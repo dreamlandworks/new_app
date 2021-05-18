@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Satrango</string>
+
+    <string name="facebook_app_id">184529536828797</string>
+    <string name="fb_login_protocol_scheme">fb184529536828797</string>
+
+    <string name="previous">PREVIOUS</string>
+    <string name="next">NEXT</string>
+    <string name="finish">FINISH</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forgot Password?</string>
+    <string name="remember_me">Remember me</string>
+    <string name="sign_in">Sign In</string>
+    <string name="don_t_have_account">Don\'t have account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="already_have_account">Already have Account?</string>
+    <string name="log_in">Log In</string>
+    <string name="next_sm">Next</string>
+    <string name="_1">1</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="welcome_to_on_board">Welcome to On Board!</string>
+    <string name="thanks_for_your_interest_but_we_fear_as_we_may_not_be_able_to_cater_some_services_in_your_area_please_do_not_mind_and_please_keep_up_with_us_and_proceed_to_register">Thanks for your interest, But We fear as we may not be able to cater some services in your area. Please do not mind and please keep up with us and proceed to register</string>
+    <string name="gps_network_not_enabled">Gps network not enabled</string>
+    <string name="open_location_settings">Open Location Settings</string>
+    <string name="Cancel">Cancel</string>
+    <string name="fetching_location_please_wait">Fetching Location Please Wait...</string>
+    <string name="email">Email</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="i_agree_to_the_terms_and_conditions_of_satrango_com">I agree to the terms and conditions of Satrango.com</string>
+    <string name="back">BACK</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="verification_code">Verification Code</string>
+    <string name="please_type_verification_code_sent_to_mobile_number_email">Please type verification code sent to Mobile number / Email</string>
+    <string name="didn_t_receive_otp">Didn\'t receive OTP?</string>
+    <string name="resend">RESEND</string>
+    <string name="verify">Verify</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="re_enter_password">Re-Enter Password</string>
+    <string name="set_password">Set Password</string>
+    <string name="success">Success</string>
+    <string name="login">Login</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="login_as">Login As</string>
+    <string name="user">User</string>
+    <string name="service_provider">Service Provider</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="please_enter_your_registered_mobile_number_and_we_will_send_you_otp_to_reset_your_password">Please enter your registered mobile number and we will send you OTP to reset your password</string>
+</resources>

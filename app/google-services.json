@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "955908791327",
+    "project_id": "satrango-b3d45",
+    "storage_bucket": "satrango-b3d45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955908791327:android:6c5c329f47b8e2076e092a",
+        "android_client_info": {
+          "package_name": "com.satrango"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955908791327-80jr94j7kd7o9p3ka6q4bm87si1uhute.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.satrango",
+            "certificate_hash": "08f2d21ea1a1cd9e7509514ae4e241d2d341232a"
+          }
+        },
+        {
+          "client_id": "955908791327-jqhhpa0n1h7j6qlbt1mgigallpujo4s7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdYlIaqsDQK3DTGoS7fthvQLAq5eENLs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955908791327-jqhhpa0n1h7j6qlbt1mgigallpujo4s7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
