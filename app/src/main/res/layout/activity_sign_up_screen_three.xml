@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/grey_800"
     android:layout_height="match_parent"
-    tools:context=".auth.user_signup.SignUpScreenThree">
+    tools:context=".ui.auth.user_signup.UserSignUpScreenThree">
 
     <ImageView
         android:layout_width="match_parent"

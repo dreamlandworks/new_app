@@ -50,32 +50,38 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".auth.forgot_password.ForgotPasswordScreenOne"></activity>
-        <activity android:name=".service_provider_dashboard.ServiceProviderDashboard" />
-        <activity android:name=".user_dashboard.UserDashboardScreen" />
-        <activity android:name=".auth.UserLoginTypeScreen" />
-        <activity android:name=".auth.user_signup.SetPasswordScreen" />
-
-        <receiver
-            android:name=".auth.user_signup.SmsReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".auth.user_signup.OTPVerificationScreen" />
-        <activity android:name=".auth.user_signup.TermsAndConditionScreen" />
-        <activity android:name=".auth.user_signup.SignUpScreenThree" />
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpFive"></activity>
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpFour" />
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpThree" />
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpTwo" />
         <activity
-            android:name=".auth.user_signup.SignUpScreenTwo"
+            android:name=".ui.auth.provider_signup.ProviderSignUpOne"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".auth.user_signup.SignUpScreenOne"
+            android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".auth.intro.IntroScreen" />
+        <activity android:name=".ui.service_provider_dashboard.ServiceProviderDashboard" />
+        <activity android:name=".ui.user_dashboard.UserDashboardScreen" />
+        <activity android:name=".ui.auth.UserLoginTypeScreen" />
         <activity
-            android:name=".auth.LoginScreen"
+            android:name=".ui.auth.user_signup.SetPasswordScreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.auth.user_signup.OTPVerificationScreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.user_signup.TermsAndConditionScreen" />
+        <activity
+            android:name=".ui.auth.user_signup.UserSignUpScreenThree"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.auth.user_signup.UserSignUpScreenOne"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.intro.IntroScreen" />
+        <activity
+            android:name=".ui.auth.LoginScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SplashScreen">
             <intent-filter>
@@ -84,6 +90,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".ui.auth.user_signup.SmsReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

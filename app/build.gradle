@@ -48,16 +48,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'
-
     // FaceBook Authentication
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
     implementation 'com.facebook.android:facebook-login:5.15.3'
 
     // Google Authentication
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    // Google Fused Location
-    // implementation 'com.google.android.gms:play-services-location:18.0.0'
 
+    // AutoFill OTP
     implementation "com.google.android.gms:play-services-auth-api-phone:17.5.0"
+
+    // Custom UI Dependencies
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.hootsuite.android:nachos:1.1.1'
+
 }

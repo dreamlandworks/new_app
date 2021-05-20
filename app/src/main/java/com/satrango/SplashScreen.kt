@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.satrango.auth.intro.IntroScreen
+import com.satrango.ui.auth.intro.IntroScreen
 import com.satrango.databinding.ActivitySplashScreenBinding
 
 class SplashScreen : AppCompatActivity() {

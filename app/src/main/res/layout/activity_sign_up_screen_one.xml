@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".auth.user_signup.SignUpScreenOne"
+    tools:context=".ui.auth.user_signup.UserSignUpScreenOne"
     android:background="@color/grey_800">
 
     <ImageView

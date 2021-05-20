@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:paddingHorizontal="@dimen/_10sdp">
+
+    <ImageView
+        android:id="@+id/toolBarBackBtn"
+        tools:ignore="ContentDescription"
+        android:layout_width="@dimen/_16sdp"
+        android:layout_height="@dimen/_16sdp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_orangebacks" />
+
+    <TextView
+        android:id="@+id/toolBarBackTVBtn"
+        tools:ignore="RelativeOverlap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/toolBarBackBtn"
+        android:text="@string/home"
+        android:textAllCaps="false"
+        android:textColor="@color/vendorOrange"
+        android:textSize="@dimen/_12sdp" />
+
+    <TextView
+        android:id="@+id/toolBarTitle"
+        tools:ignore="RelativeOverlap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/profile"
+        android:textColor="@color/vendorPrimaryColor"
+        android:textSize="@dimen/_14sdp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/toolBarImage"
+        app:civ_border_color="@color/vendorOrange"
+        app:civ_border_width="@dimen/_2sdp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="end"
+        android:layout_marginVertical="@dimen/_5sdp"
+        android:src="@drawable/images" />
+
+
+</RelativeLayout>
