@@ -76,7 +76,7 @@
     <string name="my_availability">My Availability</string>
     <string name="you_can_always_use_offline_when_busy">(You can always use offline when busy)</string>
     <string name="slot_1">Slot-1</string>
-    <string name="add_more_slots">Add More Slots</string>
+    <string name="add_more_slots">Add Slot</string>
     <string name="everyday">Everyday</string>
     <string name="week_days">Week-days</string>
     <string name="week_ends">Week-ends</string>
@@ -87,7 +87,6 @@
     <string name="m">M</string>
     <string name="t">T</string>
     <string name="_W">W</string>
-    <string name="t">T</string>
     <string name="f">F</string>
     <string name="identity_proof">Identity Proof</string>
     <string name="pan_card_aadhar_card">(PAN Card / Aadhar Card)</string>
@@ -98,4 +97,23 @@
     <string name="please_read_the_below_statements_seeing_your_screen_to_complete_registration">Please read the below statements seeing your screen to complete registration</string>
     <string name="my_name_is">My Name is</string>
     <string name="restart">Restart</string>
+    <string name="rec">REC</string>
+    <string name="this_is_my_id_proof">This is my ID Proof</string>
+
+    <string name="id_description">I Certify that will neither misbehave with customers nor will cause any damage to user property or reputation of Satrango willfully. If found guilty I will be liable to face the consequences as mentioned in terms and conditions.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="provider">PROVIDER</string>
+    <string name="rs_0_00">Rs 0.00</string>
+    <string name="post_a_job">Post a Job</string>
+    <string name="my_account">My Account</string>
+    <string name="my_booking">My Booking</string>
+    <string name="my_job_posts">My Job Posts</string>
+    <string name="my_profile">My Profile</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="offers">Offers</string>
+    <string name="alerts">Alerts</string>
+    <string name="chats">Chats</string>
+
 </resources>

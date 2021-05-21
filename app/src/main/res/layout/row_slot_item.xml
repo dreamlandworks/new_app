@@ -92,7 +92,7 @@
                 android:text="@string/everyday"
                 android:textAllCaps="false"
                 android:textColor="@color/vendorPrimaryColor"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textStyle="bold" />
 
             <TextView
@@ -106,7 +106,7 @@
                 android:text="@string/week_days"
                 android:textAllCaps="false"
                 android:textColor="@color/vendorPrimaryColor"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textStyle="bold" />
 
             <TextView
@@ -120,7 +120,7 @@
                 android:text="@string/week_ends"
                 android:textAllCaps="false"
                 android:textColor="@color/vendorPrimaryColor"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -147,9 +147,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/s"
-                android:padding="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -159,8 +158,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/m"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_7sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -169,8 +168,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/t"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_7sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -180,8 +179,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/_W"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -190,8 +189,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/t"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -201,8 +200,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/f"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 
@@ -211,9 +210,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/s"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
+                android:padding="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:background="@drawable/greenborderbutton"/>
 

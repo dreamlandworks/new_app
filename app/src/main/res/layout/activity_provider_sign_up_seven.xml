@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.auth.provider_signup.ProviderSignUpFive">
+    android:background="@color/grey_800"
+    tools:context=".ui.auth.provider_signup.ProviderSignUpSeven">
 
     <include
         android:id="@+id/toolBar"
@@ -100,9 +101,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:text="@string/my_name_is"
+                                android:lineSpacingExtra="@dimen/_3sdp"
+                                android:text="@string/id_description"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_14sdp" />
+                                android:textSize="@dimen/_10sdp" />
 
                             <TextView
                                 android:id="@+id/nameText"
@@ -143,8 +145,8 @@
                                         android:id="@+id/recordImage"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:src="@drawable/record_icon"
                                         android:visibility="gone"
+                                        android:src="@drawable/record_icon"
                                         tools:ignore="ContentDescription,TooDeepLayout" />
 
                                     <TextView
@@ -213,4 +215,6 @@
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

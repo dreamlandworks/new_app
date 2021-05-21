@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.hardware.Camera
 import android.media.MediaRecorder
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
@@ -12,33 +13,32 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
-import com.satrango.databinding.ActivityProviderSignUpFiveBinding
+import com.satrango.databinding.ActivityProviderSignUpSixBinding
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
+class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
+
+    private lateinit var binding: ActivityProviderSignUpSixBinding
 
     private lateinit var videoPath: String
     private var mOutputFile: File? = null
     private lateinit var mMediaRecorder: MediaRecorder
     private lateinit var mServiceCamera: Camera
     private lateinit var surfaceHolder: SurfaceHolder
-    private lateinit var binding: ActivityProviderSignUpFiveBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProviderSignUpFiveBinding.inflate(layoutInflater)
+        binding = ActivityProviderSignUpSixBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val toolBar = findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.profile)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.profile)
 
         surfaceHolder = binding.surfaceView.holder
         surfaceHolder.addCallback(this)
@@ -56,11 +56,10 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
 
             nextBtn.setOnClickListener {
                 stopRecording()
-                startActivity(Intent(this@ProviderSignUpFive, ProviderSignUpSix::class.java))
+                startActivity(Intent(this@ProviderSignUpSix, ProviderSignUpSeven::class.java))
             }
 
         }
-
     }
 
     private fun startRecording(): Boolean {
@@ -114,10 +113,10 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
 
     private fun timer() {
         var counter = 0
-       object : CountDownTimer(31000, 1000) {
+        object : CountDownTimer(31000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                binding.timerText.text = "REC 00:00:$counter"
+                binding.timerText.text = "REC 00:00:" + counter.toString()
                 counter++
             }
 
@@ -149,8 +148,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
         return File(
             Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOWNLOADS
-            ).toString() + "/Video Recorder/RECORDING_" + dateFormat.format(Date()) + ".mp4"
-        )
+            ).toString() + "/Video Recorder/RECORDING_" + dateFormat.format(Date()) + ".mp4")
     }
 
     fun stopRecording() {
@@ -167,5 +165,6 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
         }
         Toast.makeText(this, videoPath, Toast.LENGTH_SHORT).show()
     }
+
 
 }

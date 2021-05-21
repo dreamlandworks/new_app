@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
-import com.satrango.ui.service_provider_dashboard.ServiceProviderDashboard
+import com.satrango.ui.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user_dashboard.UserDashboardScreen
 
 class UserLoginTypeScreen : AppCompatActivity() {
@@ -23,7 +23,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
             }
 
             serviceProviderBtn.setOnClickListener {
-                startActivity(Intent(this@UserLoginTypeScreen, ServiceProviderDashboard::class.java))
+                startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
             }
 
         }

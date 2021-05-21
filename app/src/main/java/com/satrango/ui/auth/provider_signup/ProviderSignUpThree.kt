@@ -3,14 +3,12 @@ package com.satrango.ui.auth.provider_signup
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderSignUpThreeBinding
@@ -28,13 +26,22 @@ class ProviderSignUpThree : AppCompatActivity() {
         binding.apply {
 
             val toolBar = findViewById<View>(R.id.toolBar)
-            toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-            toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+            toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
+                .setOnClickListener { onBackPressed() }
+            toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+                .setOnClickListener { onBackPressed() }
             toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.profile)
-            
+
             addSlot.setOnClickListener { addView() }
 
-            nextBtn.setOnClickListener { startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java)) }
+            nextBtn.setOnClickListener {
+                startActivity(
+                    Intent(
+                        this@ProviderSignUpThree,
+                        ProviderSignUpFour::class.java
+                    )
+                )
+            }
 
             btnCancel.setOnClickListener { onBackPressed() }
         }
@@ -46,7 +53,7 @@ class ProviderSignUpThree : AppCompatActivity() {
         val cricketerView: View = layoutInflater.inflate(R.layout.row_slot_item, null, false)
         val txt_from = cricketerView.findViewById<TextInputEditText>(R.id.fromDate)
         val txt_to = cricketerView.findViewById<TextInputEditText>(R.id.toDate)
-        val btn_everyday = cricketerView.findViewById<TextView>(R.id.btn_everyday) 
+        val btn_everyday = cricketerView.findViewById<TextView>(R.id.btn_everyday)
         val btn_weekday = cricketerView.findViewById<TextView>(R.id.btn_weekday)
         val btn_wekend = cricketerView.findViewById<TextView>(R.id.btn_wekend)
         val sunday = cricketerView.findViewById<TextView>(R.id.sunday)
@@ -101,6 +108,11 @@ class ProviderSignUpThree : AppCompatActivity() {
             thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             friday.setBackgroundResource(R.drawable.greenbutton)
             friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+
+            saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            saturday.setBackgroundResource(R.drawable.greenborderbutton)
+            sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            sunday.setBackgroundResource(R.drawable.greenborderbutton)
         }
         btn_wekend.setOnClickListener {
             btn_wekend.setBackgroundResource(R.drawable.greenbutton)
@@ -109,6 +121,17 @@ class ProviderSignUpThree : AppCompatActivity() {
             btn_weekday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
             btn_everyday.setBackgroundResource(R.drawable.greenborderbutton)
             btn_everyday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+
+            monday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            monday.setBackgroundResource(R.drawable.greenborderbutton)
+            tuesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            tuesday.setBackgroundResource(R.drawable.greenborderbutton)
+            wednesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            wednesday.setBackgroundResource(R.drawable.greenborderbutton)
+            thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            thursday.setBackgroundResource(R.drawable.greenborderbutton)
+            friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+            friday.setBackgroundResource(R.drawable.greenborderbutton)
 
             saturday.setBackgroundResource(R.drawable.greenbutton)
             saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -123,32 +146,67 @@ class ProviderSignUpThree : AppCompatActivity() {
         }
 
         sunday.setOnClickListener {
-            sunday.setBackgroundResource(R.drawable.greenbutton)
-            sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (sunday.currentTextColor == Color.WHITE) {
+                sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                sunday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                sunday.setBackgroundResource(R.drawable.greenbutton)
+                sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         monday.setOnClickListener {
-            monday.setBackgroundResource(R.drawable.greenbutton)
-            monday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (monday.currentTextColor == Color.WHITE) {
+                monday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                monday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                monday.setBackgroundResource(R.drawable.greenbutton)
+                monday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         tuesday.setOnClickListener {
-            tuesday.setBackgroundResource(R.drawable.greenbutton)
-            tuesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (tuesday.currentTextColor == Color.WHITE) {
+                tuesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                tuesday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                tuesday.setBackgroundResource(R.drawable.greenbutton)
+                tuesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         wednesday.setOnClickListener {
-            wednesday.setBackgroundResource(R.drawable.greenbutton)
-            wednesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (wednesday.currentTextColor == Color.WHITE) {
+                wednesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                wednesday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                wednesday.setBackgroundResource(R.drawable.greenbutton)
+                wednesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         thursday.setOnClickListener {
-            thursday.setBackgroundResource(R.drawable.greenbutton)
-            thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (thursday.currentTextColor == Color.WHITE) {
+                thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                thursday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                thursday.setBackgroundResource(R.drawable.greenbutton)
+                thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         friday.setOnClickListener {
-            friday.setBackgroundResource(R.drawable.greenbutton)
-            friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (friday.currentTextColor == Color.WHITE) {
+                friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                friday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                friday.setBackgroundResource(R.drawable.greenbutton)
+                friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         saturday.setOnClickListener {
-            saturday.setBackgroundResource(R.drawable.greenbutton)
-            saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            if (saturday.currentTextColor == Color.WHITE) {
+                saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.vendorPrimaryColor))
+                saturday.setBackgroundResource(R.drawable.greenborderbutton)
+            } else {
+                saturday.setBackgroundResource(R.drawable.greenbutton)
+                saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
         binding.layoutList.addView(cricketerView)
     }

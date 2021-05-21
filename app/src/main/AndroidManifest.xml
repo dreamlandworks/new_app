@@ -50,7 +50,9 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.auth.provider_signup.ProviderSignUpFive"></activity>
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpSeven"></activity>
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpSix" />
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpFive" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpFour" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpThree" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpTwo" />
@@ -60,7 +62,7 @@
         <activity
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ui.service_provider_dashboard.ServiceProviderDashboard" />
+        <activity android:name=".ui.provider_dashboard.ProviderDashboard" />
         <activity android:name=".ui.user_dashboard.UserDashboardScreen" />
         <activity android:name=".ui.auth.UserLoginTypeScreen" />
         <activity

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/grey_800"
+    android:orientation="vertical"
     tools:context=".ui.auth.provider_signup.ProviderSignUpThree">
 
     <include
@@ -81,17 +81,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_20sdp"
+                            android:gravity="center"
                             android:text="@string/my_tariff_is"
                             android:textColor="@color/black"
-                            android:gravity="center"
                             android:textSize="@dimen/_14sdp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:baselineAligned="false"
                             android:orientation="horizontal"
-                            android:weightSum="2"
-                            android:baselineAligned="false">
+                            android:weightSum="2">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -187,17 +187,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_10sdp"
-                            android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
                             android:gravity="center"
                             android:lineSpacingExtra="@dimen/_3sdp"
+                            android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
                             android:textColor="@color/vendorPrimaryColor"
                             android:textSize="@dimen/_10sdp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_2sdp"
-                            android:layout_margin="@dimen/_20sdp"
-                            android:background="#CCCCCC" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -208,9 +202,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
                                 android:text="@string/my_availability"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_14sdp" />
+                                android:textSize="@dimen/_12sdp" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -222,13 +217,6 @@
 
                         </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:text="@string/slot_1"
-                            android:textSize="@dimen/_14sdp" />
-
                         <LinearLayout
                             android:id="@+id/layout_list"
                             android:layout_width="match_parent"
@@ -239,13 +227,14 @@
                             android:id="@+id/addSlot"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableEnd="@drawable/ic_addmore"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:layout_gravity="end"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:drawableEnd="@drawable/ic_addmore"
                             android:drawablePadding="@dimen/_10sdp"
+                            android:gravity="center_vertical"
                             android:text="@string/add_more_slots"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_16sdp" />
+                            android:textSize="@dimen/_12sdp" />
 
                     </LinearLayout>
 
@@ -265,8 +254,8 @@
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:layout_marginRight="@dimen/_20sdp"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:background="@drawable/greenborderbutton"
+                        android:gravity="center"
                         android:text="@string/Cancel"
                         android:textAllCaps="false"
                         android:textColor="@color/vendorPrimaryColor"
@@ -280,8 +269,8 @@
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:layout_marginRight="@dimen/_20sdp"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:background="@drawable/greenbutton"
+                        android:gravity="center"
                         android:text="@string/next"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
