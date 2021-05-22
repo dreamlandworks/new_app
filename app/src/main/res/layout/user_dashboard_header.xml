@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profileImage"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="center"
@@ -18,7 +18,7 @@
         app:civ_border_width="@dimen/_2sdp" />
 
     <TextView
-        android:id="@+id/draweruname"
+        android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/neosans_pro_regular"
@@ -46,6 +46,7 @@
             tools:ignore="ContentDescription" />
 
         <TextView
+            android:id="@+id/balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -68,6 +69,7 @@
         android:weightSum="2">
 
         <LinearLayout
+            android:id="@+id/userBtn"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_25sdp"
             android:layout_gravity="center"
@@ -94,7 +96,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/l_provider"
+            android:id="@+id/providerBtn"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_gravity="center"

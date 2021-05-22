@@ -50,7 +50,7 @@
             android:focusable="false">
 
             <FrameLayout
-                android:id="@+id/frame"
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?attr/actionBarSize" />
@@ -86,8 +86,8 @@
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
                 android:translationZ="10dp"
+                android:backgroundTint="@color/colorPrimary"
                 app:backgroundTint="@color/yellow"
                 app:borderWidth="@dimen/_3sdp"
                 android:src="@drawable/calenders"

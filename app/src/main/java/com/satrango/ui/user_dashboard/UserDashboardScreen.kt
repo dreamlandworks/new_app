@@ -1,12 +1,18 @@
 package com.satrango.ui.user_dashboard
 
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 class UserDashboardScreen : AppCompatActivity() {
@@ -32,20 +38,32 @@ class UserDashboardScreen : AppCompatActivity() {
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.white)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+        val headerView = binding.navigationView[0]
+        val profileImage = headerView.findViewById<CircleImageView>(R.id.profileImage)
+        val userName = headerView.findViewById<TextView>(R.id.userName)
+        val balanceAmount = headerView.findViewById<TextView>(R.id.balance)
+        val userBtn = headerView.findViewById<LinearLayout>(R.id.userBtn)
+        val providerBtn = headerView.findViewById<LinearLayout>(R.id.providerBtn)
+
+        userBtn.setOnClickListener { Toast.makeText(this, "User Clicked", Toast.LENGTH_SHORT).show() }
+        providerBtn.setOnClickListener { Toast.makeText(this, "Provider Clicked", Toast.LENGTH_SHORT).show() }
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.navigation_home -> {
-                    Toast.makeText(this, "Home Clicked", Toast.LENGTH_SHORT).show()
+                    loadFragment(UserHomeScreen())
                 }
                 R.id.navigation_offers -> {
-                    Toast.makeText(this, "Offers Clicked", Toast.LENGTH_SHORT).show()
+                    binding.toolBar.visibility = View.GONE
+                    loadFragment(UserOffersScreen())
                 }
                 R.id.navigation_alerts -> {
-                    Toast.makeText(this, "Alerts Clicked", Toast.LENGTH_SHORT).show()
+                    binding.toolBar.visibility = View.GONE
+                    loadFragment(UserAlertScreen())
                 }
                 R.id.navigation_chats -> {
-                    Toast.makeText(this, "Chats Clicked", Toast.LENGTH_SHORT).show()
+                    binding.toolBar.visibility = View.GONE
+                    loadFragment(UserChatScreen())
                 }
             }
             true
@@ -53,9 +71,9 @@ class UserDashboardScreen : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener {
 
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.userOptHome -> {
-                    Toast.makeText(this, "Home Clicked", Toast.LENGTH_SHORT).show()
+                    loadFragment(UserHomeScreen())
                 }
                 R.id.userOptPostJob -> {
                     Toast.makeText(this, "Post A Job Clicked", Toast.LENGTH_SHORT).show()
@@ -85,11 +103,23 @@ class UserDashboardScreen : AppCompatActivity() {
 
     }
 
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(fragment.tag).commit()
+    }
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.toolBar.visibility = View.VISIBLE
     }
 }
