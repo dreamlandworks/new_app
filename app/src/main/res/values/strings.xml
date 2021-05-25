@@ -117,7 +117,6 @@
     <string name="chats">Chats</string>
     <string name="your_location">Your Location</string>
     <string name="loading">Loading...</string>
-    <string name="provider">PROVIDER</string>
     <string name="change_profile">Change Profile</string>
     <string name="search_in_thousands_of_services">Search in thousands of services</string>
     <string name="popular_services">Popular Services</string>

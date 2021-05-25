@@ -9,10 +9,21 @@ import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
+import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonSyntaxException
+import com.satrango.databinding.ActivityLoginScreenBinding
+import com.satrango.databinding.UserDashboardHeaderBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
-import com.satrango.databinding.ActivityLoginScreenBinding
+import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
 
 class LoginScreen : AppCompatActivity() {
 
@@ -55,10 +66,60 @@ class LoginScreen : AppCompatActivity() {
                 )
             }
 
-            forgetPassword.setOnClickListener { startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java)) }
+            signInBtn.setOnClickListener {
+                val phoneNo = mobileNo.text.toString().trim()
+                val pwd = password.text.toString().trim()
 
-            signInBtn.setOnClickListener { startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java)) }
+                if (phoneNo.isEmpty()) {
+                    mobileNo.setError("Enter Phone number")
+                    mobileNo.requestFocus()
+                } else if (pwd.isEmpty()) {
+                    password.setError("Enter Password")
+                    password.requestFocus()
+                } else {
+                    loginToServer(phoneNo, pwd)
+                }
 
+            }
+
+            forgetPassword.setOnClickListener {
+                startActivity(
+                    Intent(
+                        this@LoginScreen,
+                        ForgotPasswordScreenOne::class.java
+                    )
+                )
+            }
+
+        }
+
+    }
+
+    private fun loginToServer(phoneNo: String, password: String) {
+
+        CoroutineScope(Dispatchers.Main).launch {
+
+            try {
+                val jsonObject = JSONObject()
+                jsonObject.put("username", phoneNo)
+                jsonObject.put("password", password)
+                jsonObject.put("type", "login")
+                val response = RetrofitBuilder.getRetrofitInstance().login(jsonObject)
+                val jsonResponse = JSONObject(response.string())
+                if (jsonResponse.getInt("status") == 200) {
+                    startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
+                } else {
+                    Toast.makeText(this@LoginScreen, "Invalid Credentials", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                Toast.makeText(this@LoginScreen, "${response.string()}", Toast.LENGTH_SHORT).show()
+            } catch (e: HttpException) {
+                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+            } catch (e: JsonSyntaxException) {
+                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+            } catch (e: SocketTimeoutException) {
+                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -156,4 +217,6 @@ class LoginScreen : AppCompatActivity() {
     override fun onBackPressed() {
         moveTaskToBack(true)
     }
+
+
 }

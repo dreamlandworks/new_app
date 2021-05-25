@@ -53,9 +53,9 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
     implementation 'com.facebook.android:facebook-login:5.15.3'
 
-    // Google Authentication
+    // Google Authentication, Fused Location
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
     // AutoFill OTP
     implementation "com.google.android.gms:play-services-auth-api-phone:17.5.0"
 
@@ -64,4 +64,10 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.hootsuite.android:nachos:1.1.1'
 
+    // Retrofit For Api Calls
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
 }
