@@ -1,27 +1,53 @@
 package com.satrango.ui.auth.user_signup
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenThreeBinding
+import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils
 import java.util.*
 
 class UserSignUpScreenThree : AppCompatActivity() {
 
+    private var selectedAge = 0
     private lateinit var binding: ActivitySignUpScreenThreeBinding
 
+    private lateinit var locationCallBack: LocationCallback
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var progressDialog: ProgressDialog
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpScreenThreeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        initializeProgressDialog()
 
         binding.apply {
+
+            firstName.setText(UserUtils.firstName)
+            lastName.setText(UserUtils.lastName)
+            mobileNo.setText(UserUtils.phoneNo)
+            if (UserUtils.mailId.isNotEmpty()) {
+                email.setText(UserUtils.mailId)
+            }
 
             email.addTextChangedListener(object : TextWatcher {
 
@@ -52,28 +78,94 @@ class UserSignUpScreenThree : AppCompatActivity() {
             }
 
             termsAndConditions.setOnClickListener {
-                startActivity(Intent(this@UserSignUpScreenThree, TermsAndConditionScreen::class.java))
+                startActivity(
+                    Intent(
+                        this@UserSignUpScreenThree,
+                        TermsAndConditionScreen::class.java
+                    )
+                )
             }
 
-            nextBtn.setOnClickListener { startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java)) }
+            nextBtn.setOnClickListener {
 
+                val first_name = firstName.text.toString().trim()
+                val last_name = lastName.text.toString().trim()
+                val mail = email.text.toString().trim()
+                val phoneNo = mobileNo.text.toString().trim()
+                val dob = dateOfBirth.text.toString().trim()
+
+                when {
+                    first_name.isEmpty() -> {
+                        firstName.error = "Enter First Name"
+                        firstName.requestFocus()
+                    }
+                    last_name.isEmpty() -> {
+                        lastName.error = "Enter Last Name"
+                        lastName.requestFocus()
+                    }
+                    mail.isEmpty() -> {
+                        email.error = "Enter Mail Id"
+                        email.requestFocus()
+                    }
+                    phoneNo.isEmpty() -> {
+                        mobileNo.error = "Enter Phone No"
+                        mobileNo.requestFocus()
+                    }
+                    dob == resources.getString(R.string.date_of_birth) -> {
+                        dateOfBirth.error = "Select Date Of Birth"
+                        dateOfBirth.requestFocus()
+                    }
+                    selectedAge < 13 -> {
+                        dateOfBirth.error = "Age should be greater than 13 years"
+                        dateOfBirth.requestFocus()
+                    }
+                    !checkBox.isChecked -> {
+                        Snackbar.make(
+                            checkBox,
+                            "Accept Terms and Conditions",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        UserUtils.firstName = first_name
+                        UserUtils.lastName = last_name
+                        UserUtils.mailId = mail
+                        UserUtils.dateOfBirth = dob
+                        UserUtils.phoneNo = phoneNo
+                        fetchLocation()
+                    }
+                }
+            }
         }
+    }
 
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
     }
 
     @SuppressLint("SetTextI18n")
     private fun openDateOfBirthDialog() {
         val c = Calendar.getInstance()
-
         val mYear = c[Calendar.YEAR] // current year
         val mMonth = c[Calendar.MONTH] // current month
         val mDay = c[Calendar.DAY_OF_MONTH] // current day
 
-        val datePickerDialog = DatePickerDialog(this@UserSignUpScreenThree, { _, year, monthOfYear, dayOfMonth ->
-                binding.dateOfBirth.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
-                if (getAge(year, monthOfYear + 1, dayOfMonth) < 13) {
-                    Toast.makeText(this, "Age must be greater than 13 years", Toast.LENGTH_SHORT).show()
+        val datePickerDialog = DatePickerDialog(
+            this@UserSignUpScreenThree, { _, year, monthOfYear, dayOfMonth ->
+                binding.dateOfBirth.text =
+                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
+                selectedAge = getAge(year, monthOfYear + 1, dayOfMonth)
+                if (selectedAge < 13) {
+                    Toast.makeText(this, "Age must be greater than 13 years", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }, mYear, mMonth, mDay
         )
@@ -90,5 +182,84 @@ class UserSignUpScreenThree : AppCompatActivity() {
             age--
         }
         return age
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
+            for (grant in grantResults) {
+                if (grant != PackageManager.PERMISSION_GRANTED) {
+                    PermissionUtils.checkAndRequestPermissions(this)
+                    return
+                }
+            }
+            fetchLocation()
+        }
+    }
+
+    private fun fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        progressDialog.show()
+        val locationRequest =
+            LocationRequest().setInterval(2000).setFastestInterval(2000).setPriority(
+                LocationRequest.PRIORITY_HIGH_ACCURACY
+            )
+        locationCallBack = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    fetchLocationDetails(latitude, longitude)
+                }
+            }
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallBack,
+            Looper.myLooper()!!
+        )
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun fetchLocationDetails(latitude: Double, longitude: Double) {
+        val geoCoder = Geocoder(this, Locale.getDefault())
+        val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+        val addressName: String = address.get(0).getAddressLine(0)
+        val city: String = address.get(0).locality
+        val state: String = address.get(0).adminArea
+        val country: String = address.get(0).countryName
+        val postalCode: String = address.get(0).postalCode
+        val knownName: String = address.get(0).featureName
+        fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+        UserUtils.latitude = latitude.toString()
+        UserUtils.longitute = longitude.toString()
+        UserUtils.city = city
+        UserUtils.state = state
+        UserUtils.country = country
+        UserUtils.postalCode = postalCode
+        UserUtils.address = knownName
+        startActivity(Intent(this@UserSignUpScreenThree, SetPasswordScreen::class.java))
+        progressDialog.dismiss()
     }
 }

@@ -29,8 +29,13 @@
     <item
         android:id="@+id/userOptMyProfile"
         android:icon="@drawable/ic_myprofile"
-        android:iconTint="@color/colorPrimary"
         android:title="@string/my_profile" />
+
+    <item
+        android:id="@+id/userOptReferEarn"
+        android:icon="@drawable/ic_wallets"
+        android:iconTint="@color/colorPrimary"
+        android:title="@string/refer_amp_earn" />
 
     <item
         android:id="@+id/userOptSettings"

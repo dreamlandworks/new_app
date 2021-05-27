@@ -1,5 +1,6 @@
 package com.satrango.ui.auth
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,15 +10,19 @@ import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonSyntaxException
+import com.satrango.R
 import com.satrango.databinding.ActivityLoginScreenBinding
 import com.satrango.databinding.UserDashboardHeaderBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
+import com.satrango.ui.auth.models.user_signup.UserLoginModel
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +42,8 @@ class LoginScreen : AppCompatActivity() {
     // Facebook SignIn Object
     private lateinit var facebookCallBackManager: CallbackManager
 
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,6 +52,7 @@ class LoginScreen : AppCompatActivity() {
 
         initializeSocialLogins()
         PermissionUtils.checkAndRequestPermissions(this)
+        initializeProgressDialog()
 
         binding.apply {
 
@@ -71,13 +79,13 @@ class LoginScreen : AppCompatActivity() {
                 val pwd = password.text.toString().trim()
 
                 if (phoneNo.isEmpty()) {
-                    mobileNo.setError("Enter Phone number")
+                    mobileNo.error = "Enter Phone number"
                     mobileNo.requestFocus()
                 } else if (pwd.isEmpty()) {
-                    password.setError("Enter Password")
+                    password.error = "Enter Password"
                     password.requestFocus()
                 } else {
-                    loginToServer(phoneNo, pwd)
+                    loginToServer(phoneNo, pwd, "login")
                 }
 
             }
@@ -95,30 +103,37 @@ class LoginScreen : AppCompatActivity() {
 
     }
 
-    private fun loginToServer(phoneNo: String, password: String) {
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
+    }
 
+    private fun loginToServer(phoneNo: String, password: String, type: String) {
+        binding.mobileNo.clearFocus()
+        binding.password.clearFocus()
+        progressDialog.show()
         CoroutineScope(Dispatchers.Main).launch {
-
             try {
-                val jsonObject = JSONObject()
-                jsonObject.put("username", phoneNo)
-                jsonObject.put("password", password)
-                jsonObject.put("type", "login")
-                val response = RetrofitBuilder.getRetrofitInstance().login(jsonObject)
+                val requestBody = UserLoginModel(phoneNo, password, type)
+                val response = RetrofitBuilder.getRetrofitInstance().login(requestBody)
                 val jsonResponse = JSONObject(response.string())
+                progressDialog.dismiss()
                 if (jsonResponse.getInt("status") == 200) {
+                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("id"))
                     startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
                 } else {
-                    Toast.makeText(this@LoginScreen, "Invalid Credentials", Toast.LENGTH_SHORT)
-                        .show()
+                    Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_SHORT).show()
                 }
-                Toast.makeText(this@LoginScreen, "${response.string()}", Toast.LENGTH_SHORT).show()
             } catch (e: HttpException) {
-                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                Snackbar.make(binding.password, "Server Busy", Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
-                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
             } catch (e: SocketTimeoutException) {
-                Toast.makeText(this@LoginScreen, e.message, Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                Snackbar.make(binding.password, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -145,14 +160,8 @@ class LoginScreen : AppCompatActivity() {
                     val request = GraphRequest.newMeRequest(
                         token
                     ) { jsonObject, _ ->
-                        val userName = jsonObject!!.getString("name")
                         val userId = jsonObject.getString("id")
-                        val profileImage = jsonObject.getString("public_profile")
-                        Toast.makeText(
-                            this@LoginScreen,
-                            "$userId $userName $profileImage",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        loginToServer(userId, "", resources.getString(R.string.userFacebookLogin))
                     }
                     val parameters = Bundle()
                     parameters.putString("fields", "id, name")
@@ -161,7 +170,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 override fun onCancel() {
-
+                    Toast.makeText(this@LoginScreen, "Login Cancelled", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(error: FacebookException?) {
@@ -173,7 +182,7 @@ class LoginScreen : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        facebookCallBackManager.onActivityResult(requestCode, resultCode, data);
+        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GOOGLE_SIGN_IN) {
             try {
@@ -208,7 +217,7 @@ class LoginScreen : AppCompatActivity() {
             val email = account.email
             val googleId = account.id
             val image = account.photoUrl
-            Toast.makeText(this, "$token $userName $email $googleId", Toast.LENGTH_SHORT).show()
+            loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))
         } else {
             Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
         }

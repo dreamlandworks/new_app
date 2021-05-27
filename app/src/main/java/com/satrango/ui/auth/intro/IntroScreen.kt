@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.databinding.ActivityIntroScreenBinding
+import com.satrango.utils.AuthUtils
 
 class IntroScreen : AppCompatActivity(), IntroInterface {
 
@@ -35,7 +36,12 @@ class IntroScreen : AppCompatActivity(), IntroInterface {
             binding.viewPager2.currentItem += 1
         } else {
             finish()
+            AuthUtils.setFirstTimeLaunch(this)
             startActivity(Intent(this, LoginScreen::class.java))
         }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true)
     }
 }

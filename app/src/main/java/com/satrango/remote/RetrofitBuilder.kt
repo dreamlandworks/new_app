@@ -1,17 +1,29 @@
 package com.satrango.remote
 
-import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
-
     private const val BASE_URL = "http://dev.satrango.com/api/"
 
-    fun getRetrofitInstance() : ApiService {
+    fun getRetrofitInstance(): ApiService {
+
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val client = OkHttpClient.Builder()
+            .writeTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .build().create(ApiService::class.java)
     }
 

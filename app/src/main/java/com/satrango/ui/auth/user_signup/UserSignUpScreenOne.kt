@@ -2,6 +2,7 @@ package com.satrango.ui.auth.user_signup
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -15,11 +16,22 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.location.*
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenOneBinding
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils
 import java.util.*
 
 class UserSignUpScreenOne : AppCompatActivity() {
@@ -28,13 +40,26 @@ class UserSignUpScreenOne : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: ActivitySignUpScreenOneBinding
 
+    // Google SignIn Objects
+    private lateinit var googleSignInOptions: GoogleSignInOptions
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val GOOGLE_SIGN_IN: Int = 100
+
+    // Facebook SignIn Object
+    private lateinit var facebookCallBackManager: CallbackManager
+
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpScreenOneBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        PermissionUtils.checkAndRequestPermissions(this)
 
+        PermissionUtils.checkAndRequestPermissions(this)
+        initializeProgressDialog()
+        initializeSocialLogins()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        textWatchers()
 
         binding.apply {
 
@@ -43,34 +68,116 @@ class UserSignUpScreenOne : AppCompatActivity() {
                 startActivity(Intent(this@UserSignUpScreenOne, LoginScreen::class.java))
             }
 
-            nextBtn.setOnClickListener {
-                PermissionUtils.checkAndRequestPermissions(this@UserSignUpScreenOne)
-                fetchLocation()
+            googleSigInBtn.setOnClickListener {
+                val signInIntent = googleSignInClient.signInIntent
+                startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
             }
 
-            mobileNo.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
+            facebookSignInBtn.setOnClickListener {
+                facebookSignBtn.performClick()
+            }
 
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (count == 10) {
-                        mobileNo.setCompoundDrawablesWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.drawable.ic_greencheck,
-                            0
-                        )
-                    }
-                }
+            nextBtn.setOnClickListener {
+                val first_Name = firstName.text.toString().trim()
+                val last_Name = lastName.text.toString().trim()
+                val phoneNo = mobileNo.text.toString().trim()
 
-                override fun afterTextChanged(s: Editable) {}
-            })
+                if (first_Name.isEmpty()) {
+                    firstName.error = "Enter First Name"
+                    firstName.requestFocus()
+                } else if (last_Name.isEmpty()) {
+                    lastName.error = "Enter Last Name"
+                    lastName.requestFocus()
+                } else if (phoneNo.isEmpty()) {
+                    mobileNo.error = "Enter Mobile No"
+                    mobileNo.requestFocus()
+                } else if (phoneNo.length < 10) {
+                    mobileNo.error = "Enter Valid Mobile No"
+                    mobileNo.requestFocus()
+                } else {
+                    UserUtils.firstName = first_Name
+                    UserUtils.lastName = last_Name
+                    UserUtils.phoneNo = phoneNo
+                    PermissionUtils.checkAndRequestPermissions(this@UserSignUpScreenOne)
+                    fetchLocation()
+                }
+            }
         }
+    }
+
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Loading...")
+        progressDialog.setCancelable(false)
+    }
+
+    private fun textWatchers() {
+        binding.mobileNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.length == 10) {
+                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(
+                        0,
+                        0,
+                        R.drawable.ic_greencheck,
+                        0
+                    )
+                }
+            }
+        })
+
+        binding.firstName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                binding.firstName.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        binding.lastName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                binding.lastName.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
     }
 
     override fun onRequestPermissionsResult(
@@ -91,7 +198,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
     }
 
     private fun fetchLocation() {
-        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        progressDialog.show()
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -107,23 +214,16 @@ class UserSignUpScreenOne : AppCompatActivity() {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            PermissionUtils.checkAndRequestPermissions(this)
             return
         }
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
+        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         locationCallBack = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
                     val latitude = location.latitude
                     val longitude = location.longitude
-                    Toast.makeText(
-                        this@UserSignUpScreenOne,
-                        "$latitude | $longitude",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     fetchLocationDetails(latitude, longitude)
                 }
             }
@@ -144,21 +244,101 @@ class UserSignUpScreenOne : AppCompatActivity() {
         val state: String = address.get(0).adminArea
         val country: String = address.get(0).countryName
         val postalCode: String = address.get(0).postalCode
-        val knownName: String = address.get(0).featureName // Only if available else return NULL
-
-        Log.e("LOCATION DETAILS", "$addressName, $city, $state, $country, $postalCode, $knownName")
-        Toast.makeText(
-            this,
-            "$addressName, $city, $state, $country, $postalCode, $knownName",
-            Toast.LENGTH_SHORT
-        ).show()
+        val knownName: String = address.get(0).featureName
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-//        startActivity(
-//            Intent(
-//                this@UserSignUpScreenOne,
-//                UserSignUpScreenTwo::class.java
-//            )
-//        )
+        UserUtils.latitude = latitude.toString()
+        UserUtils.longitute = longitude.toString()
+        UserUtils.city = city
+        UserUtils.state = state
+        UserUtils.country = country
+        UserUtils.postalCode = postalCode
+        UserUtils.address = knownName
+        startActivity(
+            Intent(
+                this@UserSignUpScreenOne,
+                OTPVerificationScreen::class.java
+            )
+        )
+        progressDialog.dismiss()
     }
+
+    private fun initializeSocialLogins() {
+
+        // Google SignIn Object Initialization
+        googleSignInOptions = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+
+        // Facebook SignIn Object Initialization
+        facebookCallBackManager = CallbackManager.Factory.create()
+
+        binding.facebookSignBtn.registerCallback(
+            facebookCallBackManager,
+            object : FacebookCallback<LoginResult> {
+
+                override fun onSuccess(result: LoginResult?) {
+                    val token = result!!.accessToken
+                    val request = GraphRequest.newMeRequest(
+                        token
+                    ) { jsonObject, _ ->
+                        val userId = jsonObject.getString("id")
+                        UserUtils.facebookId = userId
+                        startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenThree::class.java))
+                    }
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id, name")
+                    request.parameters = parameters
+                    request.executeAsync()
+                }
+
+                override fun onCancel() {
+                    Toast.makeText(this@UserSignUpScreenOne, "Login Cancelled", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onError(error: FacebookException?) {
+                    Toast.makeText(this@UserSignUpScreenOne, error!!.message, Toast.LENGTH_SHORT).show()
+                }
+
+            })
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GOOGLE_SIGN_IN) {
+            try {
+                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+                validateGoogleSignInResult(result)
+            } catch (e: Exception) {
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun validateGoogleSignInResult(result: GoogleSignInResult?) {
+        if (result!!.isSuccess) {
+            val account = result.signInAccount
+            val token = account!!.idToken
+            val userName = account.displayName
+            val email = account.email
+            val googleId = account.id
+            val image = account.photoUrl
+            UserUtils.googleId = googleId!!
+            UserUtils.firstName = userName!!.split(" ")[0]
+            try {
+                UserUtils.lastName = userName.split(" ")[1]
+            } catch (e: java.lang.Exception) {}
+            UserUtils.mailId = email!!
+            startActivity(Intent(this, UserSignUpScreenThree::class.java))
+        } else {
+            Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
+        }
+        progressDialog.dismiss()
+    }
+
+
 
 }

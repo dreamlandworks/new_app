@@ -50,7 +50,8 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.auth.provider_signup.ProviderSignUpSeven"></activity>
+
+        <activity android:name=".ui.auth.provider_signup.ProviderSignUpSeven" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpSix" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpFive" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpFour" />
@@ -63,7 +64,18 @@
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.provider_dashboard.ProviderDashboard" />
-        <activity android:name=".ui.user_dashboard.UserDashboardScreen" />
+        <activity android:name=".ui.user_dashboard.UserDashboardScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="satrango.page.link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.auth.UserLoginTypeScreen" />
         <activity
             android:name=".ui.auth.user_signup.SetPasswordScreen"

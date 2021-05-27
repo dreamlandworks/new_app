@@ -40,7 +40,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_5sdp">
 
@@ -104,31 +104,62 @@
                 </LinearLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/signIn_username"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxStrokeColor="@color/boxStokeColor"
-                    android:layout_marginTop="@dimen/_5sdp">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fullName"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        android:drawableStart="@drawable/ic_users"
-                        android:drawableEnd="@drawable/ic_pencils"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:hint="@string/enter_name"
-                        app:boxStrokeColor="@color/boxStokeColor"
-                        android:inputType="text"
-                        android:maxLength="50"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:boxStrokeColor="@color/boxStokeColor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/firstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:drawableStart="@drawable/ic_users"
+                            android:drawableEnd="@drawable/ic_graycheck"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:hint="@string/first_name"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:maxLines="1"
+                            app:boxStrokeColor="@color/boxStokeColor" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:boxStrokeColor="@color/boxStokeColor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/lastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:drawableStart="@drawable/ic_users"
+                            android:drawableEnd="@drawable/ic_graycheck"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:hint="@string/last_name"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:maxLines="1"
+                            app:boxStrokeColor="@color/boxStokeColor" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/signIn_email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -251,6 +282,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
