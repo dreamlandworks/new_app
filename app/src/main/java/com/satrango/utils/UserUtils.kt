@@ -22,6 +22,9 @@ object UserUtils {
     var googleId = ""
     var twitterId = ""
 
+    var FORGOT_PWD = false
+    var USER_ID = ""
+
     fun setUserLoggedInVia(context: Context, type: String, userId: String) {
         val sharedPreferences = context.getSharedPreferences(
             context.resources.getString(R.string.userDetails),

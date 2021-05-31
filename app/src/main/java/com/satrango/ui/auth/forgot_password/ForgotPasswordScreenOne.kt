@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
 import com.satrango.ui.auth.user_signup.OTPVerificationScreen
 import com.satrango.databinding.ActivityForgotPasswordScreenOneBinding
+import com.satrango.utils.UserUtils
 
 class ForgotPasswordScreenOne : AppCompatActivity() {
 
@@ -22,7 +24,17 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
             textWatcher()
 
-            resetPasswordBtn.setOnClickListener { startActivity(Intent(this@ForgotPasswordScreenOne, OTPVerificationScreen::class.java)) }
+            resetPasswordBtn.setOnClickListener {
+                val mobile = mobileNo.text.toString().trim()
+                if (mobile.isEmpty()) {
+                    Snackbar.make(mobileNo, "Enter Mobile Number", Snackbar.LENGTH_LONG).show()
+                } else if (mobile.length != 10) {
+                    Snackbar.make(mobileNo, "Enter Valid Mobile Number", Snackbar.LENGTH_LONG).show()
+                } else {
+                    UserUtils.phoneNo = mobile
+                    startActivity(Intent(this@ForgotPasswordScreenOne, OTPVerificationScreen::class.java))
+                }
+            }
 
         }
 

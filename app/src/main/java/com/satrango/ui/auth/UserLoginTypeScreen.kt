@@ -20,10 +20,12 @@ class UserLoginTypeScreen : AppCompatActivity() {
 
             userBtn.setOnClickListener {
                 startActivity(Intent(this@UserLoginTypeScreen, UserDashboardScreen::class.java))
+                finish()
             }
 
             serviceProviderBtn.setOnClickListener {
                 startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
+                finish()
             }
 
         }

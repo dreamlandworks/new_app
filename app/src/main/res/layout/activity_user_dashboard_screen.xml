@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.user_dashboard.UserDashboardScreen">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -95,8 +95,7 @@
                 tools:ignore="ContentDescription" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"

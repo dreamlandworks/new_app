@@ -1,8 +1,15 @@
 package com.satrango.ui.user_dashboard
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,8 +17,10 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -22,18 +31,19 @@ import com.google.firebase.ktx.Firebase
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.ui.auth.LoginScreen
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
-
+import java.util.*
 
 class UserDashboardScreen : AppCompatActivity() {
-
-    private lateinit var binding: ActivityUserDashboardScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDashboardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -50,7 +60,11 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        Toast.makeText(this, "Your Referral User ID: ${UserUtils.getReferralId(this)}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            "Your Referral User ID: ${UserUtils.getReferralId(this)}",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val headerView = binding.navigationView.getHeaderView(0)
         val profileImage = headerView.findViewById<CircleImageView>(R.id.profileImage)
@@ -63,16 +77,14 @@ class UserDashboardScreen : AppCompatActivity() {
             Toast.makeText(this, "User Clicked", Toast.LENGTH_SHORT).show()
         }
         providerBtn.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Provider Clicked",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "Provider Clicked", Toast.LENGTH_SHORT).show()
         }
 
+        loadFragment(UserHomeScreen())
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
+                    binding.toolBar.visibility = View.VISIBLE
                     loadFragment(UserHomeScreen())
                 }
                 R.id.navigation_offers -> {
@@ -162,7 +174,6 @@ class UserDashboardScreen : AppCompatActivity() {
                     this
                 ) { task ->
                     if (task.isSuccessful) {
-                        // Short link created
                         val shortLink: Uri? = task.result?.shortLink
                         val flowchartLink: Uri? = task.result?.previewLink
                         val intent = Intent()
@@ -171,12 +182,7 @@ class UserDashboardScreen : AppCompatActivity() {
                         intent.type = "text/plain"
                         startActivity(intent)
                     } else {
-                        // Error
-                        Toast.makeText(
-                            this@UserDashboardScreen,
-                            "Error",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@UserDashboardScreen, "Error", Toast.LENGTH_SHORT).show()
                     }
                 }
     }
@@ -192,12 +198,102 @@ class UserDashboardScreen : AppCompatActivity() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
+            if (binding.bottomNavigationView.selectedItemId == R.id.userOptHome) {
+                binding.toolBar.visibility = View.VISIBLE
+            }
             super.onBackPressed()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        binding.toolBar.visibility = View.VISIBLE
+        PermissionUtils.checkAndRequestPermissions(this)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
+            for (grant in grantResults) {
+                if (grant != PackageManager.PERMISSION_GRANTED) {
+                    PermissionUtils.checkAndRequestPermissions(this)
+                    return
+                }
+            }
+            fetchLocation(this)
+        }
+    }
+
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        lateinit var binding: ActivityUserDashboardScreenBinding
+
+        // Fused Location Objects
+        private lateinit var locationCallBack: LocationCallback
+        private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+        fun fetchLocation(context: Context) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+
+            val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            locationCallBack = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    for (location in locationResult.locations) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        fetchLocationDetails(context, latitude, longitude)
+                    }
+                }
+            }
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallBack,
+                Looper.myLooper()!!
+            )
+        }
+
+        @SuppressLint("SetTextI18n")
+        private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+            val geoCoder = Geocoder(context, Locale.getDefault())
+            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+            val addressName: String = address.get(0).getAddressLine(0)
+            val city: String = address.get(0).locality
+            val state: String = address.get(0).adminArea
+            val country: String = address.get(0).countryName
+            val postalCode: String = address.get(0).postalCode
+            val knownName: String = address.get(0).featureName
+            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+            UserUtils.latitude = latitude.toString()
+            UserUtils.longitute = longitude.toString()
+            UserUtils.city = city
+            UserUtils.state = state
+            UserUtils.country = country
+            UserUtils.postalCode = postalCode
+            UserUtils.address = knownName
+            Toast.makeText(context, city, Toast.LENGTH_SHORT).show()
+            UserHomeScreen.binding.userLocation.text = UserUtils.city
+        }
+
     }
 }

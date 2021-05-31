@@ -36,8 +36,10 @@ import java.util.*
 
 class UserSignUpScreenOne : AppCompatActivity() {
 
+    // Fused Location Objects
     private lateinit var locationCallBack: LocationCallback
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private lateinit var binding: ActivitySignUpScreenOneBinding
 
     // Google SignIn Objects

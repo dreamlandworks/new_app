@@ -5,13 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -20,10 +18,12 @@ import com.satrango.R
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.auth.models.user_signup.UserResetPwdModel
 import com.satrango.ui.auth.models.user_signup.UserSignUpModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.HttpException
@@ -56,12 +56,49 @@ class SetPasswordScreen : AppCompatActivity() {
                     reEnterPassword.requestFocus()
                 } else {
                     UserUtils.password = pwd
-                    signUpToServer()
+                    if (UserUtils.FORGOT_PWD) {
+                        resetPwdOnServer()
+                    } else {
+                        signUpToServer()
+                    }
                 }
             }
-
         }
+    }
 
+    private fun resetPwdOnServer() {
+        progressDialog.show()
+        binding.password.clearFocus()
+        binding.reEnterPassword.clearFocus()
+        CoroutineScope(Main).launch {
+            try {
+                val requestBody = UserResetPwdModel(
+                    UserUtils.USER_ID,
+                    UserUtils.password
+                )
+                val response = RetrofitBuilder.getRetrofitInstance().userResetPassword(requestBody)
+                val responseObject = JSONObject(response.string())
+                Snackbar.make(binding.nextBtn, responseObject.getString("Message"), Snackbar.LENGTH_SHORT)
+                    .show()
+                UserUtils.FORGOT_PWD = !UserUtils.FORGOT_PWD
+                startActivity(Intent(this@SetPasswordScreen, LoginScreen::class.java))
+                finish()
+            } catch (e: HttpException) {
+                progressDialog.dismiss()
+                Snackbar.make(binding.password, "User Already Exist", Snackbar.LENGTH_SHORT).show()
+            } catch (e: JsonSyntaxException) {
+                progressDialog.dismiss()
+                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                    .show()
+            } catch (e: SocketTimeoutException) {
+                progressDialog.dismiss()
+                Snackbar.make(
+                    binding.password,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun initializeProgressDialog() {
@@ -74,7 +111,7 @@ class SetPasswordScreen : AppCompatActivity() {
         progressDialog.show()
         binding.password.clearFocus()
         binding.reEnterPassword.clearFocus()
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Main).launch {
             try {
                 val requestBody = UserSignUpModel(
                     UserUtils.address,
@@ -97,7 +134,6 @@ class SetPasswordScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getRetrofitInstance().userSignUp(requestBody)
                 val responseObject = JSONObject(response.string())
                 if (responseObject.getInt("status") == 200) {
-                    progressDialog.dismiss()
                     showCustomDialog()
                 } else {
                     Snackbar.make(
@@ -106,6 +142,7 @@ class SetPasswordScreen : AppCompatActivity() {
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
+                progressDialog.dismiss()
             } catch (e: HttpException) {
                 progressDialog.dismiss()
                 Snackbar.make(binding.password, "User Already Exist", Snackbar.LENGTH_SHORT).show()

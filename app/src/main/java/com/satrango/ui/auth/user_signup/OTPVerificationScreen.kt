@@ -6,14 +6,13 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.databinding.ActivityOTPVerificationScreenBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.models.user_signup.ForgetPwdOtpReqModel
 import com.satrango.ui.auth.models.user_signup.OTPVeriticationModel
 import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
@@ -36,9 +35,12 @@ class OTPVerificationScreen : AppCompatActivity() {
         setContentView(binding.root)
         initializeProgressDialog()
         requestOTP()
+
 //        otpAutoFill()
         binding.apply {
+
             otpTextWatchers()
+
             nextBtn.setOnClickListener {
                 val numOne = firstNo.text.toString().trim()
                 val numTwo = secondNo.text.toString().trim()
@@ -49,12 +51,11 @@ class OTPVerificationScreen : AppCompatActivity() {
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {
-                        startActivity(
-                            Intent(
-                                this@OTPVerificationScreen,
-                                UserSignUpScreenThree::class.java
-                            )
-                        )
+                        if (UserUtils.FORGOT_PWD) {
+                            startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
+                        } else {
+                            startActivity(Intent(this@OTPVerificationScreen, UserSignUpScreenThree::class.java))
+                        }
                         finish()
                     } else {
                         Snackbar.make(nextBtn, "Invalid OTP", Snackbar.LENGTH_SHORT).show()
@@ -80,19 +81,27 @@ class OTPVerificationScreen : AppCompatActivity() {
     private fun requestOTP() {
 
         CoroutineScope(Main).launch {
-            val requestBody = OTPVeriticationModel(
-                UserUtils.firstName,
-                UserUtils.lastName,
-                UserUtils.phoneNo
-            )
             try {
-                Log.e("OTP VERIFICATION", requestBody.toString())
-                val response = RetrofitBuilder.getRetrofitInstance().requestOTP(requestBody)
+                var response = Any()
+                if (UserUtils.FORGOT_PWD) {
+                    val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo)
+                    response =
+                        RetrofitBuilder.getRetrofitInstance().userForgetPwdOtpRequest(requestBody)
+                } else {
+                    val requestBody = OTPVeriticationModel(
+                        UserUtils.firstName,
+                        UserUtils.lastName,
+                        UserUtils.phoneNo
+                    )
+                    response = RetrofitBuilder.getRetrofitInstance().userRequestOTP(requestBody)
+                }
                 val responseBody = JSONObject(response.string())
-                Log.e("OTP VERIFICATION", responseBody.toString())
                 if (responseBody.getInt("status") == 200) {
                     progressDialog.dismiss()
                     otp = responseBody.getInt("OTP")
+                    if (UserUtils.FORGOT_PWD) {
+                        UserUtils.USER_ID = responseBody.getString("ID")
+                    }
                 } else {
                     Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
                         .show()

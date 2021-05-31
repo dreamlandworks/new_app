@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
-    private const val BASE_URL = "http://dev.satrango.com/api/"
+    private const val BASE_URL = "http://dev.satrango.com/"
 
     fun getRetrofitInstance(): ApiService {
 

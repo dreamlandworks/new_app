@@ -78,7 +78,7 @@ object PermissionUtils {
         ActivityCompat.requestPermissions(context as Activity, permissions, PERMISSIONS_CODE)
     }
 
-    private fun checkGPSStatus(context: Context) {
+    fun checkGPSStatus(context: Context): Boolean {
         val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gpsEnabled = false
         var networkEnabled = false
@@ -104,7 +104,11 @@ object PermissionUtils {
                 }
                 .setCancelable(false)
                 .show()
+            return false
         }
+        return true
     }
+
+
 
 }

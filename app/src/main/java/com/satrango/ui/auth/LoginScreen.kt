@@ -66,6 +66,7 @@ class LoginScreen : AppCompatActivity() {
             }
 
             signUpBtn.setOnClickListener {
+                UserUtils.FORGOT_PWD = false
                 startActivity(
                     Intent(
                         this@LoginScreen,
@@ -91,12 +92,8 @@ class LoginScreen : AppCompatActivity() {
             }
 
             forgetPassword.setOnClickListener {
-                startActivity(
-                    Intent(
-                        this@LoginScreen,
-                        ForgotPasswordScreenOne::class.java
-                    )
-                )
+                UserUtils.FORGOT_PWD = true
+                startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java))
             }
 
         }
@@ -120,7 +117,7 @@ class LoginScreen : AppCompatActivity() {
                 val jsonResponse = JSONObject(response.string())
                 progressDialog.dismiss()
                 if (jsonResponse.getInt("status") == 200) {
-                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("id"))
+                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("User id"))
                     startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
                 } else {
                     Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_SHORT).show()
