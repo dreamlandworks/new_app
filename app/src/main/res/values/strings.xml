@@ -17,7 +17,6 @@
     <string name="providerDetails">ProviderDetails</string>
 
 
-
     <string name="previous">PREVIOUS</string>
     <string name="next">NEXT</string>
     <string name="finish">FINISH</string>
@@ -138,5 +137,6 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="refer_amp_earn"><![CDATA[Refer & Earn]]></string>
+    <string name="browse_categories">Browse Categories</string>
 
 </resources>

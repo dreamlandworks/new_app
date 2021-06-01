@@ -32,5 +32,11 @@ interface ApiService {
         @Body json: UserResetPwdModel
     ): ResponseBody
 
+    @GET(UserApiEndPoints.USER_BROWSE_CATEGORIES)
+    suspend fun userBrowseCategories(): ResponseBody
+
+    @GET(UserApiEndPoints.USER_BROWSE_SUB_CATEGORIES)
+    suspend fun userBrowseSubCategories(): ResponseBody
+
 
 }

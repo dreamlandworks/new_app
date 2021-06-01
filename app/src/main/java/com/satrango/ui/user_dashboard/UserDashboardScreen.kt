@@ -31,6 +31,7 @@ import com.google.firebase.ktx.Firebase
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
@@ -111,6 +112,9 @@ class UserDashboardScreen : AppCompatActivity() {
                 }
                 R.id.userOptPostJob -> {
                     Toast.makeText(this, "Post A Job Clicked", Toast.LENGTH_SHORT).show()
+                }
+                R.id.userOptBrowseCategories -> {
+                    startActivity(Intent(this, BrowseCategoriesScreen::class.java))
                 }
                 R.id.userOptMyAccount -> {
                     Toast.makeText(this, "My Account Clicked", Toast.LENGTH_SHORT).show()

@@ -129,7 +129,8 @@ class SetPasswordScreen : AppCompatActivity() {
                     UserUtils.state,
                     UserUtils.twitterId,
                     UserUtils.latitude,
-                    UserUtils.longitute
+                    UserUtils.longitute,
+                    UserUtils.getReferralId(this@SetPasswordScreen)
                 )
                 val response = RetrofitBuilder.getRetrofitInstance().userSignUp(requestBody)
                 val responseObject = JSONObject(response.string())
@@ -220,8 +221,7 @@ class SetPasswordScreen : AppCompatActivity() {
 
     private fun showCustomDialog() {
         val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-        val dialogView: View =
-            LayoutInflater.from(this).inflate(R.layout.user_signup_success_dialog, viewGroup, false)
+        val dialogView: View = LayoutInflater.from(this).inflate(R.layout.user_signup_success_dialog, viewGroup, false)
         val loginBtn = dialogView.findViewById<TextView>(R.id.loginBtn)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
         val builder = AlertDialog.Builder(this)

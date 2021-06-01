@@ -16,5 +16,6 @@ data class UserSignUpModel(
     val state: String,
     val twitter_id: String,
     val user_lat: String,
-    val user_long: String
+    val user_long: String,
+    val referral_id: String
 )
