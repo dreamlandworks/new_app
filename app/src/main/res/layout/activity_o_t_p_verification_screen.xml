@@ -158,12 +158,12 @@
                 <Button
                     android:id="@+id/nextBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:backgroundTint="@color/yellow"
                     android:text="@string/verify"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
 

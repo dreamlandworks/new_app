@@ -119,12 +119,12 @@
                 <Button
                     android:id="@+id/signInBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_40sdp"
                     android:backgroundTint="@color/yellow"
                     android:gravity="center"
                     android:text="@string/sign_in"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
 

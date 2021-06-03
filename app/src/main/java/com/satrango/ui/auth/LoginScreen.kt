@@ -11,18 +11,17 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityLoginScreenBinding
-import com.satrango.databinding.UserDashboardHeaderBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
-import com.satrango.ui.auth.models.user_signup.UserLoginModel
+import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,26 +66,29 @@ class LoginScreen : AppCompatActivity() {
 
             signUpBtn.setOnClickListener {
                 UserUtils.FORGOT_PWD = false
-                startActivity(
-                    Intent(
-                        this@LoginScreen,
-                        UserSignUpScreenOne::class.java
-                    )
-                )
+                startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
             }
 
             signInBtn.setOnClickListener {
                 val phoneNo = mobileNo.text.toString().trim()
                 val pwd = password.text.toString().trim()
 
-                if (phoneNo.isEmpty()) {
-                    mobileNo.error = "Enter Phone number"
-                    mobileNo.requestFocus()
-                } else if (pwd.isEmpty()) {
-                    password.error = "Enter Password"
-                    password.requestFocus()
-                } else {
-                    loginToServer(phoneNo, pwd, "login")
+                when {
+                    phoneNo.isEmpty() -> {
+                        mobileNo.error = "Enter Phone number"
+                        mobileNo.requestFocus()
+                    }
+                    phoneNo.length != 10 -> {
+                        mobileNo.error = "Enter Valid Phone number"
+                        mobileNo.requestFocus()
+                    }
+                    pwd.isEmpty() -> {
+                        password.error = "Enter Password"
+                        password.requestFocus()
+                    }
+                    else -> {
+                        loginToServer(phoneNo, pwd, "login")
+                    }
                 }
 
             }
@@ -115,9 +117,10 @@ class LoginScreen : AppCompatActivity() {
                 val requestBody = UserLoginModel(phoneNo, password, type)
                 val response = RetrofitBuilder.getRetrofitInstance().login(requestBody)
                 val jsonResponse = JSONObject(response.string())
+                toast(this@LoginScreen, jsonResponse.toString())
                 progressDialog.dismiss()
                 if (jsonResponse.getInt("status") == 200) {
-                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("User id"))
+                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("user id"))
                     startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
                 } else {
                     Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_SHORT).show()

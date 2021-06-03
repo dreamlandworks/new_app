@@ -8,6 +8,9 @@ object UserApiEndPoints {
     final const val OTP_REQUEST_FORGOT_PWD = "user/forgot"
     final const val USER_RESET_PASSWORD = "user/changepwd"
     final const val USER_BROWSE_CATEGORIES = "user/cat"
-    final const val USER_BROWSE_SUB_CATEGORIES = "user/subcat"
+    final const val USER_BROWSE_SUB_CATEGORIES = "user/subcat/id"
+    final const val SHOW_USER_PROFILE = "user/show"
+    final const val USER_PROFILE_UPDATE = "user/update"
+    final const val DELETE_USER_ADDRESS = "user/delete/address"
 
 }

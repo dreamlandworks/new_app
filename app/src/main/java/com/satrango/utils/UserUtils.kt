@@ -1,7 +1,10 @@
 package com.satrango.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.util.Base64
 import com.satrango.R
+import java.io.ByteArrayOutputStream
 
 object UserUtils {
 
@@ -73,6 +76,13 @@ object UserUtils {
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(context.resources.getString(R.string.userReferralId), "")!!
+    }
+
+    fun encodeToBase64(image: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 70, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
 }

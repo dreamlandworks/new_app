@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.models.user_signup
+package com.satrango.ui.auth.user_signup.models
 
 data class OTPVeriticationModel(
     val fname: String,

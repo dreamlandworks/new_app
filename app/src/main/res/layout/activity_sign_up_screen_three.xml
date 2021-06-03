@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/grey_800"
     android:layout_height="match_parent"
+    android:background="@color/grey_800"
     tools:context=".ui.auth.user_signup.UserSignUpScreenThree">
 
     <ImageView
@@ -33,9 +33,9 @@
         <ImageView
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_100sdp"
+            android:layout_marginStart="@dimen/_40sdp"
             android:src="@drawable/signupicon"
-            tools:ignore="ContentDescription"
-            android:layout_marginStart="@dimen/_40sdp"/>
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -66,8 +66,8 @@
                         android:text="@string/_1"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/_14sdp" />
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold" />
 
                     <View
                         android:layout_width="@dimen/_40sdp"
@@ -83,7 +83,7 @@
                         android:text="@string/_2"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp"/>
+                        android:textSize="@dimen/_14sdp" />
 
                     <View
                         android:layout_width="@dimen/_40sdp"
@@ -113,10 +113,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_weight="1"
                         app:boxStrokeColor="@color/boxStokeColor">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -137,10 +137,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
                         app:boxStrokeColor="@color/boxStokeColor">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -163,8 +163,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxStrokeColor="@color/boxStokeColor"
-                    android:layout_marginTop="@dimen/_5sdp">
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:boxStrokeColor="@color/boxStokeColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mobileNo"
@@ -184,8 +184,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxStrokeColor="@color/boxStokeColor"
-                    android:layout_marginTop="@dimen/_5sdp">
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:boxStrokeColor="@color/boxStokeColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
@@ -196,7 +196,7 @@
                         android:drawablePadding="@dimen/_10sdp"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
-                        android:maxLines="1"/>
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -214,41 +214,41 @@
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:windowSoftInputMode="stateAlwaysVisible"
-                    app:drawableRightCompat="@drawable/ic_graycheck"
-                    app:drawableLeftCompat="@drawable/ic_calenders" />
+                    app:drawableLeftCompat="@drawable/ic_calenders"
+                    app:drawableRightCompat="@drawable/ic_graycheck" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/checkBox"
                         style="@style/CustomCheckbox02"
                         android:layout_width="@dimen/_25sdp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="0dp"
-                        android:padding="0dp"
-                        android:layout_height="wrap_content"/>
+                        android:padding="0dp" />
 
                     <TextView
                         android:id="@+id/termsAndConditions"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/i_agree_to_the_terms_and_conditions_of_satrango_com"/>
+                        android:text="@string/i_agree_to_the_terms_and_conditions_of_satrango_com" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/nextBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginVertical="@dimen/_5sdp"
                     android:backgroundTint="@color/yellow"
                     android:text="@string/next_sm"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
 
@@ -282,8 +282,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/googleSigInBtn"

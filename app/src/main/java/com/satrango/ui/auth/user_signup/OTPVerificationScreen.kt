@@ -12,8 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonSyntaxException
 import com.satrango.databinding.ActivityOTPVerificationScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.models.user_signup.ForgetPwdOtpReqModel
-import com.satrango.ui.auth.models.user_signup.OTPVeriticationModel
+import com.satrango.ui.auth.user_signup.models.ForgetPwdOtpReqModel
+import com.satrango.ui.auth.user_signup.models.OTPVeriticationModel
 import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -98,9 +98,9 @@ class OTPVerificationScreen : AppCompatActivity() {
                 val responseBody = JSONObject(response.string())
                 if (responseBody.getInt("status") == 200) {
                     progressDialog.dismiss()
-                    otp = responseBody.getInt("OTP")
+                    otp = responseBody.getInt("otp")
                     if (UserUtils.FORGOT_PWD) {
-                        UserUtils.USER_ID = responseBody.getString("ID")
+                        UserUtils.USER_ID = responseBody.getString("id")
                     }
                 } else {
                     Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)

@@ -32,6 +32,7 @@ import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
+import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
@@ -63,7 +64,7 @@ class UserDashboardScreen : AppCompatActivity() {
 
         Toast.makeText(
             this,
-            "Your Referral User ID: ${UserUtils.getReferralId(this)}",
+            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
             Toast.LENGTH_SHORT
         ).show()
 
@@ -126,7 +127,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     Toast.makeText(this, "My Job Posts Clicked", Toast.LENGTH_SHORT).show()
                 }
                 R.id.userOptMyProfile -> {
-                    Toast.makeText(this, "My Profile Clicked", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, UserProfileScreen::class.java))
                 }
                 R.id.userOptReferEarn -> {
                     createReferLink()
@@ -295,7 +296,6 @@ class UserDashboardScreen : AppCompatActivity() {
             UserUtils.country = country
             UserUtils.postalCode = postalCode
             UserUtils.address = knownName
-            Toast.makeText(context, city, Toast.LENGTH_SHORT).show()
             UserHomeScreen.binding.userLocation.text = UserUtils.city
         }
 

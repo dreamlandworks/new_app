@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.UserLoginTypeScreen"
-    android:background="@color/grey_800">
+    android:background="@color/grey_800"
+    tools:context=".ui.auth.UserLoginTypeScreen">
 
     <ImageView
         android:layout_width="match_parent"
@@ -19,28 +19,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:src="@drawable/circlelogo"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:layout_gravity="center_horizontal"
-        tools:ignore="ContentDescription" />
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:src="@drawable/circlelogo"
+            tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_100sdp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/logo"
-        android:layout_gravity="center_horizontal"
-        tools:ignore="ContentDescription" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             app:cardCornerRadius="@dimen/_5sdp"
-            android:layout_marginHorizontal="@dimen/_20sdp">
+            app:cardElevation="@dimen/_5sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,36 +52,37 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/login_as"
                     android:gravity="center_horizontal"
-                    android:textSize="@dimen/_20sdp"
+                    android:text="@string/login_as"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"/>
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/userBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:textSize="@dimen/_14sdp"
-                    android:backgroundTint="@color/yellow"/>
+                    android:backgroundTint="@color/yellow"
+                    android:text="@string/user"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14sdp" />
 
                 <Button
                     android:id="@+id/serviceProviderBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/service_provider"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:textSize="@dimen/_14sdp"
-                    android:backgroundTint="@color/yellow"/>
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/yellow"
+                    android:text="@string/service_provider"
+                    android:textSize="@dimen/_14sdp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

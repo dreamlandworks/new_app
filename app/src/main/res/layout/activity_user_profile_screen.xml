@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolBar"
+            layout="@layout/user_tool_bar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:background="@color/colorPrimary" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardElevation="@dimen/_5sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:src="@drawable/ic_myprofileicon"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_80sdp"
+                            android:layout_gravity="center"
+                            android:gravity="bottom">
+
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/profilePic"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_80sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:src="@drawable/images"
+                                app:civ_border_color="@color/yellow"
+                                app:civ_border_width="@dimen/_2sdp" />
+
+                            <ImageView
+                                android:id="@+id/profileUploadBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_24sdp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:src="@drawable/ic_cameras"
+                                tools:ignore="ContentDescription" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_15sdp"
+                            android:gravity="start"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/firstName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@color/transparent"
+                                android:drawableEnd="@drawable/ic_pencils"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:importantForAutofill="no"
+                                android:singleLine="true"
+                                android:text="@string/first_name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="bold"
+                                tools:ignore="LabelFor,TextFields" />
+
+                            <EditText
+                                android:id="@+id/lastName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@color/transparent"
+                                android:drawableEnd="@drawable/ic_pencils"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:importantForAutofill="no"
+                                android:singleLine="true"
+                                android:text="@string/last_name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="bold"
+                                tools:ignore="LabelFor,TextFields" />
+
+                            <EditText
+                                android:id="@+id/phoneNo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:digits="0123456789"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:editable="false"
+                                android:focusable="false"
+                                android:importantForAutofill="no"
+                                android:inputType="phone"
+                                android:maxLength="10"
+                                android:text="@string/mobile_no"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="bold"
+                                tools:ignore="LabelFor" />
+
+                            <TextView
+                                android:id="@+id/changePwd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:text="@string/change_password"
+                                android:textColor="@color/gray"
+                                android:textSize="@dimen/_11sdp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_20sdp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/emailId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz@.ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                            android:drawableStart="@drawable/ic_mail"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:hint="@string/email"
+                            android:inputType="textEmailAddress"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_10sdp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/dateOfBirth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_calenders"
+                            android:drawableEnd="@drawable/ic_pencils"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:editable="false"
+                            android:hint="@string/date_of_birth"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:text="11 Jun 1997" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/addressText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_20sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:text="@string/saved_addresses"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/addressRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_100sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingVertical="@dimen/_20sdp">
+
+                        <Button
+                            android:id="@+id/backBtn"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginEnd="@dimen/_15sdp"
+                            android:text="@string/back"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/applyBtn"
+                            style="@style/Widget.MaterialComponents.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            android:backgroundTint="@color/yellow"
+                            android:text="@string/apply"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

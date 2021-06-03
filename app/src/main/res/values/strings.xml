@@ -138,5 +138,12 @@
     <string name="last_name">Last Name</string>
     <string name="refer_amp_earn"><![CDATA[Refer & Earn]]></string>
     <string name="browse_categories">Browse Categories</string>
+    <string name="change_password">Change Password</string>
+    <string name="saved_addresses">Saved Addresses</string>
+    <string name="apply">Apply</string>
 
+    <string-array name="imageSelections">
+        <item>Choose photo from gallery</item>
+        <item>Take picture with camera</item>
+    </string-array>
 </resources>

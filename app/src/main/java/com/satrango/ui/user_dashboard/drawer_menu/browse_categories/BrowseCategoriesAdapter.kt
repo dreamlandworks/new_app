@@ -10,7 +10,8 @@ import com.satrango.databinding.UserCategoryRowBinding
 import com.satrango.remote.RetrofitBuilder
 
 class BrowseCategoriesAdapter(
-    private val list: List<BrowserCategoryModel>
+    private val list: List<BrowserCategoryModel>,
+    private val browseCategoriesInterface: BrowseCategoriesInterface
 ): RecyclerView.Adapter<BrowseCategoriesAdapter.ViewHolder>() {
 
     class ViewHolder(binding: UserCategoryRowBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -42,9 +43,9 @@ class BrowseCategoriesAdapter(
 //        if (selectionList[position]) {
 //            holder.binding.rootLayout.setBackgroundResource(R.drawable.category_selected_bg)
 //        }
-//        holder.itemView.setOnClickListener {
-//            updateListSelection(position)
-//        }
+        holder.itemView.setOnClickListener {
+            browseCategoriesInterface.selectedCategory(list[position].id)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -18,10 +18,9 @@ import com.satrango.R
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
-import com.satrango.ui.auth.models.user_signup.UserResetPwdModel
-import com.satrango.ui.auth.models.user_signup.UserSignUpModel
+import com.satrango.ui.auth.user_signup.models.UserResetPwdModel
+import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.UserUtils
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -72,15 +71,15 @@ class SetPasswordScreen : AppCompatActivity() {
         binding.reEnterPassword.clearFocus()
         CoroutineScope(Main).launch {
             try {
-                val requestBody = UserResetPwdModel(
-                    UserUtils.USER_ID,
-                    UserUtils.password
-                )
+                val requestBody = UserResetPwdModel(UserUtils.USER_ID, UserUtils.password)
                 val response = RetrofitBuilder.getRetrofitInstance().userResetPassword(requestBody)
                 val responseObject = JSONObject(response.string())
-                Snackbar.make(binding.nextBtn, responseObject.getString("Message"), Snackbar.LENGTH_SHORT)
-                    .show()
-                UserUtils.FORGOT_PWD = !UserUtils.FORGOT_PWD
+                Snackbar.make(
+                    binding.nextBtn,
+                    responseObject.getString("message"),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                UserUtils.FORGOT_PWD = false
                 startActivity(Intent(this@SetPasswordScreen, LoginScreen::class.java))
                 finish()
             } catch (e: HttpException) {
@@ -135,6 +134,10 @@ class SetPasswordScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getRetrofitInstance().userSignUp(requestBody)
                 val responseObject = JSONObject(response.string())
                 if (responseObject.getInt("status") == 200) {
+                    UserUtils.setReferralId(
+                        this@SetPasswordScreen,
+                        responseObject.getString("referral_id")
+                    )
                     showCustomDialog()
                 } else {
                     Snackbar.make(
@@ -221,7 +224,8 @@ class SetPasswordScreen : AppCompatActivity() {
 
     private fun showCustomDialog() {
         val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-        val dialogView: View = LayoutInflater.from(this).inflate(R.layout.user_signup_success_dialog, viewGroup, false)
+        val dialogView: View =
+            LayoutInflater.from(this).inflate(R.layout.user_signup_success_dialog, viewGroup, false)
         val loginBtn = dialogView.findViewById<TextView>(R.id.loginBtn)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
         val builder = AlertDialog.Builder(this)

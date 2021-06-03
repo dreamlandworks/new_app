@@ -50,7 +50,8 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen"></activity>
+        <activity android:name=".ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen"></activity>
+        <activity android:name=".ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpSeven" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpSix" />
         <activity android:name=".ui.auth.provider_signup.ProviderSignUpFive" />
@@ -86,9 +87,6 @@
         <activity android:name=".ui.auth.user_signup.TermsAndConditionScreen" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenThree"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenOne"
