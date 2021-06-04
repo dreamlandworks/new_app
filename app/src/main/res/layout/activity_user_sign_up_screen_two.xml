@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_800"
-    tools:context=".ui.auth.user_signup.UserSignUpScreenOne">
+    tools:context=".ui.auth.user_signup.UserSignUpScreenTwo">
 
     <ImageView
         android:layout_width="match_parent"
@@ -24,8 +24,6 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_20sdp" />
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +33,7 @@
         <ImageView
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_100sdp"
-            android:src="@drawable/signuplogo"
+            android:src="@drawable/welcomeboardicon"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.card.MaterialCardView
@@ -103,93 +101,66 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:text="@string/welcome_to_on_board"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/user"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_18sdp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:padding="@dimen/_10sdp"
+                    android:gravity="center"
+                    tools:ignore="UseCompoundDrawables">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        app:boxStrokeColor="@color/boxStokeColor">
+                    <ImageView
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:src="@drawable/ic_location_icon"
+                        tools:ignore="ContentDescription" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/firstName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                            android:drawableStart="@drawable/ic_users"
-                            android:drawableEnd="@drawable/ic_graycheck"
-                            android:drawablePadding="@dimen/_10sdp"
-                            android:hint="@string/first_name"
-                            android:inputType="text"
-                            android:maxLength="50"
-                            android:singleLine="true"
-                            app:boxStrokeColor="@color/boxStokeColor" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/userLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center|start"
+                        android:text="@string/fetching_location_please_wait" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        app:boxStrokeColor="@color/boxStokeColor">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/lastName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                            android:drawableStart="@drawable/ic_users"
-                            android:drawableEnd="@drawable/ic_graycheck"
-                            android:drawablePadding="@dimen/_10sdp"
-                            android:hint="@string/last_name"
-                            android:inputType="text"
-                            android:maxLength="50"
-                            android:singleLine="true"
-                            app:boxStrokeColor="@color/boxStokeColor" />
-                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/signIn_email"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/boxStokeColor">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mobileNo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_phoneno"
-                        android:drawableEnd="@drawable/ic_graycheck"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:hint="@string/enter_mobile_number"
-                        android:inputType="number"
-                        android:maxLength="10"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:text="@string/thanks_for_your_interest_but_we_fear_as_we_may_not_be_able_to_cater_some_services_in_your_area_please_do_not_mind_and_please_keep_up_with_us_and_proceed_to_register"
+                    android:textColor="@color/red" />
 
                 <Button
                     android:id="@+id/nextBtn"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_150sdp"
                     android:layout_height="@dimen/_40sdp"
-                    android:layout_marginHorizontal="@dimen/_15sdp"
-                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:layout_gravity="center"
                     android:backgroundTint="@color/yellow"
                     android:text="@string/next_sm"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -252,4 +223,5 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+
 </RelativeLayout>

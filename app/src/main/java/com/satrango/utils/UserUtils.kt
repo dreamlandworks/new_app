@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import com.satrango.R
+import com.satrango.remote.RetrofitBuilder
 import java.io.ByteArrayOutputStream
 
 object UserUtils {
@@ -83,6 +84,22 @@ object UserUtils {
         image.compress(Bitmap.CompressFormat.JPEG, 70, baos)
         val b = baos.toByteArray()
         return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    fun saveUserProfilePic(context: Context, url: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.userImageUrl), url)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getUserProfilePic(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.userImageUrl), "")!!
     }
 
 }

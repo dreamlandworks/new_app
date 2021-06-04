@@ -24,17 +24,19 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_20sdp" />
 
+    <ImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/otpimage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_40sdp"
+        tools:ignore="ContentDescription" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
-            android:src="@drawable/otpimage"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -55,17 +57,17 @@
                     android:gravity="center"
                     android:text="@string/verification_code"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:layout_marginVertical="@dimen/_15sdp"
                     android:gravity="center"
                     android:text="@string/please_type_verification_code_sent_to_mobile_number_email"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_11sdp" />
 
                 <LinearLayout
                     android:id="@+id/layout_otp"
@@ -162,9 +164,10 @@
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:backgroundTint="@color/yellow"
                     android:text="@string/verify"
+                    android:layout_marginHorizontal="@dimen/_15sdp"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_13sdp"
+                    android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
             </LinearLayout>

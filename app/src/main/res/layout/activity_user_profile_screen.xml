@@ -24,9 +24,18 @@
                 android:layout_height="@dimen/_250sdp"
                 android:background="@color/colorPrimary" />
 
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_myprofileicon"
+                tools:ignore="ContentDescription" />
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/icon"
                 android:layout_centerInParent="true"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_30sdp"
@@ -37,13 +46,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:src="@drawable/ic_myprofileicon"
-                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -85,7 +87,7 @@
                             android:gravity="start"
                             android:orientation="vertical">
 
-                            <EditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/firstName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -94,6 +96,7 @@
                                 android:drawableEnd="@drawable/ic_pencils"
                                 android:drawablePadding="@dimen/_10sdp"
                                 android:importantForAutofill="no"
+                                android:inputType="textEmailAddress"
                                 android:singleLine="true"
                                 android:text="@string/first_name"
                                 android:textColor="@color/black"
@@ -101,7 +104,7 @@
                                 android:textStyle="bold"
                                 tools:ignore="LabelFor,TextFields" />
 
-                            <EditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/lastName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -110,6 +113,7 @@
                                 android:drawableEnd="@drawable/ic_pencils"
                                 android:drawablePadding="@dimen/_10sdp"
                                 android:importantForAutofill="no"
+                                android:inputType="textEmailAddress"
                                 android:singleLine="true"
                                 android:text="@string/last_name"
                                 android:textColor="@color/black"
@@ -117,7 +121,7 @@
                                 android:textStyle="bold"
                                 tools:ignore="LabelFor,TextFields" />
 
-                            <EditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/phoneNo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -162,6 +166,7 @@
                             android:layout_height="wrap_content"
                             android:digits="abcdefghijklmnopqrstuvwxyz@.ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                             android:drawableStart="@drawable/ic_mail"
+                            android:drawableEnd="@drawable/ic_pencils"
                             android:drawablePadding="@dimen/_10sdp"
                             android:hint="@string/email"
                             android:inputType="textEmailAddress"
@@ -202,7 +207,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/addressRv"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_100sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_10sdp" />
 
                     <LinearLayout
@@ -214,12 +219,13 @@
 
                         <Button
                             android:id="@+id/backBtn"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:backgroundTint="@color/lightGray"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_40sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:text="@string/back"
-                            android:textColor="@color/colorPrimary"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
                             android:textStyle="bold" />
 
                         <Button
@@ -230,6 +236,7 @@
                             android:layout_marginStart="@dimen/_15sdp"
                             android:backgroundTint="@color/yellow"
                             android:text="@string/apply"
+                            android:textAllCaps="false"
                             android:textColor="@color/black" />
 
                     </LinearLayout>

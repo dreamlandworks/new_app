@@ -1,6 +1,7 @@
 package com.satrango.ui.user_dashboard.drawer_menu.browse_categories
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -40,11 +41,11 @@ class BrowseCategoriesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-//        if (selectionList[position]) {
-//            holder.binding.rootLayout.setBackgroundResource(R.drawable.category_selected_bg)
-//        }
+        if (list[position].selected) {
+            holder.binding.rootLayout.setBackgroundResource(R.drawable.category_selected_bg)
+        }
         holder.itemView.setOnClickListener {
-            browseCategoriesInterface.selectedCategory(list[position].id)
+            browseCategoriesInterface.selectedCategory(list[position].id, position)
         }
     }
 

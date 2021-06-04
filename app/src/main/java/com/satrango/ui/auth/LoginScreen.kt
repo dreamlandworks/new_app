@@ -16,8 +16,9 @@ import com.satrango.R
 import com.satrango.databinding.ActivityLoginScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
-import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
+import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
+import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -27,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.HttpException
+import java.lang.IndexOutOfBoundsException
 import java.net.SocketTimeoutException
 
 class LoginScreen : AppCompatActivity() {
@@ -87,6 +89,8 @@ class LoginScreen : AppCompatActivity() {
                         password.requestFocus()
                     }
                     else -> {
+                        UserUtils.googleId = ""
+                        UserUtils.facebookId = ""
                         loginToServer(phoneNo, pwd, "login")
                     }
                 }
@@ -117,23 +121,31 @@ class LoginScreen : AppCompatActivity() {
                 val requestBody = UserLoginModel(phoneNo, password, type)
                 val response = RetrofitBuilder.getRetrofitInstance().login(requestBody)
                 val jsonResponse = JSONObject(response.string())
-                toast(this@LoginScreen, jsonResponse.toString())
                 progressDialog.dismiss()
                 if (jsonResponse.getInt("status") == 200) {
                     UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("user id"))
                     startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
                 } else {
-                    Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_SHORT).show()
+                    if (UserUtils.googleId.isNotEmpty() || UserUtils.facebookId.isNotEmpty()) {
+                        startActivity(Intent(this@LoginScreen, UserSignUpScreenThree::class.java))
+                    } else {
+                        Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_LONG).show()
+                    }
                 }
             } catch (e: HttpException) {
                 progressDialog.dismiss()
                 Snackbar.make(binding.password, "Server Busy", Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
                 progressDialog.dismiss()
-                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                    .show()
             } catch (e: SocketTimeoutException) {
                 progressDialog.dismiss()
-                Snackbar.make(binding.password, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.password,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -161,6 +173,13 @@ class LoginScreen : AppCompatActivity() {
                         token
                     ) { jsonObject, _ ->
                         val userId = jsonObject.getString("id")
+                        val userName = jsonObject.getString("name")
+                        UserUtils.facebookId = userId
+                        UserUtils.googleId = ""
+                        UserUtils.firstName = userName.split(" ")[0]
+                        try {
+                            UserUtils.lastName = userName.split(" ")[1]
+                        } catch (e: IndexOutOfBoundsException) {}
                         loginToServer(userId, "", resources.getString(R.string.userFacebookLogin))
                     }
                     val parameters = Bundle()
@@ -217,6 +236,13 @@ class LoginScreen : AppCompatActivity() {
             val email = account.email
             val googleId = account.id
             val image = account.photoUrl
+            UserUtils.googleId = googleId!!
+            UserUtils.facebookId = ""
+            UserUtils.firstName = userName.split(" ")[0]
+            UserUtils.mailId = email
+            try {
+                UserUtils.lastName = userName.split(" ")[1]
+            } catch (e: IndexOutOfBoundsException) {}
             loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))
         } else {
             Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()

@@ -54,7 +54,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         if (UserUtils.FORGOT_PWD) {
                             startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         } else {
-                            startActivity(Intent(this@OTPVerificationScreen, UserSignUpScreenThree::class.java))
+                            startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         }
                         finish()
                     } else {
@@ -85,8 +85,16 @@ class OTPVerificationScreen : AppCompatActivity() {
                 var response = Any()
                 if (UserUtils.FORGOT_PWD) {
                     val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo)
-                    response =
-                        RetrofitBuilder.getRetrofitInstance().userForgetPwdOtpRequest(requestBody)
+                    response = RetrofitBuilder.getRetrofitInstance().userForgetPwdOtpRequest(requestBody)
+                    val responseBody = JSONObject(response.string())
+                    if (responseBody.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        otp = responseBody.getInt("otp")
+                        UserUtils.USER_ID = responseBody.getString("id")
+                    } else {
+                        Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
                 } else {
                     val requestBody = OTPVeriticationModel(
                         UserUtils.firstName,
@@ -94,17 +102,13 @@ class OTPVerificationScreen : AppCompatActivity() {
                         UserUtils.phoneNo
                     )
                     response = RetrofitBuilder.getRetrofitInstance().userRequestOTP(requestBody)
-                }
-                val responseBody = JSONObject(response.string())
-                if (responseBody.getInt("status") == 200) {
-                    progressDialog.dismiss()
-                    otp = responseBody.getInt("otp")
-                    if (UserUtils.FORGOT_PWD) {
-                        UserUtils.USER_ID = responseBody.getString("id")
+                    val responseBody = JSONObject(response.string())
+                    if (responseBody.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        otp = responseBody.getInt("otp")
+                    } else {
+                        Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT).show()
                     }
-                } else {
-                    Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
-                        .show()
                 }
             } catch (e: HttpException) {
                 progressDialog.dismiss()

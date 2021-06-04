@@ -20,22 +20,34 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileAddressAdapter
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import java.util.*
 
 class UserDashboardScreen : AppCompatActivity() {
@@ -213,6 +225,7 @@ class UserDashboardScreen : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         PermissionUtils.checkAndRequestPermissions(this)
+        getUserProfilePicture()
     }
 
     override fun onRequestPermissionsResult(
@@ -300,4 +313,31 @@ class UserDashboardScreen : AppCompatActivity() {
         }
 
     }
+
+    @SuppressLint("SetTextI18n")
+    private fun getUserProfilePicture() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen))
+                val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
+                val responseData = response.data
+                if (response.status == 200) {
+                    if (responseData.profile_pic.isNotEmpty()) {
+                        val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                        UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
+                    }
+                } else {
+                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
+                }
+            } catch (e: HttpException) {
+                Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
+            } catch (e: JsonSyntaxException) {
+                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
+            } catch (e: SocketTimeoutException) {
+                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
 }

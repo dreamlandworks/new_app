@@ -19,6 +19,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenThreeBinding
+import com.satrango.ui.auth.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import java.util.*
@@ -86,6 +87,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 )
             }
 
+            loginBtn.setOnClickListener {
+                startActivity(Intent(this@UserSignUpScreenThree, LoginScreen::class.java))
+                finish()
+            }
+
             nextBtn.setOnClickListener {
 
                 val first_name = firstName.text.toString().trim()
@@ -103,13 +109,13 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         lastName.error = "Enter Last Name"
                         lastName.requestFocus()
                     }
-                    mail.isEmpty() -> {
-                        email.error = "Enter Mail Id"
-                        email.requestFocus()
-                    }
                     phoneNo.isEmpty() -> {
                         mobileNo.error = "Enter Phone No"
                         mobileNo.requestFocus()
+                    }
+                    mail.isEmpty() -> {
+                        email.error = "Enter Mail Id"
+                        email.requestFocus()
                     }
                     dob == resources.getString(R.string.date_of_birth) -> {
                         dateOfBirth.error = "Select Date Of Birth"
@@ -259,7 +265,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
         UserUtils.country = country
         UserUtils.postalCode = postalCode
         UserUtils.address = knownName
-        startActivity(Intent(this@UserSignUpScreenThree, SetPasswordScreen::class.java))
+        startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
         progressDialog.dismiss()
     }
 }

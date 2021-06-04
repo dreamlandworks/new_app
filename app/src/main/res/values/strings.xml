@@ -141,6 +141,7 @@
     <string name="change_password">Change Password</string>
     <string name="saved_addresses">Saved Addresses</string>
     <string name="apply">Apply</string>
+    <string name="userImageUrl">UserImageUrl</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

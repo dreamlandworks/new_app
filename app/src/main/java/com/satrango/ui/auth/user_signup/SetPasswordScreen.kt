@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
@@ -131,13 +133,11 @@ class SetPasswordScreen : AppCompatActivity() {
                     UserUtils.longitute,
                     UserUtils.getReferralId(this@SetPasswordScreen)
                 )
+                Log.e("JSON RESPONSE", Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getRetrofitInstance().userSignUp(requestBody)
                 val responseObject = JSONObject(response.string())
                 if (responseObject.getInt("status") == 200) {
-                    UserUtils.setReferralId(
-                        this@SetPasswordScreen,
-                        responseObject.getString("referral_id")
-                    )
+                    UserUtils.setReferralId(this@SetPasswordScreen, responseObject.getString("referral_id"))
                     showCustomDialog()
                 } else {
                     Snackbar.make(
