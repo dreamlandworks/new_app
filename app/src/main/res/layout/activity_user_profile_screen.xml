@@ -22,7 +22,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_250sdp"
-                android:background="@color/colorPrimary" />
+                android:background="@color/blue_500" />
 
             <ImageView
                 android:id="@+id/icon"

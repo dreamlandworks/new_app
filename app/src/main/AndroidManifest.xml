@@ -120,13 +120,13 @@
             android:name=".ui.auth.user_signup.UserSignUpScreenOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.intro.IntroScreen"
+            android:name=".ui.splash.IntroScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.LoginScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".ui.splash.SplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -22,6 +22,7 @@ import com.satrango.databinding.ActivitySignUpScreenThreeBinding
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import java.util.*
 
 class UserSignUpScreenThree : AppCompatActivity() {
@@ -99,6 +100,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 val mail = email.text.toString().trim()
                 val phoneNo = mobileNo.text.toString().trim()
                 val dob = dateOfBirth.text.toString().trim()
+                val selectedGender = genderGroup.checkedRadioButtonId
 
                 when {
                     first_name.isEmpty() -> {
@@ -126,11 +128,10 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         dateOfBirth.requestFocus()
                     }
                     !checkBox.isChecked -> {
-                        Snackbar.make(
-                            checkBox,
-                            "Accept Terms and Conditions",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        snackBar(checkBox, "Accept Terms and Conditions")
+                    }
+                    selectedGender != R.id.male && selectedGender != R.id.female && selectedGender != R.id.others -> {
+                        snackBar(genderGroup, "Select Gender")
                     }
                     else -> {
                         UserUtils.firstName = first_name
@@ -138,6 +139,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         UserUtils.mailId = mail
                         UserUtils.dateOfBirth = dob
                         UserUtils.phoneNo = phoneNo
+                        when(selectedGender) {
+                            R.id.male -> UserUtils.gender = "Male"
+                            R.id.female -> UserUtils.gender = "Female"
+                            R.id.others -> UserUtils.gender = "Others"
+                        }
                         fetchLocation()
                     }
                 }

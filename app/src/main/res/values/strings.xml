@@ -17,13 +17,12 @@
     <string name="providerDetails">ProviderDetails</string>
 
 
-    <string name="previous">PREVIOUS</string>
-    <string name="next">NEXT</string>
-    <string name="finish">FINISH</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
     <string name="mobile_no">Mobile No</string>
     <string name="password">Password</string>
     <string name="forget_password">Forgot Password?</string>
-    <string name="remember_me">Remember me</string>
     <string name="sign_in">Sign In</string>
     <string name="don_t_have_account">Don\'t have account?</string>
     <string name="create_account">Create Account</string>
@@ -142,6 +141,24 @@
     <string name="saved_addresses">Saved Addresses</string>
     <string name="apply">Apply</string>
     <string name="userImageUrl">UserImageUrl</string>
+
+    <string name="intro1">Whether you need services like mechanic, electrician, plumbing etc.</string>
+    <string name="intro2">Or Services like Teachers, Tutors, Professionals etc.</string>
+    <string name="intro3">Technical Services like Data Entry, Software / App Developer etc.</string>
+    <string name="intro4">List out your skills, your free time and your required price to get yourselves hired and earn immediately</string>
+    <string name="_4">4</string>
+    <string name="skip">Skip</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_with">Login with</string>
+    <string name="log_in_i">Log In!</string>
+    <string name="remember_me">Remember me</string>
+    <string name="welcome_here">Welcome Here</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="others">Others</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="one_step_more">One Step More</string>
+    <string name="to_go">To Go...</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

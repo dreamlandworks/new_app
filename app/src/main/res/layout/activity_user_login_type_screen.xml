@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/login_as"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/blue_500"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 

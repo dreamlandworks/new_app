@@ -23,6 +23,7 @@ import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.auth.user_signup.models.UserResetPwdModel
 import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -131,7 +132,8 @@ class SetPasswordScreen : AppCompatActivity() {
                     UserUtils.twitterId,
                     UserUtils.latitude,
                     UserUtils.longitute,
-                    UserUtils.getReferralId(this@SetPasswordScreen)
+                    UserUtils.getReferralId(this@SetPasswordScreen),
+                    UserUtils.gender
                 )
                 Log.e("JSON RESPONSE", Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getRetrofitInstance().userSignUp(requestBody)
@@ -140,27 +142,18 @@ class SetPasswordScreen : AppCompatActivity() {
                     UserUtils.setReferralId(this@SetPasswordScreen, responseObject.getString("referral_id"))
                     showCustomDialog()
                 } else {
-                    Snackbar.make(
-                        binding.nextBtn,
-                        responseObject.getString("message"),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    snackBar(binding.nextBtn, responseObject.getString("message"))
                 }
                 progressDialog.dismiss()
             } catch (e: HttpException) {
                 progressDialog.dismiss()
-                Snackbar.make(binding.password, "User Already Exist", Snackbar.LENGTH_SHORT).show()
+                snackBar(binding.password, "User Already Exist")
             } catch (e: JsonSyntaxException) {
                 progressDialog.dismiss()
-                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT)
-                    .show()
+                snackBar(binding.password, "Something Went Wrong")
             } catch (e: SocketTimeoutException) {
                 progressDialog.dismiss()
-                Snackbar.make(
-                    binding.password,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                snackBar(binding.password, "Please check internet Connection",)
             }
 
         }

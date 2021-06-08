@@ -13,6 +13,7 @@ object UserUtils {
     var firstName = ""
     var lastName = ""
     var phoneNo = ""
+    var gender = ""
     var latitude = ""
     var longitute = ""
     var city = ""

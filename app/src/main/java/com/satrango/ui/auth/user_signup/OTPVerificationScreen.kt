@@ -51,11 +51,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {
-                        if (UserUtils.FORGOT_PWD) {
-                            startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
-                        } else {
-                            startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
-                        }
+                        startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         finish()
                     } else {
                         Snackbar.make(nextBtn, "Invalid OTP", Snackbar.LENGTH_SHORT).show()

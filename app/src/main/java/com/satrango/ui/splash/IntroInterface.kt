@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.intro
+package com.satrango.ui.splash
 
 interface IntroInterface {
 

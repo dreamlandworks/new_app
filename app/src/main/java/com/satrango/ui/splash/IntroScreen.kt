@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.intro
+package com.satrango.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,11 +17,11 @@ class IntroScreen : AppCompatActivity(), IntroInterface {
         binding = ActivityIntroScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val list = mutableListOf<Int>()
-        list.add(R.drawable.slider1)
-        list.add(R.drawable.slider2)
-        list.add(R.drawable.slider3)
-        list.add(R.drawable.slider4)
+        val list = mutableListOf<IntroModel>()
+        list.add(IntroModel(R.drawable.intro1, resources.getString(R.string.intro1)))
+        list.add(IntroModel(R.drawable.intro2, resources.getString(R.string.intro2)))
+        list.add(IntroModel(R.drawable.intro3, resources.getString(R.string.intro3)))
+        list.add(IntroModel(R.drawable.intro4, resources.getString(R.string.intro4)))
         binding.viewPager2.adapter = IntroAdapter(list, this)
     }
 

@@ -1,4 +1,4 @@
-package com.satrango
+package com.satrango.ui.splash
 
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +8,6 @@ import android.os.Handler
 import android.widget.Toast
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
-import com.satrango.ui.auth.intro.IntroScreen
 import com.satrango.databinding.ActivitySplashScreenBinding
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.auth.UserLoginTypeScreen
@@ -23,22 +22,6 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                var deepLink: Uri? = null
-                if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link
-                    val referralUserId = deepLink.toString().split("=")[1]
-                    UserUtils.setReferralId(this, referralUserId)
-                }
-                setUserNavigation()
-            }
-            .addOnFailureListener(this) {
-                Toast.makeText(this, "Refer Failed", Toast.LENGTH_SHORT).show()
-                setUserNavigation()
-            }
     }
 
     private fun setUserNavigation() {
@@ -59,5 +42,24 @@ class SplashScreen : AppCompatActivity() {
             finish()
         }, 1000)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+                    val referralUserId = deepLink.toString().split("=")[1]
+                    UserUtils.setReferralId(this, referralUserId)
+                }
+                setUserNavigation()
+            }
+            .addOnFailureListener(this) {
+                Toast.makeText(this, "Refer Failed", Toast.LENGTH_SHORT).show()
+                setUserNavigation()
+            }
     }
 }

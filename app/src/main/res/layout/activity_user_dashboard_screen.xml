@@ -19,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:maxHeight="?attr/actionBarSize"
             app:titleTextColor="@color/white"
-            android:background="@color/colorPrimary">
+            android:background="@color/blue_500">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/blue_500"
                 android:clickable="true"
                 android:focusable="true"
                 app:fabAlignmentMode="center"
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:translationZ="10dp"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/blue_500"
                 app:backgroundTint="@color/yellow"
                 app:borderWidth="@dimen/_3sdp"
                 android:src="@drawable/calenders"
