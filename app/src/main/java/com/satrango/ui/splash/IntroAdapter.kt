@@ -18,7 +18,6 @@ class IntroAdapter(private val list: MutableList<IntroModel>, private val introI
 
         fun bind(model: IntroModel) {
             binding.introRowImage.setImageResource(model.image)
-            binding.introRowText.text = model.note
         }
 
     }
@@ -32,20 +31,7 @@ class IntroAdapter(private val list: MutableList<IntroModel>, private val introI
         when(position) {
             0 -> {
                 holder.binding.introRowPrevBtn.visibility = View.GONE
-                holder.binding.indicatorOne.setBackgroundResource(R.drawable.category_unselected_bg)
             }
-            1 -> {
-                holder.binding.indicatorTwo.setBackgroundResource(R.drawable.category_unselected_bg)
-            }
-            2 -> {
-                holder.binding.indicatorThree.setBackgroundResource(R.drawable.category_unselected_bg)
-            }
-            3 -> {
-                holder.binding.indicatorFour.setBackgroundResource(R.drawable.category_unselected_bg)
-            }
-        }
-        if (position == list.size - 1) {
-            holder.binding.introRowNextBtn.text = holder.binding.root.context.resources.getString(R.string.finish)
         }
         holder.binding.introRowPrevBtn.setOnClickListener {
             introInterface.prevClick(position)

@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
@@ -38,7 +37,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoryReqModel
-import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileAddressAdapter
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -47,6 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -70,7 +69,7 @@ class UserDashboardScreen : AppCompatActivity() {
             com.satrango.R.string.app_name
         )
         binding.navigationView.itemIconTintList = null
-        toggle.drawerArrowDrawable.color = resources.getColor(R.color.white)
+        toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -98,19 +97,19 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
-                    binding.toolBar.visibility = View.VISIBLE
+                    binding.toolBarLayout.visibility = View.VISIBLE
                     loadFragment(UserHomeScreen())
                 }
                 R.id.navigation_offers -> {
-                    binding.toolBar.visibility = View.GONE
+                    binding.toolBarLayout.visibility = View.GONE
                     loadFragment(UserOffersScreen())
                 }
                 R.id.navigation_alerts -> {
-                    binding.toolBar.visibility = View.GONE
+                    binding.toolBarLayout.visibility = View.GONE
                     loadFragment(UserAlertScreen())
                 }
                 R.id.navigation_chats -> {
-                    binding.toolBar.visibility = View.GONE
+                    binding.toolBarLayout.visibility = View.GONE
                     loadFragment(UserChatScreen())
                 }
             }
@@ -251,6 +250,8 @@ class UserDashboardScreen : AppCompatActivity() {
 
         // Fused Location Objects
         private lateinit var locationCallBack: LocationCallback
+
+        @SuppressLint("StaticFieldLeak")
         private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
         fun fetchLocation(context: Context) {
@@ -293,23 +294,28 @@ class UserDashboardScreen : AppCompatActivity() {
 
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
-            val geoCoder = Geocoder(context, Locale.getDefault())
-            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-            val addressName: String = address.get(0).getAddressLine(0)
-            val city: String = address.get(0).locality
-            val state: String = address.get(0).adminArea
-            val country: String = address.get(0).countryName
-            val postalCode: String = address.get(0).postalCode
-            val knownName: String = address.get(0).featureName
-            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-            UserUtils.latitude = latitude.toString()
-            UserUtils.longitute = longitude.toString()
-            UserUtils.city = city
-            UserUtils.state = state
-            UserUtils.country = country
-            UserUtils.postalCode = postalCode
-            UserUtils.address = knownName
-            UserHomeScreen.binding.userLocation.text = UserUtils.city
+            try {
+                val geoCoder = Geocoder(context, Locale.getDefault())
+                val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+                val addressName: String = address.get(0).getAddressLine(0)
+                val city: String = address.get(0).locality
+                val state: String = address.get(0).adminArea
+                val country: String = address.get(0).countryName
+                val postalCode: String = address.get(0).postalCode
+                val knownName: String = address.get(0).featureName
+                fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+                UserUtils.latitude = latitude.toString()
+                UserUtils.longitute = longitude.toString()
+                UserUtils.city = city
+                UserUtils.state = state
+                UserUtils.country = country
+                UserUtils.postalCode = postalCode
+                UserUtils.address = knownName
+                binding.userLocation.text = UserUtils.city
+            } catch (e: Exception) {
+                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+                    .show()
+            }
         }
 
     }
@@ -318,23 +324,42 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen))
+                val requestBody =
+                    BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen))
                 val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
                     if (responseData.profile_pic.isNotEmpty()) {
                         val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                        UserUtils.saveUserName(
+                            this@UserDashboardScreen,
+                            responseData.fname + " " + responseData.lname
+                        )
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
+                        Glide.with(binding.image)
+                            .load(UserUtils.getUserProfilePic(this@UserDashboardScreen))
+                            .into(binding.image)
+                        UserHomeScreen.binding.userName.text =
+                            "Hiii, ${UserUtils.getUserName(this@UserDashboardScreen)}"
                     }
                 } else {
-                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.navigationView,
+                        "Something went wrong!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                    .show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.navigationView,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 

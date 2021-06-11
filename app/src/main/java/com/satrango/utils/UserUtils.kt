@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
+import okhttp3.internal.userAgent
 import java.io.ByteArrayOutputStream
 
 object UserUtils {
@@ -101,6 +102,22 @@ object UserUtils {
     fun getUserProfilePic(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.userImageUrl), "")!!
+    }
+
+    fun getUserName(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.userName), "")!!
+    }
+
+    fun saveUserName(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.userName), fullName)
+        editor.apply()
+        editor.commit()
     }
 
 }

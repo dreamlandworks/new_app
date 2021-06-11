@@ -7,101 +7,117 @@
     android:layout_height="match_parent"
     tools:context=".ui.user_dashboard.UserDashboardScreen">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:maxHeight="?attr/actionBarSize"
-            app:titleTextColor="@color/white"
-            android:background="@color/blue_500">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_margin="@dimen/_2sdp"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/homelogo"
-                tools:ignore="ContentDescription" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_profile"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:src="@drawable/images"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/_15sdp"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/_2sdp" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="false"
-            android:fitsSystemWindows="false"
-            android:focusable="false">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
-            <FrameLayout
-                android:id="@+id/fragmentContainer"
+            <RelativeLayout
+                android:id="@+id/toolBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/ic_menu_black" />
+
+                <TextView
+                    android:id="@+id/userLocation"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/_40sdp"
+                    android:background="@drawable/locationbackground"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:text="@string/loading"
+                    android:textColor="@color/black"
+                    app:drawableStartCompat="@drawable/ic_location_searching" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:src="@drawable/images"
+                    app:civ_border_color="@color/yellow"
+                    app:civ_border_width="@dimen/_2sdp" />
+
+            </RelativeLayout>
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="?attr/actionBarSize" />
+                android:clickable="false"
+                android:fitsSystemWindows="false"
+                android:focusable="false">
 
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottom_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:backgroundTint="@color/blue_500"
-                android:clickable="true"
-                android:focusable="true"
-                app:fabAlignmentMode="center"
-                app:fabCradleMargin="10dp"
-                app:fabCradleRoundedCornerRadius="20dp"
-                app:fabCradleVerticalOffset="10dp">
+                <FrameLayout
+                    android:id="@+id/fragmentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/_54sdp" />
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigationView"
+                <com.google.android.material.bottomappbar.BottomAppBar
+                    android:id="@+id/bottom_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="bottom"
+                    android:backgroundTint="@color/com_facebook_messenger_blue"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:elevation="0dp"
-                    android:background="@android:color/transparent"
-                    app:itemIconTint="@drawable/user_bottom_nav_icon_color_selector"
-                    app:itemTextColor="@drawable/user_bottom_nav_icon_color_selector"
-                    app:labelVisibilityMode="labeled"
-                    app:menu="@menu/user_dashboard_bottom_menu" />
+                    app:fabAlignmentMode="center"
+                    app:fabCradleMargin="10dp"
+                    app:fabCradleRoundedCornerRadius="20dp"
+                    app:fabCradleVerticalOffset="10dp">
 
-            </com.google.android.material.bottomappbar.BottomAppBar>
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottomNavigationView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:background="@color/transparent"
+                        app:elevation="0dp"
+                        app:itemIconTint="@drawable/user_bottom_nav_icon_color_selector"
+                        app:itemTextColor="@drawable/user_bottom_nav_icon_color_selector"
+                        app:labelVisibilityMode="unlabeled"
+                        app:menu="@menu/user_dashboard_bottom_menu" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:translationZ="10dp"
-                android:backgroundTint="@color/blue_500"
-                app:backgroundTint="@color/yellow"
-                app:borderWidth="@dimen/_3sdp"
-                android:src="@drawable/calenders"
-                app:layout_anchor="@id/bottom_bar"
-                tools:ignore="ContentDescription" />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                </com.google.android.material.bottomappbar.BottomAppBar>
 
-    </LinearLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:src="@drawable/calenders"
+                    app:backgroundTint="@color/yellow"
+                    app:borderWidth="@dimen/_3sdp"
+                    app:layout_anchor="@id/bottom_bar"
+                    app:tint="@android:color/white"
+                    tools:ignore="ContentDescription" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
-        android:layout_gravity="start"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         app:headerLayout="@layout/user_dashboard_header"
         app:menu="@menu/user_dashboard_drawer_menu" />
 

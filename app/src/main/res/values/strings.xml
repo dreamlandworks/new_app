@@ -159,6 +159,14 @@
     <string name="male">Male</string>
     <string name="one_step_more">One Step More</string>
     <string name="to_go">To Go...</string>
+    <string name="what_do_you_need_today">What do you need today?</string>
+    <string name="userName">UserName</string>
+    <string name="choose_profile">Choose Profile</string>
+    <string name="single_move">Single Move</string>
+    <string name="blue_collar">Blue Collar</string>
+    <string name="multi_move">Multi Move</string>
+    <string name="browse_all">Browse all</string>
+    <string name="recommended_for_you">Recommended for you</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
