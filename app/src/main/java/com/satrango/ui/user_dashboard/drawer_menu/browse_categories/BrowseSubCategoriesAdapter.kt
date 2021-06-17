@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.databinding.UserSubCategoryRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 
 class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>) :
     RecyclerView.Adapter<BrowseSubCategoriesAdapter.ViewHolder>() {
@@ -38,7 +39,7 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-        if (position == list.size - 1) holder.binding.line.visibility = View.GONE
+//        if (position == list.size - 1) holder.binding.line.visibility = View.GONE
     }
 
     override fun getItemCount(): Int {

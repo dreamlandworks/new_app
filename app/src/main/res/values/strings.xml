@@ -13,6 +13,8 @@
     <string name="userLoggedVia">UserLoggedVia</string>
     <string name="userId">UserId</string>
     <string name="userReferralId">UserReferralId</string>
+    <string name="referralId">Referral Id: </string>
+    <string name="welcome">Welcome, </string>
 
     <string name="providerDetails">ProviderDetails</string>
 
@@ -114,7 +116,7 @@
 
     <string name="id_description">I Certify that will neither misbehave with customers nor will cause any damage to user property or reputation of Satrango willfully. If found guilty I will be liable to face the consequences as mentioned in terms and conditions.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="provider">PROVIDER</string>
+    <string name="provider">Service Provider</string>
     <string name="rs_0_00">Rs 0.00</string>
     <string name="post_a_job">Post a Job</string>
     <string name="my_account">My Account</string>
@@ -137,6 +139,7 @@
     <string name="last_name">Last Name</string>
     <string name="refer_amp_earn"><![CDATA[Refer & Earn]]></string>
     <string name="browse_categories">Browse Categories</string>
+    <string name="categories">Categories</string>
     <string name="change_password">Change Password</string>
     <string name="saved_addresses">Saved Addresses</string>
     <string name="apply">Apply</string>
@@ -167,6 +170,13 @@
     <string name="multi_move">Multi Move</string>
     <string name="browse_all">Browse all</string>
     <string name="recommended_for_you">Recommended for you</string>
+    <string name="p">P</string>
+    <string name="u">U</string>
+    <string name="regular">Regular</string>
+    <string name="action_needed">Action Needed</string>
+    <string name="both">Both</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

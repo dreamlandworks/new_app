@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user_dashboard.UserDashboardScreen
 import okhttp3.internal.userAgent
 import java.io.ByteArrayOutputStream
 
@@ -116,6 +117,17 @@ object UserUtils {
         )
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.userName), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun saveReferralId(context: Context, referralId: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.userReferralId), referralId)
         editor.apply()
         editor.commit()
     }

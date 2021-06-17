@@ -6,12 +6,16 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityBrowseCategoriesScreenBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +38,7 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.browse_categories)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.categories)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.setOnClickListener {
             startActivity(Intent(this, UserProfileScreen::class.java))
@@ -44,13 +48,15 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         }
 
         binding.apply {
+
+
             CoroutineScope(Main).launch {
                 try {
                     val response = RetrofitBuilder.getRetrofitInstance().userBrowseCategories()
                     val responseObject = JSONObject(response.string())
                     if (responseObject.getInt("status") == 200) {
                         val categoriesArray = responseObject.getJSONArray("data")
-                        categoriesList = ArrayList<BrowserCategoryModel>()
+                        categoriesList = ArrayList()
                         for (index in 0 until categoriesArray.length()) {
                             val category = categoriesArray.getJSONObject(index)
                             if (index == 0) {
@@ -59,20 +65,16 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                                 categoriesList.add(BrowserCategoryModel(category.getString("category"), category.getString("id"), category.getString("image"), false))
                             }
                         }
+                        categoryRV.layoutManager = LinearLayoutManager(this@BrowseCategoriesScreen, LinearLayoutManager.HORIZONTAL, false)
                         categoryRV.adapter = BrowseCategoriesAdapter(categoriesList, this@BrowseCategoriesScreen)
                         displaySubCategories("1")
                     }
                 } catch (e: HttpException) {
                     Snackbar.make(binding.categoryRV, "Server Busy", Snackbar.LENGTH_SHORT).show()
                 } catch (e: JsonSyntaxException) {
-                    Snackbar.make(binding.categoryRV, "Something Went Wrong", Snackbar.LENGTH_SHORT)
-                        .show()
+                    Snackbar.make(binding.categoryRV, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
                 } catch (e: SocketTimeoutException) {
-                    Snackbar.make(
-                        binding.categoryRV,
-                        "Please check internet Connection",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.categoryRV, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -86,11 +88,14 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private fun updateCategoryListAndDisplay(position: Int) {
         val tempList = ArrayList<BrowserCategoryModel>()
         categoriesList.forEachIndexed { index, browserCategoryModel ->
-            if (position == index) {
+            if (position == index) { 
                 tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, true))
             } else {
                 tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, false))
             }
+        }
+        if (position == categoriesList.size - 1) {
+            binding.categoryRV.scrollToPosition(categoriesList.size - 1)
         }
         binding.categoryRV.adapter = BrowseCategoriesAdapter(tempList, this)
     }
@@ -100,22 +105,14 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         CoroutineScope(Main).launch {
             binding.progressBar.visibility = View.VISIBLE
             try {
-                val response = RetrofitBuilder.getRetrofitInstance()
-                    .userBrowseSubCategories(BrowseCategoryReqModel(categoryId))
+                val response = RetrofitBuilder.getRetrofitInstance().userBrowseSubCategories(BrowseCategoryReqModel(categoryId))
                 val responseObject = JSONObject(response.string())
                 if (responseObject.getInt("status") == 200) {
                     val subCategoriesArray = responseObject.getJSONArray("data")
                     val subCategoriesList = ArrayList<BrowserSubCategoryModel>()
                     for (index in 0 until subCategoriesArray.length()) {
                         val subCategory = subCategoriesArray.getJSONObject(index)
-                        subCategoriesList.add(
-                            BrowserSubCategoryModel(
-                                subCategory.getString("category_id"),
-                                subCategory.getString("id"),
-                                subCategory.getString("image"),
-                                subCategory.getString("sub_name")
-                            )
-                        )
+                        subCategoriesList.add(BrowserSubCategoryModel(subCategory.getString("category_id"), subCategory.getString("id"), subCategory.getString("image"), subCategory.getString("sub_name")))
                     }
                     binding.progressBar.visibility = View.GONE
                     binding.subCategoryRV.adapter = BrowseSubCategoriesAdapter(subCategoriesList)
@@ -124,15 +121,10 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                 Snackbar.make(binding.categoryRV, "Server Busy", Snackbar.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(binding.categoryRV, "Something Went Wrong", Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(binding.categoryRV, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(
-                    binding.categoryRV,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar.make(binding.categoryRV, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
             }
 

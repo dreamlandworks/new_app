@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/blue_500"
+    android:background="@color/blue"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/profile"
+            android:layout_marginStart="@dimen/_100sdp"
             android:textColor="@color/white"
             android:textSize="@dimen/_14sdp"
             tools:ignore="RelativeOverlap" />
@@ -56,14 +57,5 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_5sdp"
-        android:background="@color/yellow" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_5sdp"
-        android:background="@color/blue_500" />
 
 </LinearLayout>

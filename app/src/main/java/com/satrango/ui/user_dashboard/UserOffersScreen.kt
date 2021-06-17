@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.FragmentUserOffersScreenBinding
+import com.satrango.utils.UserUtils
+import de.hdodenhof.circleimageview.CircleImageView
 
 class UserOffersScreen : Fragment() {
 
@@ -24,6 +27,8 @@ class UserOffersScreen : Fragment() {
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { activity!!.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity!!.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.offers)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(requireContext())).into(profilePic)
 
         return binding.root
     }

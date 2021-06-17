@@ -7,16 +7,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -36,10 +39,12 @@ import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
+import com.satrango.ui.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +56,14 @@ import java.util.*
 
 class UserDashboardScreen : AppCompatActivity() {
 
+    private lateinit var referralId: TextView
+    private lateinit var toolBarTitle: TextView
+    private lateinit var toolBarBackTVBtn: TextView
+    private lateinit var toolBarBackBtn: ImageView
+
+    private lateinit var userProviderSwitch: SwitchCompat
+    private lateinit var profileImage: CircleImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDashboardScreenBinding.inflate(layoutInflater)
@@ -61,36 +74,24 @@ class UserDashboardScreen : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.toolBar,
-            com.satrango.R.string.app_name,
-            com.satrango.R.string.app_name
-        )
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        Toast.makeText(
-            this,
-            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
-            Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(this, "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}", Toast.LENGTH_SHORT).show()
 
         val headerView = binding.navigationView.getHeaderView(0)
-        val profileImage = headerView.findViewById<CircleImageView>(R.id.profileImage)
-        val userName = headerView.findViewById<TextView>(R.id.userName)
-        val balanceAmount = headerView.findViewById<TextView>(R.id.balance)
-        val userBtn = headerView.findViewById<LinearLayout>(R.id.userBtn)
-        val providerBtn = headerView.findViewById<LinearLayout>(R.id.providerBtn)
-
-        userBtn.setOnClickListener {
-            Toast.makeText(this, "User Clicked", Toast.LENGTH_SHORT).show()
-        }
-        providerBtn.setOnClickListener {
-            Toast.makeText(this, "Provider Clicked", Toast.LENGTH_SHORT).show()
+        profileImage = headerView.findViewById(R.id.profileImage)
+        userProviderSwitch = headerView.findViewById(R.id.userProviderSwitch)
+        referralId = headerView.findViewById(R.id.referralId)
+        toolBarTitle = headerView.findViewById(R.id.toolBarTitle)
+        toolBarBackTVBtn = headerView.findViewById(R.id.toolBarBackTVBtn)
+        toolBarBackBtn = headerView.findViewById(R.id.toolBarBackBtn)
+        updateHeaderDetails()
+        userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            toast(this, isChecked.toString())
         }
 
         loadFragment(UserHomeScreen())
@@ -154,6 +155,15 @@ class UserDashboardScreen : AppCompatActivity() {
             true
         }
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateHeaderDetails() {
+        Glide.with(profileImage).load(UserUtils.getUserProfilePic(this)).into(profileImage)
+        referralId.text = resources.getString(R.string.referralId) + UserUtils.getReferralId(this)
+        toolBarTitle.text = resources.getString(R.string.welcome) + UserUtils.getUserName(this)
+        toolBarBackBtn.setOnClickListener { onBackPressed() }
+        toolBarBackTVBtn.setOnClickListener { onBackPressed() }
     }
 
     private fun logoutDialog() {
@@ -331,23 +341,16 @@ class UserDashboardScreen : AppCompatActivity() {
                 if (response.status == 200) {
                     if (responseData.profile_pic.isNotEmpty()) {
                         val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserName(
-                            this@UserDashboardScreen,
-                            responseData.fname + " " + responseData.lname
-                        )
+                        UserUtils.saveUserName(this@UserDashboardScreen, responseData.fname + " " + responseData.lname)
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
-                        Glide.with(binding.image)
-                            .load(UserUtils.getUserProfilePic(this@UserDashboardScreen))
-                            .into(binding.image)
-                        UserHomeScreen.binding.userName.text =
-                            "Hiii, ${UserUtils.getUserName(this@UserDashboardScreen)}"
+                        if (responseData.referral_id != null) {
+                            UserUtils.saveReferralId(this@UserDashboardScreen, responseData.referral_id)
+                        }
+                        Glide.with(binding.image).load(UserUtils.getUserProfilePic(this@UserDashboardScreen)).into(binding.image)
+                        updateHeaderDetails()
                     }
                 } else {
-                    Snackbar.make(
-                        binding.navigationView,
-                        "Something went wrong!",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
@@ -355,11 +358,7 @@ class UserDashboardScreen : AppCompatActivity() {
                 Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
                     .show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(
-                    binding.navigationView,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
             }
         }
 

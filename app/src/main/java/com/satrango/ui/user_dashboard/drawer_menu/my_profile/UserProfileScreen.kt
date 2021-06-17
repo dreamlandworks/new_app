@@ -27,7 +27,7 @@ import com.satrango.R
 import com.satrango.databinding.ActivityUserProfileScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.user_signup.SetPasswordScreen
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileAddressInterface
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.utils.UserUtils

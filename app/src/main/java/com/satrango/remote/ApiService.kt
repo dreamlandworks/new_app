@@ -1,7 +1,7 @@
 package com.satrango.remote
 
 import com.satrango.ui.auth.user_signup.models.*
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import okhttp3.ResponseBody

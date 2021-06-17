@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_800"
     android:orientation="vertical"
     tools:context=".ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen">
 
@@ -12,65 +11,49 @@
         android:id="@+id/toolBar"
         layout="@layout/user_tool_bar" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/browse_categories"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@color/black"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingTop="@dimen/_10sdp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRV"
+        android:layout_width="match_parent"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_weight="1.5"
-            app:cardCornerRadius="@dimen/_5sdp"
-            app:cardElevation="@dimen/_5sdp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoryRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/category_unselected_bg"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </com.google.android.material.card.MaterialCardView>
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/progressBar"
-            android:layout_width="0dp"
-            android:layout_weight="3.5"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:visibility="gone">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:indicatorColor="@color/yellow"
-                app:trackColor="@color/lightGray"
-                android:indeterminate="true"
                 android:layout_marginTop="@dimen/_50sdp"
-                android:indeterminateBehavior="repeat"/>
+                android:indeterminate="true"
+                android:indeterminateBehavior="repeat"
+                app:indicatorColor="@color/yellow"
+                app:trackColor="@color/lightGray" />
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_weight="3.5"
-            android:background="@drawable/category_selected_bg"
-            app:cardCornerRadius="@dimen/_5sdp"
-            app:cardElevation="@dimen/_5sdp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/subCategoryRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/category_selected_bg"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </com.google.android.material.card.MaterialCardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subCategoryRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 
 </LinearLayout>

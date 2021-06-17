@@ -8,12 +8,117 @@
 
     <include
         android:id="@+id/toolBar"
-        layout="@layout/user_tool_bar"/>
+        layout="@layout/user_tool_bar" />
+
+    <!--    <RadioGroup-->
+    <!--        android:id="@+id/radioGroup"-->
+    <!--        android:checkedButton="@+id/offer"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="30dp"-->
+    <!--        android:layout_marginHorizontal="@dimen/_50sdp"-->
+    <!--        android:layout_marginVertical="@dimen/_10sdp"-->
+    <!--        android:background="@drawable/pink_out_line"-->
+    <!--        android:orientation="horizontal">-->
+
+    <!--        <RadioButton-->
+    <!--            android:id="@+id/regularBtn"-->
+    <!--            android:layout_margin="@dimen/_1sdp"-->
+    <!--            android:background="@drawable/toggle_widget_background"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:checked="true"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:button="@null"-->
+    <!--            android:gravity="center"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:text="@string/regular" />-->
+
+    <!--        <RadioButton-->
+    <!--            android:id="@+id/actionNeededBtn"-->
+    <!--            android:layout_margin="@dimen/_1sdp"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:background="@drawable/toggle_widget_background"-->
+    <!--            android:button="@null"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="@string/action_needed" />-->
+    <!--    </RadioGroup>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/regularBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/category_bg"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/regular"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/regularBadge"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@drawable/badge_circle"
+                android:text="@string/_1"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/actionNeededBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_out_line"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/action_needed"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/actionNeededBadge"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@drawable/badge_circle"
+                android:text="@string/_1"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This Page is under Development"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="This Page is under Development" />
 
 </LinearLayout>

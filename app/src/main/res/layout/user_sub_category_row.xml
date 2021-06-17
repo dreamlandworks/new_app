@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:clickable="true"
@@ -14,6 +15,13 @@
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_10sdp">
 
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_browsecategory"
+            tools:ignore="ContentDescription" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
@@ -27,10 +35,11 @@
             android:textSize="@dimen/_10sdp" />
 
         <ImageView
-            android:id="@+id/image"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_browsecategory" />
+            android:src="@drawable/arrow_forward_icon"
+            tools:ignore="ContentDescription" />
+
     </LinearLayout>
 
     <View

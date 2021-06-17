@@ -20,6 +20,7 @@
             <RelativeLayout
                 android:id="@+id/toolBarLayout"
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_height="?attr/actionBarSize">
 
                 <com.google.android.material.appbar.MaterialToolbar
@@ -52,7 +53,7 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:src="@drawable/images"
-                    app:civ_border_color="@color/yellow"
+                    app:civ_border_color="@color/blue"
                     app:civ_border_width="@dimen/_2sdp" />
 
             </RelativeLayout>
@@ -75,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:backgroundTint="@color/com_facebook_messenger_blue"
+                    android:backgroundTint="@color/blue_500"
                     android:clickable="true"
                     android:focusable="true"
                     app:elevation="0dp"
@@ -102,9 +103,8 @@
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:backgroundTint="@color/blue_500"
                     android:src="@drawable/calenders"
-                    app:backgroundTint="@color/yellow"
                     app:borderWidth="@dimen/_3sdp"
                     app:layout_anchor="@id/bottom_bar"
                     app:tint="@android:color/white"

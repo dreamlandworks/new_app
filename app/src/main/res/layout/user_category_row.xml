@@ -2,29 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
+    android:layout_marginHorizontal="@dimen/_5sdp"
+    android:layout_marginVertical="@dimen/_10sdp"
     android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
-        android:padding="@dimen/_10sdp"
-        android:src="@drawable/ic_browsecategory"
-        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
         android:lines="2"
         android:text="@string/app_name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="@dimen/_10sdp" />
 </LinearLayout>
