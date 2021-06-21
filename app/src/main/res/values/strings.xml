@@ -177,6 +177,19 @@
     <string name="both">Both</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+    <string name="account">Account</string>
+    <string name="job_posts">Job Posts</string>
+    <string name="referrals">Referrals</string>
+    <string name="bookings">Bookings</string>
+    <string name="commission_earned">Commission Earned</string>
+    <string name="this_month">This Month</string>
+    <string name="previous_month">Previous Month</string>
+    <string name="change">Change</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="current_plan">Current Plan</string>
+    <string name="free">Free</string>
+    <string name="change_plan">Change Plan</string>
+    <string name="add_withdraw_funds">Add / Withdraw Funds</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

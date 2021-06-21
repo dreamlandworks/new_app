@@ -10,41 +10,6 @@
         android:id="@+id/toolBar"
         layout="@layout/user_tool_bar" />
 
-    <!--    <RadioGroup-->
-    <!--        android:id="@+id/radioGroup"-->
-    <!--        android:checkedButton="@+id/offer"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="30dp"-->
-    <!--        android:layout_marginHorizontal="@dimen/_50sdp"-->
-    <!--        android:layout_marginVertical="@dimen/_10sdp"-->
-    <!--        android:background="@drawable/pink_out_line"-->
-    <!--        android:orientation="horizontal">-->
-
-    <!--        <RadioButton-->
-    <!--            android:id="@+id/regularBtn"-->
-    <!--            android:layout_margin="@dimen/_1sdp"-->
-    <!--            android:background="@drawable/toggle_widget_background"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:checked="true"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:button="@null"-->
-    <!--            android:gravity="center"-->
-    <!--            android:textColor="@color/white"-->
-    <!--            android:text="@string/regular" />-->
-
-    <!--        <RadioButton-->
-    <!--            android:id="@+id/actionNeededBtn"-->
-    <!--            android:layout_margin="@dimen/_1sdp"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:background="@drawable/toggle_widget_background"-->
-    <!--            android:button="@null"-->
-    <!--            android:gravity="center"-->
-    <!--            android:text="@string/action_needed" />-->
-    <!--    </RadioGroup>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"

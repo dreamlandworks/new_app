@@ -5,7 +5,7 @@
     android:layout_width="@dimen/_120sdp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_10sdp"
-    android:background="@drawable/category_selected_bg">
+    android:background="@drawable/gray_corner">
 
     <TextView
         android:id="@+id/addressText"

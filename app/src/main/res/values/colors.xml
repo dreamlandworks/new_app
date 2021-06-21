@@ -44,5 +44,6 @@
     <color name="vendorIconColor">#0b5958</color>
     <color name="boxStokeColor">#003f88</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="paleBlue">#E7F0FF</color>
 
 </resources>

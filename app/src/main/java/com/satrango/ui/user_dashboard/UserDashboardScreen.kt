@@ -40,6 +40,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.PermissionUtils
@@ -130,7 +131,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, BrowseCategoriesScreen::class.java))
                 }
                 R.id.userOptMyAccount -> {
-                    Toast.makeText(this, "My Account Clicked", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, UserMyAccountScreen::class.java))
                 }
                 R.id.userOptMyBooking -> {
                     Toast.makeText(this, "My Booking Clicked", Toast.LENGTH_SHORT).show()

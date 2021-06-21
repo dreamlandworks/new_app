@@ -61,7 +61,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_profile)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_profile)
 
         initializeProgressDialog()
         showUserProfile()
@@ -96,40 +97,52 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
             profileUploadBtn.setOnClickListener { openImagePicker() }
 
+
+            firstName.inputType = InputType.TYPE_CLASS_TEXT
+            firstName.tag = firstName.keyListener
+            firstName.keyListener = null
+            firstNameEdit.setOnClickListener { firstName.keyListener =  firstName.tag as KeyListener}
+
+            lastName.inputType = InputType.TYPE_CLASS_TEXT
+            lastName.tag = lastName.keyListener
+            lastName.keyListener = null
+            lastNameEdit.setOnClickListener { lastName.keyListener =  lastName.tag as KeyListener}
+
             dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             dateOfBirth.tag = dateOfBirth.keyListener
             dateOfBirth.keyListener = null
-            dateOfBirth.setOnTouchListener(OnTouchListener { v, event ->
-                val DRAWABLE_LEFT = 0
-                val DRAWABLE_TOP = 1
-                val DRAWABLE_RIGHT = 2
-                val DRAWABLE_BOTTOM = 3
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= dateOfBirth.right - dateOfBirth.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                        dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
-                        return@OnTouchListener true
-                    }
-                }
-                false
-            })
+            dateOfBirthEdit.setOnClickListener { dateOfBirth.keyListener = dateOfBirth.tag as KeyListener }
+//            dateOfBirth.setOnTouchListener(OnTouchListener { v, event ->
+//                val DRAWABLE_LEFT = 0
+//                val DRAWABLE_TOP = 1
+//                val DRAWABLE_RIGHT = 2
+//                val DRAWABLE_BOTTOM = 3
+//                if (event.action == MotionEvent.ACTION_UP) {
+//                    if (event.rawX >= dateOfBirth.right - dateOfBirth.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
+//                        dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
+//                        return@OnTouchListener true
+//                    }
+//                }
+//                false
+//            })
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener
             emailId.keyListener = null
-            emailId.setOnTouchListener(OnTouchListener { v, event ->
-                val DRAWABLE_LEFT = 0
-                val DRAWABLE_TOP = 1
-                val DRAWABLE_RIGHT = 2
-                val DRAWABLE_BOTTOM = 3
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= emailId.right - emailId.compoundDrawables[DRAWABLE_RIGHT].bounds.width()
-                    ) {
-                        toast(this@UserProfileScreen, "Clicked")
-                        emailId.keyListener = emailId.tag as KeyListener
-                        return@OnTouchListener true
-                    }
-                }
-                false
-            })
+            emailEdit.setOnClickListener {  emailId.keyListener = emailId.tag as KeyListener }
+//            emailId.setOnTouchListener(OnTouchListener { v, event ->
+//                val DRAWABLE_LEFT = 0
+//                val DRAWABLE_TOP = 1
+//                val DRAWABLE_RIGHT = 2
+//                val DRAWABLE_BOTTOM = 3
+//                if (event.action == MotionEvent.ACTION_UP) {
+//                    if (event.rawX >= emailId.right - emailId.compoundDrawables[DRAWABLE_RIGHT].bounds.width()
+//                    ) {
+//                        emailId.keyListener = emailId.tag as KeyListener
+//                        return@OnTouchListener true
+//                    }
+//                }
+//                false
+//            })
         }
 
     }
@@ -206,8 +219,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         progressDialog.show()
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody =
-                    BrowseCategoryReqModel(UserUtils.getUserId(this@UserProfileScreen))
+                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserProfileScreen))
                 val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
