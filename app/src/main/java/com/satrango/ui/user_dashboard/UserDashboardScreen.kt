@@ -42,6 +42,7 @@ import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCatego
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
+import com.satrango.ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -143,7 +144,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserProfileScreen::class.java))
                 }
                 R.id.userOptReferEarn -> {
-                    createReferLink()
+                    startActivity(Intent(this, UserReferAndEarn::class.java))
                 }
                 R.id.userOptSettings -> {
                     Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
@@ -180,38 +181,6 @@ class UserDashboardScreen : AppCompatActivity() {
             dialogInterface.dismiss()
         }
         dialog.show()
-    }
-
-    private fun createReferLink() {
-        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-            link =
-                Uri.parse("http://dev.satrango.com/userid=${UserUtils.getUserId(this@UserDashboardScreen)}")
-            domainUriPrefix = "https://satrango.page.link"
-            androidParameters {
-                this.build()
-            }
-        }
-
-        val dynamicLinkUri = dynamicLink.uri
-        val shortLinkTask: Task<ShortDynamicLink> =
-            FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLongLink(dynamicLinkUri)
-                .buildShortDynamicLink()
-                .addOnCompleteListener(
-                    this
-                ) { task ->
-                    if (task.isSuccessful) {
-                        val shortLink: Uri? = task.result?.shortLink
-                        val flowchartLink: Uri? = task.result?.previewLink
-                        val intent = Intent()
-                        intent.action = Intent.ACTION_SEND
-                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        intent.type = "text/plain"
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this@UserDashboardScreen, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                }
     }
 
     private fun loadFragment(fragment: Fragment) {

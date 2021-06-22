@@ -190,6 +190,14 @@
     <string name="free">Free</string>
     <string name="change_plan">Change Plan</string>
     <string name="add_withdraw_funds">Add / Withdraw Funds</string>
+    <string name="how_to_use_refer_amp_earn"><![CDATA[How to use Refer & Earn?]]></string>
+    <string name="you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app">You can receive commission of upto Rs 50,000/- per month by simply referring your friends to our App.</string>
+    <string name="step_1">STEP-1</string>
+    <string name="step_2">STEP-2</string>
+    <string name="when_someone_signup_for_our_app_through_your_referral_link_they_will_be_added_as_your_referrals_when_they_spend_or_earn_you_will_also_receive_commissions_for_a_period_of_three_months">When Someone Signup for our app through your Referral link. They will be added as your referrals. When they spend or earn, you will also receive commissions for a period of three months</string>
+    <string name="my_referral_link">My Referral Link</string>
+    <string name="http_satrango_com_referral_id_0123456789">http://satrango.com/referral?id=0123456789</string>
+    <string name="share_app">Share App</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolBar"
+            layout="@layout/user_tool_bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/how_to_use_refer_amp_earn"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/lightGray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:lines="3"
+            android:text="@string/you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@color/blue" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/step_1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:text="Click on the Share Button Below to share this app with your referral ID\n(or)\nInvite anyone using referral link below"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@color/blue" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/step_2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/blue" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:text="@string/when_someone_signup_for_our_app_through_your_referral_link_they_will_be_added_as_your_referrals_when_they_spend_or_earn_you_will_also_receive_commissions_for_a_period_of_three_months"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15sdp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/my_referral_link"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="@dimen/_15sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_15sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_15sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_15sdp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:singleLine="true"
+                        android:text="@string/http_satrango_com_referral_id_0123456789" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:src="@drawable/copy_white"
+                        tools:ignore="contentDescription" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:src="@drawable/share_white"
+                        tools:ignore="contentDescription" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/_20sdp">
+
+            <TextView
+                android:id="@+id/backBtn"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/blue_out_line"
+                android:elevation="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/blue_500"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/applyBtn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:background="@drawable/category_bg"
+                android:elevation="@dimen/_5sdp"
+                android:text="@string/share_app"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
