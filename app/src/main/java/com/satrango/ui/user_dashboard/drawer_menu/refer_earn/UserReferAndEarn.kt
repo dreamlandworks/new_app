@@ -44,6 +44,8 @@ class UserReferAndEarn : AppCompatActivity() {
 
         binding.apply {
             applyBtn.setOnClickListener { createReferLink() }
+
+
         }
 
     }

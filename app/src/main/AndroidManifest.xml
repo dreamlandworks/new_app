@@ -50,8 +50,10 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"></activity>
-        <activity android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen"></activity>
+        <activity android:name=".ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen"></activity>
+        <activity android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserPlanScreen" />
+        <activity android:name=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn" />
+        <activity android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
             android:screenOrientation="portrait" />

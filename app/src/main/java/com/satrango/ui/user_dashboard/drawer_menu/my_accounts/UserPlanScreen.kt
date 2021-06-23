@@ -1,21 +1,20 @@
 package com.satrango.ui.user_dashboard.drawer_menu.my_accounts
 
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
-import com.satrango.databinding.ActivityUserMyAccountScreenBinding
+import com.satrango.databinding.ActivityUserPlanScreenBinding
 
-class UserMyAccountScreen : AppCompatActivity() {
+class UserPlanScreen : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUserMyAccountScreenBinding
+    private lateinit var binding: ActivityUserPlanScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUserMyAccountScreenBinding.inflate(layoutInflater)
+        binding = ActivityUserPlanScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
@@ -23,15 +22,12 @@ class UserMyAccountScreen : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.account)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.plans)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
 
-        binding.apply {
 
-            changePlan.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java)) }
 
-        }
 
     }
 }

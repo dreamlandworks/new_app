@@ -334,6 +334,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <TextView
+                android:id="@+id/changePlan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/change_plan"

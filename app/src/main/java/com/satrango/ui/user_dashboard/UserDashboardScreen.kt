@@ -7,13 +7,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.media.Image
-import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -25,19 +22,13 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.ShortDynamicLink
-import com.google.firebase.dynamiclinks.ktx.androidParameters
-import com.google.firebase.dynamiclinks.ktx.dynamicLink
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
@@ -126,6 +117,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     loadFragment(UserHomeScreen())
                 }
                 R.id.userOptPostJob -> {
+                    startActivity(Intent(this, UserSearchViewProfileScreen::class.java))
                     Toast.makeText(this, "Post A Job Clicked", Toast.LENGTH_SHORT).show()
                 }
                 R.id.userOptBrowseCategories -> {

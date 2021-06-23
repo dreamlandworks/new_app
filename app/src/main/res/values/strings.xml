@@ -198,6 +198,31 @@
     <string name="my_referral_link">My Referral Link</string>
     <string name="http_satrango_com_referral_id_0123456789">http://satrango.com/referral?id=0123456789</string>
     <string name="share_app">Share App</string>
+    <string name="choose_the_best_plan">Choose the Best Plan</string>
+    <string name="starter">STARTER</string>
+    <string name="this_is_the_basic_plan">This is the basic plan.</string>
+    <string name="this_is_the_regular_plan">This is the Regular plan.</string>
+    <string name="benefits">Benefits</string>
+    <string name="no_of_free_posts_per_month">No. of Free Posts Per Month</string>
+    <string name="_5">5</string>
+    <string name="no_of_proposals_eligible_for_each_post">No. of Proposals Eligible for Each post</string>
+    <string name="premium_customer_support">Premium Customer Support</string>
+    <string name="x">x</string>
+    <string name="already_activated">Already Activated</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="_10">10</string>
+    <string name="unlimited">Unlimited</string>
+    <string name="regular_caps">REGULAR</string>
+    <string name="plans">Plans</string>
+    <string name="ranking">Ranking</string>
+    <string name="rating">Rating</string>
+    <string name="reviews">Reviews</string>
+    <string name="jobs">Jobs</string>
+    <string name="professional_info">Professional Info</string>
+    <string name="experience">Experience</string>
+    <string name="distance">Distance</string>
+    <string name="view_profile">View Profile</string>
+    <string name="month">/Month</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
