@@ -118,7 +118,7 @@ class LoginScreen : AppCompatActivity() {
         progressDialog.show()
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = UserLoginModel(phoneNo, password, type)
+                val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.KEY)
                 val response = RetrofitBuilder.getRetrofitInstance().login(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 progressDialog.dismiss()

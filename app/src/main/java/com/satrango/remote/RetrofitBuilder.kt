@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
     const val BASE_URL = "http://dev.satrango.com/"
+    const val KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
 
     fun getRetrofitInstance(): ApiService {
 

@@ -12,5 +12,6 @@ object UserApiEndPoints {
     final const val SHOW_USER_PROFILE = "user/show"
     final const val USER_PROFILE_UPDATE = "user/update"
     final const val DELETE_USER_ADDRESS = "user/delete/address"
+    final const val USER_GET_ALERTS = "user/alerts/get"
 
 }

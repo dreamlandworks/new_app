@@ -34,6 +34,8 @@ import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.Brows
 import com.satrango.ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
+import com.satrango.ui.user_dashboard.drawer_menu.settings.UserSettingsScreen
+import com.satrango.ui.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -139,7 +141,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserReferAndEarn::class.java))
                 }
                 R.id.userOptSettings -> {
-                    Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
                 R.id.userOptLogOut -> {
                     logoutDialog()

@@ -4,6 +4,8 @@ import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
+import com.satrango.ui.user_dashboard.user_alerts.models.UserAlertsReqModel
+import com.satrango.ui.user_dashboard.user_alerts.models.UserAlertsResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -56,5 +58,10 @@ interface ApiService {
     suspend fun deleteUserAddress(
         @Body map: BrowseCategoryReqModel
     ): ResponseBody
+
+    @POST(UserApiEndPoints.USER_GET_ALERTS)
+    suspend fun getUserAlerts(
+        @Body map: UserAlertsReqModel
+    ): UserAlertsResModel
 
 }

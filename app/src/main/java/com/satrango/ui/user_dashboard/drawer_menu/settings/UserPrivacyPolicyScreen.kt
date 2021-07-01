@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.user_signup
+package com.satrango.ui.user_dashboard.drawer_menu.settings
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,29 +7,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.satrango.R
-import com.satrango.databinding.ActivityTermsAndConditionScreenBinding
+import com.satrango.databinding.ActivityUserPrivacyPolicyScreenBinding
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
-class TermsAndConditionScreen : AppCompatActivity() {
+class UserPrivacyPolicyScreen : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTermsAndConditionScreenBinding
+    private lateinit var binding: ActivityUserPrivacyPolicyScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTermsAndConditionScreenBinding.inflate(layoutInflater)
+        binding = ActivityUserPrivacyPolicyScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.terms_amp_conditions)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.privacy_policy)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-
-        binding.apply {
-
-
-        }
     }
 }

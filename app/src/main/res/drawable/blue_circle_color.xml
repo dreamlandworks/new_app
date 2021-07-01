@@ -7,8 +7,8 @@
     <corners android:radius="@dimen/_80sdp" />
 
     <size
-        android:width="@dimen/_35sdp"
-        android:height="@dimen/_35sdp" />
+        android:width="@dimen/_30sdp"
+        android:height="@dimen/_30sdp" />
 
     <stroke
         android:width="@dimen/_1sdp"
