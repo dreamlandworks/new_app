@@ -11,7 +11,7 @@ import java.net.SocketTimeoutException
 open class UserAlertsRepository: BaseRepository() {
 
     suspend fun getUserAlerts(alertType: String) : List<Data> {
-        val response = RetrofitBuilder.getRetrofitInstance().getUserAlerts(UserAlertsReqModel("5", alertType))
+        val response = RetrofitBuilder.getRetrofitInstance().getUserAlerts(UserAlertsReqModel("5", alertType, RetrofitBuilder.KEY, "0"))
         try {
             if (response.status == 200) {
                 return response.data

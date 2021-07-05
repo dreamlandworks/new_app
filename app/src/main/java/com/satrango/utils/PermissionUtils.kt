@@ -1,11 +1,14 @@
 package com.satrango.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -14,6 +17,30 @@ import com.satrango.R
 object PermissionUtils {
 
     val PERMISSIONS_CODE: Int = 101
+
+    fun connectionAlert(context: Context, task: () -> Unit) {
+        AlertDialog.Builder(context).setTitle("No Internet Connection")
+            .setMessage("Please check your internet connection and try again")
+            .setPositiveButton(android.R.string.ok) { dialogInterface, _ ->
+                task()
+                dialogInterface.dismiss()
+                }
+            .setIcon(android.R.drawable.ic_dialog_alert).setCancelable(false).show()
+    }
+
+    @SuppressLint("ServiceCast")
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            connectivityManager.activeNetwork
+        } else {
+            TODO("VERSION.SDK_INT < M")
+        }
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return networkCapabilities != null &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
 
     fun checkAndRequestPermissions(context: Context) {
         when {

@@ -18,5 +18,6 @@ data class UserSignUpModel(
     val user_lat: String,
     val user_long: String,
     val referral_id: String,
-    val gender: String
+    val gender: String,
+    val key: String
 )

@@ -7,7 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
-import com.satrango.ui.auth.user_signup.OTPVerificationScreen
+import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.databinding.ActivityForgotPasswordScreenOneBinding
 import com.satrango.utils.UserUtils
 

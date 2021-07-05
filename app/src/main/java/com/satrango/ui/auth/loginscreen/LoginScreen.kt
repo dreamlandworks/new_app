@@ -1,19 +1,21 @@
-package com.satrango.ui.auth
+package com.satrango.ui.auth.loginscreen
 
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonSyntaxException
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
+import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
@@ -23,16 +25,10 @@ import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.HttpException
-import java.lang.IndexOutOfBoundsException
-import java.net.SocketTimeoutException
 
 class LoginScreen : AppCompatActivity() {
 
+    private lateinit var viewModel: LoginViewModel
     private val GOOGLE_SIGN_IN: Int = 100
     private lateinit var binding: ActivityLoginScreenBinding
 
@@ -54,6 +50,9 @@ class LoginScreen : AppCompatActivity() {
         initializeSocialLogins()
         PermissionUtils.checkAndRequestPermissions(this)
         initializeProgressDialog()
+
+        val factory = ViewModelFactory(LoginRepository())
+        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         binding.apply {
 
@@ -113,42 +112,36 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun loginToServer(phoneNo: String, password: String, type: String) {
-        binding.mobileNo.clearFocus()
-        binding.password.clearFocus()
-        progressDialog.show()
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.KEY)
-                val response = RetrofitBuilder.getRetrofitInstance().login(requestBody)
-                val jsonResponse = JSONObject(response.string())
-                progressDialog.dismiss()
-                if (jsonResponse.getInt("status") == 200) {
-                    UserUtils.setUserLoggedInVia(this@LoginScreen, type, jsonResponse.getString("user id"))
-                    startActivity(Intent(this@LoginScreen, UserDashboardScreen::class.java))
-                } else {
-                    if (UserUtils.googleId.isNotEmpty() || UserUtils.facebookId.isNotEmpty()) {
-                        startActivity(Intent(this@LoginScreen, UserSignUpScreenThree::class.java))
-                    } else {
-                        Snackbar.make(binding.password, "Invalid Credentials", Snackbar.LENGTH_LONG).show()
-                    }
-                }
-            } catch (e: HttpException) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.password, "Server Busy", Snackbar.LENGTH_SHORT).show()
-            } catch (e: JsonSyntaxException) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.password, "Something Went Wrong", Snackbar.LENGTH_SHORT)
-                    .show()
-            } catch (e: SocketTimeoutException) {
-                progressDialog.dismiss()
-                Snackbar.make(
-                    binding.password,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
+
+        if (!PermissionUtils.isNetworkConnected(this@LoginScreen)) {
+            PermissionUtils.connectionAlert(this) { loginToServer(phoneNo, password, type) }
+            return
         }
 
+        val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.KEY)
+
+        viewModel.userLogin(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    binding.mobileNo.clearFocus()
+                    binding.password.clearFocus()
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    UserUtils.setUserLoggedInVia(this, type, it.data!!)
+                    progressDialog.dismiss()
+                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    if (UserUtils.googleId.isNotEmpty() || UserUtils.facebookId.isNotEmpty()) {
+                        startActivity(Intent(this, UserSignUpScreenThree::class.java))
+                    } else {
+                        toast(this, it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun initializeSocialLogins() {
@@ -179,7 +172,8 @@ class LoginScreen : AppCompatActivity() {
                         UserUtils.firstName = userName.split(" ")[0]
                         try {
                             UserUtils.lastName = userName.split(" ")[1]
-                        } catch (e: IndexOutOfBoundsException) {}
+                        } catch (e: IndexOutOfBoundsException) {
+                        }
                         loginToServer(userId, "", resources.getString(R.string.userFacebookLogin))
                     }
                     val parameters = Bundle()
@@ -242,7 +236,8 @@ class LoginScreen : AppCompatActivity() {
             UserUtils.mailId = email
             try {
                 UserUtils.lastName = userName.split(" ")[1]
-            } catch (e: IndexOutOfBoundsException) {}
+            } catch (e: IndexOutOfBoundsException) {
+            }
             loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))
         } else {
             Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()

@@ -5,15 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonSyntaxException
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserHomeScreenBinding
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesAdapter
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
@@ -21,16 +16,8 @@ import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.Brows
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.networkAvailable
-import com.satrango.utils.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
 
-class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
-    BrowseCategoriesInterface {
+class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(), BrowseCategoriesInterface {
 
     private lateinit var categoriesList: java.util.ArrayList<BrowserCategoryModel>
 
@@ -44,42 +31,28 @@ class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBin
         if (UserUtils.getUserName(requireContext()).isNotEmpty()) {
             binding.userName.text = "Hiii, ${UserUtils.getUserName(requireContext())}"
         }
+
+        loadHomeScreen()
+
+    }
+
+    private fun loadHomeScreen() {
+
+        if (!PermissionUtils.isNetworkConnected(requireContext())) {
+            PermissionUtils.connectionAlert(requireContext()) { loadHomeScreen() }
+            return
+        }
+
         binding.userPopularServicesRv.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         viewModel.getPopularServicesList().observe(viewLifecycleOwner, {
             binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(it)
         })
 
-        loadCategories()
-
-    }
-
-    private fun loadCategories() {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = RetrofitBuilder.getRetrofitInstance().userBrowseCategories()
-                val responseObject = JSONObject(response.string())
-                if (responseObject.getInt("status") == 200) {
-                    val categoriesArray = responseObject.getJSONArray("data")
-                    categoriesList = ArrayList()
-                    for (index in 0 until categoriesArray.length()) {
-                        val category = categoriesArray.getJSONObject(index)
-                        if (index == 0) {
-                            categoriesList.add(BrowserCategoryModel(category.getString("category"), category.getString("id"), category.getString("image"), true))
-                        } else {
-                            categoriesList.add(BrowserCategoryModel(category.getString("category"), category.getString("id"), category.getString("image"), false))
-                        }
-                    }
-                    binding.categoryRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.categoryRV.adapter = BrowseCategoriesAdapter(categoriesList, this@UserHomeScreen)
-                }
-            } catch (e: HttpException) {
-                Snackbar.make(binding.categoryRV, "Server Busy", Snackbar.LENGTH_SHORT).show()
-            } catch (e: JsonSyntaxException) {
-                Snackbar.make(binding.categoryRV, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
-            } catch (e: SocketTimeoutException) {
-                Snackbar.make(binding.categoryRV, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
-            }
-        }
+        binding.categoryRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        viewModel.getBrowseCategories().observe(viewLifecycleOwner, {
+            categoriesList = it as java.util.ArrayList<BrowserCategoryModel>
+            binding.categoryRV.adapter = BrowseCategoriesAdapter(categoriesList, this@UserHomeScreen)
+        })
     }
 
     override fun onResume() {
@@ -97,7 +70,6 @@ class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBin
     override fun getFragmentRepository(): UserHomeRepository = UserHomeRepository()
 
     override fun selectedCategory(categoryId: String, position: Int) {
-
         val tempList = ArrayList<BrowserCategoryModel>()
         categoriesList.forEachIndexed { index, browserCategoryModel ->
             if (position == index) {

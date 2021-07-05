@@ -1,9 +1,12 @@
 package com.satrango.remote
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 object RetrofitBuilder {
     const val BASE_URL = "http://dev.satrango.com/"
@@ -21,10 +24,14 @@ object RetrofitBuilder {
             .addInterceptor(loggingInterceptor)
             .build()
 
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build().create(ApiService::class.java)
     }
 

@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.satrango.databinding.ActivitySplashScreenBinding
-import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.utils.AuthUtils
 import com.satrango.utils.UserUtils

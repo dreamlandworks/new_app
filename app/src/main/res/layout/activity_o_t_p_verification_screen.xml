@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context=".ui.auth.user_signup.OTPVerificationScreen">
+    tools:context=".ui.auth.user_signup.otp_verification.OTPVerificationScreen">
 
     <RelativeLayout
         android:layout_width="@dimen/_200sdp"

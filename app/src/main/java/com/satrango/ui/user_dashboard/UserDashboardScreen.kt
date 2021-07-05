@@ -27,7 +27,7 @@ import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
@@ -45,7 +45,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -69,13 +68,23 @@ class UserDashboardScreen : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolBar,
+            R.string.app_name,
+            com.satrango.R.string.app_name
+        )
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        Toast.makeText(this, "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val headerView = binding.navigationView.getHeaderView(0)
         profileImage = headerView.findViewById(R.id.profileImage)
@@ -298,23 +307,34 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody =
-                    BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen))
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(this@UserDashboardScreen),
+                    RetrofitBuilder.KEY
+                )
                 val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
-                    if (responseData.profile_pic.isNotEmpty()) {
+                    if (responseData.profile_pic != null) {
                         val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserName(this@UserDashboardScreen, responseData.fname + " " + responseData.lname)
+                        UserUtils.saveUserName(
+                            this@UserDashboardScreen,
+                            responseData.fname + " " + responseData.lname
+                        )
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
-                        if (responseData.referral_id != null) {
-                            UserUtils.saveReferralId(this@UserDashboardScreen, responseData.referral_id)
-                        }
-                        Glide.with(binding.image).load(UserUtils.getUserProfilePic(this@UserDashboardScreen)).into(binding.image)
-                        updateHeaderDetails()
                     }
+                    if (responseData.referral_id != null) {
+                        UserUtils.saveReferralId(this@UserDashboardScreen, responseData.referral_id)
+                    }
+                    Glide.with(binding.image)
+                        .load(UserUtils.getUserProfilePic(this@UserDashboardScreen))
+                        .into(binding.image)
+                    updateHeaderDetails()
                 } else {
-                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.navigationView,
+                        "Something went wrong!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
@@ -322,7 +342,11 @@ class UserDashboardScreen : AppCompatActivity() {
                 Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
                     .show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.navigationView,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 

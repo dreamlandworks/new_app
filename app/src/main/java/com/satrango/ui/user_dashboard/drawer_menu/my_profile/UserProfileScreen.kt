@@ -11,9 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputType
 import android.text.method.KeyListener
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -26,7 +24,7 @@ import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserProfileScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.user_signup.SetPasswordScreen
+import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileAddressInterface
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
@@ -184,7 +182,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     binding.firstName.text.toString().trim(),
                     selectedEncodedImage,
                     binding.lastName.text.toString().trim(),
-                    UserUtils.getUserId(this@UserProfileScreen)
+                    UserUtils.getUserId(this@UserProfileScreen),
+                    RetrofitBuilder.KEY
                 )
                 val response = RetrofitBuilder.getRetrofitInstance().updateUserProfile(requestBody)
                 val jsonResponse = JSONObject(response.string())
@@ -219,7 +218,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         progressDialog.show()
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserProfileScreen))
+                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserProfileScreen), RetrofitBuilder.KEY)
                 val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
@@ -303,7 +302,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     private fun deleteAddressOnServer(addressId: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(addressId)
+                val requestBody = BrowseCategoryReqModel(addressId, RetrofitBuilder.KEY)
                 val response = RetrofitBuilder.getRetrofitInstance().deleteUserAddress(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {

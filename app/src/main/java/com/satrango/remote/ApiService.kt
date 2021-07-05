@@ -2,6 +2,7 @@ package com.satrango.remote
 
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.UserKeyModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user_dashboard.user_alerts.models.UserAlertsReqModel
@@ -37,7 +38,9 @@ interface ApiService {
     ): ResponseBody
 
     @GET(UserApiEndPoints.USER_BROWSE_CATEGORIES)
-    suspend fun userBrowseCategories(): ResponseBody
+    suspend fun userBrowseCategories(
+        @Query("key") key: String
+    ): ResponseBody
 
     @POST(UserApiEndPoints.USER_BROWSE_SUB_CATEGORIES)
     suspend fun userBrowseSubCategories(

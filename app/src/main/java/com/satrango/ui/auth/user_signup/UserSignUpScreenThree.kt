@@ -16,10 +16,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenThreeBinding
-import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar

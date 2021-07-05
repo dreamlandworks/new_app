@@ -12,10 +12,14 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserAlertScreenBinding
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAlertScreen : BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>() {
+
+    private val ACTIONABLE: String = "1"
+    private val NOT_ACTIONABLE: String = "2"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,30 +31,53 @@ class UserAlertScreen : BaseFragment<UserAlertsViewModel, FragmentUserAlertScree
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(requireContext())).into(profilePic)
 
-        binding.apply {
+        loadUserAlertsScreen()
 
-            actionNeededBtn.setOnClickListener {
-                actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
-                actionNeededBtn.setTextColor(Color.parseColor("#ffffff"))
-                regularBtn.setTextColor(Color.parseColor("#000000"))
-                regularBtn.setBackgroundResource(R.drawable.blue_out_line)
-                viewModel.getActionableAlerts().observe(viewLifecycleOwner, {
-                    alertsRV.adapter = UserAlertsAdapter(it, "2")
-                })
-            }
+    }
 
-            regularBtn.setOnClickListener {
-                regularBtn.setBackgroundResource(R.drawable.category_bg)
-                regularBtn.setTextColor(Color.parseColor("#ffffff"))
-                actionNeededBtn.setTextColor(Color.parseColor("#000000"))
-                actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
-                viewModel.getNormalAlerts().observe(viewLifecycleOwner, {
-                    alertsRV.adapter = UserAlertsAdapter(it, "1")
-                })
-            }
+    private fun loadUserAlertsScreen() {
 
+        if (!PermissionUtils.isNetworkConnected(requireContext())) {
+            PermissionUtils.connectionAlert(requireContext()) { loadUserAlertsScreen() }
+            return
+        }
+
+        loadNotActionableAlerts()
+
+        binding.actionNeededBtn.setOnClickListener {
+            loadActionableAlerts()
+        }
+
+        binding.regularBtn.setOnClickListener {
+            loadNotActionableAlerts()
         }
     }
+
+    private fun loadNotActionableAlerts() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
+        binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
+        binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
+        viewModel.getNormalAlerts().observe(viewLifecycleOwner, {
+            binding.alertsRV.adapter = UserAlertsAdapter(it, ACTIONABLE)
+            binding.progressBar.visibility = View.GONE
+        })
+    }
+
+    private fun loadActionableAlerts() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
+        binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
+        binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
+        viewModel.getActionableAlerts().observe(viewLifecycleOwner, {
+            binding.alertsRV.adapter = UserAlertsAdapter(it, NOT_ACTIONABLE)
+            binding.progressBar.visibility = View.GONE
+        })
+    }
+
+
 
     override fun getFragmentViewModel(): Class<UserAlertsViewModel> = UserAlertsViewModel::class.java
 

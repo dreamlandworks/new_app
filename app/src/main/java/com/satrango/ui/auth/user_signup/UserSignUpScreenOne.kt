@@ -27,7 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.location.*
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenOneBinding
-import com.satrango.ui.auth.LoginScreen
+import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import java.util.*
@@ -279,7 +279,12 @@ class UserSignUpScreenOne : AppCompatActivity() {
                         token
                     ) { jsonObject, _ ->
                         val userId = jsonObject.getString("id")
+                        val userName = jsonObject.getString("name")
                         UserUtils.facebookId = userId
+                        UserUtils.firstName = userName.split(" ")[0]
+                        try {
+                            UserUtils.lastName = userName.split(" ")[1]
+                        } catch (e: java.lang.Exception) {}
                         startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenThree::class.java))
                     }
                     val parameters = Bundle()

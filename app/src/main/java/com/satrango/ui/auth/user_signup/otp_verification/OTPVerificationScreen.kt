@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.user_signup
+package com.satrango.ui.auth.user_signup.otp_verification
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -7,25 +7,25 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonSyntaxException
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityOTPVerificationScreenBinding
+import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.user_signup.models.ForgetPwdOtpReqModel
+import com.satrango.ui.auth.user_signup.SmsReceiver
 import com.satrango.ui.auth.user_signup.models.OTPVeriticationModel
+import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.utils.UserUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
+import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import org.json.JSONObject
-import retrofit2.HttpException
-import java.net.ConnectException
-
 
 class OTPVerificationScreen : AppCompatActivity() {
 
     private var otp: Int = 0
+    private lateinit var viewModel: OTPVerificationViewModel
     private lateinit var binding: ActivityOTPVerificationScreenBinding
     private lateinit var progressDialog: ProgressDialog
 
@@ -33,6 +33,10 @@ class OTPVerificationScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOTPVerificationScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val factory = ViewModelFactory(OTPVerificationRepository())
+        viewModel = ViewModelProvider(this, factory)[OTPVerificationViewModel::class.java]
+
         initializeProgressDialog()
         requestOTP()
 
@@ -51,7 +55,12 @@ class OTPVerificationScreen : AppCompatActivity() {
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {
-                        startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
+                        startActivity(
+                            Intent(
+                                this@OTPVerificationScreen,
+                                SetPasswordScreen::class.java
+                            )
+                        )
                         finish()
                     } else {
                         Snackbar.make(nextBtn, "Invalid OTP", Snackbar.LENGTH_SHORT).show()
@@ -75,57 +84,39 @@ class OTPVerificationScreen : AppCompatActivity() {
     }
 
     private fun requestOTP() {
-
-        CoroutineScope(Main).launch {
-            try {
-                var response = Any()
-                if (UserUtils.FORGOT_PWD) {
-                    val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo)
-                    response = RetrofitBuilder.getRetrofitInstance().userForgetPwdOtpRequest(requestBody)
-                    val responseBody = JSONObject(response.string())
-                    if (responseBody.getInt("status") == 200) {
-                        progressDialog.dismiss()
-                        otp = responseBody.getInt("otp")
-                        UserUtils.USER_ID = responseBody.getString("id")
-                    } else {
-                        Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
-                            .show()
+        if (UserUtils.FORGOT_PWD) {
+            viewModel.forgotPwdRequestOTP(this).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
                     }
-                } else {
-                    val requestBody = OTPVeriticationModel(
-                        UserUtils.firstName,
-                        UserUtils.lastName,
-                        UserUtils.phoneNo
-                    )
-                    response = RetrofitBuilder.getRetrofitInstance().userRequestOTP(requestBody)
-                    val responseBody = JSONObject(response.string())
-                    if (responseBody.getInt("status") == 200) {
+                    is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        otp = responseBody.getInt("otp")
-                    } else {
-                        Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT).show()
+                        val data = it.data!!
+                        otp = data.split("|")[1].toInt()
+                        UserUtils.USER_ID = data.split("|")[0]
+                    }
+                    is NetworkResponse.Failure -> {
+                        toast(this, it.message!!)
                     }
                 }
-            } catch (e: HttpException) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.fourthNo, "Server Busy", Snackbar.LENGTH_SHORT).show()
-            } catch (e: JsonSyntaxException) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
-                    .show()
-            } catch (e: ConnectException) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.fourthNo, "Please Check Internet", Snackbar.LENGTH_SHORT)
-                    .show()
-            } catch (e: Exception) {
-                progressDialog.dismiss()
-                Snackbar.make(binding.fourthNo, "Something went wrong", Snackbar.LENGTH_SHORT)
-                    .show()
-            }
-
+            })
+        } else {
+            viewModel.requestOTP(this).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        otp = it.data!!.toInt()
+                    }
+                    is NetworkResponse.Failure -> {
+                        toast(this, it.message!!)
+                    }
+                }
+            })
         }
-
-
     }
 
     private fun otpTextWatchers() {

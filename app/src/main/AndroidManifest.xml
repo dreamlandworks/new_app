@@ -50,12 +50,24 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"></activity>
-        <activity android:name=".ui.user_dashboard.drawer_menu.settings.UserSettingsScreen" />
-        <activity android:name=".ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen" />
-        <activity android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserPlanScreen" />
-        <activity android:name=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn" />
-        <activity android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.settings.UserSettingsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserPlanScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
             android:screenOrientation="portrait" />
@@ -110,10 +122,10 @@
             android:name=".ui.auth.UserLoginTypeScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.user_signup.SetPasswordScreen"
+            android:name=".ui.auth.user_signup.set_password.SetPasswordScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.user_signup.OTPVerificationScreen"
+            android:name=".ui.auth.user_signup.otp_verification.OTPVerificationScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.TermsAndConditionScreen"
@@ -128,7 +140,7 @@
             android:name=".ui.splash.IntroScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.LoginScreen"
+            android:name=".ui.auth.loginscreen.LoginScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.splash.SplashScreen"

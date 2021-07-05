@@ -1,6 +1,5 @@
 package com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models
 
-data class BrowseCategoryReqModel(
-    val id: String,
+data class UserKeyModel(
     val key: String
 )

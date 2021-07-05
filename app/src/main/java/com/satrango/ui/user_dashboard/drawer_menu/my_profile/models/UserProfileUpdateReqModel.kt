@@ -6,5 +6,6 @@ data class UserProfileUpdateReqModel(
     val fname: String,
     val image: String,
     val lname: String,
-    val user_id: String
+    val user_id: String,
+    val key: String
 )
