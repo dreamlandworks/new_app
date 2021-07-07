@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user_dashboard.UserChatScreen">
+    tools:context=".ui.user.user_dashboard.UserChatScreen">
 
     <include
         android:id="@+id/toolBar"

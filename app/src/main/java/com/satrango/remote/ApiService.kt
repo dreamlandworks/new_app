@@ -1,12 +1,11 @@
 package com.satrango.remote
 
 import com.satrango.ui.auth.user_signup.models.*
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.models.UserKeyModel
-import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
-import com.satrango.ui.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
-import com.satrango.ui.user_dashboard.user_alerts.models.UserAlertsReqModel
-import com.satrango.ui.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 

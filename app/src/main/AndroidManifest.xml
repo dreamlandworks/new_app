@@ -50,32 +50,40 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".ui.user.bookings.AddBookingAddress"></activity>
+        <activity android:name=".ui.user.bookings.bookaddress.BookingAddress" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
+            android:name=".ui.user.bookings.booklater.BookLater"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.settings.UserSettingsScreen"
+            android:name=".ui.user.bookings.booknow.BookingNow"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.UserSearchViewProfileScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserPlanScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"
+            android:name=".ui.user.user_dashboard.drawer_menu.UserSearchViewProfileScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.UserPlanScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.my_profile.UserProfileScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpSeven"
@@ -102,10 +110,10 @@
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.provider_dashboard.ProviderDashboard"
+            android:name=".ui.service_provider.provider_dashboard.ProviderDashboard"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user_dashboard.UserDashboardScreen"
+            android:name=".ui.user.user_dashboard.UserDashboardScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

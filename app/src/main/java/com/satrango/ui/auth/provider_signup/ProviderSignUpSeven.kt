@@ -15,7 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderSignUpSevenBinding
-import com.satrango.ui.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

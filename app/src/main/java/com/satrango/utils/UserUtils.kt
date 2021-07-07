@@ -4,9 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import com.satrango.R
-import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user_dashboard.UserDashboardScreen
-import okhttp3.internal.userAgent
 import java.io.ByteArrayOutputStream
 
 object UserUtils {

@@ -2,19 +2,18 @@ package com.satrango.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.login.Login
 import com.satrango.ui.auth.loginscreen.LoginRepository
 import com.satrango.ui.auth.loginscreen.LoginViewModel
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationRepository
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
-import com.satrango.ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
-import com.satrango.ui.user_dashboard.user_alerts.UserAlertsRepository
-import com.satrango.ui.user_dashboard.user_alerts.UserAlertsViewModel
-import com.satrango.ui.user_dashboard.user_home_screen.UserHomeRepository
-import com.satrango.ui.user_dashboard.user_home_screen.UserHomeViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeRepository
+import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeViewModel
 
 @Suppress("UNCHECKED_CAST")
 open class ViewModelFactory(private val baseRepository: BaseRepository) :

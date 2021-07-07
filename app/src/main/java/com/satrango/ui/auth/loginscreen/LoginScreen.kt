@@ -21,7 +21,7 @@ import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
-import com.satrango.ui.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.toast

@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
-import com.satrango.ui.provider_dashboard.ProviderDashboard
-import com.satrango.ui.user_dashboard.UserDashboardScreen
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 
 class UserLoginTypeScreen : AppCompatActivity() {
 
