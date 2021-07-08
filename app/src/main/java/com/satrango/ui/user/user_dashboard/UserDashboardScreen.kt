@@ -19,8 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonSyntaxException
@@ -38,9 +38,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEa
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
-import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
-import com.satrango.utils.toast
+import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -165,7 +163,7 @@ class UserDashboardScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateHeaderDetails() {
-        Glide.with(profileImage).load(UserUtils.getUserProfilePic(this)).into(profileImage)
+        loadProfileImage(profileImage)
         referralId.text = resources.getString(R.string.referralId) + UserUtils.getReferralId(this)
         toolBarTitle.text = resources.getString(R.string.welcome) + UserUtils.getUserName(this)
         toolBarBackBtn.setOnClickListener { onBackPressed() }
@@ -190,18 +188,20 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
+            .addToBackStack(fragment.tag)
             .replace(R.id.fragmentContainer, fragment)
-            .addToBackStack(fragment.tag).commit()
+            .commit()
     }
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            if (binding.bottomNavigationView.selectedItemId == R.id.userOptHome) {
-                binding.toolBar.visibility = View.VISIBLE
+            if (binding.bottomBar[0].isActivated) {
+                moveTaskToBack(true)
+            } else {
+                super.onBackPressed()
             }
-            super.onBackPressed()
         }
     }
 
@@ -317,15 +317,19 @@ class UserDashboardScreen : AppCompatActivity() {
                 if (response.status == 200) {
                     if (responseData.profile_pic != null) {
                         val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserName(this@UserDashboardScreen, responseData.fname + " " + responseData.lname)
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
+                        loadProfileImage(binding.image)
+                    } else {
+                        UserUtils.saveUserProfilePic(this@UserDashboardScreen, "")
                     }
+                    UserUtils.saveUserName(
+                        this@UserDashboardScreen,
+                        responseData.fname + " " + responseData.lname
+                    )
                     if (responseData.referral_id != null) {
                         UserUtils.saveReferralId(this@UserDashboardScreen, responseData.referral_id)
                     }
-                    Glide.with(binding.image)
-                        .load(UserUtils.getUserProfilePic(this@UserDashboardScreen))
-                        .into(binding.image)
+
                     updateHeaderDetails()
                 } else {
                     Snackbar.make(

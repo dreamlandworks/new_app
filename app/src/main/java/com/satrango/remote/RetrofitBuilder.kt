@@ -33,6 +33,7 @@ object RetrofitBuilder {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build().create(ApiService::class.java)
+
     }
 
 }

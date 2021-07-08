@@ -202,6 +202,7 @@ class SetPasswordScreen : AppCompatActivity() {
             LayoutInflater.from(this).inflate(R.layout.user_signup_success_dialog, viewGroup, false)
         val loginBtn = dialogView.findViewById<TextView>(R.id.loginBtn)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
+        closeBtn.visibility = View.GONE
         val builder = AlertDialog.Builder(this)
         builder.setView(dialogView)
         val alertDialog = builder.create()

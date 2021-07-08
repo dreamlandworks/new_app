@@ -3,11 +3,15 @@ package com.satrango.ui.user.user_dashboard.user_home_screen
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserHomeScreenBinding
 import com.satrango.remote.NetworkResponse
@@ -15,21 +19,23 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesAdapter
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.networkAvailable
 import com.satrango.utils.toast
 
-class UserHomeScreen :
-    BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
+class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
     BrowseCategoriesInterface {
 
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var categoriesList: java.util.ArrayList<BrowserCategoryModel>
+    private lateinit var categoriesList: ArrayList<BrowserCategoryModel>
+    private lateinit var keywordsList: ArrayList<Data>
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         if (PermissionUtils.checkGPSStatus(requireContext()) && networkAvailable(requireContext())) {
             UserDashboardScreen.fetchLocation(requireContext())
@@ -50,8 +56,7 @@ class UserHomeScreen :
         progressDialog = ProgressDialog(requireContext())
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
-        binding.userPopularServicesRv.layoutManager =
-            GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        binding.userPopularServicesRv.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         viewModel.getPopularServicesList(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -86,6 +91,34 @@ class UserHomeScreen :
             }
 
         })
+
+        viewModel.getKeywordsList(requireContext()).observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    keywordsList = it.data as ArrayList<Data>
+                    val keywords = arrayListOf<String>()
+
+                    keywordsList.forEach { keyword -> keywords.add(keyword.keyword)}
+
+                    binding.searchBar.threshold = 1
+                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, keywords)
+                    binding.searchBar.setAdapter(adapter)
+                    binding.searchBar.setOnItemClickListener { _, _, position, _ ->
+                        toast(requireContext(), Gson().toJson(keywordsList[position]))
+                    }
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(requireContext(), "KEYWORDS: " + it.message!!)
+                }
+            }
+
+        })
+
     }
 
     override fun onResume() {

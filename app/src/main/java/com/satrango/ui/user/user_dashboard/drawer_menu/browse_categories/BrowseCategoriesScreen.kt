@@ -17,7 +17,9 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
+import de.hdodenhof.circleimageview.CircleImageView
 
 class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
 
@@ -33,15 +35,12 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.categories)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.browse_categories)
+        val imageView = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         imageView.setOnClickListener {
             startActivity(Intent(this, UserProfileScreen::class.java))
         }
-        if (UserUtils.getUserProfilePic(this).isNotEmpty()) {
-            Glide.with(imageView).load(UserUtils.getUserProfilePic(this)).into(imageView)
-        }
-
+        loadProfileImage(imageView)
         loadBrowseCategoriesScreen()
     }
 
@@ -61,7 +60,7 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                     categoriesList = it.data as java.util.ArrayList<BrowserCategoryModel>
                     binding.categoryRV.layoutManager = LinearLayoutManager(this@BrowseCategoriesScreen, LinearLayoutManager.HORIZONTAL, false)
                     binding.categoryRV.adapter = BrowseCategoriesAdapter(categoriesList, this@BrowseCategoriesScreen)
-                    displaySubCategories("1")
+                    displaySubCategories(categoriesList[0].id)
                 }
                 is NetworkResponse.Failure -> {
                     toast(this, it.message!!)

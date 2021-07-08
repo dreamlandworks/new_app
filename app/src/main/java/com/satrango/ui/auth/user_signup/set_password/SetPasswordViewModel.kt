@@ -19,8 +19,8 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
 
     fun resetPassword(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            resetPassword.value = NetworkResponse.Loading()
             CoroutineScope(Dispatchers.Main).launch {
+                resetPassword.value = NetworkResponse.Loading()
                 try {
                     val response = repository.resetPasswordInServer()
                     val jsonObject = JSONObject(response.string())
@@ -39,20 +39,24 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
 
     fun createNewUser(context: Context, requestBody: UserSignUpModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            createNewUser.value = NetworkResponse.Loading()
-            try {
-                CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main).launch {
+                createNewUser.value = NetworkResponse.Loading()
+                try {
                     val response = repository.createNewUser(requestBody)
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
-                        createNewUser.value = NetworkResponse.Success(jsonObject.getString("referral_id"))
+                        createNewUser.value =
+                            NetworkResponse.Success(jsonObject.getString("referral_id"))
                     } else {
-                        createNewUser.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                        createNewUser.value =
+                            NetworkResponse.Failure(jsonObject.getString("message"))
                     }
+                } catch (e: java.lang.Exception) {
+                    createNewUser.value = NetworkResponse.Failure(e.message)
                 }
-            } catch (e: java.lang.Exception) {
-                createNewUser.value = NetworkResponse.Failure(e.message)
             }
+        } else {
+            createNewUser.value = NetworkResponse.Failure("No Internet Connection")
         }
 
         return createNewUser

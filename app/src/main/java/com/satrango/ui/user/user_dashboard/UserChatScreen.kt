@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.FragmentUserChatScreenBinding
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserChatScreen : Fragment() {
@@ -29,7 +30,7 @@ class UserChatScreen : Fragment() {
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity!!.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.chats)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(requireContext())).into(profilePic)
+        loadProfileImage(profilePic)
 
         binding.apply {
 

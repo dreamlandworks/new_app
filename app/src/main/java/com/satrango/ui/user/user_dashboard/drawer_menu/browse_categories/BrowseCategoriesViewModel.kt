@@ -20,8 +20,8 @@ class BrowseCategoriesViewModel(private val repository: BrowseCategoriesReposito
 
     fun getBrowseCategories(context: Context): MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>> {
         if (hasInternetConnection(context)) {
-            browseCategoriesList.value = NetworkResponse.Loading()
             CoroutineScope(Dispatchers.Main).launch {
+                browseCategoriesList.value = NetworkResponse.Loading()
                 try {
                     val categoriesList = ArrayList<BrowserCategoryModel>()
                     val response = repository.getBrowseCategories()
@@ -53,8 +53,8 @@ class BrowseCategoriesViewModel(private val repository: BrowseCategoriesReposito
 
     fun getBrowseSubCategories(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
         if (hasInternetConnection(context)) {
-            browseSubCategoriesList.value = NetworkResponse.Loading()
             CoroutineScope(Dispatchers.Main).launch {
+                browseSubCategoriesList.value = NetworkResponse.Loading()
                 try {
                     val subCategoriesList = ArrayList<BrowserSubCategoryModel>()
                     val response = repository.getBrowseSubCategories(categoryId)

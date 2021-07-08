@@ -50,8 +50,10 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.bookings.AddBookingAddress"></activity>
-        <activity android:name=".ui.user.bookings.bookaddress.BookingAddress" />
+        <activity android:name=".ui.user.bookings.AddBookingAddress"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.user.bookings.bookaddress.BookingAddress"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.user.bookings.booklater.BookLater"
             android:screenOrientation="portrait" />

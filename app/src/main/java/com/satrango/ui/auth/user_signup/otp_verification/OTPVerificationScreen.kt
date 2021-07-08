@@ -40,7 +40,6 @@ class OTPVerificationScreen : AppCompatActivity() {
         initializeProgressDialog()
         requestOTP()
 
-//        otpAutoFill()
         binding.apply {
 
             otpTextWatchers()
@@ -55,12 +54,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {
-                        startActivity(
-                            Intent(
-                                this@OTPVerificationScreen,
-                                SetPasswordScreen::class.java
-                            )
-                        )
+                        startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         finish()
                     } else {
                         Snackbar.make(nextBtn, "Invalid OTP", Snackbar.LENGTH_SHORT).show()

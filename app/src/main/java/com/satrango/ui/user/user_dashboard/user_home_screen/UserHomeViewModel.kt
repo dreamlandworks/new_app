@@ -8,6 +8,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
 
     val popularServices = MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>>()
     val browseCategoriesList = MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>>()
+    val keywordsList = MutableLiveData<NetworkResponse<List<Data>>>()
 
     fun getPopularServicesList(context: Context): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
         if (hasInternetConnection(context)) {
@@ -83,6 +85,30 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
         }
 
         return browseCategoriesList
+    }
+
+    fun getKeywordsList(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
+        if (hasInternetConnection(context)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                keywordsList.value = NetworkResponse.Loading()
+                try {
+                    val response = userHomeRepository.getKeyWords()
+//                    Log.e("KEYWORDS", response.string())
+                    if (response.status == 200) {
+                        keywordsList.value = NetworkResponse.Success(response.data)
+                    } else {
+                        keywordsList.value = NetworkResponse.Failure(response.message)
+                    }
+                } catch (e: Exception) {
+                    Log.e("KEYWORDS", e.message!!)
+                    keywordsList.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            keywordsList.value = NetworkResponse.Failure("No Internet Connection")
+        }
+
+        return keywordsList
     }
 
 }

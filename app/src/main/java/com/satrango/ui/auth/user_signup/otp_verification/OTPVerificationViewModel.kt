@@ -9,49 +9,53 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
 
-class OTPVerificationViewModel(private val repository: OTPVerificationRepository): ViewModel() {
+class OTPVerificationViewModel(private val repository: OTPVerificationRepository) : ViewModel() {
 
     val forgotPwdRequestOTP = MutableLiveData<NetworkResponse<String>>()
     val requestOTP = MutableLiveData<NetworkResponse<String>>()
 
 
-    fun forgotPwdRequestOTP(context: Context) : MutableLiveData<NetworkResponse<String>> {
+    fun forgotPwdRequestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            try {
+            CoroutineScope(Dispatchers.Main).launch {
                 forgotPwdRequestOTP.value = NetworkResponse.Loading()
-                CoroutineScope(Dispatchers.Main).launch {
+                try {
                     val response = repository.forgotPwdRequestOTP()
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
-                        forgotPwdRequestOTP.value = NetworkResponse.Success(jsonObject.getString("id") + "|" + jsonObject.getInt("otp"))
+                        forgotPwdRequestOTP.value = NetworkResponse.Success(
+                            jsonObject.getString("id") + "|" + jsonObject.getInt("otp")
+                        )
                     } else {
-                        forgotPwdRequestOTP.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                        forgotPwdRequestOTP.value =
+                            NetworkResponse.Failure(jsonObject.getString("message"))
                     }
+                } catch (e: Exception) {
+                    forgotPwdRequestOTP.value = NetworkResponse.Failure(e.message)
                 }
-            } catch (e: Exception) {
-                forgotPwdRequestOTP.value = NetworkResponse.Failure(e.message)
+
             }
         }
         return forgotPwdRequestOTP
     }
 
-    fun requestOTP(context: Context) : MutableLiveData<NetworkResponse<String>> {
+    fun requestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            try {
+            CoroutineScope(Dispatchers.Main).launch {
                 requestOTP.value = NetworkResponse.Loading()
-                CoroutineScope(Dispatchers.Main).launch {
+                try {
                     val response = repository.requestOTP()
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
-                        requestOTP.value = NetworkResponse.Success(jsonObject.getInt("otp").toString())
+                        requestOTP.value =
+                            NetworkResponse.Success(jsonObject.getInt("otp").toString())
                     } else {
                         requestOTP.value = NetworkResponse.Failure(jsonObject.getString("message"))
                     }
+                } catch (e: Exception) {
+                    requestOTP.value = NetworkResponse.Failure(e.message)
                 }
-            } catch (e: Exception) {
-                requestOTP.value = NetworkResponse.Failure(e.message)
             }
         }
         return requestOTP

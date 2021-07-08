@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen">
+    tools:context=".ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen">
 
     <include
         android:id="@+id/toolBar"
@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:text="@string/browse_categories"
         android:textSize="@dimen/_14sdp"
+        android:visibility="gone"
         android:textColor="@color/black"
         android:paddingHorizontal="@dimen/_12sdp"
         android:paddingTop="@dimen/_10sdp"/>

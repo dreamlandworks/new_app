@@ -6,6 +6,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -65,5 +66,10 @@ interface ApiService {
     suspend fun getUserAlerts(
         @Body map: UserAlertsReqModel
     ): UserAlertsResModel
+
+    @GET(UserApiEndPoints.USER_SEARCH_KEYWORDS)
+    suspend fun getUserSearchKeywords(
+        @Query("key") key: String
+    ): UserKeywordsResModel
 
 }

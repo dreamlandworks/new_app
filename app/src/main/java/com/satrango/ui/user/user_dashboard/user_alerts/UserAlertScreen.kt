@@ -12,8 +12,11 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserAlertScreenBinding
+import com.satrango.remote.NetworkResponse
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAlertScreen : BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>() {
@@ -29,7 +32,7 @@ class UserAlertScreen : BaseFragment<UserAlertsViewModel, FragmentUserAlertScree
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity!!.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.alerts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(requireContext())).into(profilePic)
+        loadProfileImage(profilePic)
 
         loadUserAlertsScreen()
 
@@ -54,26 +57,46 @@ class UserAlertScreen : BaseFragment<UserAlertsViewModel, FragmentUserAlertScree
     }
 
     private fun loadNotActionableAlerts() {
-        binding.progressBar.visibility = View.VISIBLE
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
         binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
-        viewModel.getNormalAlerts().observe(viewLifecycleOwner, {
-            binding.alertsRV.adapter = UserAlertsAdapter(it, ACTIONABLE)
-            binding.progressBar.visibility = View.GONE
+        viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is NetworkResponse.Success -> {
+                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE)
+                    binding.progressBar.visibility = View.GONE
+                }
+                is NetworkResponse.Failure -> {
+                    binding.progressBar.visibility = View.GONE
+                    toast(requireContext(), it.message!!)
+                }
+            }
         })
     }
 
     private fun loadActionableAlerts() {
-        binding.progressBar.visibility = View.VISIBLE
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
         binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
-        viewModel.getActionableAlerts().observe(viewLifecycleOwner, {
-            binding.alertsRV.adapter = UserAlertsAdapter(it, NOT_ACTIONABLE)
-            binding.progressBar.visibility = View.GONE
+        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is NetworkResponse.Success -> {
+                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, NOT_ACTIONABLE)
+                    binding.progressBar.visibility = View.GONE
+                }
+                is NetworkResponse.Failure -> {
+                    binding.progressBar.visibility = View.GONE
+                    toast(requireContext(), it.message!!)
+                }
+            }
         })
     }
 

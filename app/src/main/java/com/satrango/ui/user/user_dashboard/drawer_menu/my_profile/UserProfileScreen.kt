@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.MediaStore.Images
 import android.text.InputType
 import android.text.method.KeyListener
 import android.view.View
@@ -18,7 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
@@ -29,13 +31,15 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileAddressInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.HttpException
-import java.io.FileNotFoundException
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.SocketTimeoutException
 import java.util.*
@@ -45,7 +49,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     private var selectedAge = 0
     private val GALLERY_REQUEST = 100
-    private val CAMERA_REQUEST: Int = 100
+    private val CAMERA_REQUEST: Int = 101
     private var selectedEncodedImage = ""
     private lateinit var binding: ActivityUserProfileScreenBinding
     private lateinit var progressDialog: ProgressDialog
@@ -59,8 +63,9 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_profile)
+        toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_profile)
+
 
         initializeProgressDialog()
         showUserProfile()
@@ -98,17 +103,21 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             firstName.inputType = InputType.TYPE_CLASS_TEXT
             firstName.tag = firstName.keyListener
             firstName.keyListener = null
-            firstNameEdit.setOnClickListener { firstName.keyListener =  firstName.tag as KeyListener}
+            firstNameEdit.setOnClickListener {
+                firstName.keyListener = firstName.tag as KeyListener
+            }
 
             lastName.inputType = InputType.TYPE_CLASS_TEXT
             lastName.tag = lastName.keyListener
             lastName.keyListener = null
-            lastNameEdit.setOnClickListener { lastName.keyListener =  lastName.tag as KeyListener}
+            lastNameEdit.setOnClickListener { lastName.keyListener = lastName.tag as KeyListener }
 
             dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             dateOfBirth.tag = dateOfBirth.keyListener
             dateOfBirth.keyListener = null
-            dateOfBirthEdit.setOnClickListener { dateOfBirth.keyListener = dateOfBirth.tag as KeyListener }
+            dateOfBirthEdit.setOnClickListener {
+                dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
+            }
 //            dateOfBirth.setOnTouchListener(OnTouchListener { v, event ->
 //                val DRAWABLE_LEFT = 0
 //                val DRAWABLE_TOP = 1
@@ -125,7 +134,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener
             emailId.keyListener = null
-            emailEdit.setOnClickListener {  emailId.keyListener = emailId.tag as KeyListener }
+            emailEdit.setOnClickListener { emailId.keyListener = emailId.tag as KeyListener }
 //            emailId.setOnTouchListener(OnTouchListener { v, event ->
 //                val DRAWABLE_LEFT = 0
 //                val DRAWABLE_TOP = 1
@@ -166,8 +175,10 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     private fun getImageFromGallery() {
         val intent = Intent()
+        val mineType = arrayOf("image/jpeg", "image/jpg", "image/png")
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mineType)
         startActivityForResult(intent, GALLERY_REQUEST)
     }
 
@@ -217,28 +228,26 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         progressDialog.show()
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserProfileScreen), RetrofitBuilder.KEY)
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(this@UserProfileScreen),
+                    RetrofitBuilder.KEY
+                )
                 val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
                     val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                    Glide.with(binding.profilePic).load(imageUrl).into(binding.profilePic)
+                    UserUtils.saveUserProfilePic(this@UserProfileScreen, imageUrl)
+                    loadProfileImage(binding.profilePic)
                     binding.firstName.setText(responseData.fname)
                     binding.lastName.setText(responseData.lname)
                     binding.phoneNo.setText(responseData.mobile)
                     binding.emailId.setText(responseData.email_id)
                     binding.dateOfBirth.setText(responseData.dob)
-                    if (responseData.address != null) {
-                        val layoutManager = LinearLayoutManager(this@UserProfileScreen)
-                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                        binding.addressRv.layoutManager = layoutManager
-                        binding.addressRv.adapter =
-                            UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
-                        binding.addressRv.visibility = View.VISIBLE
-                    } else {
-                        binding.addressText.text = "No Addresses Found!"
-                        binding.addressRv.visibility = View.GONE
-                    }
+                    val layoutManager = LinearLayoutManager(this@UserProfileScreen)
+                    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    binding.addressRv.layoutManager = layoutManager
+                    binding.addressRv.adapter = UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
+                    binding.addressRv.visibility = View.VISIBLE
                     progressDialog.dismiss()
                 } else {
                     Snackbar.make(binding.applyBtn, "Something went wrong!", Snackbar.LENGTH_SHORT)
@@ -266,21 +275,32 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        var imageStream: InputStream? = null
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImage = data.data
             binding.profilePic.setImageURI(selectedImage)
+            try {
+                imageStream = contentResolver.openInputStream(data.data!!)
+            } catch (e: Exception) {
+                toast(this, e.message!!)
+            }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val bitmap = data.extras!!["data"] as Bitmap?
-            binding.profilePic.setImageBitmap(bitmap)
+
+            val extras: Bundle = data.extras!!
+            val imageBitmap = extras["data"] as Bitmap?
+            binding.profilePic.setImageBitmap(imageBitmap)
+            val tempUri = getImageUri(applicationContext, imageBitmap!!)
+            try {
+                imageStream = contentResolver.openInputStream(tempUri!!)
+            } catch (e: Exception) {
+                toast(this, e.message!!)
+            }
         }
-        var imageStream: InputStream? = null
-        try {
-            imageStream = contentResolver.openInputStream(data!!.data!!)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
+        if (imageStream != null) {
+            val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+            selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
+            toast(this, selectedEncodedImage)
         }
-        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-        selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
     }
 
     private fun initializeProgressDialog() {
@@ -361,6 +381,13 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             age--
         }
         return age
+    }
+
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
     }
 
 }
