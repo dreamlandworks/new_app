@@ -28,18 +28,11 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(
-            UserSubCategoryRowBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return ViewHolder(UserSubCategoryRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-//        if (position == list.size - 1) holder.binding.line.visibility = View.GONE
     }
 
     override fun getItemCount(): Int {

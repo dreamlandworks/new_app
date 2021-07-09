@@ -2,9 +2,11 @@ package com.satrango.ui.auth.user_signup
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityTermsAndConditionScreenBinding
@@ -29,6 +31,9 @@ class TermsAndConditionScreen : AppCompatActivity() {
 
         binding.apply {
 
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                termsAndConditions.text = HtmlCompat.fromHtml(getString(R.string.terms_amp_conditions_data_one) + "<br/>" + getString(R.string.terms_amp_conditions_data_two),  HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
 
         }
     }

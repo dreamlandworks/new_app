@@ -9,6 +9,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.util.*
+
 
 class UserDashboardScreen : AppCompatActivity() {
 
@@ -77,6 +78,11 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+        val params = binding.navigationView.layoutParams
+        params.width = metrics.widthPixels
+        binding.navigationView.layoutParams = params
         toggle.syncState()
 
         Toast.makeText(
@@ -166,6 +172,12 @@ class UserDashboardScreen : AppCompatActivity() {
         loadProfileImage(profileImage)
         referralId.text = resources.getString(R.string.referralId) + UserUtils.getReferralId(this)
         toolBarTitle.text = resources.getString(R.string.welcome) + UserUtils.getUserName(this)
+        profileImage.setOnClickListener {
+            startActivity(Intent(this, UserProfileScreen::class.java))
+        }
+        binding.image.setOnClickListener {
+            startActivity(Intent(this, UserProfileScreen::class.java))
+        }
         toolBarBackBtn.setOnClickListener { onBackPressed() }
         toolBarBackTVBtn.setOnClickListener { onBackPressed() }
     }
@@ -197,11 +209,7 @@ class UserDashboardScreen : AppCompatActivity() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            if (binding.bottomBar[0].isActivated) {
-                moveTaskToBack(true)
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 

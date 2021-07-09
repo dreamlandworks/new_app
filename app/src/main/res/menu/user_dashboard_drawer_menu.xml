@@ -5,50 +5,40 @@
         android:id="@+id/userOptHome"
         android:icon="@drawable/ic_home"
         android:title="@string/home" />
-
     <item
         android:id="@+id/userOptPostJob"
         android:icon="@drawable/ic_poasajob"
         android:title="@string/post_a_job" />
-
     <item
         android:id="@+id/userOptBrowseCategories"
         android:icon="@drawable/ic_browsecategory"
         android:title="@string/browse_categories" />
-
     <item
         android:id="@+id/userOptMyAccount"
         android:icon="@drawable/ic_myaccount"
         android:title="@string/my_account" />
-
     <item
         android:id="@+id/userOptMyBooking"
         android:icon="@drawable/ic_mybooking"
         android:title="@string/my_booking" />
-
     <item
         android:id="@+id/userOptMyJobPosts"
         android:icon="@drawable/ic_myjob"
         android:title="@string/my_job_posts" />
-
     <item
         android:id="@+id/userOptMyProfile"
         android:icon="@drawable/ic_myprofile"
         android:title="@string/my_profile" />
-
     <item
         android:id="@+id/userOptReferEarn"
         android:icon="@drawable/ic_wallets"
         android:title="@string/refer_amp_earn" />
-
     <item
         android:id="@+id/userOptSettings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
-
     <item
         android:id="@+id/userOptLogOut"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout" />
-
 </menu>

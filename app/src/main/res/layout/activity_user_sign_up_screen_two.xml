@@ -1,232 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1"
     tools:context=".ui.auth.user_signup.UserSignUpScreenTwo">
-
-    <RelativeLayout
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
-        android:gravity="start|center"
-        android:orientation="vertical"
-        tools:ignore="RtlSymmetry">
-
-        <ImageView
-            android:layout_width="@dimen/_500sdp"
-            android:layout_height="@dimen/_500sdp"
-            android:layout_marginStart="-80dp"
-            android:layout_marginTop="-75dp"
-            android:src="@drawable/login_img"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|start"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/_24sdp"
-            android:paddingBottom="@dimen/_50sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome_here"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing=".06"
-                android:text="@string/sign_up"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_22sdp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_250sdp"
+            android:gravity="start|center"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
+
+            <ImageView
+                android:layout_width="@dimen/_600sdp"
+                android:layout_height="@dimen/_600sdp"
+                android:layout_marginStart="-95dp"
+                android:layout_marginTop="-100dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/login_img"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/_50sdp"
+                android:paddingBottom="@dimen/_50sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome_here"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".06"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_28sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:gravity="center"
+                android:text="@string/welcome_to_on_board"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_18sdp" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/user"
+                android:textColor="@color/blue_500"
+                android:textSize="@dimen/_18sdp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10sdp"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_location_icon"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/userLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:text="@string/fetching_location_please_wait" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_30sdp"
+                android:gravity="center"
+                android:text="@string/thanks_for_your_interest_but_we_fear_as_we_may_not_be_able_to_cater_some_services_in_your_area_please_do_not_mind_and_please_keep_up_with_us_and_proceed_to_register"
+                android:textColor="@color/red" />
+
+            <TextView
+                android:id="@+id/nextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/btn_bg"
-                android:padding="@dimen/_5sdp"
-                android:text="@string/_1"
-                android:textAlignment="center"
+                android:elevation="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_50sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/next_sm"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
 
-            <View
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_2sdp"
-                android:layout_gravity="center"
-                android:background="@color/grey_400" />
-
-            <TextView
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/inactivebackground"
-                android:padding="@dimen/_5sdp"
-                android:text="@string/_2"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
-
-            <View
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_2sdp"
-                android:layout_gravity="center"
-                android:background="@color/grey_400" />
-
-            <TextView
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/inactivebackground"
-                android:padding="@dimen/_5sdp"
-                android:text="@string/_3"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:gravity="center"
-            android:text="@string/welcome_to_on_board"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_18sdp" />
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/user"
-            android:textColor="@color/blue_500"
-            android:textSize="@dimen/_18sdp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="@dimen/_10sdp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
-                android:src="@drawable/ic_location_icon"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/userLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:text="@string/fetching_location_please_wait" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_30sdp"
-            android:gravity="center"
-            android:text="@string/thanks_for_your_interest_but_we_fear_as_we_may_not_be_able_to_cater_some_services_in_your_area_please_do_not_mind_and_please_keep_up_with_us_and_proceed_to_register"
-            android:textColor="@color/red" />
-
-        <TextView
-            android:id="@+id/nextBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:background="@drawable/btn_bg"
-            android:elevation="@dimen/_5sdp"
-            android:paddingHorizontal="@dimen/_50sdp"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/next_sm"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/white"
                 android:gravity="center"
-                android:text="@string/already_have_account"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/loginBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:text="@string/log_in"
-                android:padding="@dimen/_10sdp"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/already_have_account"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/loginBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@string/log_in"
+                    android:textColor="@color/blue_500"
+                    android:textSize="@dimen/_12sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/googleSigInBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:src="@drawable/ic_google_symbol"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/facebookSignInBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:src="@drawable/ic_facebook"
+                    tools:ignore="ContentDescription" />
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/facebookSignBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/googleSigInBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:src="@drawable/ic_google_symbol"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/facebookSignInBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:src="@drawable/ic_facebook"
-                tools:ignore="ContentDescription" />
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebookSignBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
     </LinearLayout>
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -12,12 +12,18 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySignUpScreenThreeBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.forgot_password.ForgotPwdRepository
+import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
+import com.satrango.ui.auth.forgot_password.ForgotPwdViewModel
 import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.utils.PermissionUtils
@@ -27,6 +33,21 @@ import java.util.*
 
 class UserSignUpScreenThree : AppCompatActivity() {
 
+    companion object {
+        fun getAge(year: Int, month: Int, day: Int): Int {
+            val dob = Calendar.getInstance()
+            val today = Calendar.getInstance()
+            dob[year, month] = day
+            var age = today[Calendar.YEAR] - dob[Calendar.YEAR]
+            if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
+                age--
+            }
+            return age
+        }
+    }
+
+
+    private lateinit var viewModel: ForgotPwdViewModel
     private var selectedAge = 0
     private lateinit var binding: ActivitySignUpScreenThreeBinding
 
@@ -41,6 +62,8 @@ class UserSignUpScreenThree : AppCompatActivity() {
         setContentView(binding.root)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         initializeProgressDialog()
+        val factory = ViewModelFactory(ForgotPwdRepository())
+        viewModel = ViewModelProvider(this, factory)[ForgotPwdViewModel::class.java]
 
         binding.apply {
 
@@ -62,13 +85,8 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (s.toString().contains("@") || s.toString().contains(".co")) {
-                        email.setCompoundDrawablesWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.drawable.ic_greencheck,
-                            0
-                        )
+                    if (s.toString().contains("@") || s.toString().contains(".")) {
+                        email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_blue_24, 0, R.drawable.ic_greencheck, 0)
                     }
                 }
 
@@ -139,7 +157,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         UserUtils.mailId = mail
                         UserUtils.dateOfBirth = dob
                         UserUtils.phoneNo = phoneNo
-                        when(selectedGender) {
+                        when (selectedGender) {
                             R.id.male -> UserUtils.gender = "Male"
                             R.id.female -> UserUtils.gender = "Female"
                             R.id.others -> UserUtils.gender = "Others"
@@ -166,34 +184,16 @@ class UserSignUpScreenThree : AppCompatActivity() {
 
         val datePickerDialog = DatePickerDialog(
             this@UserSignUpScreenThree, { _, year, monthOfYear, dayOfMonth ->
-                binding.dateOfBirth.text =
-                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_greencheck,
-                    0
-                )
+                binding.dateOfBirth.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
                 selectedAge = getAge(year, monthOfYear + 1, dayOfMonth)
                 if (selectedAge < 13) {
-                    Toast.makeText(this, "Age must be greater than 13 years", Toast.LENGTH_SHORT)
-                        .show()
+                    snackBar(binding.dateOfBirth, "Age must be greater than 13 years")
                 }
             }, mYear, mMonth, mDay
         )
         datePickerDialog.datePicker.maxDate = Date().time
         datePickerDialog.show()
-    }
-
-    private fun getAge(year: Int, month: Int, day: Int): Int {
-        val dob = Calendar.getInstance()
-        val today = Calendar.getInstance()
-        dob[year, month] = day
-        var age = today[Calendar.YEAR] - dob[Calendar.YEAR]
-        if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
-            age--
-        }
-        return age
     }
 
     override fun onRequestPermissionsResult(
@@ -271,7 +271,29 @@ class UserSignUpScreenThree : AppCompatActivity() {
         UserUtils.country = country
         UserUtils.postalCode = postalCode
         UserUtils.address = knownName
-        startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
-        progressDialog.dismiss()
+        verifyUser()
+    }
+
+    private fun verifyUser() {
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.KEY, UserUtils.phoneNo)
+        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    if (it.message!! == "User Not Found") {
+                        startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
+                    } else {
+                        snackBar(binding.nextBtn, it.message)
+                    }
+                }
+            }
+        })
     }
 }

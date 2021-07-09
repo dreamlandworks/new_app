@@ -16,21 +16,14 @@
             layout="@layout/user_tool_bar" />
 
         <TextView
+            android:id="@+id/termsAndConditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
+            android:justificationMode="inter_word"
             android:textColor="@color/black"
-            android:lineSpacingExtra="@dimen/_2sdp"
+            android:lineSpacingExtra="@dimen/_5sdp"
             android:text="@string/terms_amp_conditions_data_one"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:lineSpacingExtra="@dimen/_2sdp"
-            android:text="@string/terms_amp_conditions_data_two"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

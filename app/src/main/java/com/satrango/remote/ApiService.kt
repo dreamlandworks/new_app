@@ -1,5 +1,6 @@
 package com.satrango.remote
 
+import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
@@ -71,5 +72,10 @@ interface ApiService {
     suspend fun getUserSearchKeywords(
         @Query("key") key: String
     ): UserKeywordsResModel
+
+    @POST(UserApiEndPoints.VERIFY_USER)
+    suspend fun verifyUser(
+        @Body map: ForgotPwdVerifyReqModel
+    ): ResponseBody
 
 }

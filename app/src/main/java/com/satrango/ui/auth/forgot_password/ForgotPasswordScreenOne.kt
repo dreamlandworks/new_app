@@ -1,24 +1,36 @@
 package com.satrango.ui.auth.forgot_password
 
+import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.satrango.R
-import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityForgotPasswordScreenOneBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 
 class ForgotPasswordScreenOne : AppCompatActivity() {
 
+    private lateinit var viewModel: ForgotPwdViewModel
     private lateinit var binding: ActivityForgotPasswordScreenOneBinding
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityForgotPasswordScreenOneBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val factory = ViewModelFactory(ForgotPwdRepository())
+        viewModel = ViewModelProvider(this, factory)[ForgotPwdViewModel::class.java]
+
+        initializeProgressDialog()
 
         binding.apply {
 
@@ -27,12 +39,12 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
             resetPasswordBtn.setOnClickListener {
                 val mobile = mobileNo.text.toString().trim()
                 if (mobile.isEmpty()) {
-                    Snackbar.make(mobileNo, "Enter Mobile Number", Snackbar.LENGTH_LONG).show()
+                    snackBar(mobileNo, "Enter Mobile Number")
                 } else if (mobile.length != 10) {
-                    Snackbar.make(mobileNo, "Enter Valid Mobile Number", Snackbar.LENGTH_LONG).show()
+                    snackBar(mobileNo, "Enter Valid Mobile Number")
                 } else {
                     UserUtils.phoneNo = mobile
-                    startActivity(Intent(this@ForgotPasswordScreenOne, OTPVerificationScreen::class.java))
+                    verifyUser()
                 }
             }
 
@@ -40,8 +52,34 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
     }
 
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
+    }
+
+
+    private fun verifyUser() {
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.KEY, UserUtils.phoneNo)
+        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    startActivity(Intent(this, OTPVerificationScreen::class.java))
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.resetPasswordBtn, it.message!!)
+                }
+            }
+        })
+    }
+
     private fun textWatcher() {
-        binding.mobileNo.addTextChangedListener(object: TextWatcher {
+        binding.mobileNo.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
@@ -57,7 +95,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s!!.length == 10) {
-                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
+                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
                 }
             }
 

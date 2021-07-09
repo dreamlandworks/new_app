@@ -6,8 +6,8 @@
     <color name="blue_700">#0070FF</color>
     <color name="blue_500">#0A84FF</color>
     <color name="blue_300">#5FAEFD</color>
-    <color name="colorPrimary">#045de9</color>
-    <color name="colorSecondary">#02BEF1</color>
+    <color name="colorPrimary">#0070FF</color>
+    <color name="colorSecondary">#0070FF</color>
 
     <color name="red">#ff3300</color>
     <color name="pink">#FF375F</color>

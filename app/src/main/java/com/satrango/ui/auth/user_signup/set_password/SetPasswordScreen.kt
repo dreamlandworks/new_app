@@ -13,20 +13,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.JsonSyntaxException
 import com.satrango.R
-import com.satrango.remote.NetworkResponse
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
+import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
 
 class SetPasswordScreen : AppCompatActivity() {
 
@@ -57,6 +53,8 @@ class SetPasswordScreen : AppCompatActivity() {
                 } else if (cPwd.isEmpty()) {
                     reEnterPassword.error = "Enter Confirm Password"
                     reEnterPassword.requestFocus()
+                } else if (pwd != cPwd) {
+                  snackBar(binding.nextBtn, "Confirm Password not valid")
                 } else {
                     UserUtils.password = pwd
                     if (UserUtils.FORGOT_PWD) {
@@ -85,13 +83,13 @@ class SetPasswordScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     UserUtils.FORGOT_PWD = false
                     startActivity(Intent(this, LoginScreen::class.java))
-                    toast(this, it.data!!)
+                    snackBar(binding.nextBtn, it.data!!)
                     progressDialog.dismiss()
                     finish()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(this, it.message!!)
+                    snackBar(binding.nextBtn, it.message!!)
                 }
             }
 
@@ -163,7 +161,7 @@ class SetPasswordScreen : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
+                binding.password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -189,7 +187,7 @@ class SetPasswordScreen : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() == binding.password.text.toString().trim()) {
-                    binding.reEnterPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
+                    binding.reEnterPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
                 }
             }
 

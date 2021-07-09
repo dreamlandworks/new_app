@@ -8,7 +8,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.facebook.CallbackManager
@@ -26,6 +25,7 @@ import com.satrango.databinding.ActivityUserSignUpScreenTwoBinding
 import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import java.util.*
 
 class UserSignUpScreenTwo : AppCompatActivity() {
@@ -198,13 +198,11 @@ class UserSignUpScreenTwo : AppCompatActivity() {
                 }
 
                 override fun onCancel() {
-                    Toast.makeText(this@UserSignUpScreenTwo, "Login Cancelled", Toast.LENGTH_SHORT)
-                        .show()
+                    snackBar(binding.nextBtn, "Login Cancelled")
                 }
 
                 override fun onError(error: FacebookException?) {
-                    Toast.makeText(this@UserSignUpScreenTwo, error!!.message, Toast.LENGTH_SHORT)
-                        .show()
+                    snackBar(binding.nextBtn, error!!.message!!)
                 }
 
             })
@@ -219,7 +217,7 @@ class UserSignUpScreenTwo : AppCompatActivity() {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 validateGoogleSignInResult(result)
             } catch (e: Exception) {
-                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                snackBar(binding.nextBtn, e.message!!)
             }
         }
     }
@@ -241,7 +239,7 @@ class UserSignUpScreenTwo : AppCompatActivity() {
             UserUtils.mailId = email!!
             startActivity(Intent(this, UserSignUpScreenThree::class.java))
         } else {
-            Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
+            snackBar(binding.nextBtn, "Google SignIn Failed")
         }
     }
 

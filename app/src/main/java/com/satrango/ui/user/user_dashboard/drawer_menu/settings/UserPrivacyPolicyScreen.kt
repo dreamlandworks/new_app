@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityUserPrivacyPolicyScreenBinding
@@ -26,5 +27,6 @@ class UserPrivacyPolicyScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.privacy_policy)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        binding.privacyPolicy.text = HtmlCompat.fromHtml(getString(R.string.privacy_policy_data) + "<br/><br/>" + getString(R.string.disclaimer), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 }

@@ -9,18 +9,13 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.material.snackbar.Snackbar
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityOTPVerificationScreenBinding
 import com.satrango.remote.NetworkResponse
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.user_signup.SmsReceiver
-import com.satrango.ui.auth.user_signup.models.OTPVeriticationModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
-import org.json.JSONObject
 
 class OTPVerificationScreen : AppCompatActivity() {
 
@@ -50,21 +45,21 @@ class OTPVerificationScreen : AppCompatActivity() {
                 val numThree = thirdNo.text.toString().trim()
                 val numFourth = fourthNo.text.toString().trim()
                 if (numOne.isEmpty() || numTwo.isEmpty() || numThree.isEmpty() || numFourth.isEmpty()) {
-                    Snackbar.make(firstNo, "Enter OTP to verify", Snackbar.LENGTH_SHORT).show()
+                    snackBar(firstNo, "Enter OTP to verify")
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {
                         startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         finish()
                     } else {
-                        Snackbar.make(nextBtn, "Invalid OTP", Snackbar.LENGTH_SHORT).show()
+                        snackBar(nextBtn, "Invalid OTP")
                     }
                 }
             }
 
             binding.reSendOTP.setOnClickListener {
                 requestOTP()
-                Snackbar.make(reSendOTP, "OTP Sent", Snackbar.LENGTH_SHORT).show()
+                snackBar(reSendOTP, "OTP Sent")
             }
         }
 
@@ -80,7 +75,7 @@ class OTPVerificationScreen : AppCompatActivity() {
     private fun requestOTP() {
         if (UserUtils.FORGOT_PWD) {
             viewModel.forgotPwdRequestOTP(this).observe(this, {
-                when(it) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -91,13 +86,13 @@ class OTPVerificationScreen : AppCompatActivity() {
                         UserUtils.USER_ID = data.split("|")[0]
                     }
                     is NetworkResponse.Failure -> {
-                        toast(this, it.message!!)
+                        snackBar(binding.nextBtn, it.message!!)
                     }
                 }
             })
         } else {
             viewModel.requestOTP(this).observe(this, {
-                when(it) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -106,7 +101,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         otp = it.data!!.toInt()
                     }
                     is NetworkResponse.Failure -> {
-                        toast(this, it.message!!)
+                        snackBar(binding.nextBtn, it.message!!)
                     }
                 }
             })

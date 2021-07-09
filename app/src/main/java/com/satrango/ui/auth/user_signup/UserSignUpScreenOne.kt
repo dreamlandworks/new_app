@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.facebook.CallbackManager
@@ -30,6 +29,7 @@ import com.satrango.databinding.ActivitySignUpScreenOneBinding
 import com.satrango.ui.auth.loginscreen.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import java.util.*
 
 class UserSignUpScreenOne : AppCompatActivity() {
@@ -127,12 +127,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.length == 10) {
-                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_greencheck,
-                        0
-                    )
+                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_phoneno, 0, R.drawable.ic_greencheck, 0)
                 }
             }
         })
@@ -147,12 +142,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                binding.firstName.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_greencheck,
-                    0
-                )
+                binding.firstName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_person_blue_24, 0, R.drawable.ic_greencheck, 0)
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -168,12 +158,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                binding.lastName.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_greencheck,
-                    0
-                )
+                binding.lastName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_person_blue_24, 0, R.drawable.ic_greencheck, 0)
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -294,11 +279,11 @@ class UserSignUpScreenOne : AppCompatActivity() {
                 }
 
                 override fun onCancel() {
-                    Toast.makeText(this@UserSignUpScreenOne, "Login Cancelled", Toast.LENGTH_SHORT).show()
+                    snackBar(binding.nextBtn, "Login Cancelled")
                 }
 
                 override fun onError(error: FacebookException?) {
-                    Toast.makeText(this@UserSignUpScreenOne, error!!.message, Toast.LENGTH_SHORT).show()
+                    snackBar(binding.nextBtn, error!!.message!!)
                 }
 
             })
@@ -313,7 +298,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 validateGoogleSignInResult(result)
             } catch (e: Exception) {
-                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                snackBar(binding.nextBtn, e.message!!)
             }
         }
     }
@@ -334,7 +319,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
             UserUtils.mailId = email!!
             startActivity(Intent(this, UserSignUpScreenThree::class.java))
         } else {
-            Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
+            snackBar(binding.nextBtn, "Google SignIn Failed")
         }
         progressDialog.dismiss()
     }

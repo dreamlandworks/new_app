@@ -4,8 +4,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.facebook.*
@@ -24,7 +22,7 @@ import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
-import com.satrango.utils.toast
+import com.satrango.utils.snackBar
 
 class LoginScreen : AppCompatActivity() {
 
@@ -137,7 +135,7 @@ class LoginScreen : AppCompatActivity() {
                     if (UserUtils.googleId.isNotEmpty() || UserUtils.facebookId.isNotEmpty()) {
                         startActivity(Intent(this, UserSignUpScreenThree::class.java))
                     } else {
-                        toast(this, it.message!!)
+                        snackBar(binding.signUpBtn, it.message!!)
                     }
                 }
             }
@@ -183,11 +181,11 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 override fun onCancel() {
-                    Toast.makeText(this@LoginScreen, "Login Cancelled", Toast.LENGTH_SHORT).show()
+                    snackBar(binding.signUpBtn, "Login Cancelled")
                 }
 
                 override fun onError(error: FacebookException?) {
-                    Toast.makeText(this@LoginScreen, error!!.message, Toast.LENGTH_SHORT).show()
+                    snackBar(binding.signUpBtn, error!!.message!!)
                 }
 
             })
@@ -202,7 +200,7 @@ class LoginScreen : AppCompatActivity() {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 validateGoogleSignInResult(result)
             } catch (e: Exception) {
-                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                snackBar(binding.signUpBtn, e.message!!)
             }
         }
     }
@@ -240,7 +238,7 @@ class LoginScreen : AppCompatActivity() {
             }
             loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))
         } else {
-            Toast.makeText(this, "Google SignIn Failed", Toast.LENGTH_SHORT).show()
+            snackBar(binding.signUpBtn, "Google SignIn Failed")
         }
     }
 
