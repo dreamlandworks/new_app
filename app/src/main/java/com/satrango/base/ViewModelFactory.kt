@@ -14,6 +14,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseC
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProviderRepository
+import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProviderViewModel
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeRepository
@@ -49,6 +51,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(ForgotPwdViewModel::class.java) -> return ForgotPwdViewModel(
                 baseRepository as ForgotPwdRepository
+            ) as T
+            modelClass.isAssignableFrom(SearchServiceProviderViewModel::class.java) -> return SearchServiceProviderViewModel(
+                baseRepository as SearchServiceProviderRepository
             ) as T
         }
         return super.create(modelClass)

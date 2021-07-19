@@ -1,13 +1,11 @@
 package com.satrango.ui.auth.provider_signup
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import com.satrango.R
+import androidx.appcompat.app.AppCompatActivity
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.satrango.databinding.ActivityProviderSignUpTwoBinding
+import com.satrango.ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree
 
 class ProviderSignUpTwo : AppCompatActivity() {
 
@@ -18,18 +16,16 @@ class ProviderSignUpTwo : AppCompatActivity() {
         binding = ActivityProviderSignUpTwoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.profile)
-
         binding.apply {
+
+            keywordSkills.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+            keywordSkills.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
 
             nextBtn.setOnClickListener {
                 startActivity(Intent(this@ProviderSignUpTwo, ProviderSignUpThree::class.java))
             }
 
-            cancelBtn.setOnClickListener { onBackPressed() }
+            backBtn.setOnClickListener { onBackPressed() }
 
         }
 

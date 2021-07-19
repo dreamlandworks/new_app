@@ -24,7 +24,7 @@
                 android:layout_height="@dimen/_500sdp"
                 android:layout_marginStart="-80dp"
                 android:layout_marginTop="-75dp"
-                android:src="@drawable/login_img"
+                android:src="@drawable/login_bg"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
@@ -69,7 +69,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/blue_500"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -93,7 +93,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/blue_500"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -117,7 +117,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/blue_500"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +141,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/blue_500"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -165,7 +165,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/blue_500"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText

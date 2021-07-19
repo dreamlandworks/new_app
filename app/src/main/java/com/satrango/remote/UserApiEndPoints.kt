@@ -13,7 +13,8 @@ object UserApiEndPoints {
     final const val USER_PROFILE_UPDATE = "user/update"
     final const val DELETE_USER_ADDRESS = "user/delete/address"
     final const val USER_GET_ALERTS = "user/alerts/get"
-    final const val USER_SEARCH_KEYWORDS = "user/keywords"
+    final const val USER_SEARCH_KEYWORDS = "user/autocomplete"
     final const val VERIFY_USER = "user/verify"
+    final const val USER_KEYWORDS = "user/keywords"
 
 }

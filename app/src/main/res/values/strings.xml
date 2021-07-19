@@ -66,7 +66,9 @@
     <string name="looks_like_you_haven_t_activated_your_service_provider_account_yet_would_you_like_to_do_it_now">Looks like you haven\t activated your Service Provider Account yet. Would you like to do it now?</string>
     <string name="service_provider_activation">SERVICE PROVIDER ACTIVATION</string>
     <string name="no">NO</string>
+    <string name="no_sm">No</string>
     <string name="yes">YES</string>
+    <string name="yes_sm">Yes</string>
     <string name="home">HOME</string>
     <string name="profile">Profile</string>
     <string name="get_set">Get.. Set</string>
@@ -81,7 +83,7 @@
     <string name="add_skills">Add Skills</string>
     <string name="about_me_min_250_words">About Me (Min 250 Words)</string>
     <string name="tariff">Tariff</string>
-    <string name="my_tariff_is">My Tariff</string>
+    <string name="my_tariff_is">My Tariff is</string>
     <string name="per_hour">Per Hour</string>
     <string name="per_day">Per Day</string>
     <string name="min_charges">Min. Charges</string>
@@ -264,9 +266,26 @@
     <string name="add">Add</string>
     <string name="reset">Reset</string>
     <string name="hello_there">Hello There,</string>
+    <string name="confirm_activation">Confirm Activation</string>
+    <string name="activation_note">Looks like you haven\'t activated your Service Provider Account yet. Would you like to do it now?</string>
+    <string name="profession_best_suits">Profession(Best Suits)</string>
+    <string name="qualification">Qualification</string>
+    <string name="two_more">Two More</string>
+    <string name="steps_to_earn">Steps to Earn!</string>
+    <string name="three_more">Three More</string>
+    <string name="one_more">One More</string>
+    <string name="step_to_earn">Step to Earn</string>
+    <string name="time_slot">Time-Slot</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
         <item>Take picture with camera</item>
+    </string-array>
+
+    <string-array name="genderGroup">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
     </string-array>
 </resources>

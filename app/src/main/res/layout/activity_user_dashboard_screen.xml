@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/blue_500"
-                    android:src="@drawable/calenders"
+                    android:src="@drawable/ic_calenders_white"
                     app:borderWidth="@dimen/_3sdp"
                     app:layout_anchor="@id/bottom_bar"
                     app:tint="@android:color/white"

@@ -6,15 +6,15 @@
     <color name="blue_700">#0070FF</color>
     <color name="blue_500">#0A84FF</color>
     <color name="blue_300">#5FAEFD</color>
-    <color name="colorPrimary">#0070FF</color>
-    <color name="colorSecondary">#0070FF</color>
+
+    <color name="green_700">#248A3D</color>
+    <color name="green_500">#30DB5B</color>
 
     <color name="red">#ff3300</color>
     <color name="pink">#FF375F</color>
     <color name="yellow">#fdc400</color>
     <color name="gray">#808080</color>
     <color name="lightGray">#ECECEC</color>
-    <color name="green">#1c8c22</color>
     <color name="orange">#ff8114</color>
     <color name="lightGreen">#00cf0b</color>
     <color name="lightGreen600">#02d300</color>

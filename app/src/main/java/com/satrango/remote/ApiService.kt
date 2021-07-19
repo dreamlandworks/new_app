@@ -78,4 +78,9 @@ interface ApiService {
         @Body map: ForgotPwdVerifyReqModel
     ): ResponseBody
 
+//    @POST(UserApiEndPoints.VERIFY_USER)
+//    suspend fun verifyUser(
+//        @Body map: ForgotPwdVerifyReqModel
+//    ): ResponseBody
+
 }

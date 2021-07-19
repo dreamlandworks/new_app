@@ -50,10 +50,14 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.bookings.AddBookingAddress"
+        <activity android:name=".ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.user.bookings.bookaddress.BookingAddress"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.user.bookings.AddBookingAddress"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.bookings.bookaddress.BookingAddress"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.booklater.BookLater"
             android:screenOrientation="portrait" />
@@ -100,14 +104,15 @@
             android:name=".ui.auth.provider_signup.ProviderSignUpFour"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.provider_signup.ProviderSignUpThree"
+            android:name=".ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpTwo"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpOne"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="screenSize"/>
         <activity
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />

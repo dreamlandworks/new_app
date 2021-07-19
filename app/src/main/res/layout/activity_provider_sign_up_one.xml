@@ -1,264 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_800"
-    android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".ui.auth.provider_signup.ProviderSignUpOne">
 
-    <include
-        android:id="@+id/toolBar"
-        layout="@layout/provider_page_tool_bar" />
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_250sdp"
+            android:gravity="start|center"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
+
+            <ImageView
+                android:layout_width="@dimen/_600sdp"
+                android:layout_height="@dimen/_600sdp"
+                android:layout_marginStart="-95dp"
+                android:layout_marginTop="-100dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/provider_bg"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/_20sdp"
+                android:paddingBottom="@dimen/_50sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/three_more"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".06"
+                    android:text="@string/steps_to_earn"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="@dimen/_15sdp">
 
-            <RelativeLayout
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:boxStrokeColor="@color/green_500">
 
-                <TextView
-                    android:id="@+id/oneStep"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_marginTop="@dimen/_25sdp"
-                    android:text="@string/get_set"
-                    android:textColor="@color/vendorPrimaryColor"
-                    android:textSize="@dimen/_20sdp"
-                    android:textStyle="bold"
-                    tools:ignore="RelativeOverlap" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/oneStep"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:text="@string/info"
-                    android:textColor="@color/vendorPrimaryColor"
-                    android:textSize="@dimen/_20sdp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:src="@drawable/ic_vendorprofileicon"
-                    tools:ignore="ContentDescription" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/verticalCard"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profession"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    app:cardCornerRadius="@dimen/_5sdp"
-                    app:cardElevation="@dimen/_5sdp"
-                    app:cardUseCompatPadding="true">
+                    android:drawableStart="@drawable/ic_graduation_cap"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:hint="@string/profession_best_suits"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:paddingBottom="@dimen/_15sdp">
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:hint="@string/qualification"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:boxStrokeColor="@color/green_500">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            app:boxStrokeColor="@color/boxStokeColor">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/fullName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_vgusers"
-                                android:drawableEnd="@drawable/ic_yellowpencil"
-                                android:drawablePadding="@dimen/_10sdp"
-                                android:hint="@string/your_name"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/signIn_mobile"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            app:boxStrokeColor="@color/boxStokeColor">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/mobileNo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_vgphoneno"
-                                android:drawableEnd="@drawable/ic_yellowpencil"
-                                android:drawablePadding="@dimen/_10sdp"
-                                android:hint="@string/mobile_no"
-                                android:inputType="number"
-                                android:maxLength="10"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:id="@+id/dateOfBirth"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_45sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:background="@drawable/gray_corner"
-                            android:drawablePadding="@dimen/_10sdp"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:hint="@string/dd_mm_yy"
-                            android:padding="@dimen/_10sdp"
-                            android:textSize="16sp"
-                            android:windowSoftInputMode="stateAlwaysVisible"
-                            app:drawableEndCompat="@drawable/ic_vcalender_icon"
-                            app:drawableStartCompat="@drawable/ic_vgcalenders" />
-
-                        <LinearLayout
-                            android:id="@+id/profession"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:background="@drawable/gray_corner"
-                            android:orientation="horizontal"
-                            android:paddingStart="@dimen/_10sdp"
-                            android:theme="@style/SignInSignUpEditText"
-                            android:weightSum="3"
-                            tools:ignore="RtlSymmetry">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="start"
-                                android:src="@drawable/ic_bagicon"
-                                tools:ignore="ContentDescription" />
-
-                            <Spinner
-                                android:id="@+id/professionSpinner"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_45sdp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_15sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_20sdp"
-                                android:text="@string/gender"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_12sdp" />
-
-                            <LinearLayout
-                                android:id="@+id/maleImg"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="@dimen/_30sdp"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:src="@drawable/male"
-                                    tools:ignore="ContentDescription" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/femaleImg"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="@dimen/_30sdp"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:layout_margin="@dimen/_5sdp"
-                                    android:src="@drawable/female"
-                                    tools:ignore="ContentDescription" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/transGenderImg"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:layout_width="@dimen/_30sdp"
-                                android:layout_height="@dimen/_30sdp"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:src="@drawable/both"
-                                tools:ignore="ContentDescription" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/qualification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/verticalCard"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:orientation="horizontal">
+                    android:drawableStart="@drawable/ic_graduation_cap"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/cancelBtn"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:layout_marginLeft="@dimen/_20sdp"
-                        android:layout_marginRight="@dimen/_20sdp"
-                        android:background="@drawable/greenborderbutton"
-                        android:gravity="center"
-                        android:text="@string/Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/vendorPrimaryColor"
-                        android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold" />
+            <AutoCompleteTextView
+                android:id="@+id/experience"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/experience"
+                android:inputType="textPhonetic"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:singleLine="true" />
 
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/languages"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:hint="@string/languages_known"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:singleLine="true"
+                app:chipBackground="@color/lightGray"
+                app:chipTextColor="@color/white" />
 
-                    <TextView
-                        android:id="@+id/nextBtn"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:layout_marginLeft="@dimen/_20sdp"
-                        android:layout_marginRight="@dimen/_20sdp"
-                        android:background="@drawable/greenbutton"
-                        android:gravity="center"
-                        android:text="@string/next"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </RelativeLayout>
+            <Spinner
+                android:id="@+id/genderSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:entries="@array/genderGroup" />
         </LinearLayout>
 
-    </ScrollView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp">
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/resetBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/green_corner_border"
+                android:clickable="true"
+                android:elevation="@dimen/_5sdp"
+                android:focusable="true"
+                android:paddingHorizontal="@dimen/_30sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="@string/reset"
+                android:textColor="@color/green_500"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/nextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/green_btn_bg"
+                android:clickable="true"
+                android:elevation="@dimen/_5sdp"
+                android:focusable="true"
+                android:paddingHorizontal="@dimen/_30sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="@string/next_sm"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -15,6 +15,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
@@ -128,7 +129,7 @@ class LoginScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     UserUtils.setUserLoggedInVia(this, type, it.data!!)
                     progressDialog.dismiss()
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                    startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
