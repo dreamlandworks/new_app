@@ -7,7 +7,7 @@ import okhttp3.ResponseBody
 open class ForgotPwdRepository: BaseRepository() {
 
     suspend fun verifyUser(requestBody: ForgotPwdVerifyReqModel): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().verifyUser(requestBody)
+        return RetrofitBuilder.getUserRetrofitInstance().verifyUser(requestBody)
     }
 
 }

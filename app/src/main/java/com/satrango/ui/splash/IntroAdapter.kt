@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.IntroRowBinding
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.utils.AuthUtils
 
 

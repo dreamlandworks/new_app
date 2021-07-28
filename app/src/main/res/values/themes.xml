@@ -13,6 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/neosans_pro_regular</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
     </style>
 
     <style name="SignInSignUpEditText" parent="Theme.AppCompat.Light">
@@ -27,5 +28,10 @@
 
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlActivated">@color/yellow</item>
+    </style>
+
+    <style name="fabTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
     </style>
 </resources>

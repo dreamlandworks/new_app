@@ -18,7 +18,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -126,7 +126,7 @@ class SetPasswordScreen : AppCompatActivity() {
                 UserUtils.longitute,
                 UserUtils.getReferralId(this@SetPasswordScreen),
                 UserUtils.gender,
-                RetrofitBuilder.KEY
+                RetrofitBuilder.USER_KEY
             )
             viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {
                 when(it) {

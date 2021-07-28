@@ -8,11 +8,12 @@ import okhttp3.ResponseBody
 class BrowseCategoriesRepository : BaseRepository() {
 
     suspend fun getBrowseCategories(): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().userBrowseCategories(RetrofitBuilder.KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().userBrowseCategories(RetrofitBuilder.USER_KEY)
     }
 
     suspend fun getBrowseSubCategories(categoryId: String): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().userBrowseSubCategories(BrowseCategoryReqModel(categoryId, RetrofitBuilder.KEY))
+        return RetrofitBuilder.getUserRetrofitInstance()
+            .userBrowseSubCategories(BrowseCategoryReqModel(categoryId, RetrofitBuilder.USER_KEY))
     }
 
 }

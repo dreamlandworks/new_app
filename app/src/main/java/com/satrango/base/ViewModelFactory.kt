@@ -4,8 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.satrango.ui.auth.forgot_password.ForgotPwdRepository
 import com.satrango.ui.auth.forgot_password.ForgotPwdViewModel
-import com.satrango.ui.auth.loginscreen.LoginRepository
-import com.satrango.ui.auth.loginscreen.LoginViewModel
+import com.satrango.ui.auth.login_screen.LoginRepository
+import com.satrango.ui.auth.login_screen.LoginViewModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveRepository
+import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveViewModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFourRepository
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFourViewModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneRepository
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneViewModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwoRepository
+import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwoViewModel
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationRepository
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
@@ -54,6 +62,18 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(SearchServiceProviderViewModel::class.java) -> return SearchServiceProviderViewModel(
                 baseRepository as SearchServiceProviderRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderSignUpOneViewModel::class.java) -> return ProviderSignUpOneViewModel(
+                baseRepository as ProviderSignUpOneRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderSignUpTwoViewModel::class.java) -> return ProviderSignUpTwoViewModel(
+                baseRepository as ProviderSignUpTwoRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderSignUpFourViewModel::class.java) -> return ProviderSignUpFourViewModel(
+                baseRepository as ProviderSignUpFourRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderSignUpFiveViewModel::class.java) -> return ProviderSignUpFiveViewModel(
+                baseRepository as ProviderSignUpFiveRepository
             ) as T
         }
         return super.create(modelClass)

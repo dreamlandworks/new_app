@@ -1,17 +1,15 @@
-package com.satrango.ui.auth.loginscreen
+package com.satrango.ui.auth.login_screen
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.lang.Exception
-import kotlin.coroutines.suspendCoroutine
 
 class LoginViewModel(private val repository: LoginRepository): ViewModel() {
 

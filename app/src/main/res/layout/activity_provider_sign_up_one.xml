@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.auth.provider_signup.ProviderSignUpOne">
+    tools:context=".ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,61 +62,41 @@
             android:paddingRight="30dp"
             android:paddingBottom="@dimen/_15sdp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <AutoCompleteTextView
+                android:id="@+id/profession"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/green_500">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profession"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_graduation_cap"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:hint="@string/profession_best_suits"
-                    android:inputType="text"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:hint="@string/qualification"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/green_500">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/qualification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_graduation_cap"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="@dimen/_45sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_graduation_cap"
+                android:drawablePadding="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
+                android:hint="@string/profession_best_suits"
+                android:inputType="textPhonetic"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:singleLine="true" />
 
             <AutoCompleteTextView
+                android:id="@+id/qualification"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_graduation_cap"
+                android:drawablePadding="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:hint="@string/qualification"
+                android:inputType="textPhonetic"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:singleLine="true" />
+
+            <Spinner
                 android:id="@+id/experience"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
-                android:drawablePadding="@dimen/_10sdp"
-                android:hint="@string/experience"
-                android:inputType="textPhonetic"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:singleLine="true" />
+                android:drawablePadding="@dimen/_10sdp"/>
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/languages"
@@ -126,23 +106,15 @@
                 android:background="@drawable/gray_corner"
                 android:hint="@string/languages_known"
                 android:paddingHorizontal="@dimen/_10sdp"
-                android:singleLine="true"
-                app:chipBackground="@color/lightGray"
-                app:chipTextColor="@color/white" />
+                android:singleLine="true" />
 
-            <Spinner
-                android:id="@+id/genderSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/gray_corner"
-                android:entries="@array/genderGroup" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_20sdp">
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp">
 
             <TextView
                 android:id="@+id/resetBtn"

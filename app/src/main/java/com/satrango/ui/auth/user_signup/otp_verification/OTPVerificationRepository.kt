@@ -10,13 +10,13 @@ import okhttp3.ResponseBody
 open class OTPVerificationRepository: BaseRepository() {
 
     suspend fun forgotPwdRequestOTP(): ResponseBody {
-        val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo, RetrofitBuilder.KEY)
-        return RetrofitBuilder.getRetrofitInstance().userForgetPwdOtpRequest(requestBody)
+        val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo, RetrofitBuilder.USER_KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().userForgetPwdOtpRequest(requestBody)
     }
 
     suspend fun requestOTP(): ResponseBody {
-        val requestBody = OTPVeriticationModel(UserUtils.firstName, UserUtils.lastName, UserUtils.phoneNo, RetrofitBuilder.KEY)
-        return RetrofitBuilder.getRetrofitInstance().userRequestOTP(requestBody)
+        val requestBody = OTPVeriticationModel(UserUtils.firstName, UserUtils.lastName, UserUtils.phoneNo, RetrofitBuilder.USER_KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().userRequestOTP(requestBody)
     }
 
 }

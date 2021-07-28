@@ -9,15 +9,16 @@ import okhttp3.ResponseBody
 class UserHomeRepository : BaseRepository() {
 
     suspend fun getPopularServices(): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().userBrowseSubCategories(BrowseCategoryReqModel("1", RetrofitBuilder.KEY))
+        return RetrofitBuilder.getUserRetrofitInstance()
+            .userBrowseSubCategories(BrowseCategoryReqModel("1", RetrofitBuilder.USER_KEY))
     }
 
     suspend fun getBrowseCategories(): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().userBrowseCategories(RetrofitBuilder.KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().userBrowseCategories(RetrofitBuilder.USER_KEY)
     }
 
     suspend fun getKeyWords(): UserKeywordsResModel {
-        return RetrofitBuilder.getRetrofitInstance().getUserSearchKeywords(RetrofitBuilder.KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().getUserSearchKeywords(RetrofitBuilder.USER_KEY)
     }
 
 }

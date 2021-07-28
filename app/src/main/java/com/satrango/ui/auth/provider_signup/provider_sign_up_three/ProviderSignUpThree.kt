@@ -5,7 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +14,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderSignUpThreeBinding
-import com.satrango.ui.auth.provider_signup.ProviderSignUpFour
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.TimeslotResponse
+import com.satrango.utils.ProviderUtils
+import com.satrango.utils.snackBar
+import org.json.JSONArray
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -32,13 +36,34 @@ class ProviderSignUpThree : AppCompatActivity() {
             addSlot.setOnClickListener { addView() }
 
             nextBtn.setOnClickListener {
-                Log.e("SLOTS DATA", validateSlots())
-                startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
+                validateFields()
             }
 
-            btnCancel.setOnClickListener { onBackPressed() }
+            backBtn.setOnClickListener { onBackPressed() }
         }
 
+    }
+
+    private fun validateFields() {
+        if (binding.perHour.text.toString().isEmpty()) {
+            snackBar(binding.nextBtn, "Enter Per Hour Charges")
+        } else if (binding.perDay.text.toString().isEmpty()) {
+            snackBar(binding.nextBtn, "Enter Per Day Charges")
+        } else if (binding.minCharge.text.toString().isEmpty()) {
+            snackBar(binding.nextBtn, "Enter Minimum Charges")
+        } else if (binding.extraCharge.text.toString().isEmpty()) {
+            snackBar(binding.nextBtn, "Enter Extra Charges")
+        } else if (JSONArray(validateSlots()).length() == 0) {
+            snackBar(binding.nextBtn, "Add Slots")
+        } else {
+            ProviderUtils.perDay = binding.perDay.text.toString().trim()
+            ProviderUtils.perHour = binding.perHour.text.toString().trim()
+            ProviderUtils.minCharge = binding.minCharge.text.toString().trim()
+            ProviderUtils.extraCharge = binding.extraCharge.text.toString().trim()
+            ProviderUtils.slotsList = validateSlots()
+            startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
+
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -360,20 +385,21 @@ class ProviderSignUpThree : AppCompatActivity() {
         val timepickerdialog = TimePickerDialog(
             this@ProviderSignUpThree,
             { view, hourOfDay, minute ->
-                var format = ""
-                var hour = hourOfDay
-                if (hour == 0) {
-                    hour += 12
-                    format = "AM"
-                } else if (hourOfDay == 12) {
-                    format = "PM"
-                } else if (hourOfDay > 12) {
-                    hour -= 12
-                    format = "PM"
-                } else {
-                    format = "AM"
-                }
-                editText.setText("$hour:$minute$format")
+//                var format = ""
+//                var hour = hourOfDay
+//                if (hour == 0) {
+//                    hour += 12
+//                    format = "AM"
+//                } else if (hourOfDay == 12) {
+//                    format = "PM"
+//                } else if (hourOfDay > 12) {
+//                    hour -= 12
+//                    format = "PM"
+//                } else {
+//                    format = "AM"
+//                }
+//                editText.setText("${java.lang.String.format("%02d", hour)}:${java.lang.String.format("%02d", minute)}$format")
+                editText.setText("${java.lang.String.format("%02d", hourOfDay)}:${java.lang.String.format("%02d", minute)}")
             }, calendarHour, calendarMinute, false
         )
         timepickerdialog.show()
@@ -383,9 +409,9 @@ class ProviderSignUpThree : AppCompatActivity() {
         binding.layoutList.removeView(view)
     }
 
-    private fun validateSlots(): String {
+    private fun validateSlots(): ArrayList<TimeslotResponse> {
 
-        val slotList = ArrayList<ProviderTimeSlotModel>()
+        val slotList = ArrayList<TimeslotResponse>()
 
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)
@@ -426,31 +452,31 @@ class ProviderSignUpThree : AppCompatActivity() {
                 dayType = "WeekEnds"
             }
             if (sunday.currentTextColor == Color.WHITE) {
-                daysList.add("Sunday")
+                daysList.add("1")
             }
             if (monday.currentTextColor == Color.WHITE) {
-                daysList.add("Monday")
+                daysList.add("2")
             }
             if (tuesday.currentTextColor == Color.WHITE) {
-                daysList.add("Tuesday")
+                daysList.add("3")
             }
             if (wednesday.currentTextColor == Color.WHITE) {
-                daysList.add("Wednesday")
+                daysList.add("4")
             }
             if (thursday.currentTextColor == Color.WHITE) {
-                daysList.add("Thursday")
+                daysList.add("5")
             }
             if (friday.currentTextColor == Color.WHITE) {
-                daysList.add("Friday")
+                daysList.add("6")
             }
             if (saturday.currentTextColor == Color.WHITE) {
-                daysList.add("Saturday")
+                daysList.add("7")
             }
 
-            slotList.add(ProviderTimeSlotModel(selectedFromDate, selectedToDate, dayType, daysList))
+            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), selectedFromDate, selectedToDate, ))
         }
 
-        return Gson().toJson(slotList)
+        return slotList
     }
 
 

@@ -98,21 +98,21 @@
             android:name=".ui.auth.provider_signup.ProviderSignUpSix"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.provider_signup.ProviderSignUpFive"
+            android:name=".ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.provider_signup.ProviderSignUpFour"
+            android:name=".ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.provider_signup.ProviderSignUpTwo"
+            android:name=".ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.provider_signup.ProviderSignUpOne"
+            android:name=".ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne"
             android:screenOrientation="portrait"
-            android:configChanges="screenSize"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />
@@ -155,7 +155,7 @@
             android:name=".ui.splash.IntroScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.auth.loginscreen.LoginScreen"
+            android:name=".ui.auth.login_screen.LoginScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.splash.SplashScreen"

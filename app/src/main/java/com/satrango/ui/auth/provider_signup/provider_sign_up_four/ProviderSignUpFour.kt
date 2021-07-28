@@ -1,4 +1,4 @@
-package com.satrango.ui.auth.provider_signup
+package com.satrango.ui.auth.provider_signup.provider_sign_up_four
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -6,22 +6,26 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.satrango.R
+import androidx.lifecycle.ViewModelProvider
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpFourBinding
-import com.satrango.utils.PermissionUtils
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
+import com.satrango.utils.*
 import java.io.*
 
 class ProviderSignUpFour : AppCompatActivity() {
 
+    private var selectedEncodedImage = ""
+    private lateinit var viewModel: ProviderSignUpFourViewModel
     private val REQUEST_CAMERA: Int = 101
     private val SELECT_FILE: Int = 100
     private lateinit var binding: ActivityProviderSignUpFourBinding
@@ -31,33 +35,70 @@ class ProviderSignUpFour : AppCompatActivity() {
         binding = ActivityProviderSignUpFourBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        PermissionUtils.checkAndRequestPermissions(this)
+        val factory = ViewModelFactory(ProviderSignUpFourRepository())
+        viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
 
-        val toolBar = findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.profile)
+        PermissionUtils.checkAndRequestPermissions(this)
 
         binding.apply {
 
             uploadIdProof.setOnClickListener { selectImage() }
 
-            backBtn.setOnClickListener { onBackPressed() }
-
-            submitBtn.setOnClickListener { startActivity(Intent(this@ProviderSignUpFour, ProviderSignUpFive::class.java)) }
+            submitBtn.setOnClickListener {
+                validateFields()
+            }
 
         }
 
     }
 
+    private fun validateFields() {
+        if (ProviderUtils.imagePath.isEmpty()) {
+            snackBar(binding.submitBtn, "Please Select Identity Proof")
+        } else {
+            sendActivationRequestToServer()
+        }
+    }
+
+    private fun sendActivationRequestToServer() {
+
+        val requestBody = ProviderSignUpFourReqModel(
+            RetrofitBuilder.PROVIDER_KEY,
+            UserUtils.getUserId(this),
+            ProviderUtils.experience,
+            ProviderUtils.aboutMe,
+            ProviderUtils.perHour,
+            ProviderUtils.perDay,
+            ProviderUtils.minCharge,
+            ProviderUtils.extraCharge,
+            selectedEncodedImage,
+            ProviderUtils.profession!!,
+            ProviderUtils.qualification!!,
+            ProviderUtils.languagesKnown!!,
+            ProviderUtils.keywordsSkills!!,
+            ProviderUtils.slotsList!!,
+        )
+        viewModel.providerActivation(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    toast(this, "Loading...")
+                }
+                is NetworkResponse.Success -> {
+                    startActivity(Intent(this, ProviderSignUpFive::class.java))
+                }
+                is NetworkResponse.Failure -> {
+                    snackBar(binding.submitBtn, it.message!!)
+                }
+            }
+        })
+    }
+
     private fun selectImage() {
-        val items = arrayOf<CharSequence>("Take Photo", "Choose from Library", "Cancel")
+        val items = arrayOf<CharSequence>("Choose from Library", "Cancel")
         val builder = AlertDialog.Builder(this@ProviderSignUpFour)
         builder.setTitle("Add Photo!")
         builder.setItems(items) { dialog, item ->
-            if (items[item] == "Take Photo") {
-                cameraIntent()
-            } else if (items[item] == "Choose from Library") {
+            if (items[item] == "Choose from Library") {
                 galleryIntent()
             } else if (items[item] == "Cancel") {
                 dialog.dismiss()
@@ -67,6 +108,7 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun galleryIntent() {
+        ProviderUtils.imagePath = ""
         val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(i, SELECT_FILE)
     }
@@ -90,16 +132,14 @@ class ProviderSignUpFour : AppCompatActivity() {
         val thumbnail = data.extras!!["data"] as Bitmap?
         val bytes = ByteArrayOutputStream()
         thumbnail!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val destination = File(
-            Environment.getExternalStorageDirectory(),
-            System.currentTimeMillis().toString() + ".jpg"
-        )
+        val destination =
+            File(Environment.getExternalStorageDirectory(), System.currentTimeMillis().toString())
         val fo: FileOutputStream
         try {
             fo = FileOutputStream(destination)
             if (destination != null) {
                 val filenew1 = destination.absolutePath
-                binding.txtdocument.text = destination.absolutePath.toString() + ".jpg"
+                binding.imagePath.text = destination.absolutePath.toString()
             } else {
                 Toast.makeText(this@ProviderSignUpFour, "something wrong", Toast.LENGTH_SHORT)
                     .show()
@@ -113,10 +153,8 @@ class ProviderSignUpFour : AppCompatActivity() {
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun onSelectFromGalleryResult(data: Intent?) {
-        var bm: Bitmap? = null
         if (data != null) {
             val pickedImage = data.data
             val filePath = arrayOf(MediaStore.Images.Media.DATA)
@@ -124,20 +162,23 @@ class ProviderSignUpFour : AppCompatActivity() {
             cursor!!.moveToFirst()
             val destination = File(cursor.getString(cursor.getColumnIndex(filePath[0])))
             cursor.close()
-            if (destination != null) {
-                binding.txtdocument.text = destination.absolutePath.toString() + ".jpg"
-            } else {
-                Toast.makeText(this@ProviderSignUpFour, "something wrong", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            var imageStream: InputStream? = null
             try {
-                bm = MediaStore.Images.Media.getBitmap(this@ProviderSignUpFour.contentResolver,data.data)
-            } catch (e: IOException) {
-                e.printStackTrace()
+                imageStream = contentResolver.openInputStream(data.data!!)
+                val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+                selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
+            } catch (e: Exception) {
+                snackBar(binding.submitBtn, e.message!!)
+            }
+            if (destination != null) {
+                ProviderUtils.imagePath = destination.absolutePath.toString()
+                binding.imagePath.text =
+                    ProviderUtils.imagePath.split("/")[ProviderUtils.imagePath.split("/").size - 1]
+            } else {
+                snackBar(binding.submitBtn, "Something went Wrong, Select Image Again")
             }
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

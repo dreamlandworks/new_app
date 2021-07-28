@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.auth.provider_signup.ProviderSignUpTwo">
+    tools:context=".ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 <com.hootsuite.nachos.NachoTextView
                     android:id="@+id/keywordSkills"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="@dimen/_45sdp"
                     android:hint="@string/keywords_skills"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:inputType="text"
@@ -97,6 +97,7 @@
                     android:id="@+id/aboutMe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="start"
                     android:hint="@string/about_me_min_250_words"
                     android:inputType="textMultiLine"
                     android:lines="10" />
@@ -108,7 +109,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_20sdp">
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_10sdp">
 
             <TextView
                 android:id="@+id/backBtn"

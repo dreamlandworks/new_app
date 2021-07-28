@@ -26,7 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.location.*
 import com.satrango.R
 import com.satrango.databinding.ActivitySignUpScreenOneBinding
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar

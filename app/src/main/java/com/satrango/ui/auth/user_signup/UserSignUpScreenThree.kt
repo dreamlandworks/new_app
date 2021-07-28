@@ -24,7 +24,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.forgot_password.ForgotPwdRepository
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdViewModel
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -275,7 +275,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
     }
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.KEY, UserUtils.phoneNo)
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.USER_KEY, UserUtils.phoneNo)
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

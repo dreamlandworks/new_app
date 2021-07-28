@@ -36,7 +36,6 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
-import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.*
@@ -203,7 +202,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             selectedEncodedImage,
             binding.lastName.text.toString().trim(),
             UserUtils.getUserId(this@UserProfileScreen),
-            RetrofitBuilder.KEY
+            RetrofitBuilder.USER_KEY
         )
 
         viewModel.updateProfileInfo(this, requestBody).observe(this, {
@@ -268,7 +267,6 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 snackBar(binding.applyBtn, e.message!!)
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
             binding.profilePic.setImageBitmap(imageBitmap)
@@ -301,7 +299,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     @SuppressLint("SetTextI18n")
     private fun deleteAddressOnServer(addressId: String) {
-        val requestBody = BrowseCategoryReqModel(addressId, RetrofitBuilder.KEY)
+        val requestBody = BrowseCategoryReqModel(addressId, RetrofitBuilder.USER_KEY)
         viewModel.deleteUserAddress(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

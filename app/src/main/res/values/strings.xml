@@ -276,6 +276,27 @@
     <string name="one_more">One More</string>
     <string name="step_to_earn">Step to Earn</string>
     <string name="time_slot">Time-Slot</string>
+    <string name="to_earn">to Earn!</string>
+    <string name="please_upload_your_id_proof_amp_address_proof_documents_to_get_verified_by_our_team"><![CDATA[Please upload your ID Proof & Address Proof documents to get verified by our team.]]></string>
+    <string name="please_show_your_id_card_to_the_camera">Please show your ID Card to the Camera</string>
+    <string name="please_read_the_statement_to_the_camera">Please read the statement to the camera</string>
+    <string name="video_preview">Video Preview</string>
+    <string name="reshoot">Reshoot</string>
+    <string name="success_">Success!</string>
+    <string name="hurray_you_have_successfully_completed_your_activation_now_you_can">Hurray! You have successfully Completed your Activation. Now you can</string>
+    <string name="start_earning">START EARNING</string>
+    <string name="go_to_dashboard">Go to Dashboard</string>
+    <string name="request_failed">Request Failed</string>
+    <string name="your_activation_is_not_successful">Your Activation is not successful</string>
+    <string name="start_again">Start Again</string>
+    <string name="service_provider_dashboard">Service Provider Dashboard</string>
+    <string name="o">O</string>
+    <string name="bids">Bids</string>
+    <string name="earnings">Earnings</string>
+    <string name="commission">Commission</string>
+    <string name="my_rank">My Rank</string>
+    <string name="points">Points</string>
+    <string name="next_competitor">Competitor</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -12,16 +12,16 @@ import okhttp3.ResponseBody
 open class UserProfileRepository : BaseRepository() {
 
     suspend fun userProfileInfo(context: Context): UserProfileResModel {
-        val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(context), RetrofitBuilder.KEY)
-        return RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
+        val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY)
+        return RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
     }
 
     suspend fun updateProfileInfo(requestBody: UserProfileUpdateReqModel): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().updateUserProfile(requestBody)
+        return RetrofitBuilder.getUserRetrofitInstance().updateUserProfile(requestBody)
     }
 
     suspend fun deleteUserAddress(requestBody: BrowseCategoryReqModel): ResponseBody {
-        return RetrofitBuilder.getRetrofitInstance().deleteUserAddress(requestBody)
+        return RetrofitBuilder.getUserRetrofitInstance().deleteUserAddress(requestBody)
     }
 
 }

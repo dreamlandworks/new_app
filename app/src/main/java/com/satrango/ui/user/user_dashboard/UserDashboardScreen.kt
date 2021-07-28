@@ -27,7 +27,7 @@ import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.user.bookings.booklater.BookLater
 import com.satrango.ui.user.user_dashboard.drawer_menu.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
@@ -70,11 +70,7 @@ class UserDashboardScreen : AppCompatActivity() {
 
         val toggle = ActionBarDrawerToggle(
             this,
-            binding.drawerLayout,
-            binding.toolBar,
-            R.string.app_name,
-            com.satrango.R.string.app_name
-        )
+            binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -316,11 +312,8 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(
-                    UserUtils.getUserId(this@UserDashboardScreen),
-                    RetrofitBuilder.KEY
-                )
-                val response = RetrofitBuilder.getRetrofitInstance().getUserProfile(requestBody)
+                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen), RetrofitBuilder.USER_KEY)
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
                     if (responseData.profile_pic != null) {

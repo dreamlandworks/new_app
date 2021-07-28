@@ -1,6 +1,8 @@
-package com.satrango.remote
+package com.satrango.remote.api_services
 
+import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
@@ -11,7 +13,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsR
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
-interface ApiService {
+interface UserApiService {
 
     @POST(UserApiEndPoints.LOGIN)
     suspend fun login(
@@ -78,9 +80,9 @@ interface ApiService {
         @Body map: ForgotPwdVerifyReqModel
     ): ResponseBody
 
-//    @POST(UserApiEndPoints.VERIFY_USER)
-//    suspend fun verifyUser(
-//        @Body map: ForgotPwdVerifyReqModel
-//    ): ResponseBody
+    @GET(UserApiEndPoints.USER_KEYWORDS)
+    suspend fun userKeywords(
+        @QueryMap map: Map<String, String>
+    ): ProviderSignUpTwoKeywordsResModel
 
 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
 import com.satrango.databinding.ActivityIntroScreenBinding
-import com.satrango.ui.auth.loginscreen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.utils.AuthUtils
 
 class IntroScreen : AppCompatActivity(), IntroInterface {

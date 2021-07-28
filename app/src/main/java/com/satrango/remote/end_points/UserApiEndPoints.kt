@@ -1,4 +1,4 @@
-package com.satrango.remote
+package com.satrango.remote.end_points
 
 object UserApiEndPoints {
 
