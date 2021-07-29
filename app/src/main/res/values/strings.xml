@@ -297,6 +297,7 @@
     <string name="my_rank">My Rank</string>
     <string name="points">Points</string>
     <string name="next_competitor">Competitor</string>
+    <string name="your_password_is_successfully_set_nplease_login_to_continue">Your password is successfully set.<br/>Please login to continue</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

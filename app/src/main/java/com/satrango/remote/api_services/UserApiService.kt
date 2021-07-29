@@ -32,7 +32,7 @@ interface UserApiService {
 
     @POST(UserApiEndPoints.OTP_REQUEST_FORGOT_PWD)
     suspend fun userForgetPwdOtpRequest(
-        @Body json: ForgetPwdOtpReqModel
+        @Body json: ForgotPwdOtpReqModel
     ): ResponseBody
 
     @POST(UserApiEndPoints.USER_RESET_PASSWORD)

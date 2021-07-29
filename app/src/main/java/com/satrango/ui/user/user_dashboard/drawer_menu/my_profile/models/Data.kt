@@ -8,5 +8,6 @@ data class Data(
     val lname: String,
     val mobile: String,
     val profile_pic: String,
-    val referral_id: String
+    val referral_id: String,
+    val sp_activated: String // 1=Not Activated,2=Approval Waiting,3=Activated,4=Not Approved,5=Banned
 )

@@ -37,7 +37,7 @@ class UserHomeScreen : BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBin
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (PermissionUtils.checkGPSStatus(requireContext()) && networkAvailable(requireContext())) {
+        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
             UserDashboardScreen.fetchLocation(requireContext())
         }
         if (UserUtils.getUserName(requireContext()).isNotEmpty()) {

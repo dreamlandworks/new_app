@@ -20,8 +20,8 @@
             <RelativeLayout
                 android:id="@+id/toolBarLayout"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_height="?attr/actionBarSize">
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="@dimen/_5sdp">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolBar"
@@ -50,10 +50,10 @@
                     android:layout_height="@dimen/_30sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/_15sdp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/images"
                     app:civ_border_color="@color/blue"
                     app:civ_border_width="@dimen/_2sdp" />

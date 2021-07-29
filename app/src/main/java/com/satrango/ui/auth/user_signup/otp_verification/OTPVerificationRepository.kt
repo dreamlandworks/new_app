@@ -2,7 +2,7 @@ package com.satrango.ui.auth.user_signup.otp_verification
 
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.user_signup.models.ForgetPwdOtpReqModel
+import com.satrango.ui.auth.user_signup.models.ForgotPwdOtpReqModel
 import com.satrango.ui.auth.user_signup.models.OTPVeriticationModel
 import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
@@ -10,7 +10,7 @@ import okhttp3.ResponseBody
 open class OTPVerificationRepository: BaseRepository() {
 
     suspend fun forgotPwdRequestOTP(): ResponseBody {
-        val requestBody = ForgetPwdOtpReqModel(UserUtils.phoneNo, RetrofitBuilder.USER_KEY)
+        val requestBody = ForgotPwdOtpReqModel(UserUtils.phoneNo, RetrofitBuilder.USER_KEY)
         return RetrofitBuilder.getUserRetrofitInstance().userForgetPwdOtpRequest(requestBody)
     }
 

@@ -18,6 +18,8 @@ import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationReposito
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardRepository
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
@@ -74,6 +76,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(ProviderSignUpFiveViewModel::class.java) -> return ProviderSignUpFiveViewModel(
                 baseRepository as ProviderSignUpFiveRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderDashboardViewModel::class.java) -> return ProviderDashboardViewModel(
+                baseRepository as ProviderDashboardRepository
             ) as T
         }
         return super.create(modelClass)

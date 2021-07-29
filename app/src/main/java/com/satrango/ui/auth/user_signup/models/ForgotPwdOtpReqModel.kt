@@ -1,6 +1,6 @@
 package com.satrango.ui.auth.user_signup.models
 
-data class ForgetPwdOtpReqModel(
+data class ForgotPwdOtpReqModel(
     val mobile: String,
     val key: String
 )

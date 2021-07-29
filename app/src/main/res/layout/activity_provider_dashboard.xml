@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.service_provider.provider_dashboard.ProviderDashboard">
+    tools:context=".ui.service_provider.provider_dashboard.dashboard.ProviderDashboard">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -139,8 +139,7 @@
                 <FrameLayout
                     android:id="@+id/fragmentContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/_54sdp" />
+                    android:layout_height="match_parent" />
 
                 <com.google.android.material.bottomappbar.BottomAppBar
                     android:id="@+id/bottom_bar"
@@ -172,7 +171,6 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab"
-                    style="@style/fabTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/green_500"

@@ -42,7 +42,7 @@ object PermissionUtils {
     }
 
 
-    fun checkAndRequestPermissions(context: Context) {
+    fun checkAndRequestPermissions(context: Activity) {
         when {
             ActivityCompat.checkSelfPermission(
                 context,
@@ -105,7 +105,7 @@ object PermissionUtils {
         ActivityCompat.requestPermissions(context as Activity, permissions, PERMISSIONS_CODE)
     }
 
-    fun checkGPSStatus(context: Context): Boolean {
+    fun checkGPSStatus(context: Activity): Boolean {
         val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gpsEnabled = false
         var networkEnabled = false
@@ -128,6 +128,7 @@ object PermissionUtils {
                 }.setNegativeButton(R.string.Cancel) { dialogInterface, _ ->
                     dialogInterface.dismiss()
                     checkAndRequestPermissions(context)
+                    context.startActivity(context.intent)
                 }
                 .setCancelable(false)
                 .show()

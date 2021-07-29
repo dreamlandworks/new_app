@@ -1,5 +1,6 @@
 package com.satrango.ui.auth.user_signup.set_password
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.card.MaterialCardView
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
@@ -82,18 +84,40 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     UserUtils.FORGOT_PWD = false
-                    startActivity(Intent(this, LoginScreen::class.java))
-                    snackBar(binding.nextBtn, it.data!!)
                     progressDialog.dismiss()
-                    finish()
+                    congratulationsDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
+                    requestFailedDialog()
                 }
             }
 
         })
+    }
+
+    private fun requestFailedDialog() {
+        val dialog = Dialog(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.password_failure_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun congratulationsDialog() {
+        val dialog = Dialog(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.password_success_dialog, null)
+        val loginBtn = dialogView.findViewById<ImageView>(R.id.loginBtn)
+        loginBtn.setOnClickListener {
+            startActivity(Intent(this, LoginScreen::class.java))
+            finish()
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
     }
 
     private fun initializeProgressDialog() {

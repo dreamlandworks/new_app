@@ -126,8 +126,7 @@
                 android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/back_sm"
                 android:textColor="@color/green_500"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:id="@+id/nextBtn"
@@ -144,8 +143,7 @@
                 android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/next_sm"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_12sdp" />
 
         </RelativeLayout>
     </LinearLayout>

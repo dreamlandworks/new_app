@@ -28,6 +28,7 @@ import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booklater.BookLater
 import com.satrango.ui.user.user_dashboard.drawer_menu.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
@@ -54,9 +55,11 @@ class UserDashboardScreen : AppCompatActivity() {
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackTVBtn: TextView
     private lateinit var toolBarBackBtn: ImageView
-
     private lateinit var userProviderSwitch: SwitchCompat
     private lateinit var profileImage: CircleImageView
+
+    private var flag: Boolean = true
+    private lateinit var backStack: Deque<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +71,7 @@ class UserDashboardScreen : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -81,11 +82,7 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.navigationView.layoutParams = params
         toggle.syncState()
 
-        Toast.makeText(
-            this,
-            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
-            Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(this, "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}", Toast.LENGTH_SHORT).show()
 
         val headerView = binding.navigationView.getHeaderView(0)
         profileImage = headerView.findViewById(R.id.profileImage)
@@ -96,34 +93,34 @@ class UserDashboardScreen : AppCompatActivity() {
         toolBarBackBtn = headerView.findViewById(R.id.toolBarBackBtn)
         updateHeaderDetails()
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            toast(this, isChecked.toString())
+            if (isChecked) {
+                finish()
+                startActivity(Intent(this, ProviderDashboard::class.java))
+            }
         }
 
+        backStack = ArrayDeque(4)
+        backStack.push(R.id.navigation_home)
         loadFragment(UserHomeScreen())
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.navigation_home -> {
-                    binding.toolBarLayout.visibility = View.VISIBLE
-                    loadFragment(UserHomeScreen())
+            val id = it.itemId
+            if (backStack.contains(id)) {
+                if (id == R.id.navigation_home) {
+                    if (backStack.size != 1) {
+                        if (flag) {
+                            backStack.addFirst(R.id.navigation_home)
+                            flag = false
+                        }
+                    }
                 }
-                R.id.navigation_offers -> {
-                    binding.toolBarLayout.visibility = View.GONE
-                    loadFragment(UserOffersScreen())
-                }
-                R.id.navigation_alerts -> {
-                    binding.toolBarLayout.visibility = View.GONE
-                    loadFragment(UserAlertScreen())
-                }
-                R.id.navigation_chats -> {
-                    binding.toolBarLayout.visibility = View.GONE
-                    loadFragment(UserChatScreen())
-                }
+                backStack.remove(id)
             }
+            backStack.push(id)
+            loadFragment(getFragment(it.itemId))
             true
         }
 
         binding.navigationView.setNavigationItemSelectedListener {
-
             when (it.itemId) {
                 R.id.userOptHome -> {
                     loadFragment(UserHomeScreen())
@@ -196,7 +193,7 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .addToBackStack(fragment.tag)
+            .addToBackStack(null)
             .replace(R.id.fragmentContainer, fragment)
             .commit()
     }
@@ -205,7 +202,13 @@ class UserDashboardScreen : AppCompatActivity() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            backStack.pop()
+            if (!backStack.isEmpty()) {
+                loadFragment(getFragment(backStack.peek()))
+            } else {
+                finish()
+                moveTaskToBack(true)
+            }
         }
     }
 
@@ -352,7 +355,34 @@ class UserDashboardScreen : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
+    private fun getFragment(itemId: Int): Fragment {
+        when (itemId) {
+            R.id.navigation_home -> {
+                binding.toolBarLayout.visibility = View.VISIBLE
+                binding.bottomNavigationView.menu.getItem(0).isChecked = true
+                return UserHomeScreen()
+            }
+            R.id.navigation_chats -> {
+                binding.toolBarLayout.visibility = View.GONE
+                binding.bottomNavigationView.menu.getItem(1).isChecked = true
+                return UserChatScreen()
+            }
+            R.id.navigation_alerts -> {
+                binding.toolBarLayout.visibility = View.GONE
+                binding.bottomNavigationView.menu.getItem(3).isChecked = true
+                return UserAlertScreen()
+            }
+            R.id.navigation_offers -> {
+                binding.toolBarLayout.visibility = View.GONE
+                binding.bottomNavigationView.menu.getItem(4).isChecked = true
+                logoutDialog()
+                return UserOffersScreen()
+            }
+        }
+        binding.bottomNavigationView.menu.getItem(0).isChecked = true
+        return UserHomeScreen()
     }
 
 }

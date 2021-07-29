@@ -12,9 +12,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -26,10 +24,8 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveViewModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.utils.UserUtils
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

@@ -198,13 +198,13 @@ class OTPVerificationScreen : AppCompatActivity() {
         })
     }
 
-    private fun otpAutoFill() {
-        val smsRetriverClient = SmsRetriever.getClient(this)
-        val task = smsRetriverClient.startSmsRetriever()
-        task.addOnSuccessListener {
-            val filter = IntentFilter()
-            filter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
-            registerReceiver(SmsReceiver(), filter)
-        }
-    }
+//    private fun otpAutoFill() {
+//        val smsRetriverClient = SmsRetriever.getClient(this)
+//        val task = smsRetriverClient.startSmsRetriever()
+//        task.addOnSuccessListener {
+//            val filter = IntentFilter()
+//            filter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+//            registerReceiver(SmsReceiver(), filter)
+//        }
+//    }
 }
