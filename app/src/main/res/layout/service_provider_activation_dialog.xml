@@ -85,7 +85,7 @@
             android:paddingVertical="@dimen/_8sdp"
             android:text="@string/no_sm"
             android:textColor="@color/green_500"
-            android:textSize="@dimen/_14sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
         <TextView
@@ -103,7 +103,7 @@
             android:paddingVertical="@dimen/_8sdp"
             android:text="@string/yes_sm"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
     </RelativeLayout>

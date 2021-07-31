@@ -1,9 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue_500"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+        <ImageView
+            android:id="@+id/toolBarBackBtn"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_whiteback"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/toolBarBackTVBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/toolBarBackBtn"
+            android:text="@string/back_sm"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp"
+            tools:ignore="RelativeOverlap" />
+
+        <LinearLayout
+            android:id="@+id/userLocationLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/locationbackground"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location_searching"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/userLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/locationbackground"
+            android:drawableStart="@drawable/ic_search"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:drawableEnd="@drawable/ic_mic"
+            android:drawablePadding="@dimen/_5sdp"
+            android:hint="@string/search_in_thousands_of_services"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_12sdp"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/goBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            android:text="@string/go"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp"
+            android:background="@drawable/btn_bg_sm"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/listCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_alignParentStart="true"
+            android:text="@string/showing_10_out_of_143_results"/>
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:src="@drawable/settings_black"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="@dimen/_5sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+</LinearLayout>

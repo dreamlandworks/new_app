@@ -20,7 +20,6 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
 
     val popularServices = MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>>()
     val browseCategoriesList = MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>>()
-    val keywordsList = MutableLiveData<NetworkResponse<List<Data>>>()
 
     fun getPopularServicesList(context: Context): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
         if (hasInternetConnection(context)) {
@@ -85,30 +84,6 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
         }
 
         return browseCategoriesList
-    }
-
-    fun getKeywordsList(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
-                keywordsList.value = NetworkResponse.Loading()
-                try {
-                    val response = userHomeRepository.getKeyWords()
-//                    Log.e("KEYWORDS", response.string())
-                    if (response.status == 200) {
-                        keywordsList.value = NetworkResponse.Success(response.data)
-                    } else {
-                        keywordsList.value = NetworkResponse.Failure(response.message)
-                    }
-                } catch (e: Exception) {
-                    Log.e("KEYWORDS", e.message!!)
-                    keywordsList.value = NetworkResponse.Failure(e.message)
-                }
-            }
-        } else {
-            keywordsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
-
-        return keywordsList
     }
 
 }

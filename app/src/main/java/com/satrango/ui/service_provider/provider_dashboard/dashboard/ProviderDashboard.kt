@@ -128,35 +128,25 @@ class ProviderDashboard : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.userOptHome -> {
+                R.id.providerOptHome -> {
                     loadFragment(ProviderHomeScreen())
                 }
-                R.id.userOptPostJob -> {
-//                    startActivity(Intent(this, UserSearchViewProfileScreen::class.java))
-//                    Toast.makeText(this, "Post A Job Clicked", Toast.LENGTH_SHORT).show()
+                R.id.providerOptMyAccount -> {
+
                 }
-                R.id.userOptBrowseCategories -> {
-//                    startActivity(Intent(this, BrowseCategoriesScreen::class.java))
+                R.id.providerOptMyBooking -> {
+
                 }
-                R.id.userOptMyAccount -> {
-//                    startActivity(Intent(this, UserMyAccountScreen::class.java))
+                R.id.providerOptMyBids -> {
+
                 }
-                R.id.userOptMyBooking -> {
-//                    startActivity(Intent(this, BookLater::class.java))
+                R.id.providerOptMyProfile -> {
+
                 }
-                R.id.userOptMyJobPosts -> {
-//                    Toast.makeText(this, "My Job Posts Clicked", Toast.LENGTH_SHORT).show()
+                R.id.providerOptSettings -> {
+
                 }
-                R.id.userOptMyProfile -> {
-//                    startActivity(Intent(this, UserProfileScreen::class.java))
-                }
-                R.id.userOptReferEarn -> {
-//                    startActivity(Intent(this, UserReferAndEarn::class.java))
-                }
-                R.id.userOptSettings -> {
-//                    startActivity(Intent(this, UserSettingsScreen::class.java))
-                }
-                R.id.userOptLogOut -> {
+                R.id.providerOptLogOut -> {
                     logoutDialog()
                 }
             }

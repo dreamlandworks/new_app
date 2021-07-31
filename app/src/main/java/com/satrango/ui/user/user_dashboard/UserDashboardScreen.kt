@@ -37,6 +37,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccount
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.*
@@ -303,6 +304,7 @@ class UserDashboardScreen : AppCompatActivity() {
                 UserUtils.postalCode = postalCode
                 UserUtils.address = knownName
                 binding.userLocation.text = UserUtils.city
+                SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
                 Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                     .show()

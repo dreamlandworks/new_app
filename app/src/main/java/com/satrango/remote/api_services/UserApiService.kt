@@ -7,6 +7,8 @@ import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
@@ -79,6 +81,11 @@ interface UserApiService {
     suspend fun verifyUser(
         @Body map: ForgotPwdVerifyReqModel
     ): ResponseBody
+
+    @POST(UserApiEndPoints.USER_SEARCH_RESULTS)
+    suspend fun getUserSearchResults(
+        @Body map: SearchServiceProviderReqModel
+    ): SearchServiceProviderResModel
 
     @GET(UserApiEndPoints.USER_KEYWORDS)
     suspend fun userKeywords(

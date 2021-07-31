@@ -298,6 +298,11 @@
     <string name="points">Points</string>
     <string name="next_competitor">Competitor</string>
     <string name="your_password_is_successfully_set_nplease_login_to_continue">Your password is successfully set.<br/>Please login to continue</string>
+    <string name="my_bids">My Bids</string>
+    <string name="go">Go</string>
+    <string name="showing_10_out_of_143_results">Showing 10 out of 143 results</string>
+    <string name="book_later">Book Later</string>
+    <string name="book_now">Book Now</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -16,5 +16,6 @@ object UserApiEndPoints {
     final const val USER_SEARCH_KEYWORDS = "user/autocomplete"
     final const val VERIFY_USER = "user/verify"
     final const val USER_KEYWORDS = "user/keywords"
+    final const val USER_SEARCH_RESULTS = "user/search_result"
 
 }

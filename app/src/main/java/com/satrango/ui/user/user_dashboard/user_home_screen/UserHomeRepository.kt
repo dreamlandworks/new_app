@@ -17,8 +17,4 @@ class UserHomeRepository : BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().userBrowseCategories(RetrofitBuilder.USER_KEY)
     }
 
-    suspend fun getKeyWords(): UserKeywordsResModel {
-        return RetrofitBuilder.getUserRetrofitInstance().getUserSearchKeywords(RetrofitBuilder.USER_KEY)
-    }
-
 }

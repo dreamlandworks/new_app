@@ -74,6 +74,7 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:layout_weight="1"
+                            android:editable="false"
                             android:background="@drawable/locationbackground"
                             android:drawableStart="@drawable/ic_search"
                             android:drawableEnd="@drawable/ic_mic"
