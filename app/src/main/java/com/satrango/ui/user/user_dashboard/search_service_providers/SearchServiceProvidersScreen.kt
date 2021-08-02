@@ -78,19 +78,19 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults() {
-//        val requestBody = SearchServiceProviderReqModel(UserUtils.address, UserUtils.city, UserUtils.country, RetrofitBuilder.USER_KEY, 4, UserUtils.postalCode, UserUtils.state, UserUtils.latitude, UserUtils.longitute, UserUtils.getUserId(this).toInt())
-        val requestBody = SearchServiceProviderReqModel(
-            "Near Mandovi Showroom",
-            "Mangalore",
-            "India",
-            RetrofitBuilder.USER_KEY,
-            4,
-            "575014",
-            "Karnataka",
-            "12.9951",
-            "74.8094",
-            UserUtils.getUserId(this).toInt()
-        )
+        val requestBody = SearchServiceProviderReqModel(UserUtils.address, UserUtils.city, UserUtils.country, RetrofitBuilder.USER_KEY, 4, UserUtils.postalCode, UserUtils.state, UserUtils.latitude, UserUtils.longitute, UserUtils.getUserId(this).toInt())
+//        val requestBody = SearchServiceProviderReqModel(
+//            "Near Mandovi Showroom",
+//            "Mangalore",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            4,
+//            "575014",
+//            "Karnataka",
+//            "12.9951",
+//            "74.8094",
+//            UserUtils.getUserId(this).toInt()
+//        )
 
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {

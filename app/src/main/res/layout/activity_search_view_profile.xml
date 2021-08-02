@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.user_dashboard.drawer_menu.UserSearchViewProfileScreen">
+    tools:context=".ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen">
 
     <LinearLayout
         android:layout_width="match_parent"

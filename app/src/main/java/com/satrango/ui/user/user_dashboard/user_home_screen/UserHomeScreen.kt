@@ -15,6 +15,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesAdapter
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
@@ -55,26 +56,20 @@ class UserHomeScreen :
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
 
-        binding.userPopularServicesRv.layoutManager =
-            GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
-        viewModel.getPopularServicesList(requireContext()).observe(viewLifecycleOwner, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(it.data!!)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
-                }
-            }
-        })
 
-        binding.categoryRV.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
+            }
+        }
+        binding.searchBar.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
+        }
+        binding.browseAll.setOnClickListener {
+            startActivity(Intent(requireContext(), BrowseCategoriesScreen::class.java))
+        }
+
+        binding.categoryRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         viewModel.getBrowseCategories(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -91,16 +86,29 @@ class UserHomeScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-
         })
-        binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
+
+        updatePopularServices("1")
+
+    }
+
+    private fun updatePopularServices(categoryId: String) {
+        binding.userPopularServicesRv.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        viewModel.getPopularServicesList(requireContext(), categoryId).observe(viewLifecycleOwner, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(requireContext(), it.message!!)
+                }
             }
-        }
-        binding.searchBar.setOnClickListener {
-            startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
-        }
+        })
 
     }
 
@@ -123,30 +131,16 @@ class UserHomeScreen :
         val tempList = ArrayList<BrowserCategoryModel>()
         categoriesList.forEachIndexed { index, browserCategoryModel ->
             if (position == index) {
-                tempList.add(
-                    BrowserCategoryModel(
-                        browserCategoryModel.category,
-                        browserCategoryModel.id,
-                        browserCategoryModel.image,
-                        true
-                    )
-                )
+                tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, true))
             } else {
-                tempList.add(
-                    BrowserCategoryModel(
-                        browserCategoryModel.category,
-                        browserCategoryModel.id,
-                        browserCategoryModel.image,
-                        false
-                    )
-                )
+                tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, false))
             }
         }
         if (position == categoriesList.size - 1) {
             binding.categoryRV.scrollToPosition(categoriesList.size - 1)
         }
         binding.categoryRV.adapter = BrowseCategoriesAdapter(tempList, this)
-
+        updatePopularServices(categoryId)
     }
 
 }

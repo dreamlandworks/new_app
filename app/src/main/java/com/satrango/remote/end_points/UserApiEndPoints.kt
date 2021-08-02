@@ -17,5 +17,7 @@ object UserApiEndPoints {
     final const val VERIFY_USER = "user/verify"
     final const val USER_KEYWORDS = "user/keywords"
     final const val USER_SEARCH_RESULTS = "user/search_result"
+    final const val USER_FAQS = "user/user_faq"
+    final const val USER_CHANGE_ADDRESS = "user/change_address"
 
 }

@@ -13,12 +13,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        android:paddingVertical="@dimen/_5sdp"
         android:paddingHorizontal="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
             android:src="@drawable/ic_browsecategory"
             tools:ignore="ContentDescription" />
 
@@ -32,11 +33,11 @@
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_12sdp" />
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:src="@drawable/arrow_forward_icon"
             tools:ignore="ContentDescription" />
 

@@ -1,15 +1,19 @@
 package com.satrango.ui.auth.login_screen
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
@@ -23,6 +27,7 @@ import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class LoginScreen : AppCompatActivity() {
 
@@ -36,7 +41,6 @@ class LoginScreen : AppCompatActivity() {
 
     // Facebook SignIn Object
     private lateinit var facebookCallBackManager: CallbackManager
-
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +57,12 @@ class LoginScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         binding.apply {
+
+            val userCredentials = UserUtils.getLoginCredentials(this@LoginScreen)
+            if (userCredentials[resources.getString(R.string.phoneNo)]!!.isNotEmpty()) {
+                binding.mobileNo.setText(userCredentials[resources.getString(R.string.phoneNo)])
+                binding.password.setText(userCredentials[resources.getString(R.string.password)])
+            }
 
             googleSigInBtn.setOnClickListener {
                 val signInIntent = googleSignInClient.signInIntent
@@ -71,6 +81,12 @@ class LoginScreen : AppCompatActivity() {
             signInBtn.setOnClickListener {
                 val phoneNo = mobileNo.text.toString().trim()
                 val pwd = password.text.toString().trim()
+
+                if (rememberMe.isChecked) {
+                    UserUtils.saveLoginCredentials(this@LoginScreen, phoneNo, pwd)
+                } else {
+                    UserUtils.deleteUserCredentials(this@LoginScreen)
+                }
 
                 when {
                     phoneNo.isEmpty() -> {
@@ -98,9 +114,7 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.FORGOT_PWD = true
                 startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java))
             }
-
         }
-
     }
 
     private fun initializeProgressDialog() {
@@ -117,7 +131,6 @@ class LoginScreen : AppCompatActivity() {
         }
 
         val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.USER_KEY)
-
         viewModel.userLogin(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -245,6 +258,5 @@ class LoginScreen : AppCompatActivity() {
     override fun onBackPressed() {
         moveTaskToBack(true)
     }
-
 
 }

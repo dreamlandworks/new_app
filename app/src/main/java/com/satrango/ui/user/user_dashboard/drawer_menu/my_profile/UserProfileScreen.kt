@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -116,18 +117,32 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             firstName.tag = firstName.keyListener
             firstName.keyListener = null
             firstNameEdit.setOnClickListener {
+                firstNameLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
                 firstName.keyListener = firstName.tag as KeyListener
             }
 
             lastName.inputType = InputType.TYPE_CLASS_TEXT
             lastName.tag = lastName.keyListener
             lastName.keyListener = null
-            lastNameEdit.setOnClickListener { lastName.keyListener = lastName.tag as KeyListener }
+            lastNameEdit.setOnClickListener {
+                lastNameLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                lastName.keyListener = lastName.tag as KeyListener
+            }
 
             dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             dateOfBirth.tag = dateOfBirth.keyListener
             dateOfBirth.keyListener = null
             dateOfBirthEdit.setOnClickListener {
+                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
                 dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
             }
 //            dateOfBirth.setOnTouchListener(OnTouchListener { v, event ->
@@ -146,7 +161,13 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener
             emailId.keyListener = null
-            emailEdit.setOnClickListener { emailId.keyListener = emailId.tag as KeyListener }
+            emailEdit.setOnClickListener {
+                emailLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+                emailId.keyListener = emailId.tag as KeyListener
+            }
 //            emailId.setOnTouchListener(OnTouchListener { v, event ->
 //                val DRAWABLE_LEFT = 0
 //                val DRAWABLE_TOP = 1

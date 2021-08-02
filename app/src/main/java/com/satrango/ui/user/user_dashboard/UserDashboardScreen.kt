@@ -30,9 +30,10 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booklater.BookLater
-import com.satrango.ui.user.user_dashboard.drawer_menu.UserSearchViewProfileScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
@@ -40,6 +41,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScre
 import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -121,6 +123,10 @@ class UserDashboardScreen : AppCompatActivity() {
             true
         }
 
+        binding.userLocation.setOnClickListener {
+            startActivity(Intent(this, UserLocationSelectionScreen::class.java))
+        }
+
         binding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.userOptHome -> {
@@ -147,6 +153,9 @@ class UserDashboardScreen : AppCompatActivity() {
                 }
                 R.id.userOptReferEarn -> {
                     startActivity(Intent(this, UserReferAndEarn::class.java))
+                }
+                R.id.userOptFAQs -> {
+                    startActivity(Intent(this, UserFAQScreen::class.java))
                 }
                 R.id.userOptSettings -> {
                     startActivity(Intent(this, UserSettingsScreen::class.java))

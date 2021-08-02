@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.user_dashboard.user_alerts.UserAlertScreen">
+    tools:context=".ui.user.user_dashboard.user_alerts.UserAlertScreen">
 
     <include
         android:id="@+id/toolBar"
@@ -34,7 +34,7 @@
                 android:paddingVertical="@dimen/_10sdp"
                 android:text="@string/regular"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:id="@+id/regularBadge"
@@ -60,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/blue_out_line"
                 android:gravity="center"
+                android:textSize="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:paddingVertical="@dimen/_10sdp"

@@ -1,7 +1,7 @@
 package com.satrango.ui.auth.user_signup.set_password
 
-import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -25,6 +26,7 @@ import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class SetPasswordScreen : AppCompatActivity() {
 
@@ -56,13 +58,15 @@ class SetPasswordScreen : AppCompatActivity() {
                     reEnterPassword.error = "Enter Confirm Password"
                     reEnterPassword.requestFocus()
                 } else if (pwd != cPwd) {
-                  snackBar(binding.nextBtn, "Confirm Password not valid")
+                    snackBar(binding.nextBtn, "Confirm Password not valid")
                 } else {
                     UserUtils.password = pwd
                     if (UserUtils.FORGOT_PWD) {
+                        toast(this@SetPasswordScreen, "Forgot password")
                         resetPwdOnServer()
                     } else {
                         signUpToServer()
+                        toast(this@SetPasswordScreen, "New Creation")
                     }
                 }
             }
@@ -76,30 +80,31 @@ class SetPasswordScreen : AppCompatActivity() {
         }
 
         viewModel.resetPassword(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                     binding.password.clearFocus()
                     binding.reEnterPassword.clearFocus()
                 }
                 is NetworkResponse.Success -> {
-                    UserUtils.FORGOT_PWD = false
                     progressDialog.dismiss()
-                    congratulationsDialog()
+                    congratulationsDialog(this, it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    requestFailedDialog()
+                    requestFailedDialog(this, it.message!!)
                 }
             }
 
         })
     }
 
-    private fun requestFailedDialog() {
-        val dialog = Dialog(this)
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.password_failure_dialog, null)
+    private fun requestFailedDialog(context: Context, message: String) {
+        val dialog = BottomSheetDialog(context)
+        val dialogView = layoutInflater.inflate(R.layout.password_failure_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val messageText = dialogView.findViewById<TextView>(R.id.message)
+        messageText.text = message
         closeBtn.setOnClickListener {
             dialog.dismiss()
         }
@@ -107,16 +112,17 @@ class SetPasswordScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun congratulationsDialog() {
-        val dialog = Dialog(this)
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.password_success_dialog, null)
-        val loginBtn = dialogView.findViewById<ImageView>(R.id.loginBtn)
+    private fun congratulationsDialog(context: Context, message: String) {
+        val dialog = BottomSheetDialog(context)
+        val dialogView = layoutInflater.inflate(R.layout.password_success_dialog, null)
+        val loginBtn = dialogView.findViewById<TextView>(R.id.loginBtn)
+        val messageText = dialogView.findViewById<TextView>(R.id.message)
+        messageText.text = message
         loginBtn.setOnClickListener {
-            startActivity(Intent(this, LoginScreen::class.java))
+            startActivity(Intent(context, LoginScreen::class.java))
             finish()
         }
         dialog.setContentView(dialogView)
-        dialog.setCancelable(false)
         dialog.show()
     }
 
@@ -131,46 +137,46 @@ class SetPasswordScreen : AppCompatActivity() {
             PermissionUtils.connectionAlert(this) { signUpToServer() }
             return
         }
-            val requestBody = UserSignUpModel(
-                UserUtils.address,
-                UserUtils.city,
-                UserUtils.country,
-                UserUtils.dateOfBirth,
-                UserUtils.mailId,
-                UserUtils.facebookId,
-                UserUtils.firstName,
-                UserUtils.googleId,
-                UserUtils.lastName,
-                UserUtils.phoneNo,
-                UserUtils.password,
-                UserUtils.postalCode,
-                UserUtils.state,
-                UserUtils.twitterId,
-                UserUtils.latitude,
-                UserUtils.longitute,
-                UserUtils.getReferralId(this@SetPasswordScreen),
-                UserUtils.gender,
-                RetrofitBuilder.USER_KEY
-            )
-            viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {
-                when(it) {
-                    is NetworkResponse.Loading -> {
-                        binding.reEnterPassword.clearFocus()
-                        binding.password.clearFocus()
-                        progressDialog.show()
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        UserUtils.setReferralId(this@SetPasswordScreen, it.data!!)
-                        showCustomDialog()
-                    }
-                    is NetworkResponse.Failure -> {
-                        snackBar(binding.nextBtn, it.message!!)
-                        progressDialog.dismiss()
-                    }
+        val requestBody = UserSignUpModel(
+            UserUtils.address,
+            UserUtils.city,
+            UserUtils.country,
+            UserUtils.dateOfBirth,
+            UserUtils.mailId,
+            UserUtils.facebookId,
+            UserUtils.firstName,
+            UserUtils.googleId,
+            UserUtils.lastName,
+            UserUtils.phoneNo,
+            UserUtils.password,
+            UserUtils.postalCode,
+            UserUtils.state,
+            UserUtils.twitterId,
+            UserUtils.latitude,
+            UserUtils.longitute,
+            UserUtils.getReferralId(this@SetPasswordScreen),
+            UserUtils.gender,
+            RetrofitBuilder.USER_KEY
+        )
+        viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    binding.reEnterPassword.clearFocus()
+                    binding.password.clearFocus()
+                    progressDialog.show()
                 }
-
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    UserUtils.setReferralId(this@SetPasswordScreen, it.data!!)
+                    showCustomDialog()
+                }
+                is NetworkResponse.Failure -> {
+                    snackBar(binding.nextBtn, it.message!!)
+                    progressDialog.dismiss()
+                }
             }
+
+        }
     }
 
     private fun textWatchers() {
@@ -185,7 +191,12 @@ class SetPasswordScreen : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
+                binding.password.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_passwords,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -211,7 +222,12 @@ class SetPasswordScreen : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() == binding.password.text.toString().trim()) {
-                    binding.reEnterPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
+                    binding.reEnterPassword.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_passwords,
+                        0,
+                        R.drawable.ic_greencheck,
+                        0
+                    )
                 }
             }
 

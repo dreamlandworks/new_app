@@ -23,6 +23,7 @@
             android:justificationMode="inter_word"
             android:textColor="@color/black"
             android:lineSpacingExtra="@dimen/_5sdp"
+            android:textSize="@dimen/_11sdp"
             android:text="@string/terms_amp_conditions_data_one"/>
 
     </LinearLayout>

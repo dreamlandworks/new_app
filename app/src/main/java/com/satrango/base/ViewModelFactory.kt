@@ -22,6 +22,8 @@ import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDas
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProviderRepository
@@ -30,6 +32,8 @@ import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeRepository
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeViewModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationChangeRepository
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationChangeViewModel
 
 @Suppress("UNCHECKED_CAST")
 open class ViewModelFactory(private val baseRepository: BaseRepository) :
@@ -79,6 +83,12 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(ProviderDashboardViewModel::class.java) -> return ProviderDashboardViewModel(
                 baseRepository as ProviderDashboardRepository
+            ) as T
+            modelClass.isAssignableFrom(UserFAQViewModel::class.java) -> return UserFAQViewModel(
+                baseRepository as UserFAQRepository
+            ) as T
+            modelClass.isAssignableFrom(UserLocationChangeViewModel::class.java) -> return UserLocationChangeViewModel(
+                baseRepository as UserLocationChangeRepository
             ) as T
         }
         return super.create(modelClass)

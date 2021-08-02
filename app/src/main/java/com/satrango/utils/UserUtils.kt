@@ -13,8 +13,8 @@ object UserUtils {
     var lastName = ""
     var phoneNo = ""
     var gender = ""
-    var latitude = ""
-    var longitute = ""
+    var latitude = "0.0"
+    var longitute = "0.0"
     var city = ""
     var state = ""
     var country = ""
@@ -124,6 +124,42 @@ object UserUtils {
         editor.putString(context.resources.getString(R.string.userReferralId), referralId)
         editor.apply()
         editor.commit()
+    }
+
+    fun saveLoginCredentials(context: Context, phoneNo: String, pwd: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.phoneNo), phoneNo)
+        editor.putString(context.resources.getString(R.string.password), password)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun deleteUserCredentials(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.phoneNo), "")
+        editor.putString(context.resources.getString(R.string.password), "")
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getLoginCredentials(context: Context): MutableMap<String, String> {
+        val map = mutableMapOf<String, String>()
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        sharedPreferences.getString(context.resources.getString(R.string.password), "")
+        map.put(context.resources.getString(R.string.phoneNo), sharedPreferences.getString(context.resources.getString(R.string.phoneNo), "")!!)
+        map.put(context.resources.getString(R.string.password), sharedPreferences.getString(context.resources.getString(R.string.password), "")!!)
+        return map
     }
 
 }

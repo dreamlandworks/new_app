@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu
+package com.satrango.ui.user.user_dashboard.search_service_providers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

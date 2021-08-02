@@ -8,9 +8,9 @@ import okhttp3.ResponseBody
 
 class UserHomeRepository : BaseRepository() {
 
-    suspend fun getPopularServices(): ResponseBody {
+    suspend fun getPopularServices(categoryId: String): ResponseBody {
         return RetrofitBuilder.getUserRetrofitInstance()
-            .userBrowseSubCategories(BrowseCategoryReqModel("1", RetrofitBuilder.USER_KEY))
+            .userBrowseSubCategories(BrowseCategoryReqModel(categoryId, RetrofitBuilder.USER_KEY))
     }
 
     suspend fun getBrowseCategories(): ResponseBody {

@@ -5,6 +5,7 @@ import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
@@ -12,6 +13,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationChangeReqModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -91,5 +93,15 @@ interface UserApiService {
     suspend fun userKeywords(
         @QueryMap map: Map<String, String>
     ): ProviderSignUpTwoKeywordsResModel
+
+    @GET(UserApiEndPoints.USER_FAQS)
+    suspend fun userFAQs(
+        @Query("key") key: String
+    ): UserFAQResModel
+
+    @POST(UserApiEndPoints.USER_CHANGE_ADDRESS)
+    suspend fun changeUserLocation(
+        @Body json: UserLocationChangeReqModel
+    ): ResponseBody
 
 }

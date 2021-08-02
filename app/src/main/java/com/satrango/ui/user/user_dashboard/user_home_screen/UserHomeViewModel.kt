@@ -21,13 +21,13 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
     val popularServices = MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>>()
     val browseCategoriesList = MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>>()
 
-    fun getPopularServicesList(context: Context): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
+    fun getPopularServicesList(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 val popularServicesList = ArrayList<BrowserSubCategoryModel>()
                 popularServices.value = NetworkResponse.Loading()
                 try {
-                    val response = userHomeRepository.getPopularServices()
+                    val response = userHomeRepository.getPopularServices(categoryId)
                     val responseObject = JSONObject(response.string())
                     if (responseObject.getInt("status") == 200) {
                         val subCategoriesArray = responseObject.getJSONArray("data")

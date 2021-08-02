@@ -22,7 +22,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue_500">
+                android:background="@color/blue_700">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -117,6 +117,7 @@
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
+                android:id="@+id/browseAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

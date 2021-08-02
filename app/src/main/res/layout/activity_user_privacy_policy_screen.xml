@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
+            android:textSize="@dimen/_11sdp"
             android:textColor="@color/black"
             android:justificationMode="inter_word"
             android:lineSpacingExtra="@dimen/_5sdp"

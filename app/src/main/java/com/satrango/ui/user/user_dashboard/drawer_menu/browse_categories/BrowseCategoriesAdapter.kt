@@ -19,7 +19,6 @@ class BrowseCategoriesAdapter(
 
         @SuppressLint("CheckResult")
         fun bind(data: BrowserCategoryModel) {
-//            Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + data.image).into(binding.image)
             binding.title.text = data.category
         }
 

@@ -20,8 +20,8 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
     fun resetPassword(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
-                resetPassword.value = NetworkResponse.Loading()
                 try {
+                    resetPassword.value = NetworkResponse.Loading()
                     val response = repository.resetPasswordInServer()
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.get("status") == 200) {
