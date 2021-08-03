@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.search_service_providers
+package com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider
 
 import android.content.Context
 import android.util.Log
@@ -10,7 +10,6 @@ import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody
 import java.lang.Exception
 
 class SearchServiceProviderViewModel(private val repository: SearchServiceProviderRepository): ViewModel() {

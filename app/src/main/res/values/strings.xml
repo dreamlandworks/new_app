@@ -223,7 +223,6 @@
     <string name="reviews">Reviews</string>
     <string name="jobs">Jobs</string>
     <string name="professional_info">Professional Info</string>
-    <string name="experience">Experience</string>
     <string name="distance">Distance</string>
     <string name="view_profile">View Profile</string>
     <string name="month">/Month</string>
@@ -306,6 +305,25 @@
     <string name="book_now">Book Now</string>
     <string name="yyyy_mm_dd">YYYY-MM-DD</string>
     <string name="we_fear_your_request_cannot_be_processed_at_this_time">We fear your request cannot be processed at this time</string>
+    <string name="about_me">About Me</string>
+    <string name="job_skills">Job Skills</string>
+    <string name="overall_rating">Overall Rating</string>
+    <string name="professionalism">Professionalism</string>
+    <string name="behaviour">Behaviour</string>
+    <string name="satisfaction">Satisfaction</string>
+    <string name="requisite_skills">Requisite Skills</string>
+    <string name="sort_filter">Sort And Filter</string>
+    <string name="sort_results_by">Sort Results By</string>
+    <string name="clear_all">Clear all</string>
+    <string name="near_me">Near Me</string>
+    <string name="price_low_to_high">Price Low to High</string>
+    <string name="price_high_to_low">Price High to Low</string>
+    <string name="fresher">Fresher</string>
+    <string name="experience">Experience</string>
+    <string name="any">Any</string>
+    <string name="filter_results_by">Filter Results by</string>
+    <string name="distance_with_in">Distance with in</string>
+    <string name="amount">Amount</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -38,8 +38,8 @@ class BookingAddress : AppCompatActivity(), MonthsInterface {
 
         binding.apply {
             addressList = arrayListOf()
-            addressList.add(MonthsModel("Krishna Ganga Spinning Mill, Thimmapuram, 522619", false))
-            addressList.add(MonthsModel("Nrt Center, Chilakaluripet, 522616", false))
+            addressList.add(MonthsModel("Krishna Ganga Spinning Mill, Thimmapuram, 522619", "",false))
+            addressList.add(MonthsModel("Nrt Center, Chilakaluripet, 522616", "",false))
             addressRv.layoutManager = LinearLayoutManager(this@BookingAddress, LinearLayoutManager.HORIZONTAL, false)
             addressRv.adapter = MonthsAdapter(addressList, this@BookingAddress, "AA")
 
@@ -52,9 +52,9 @@ class BookingAddress : AppCompatActivity(), MonthsInterface {
         val tempAddress = arrayListOf<MonthsModel>()
         addressList.onEachIndexed { index, month ->
             if (index == position) {
-                tempAddress.add(MonthsModel(month.month, true))
+                tempAddress.add(MonthsModel(month.month, "",true))
             } else {
-                tempAddress.add(MonthsModel(month.month, false))
+                tempAddress.add(MonthsModel(month.month, "",false))
             }
         }
         binding.addressRv.adapter = MonthsAdapter(tempAddress, this@BookingAddress, "AA")

@@ -22,8 +22,9 @@
     <LinearLayout
         android:id="@+id/rowLayout"
         android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="@dimen/_10sdp"
         android:orientation="vertical"
         android:background="@drawable/blue_out_line">
 
@@ -32,8 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:visibility="gone"
-            android:layout_marginBottom="@dimen/_5sdp"
             android:text="@string/app_name"
             android:textStyle="bold"
             android:gravity="center"
@@ -44,7 +43,6 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:text="@string/app_name"
             android:gravity="center"
             android:textSize="@dimen/_18sdp"

@@ -26,8 +26,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProviderRepository
-import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProviderViewModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProviderRepository
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProviderViewModel
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeRepository

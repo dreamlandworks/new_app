@@ -13,16 +13,17 @@ import com.satrango.R
 import com.satrango.databinding.ActivityBookLaterBinding
 import com.satrango.ui.user.bookings.booknow.BookingNow
 import com.satrango.utils.UserUtils
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.time.YearMonth
 import java.util.*
 
 class BookLater : AppCompatActivity(), MonthsInterface {
 
+
     private lateinit var calendar: Calendar
     private lateinit var timings: ArrayList<MonthsModel>
     private lateinit var daysList: ArrayList<MonthsModel>
-    private lateinit var monthsList: ArrayList<MonthsModel>
     private lateinit var binding: ActivityBookLaterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,121 +38,118 @@ class BookLater : AppCompatActivity(), MonthsInterface {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
-        loadMonths()
         calendar = Calendar.getInstance()
-        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
+        loadDates()
         loadTimings()
 
-        binding.am.setOnClickListener {
-            binding.am.setBackgroundResource(R.drawable.category_bg)
-            binding.am.setTextColor(resources.getColor(R.color.white))
-            binding.pm.setBackgroundResource(R.drawable.blue_out_line)
-            binding.pm.setTextColor(resources.getColor(R.color.black))
-            binding.timeRv.scrollToPosition(0)
-        }
-        binding.pm.setOnClickListener {
-            binding.pm.setBackgroundResource(R.drawable.category_bg)
-            binding.pm.setTextColor(resources.getColor(R.color.white))
-            binding.am.setBackgroundResource(R.drawable.blue_out_line)
-            binding.am.setTextColor(resources.getColor(R.color.black))
-            binding.timeRv.scrollToPosition(14)
-        }
         binding.nextBtn.setOnClickListener {
             startActivity(Intent(this, BookingNow::class.java))
         }
     }
 
+    private fun loadDates() {
+        val months = resources.getStringArray(R.array.months)
+        val month = months[calendar.get(Calendar.MONTH)]
+        val nextMonth = months[calendar.get(Calendar.MONTH) + 1]
+        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), month, nextMonth)
+        binding.dayRv.layoutManager = LinearLayoutManager(this@BookLater, LinearLayoutManager.HORIZONTAL, false)
+        binding.dayRv.adapter = MonthsAdapter(daysList, this@BookLater, "D")
+    }
+
     private fun loadTimings() {
         timings = arrayListOf()
-        for (time in resources.getStringArray(R.array.bookingTimings)) {
-            timings.add(MonthsModel(time, false))
+        val timingsList = resources.getStringArray(R.array.bookingTimings)
+        for (index in timingsList.indices) {
+            if (index < 12) {
+                timings.add(MonthsModel(timingsList[index],"AM",  false))
+            } else {
+                timings.add(MonthsModel(timingsList[index],"PM",  false))
+            }
         }
-        binding.timeRv.layoutManager = LinearLayoutManager(this@BookLater, LinearLayoutManager.HORIZONTAL, false)
+        binding.timeRv.layoutManager =
+            LinearLayoutManager(this@BookLater, LinearLayoutManager.HORIZONTAL, false)
         binding.timeRv.adapter = MonthsAdapter(timings, this@BookLater, "T")
 
     }
 
-    private fun loadDays(year: Int, month: Int) {
-        val yearMonthObject: YearMonth = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            YearMonth.of(year, month)
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-        val daysInMonth = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            yearMonthObject.lengthOfMonth()
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
+    private fun loadDays(year: Int, month: Int, currentMonth: String, nextMonth: String): ArrayList<MonthsModel> {
+        var daysInMonth = getDaysInMonth(year, month)
         daysList = arrayListOf()
         for (day in 1..daysInMonth) {
-            when (day) {
-                1 -> {
-                    daysList.add(MonthsModel("$day st", false))
-                }
-                2 -> {
-                    daysList.add(MonthsModel("$day nd", false))
-                }
-                3 -> {
-                    daysList.add(MonthsModel("$day rd", false))
-                }
-                else -> {
-                    daysList.add(MonthsModel("$day th", false))
+            if (day >= calendar.get(Calendar.DAY_OF_MONTH)) {
+                when (day.toString().last()) {
+                    1.toChar() -> {
+                        daysList.add(MonthsModel(currentMonth, "$day st", false))
+                    }
+                    2.toChar() -> {
+                        daysList.add(MonthsModel(currentMonth,"$day nd", false))
+                    }
+                    3.toChar() -> {
+                        daysList.add(MonthsModel(currentMonth,"$day rd", false))
+                    }
+                    else -> {
+                        daysList.add(MonthsModel(currentMonth,"$day th", false))
+                    }
                 }
             }
         }
-        binding.dayRv.layoutManager = LinearLayoutManager(this@BookLater, LinearLayoutManager.HORIZONTAL, false)
-        binding.dayRv.adapter = MonthsAdapter(daysList, this@BookLater, "DD")
-
+        daysInMonth = getDaysInMonth(year, month + 1)
+        for (day in 1..daysInMonth) {
+            when (day) {
+                1 -> {
+                    daysList.add(MonthsModel(nextMonth, "$day st", false))
+                }
+                2 -> {
+                    daysList.add(MonthsModel(nextMonth, "$day nd", false))
+                }
+                3 -> {
+                    daysList.add(MonthsModel(nextMonth, "$day rd", false))
+                }
+                else -> {
+                    daysList.add(MonthsModel(nextMonth, "$day th", false))
+                }
+            }
+        }
+        return daysList
     }
 
-    private fun loadMonths() {
-        monthsList = arrayListOf()
-        for (month in resources.getStringArray(R.array.months)){
-            monthsList.add(MonthsModel(month, false))
+    private fun getDaysInMonth(year: Int, month: Int): Int {
+        val yearMonthObject: YearMonth =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                YearMonth.of(year, month)
+            } else {
+                return 30
+            }
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            yearMonthObject.lengthOfMonth()
+        } else {
+            30
         }
-        binding.monthsRv.layoutManager = LinearLayoutManager(this@BookLater, LinearLayoutManager.HORIZONTAL, false)
-        binding.monthsRv.adapter = MonthsAdapter(monthsList, this@BookLater, "MM")
-        binding.dayRv.scrollToPosition(0)
-
     }
 
     override fun selectedMonth(position: Int, listType: String) {
         val tempMonths = arrayListOf<MonthsModel>()
 
-        if (listType == "MM") {
-            monthsList.onEachIndexed { index, month ->
-                if (index == position) {
-                    tempMonths.add(MonthsModel(month.month, true))
-                    Log.e("MONTHS TRUE", tempMonths[index].toString())
-                } else {
-                    tempMonths.add(MonthsModel(month.month, false))
-                    Log.e("MONTHS FALSE", tempMonths[index].toString())
-                }
-            }
-            binding.monthsRv.adapter = MonthsAdapter(tempMonths, this, "MM")
-            binding.monthsRv.scrollToPosition(position)
-            loadDays(calendar.get(Calendar.YEAR), position + 1)
-        }
-        if (listType == "DD") {
+        if (listType == "D") { // Days List
             daysList.onEachIndexed { index, month ->
                 if (index == position) {
-                    tempMonths.add(MonthsModel(month.month, true))
+                    tempMonths.add(MonthsModel(month.month, month.day ,true))
                     Log.e("MONTHS TRUE", tempMonths[index].toString())
                 } else {
-                    tempMonths.add(MonthsModel(month.month, false))
+                    tempMonths.add(MonthsModel(month.month, month.day, false))
                     Log.e("MONTHS FALSE", tempMonths[index].toString())
                 }
             }
             binding.dayRv.adapter = MonthsAdapter(tempMonths, this, "DD")
             binding.dayRv.scrollToPosition(position)
         }
-        if (listType == "T") {
+        if (listType == "T") { // Timings List
             timings.onEachIndexed { index, month ->
                 if (index == position) {
-                    tempMonths.add(MonthsModel(month.month, true))
+                    tempMonths.add(MonthsModel(month.month, month.day, true))
                     Log.e("MONTHS TRUE", tempMonths[index].toString())
                 } else {
-                    tempMonths.add(MonthsModel(month.month, false))
+                    tempMonths.add(MonthsModel(month.month, month.day, false))
                     Log.e("MONTHS FALSE", tempMonths[index].toString())
                 }
             }

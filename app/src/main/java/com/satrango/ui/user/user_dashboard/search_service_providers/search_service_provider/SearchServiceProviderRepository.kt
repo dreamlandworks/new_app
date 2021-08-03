@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.search_service_providers
+package com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider
 
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder

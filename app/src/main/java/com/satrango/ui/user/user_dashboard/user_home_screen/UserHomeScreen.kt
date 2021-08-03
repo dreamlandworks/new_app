@@ -17,7 +17,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseC
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.networkAvailable

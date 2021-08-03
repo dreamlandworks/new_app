@@ -51,10 +51,11 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider"></activity>
+        <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen" />
         <activity
-            android:name=".ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen"
+            android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.AddBookingAddress"
@@ -204,7 +205,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBFC4Jgdqm8a7tIeIVEJJL71KEHyuU1V0I"/>
+            android:value="AIzaSyBSDwshVDwzn4ddIN728zPgFgarpjwjMQE" />
     </application>
 
 </manifest>

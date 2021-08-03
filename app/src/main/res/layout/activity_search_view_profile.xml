@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_120sdp"
                 android:layout_margin="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/blue"
                 app:cardCornerRadius="@dimen/_15sdp"
                 app:cardElevation="@dimen/_5sdp">
 
@@ -34,7 +35,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/blue_out_line"
                         android:orientation="horizontal">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -43,7 +43,7 @@
                             android:layout_height="@dimen/_80sdp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:src="@drawable/ic_pencils"/>
+                            android:src="@drawable/images" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:singleLine="true"
                                     android:text="@string/app_name"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/_14sdp"
                                     android:textStyle="bold" />
 
@@ -74,7 +74,7 @@
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
                                     android:text="@string/app_name"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/_12sdp" />
 
                             </LinearLayout>
@@ -83,14 +83,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/_45sdp"
                                 android:layout_margin="@dimen/_5sdp"
-                                app:cardBackgroundColor="@color/pink"
                                 app:cardCornerRadius="@dimen/_15sdp"
                                 app:cardElevation="@dimen/_5sdp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@drawable/pink_corner_border"
+                                    android:background="@drawable/btn_bg_sm_blue_border"
                                     android:gravity="center"
                                     android:orientation="vertical"
                                     android:paddingHorizontal="@dimen/_10sdp">
@@ -101,7 +100,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center_vertical"
                                         android:text="100.00"
-                                        android:textColor="@color/white"
+                                        android:textColor="@color/pink"
                                         android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
 
@@ -109,7 +108,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/per_hour"
-                                        android:textColor="@color/white"
+                                        android:textColor="@color/pink"
                                         android:textSize="@dimen/_10sdp"
                                         android:textStyle="bold" />
 
@@ -140,28 +139,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@string/ranking"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@string/rating"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:text="@string/reviews"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:text="@string/jobs"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
 
             </LinearLayout>
 
@@ -286,11 +289,12 @@
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
+                android:id="@+id/experience"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:text="3-5 Years"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp" />
 
@@ -303,12 +307,13 @@
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
+                android:id="@+id/languages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:text="Telugu, English, Hindi"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp" />
 
@@ -321,12 +326,13 @@
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
+                android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:text="3.4 Kms"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp" />
         </RelativeLayout>
@@ -335,15 +341,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="Job Skills"
+            android:text="@string/job_skills"
             android:textSize="@dimen/_12sdp" />
 
         <TextView
+            android:id="@+id/skills"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="3-5 Voltas, Samsung, LG, Daikin AC Repair, Gas Filling"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
 
@@ -352,16 +359,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="About Me"
+            android:text="@string/about_me"
             android:textSize="@dimen/_12sdp" />
 
         <TextView
+            android:id="@+id/aboutMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:lineSpacingExtra="5dp"
-            android:text="I am a specialist in AC Mechanism. I worked in Daikin Company as a Senior Mechanic and also have huge experience in repairing Samsung, LG, Whirlpool and Blue Star AC and any AC Split/ Window Gas filling at low cost and best quality."
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
 
@@ -374,11 +381,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Overall Rating"
+                android:text="@string/overall_rating"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
+                android:id="@+id/overAllReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -389,6 +397,7 @@
                 app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
             <TextView
+                android:id="@+id/audience"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -409,7 +418,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Professionalism"
+                android:text="@string/professionalism"
                 android:textSize="@dimen/_12sdp" />
 
             <RatingBar
@@ -426,6 +435,7 @@
                 app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
             <TextView
+                android:id="@+id/professionRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -446,7 +456,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Behaviour"
+                android:text="@string/behaviour"
                 android:textSize="@dimen/_12sdp" />
 
             <RatingBar
@@ -463,6 +473,7 @@
                 app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
             <TextView
+                android:id="@+id/behaviourRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -483,7 +494,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Satisfaction"
+                android:text="@string/satisfaction"
                 android:textSize="@dimen/_12sdp" />
 
             <RatingBar
@@ -500,6 +511,7 @@
                 app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
             <TextView
+                android:id="@+id/satisfactionRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -520,7 +532,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Requisite Skills"
+                android:text="@string/requisite_skills"
                 android:textSize="@dimen/_12sdp" />
 
             <RatingBar
@@ -537,6 +549,7 @@
                 app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
             <TextView
+                android:id="@+id/skillsRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -551,7 +564,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginVertical="@dimen/_20sdp"
             app:cardCornerRadius="@dimen/_10sdp"
             app:cardElevation="@dimen/_5sdp">
 
@@ -564,22 +578,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/grey_600"
+                    android:background="@color/blue"
                     android:gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="Book Later"
-                    android:textSize="@dimen/_16sdp" />
+                    android:text="@string/book_later"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/blue"
+                    android:background="@color/grey_600"
                     android:gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="Book Now"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sdp" />
+                    android:text="@string/book_now"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_12sdp" />
 
             </LinearLayout>
 

@@ -17,30 +17,34 @@
     </string-array>
 
     <string-array name="bookingTimings">
-        <item>00:00</item>
-        <item>01:00</item>
-        <item>02:00</item>
-        <item>03:00</item>
-        <item>04:00</item>
-        <item>05:00</item>
-        <item>06:00</item>
-        <item>07:00</item>
-        <item>08:00</item>
-        <item>09:00</item>
-        <item>10:00</item>
-        <item>11:00</item>
-        <item>12:00</item>
-        <item>01:00</item>
-        <item>02:00</item>
-        <item>03:00</item>
-        <item>04:00</item>
-        <item>05:00</item>
-        <item>06:00</item>
-        <item>07:00</item>
-        <item>08:00</item>
-        <item>09:00</item>
-        <item>10:00</item>
-        <item>11:00</item>
+        <item>00:00\nto\n01:00</item>
+        <item>01:00\nto\n02:00</item>
+        <item>02:00\nto\n03:00</item>
+        <item>03:00\nto\n04:00</item>
+        <item>04:00\nto\n05:00</item>
+        <item>05:00\nto\n06:00</item>
+        <item>06:00\nto\n07:00</item>
+        <item>07:00\nto\n08:00</item>
+        <item>08:00\nto\n09:00</item>
+        <item>09:00\nto\n10:00</item>
+        <item>10:00\nto\n11:00</item>
+        <item>11:00\nto\n12:00</item>
+        <item>12:00\nto\n01:00</item>
+        <item>01:00\nto\n02:00</item>
+        <item>02:00\nto\n03:00</item>
+        <item>03:00\nto\n04:00</item>
+        <item>04:00\nto\n05:00</item>
+        <item>05:00\nto\n06:00</item>
+        <item>06:00\nto\n07:00</item>
+        <item>07:00\nto\n08:00</item>
+        <item>08:00\nto\n09:00</item>
+        <item>09:00\nto\n10:00</item>
+        <item>10:00\nto\n11:00</item>
+        <item>11:00\nto\n00:00</item>
     </string-array>
 
+    <array name="initial_slider_values">
+        <item>300</item>
+        <item>3000</item>
+    </array>
 </resources>

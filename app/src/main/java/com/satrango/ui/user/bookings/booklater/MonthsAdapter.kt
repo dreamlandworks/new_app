@@ -1,9 +1,10 @@
 package com.satrango.ui.user.bookings.booklater
 
+import android.annotation.SuppressLint
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
 import com.satrango.databinding.MonthsRowBinding
@@ -17,8 +18,10 @@ class MonthsAdapter(
     class ViewHolder(binding: MonthsRowBinding): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
-        fun bind(title: String) {
-            binding.title.text = title
+        @SuppressLint("SetTextI18n")
+        fun bind(model: MonthsModel) {
+            binding.title.text = model.month
+            binding.note.text = model.day
         }
     }
 
@@ -27,7 +30,7 @@ class MonthsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position].month)
+        holder.bind(list[position])
         if (list[position].isSelected) {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.category_bg)
             holder.binding.addressText.setBackgroundResource(R.drawable.category_bg)
@@ -53,6 +56,10 @@ class MonthsAdapter(
         holder.itemView.setOnClickListener {
             monthsInterface.selectedMonth(position, listType)
             notifyDataSetChanged()
+        }
+        if (listType == "T") {
+            holder.binding.note.text = list[position].day
+            holder.binding.title.text = Html.fromHtml(list[position].month)
         }
     }
 

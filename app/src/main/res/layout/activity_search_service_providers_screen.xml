@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen">
+    tools:context=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -113,6 +113,7 @@
             android:text="@string/showing_10_out_of_143_results"/>
 
         <ImageView
+            android:id="@+id/sortFilterBtn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentEnd="true"

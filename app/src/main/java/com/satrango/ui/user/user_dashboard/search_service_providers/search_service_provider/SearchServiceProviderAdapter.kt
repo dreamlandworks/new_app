@@ -1,10 +1,14 @@
-package com.satrango.ui.user.user_dashboard.search_service_providers
+package com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
+import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 
 class SearchServiceProviderAdapter(private val list: List<Data>) :
@@ -13,6 +17,7 @@ class SearchServiceProviderAdapter(private val list: List<Data>) :
     class ViewHolder(binding: SearchServiceProviderRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+        @SuppressLint("SetTextI18n")
         fun bindValues(data: Data) {
             Glide.with(binding.profilePic).load(data.profile_pic).into(binding.profilePic)
             binding.userRating.text = data.id
@@ -21,6 +26,11 @@ class SearchServiceProviderAdapter(private val list: List<Data>) :
             binding.userDescription.text = data.about_me
             binding.costPerHour.text = data.per_hour
             binding.userDistance.text = "${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.postcode}"
+            binding.root.setOnClickListener {
+                val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
+                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
+                binding.root.context.startActivity(intent)
+            }
         }
     }
 

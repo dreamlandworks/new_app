@@ -42,7 +42,7 @@
                             android:layout_height="@dimen/_80sdp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:src="@drawable/ic_pencils" />
+                            android:src="@drawable/images" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -128,6 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/booking"
+                    android:textSize="@dimen/_10sdp"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -135,12 +136,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_20sdp"
                     android:text="@string/payment"
+                    android:textSize="@dimen/_10sdp"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/confirmation"
+                    android:textSize="@dimen/_10sdp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
@@ -163,12 +166,11 @@
 
                     <TextView
                         android:id="@+id/ranking"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/blue_circle_color"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
                         android:gravity="center"
-                        android:text="24"
-                        android:textColor="@color/white"
+                        android:text="1"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -178,7 +180,6 @@
                     android:layout_marginStart="@dimen/_28sdp"
                     android:layout_marginEnd="@dimen/_30sdp"
                     android:layout_marginBottom="-15dp"
-                    android:background="@drawable/blue_circle"
                     android:elevation="@dimen/_5sdp"
                     android:orientation="horizontal"
                     android:padding="@dimen/_3sdp">
@@ -189,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/blue_circle_color"
                         android:gravity="center"
-                        android:text="4.5"
+                        android:text="2"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -197,8 +198,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_35sdp"
-                    android:background="@drawable/blue_circle"
+                    android:layout_marginEnd="@dimen/_30sdp"
                     android:elevation="@dimen/_5sdp"
                     android:orientation="horizontal"
                     android:padding="@dimen/_3sdp">
@@ -209,7 +209,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/blue_circle_color"
                         android:gravity="center"
-                        android:text="12"
+                        android:text="3"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -219,23 +219,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/select_month"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/monthsRv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_5sdp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_margin="@dimen/_10sdp"
             android:text="@string/select_date"
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
@@ -246,43 +230,13 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:text="@string/select_time"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
-
-            <TextView
-                android:id="@+id/am"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/am"
-                android:textSize="@dimen/_14sdp" />
-
-            <TextView
-                android:id="@+id/pm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/pm"
-                android:textSize="@dimen/_14sdp" />
-
-        </LinearLayout>
+            android:layout_margin="@dimen/_10sdp"
+            android:text="@string/select_time"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/timeRv"

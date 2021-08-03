@@ -38,7 +38,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccount
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.SearchServiceProvidersScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen

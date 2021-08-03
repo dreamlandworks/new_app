@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -32,6 +33,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -53,8 +55,14 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
             resources.getString(R.string.my_location)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
@@ -112,7 +120,8 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
                     progressDialog.dismiss()
                     snackBar(binding.addBtn, it.data!!)
                     Handler().postDelayed({
-                        onBackPressed()
+                        finish()
+                        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
                     }, 3000)
                 }
                 is NetworkResponse.Failure -> {
@@ -137,17 +146,10 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         )
         mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
-                Log.d(
-                    "System out",
-                    "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude
-                )
+//                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
             }
 
             override fun onMarkerDragEnd(marker: Marker) {
-                Log.d(
-                    "System out",
-                    "onMarkerDragEnd..." + marker.position.latitude + "..." + marker.position.longitude
-                )
                 mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
                 fetchLocationDetails(
                     this@UserLocationSelectionScreen,
@@ -157,7 +159,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onMarkerDrag(arg0: Marker) {
-                Log.i("System out", "onMarkerDrag...")
+//                Log.i("System out", "onMarkerDrag...")
             }
         })
     }
@@ -228,5 +230,10 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
     }
 }

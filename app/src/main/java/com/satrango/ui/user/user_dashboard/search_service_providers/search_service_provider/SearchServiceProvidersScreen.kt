@@ -1,10 +1,14 @@
-package com.satrango.ui.user.user_dashboard.search_service_providers
+package com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider
 
 import android.R
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
@@ -12,8 +16,10 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySearchServiceProvidersScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -38,7 +44,22 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
 
-        binding.userLocation.text = userLocationText
+        binding.userLocation.text = UserUtils.city
+
+        binding.toolBarBackBtn.setOnClickListener {
+            onBackPressed()
+        }
+        binding.toolBarBackTVBtn.setOnClickListener {
+            onBackPressed()
+        }
+
+        binding.sortFilterBtn.setOnClickListener {
+            startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
+        }
+
+        binding.userLocation.setOnClickListener {
+            startActivity(Intent(this, UserLocationSelectionScreen::class.java))
+        }
 
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
@@ -78,19 +99,19 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults() {
-        val requestBody = SearchServiceProviderReqModel(UserUtils.address, UserUtils.city, UserUtils.country, RetrofitBuilder.USER_KEY, 4, UserUtils.postalCode, UserUtils.state, UserUtils.latitude, UserUtils.longitute, UserUtils.getUserId(this).toInt())
-//        val requestBody = SearchServiceProviderReqModel(
-//            "Near Mandovi Showroom",
-//            "Mangalore",
-//            "India",
-//            RetrofitBuilder.USER_KEY,
-//            4,
-//            "575014",
-//            "Karnataka",
-//            "12.9951",
-//            "74.8094",
-//            UserUtils.getUserId(this).toInt()
-//        )
+//        val requestBody = SearchServiceProviderReqModel(UserUtils.address, UserUtils.city, UserUtils.country, RetrofitBuilder.USER_KEY, 4, UserUtils.postalCode, UserUtils.state, UserUtils.latitude, UserUtils.longitute, UserUtils.getUserId(this).toInt())
+        val requestBody = SearchServiceProviderReqModel(
+            "Near Mandovi Showroom",
+            "Mangalore",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            3,
+            "575014",
+            "Karnataka",
+            "12.9951",
+            "74.8094",
+            UserUtils.getUserId(this).toInt()
+        )
 
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
