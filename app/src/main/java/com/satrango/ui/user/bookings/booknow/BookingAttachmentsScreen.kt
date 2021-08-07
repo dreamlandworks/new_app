@@ -1,6 +1,8 @@
 package com.satrango.ui.user.bookings.booknow
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,29 +16,50 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.satrango.R
-import com.satrango.databinding.ActivityBookNowOneBinding
-import com.satrango.ui.user.bookings.bookaddress.BookingAddress
+import com.satrango.base.ViewModelFactory
+import com.satrango.databinding.ActivityBookingAttachmentsScreenBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.bookaddress.models.Attachment
+import com.satrango.ui.user.bookings.bookaddress.BookingAddressScreen
+import com.satrango.ui.user.bookings.bookaddress.BookingRepository
+import com.satrango.ui.user.bookings.bookaddress.BookingViewModel
+import com.satrango.ui.user.bookings.bookaddress.models.BlueCollarBookingReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-class BookingNow : AppCompatActivity(), AttachmentsListener {
+class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
-    private lateinit var binding: ActivityBookNowOneBinding
+    private lateinit var binding: ActivityBookingAttachmentsScreenBinding
+    private lateinit var progressDialog: ProgressDialog
     private val GALLERY_REQUEST = 100
     private val CAMERA_REQUEST: Int = 100
+    private lateinit var data: Data
 
-    private lateinit var imagePathList: ArrayList<String>
-    private lateinit var encodedImages: ArrayList<String>
+
+    companion object {
+        lateinit var imagePathList: ArrayList<String>
+        lateinit var encodedImages: ArrayList<Attachment>
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBookNowOneBinding.inflate(layoutInflater)
+        binding = ActivityBookingAttachmentsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
@@ -45,6 +68,10 @@ class BookingNow : AppCompatActivity(), AttachmentsListener {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+
+        data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+
+        initializeProgressDialog()
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()
@@ -55,7 +82,25 @@ class BookingNow : AppCompatActivity(), AttachmentsListener {
                 openImagePicker()
             }
 
-            nextBtn.setOnClickListener { startActivity(Intent(this@BookingNow, BookingAddress::class.java)) }
+            nextBtn.setOnClickListener {
+                val description = discription.text.toString().trim()
+                if (description.isEmpty()) {
+                    snackBar(nextBtn, "Enter Description")
+                } else {
+                    UserUtils.job_description = description
+
+                    when(data.category_id) {
+                        "2" -> {
+                            bookBlueCollarServiceProvider()
+                        }
+                        else -> {
+                            val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
+                            intent.putExtra(getString(R.string.service_provider), data)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
 
         }
     }
@@ -63,7 +108,7 @@ class BookingNow : AppCompatActivity(), AttachmentsListener {
     private fun openImagePicker() {
         val options = resources.getStringArray(R.array.imageSelections)
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select image ")
+        builder.setTitle("Select image")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> getImageFromGallery()
@@ -96,12 +141,12 @@ class BookingNow : AppCompatActivity(), AttachmentsListener {
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
                     imagePathList.add(getImageFilePath(imageUri))
-                    encodedImages.add(encodeToBase64FromUri(imageUri))
+                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
                 imagePathList.add(getImageFilePath(imageUri!!))
-                encodedImages.add(encodeToBase64FromUri(imageUri))
+                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -154,4 +199,48 @@ class BookingNow : AppCompatActivity(), AttachmentsListener {
             encodedImages.remove(encodedImages[position])
         }, 500)
     }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun bookBlueCollarServiceProvider() {
+        val requestBody = BlueCollarBookingReqModel(
+            data.per_hour,
+            encodedImages,
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+            1,
+            1,
+            UserUtils.job_description,
+            RetrofitBuilder.USER_KEY,
+            UserUtils.scheduled_date,
+            data.users_id.toInt(),
+            UserUtils.started_at,
+            UserUtils.time_slot_from,
+            UserUtils.time_slot_to,
+            UserUtils.getUserId(this).toInt()
+        )
+        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        viewModel.blueCollarBooking(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    toast(this, it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
+    }
+
 }

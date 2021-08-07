@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change
+package com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models
 
 data class UserLocationChangeReqModel(
     val address: String,

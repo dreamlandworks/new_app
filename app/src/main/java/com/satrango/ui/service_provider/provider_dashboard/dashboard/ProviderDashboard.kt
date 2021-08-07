@@ -388,16 +388,16 @@ class ProviderDashboard : AppCompatActivity() {
             val postalCode: String = address.get(0).postalCode
             val knownName: String = address.get(0).featureName
             fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-            UserUtils.latitude = latitude.toString()
-            UserUtils.longitute = longitude.toString()
-            UserUtils.city = city
-            UserUtils.state = state
-            UserUtils.country = country
-            UserUtils.postalCode = postalCode
-            UserUtils.address = knownName
-            binding.userLocation.text = UserUtils.city
+            UserUtils.setLatitude(this, latitude.toString())
+            UserUtils.setLongitude(this, longitude.toString())
+            UserUtils.setCity(this, city)
+            UserUtils.setState(this, state)
+            UserUtils.setCountry(this, country)
+            UserUtils.setPostalCode(this, postalCode)
+            UserUtils.setAddress(this, knownName)
+            binding.userLocation.text = UserUtils.getCity(this)
 
-            val requestBody = ProviderLocationReqModel(UserUtils.address, UserUtils.city, UserUtils.country, RetrofitBuilder.PROVIDER_KEY, 1, UserUtils.postalCode, UserUtils.state, UserUtils.latitude, UserUtils.longitute, UserUtils.getUserId(this).toInt())
+            val requestBody = ProviderLocationReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.PROVIDER_KEY, 1, UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt())
             viewModel.saveLocation(this, requestBody).observe(this, {
                 when(it) {
                     is NetworkResponse.Loading -> {

@@ -29,7 +29,7 @@ import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.user.bookings.booklater.BookLater
+import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
@@ -143,7 +143,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserMyAccountScreen::class.java))
                 }
                 R.id.userOptMyBooking -> {
-                    startActivity(Intent(this, BookLater::class.java))
+                    startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
                 }
                 R.id.userOptMyJobPosts -> {
                     Toast.makeText(this, "My Job Posts Clicked", Toast.LENGTH_SHORT).show()
@@ -305,14 +305,14 @@ class UserDashboardScreen : AppCompatActivity() {
                 val postalCode: String = address.get(0).postalCode
                 val knownName: String = address.get(0).featureName
                 fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-                UserUtils.latitude = latitude.toString()
-                UserUtils.longitute = longitude.toString()
-                UserUtils.city = city
-                UserUtils.state = state
-                UserUtils.country = country
-                UserUtils.postalCode = postalCode
-                UserUtils.address = knownName
-                binding.userLocation.text = UserUtils.city
+                UserUtils.setLatitude(context, latitude.toString())
+                UserUtils.setLongitude(context, longitude.toString())
+                UserUtils.setCity(context, city)
+                UserUtils.setState(context, state)
+                UserUtils.setCountry(context, country)
+                UserUtils.setPostalCode(context, postalCode)
+                UserUtils.setAddress(context, knownName)
+                binding.userLocation.text = UserUtils.getCity(context)
                 SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
                 Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)

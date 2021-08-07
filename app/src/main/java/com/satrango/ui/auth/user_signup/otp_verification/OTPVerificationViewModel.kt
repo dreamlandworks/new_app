@@ -21,7 +21,7 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
             CoroutineScope(Dispatchers.Main).launch {
                 forgotPwdRequestOTP.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.forgotPwdRequestOTP()
+                    val response = repository.forgotPwdRequestOTP(context)
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
                         forgotPwdRequestOTP.value = NetworkResponse.Success(
@@ -45,7 +45,7 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
             CoroutineScope(Dispatchers.Main).launch {
                 requestOTP.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.requestOTP()
+                    val response = repository.requestOTP(context)
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
                         requestOTP.value =

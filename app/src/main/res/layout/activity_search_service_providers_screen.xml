@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_alignParentStart="true"
-            android:text="@string/showing_10_out_of_143_results"/>
+            android:text="@string/showing_0_out_of_0_results"/>
 
         <ImageView
             android:id="@+id/sortFilterBtn"

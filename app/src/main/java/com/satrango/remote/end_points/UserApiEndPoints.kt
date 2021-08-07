@@ -18,6 +18,7 @@ object UserApiEndPoints {
     final const val USER_KEYWORDS = "user/keywords"
     final const val USER_SEARCH_RESULTS = "user/search_result"
     final const val USER_FAQS = "user/user_faq"
-    final const val USER_CHANGE_ADDRESS = "user/change_address"
+    final const val USER_SINGLE_MOVE_BOOKING = "user/single_move_booking"
+    final const val USER_BLUE_COLLAR_BOOKING = "user/blue_collar_booking"
 
 }

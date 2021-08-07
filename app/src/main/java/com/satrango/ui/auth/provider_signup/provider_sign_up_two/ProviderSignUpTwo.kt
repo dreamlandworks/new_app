@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
 import com.satrango.base.ViewModelFactory
@@ -17,10 +16,11 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.Keyword
 import com.satrango.ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class ProviderSignUpTwo : AppCompatActivity() {
 
-    private var subCatId: String = ""
+    private var profession_Id: String = ""
     private lateinit var keywordsMList: List<com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.Data>
     private lateinit var viewModel: ProviderSignUpTwoViewModel
     private lateinit var binding: ActivityProviderSignUpTwoBinding
@@ -35,7 +35,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
 
-        subCatId = intent.getStringExtra("subcat_id")!!
+        profession_Id = intent.getStringExtra("profession_id")!!
+        toast(this, profession_Id)
 
         val factory = ViewModelFactory(ProviderSignUpTwoRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpTwoViewModel::class.java]
@@ -65,7 +66,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
     }
 
     private fun loadKeyWords() {
-        viewModel.getKeywords(this, subCatId).observe(this, {
+        viewModel.getKeywords(this, profession_Id).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

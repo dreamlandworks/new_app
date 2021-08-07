@@ -12,7 +12,7 @@ class ProviderSignUpTwoRepository: BaseRepository() {
     suspend fun getKeyWords(subCatId: String): ProviderSignUpTwoKeywordsResModel {
         val map = mutableMapOf<String, String>()
         map["key"] = RetrofitBuilder.USER_KEY
-        map["subcat_id"] = subCatId
+        map["profession_id"] = subCatId
         Log.e("SUBCAT:", subCatId)
         return RetrofitBuilder.getUserRetrofitInstance().userKeywords(map)
     }

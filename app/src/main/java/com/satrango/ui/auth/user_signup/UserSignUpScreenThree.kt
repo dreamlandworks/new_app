@@ -67,11 +67,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
 
         binding.apply {
 
-            firstName.setText(UserUtils.firstName)
-            lastName.setText(UserUtils.lastName)
-            mobileNo.setText(UserUtils.phoneNo)
-            if (UserUtils.mailId.isNotEmpty()) {
-                email.setText(UserUtils.mailId)
+            firstName.setText(UserUtils.getFirstName(this@UserSignUpScreenThree))
+            lastName.setText(UserUtils.getLastName(this@UserSignUpScreenThree))
+            mobileNo.setText(UserUtils.getPhoneNo(this@UserSignUpScreenThree))
+            if (UserUtils.getMail(this@UserSignUpScreenThree).isNotEmpty()) {
+                email.setText(UserUtils.getMail(this@UserSignUpScreenThree))
             }
 
             email.addTextChangedListener(object : TextWatcher {
@@ -152,15 +152,15 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         snackBar(genderGroup, "Select Gender")
                     }
                     else -> {
-                        UserUtils.firstName = first_name
-                        UserUtils.lastName = last_name
-                        UserUtils.mailId = mail
-                        UserUtils.dateOfBirth = dob
-                        UserUtils.phoneNo = phoneNo
+                        UserUtils.setFirstName(this@UserSignUpScreenThree, first_name)
+                        UserUtils.setLastName(this@UserSignUpScreenThree, last_name)
+                        UserUtils.setMail(this@UserSignUpScreenThree, mail)
+                        UserUtils.setDateOfBirth(this@UserSignUpScreenThree, dob)
+                        UserUtils.setPhoneNo(this@UserSignUpScreenThree, phoneNo)
                         when (selectedGender) {
-                            R.id.male -> UserUtils.gender = "Male"
-                            R.id.female -> UserUtils.gender = "Female"
-                            R.id.others -> UserUtils.gender = "Others"
+                            R.id.male -> UserUtils.setGender(this@UserSignUpScreenThree, "Male")
+                            R.id.female -> UserUtils.setGender(this@UserSignUpScreenThree, "Female")
+                            R.id.others -> UserUtils.setGender(this@UserSignUpScreenThree, "Others")
                         }
                         fetchLocation()
                     }
@@ -264,18 +264,18 @@ class UserSignUpScreenThree : AppCompatActivity() {
         val postalCode: String = address.get(0).postalCode
         val knownName: String = address.get(0).featureName
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-        UserUtils.latitude = latitude.toString()
-        UserUtils.longitute = longitude.toString()
-        UserUtils.city = city
-        UserUtils.state = state
-        UserUtils.country = country
-        UserUtils.postalCode = postalCode
-        UserUtils.address = knownName
+        UserUtils.setLatitude(this, latitude.toString())
+        UserUtils.setLongitude(this, longitude.toString())
+        UserUtils.setCity(this, city)
+        UserUtils.setState(this, state)
+        UserUtils.setCountry(this, country)
+        UserUtils.setPostalCode(this, postalCode)
+        UserUtils.setAddress(this, knownName)
         verifyUser()
     }
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.USER_KEY, UserUtils.phoneNo)
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.getMail(this), RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

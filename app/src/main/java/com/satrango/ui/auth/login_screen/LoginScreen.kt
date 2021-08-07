@@ -1,19 +1,15 @@
 package com.satrango.ui.auth.login_screen
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
@@ -27,7 +23,6 @@ import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 
 class LoginScreen : AppCompatActivity() {
 
@@ -102,8 +97,8 @@ class LoginScreen : AppCompatActivity() {
                         password.requestFocus()
                     }
                     else -> {
-                        UserUtils.googleId = ""
-                        UserUtils.facebookId = ""
+                        UserUtils.setGoogleId(this@LoginScreen, "")
+                        UserUtils.setFacebookId(this@LoginScreen, "")
                         loginToServer(phoneNo, pwd, "login")
                     }
                 }
@@ -145,7 +140,9 @@ class LoginScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    if (UserUtils.googleId.isNotEmpty() || UserUtils.facebookId.isNotEmpty()) {
+                    if (UserUtils.getGoogleId(this).isNotEmpty() || UserUtils.getFacebookId(this)
+                            .isNotEmpty()
+                    ) {
                         startActivity(Intent(this, UserSignUpScreenThree::class.java))
                     } else {
                         snackBar(binding.signUpBtn, it.message!!)
@@ -178,11 +175,11 @@ class LoginScreen : AppCompatActivity() {
                     ) { jsonObject, _ ->
                         val userId = jsonObject.getString("id")
                         val userName = jsonObject.getString("name")
-                        UserUtils.facebookId = userId
-                        UserUtils.googleId = ""
-                        UserUtils.firstName = userName.split(" ")[0]
+                        UserUtils.setFacebookId(this@LoginScreen, userId)
+                        UserUtils.setGoogleId(this@LoginScreen, "")
+                        UserUtils.setFirstName(this@LoginScreen, userName.split(" ")[0])
                         try {
-                            UserUtils.lastName = userName.split(" ")[1]
+                            UserUtils.setLastName(this@LoginScreen, userName.split(" ")[1])
                         } catch (e: IndexOutOfBoundsException) {
                         }
                         loginToServer(userId, "", resources.getString(R.string.userFacebookLogin))
@@ -241,12 +238,12 @@ class LoginScreen : AppCompatActivity() {
             val email = account.email
             val googleId = account.id
             val image = account.photoUrl
-            UserUtils.googleId = googleId!!
-            UserUtils.facebookId = ""
-            UserUtils.firstName = userName.split(" ")[0]
-            UserUtils.mailId = email
+            UserUtils.setGoogleId(this, googleId!!)
+            UserUtils.setFacebookId(this, "")
+            UserUtils.setFirstName(this, userName.split(" ")[0])
+            UserUtils.setMail(this, email)
             try {
-                UserUtils.lastName = userName.split(" ")[1]
+                UserUtils.setLastName(this, userName.split(" ")[1])
             } catch (e: IndexOutOfBoundsException) {
             }
             loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))

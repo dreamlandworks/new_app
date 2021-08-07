@@ -10,5 +10,6 @@ data class SearchServiceProviderReqModel(
     val state: String,
     val user_lat: String,
     val user_long: String,
-    val users_id: Int
+    val users_id: Int,
+    val subcat_id: Int
 )

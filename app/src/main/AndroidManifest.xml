@@ -58,16 +58,16 @@
             android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.AddBookingAddress"
+            android:name=".ui.user.bookings.ChangeBookingAddressScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.bookaddress.BookingAddress"
+            android:name=".ui.user.bookings.bookaddress.BookingAddressScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.booklater.BookLater"
+            android:name=".ui.user.bookings.booklater.BookingDateAndTimeScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.booknow.BookingNow"
+            android:name=".ui.user.bookings.booknow.BookingAttachmentsScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"

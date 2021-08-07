@@ -129,7 +129,7 @@
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/reset"
-                android:textColor="@color/green_500"
+                android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
 
             <TextView

@@ -95,9 +95,9 @@ class UserSignUpScreenOne : AppCompatActivity() {
                     mobileNo.error = "Enter Valid Mobile No"
                     mobileNo.requestFocus()
                 } else {
-                    UserUtils.firstName = first_Name
-                    UserUtils.lastName = last_Name
-                    UserUtils.phoneNo = phoneNo
+                    UserUtils.setFirstName(this@UserSignUpScreenOne, first_Name)
+                    UserUtils.setLastName(this@UserSignUpScreenOne, last_Name)
+                    UserUtils.setPhoneNo(this@UserSignUpScreenOne, phoneNo)
                     PermissionUtils.checkAndRequestPermissions(this@UserSignUpScreenOne)
                     fetchLocation()
                 }
@@ -231,13 +231,13 @@ class UserSignUpScreenOne : AppCompatActivity() {
         val postalCode: String = address.get(0).postalCode
         val knownName: String = address.get(0).featureName
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-        UserUtils.latitude = latitude.toString()
-        UserUtils.longitute = longitude.toString()
-        UserUtils.city = city
-        UserUtils.state = state
-        UserUtils.country = country
-        UserUtils.postalCode = postalCode
-        UserUtils.address = knownName
+        UserUtils.setLatitude(this, latitude.toString())
+        UserUtils.setLongitude(this, longitude.toString())
+        UserUtils.setCity(this, city)
+        UserUtils.setState(this, state)
+        UserUtils.setCountry(this, country)
+        UserUtils.setPostalCode(this, postalCode)
+        UserUtils.setAddress(this, knownName)
         startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenTwo::class.java))
         progressDialog.dismiss()
     }
@@ -265,10 +265,10 @@ class UserSignUpScreenOne : AppCompatActivity() {
                     ) { jsonObject, _ ->
                         val userId = jsonObject.getString("id")
                         val userName = jsonObject.getString("name")
-                        UserUtils.facebookId = userId
-                        UserUtils.firstName = userName.split(" ")[0]
+                        UserUtils.setFacebookId(this@UserSignUpScreenOne, userId)
+                        UserUtils.setFirstName(this@UserSignUpScreenOne , userName.split(" ")[0])
                         try {
-                            UserUtils.lastName = userName.split(" ")[1]
+                            UserUtils.setLastName(this@UserSignUpScreenOne, userName.split(" ")[1])
                         } catch (e: java.lang.Exception) {}
                         startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenThree::class.java))
                     }
@@ -311,12 +311,12 @@ class UserSignUpScreenOne : AppCompatActivity() {
             val email = account.email
             val googleId = account.id
             val image = account.photoUrl
-            UserUtils.googleId = googleId!!
-            UserUtils.firstName = userName!!.split(" ")[0]
+            UserUtils.setGoogleId(this, googleId!!)
+            UserUtils.setFirstName(this, userName!!.split(" ")[0])
             try {
-                UserUtils.lastName = userName.split(" ")[1]
+                UserUtils.setLastName(this, userName.split(" ")[1])
             } catch (e: java.lang.Exception) {}
-            UserUtils.mailId = email!!
+            UserUtils.setMail(this, email!!)
             startActivity(Intent(this, UserSignUpScreenThree::class.java))
         } else {
             snackBar(binding.nextBtn, "Google SignIn Failed")

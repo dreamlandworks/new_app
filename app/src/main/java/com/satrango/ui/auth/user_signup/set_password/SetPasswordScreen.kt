@@ -60,7 +60,7 @@ class SetPasswordScreen : AppCompatActivity() {
                 } else if (pwd != cPwd) {
                     snackBar(binding.nextBtn, "Confirm Password not valid")
                 } else {
-                    UserUtils.password = pwd
+                    UserUtils.setPassword(this@SetPasswordScreen, pwd)
                     if (UserUtils.FORGOT_PWD) {
                         toast(this@SetPasswordScreen, "Forgot password")
                         resetPwdOnServer()
@@ -138,24 +138,24 @@ class SetPasswordScreen : AppCompatActivity() {
             return
         }
         val requestBody = UserSignUpModel(
-            UserUtils.address,
-            UserUtils.city,
-            UserUtils.country,
-            UserUtils.dateOfBirth,
-            UserUtils.mailId,
-            UserUtils.facebookId,
-            UserUtils.firstName,
-            UserUtils.googleId,
-            UserUtils.lastName,
-            UserUtils.phoneNo,
-            UserUtils.password,
-            UserUtils.postalCode,
-            UserUtils.state,
-            UserUtils.twitterId,
-            UserUtils.latitude,
-            UserUtils.longitute,
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            UserUtils.getDateOfBirth(this),
+            UserUtils.getMail(this),
+            UserUtils.getFacebookId(this),
+            UserUtils.getFirstName(this),
+            UserUtils.getGoogleId(this),
+            UserUtils.getLastName(this),
+            UserUtils.getPhoneNo(this),
+            UserUtils.getPassword(this),
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getTwitterId(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
             UserUtils.getReferralId(this@SetPasswordScreen),
-            UserUtils.gender,
+            UserUtils.getGender(this),
             RetrofitBuilder.USER_KEY
         )
         viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {

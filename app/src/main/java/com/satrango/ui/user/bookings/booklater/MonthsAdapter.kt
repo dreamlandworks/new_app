@@ -59,7 +59,7 @@ class MonthsAdapter(
         }
         if (listType == "T") {
             holder.binding.note.text = list[position].day
-            holder.binding.title.text = Html.fromHtml(list[position].month)
+            holder.binding.title.text = list[position].month
         }
     }
 

@@ -1,6 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.satrango.databinding.UserSubCategoryRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.utils.UserUtils
 
 class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>) :
     RecyclerView.Adapter<BrowseSubCategoriesAdapter.ViewHolder>() {
@@ -20,6 +23,10 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
         fun bind(data: BrowserSubCategoryModel) {
             Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + data.image).into(binding.image)
             binding.title.text = data.sub_name
+            binding.root.setOnClickListener {
+                UserUtils.keywordId = data.id.toInt()
+                binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
+            }
         }
 
     }

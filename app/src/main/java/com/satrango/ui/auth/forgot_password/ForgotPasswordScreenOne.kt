@@ -43,7 +43,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
                 } else if (mobile.length != 10) {
                     snackBar(mobileNo, "Enter Valid Mobile Number")
                 } else {
-                    UserUtils.phoneNo = mobile
+                    UserUtils.setPhoneNo(this@ForgotPasswordScreenOne, mobile)
                     verifyUser()
                 }
             }
@@ -60,7 +60,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.mailId, RetrofitBuilder.USER_KEY, UserUtils.phoneNo)
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.getMail(this), RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

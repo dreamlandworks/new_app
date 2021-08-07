@@ -56,7 +56,7 @@ class UserSignUpScreenTwo : AppCompatActivity() {
         fetchLocation()
 
         binding.apply {
-            userName.text = UserUtils.firstName + " " + UserUtils.lastName
+            userName.text = UserUtils.getFirstName(this@UserSignUpScreenTwo) + " " + UserUtils.getLastName(this@UserSignUpScreenTwo)
 
             loginBtn.setOnClickListener {
                 finish()
@@ -146,13 +146,13 @@ class UserSignUpScreenTwo : AppCompatActivity() {
         val postalCode: String = address.get(0).postalCode
         val knownName: String = address.get(0).featureName
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-        UserUtils.latitude = latitude.toString()
-        UserUtils.longitute = longitude.toString()
-        UserUtils.city = city
-        UserUtils.state = state
-        UserUtils.country = country
-        UserUtils.postalCode = postalCode
-        UserUtils.address = knownName
+        UserUtils.setLatitude(this, latitude.toString())
+        UserUtils.setLongitude(this, longitude.toString())
+        UserUtils.setCity(this, city)
+        UserUtils.setState(this, state)
+        UserUtils.setCountry(this, country)
+        UserUtils.setPostalCode(this, postalCode)
+        UserUtils.setAddress(this, knownName)
         binding.userLocation.text = "$city, $state, $country, $postalCode"
     }
 
@@ -179,10 +179,10 @@ class UserSignUpScreenTwo : AppCompatActivity() {
                     ) { jsonObject, _ ->
                         val userId = jsonObject.getString("id")
                         val userName = jsonObject.getString("name")
-                        UserUtils.facebookId = userId
-                        UserUtils.firstName = userName.split(" ")[0]
+                        UserUtils.setFacebookId(this@UserSignUpScreenTwo, userId)
+                        UserUtils.setFirstName(this@UserSignUpScreenTwo, userName.split(" ")[0])
                         try {
-                            UserUtils.lastName = userName.split(" ")[1]
+                            UserUtils.setLastName(this@UserSignUpScreenTwo, userName.split(" ")[1])
                         } catch (e: java.lang.Exception) {}
                         startActivity(
                             Intent(
@@ -230,13 +230,13 @@ class UserSignUpScreenTwo : AppCompatActivity() {
             val email = account.email
             val googleId = account.id
             val image = account.photoUrl
-            UserUtils.googleId = googleId!!
-            UserUtils.firstName = userName!!.split(" ")[0]
+            UserUtils.setGoogleId(this, googleId!!)
+            UserUtils.setFirstName(this, userName!!.split(" ")[0])
             try {
-                UserUtils.lastName = userName.split(" ")[1]
+                UserUtils.setLastName(this, userName.split(" ")[1])
             } catch (e: java.lang.Exception) {
             }
-            UserUtils.mailId = email!!
+            UserUtils.setMail(this, email!!)
             startActivity(Intent(this, UserSignUpScreenThree::class.java))
         } else {
             snackBar(binding.nextBtn, "Google SignIn Failed")

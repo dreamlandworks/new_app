@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
+import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 
@@ -30,6 +31,12 @@ class SearchServiceProviderAdapter(private val list: List<Data>) :
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
+            }
+            binding.bookLaterBtn.setOnClickListener {
+                binding.root.context.startActivity(Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java)))
+            }
+            binding.bookNowBtn.setOnClickListener {
+                binding.root.context.startActivity(Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java)))
             }
         }
     }

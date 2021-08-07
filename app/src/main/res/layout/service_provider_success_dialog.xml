@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/success_"
-        android:textColor="@color/green_700"
+        android:textColor="@color/purple_700"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold" />
 

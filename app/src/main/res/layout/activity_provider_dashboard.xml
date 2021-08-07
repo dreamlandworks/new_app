@@ -62,7 +62,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/images"
-                        app:civ_border_color="@color/green_500"
+                        app:civ_border_color="@color/purple_500"
                         app:civ_border_width="@dimen/_2sdp" />
 
                 </RelativeLayout>
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:backgroundTint="@color/green_500"
+                    android:backgroundTint="@color/purple_500"
                     android:clickable="true"
                     android:focusable="true"
                     app:elevation="0dp"
@@ -173,7 +173,7 @@
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/green_500"
+                    android:backgroundTint="@color/purple_500"
                     android:src="@drawable/ic_calenders_white"
                     app:borderWidth="@dimen/_3sdp"
                     app:layout_anchor="@id/bottom_bar"

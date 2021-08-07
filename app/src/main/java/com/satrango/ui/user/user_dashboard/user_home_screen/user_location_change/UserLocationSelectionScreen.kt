@@ -11,7 +11,6 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -34,6 +33,7 @@ import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeReqModel
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -90,51 +90,15 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.addBtn.setOnClickListener {
-            changeAddressInServer()
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         }
 
     }
 
-    private fun changeAddressInServer() {
-        val requestBody = UserLocationChangeReqModel(
-            UserUtils.address,
-            UserUtils.address,
-            UserUtils.city,
-            UserUtils.country,
-            UserUtils.address,
-            RetrofitBuilder.USER_KEY,
-            UserUtils.address,
-            UserUtils.getUserName(this),
-            UserUtils.postalCode,
-            UserUtils.state,
-            UserUtils.latitude,
-            UserUtils.longitute,
-            UserUtils.getUserId(this).toInt(),
-        )
-        viewModel.changeUserLocation(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.addBtn, it.data!!)
-                    Handler().postDelayed({
-                        finish()
-                        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-                    }, 3000)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.addBtn, it.message!!)
-                }
-            }
-        })
-    }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLong = LatLng(UserUtils.latitude.toDouble(), UserUtils.longitute.toDouble())
+        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
         mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
         mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null);
 
@@ -151,11 +115,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onMarkerDragEnd(marker: Marker) {
                 mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-                fetchLocationDetails(
-                    this@UserLocationSelectionScreen,
-                    marker.position.latitude,
-                    marker.position.longitude
-                )
+                fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
             }
 
             override fun onMarkerDrag(arg0: Marker) {
@@ -214,18 +174,19 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             val postalCode: String = address[0].postalCode
             val knownName: String = address[0].featureName
             fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-            UserUtils.latitude = latitude.toString()
-            UserUtils.longitute = longitude.toString()
-            UserUtils.city = city
-            UserUtils.state = state
-            UserUtils.country = country
-            UserUtils.postalCode = postalCode
-            UserUtils.address = knownName
-            if (UserUtils.address.isNotEmpty()) {
-                binding.myLocation.setText("${UserUtils.address}, ${UserUtils.city}, ${UserUtils.state}, ${UserUtils.country}, ${UserUtils.postalCode}")
+            UserUtils.setLatitude(context, latitude.toString())
+            UserUtils.setLongitude(context, longitude.toString())
+            UserUtils.setCity(context, city)
+            UserUtils.setState(context, state)
+            UserUtils.setCountry(context, country)
+            UserUtils.setPostalCode(context, postalCode)
+            UserUtils.setAddress(context, knownName)
+            if (UserUtils.getAddress(context).isNotEmpty()) {
+                binding.myLocation.setText("${UserUtils.getAddress(context)}, ${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
             } else {
-                binding.myLocation.setText("${UserUtils.city}, ${UserUtils.state}, ${UserUtils.country}, ${UserUtils.postalCode}")
+                binding.myLocation.setText("${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
             }
+            binding.addBtn.isEnabled = true
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()

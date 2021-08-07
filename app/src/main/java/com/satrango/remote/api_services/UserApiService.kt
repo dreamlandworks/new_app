@@ -4,6 +4,8 @@ import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
+import com.satrango.ui.user.bookings.bookaddress.models.BlueCollarBookingReqModel
+import com.satrango.ui.user.bookings.bookaddress.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
@@ -13,7 +15,8 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
-import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationChangeReqModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeReqModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -99,9 +102,14 @@ interface UserApiService {
         @Query("key") key: String
     ): UserFAQResModel
 
-    @POST(UserApiEndPoints.USER_CHANGE_ADDRESS)
-    suspend fun changeUserLocation(
-        @Body json: UserLocationChangeReqModel
+    @POST(UserApiEndPoints.USER_SINGLE_MOVE_BOOKING)
+    suspend fun bookSingleMoveProvider(
+        @Body json: SingleMoveBookingReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.USER_SINGLE_MOVE_BOOKING)
+    suspend fun bookBlueCollarProvider(
+        @Body json: BlueCollarBookingReqModel
     ): ResponseBody
 
 }

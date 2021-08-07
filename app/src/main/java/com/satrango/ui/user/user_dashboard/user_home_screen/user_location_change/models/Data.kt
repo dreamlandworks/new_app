@@ -1,6 +1,4 @@
-package com.satrango.ui.user.user_dashboard.search_service_providers.models
-
-import java.io.Serializable
+package com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models
 
 data class Data(
     val about_me: String,
@@ -21,16 +19,14 @@ data class Data(
     val mobile: String,
     val per_day: String,
     val per_hour: String,
-    val points_count: String?,
+    val points_count: Any,
     val postcode: String,
     val profession: String,
-    val profile_pic: String?,
+    val profile_pic: Any,
     val qualification: String,
     val referral_id: String,
     val reg_status: String,
     val registered_on: String,
     val state: String,
-    val category_id: String,
-    val subcategory_id: String,
     val users_id: String
-): Serializable
+)

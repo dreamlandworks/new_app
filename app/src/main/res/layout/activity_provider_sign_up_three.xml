@@ -86,7 +86,7 @@
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/green_500">
+                    app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/perHour"
@@ -109,7 +109,7 @@
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/green_500">
+                    app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/perDay"
@@ -141,7 +141,7 @@
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/green_500">
+                    app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/minCharge"
@@ -165,7 +165,7 @@
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/green_500">
+                    app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/extraCharge"
@@ -265,7 +265,7 @@
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/back_sm"
-                android:textColor="@color/green_500"
+                android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
 
             <TextView

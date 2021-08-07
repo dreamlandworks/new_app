@@ -20,6 +20,8 @@ import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardRepository
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
+import com.satrango.ui.user.bookings.bookaddress.BookingRepository
+import com.satrango.ui.user.bookings.bookaddress.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQRepository
@@ -89,6 +91,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(UserLocationChangeViewModel::class.java) -> return UserLocationChangeViewModel(
                 baseRepository as UserLocationChangeRepository
+            ) as T
+            modelClass.isAssignableFrom(BookingViewModel::class.java) -> return BookingViewModel(
+                baseRepository as BookingRepository
             ) as T
         }
         return super.create(modelClass)

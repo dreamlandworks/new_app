@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
+import com.satrango.utils.UserUtils
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,9 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                 try {
                     val response = repository.getSearchResults(requestBody)
                     if (response.status == 200) {
-                         searchResultsList.value = NetworkResponse.Success(response.data)
+                        UserUtils.setTempAddressId(context, response.temp_address_id.toString())
+                        UserUtils.setSearchResultsId(context, response.search_results_id.toString())
+                        searchResultsList.value = NetworkResponse.Success(response.data)
                     } else {
                         searchResultsList.value = NetworkResponse.Failure(response.message)
                     }

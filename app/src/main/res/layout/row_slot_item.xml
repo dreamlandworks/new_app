@@ -51,7 +51,7 @@
             app:boxCornerRadiusBottomStart="@dimen/_10sdp"
             app:boxCornerRadiusTopEnd="@dimen/_10sdp"
             app:boxCornerRadiusTopStart="@dimen/_10sdp"
-            app:boxStrokeColor="@color/green_500">
+            app:boxStrokeColor="@color/purple_500">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fromDate"
@@ -76,7 +76,7 @@
             app:boxCornerRadiusBottomStart="@dimen/_10sdp"
             app:boxCornerRadiusTopEnd="@dimen/_10sdp"
             app:boxCornerRadiusTopStart="@dimen/_10sdp"
-            app:boxStrokeColor="@color/green_500">
+            app:boxStrokeColor="@color/purple_500">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/toDate"

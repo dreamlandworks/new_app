@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.search_service_providers
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivitySearchViewProfileBinding
+import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
 
@@ -52,6 +54,17 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 //            behaviourRating.text = data.
 //            satisfactionRating.text = data.
 //            skillsRating.text = data.
+
+            bookLaterBtn.setOnClickListener {
+                val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
+                intent.putExtra(getString(R.string.service_provider), data)
+                startActivity(intent)
+            }
+            bookNowBtn.setOnClickListener {
+                val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
+                intent.putExtra(getString(R.string.service_provider), data)
+                startActivity(intent)
+            }
         }
 
     }

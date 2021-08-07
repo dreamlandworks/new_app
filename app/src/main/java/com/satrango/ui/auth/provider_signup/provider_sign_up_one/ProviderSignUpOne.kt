@@ -150,15 +150,18 @@ class ProviderSignUpOne : AppCompatActivity() {
             val qualList = mutableListOf<QualificationResponse>()
             for (qual in response.data.qualification) {
                 if (binding.qualification.text.toString().trim() == qual.qualification) {
-                    qualList.add(QualificationResponse(qual.id, qual.qualification))
+                    qualList.add(QualificationResponse(qual.qualification, qual.id))
                 }
+            }
+            if (qualList.isEmpty()) {
+                qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
             }
             ProviderUtils.languagesKnown = langList
             ProviderUtils.profession = profList
             ProviderUtils.qualification = qualList
             ProviderUtils.experience = binding.experience.selectedItem.toString()
             val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
-            intent.putExtra("subcat_id", profList[0].prof_id)
+            intent.putExtra("profession_id", profList[0].prof_id)
             startActivity(intent)
         }
     }

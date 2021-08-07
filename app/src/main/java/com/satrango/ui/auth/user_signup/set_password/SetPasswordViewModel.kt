@@ -22,7 +22,7 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     resetPassword.value = NetworkResponse.Loading()
-                    val response = repository.resetPasswordInServer()
+                    val response = repository.resetPasswordInServer(context)
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.get("status") == 200) {
                         resetPassword.value = NetworkResponse.Success(jsonObject.getString("message"))

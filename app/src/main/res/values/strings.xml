@@ -300,7 +300,7 @@
     <string name="your_password_is_successfully_set_nplease_login_to_continue">Your password is successfully set.<br />Please login to continue</string>
     <string name="my_bids">My Bids</string>
     <string name="go">Go</string>
-    <string name="showing_10_out_of_143_results">Showing 10 out of 143 results</string>
+    <string name="showing_0_out_of_0_results">Showing 0 out of 0 results</string>
     <string name="book_later">Book Later</string>
     <string name="book_now">Book Now</string>
     <string name="yyyy_mm_dd">YYYY-MM-DD</string>
@@ -324,10 +324,20 @@
     <string name="filter_results_by">Filter Results by</string>
     <string name="distance_with_in">Distance with in</string>
     <string name="amount">Amount</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="state">state</string>
+    <string name="country">country</string>
+    <string name="postal_code">postalcode</string>
+    <string name="facebook_id">facebookId</string>
+    <string name="google_id">googleId</string>
+    <string name="twitter">twitterId</string>
+    <string name="search_results_id">search_results_id</string>
+    <string name="temp_address_id">temp_address_id</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
-        <item>Take picture with camera</item>
+<!--        <item>Take picture with camera</item>-->
     </string-array>
 
     <string-array name="genderGroup">
