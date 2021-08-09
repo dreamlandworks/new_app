@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
+import com.google.firebase.FirebaseApp
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.satrango.databinding.ActivitySplashScreenBinding
@@ -46,6 +47,7 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        FirebaseApp.initializeApp(this)
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->

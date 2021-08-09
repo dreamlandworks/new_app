@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
-import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
+import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 

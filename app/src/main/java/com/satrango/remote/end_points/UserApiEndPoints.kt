@@ -20,5 +20,7 @@ object UserApiEndPoints {
     final const val USER_FAQS = "user/user_faq"
     final const val USER_SINGLE_MOVE_BOOKING = "user/single_move_booking"
     final const val USER_BLUE_COLLAR_BOOKING = "user/blue_collar_booking"
+    final const val USER_MULTI_MOVE_BOOKING = "user/multi_move_booking"
+    final const val USER_ADD_BOOKING_ADDRESS = "user/add_address"
 
 }

@@ -9,9 +9,9 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivitySearchViewProfileBinding
-import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
+import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
-import com.satrango.utils.UserUtils
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 
 class UserSearchViewProfileScreen : AppCompatActivity() {
 
@@ -66,6 +66,10 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
 
+    override fun onBackPressed() {
+        finish()
+        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
     }
 }

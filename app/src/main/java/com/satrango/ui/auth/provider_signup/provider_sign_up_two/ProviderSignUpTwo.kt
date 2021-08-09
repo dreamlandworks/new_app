@@ -45,14 +45,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
 
         binding.apply {
 
-            keywordSkills.addChipTerminator(
-                ' ',
-                ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-            )
-            keywordSkills.addChipTerminator(
-                ',',
-                ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-            )
+            keywordSkills.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+            keywordSkills.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
             keywordSkills.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
 
             nextBtn.setOnClickListener {
@@ -77,8 +71,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                     for (data in keywordsMList) {
                         keywordsList.add(data.keyword)
                     }
-                    val languagesAdapter =
-                        ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywordsList)
+                    val languagesAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywordsList)
                     binding.keywordSkills.setAdapter(languagesAdapter)
                     binding.keywordSkills.addChipTerminator(
                         '\n',

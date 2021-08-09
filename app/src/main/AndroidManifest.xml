@@ -51,23 +51,28 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider"></activity>
+        <service
+            android:name=".remote.FCMService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider" />
         <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.ChangeBookingAddressScreen"
+            android:name=".ui.user.bookings.change_address.AddBookingAddressScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.bookaddress.BookingAddressScreen"
+            android:name=".ui.user.bookings.booking_address.BookingAddressScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.booklater.BookingDateAndTimeScreen"
+            android:name=".ui.user.bookings.booking_date_time.BookingDateAndTimeScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.booknow.BookingAttachmentsScreen"
+            android:name=".ui.user.bookings.booking_attachments.BookingAttachmentsScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
@@ -202,6 +207,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <service android:name=".FCMService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

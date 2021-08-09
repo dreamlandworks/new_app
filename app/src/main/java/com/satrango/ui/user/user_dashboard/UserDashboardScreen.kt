@@ -29,8 +29,7 @@ import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.user.bookings.booklater.BookingDateAndTimeScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
+import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen
@@ -38,6 +37,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccount
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
@@ -47,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.util.*
@@ -74,7 +75,13 @@ class UserDashboardScreen : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, com.satrango.R.string.app_name)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolBar,
+            R.string.app_name,
+            R.string.app_name
+        )
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -85,7 +92,11 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.navigationView.layoutParams = params
         toggle.syncState()
 
-        Toast.makeText(this, "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val headerView = binding.navigationView.getHeaderView(0)
         profileImage = headerView.findViewById(R.id.profileImage)
@@ -167,6 +178,7 @@ class UserDashboardScreen : AppCompatActivity() {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+
 
     }
 
@@ -313,7 +325,8 @@ class UserDashboardScreen : AppCompatActivity() {
                 UserUtils.setPostalCode(context, postalCode)
                 UserUtils.setAddress(context, knownName)
                 binding.userLocation.text = UserUtils.getCity(context)
-                SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+                SearchServiceProvidersScreen.userLocationText =
+                    binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
                 Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                     .show()
@@ -326,7 +339,10 @@ class UserDashboardScreen : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@UserDashboardScreen), RetrofitBuilder.USER_KEY)
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(this@UserDashboardScreen),
+                    RetrofitBuilder.USER_KEY
+                )
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {

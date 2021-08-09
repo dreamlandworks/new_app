@@ -36,6 +36,13 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -43,7 +50,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -51,6 +57,7 @@ dependencies {
     // Firebase Dependencies
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-dynamic-links:20.1.1'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
     // Google Material
     implementation 'com.google.android.material:material:1.4.0'
@@ -62,6 +69,7 @@ dependencies {
     // Google Authentication, Fused Location
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
     // AutoFill OTP
     implementation "com.google.android.gms:play-services-auth-api-phone:17.5.1"

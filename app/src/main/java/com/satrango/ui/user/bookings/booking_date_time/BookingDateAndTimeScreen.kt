@@ -1,8 +1,8 @@
-package com.satrango.ui.user.bookings.booklater
+package com.satrango.ui.user.bookings.booking_date_time
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityBookingDateAndTimeScreenBinding
-import com.satrango.ui.user.bookings.booknow.BookingAttachmentsScreen
+import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
+import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -42,6 +44,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
         data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        updateUI(data)
 
         calendar = Calendar.getInstance()
         loadDates()
@@ -52,6 +55,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateUI(data: Data) {
+        binding.userName.text = "${data.fname} ${data.lname}"
+        binding.occupation.text = data.profession
+        binding.costPerHour.text = data.per_hour
+    }
+
     private fun validateFields() {
         UserUtils.scheduled_date = ""
         for (day in daysList) {
@@ -60,7 +70,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 for (index in months.indices) {
                     if (day.month == months[index]) {
                         UserUtils.scheduled_date = "${calendar.get(Calendar.YEAR)}-${index}-${day.day.split(" ")[0]}"
-                        toast(this, UserUtils.scheduled_date)
                     }
                 }
             }
@@ -69,7 +78,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         UserUtils.time_slot_to = ""
         for (time in timings) {
             if (time.isSelected) {
-//                    Log.e("TIME", time.month)
                 val timing = time.month.trim().split("to")
                 UserUtils.time_slot_from = timing[0].trim() + time.day.trim()
                 UserUtils.time_slot_to = timing[1].toString() + time.day.trim()
@@ -80,9 +88,15 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
-            val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
-            intent.putExtra(getString(R.string.service_provider), data)
-            startActivity(intent)
+            if (data.category_id == "3") {
+                val intent = Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
+                intent.putExtra(getString(R.string.service_provider), data)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
+                intent.putExtra(getString(R.string.service_provider), data)
+                startActivity(intent)
+            }
         }
     }
 
@@ -177,10 +191,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             daysList.onEachIndexed { index, month ->
                 if (index == position) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
-//                    Log.e("DAY TRUE", tempMonths[index].toString())
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
-//                    Log.e("DAY FALSE", tempMonths[index].toString())
                 }
             }
             daysList = tempMonths
@@ -191,10 +203,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             timings.onEachIndexed { index, month ->
                 if (index == position) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
-//                    Log.e("TIME TRUE", tempMonths[index].toString())
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
-//                    Log.e("TIME FALSE", tempMonths[index].toString())
                 }
             }
             timings = tempMonths
@@ -202,6 +212,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.timeRv.scrollToPosition(position)
         }
 
+    }
+
+    override fun onBackPressed() {
+        finish()
+        val intent = Intent(this, UserSearchViewProfileScreen::class.java)
+        intent.putExtra(getString(R.string.service_provider), data)
+        startActivity(intent)
     }
 
 }

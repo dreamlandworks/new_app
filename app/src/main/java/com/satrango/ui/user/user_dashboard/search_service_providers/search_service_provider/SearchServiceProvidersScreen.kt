@@ -95,27 +95,30 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         })
 
         binding.goBtn.setOnClickListener {
-            loadSearchResults(keyword, subCategoryId)
+            if (binding.searchBar.text.toString().isNotEmpty()) {
+                loadSearchResults(keyword, subCategoryId)
+            } else {
+                snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String) {
-//        val requestBody = SearchServiceProviderReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.USER_KEY, 4, UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt())
-        toast(this, "$subCategory|$keywordId")
-        val requestBody = SearchServiceProviderReqModel(
-            "Near Mandovi Showroom",
-            "Mangalore",
-            "India",
-            RetrofitBuilder.USER_KEY,
-            keywordId.toInt(),
-            "575014",
-            "Karnataka",
-            "12.9951",
-            "74.8094",
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt()
-        )
+        val requestBody = SearchServiceProviderReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.USER_KEY, keywordId.toInt(), UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt(), subCategory.toInt())
+//        val requestBody = SearchServiceProviderReqModel(
+//            "Near Mandovi Showroom",
+//            "Mangalore",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            keywordId.toInt(),
+//            "575014",
+//            "Karnataka",
+//            "12.9951",
+//            "74.8094",
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt()
+//        )
 
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {

@@ -67,7 +67,7 @@
                 android:textAlignment="center"
                 android:paddingHorizontal="@dimen/_20sdp"
                 android:lineSpacingExtra="@dimen/_5sdp"
-                android:textColor="@color/vendorPrimaryColor"
+                android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
 
             <View

@@ -20,8 +20,8 @@ import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardRepository
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
-import com.satrango.ui.user.bookings.bookaddress.BookingRepository
-import com.satrango.ui.user.bookings.bookaddress.BookingViewModel
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQRepository

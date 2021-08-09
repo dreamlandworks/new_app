@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.bookings.ChangeBookingAddressScreen">
+    tools:context=".ui.user.bookings.change_address.AddBookingAddressScreen">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
-package com.satrango.ui.user.bookings.bookaddress.models
+package com.satrango.ui.user.bookings.booking_address.models
 
-data class BlueCollarBookingReqModel(
+data class SingleMoveBookingReqModel(
+    val address_id: Int,
     val amount: String,
     val attachments: List<Attachment>,
     val created_on: String,
@@ -11,6 +12,7 @@ data class BlueCollarBookingReqModel(
     val scheduled_date: String,
     val sp_id: Int,
     val started_at: String,
+    val temp_address_id: Int,
     val time_slot_from: String,
     val time_slot_to: String,
     val users_id: Int

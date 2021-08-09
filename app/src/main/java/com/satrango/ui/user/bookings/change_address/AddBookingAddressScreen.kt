@@ -1,0 +1,197 @@
+package com.satrango.ui.user.bookings.change_address
+
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.Looper
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.satrango.R
+import com.satrango.base.ViewModelFactory
+import com.satrango.databinding.ActivityChangeBookingAddressScreenBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
+import com.satrango.utils.toast
+import java.util.*
+
+class AddBookingAddressScreen : AppCompatActivity() {
+
+    private lateinit var binding: ActivityChangeBookingAddressScreenBinding
+    private lateinit var locationCallBack: LocationCallback
+    private lateinit var progressDialog: ProgressDialog
+    private lateinit var data: Data
+
+    @SuppressLint("StaticFieldLeak")
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var viewModel: BookingViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityChangeBookingAddressScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val factory = ViewModelFactory(BookingRepository())
+        viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+
+        data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        initializeProgressDialog()
+
+        binding.apply { 
+            
+            resetBtn.setOnClickListener {
+                flatNo.setText("")
+                flatName.setText("")
+                streetName.setText("")
+                pinCode.setText("")
+                city.setText("")
+            }
+            
+            addBtn.setOnClickListener {
+                validateFields()
+            }
+            
+        }
+
+    }
+
+    private fun validateFields() {
+        if (binding.flatNo.text.toString().isEmpty()) {
+            snackBar(binding.addBtn, "Enter Flat No")
+        } else if (binding.flatName.text.toString().isEmpty()) {
+            snackBar(binding.addBtn, "Enter Flat Name")
+        } else if (binding.streetName.text.toString().isEmpty()) {
+            snackBar(binding.addBtn, "Enter Street Name")
+        } else if (binding.pinCode.text.toString().isEmpty()) {
+            snackBar(binding.addBtn, "Enter PinCode")
+        } else if (binding.city.text.toString().isEmpty()) {
+            snackBar(binding.addBtn, "Enter City Name")
+        } else {
+            fetchLocation(this)
+        }
+    }
+
+    fun fetchLocation(context: Context) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+
+        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        locationCallBack = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    fetchLocationDetails(context, latitude, longitude)
+                }
+            }
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallBack,
+            Looper.myLooper()!!
+        )
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+        try {
+            val geoCoder = Geocoder(context, Locale.getDefault())
+            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+            val addressName: String = address.get(0).getAddressLine(0)
+            val city: String = address.get(0).locality
+            val state: String = address.get(0).adminArea
+            val country: String = address.get(0).countryName
+            val postalCode: String = address.get(0).postalCode
+            val knownName: String = address.get(0).featureName
+            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+            UserUtils.setLatitude(context, latitude.toString())
+            UserUtils.setLongitude(context, longitude.toString())
+            UserUtils.setCity(context, city)
+            UserUtils.setState(context, state)
+            UserUtils.setCountry(context, country)
+            UserUtils.setPostalCode(context, postalCode)
+            UserUtils.setAddress(context, knownName)
+
+            val requestBody = AddBookingAddressReqModel(
+                knownName,
+                knownName,
+                city,
+                country,
+                "${binding.flatNo.text.toString().trim()} ${binding.flatName.text.toString().trim()}",
+                RetrofitBuilder.USER_KEY,
+                knownName,
+                "${UserUtils.getFirstName(context)} ${UserUtils.getLastName(context)}",
+                binding.pinCode.text.toString().trim(),
+                state,
+                latitude.toString(),
+                longitude.toString(),
+                UserUtils.getUserId(context).toInt()
+            )
+            viewModel.addBookingAddress(context, requestBody).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        toast(context, it.data!!)
+                        finish()
+                        val intent = Intent(context, BookingAddressScreen::class.java)
+                        intent.putExtra(getString(R.string.service_provider), data)
+                        startActivity(intent)
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.addBtn, it.message!!)
+                    }
+                }
+            })
+
+        } catch (e: Exception) {
+            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun initializeProgressDialog() {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
+    }
+}

@@ -11,7 +11,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderSignUpThreeBinding
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour
@@ -106,14 +105,14 @@ class ProviderSignUpThree : AppCompatActivity() {
                     R.color.vendorPrimaryColor
                 )
             )
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
 
             sunday.setBackgroundResource(R.drawable.greenbutton)
             sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -133,14 +132,14 @@ class ProviderSignUpThree : AppCompatActivity() {
         weekDays.setOnClickListener {
             weekDays.setBackgroundResource(R.drawable.greenbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
@@ -165,26 +164,26 @@ class ProviderSignUpThree : AppCompatActivity() {
                     R.color.vendorPrimaryColor
                 )
             )
-            saturday.setBackgroundResource(R.drawable.greenborderbutton)
+            saturday.setBackgroundResource(R.drawable.purpleborderbutton)
             sunday.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            sunday.setBackgroundResource(R.drawable.greenborderbutton)
+            sunday.setBackgroundResource(R.drawable.purpleborderbutton)
         }
         weekEnds.setOnClickListener {
             weekEnds.setBackgroundResource(R.drawable.greenbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
@@ -198,35 +197,35 @@ class ProviderSignUpThree : AppCompatActivity() {
                     R.color.vendorPrimaryColor
                 )
             )
-            monday.setBackgroundResource(R.drawable.greenborderbutton)
+            monday.setBackgroundResource(R.drawable.purpleborderbutton)
             tuesday.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            tuesday.setBackgroundResource(R.drawable.greenborderbutton)
+            tuesday.setBackgroundResource(R.drawable.purpleborderbutton)
             wednesday.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            wednesday.setBackgroundResource(R.drawable.greenborderbutton)
+            wednesday.setBackgroundResource(R.drawable.purpleborderbutton)
             thursday.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            thursday.setBackgroundResource(R.drawable.greenborderbutton)
+            thursday.setBackgroundResource(R.drawable.purpleborderbutton)
             friday.setTextColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.vendorPrimaryColor
                 )
             )
-            friday.setBackgroundResource(R.drawable.greenborderbutton)
+            friday.setBackgroundResource(R.drawable.purpleborderbutton)
 
             saturday.setBackgroundResource(R.drawable.greenbutton)
             saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -242,16 +241,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                sunday.setBackgroundResource(R.drawable.greenborderbutton)
+                sunday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 sunday.setBackgroundResource(R.drawable.greenbutton)
                 sunday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         monday.setOnClickListener {
@@ -262,16 +261,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                monday.setBackgroundResource(R.drawable.greenborderbutton)
+                monday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 monday.setBackgroundResource(R.drawable.greenbutton)
                 monday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         tuesday.setOnClickListener {
@@ -282,16 +281,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                tuesday.setBackgroundResource(R.drawable.greenborderbutton)
+                tuesday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 tuesday.setBackgroundResource(R.drawable.greenbutton)
                 tuesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         wednesday.setOnClickListener {
@@ -302,16 +301,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                wednesday.setBackgroundResource(R.drawable.greenborderbutton)
+                wednesday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 wednesday.setBackgroundResource(R.drawable.greenbutton)
                 wednesday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         thursday.setOnClickListener {
@@ -322,16 +321,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                thursday.setBackgroundResource(R.drawable.greenborderbutton)
+                thursday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 thursday.setBackgroundResource(R.drawable.greenbutton)
                 thursday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         friday.setOnClickListener {
@@ -342,16 +341,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                friday.setBackgroundResource(R.drawable.greenborderbutton)
+                friday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 friday.setBackgroundResource(R.drawable.greenbutton)
                 friday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         saturday.setOnClickListener {
@@ -362,16 +361,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                         R.color.vendorPrimaryColor
                     )
                 )
-                saturday.setBackgroundResource(R.drawable.greenborderbutton)
+                saturday.setBackgroundResource(R.drawable.purpleborderbutton)
             } else {
                 saturday.setBackgroundResource(R.drawable.greenbutton)
                 saturday.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
-            everyDay.setBackgroundResource(R.drawable.greenborderbutton)
+            everyDay.setBackgroundResource(R.drawable.purpleborderbutton)
             everyDay.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekDays.setBackgroundResource(R.drawable.greenborderbutton)
+            weekDays.setBackgroundResource(R.drawable.purpleborderbutton)
             weekDays.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            weekEnds.setBackgroundResource(R.drawable.greenborderbutton)
+            weekEnds.setBackgroundResource(R.drawable.purpleborderbutton)
             weekEnds.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         }
         binding.layoutList.addView(cricketerView)

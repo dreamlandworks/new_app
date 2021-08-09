@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import com.satrango.R
+import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
+import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import java.io.ByteArrayOutputStream
 
 object UserUtils {
@@ -18,6 +20,8 @@ object UserUtils {
     var address_id = "0"
     var temp_address_id = "0"
     var job_description = ""
+    var addressList = ArrayList<MonthsModel>()
+    var finalAddressList = ArrayList<Addresses>()
 
     fun setPassword(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)

@@ -1,4 +1,4 @@
-package com.satrango.ui.user.bookings.booklater
+package com.satrango.ui.user.bookings.booking_date_time
 
 data class MonthsModel(
     val month: String,

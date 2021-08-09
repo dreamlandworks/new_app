@@ -1,7 +1,6 @@
-package com.satrango.ui.user.bookings.booklater
+package com.satrango.ui.user.bookings.booking_date_time
 
 import android.annotation.SuppressLint
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.satrango.ui.user.bookings.booknow
+package com.satrango.ui.user.bookings.booking_attachments
 
 interface AttachmentsListener {
 

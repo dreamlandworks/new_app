@@ -69,7 +69,7 @@
                 android:lineSpacingExtra="@dimen/_5sdp"
                 android:text="@string/please_upload_your_id_proof_amp_address_proof_documents_to_get_verified_by_our_team"
                 android:textAlignment="center"
-                android:textColor="@color/vendorPrimaryColor"
+                android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
 
             <LinearLayout
@@ -158,7 +158,7 @@
                 android:lineSpacingExtra="@dimen/_5sdp"
                 android:text="@string/please_hold_your_id_proof_in_your_hand_and_proceed_with_video_verification"
                 android:textAlignment="center"
-                android:textColor="@color/vendorPrimaryColor"
+                android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
 
             <LinearLayout
