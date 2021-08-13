@@ -13,6 +13,7 @@
         layout="@layout/user_tool_bar" />
 
     <RelativeLayout
+        android:id="@+id/spCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_125sdp">
 

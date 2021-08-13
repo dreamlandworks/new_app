@@ -17,6 +17,7 @@
             layout="@layout/user_tool_bar" />
 
         <RelativeLayout
+            android:id="@+id/spCard"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_125sdp">
 
@@ -224,6 +225,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:text="@string/work_description"
             android:textColor="@color/black"

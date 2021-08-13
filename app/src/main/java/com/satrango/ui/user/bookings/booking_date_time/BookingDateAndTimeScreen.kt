@@ -3,34 +3,43 @@ package com.satrango.ui.user.bookings.booking_date_time
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivityBookingDateAndTimeScreenBinding
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.BlockedTimeSlot
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.*
+import kotlin.collections.ArrayList
 
 class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
 
+    private lateinit var availableTimeSlots: java.util.ArrayList<MonthsModel>
+    private lateinit var availableSlots: java.util.ArrayList<MonthsModel>
+    private lateinit var spDetails: SearchServiceProviderResModel
     private lateinit var calendar: Calendar
-    private lateinit var timings: ArrayList<MonthsModel>
     private lateinit var daysList: ArrayList<MonthsModel>
     private lateinit var binding: ActivityBookingDateAndTimeScreenBinding
     private lateinit var data: Data
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookingDateAndTimeScreenBinding.inflate(layoutInflater)
@@ -44,11 +53,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
         data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-        updateUI(data)
+        spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
 
         calendar = Calendar.getInstance()
         loadDates()
-        loadTimings()
+        loadTimings(0)
+        updateUI(data)
 
         binding.nextBtn.setOnClickListener {
             validateFields()
@@ -64,23 +74,18 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
     private fun validateFields() {
         UserUtils.scheduled_date = ""
-        for (day in daysList) {
+        for (day in availableSlots) {
             if (day.isSelected) {
-                val months = resources.getStringArray(R.array.months)
-                for (index in months.indices) {
-                    if (day.month == months[index]) {
-                        UserUtils.scheduled_date = "${calendar.get(Calendar.YEAR)}-${index}-${day.day.split(" ")[0]}"
-                    }
-                }
+                UserUtils.scheduled_date = day.month
             }
         }
         UserUtils.time_slot_from = ""
         UserUtils.time_slot_to = ""
-        for (time in timings) {
+        for (time in availableTimeSlots) {
             if (time.isSelected) {
                 val timing = time.month.trim().split("to")
                 UserUtils.time_slot_from = timing[0].trim() + time.day.trim()
-                UserUtils.time_slot_to = timing[1].toString() + time.day.trim()
+                UserUtils.time_slot_to = timing[1] + time.day.trim()
             }
         }
         if (UserUtils.scheduled_date.isEmpty()) {
@@ -93,79 +98,92 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)
             } else {
-                val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
+                val intent = Intent(
+                    this@BookingDateAndTimeScreen,
+                    BookingAttachmentsScreen::class.java
+                )
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)
             }
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun loadDates() {
-        val months = resources.getStringArray(R.array.months)
-        val month = months[calendar.get(Calendar.MONTH)]
-        val nextMonth = months[calendar.get(Calendar.MONTH) + 1]
-        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), month, nextMonth)
+        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+        availableSlots = ArrayList()
+        for(day in daysList) {
+            for (slots in spDetails.slots_data) {
+                if (slots.user_id == data.users_id) {
+                    for(slot in slots.preferred_time_slots) {
+                        val inFormat = SimpleDateFormat("dd-MM-yyyy")
+                        val d = day.month.split("-")
+                        val date= inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
+                        val outFormat = SimpleDateFormat("EEEE")
+                        val goal: String = outFormat.format(date!!)
+                        val weekDays = resources.getStringArray(R.array.days)
+                        for (index in weekDays.indices) {
+                            if (weekDays[index] == goal) {
+                                if (slot.day_slot == (index + 1).toString()) {
+                                    availableSlots.add(day)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         binding.dayRv.layoutManager = LinearLayoutManager(this@BookingDateAndTimeScreen, LinearLayoutManager.HORIZONTAL, false)
-        binding.dayRv.adapter = MonthsAdapter(daysList, this@BookingDateAndTimeScreen, "D")
+        binding.dayRv.adapter = MonthsAdapter(availableSlots, this@BookingDateAndTimeScreen, "D")
     }
 
-    private fun loadTimings() {
-        timings = arrayListOf()
+    private fun loadTimings(position: Int) {
+        availableTimeSlots = ArrayList()
+        val bookedSlots = ArrayList<MonthsModel>()
+        val actualTimeSlots = ArrayList<MonthsModel>()
+        for (slot in spDetails.slots_data)  {
+            if (slot.user_id == data.users_id) {
+                for (time in slot.blocked_time_slots) {
+                    if (time.date == availableSlots[position].month) {
+                        bookedSlots.add(MonthsModel(time.time_slot_from, "", false))}
+                    }
+            }
+        }
         val timingsList = resources.getStringArray(R.array.bookingTimings)
         for (index in timingsList.indices) {
-            if (index < 12) {
-                timings.add(MonthsModel(timingsList[index], "AM", false))
+            actualTimeSlots.add(MonthsModel(timingsList[index], "", false))
+        }
+        for (index in actualTimeSlots.indices) {
+            if (bookedSlots.isNotEmpty()) {
+                for (book in bookedSlots) {
+                    if (book.month != actualTimeSlots[index].month.split("\nto\n")[0]) {
+                        availableTimeSlots.add(actualTimeSlots[index])
+                    }
+                }
             } else {
-                timings.add(MonthsModel(timingsList[index], "PM", false))
+                availableTimeSlots.add(actualTimeSlots[index])
             }
         }
         binding.timeRv.layoutManager = LinearLayoutManager(this@BookingDateAndTimeScreen, LinearLayoutManager.HORIZONTAL, false)
-        binding.timeRv.adapter = MonthsAdapter(timings, this@BookingDateAndTimeScreen, "T")
-
+        binding.timeRv.adapter = MonthsAdapter(availableTimeSlots, this@BookingDateAndTimeScreen, "T")
     }
 
     private fun loadDays(
         year: Int,
-        month: Int,
-        currentMonth: String,
-        nextMonth: String
+        month: Int
     ): ArrayList<MonthsModel> {
         var daysInMonth = getDaysInMonth(year, month)
         daysList = arrayListOf()
         for (day in 1..daysInMonth) {
             if (day >= calendar.get(Calendar.DAY_OF_MONTH)) {
-                when (day.toString().last()) {
-                    1.toChar() -> {
-                        daysList.add(MonthsModel(currentMonth, "$day st", false))
-                    }
-                    2.toChar() -> {
-                        daysList.add(MonthsModel(currentMonth, "$day nd", false))
-                    }
-                    3.toChar() -> {
-                        daysList.add(MonthsModel(currentMonth, "$day rd", false))
-                    }
-                    else -> {
-                        daysList.add(MonthsModel(currentMonth, "$day th", false))
-                    }
-                }
+                daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false))
+//                Log.e("DATE:", Gson().toJson(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false)))
             }
         }
         daysInMonth = getDaysInMonth(year, month + 1)
         for (day in 1..daysInMonth) {
-            when (day) {
-                1 -> {
-                    daysList.add(MonthsModel(nextMonth, "$day st", false))
-                }
-                2 -> {
-                    daysList.add(MonthsModel(nextMonth, "$day nd", false))
-                }
-                3 -> {
-                    daysList.add(MonthsModel(nextMonth, "$day rd", false))
-                }
-                else -> {
-                    daysList.add(MonthsModel(nextMonth, "$day th", false))
-                }
-            }
+            daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day), day.toString(), false))
+//            Log.e("DATE:", Gson().toJson(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day), day.toString(), false)))
         }
         return daysList
     }
@@ -188,27 +206,28 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val tempMonths = arrayListOf<MonthsModel>()
 
         if (listType == "D") { // Days List
-            daysList.onEachIndexed { index, month ->
+            availableSlots.onEachIndexed { index, month ->
                 if (index == position) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
                 }
             }
-            daysList = tempMonths
-            binding.dayRv.adapter = MonthsAdapter(daysList, this, "D")
+            availableSlots = tempMonths
+            binding.dayRv.adapter = MonthsAdapter(availableSlots, this, "D")
             binding.dayRv.scrollToPosition(position)
+            loadTimings(position)
         }
         if (listType == "T") { // Timings List
-            timings.onEachIndexed { index, month ->
+            availableTimeSlots.onEachIndexed { index, month ->
                 if (index == position) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
                 }
             }
-            timings = tempMonths
-            binding.timeRv.adapter = MonthsAdapter(timings, this, "T")
+            availableTimeSlots = tempMonths
+            binding.timeRv.adapter = MonthsAdapter(availableTimeSlots, this, "T")
             binding.timeRv.scrollToPosition(position)
         }
 

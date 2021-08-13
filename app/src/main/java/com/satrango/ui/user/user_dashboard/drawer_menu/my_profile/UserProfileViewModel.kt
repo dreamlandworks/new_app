@@ -20,12 +20,12 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
     val updateProfileInfo = MutableLiveData<NetworkResponse<String>>()
     val deleteUserAddress = MutableLiveData<NetworkResponse<String>>()
 
-    fun userProfileInfo(context: Context): MutableLiveData<NetworkResponse<Data>> {
+    fun userProfileInfo(context: Context, userId: String): MutableLiveData<NetworkResponse<Data>> {
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 userProfileInfo.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.userProfileInfo(context)
+                    val response = repository.userProfileInfo(userId)
                     if (response.status == 200) {
                         userProfileInfo.value = NetworkResponse.Success(response.data)
                     } else {

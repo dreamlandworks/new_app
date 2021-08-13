@@ -24,12 +24,9 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                     val response = repository.forgotPwdRequestOTP(context)
                     val jsonObject = JSONObject(response.string())
                     if (jsonObject.getInt("status") == 200) {
-                        forgotPwdRequestOTP.value = NetworkResponse.Success(
-                            jsonObject.getString("id") + "|" + jsonObject.getInt("otp")
-                        )
+                        forgotPwdRequestOTP.value = NetworkResponse.Success(jsonObject.getString("id") + "|" + jsonObject.getInt("otp"))
                     } else {
-                        forgotPwdRequestOTP.value =
-                            NetworkResponse.Failure(jsonObject.getString("message"))
+                        forgotPwdRequestOTP.value = NetworkResponse.Failure(jsonObject.getString("message"))
                     }
                 } catch (e: Exception) {
                     forgotPwdRequestOTP.value = NetworkResponse.Failure(e.message)

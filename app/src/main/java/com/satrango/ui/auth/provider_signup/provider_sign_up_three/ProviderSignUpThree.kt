@@ -44,24 +44,31 @@ class ProviderSignUpThree : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (binding.perHour.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Per Hour Charges")
-        } else if (binding.perDay.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Per Day Charges")
-        } else if (binding.minCharge.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Minimum Charges")
-        } else if (binding.extraCharge.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Extra Charges")
-        } else if (JSONArray(validateSlots()).length() == 0) {
-            snackBar(binding.nextBtn, "Add Slots")
-        } else {
-            ProviderUtils.perDay = binding.perDay.text.toString().trim()
-            ProviderUtils.perHour = binding.perHour.text.toString().trim()
-            ProviderUtils.minCharge = binding.minCharge.text.toString().trim()
-            ProviderUtils.extraCharge = binding.extraCharge.text.toString().trim()
-            ProviderUtils.slotsList = validateSlots()
-            startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
+        when {
+            binding.perHour.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Enter Per Hour Charges")
+            }
+            binding.perDay.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Enter Per Day Charges")
+            }
+            binding.minCharge.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Enter Minimum Charges")
+            }
+            binding.extraCharge.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Enter Extra Charges")
+            }
+            JSONArray(validateSlots()).length() == 0 -> {
+                snackBar(binding.nextBtn, "Add Slots")
+            }
+            else -> {
+                ProviderUtils.perDay = binding.perDay.text.toString().trim()
+                ProviderUtils.perHour = binding.perHour.text.toString().trim()
+                ProviderUtils.minCharge = binding.minCharge.text.toString().trim()
+                ProviderUtils.extraCharge = binding.extraCharge.text.toString().trim()
+                ProviderUtils.slotsList = validateSlots()
+                startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
 
+            }
         }
     }
 
@@ -376,7 +383,7 @@ class ProviderSignUpThree : AppCompatActivity() {
         binding.layoutList.addView(cricketerView)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun openDatePickerDialog(editText: TextInputEditText) {
         val calendar = Calendar.getInstance()
         val calendarHour = calendar.get(Calendar.HOUR_OF_DAY)

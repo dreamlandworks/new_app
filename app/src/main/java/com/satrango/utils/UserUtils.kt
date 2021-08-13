@@ -3,10 +3,21 @@ package com.satrango.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
+import android.widget.Toast
+import com.google.gson.Gson
 import com.satrango.R
+import com.satrango.remote.Notification
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 object UserUtils {
 
@@ -309,6 +320,44 @@ object UserUtils {
         editor.commit()
     }
 
+    fun saveSelectedSPDetails(context: Context, spDetails: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.selected_service_provider), spDetails)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSelectedSPDetails(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getString(context.resources.getString(R.string.selected_service_provider), "")!!
+    }
+
+    fun saveSelectedKeywordCategoryId(context: Context, spDetails: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.selected_keyword_id), spDetails)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSelectedKeywordCategoryId(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getString(context.resources.getString(R.string.selected_keyword_id), "")!!
+    }
+
     fun getReferralId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
             context.resources.getString(R.string.userDetails),
@@ -349,6 +398,32 @@ object UserUtils {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.userName), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getBookingId(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.booking_id), "")!!
+    }
+
+    fun saveBookingId(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.booking_id), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getProviderAction(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.provider_action), "")!!
+    }
+
+    fun saveProviderAction(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.provider_action), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.booking_id), fullName)
         editor.apply()
         editor.commit()
     }
@@ -398,6 +473,60 @@ object UserUtils {
         map.put(context.resources.getString(R.string.phoneNo), sharedPreferences.getString(context.resources.getString(R.string.phoneNo), "")!!)
         map.put(context.resources.getString(R.string.password), sharedPreferences.getString(context.resources.getString(R.string.password), "")!!)
         return map
+    }
+
+    fun getComingHour(): Int {
+        val calender = Calendar.getInstance()
+        return calender.get(Calendar.HOUR_OF_DAY) + 1
+    }
+
+    fun sendFCM(
+        context: Context,
+        token: String,
+        bookingId: String,
+        from: String
+    ) {
+        saveProviderAction(context, "")
+        val map = mutableMapOf<String, String>()
+        map["Content-Type"] = "application/json"
+        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        val requestBody = FCMMessageReqModel(Notification("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Toast.makeText(context, response.string(), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun sendFCMtoSelectedServiceProvider(
+        context: Context,
+        bookingId: String,
+        from: String
+    ) {
+        val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+        for (sp in spDetails.data) {
+            for (spSlot in spDetails.slots_data) {
+                if (sp.users_id == spSlot.user_id) {
+                    sendFCM(context, sp.fcm_token, bookingId, from)
+                }
+            }
+        }
+    }
+
+    fun sendFCMtoAllServiceProviders(
+        context: Context,
+        bookingId: String,
+        from: String
+    ) {
+        val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+        for (sp in spDetails.data) {
+            for (spSlot in spDetails.slots_data) {
+                for (booking in spSlot.blocked_time_slots) {
+                    if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                        sendFCM(context, sp.fcm_token, bookingId, from)
+                    }
+                }
+            }
+        }
     }
 
 }

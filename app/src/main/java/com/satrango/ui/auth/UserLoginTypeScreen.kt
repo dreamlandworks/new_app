@@ -1,23 +1,31 @@
 package com.satrango.ui.auth
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
-import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
+import com.satrango.remote.Notification
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
+import java.util.*
 
 
-class UserLoginTypeScreen : AppCompatActivity(), PaymentResultListener {
+class UserLoginTypeScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserLoginTypeScreenBinding
 
@@ -26,15 +34,45 @@ class UserLoginTypeScreen : AppCompatActivity(), PaymentResultListener {
         binding = ActivityUserLoginTypeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            val token = task.result
-            toast(this, token)
-            Log.e("FCM TOKEN", token)
-        })
+        if (PermissionUtils.isNetworkConnected(this)) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+                val token = task.result
+                CoroutineScope(Dispatchers.Main).launch {
+                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                        FCMReqModel(
+                            token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(
+                                this@UserLoginTypeScreen
+                            )
+                        )
+                    )
+                    val responses = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                        FCMReqModel(
+                            token,
+                            RetrofitBuilder.USER_KEY,
+                            "2"
+                        )
+                    )
+                    val jsonResponse = JSONObject(response.string())
+                    if (jsonResponse.getInt("status") != 200) {
+                        snackBar(binding.userBtn, "Please check internet connection!")
+                        Handler().postDelayed({
+                            finish()
+                        }, 3000)
+                    }
+                }
+                Log.e("FCM TOKEN", token)
+            })
+        } else {
+            snackBar(binding.userBtn, "Please check internet connection!")
+            Handler().postDelayed({
+                finish()
+            }, 3000)
+        }
+
 
         binding.apply {
 
@@ -50,35 +88,12 @@ class UserLoginTypeScreen : AppCompatActivity(), PaymentResultListener {
             }
 
         }
-
-//        Checkout.preload(applicationContext)
-//        makePayment()
     }
 
-    private fun makePayment() {
-        val checkout = Checkout()
-        checkout.setKeyID("KEY")
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("amount", 50000) //500rs * 100 = 50000
-            orderRequest.put("currency", "INR")
-            orderRequest.put("receipt", "order_rcptid_11")
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-
-    }
 
     override fun onBackPressed() {
         moveTaskToBack(true)
     }
 
-    override fun onPaymentSuccess(response: String?) {
-        toast(this, response!!)
-    }
 
-    override fun onPaymentError(p0: Int, response: String?) {
-        toast(this, response!!)
-    }
 }

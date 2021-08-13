@@ -16,7 +16,7 @@ import java.lang.Exception
 class SearchServiceProviderViewModel(private val repository: SearchServiceProviderRepository): ViewModel() {
 
     val keywordsList = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_home_screen.models.Data>>>()
-    val searchResultsList = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>>>()
+    val searchResultsList = MutableLiveData<NetworkResponse<com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel>>()
 
     fun getKeywordsList(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_home_screen.models.Data>>> {
         if (hasInternetConnection(context)) {
@@ -40,7 +40,7 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
         return keywordsList
     }
 
-    fun getSearchResults(context: Context, requestBody: SearchServiceProviderReqModel): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>>> {
+    fun getSearchResults(context: Context, requestBody: SearchServiceProviderReqModel): MutableLiveData<NetworkResponse<com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel>> {
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 searchResultsList.value = NetworkResponse.Loading()
@@ -49,7 +49,7 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                     if (response.status == 200) {
                         UserUtils.setTempAddressId(context, response.temp_address_id.toString())
                         UserUtils.setSearchResultsId(context, response.search_results_id.toString())
-                        searchResultsList.value = NetworkResponse.Success(response.data)
+                        searchResultsList.value = NetworkResponse.Success(response)
                     } else {
                         searchResultsList.value = NetworkResponse.Failure(response.message)
                     }

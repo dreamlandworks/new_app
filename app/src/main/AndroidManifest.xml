@@ -43,19 +43,16 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/circlelogo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/circlelogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <service
-            android:name=".remote.FCMService"
-            android:enabled="true"
-            android:exported="true"></service>
-
+        <activity android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen"></activity>
+        <activity android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen" />
         <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider" />
         <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen" />
@@ -208,9 +205,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".FCMService">
+        <service android:name=".remote.fcm.FCMService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 

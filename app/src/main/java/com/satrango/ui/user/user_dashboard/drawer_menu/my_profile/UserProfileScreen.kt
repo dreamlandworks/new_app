@@ -246,7 +246,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     @SuppressLint("SetTextI18n")
     private fun showUserProfile() {
-        viewModel.userProfileInfo(this).observe(this, {
+        viewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

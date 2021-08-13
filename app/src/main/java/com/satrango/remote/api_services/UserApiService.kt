@@ -1,13 +1,19 @@
 package com.satrango.remote.api_services
 
 import com.satrango.remote.end_points.UserApiEndPoints
+import com.satrango.remote.fcm.FCMMessageReqModel
+import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
+import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
@@ -120,6 +126,32 @@ interface UserApiService {
     @POST(UserApiEndPoints.USER_ADD_BOOKING_ADDRESS)
     suspend fun addBookingAddress(
         @Body json: AddBookingAddressReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.UPDATE_FCM_TOKEN)
+    suspend fun updateFCMToken(
+        @Body json: FCMReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.FCM_SEND)
+    suspend fun sendFCM(
+        @HeaderMap map: Map<String, String>,
+        @Body requestBody: FCMMessageReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.CONFIRM_PAYMENT)
+    suspend fun confirmPayment(
+        @Body requestBody: PaymentConfirmReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.USER_DETAILS_ACCEPT)
+    suspend fun getUserBookingDetails(
+        @Body json: BookingDetailsReqModel
+    ): BookingDetailsResModel
+
+    @POST(UserApiEndPoints.PROVIDER_RESPONSE)
+    suspend fun setProviderResponse(
+        @Body json: ProviderResponseReqModel
     ): ResponseBody
 
 }

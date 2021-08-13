@@ -7,11 +7,17 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivitySearchViewProfileBinding
+import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
+import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.utils.UserUtils
+import java.util.*
 
 class UserSearchViewProfileScreen : AppCompatActivity() {
 
@@ -32,6 +38,18 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         imageView.visibility = View.GONE
 
         val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+        for (sp in spDetails.slots_data) {
+            if (data.users_id == sp.user_id) {
+                for (booking in sp.blocked_time_slots) {
+                    val calender = Calendar.getInstance()
+                    val comingHour = calender.get(Calendar.HOUR_OF_DAY)
+                    if (comingHour + 1 == booking.time_slot_from.split(":")[0].toInt()) {
+                        binding.bookNowBtn.visibility = View.GONE
+                    }
+                }
+            }
+        }
 
         binding.apply {
 
@@ -61,9 +79,15 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
                 startActivity(intent)
             }
             bookNowBtn.setOnClickListener {
-                val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
-                intent.putExtra(getString(R.string.service_provider), data)
-                startActivity(intent)
+                if (data.category_id == "3") {
+                    val intent = Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java)
+                    intent.putExtra(getString(R.string.service_provider), data)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this@UserSearchViewProfileScreen, BookingAttachmentsScreen::class.java)
+                    intent.putExtra(getString(R.string.service_provider), data)
+                    startActivity(intent)
+                }
             }
         }
     }

@@ -57,7 +57,7 @@ class MonthsAdapter(
             notifyDataSetChanged()
         }
         if (listType == "T") {
-            holder.binding.note.text = list[position].day
+//            holder.binding.note.text = list[position].day
             holder.binding.title.text = list[position].month
         }
     }

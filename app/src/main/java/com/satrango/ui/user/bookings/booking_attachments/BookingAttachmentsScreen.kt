@@ -3,6 +3,7 @@ package com.satrango.ui.user.bookings.booking_attachments
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -24,11 +25,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAttachmentsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
+import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -36,8 +41,11 @@ import com.satrango.ui.user.bookings.booking_address.models.Attachment
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
+import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -50,7 +58,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
+class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, PaymentResultListener {
 
     private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityBookingAttachmentsScreenBinding
@@ -63,6 +71,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     companion object {
         lateinit var imagePathList: ArrayList<String>
         lateinit var encodedImages: ArrayList<Attachment>
+        var FROM_BOOK_INSTANTLY = false
     }
 
 
@@ -72,20 +81,29 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            onBackPressed()
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            onBackPressed()
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-        initializeProgressDialog()
-        data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-        updateUI(data)
-        if (UserUtils.addressList.isNotEmpty()) {
-            loadAddressOnUI()
+        if (!FROM_BOOK_INSTANTLY) {
+            initializeProgressDialog()
+            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+            updateUI(data)
+            if (UserUtils.addressList.isNotEmpty()) {
+                loadAddressOnUI()
+            }
+        } else {
+            binding.spCard.visibility = View.GONE
         }
 
         imagePathList = ArrayList()
@@ -94,7 +112,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         binding.apply {
 
             attachments.setOnClickListener {
-                openImagePicker()
+                getImageFromGallery()
+//                openImagePicker()
             }
 
             backBtn.setOnClickListener {
@@ -108,25 +127,39 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 } else {
                     UserUtils.job_description = description
 
-                    when (data.category_id) {
-                        "1" -> {
-                            val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
-                            intent.putExtra(getString(R.string.service_provider), data)
-                            startActivity(intent)
-                        }
-                        "2" -> {
-                            bookBlueCollarServiceProvider()
-                        }
-                        "3" -> {
-                            UserUtils.finalAddressList = ArrayList()
-                            UserUtils.finalAddressList.add(Addresses(UserUtils.addressList[addressIndex].day.toInt(), UserUtils.job_description, addressIndex + 1, 2))
-                            addressIndex += 1
-                            if (addressIndex != UserUtils.addressList.size) {
-                                loadAddressOnUI()
-                            } else {
-                                bookMultiMoveServiceProvider()
+                    if (!FROM_BOOK_INSTANTLY) {
+                        when (data.category_id) {
+                            "1" -> {
+                                val intent = Intent(
+                                    this@BookingAttachmentsScreen,
+                                    BookingAddressScreen::class.java
+                                )
+                                intent.putExtra(getString(R.string.service_provider), data)
+                                startActivity(intent)
+                            }
+                            "2" -> {
+                                bookBlueCollarServiceProvider()
+                            }
+                            "3" -> {
+                                UserUtils.finalAddressList = ArrayList()
+                                UserUtils.finalAddressList.add(
+                                    Addresses(
+                                        UserUtils.addressList[addressIndex].day.toInt(),
+                                        UserUtils.job_description,
+                                        addressIndex + 1,
+                                        2
+                                    )
+                                )
+                                addressIndex += 1
+                                if (addressIndex != UserUtils.addressList.size) {
+                                    loadAddressOnUI()
+                                } else {
+                                    bookMultiMoveServiceProvider()
+                                }
                             }
                         }
+                    } else {
+                        startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
                     }
                 }
             }
@@ -151,13 +184,30 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt()
         )
         viewModel.multiMoveBooking(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
+                    if (FROM_BOOK_INSTANTLY) {
+                        if (PermissionUtils.isNetworkConnected(this)) {
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
+                        } else {
+                            snackBar(binding.nextBtn, "No Internet Connection!")
+                        }
+                    } else {
+                        UserUtils.sendFCMtoSelectedServiceProvider(
+                            this,
+                            UserUtils.getBookingId(this),
+                            "user"
+                        )
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -302,6 +352,16 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
+                    if (FROM_BOOK_INSTANTLY) {
+                        if (PermissionUtils.isNetworkConnected(this)) {
+                            FCMService.INSTANT_BOOKED = false
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                        } else {
+                            snackBar(binding.nextBtn, "No Internet Connection!")
+                        }
+                    } else {
+                        UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -360,6 +420,45 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         dialog.show()
     }
 
+    private fun serviceProviderAcceptDialog(context: Context) {
+        val dialog = BottomSheetDialog(context)
+        dialog.setCancelable(false)
+        val dialogView = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        Handler().postDelayed({
+            Checkout.preload(applicationContext)
+            makePayment()
+        }, 3000)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun serviceProviderRejectDialog(context: Context) {
+        val dialog = BottomSheetDialog(context)
+        dialog.setCancelable(false)
+        val dialogView = layoutInflater.inflate(R.layout.rejected_by_service_provider_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
+        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        yesBtn.setOnClickListener {
+            snackBar(yesBtn, "Post the Job")
+            dialog.dismiss()
+            finish()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
     private fun weAreSorryDialog() {
         val dialog = BottomSheetDialog(this)
         dialog.setCancelable(false)
@@ -378,11 +477,88 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         }
         noBtn.setOnClickListener {
             dialog.dismiss()
-            showWaitingForSPConfirmationDialog()
         }
         dialog.setContentView(dialogView)
         dialog.show()
     }
 
+    private fun makePayment() {
+        val checkout = Checkout()
+        checkout.setKeyID(getString(R.string.razorpay_api_key))
+        try {
+            val orderRequest = JSONObject()
+            orderRequest.put("currency", "INR")
+            orderRequest.put(
+                "amount",
+                data.per_hour.toInt() * 100
+            ) // 500rs * 100 = 50000 paisa passed
+            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+            orderRequest.put("theme.color", R.color.blue)
+            checkout.open(this, orderRequest)
+        } catch (e: Exception) {
+            toast(this, e.message!!)
+        }
+    }
+
+    override fun onPaymentSuccess(paymentResponse: String?) {
+        updateStatusInServer(paymentResponse, "Success")
+    }
+
+    private fun updateStatusInServer(paymentResponse: String?, status: String) {
+        val requestBody = PaymentConfirmReqModel(
+            data.per_hour,
+            UserUtils.getBookingId(this),
+            UserUtils.scheduled_date,
+            RetrofitBuilder.USER_KEY,
+            status,
+            paymentResponse!!,
+            data.users_id.toInt(),
+            UserUtils.time_slot_from,
+            UserUtils.getUserId(this).toInt()
+        )
+        viewModel.confirmPayment(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    finish()
+                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
+    }
+
+    override fun onPaymentError(p0: Int, paymentError: String?) {
+        updateStatusInServer("", "failure")
+        snackBar(binding.nextBtn, "Payment Failed. Please Try Again!")
+    }
+
+    override fun onBackPressed() {
+        finish()
+        if (FROM_BOOK_INSTANTLY) {
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        } else {
+            when(data.category_id) {
+                "3" -> {
+                    finish()
+                    startActivity(Intent(this, BookingAddressScreen::class.java))
+                }
+                else -> {
+                    finish()
+                    val intent = Intent(this, BookingDateAndTimeScreen::class.java)
+                    intent.putExtra(getString(R.string.service_provider), data)
+                    startActivity(intent)
+                }
+            }
+        }
+
+    }
 
 }

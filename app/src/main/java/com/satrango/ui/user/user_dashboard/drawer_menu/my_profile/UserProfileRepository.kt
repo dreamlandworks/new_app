@@ -11,8 +11,8 @@ import okhttp3.ResponseBody
 
 open class UserProfileRepository : BaseRepository() {
 
-    suspend fun userProfileInfo(context: Context): UserProfileResModel {
-        val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY)
+    suspend fun userProfileInfo(userId: String): UserProfileResModel {
+        val requestBody = BrowseCategoryReqModel(userId, RetrofitBuilder.USER_KEY)
         return RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
     }
 

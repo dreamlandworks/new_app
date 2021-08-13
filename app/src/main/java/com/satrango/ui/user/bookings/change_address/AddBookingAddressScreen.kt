@@ -26,9 +26,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
-import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
-import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -193,5 +191,9 @@ class AddBookingAddressScreen : AppCompatActivity() {
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, BookingAddressScreen::class.java))
     }
 }

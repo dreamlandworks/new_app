@@ -16,31 +16,41 @@
         <item>Dec</item>
     </string-array>
 
+    <string-array name="days">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
     <string-array name="bookingTimings">
-        <item>00:00\nto\n01:00</item>
-        <item>01:00\nto\n02:00</item>
-        <item>02:00\nto\n03:00</item>
-        <item>03:00\nto\n04:00</item>
-        <item>04:00\nto\n05:00</item>
-        <item>05:00\nto\n06:00</item>
-        <item>06:00\nto\n07:00</item>
-        <item>07:00\nto\n08:00</item>
-        <item>08:00\nto\n09:00</item>
-        <item>09:00\nto\n10:00</item>
-        <item>10:00\nto\n11:00</item>
-        <item>11:00\nto\n12:00</item>
-        <item>12:00\nto\n01:00</item>
-        <item>01:00\nto\n02:00</item>
-        <item>02:00\nto\n03:00</item>
-        <item>03:00\nto\n04:00</item>
-        <item>04:00\nto\n05:00</item>
-        <item>05:00\nto\n06:00</item>
-        <item>06:00\nto\n07:00</item>
-        <item>07:00\nto\n08:00</item>
-        <item>08:00\nto\n09:00</item>
-        <item>09:00\nto\n10:00</item>
-        <item>10:00\nto\n11:00</item>
-        <item>11:00\nto\n00:00</item>
+        <item>00:00:00\nto\n01:00:00</item>
+        <item>01:00:00\nto\n02:00:00</item>
+        <item>02:00:00\nto\n03:00:00</item>
+        <item>03:00:00\nto\n04:00:00</item>
+        <item>04:00:00\nto\n05:00:00</item>
+        <item>05:00:00\nto\n06:00:00</item>
+        <item>06:00:00\nto\n07:00:00</item>
+        <item>07:00:00\nto\n08:00:00</item>
+        <item>08:00:00\nto\n09:00:00</item>
+        <item>09:00:00\nto\n10:00:00</item>
+        <item>10:00:00\nto\n11:00:00</item>
+        <item>11:00:00\nto\n12:00:00</item>
+        <item>12:00:00\nto\n13:00:00</item>
+        <item>13:00:00\nto\n14:00:00</item>
+        <item>14:00:00\nto\n15:00:00</item>
+        <item>15:00:00\nto\n16:00:00</item>
+        <item>16:00:00\nto\n17:00:00</item>
+        <item>17:00:00\nto\n18:00:00</item>
+        <item>18:00:00\nto\n19:00:00</item>
+        <item>19:00:00\nto\n20:00:00</item>
+        <item>20:00:00\nto\n21:00:00</item>
+        <item>21:00:00\nto\n22:00:00</item>
+        <item>22:00:00\nto\n23:00:00</item>
+        <item>23:00:00\nto\n24:00:00</item>
     </string-array>
 
     <array name="initial_slider_values">

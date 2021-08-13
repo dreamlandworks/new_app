@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Satrango</string>
 
+    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>
+    <string name="fcm_server_key">AAAA3pCanB8:APA91bH5QKAcqGEKkcFbIDDpkrMSXEPLpst5MFq1_MXCojm-WFAh-NTU5wHxWao6dSVt7ywQDeMqpzHwnzlAQuNMfaxwp3nmgP4CINYfeAK4mzf6XnPyE_4xthRV6kaj3gVWntOBNCki</string>
     <string name="facebook_app_id">184529536828797</string>
     <string name="fb_login_protocol_scheme">fb184529536828797</string>
 
@@ -61,6 +63,8 @@
     <string name="login_as">Login As</string>
     <string name="user">User</string>
     <string name="service_provider">Service Provider</string>
+    <string name="selected_service_provider">Selected Service Provider</string>
+    <string name="selected_keyword_id">Selected Keyword Id</string>
     <string name="reset_password">Reset Password</string>
     <string name="please_enter_your_registered_mobile_number_and_we_will_send_you_otp_to_reset_your_password">Please enter your registered mobile number and we will send you OTP to reset your password</string>
     <string name="looks_like_you_haven_t_activated_your_service_provider_account_yet_would_you_like_to_do_it_now">Looks like you haven\t activated your Service Provider Account yet. Would you like to do it now?</string>
@@ -242,6 +246,11 @@
     <string name="black_color">#000000</string>
     <string name="_0">0</string>
     <string name="booking">Booking</string>
+    <string name="booking_id">Booking Id</string>
+    <string name="provider_action">Provider Action</string>
+    <string name="category_id">Category Id</string>
+    <string name="key">Key</string>
+    <string name="user_id">User Id</string>
     <string name="know_more">Know More</string>
     <string name="payment">Payment</string>
     <string name="confirmation">Confirmation</string>
@@ -345,10 +354,22 @@
     <string name="looks_like_we_still_don_t_have_service_provider_available_in_your_location">Looks like we still don\'t have Service Provider available in your location</string>
     <string name="would_you_like_to_post_the_job_and_get_lowest_bidders_for_your_work">Would you like to Post the Job and get lowest bidders for your work.</string>
     <string name="yes_book_for_me">Yes, Book for Me</string>
+    <string name="how_you_want_to_search_service_providers">How you want to Search Service Providers?</string>
+    <string name="view_results">View Results</string>
+    <string name="book_instantly">Book Instantly</string>
+    <string name="booking_details">Booking Details</string>
+    <string name="accept_to_get_booking">Accept to get Booking</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="token">Token</string>
+    <string name="scheduled_date">Scheduled Date</string>
+    <string name="estimate_time">Estimate Time</string>
+    <string name="job_details">Job Details</string>
+    <string name="job_description">Job Description</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
-<!--        <item>Take picture with camera</item>-->
+        <!--        <item>Take picture with camera</item>-->
     </string-array>
 
     <string-array name="genderGroup">
