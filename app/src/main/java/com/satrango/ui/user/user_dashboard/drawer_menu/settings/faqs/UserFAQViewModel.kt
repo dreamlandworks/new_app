@@ -1,10 +1,10 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu.faqs
+package com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.satrango.base.BaseRepository
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 
 class UserFAQViewModel(private val repository: UserFAQRepository): ViewModel() {
 
-    val faqsList = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.Data>>>()
+    val faqsList = MutableLiveData<NetworkResponse<List<Data>>>()
 
-    fun getFAQSList(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.Data>>> {
+    fun getFAQSList(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {

@@ -10,6 +10,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,11 +30,10 @@ import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
@@ -47,7 +47,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.util.*
@@ -69,6 +68,10 @@ class UserDashboardScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDashboardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
+            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+        }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -154,7 +157,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserMyAccountScreen::class.java))
                 }
                 R.id.userOptMyBooking -> {
-                    startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
+                    startActivity(Intent(this, MyBookingsScreen::class.java))
                 }
                 R.id.userOptMyJobPosts -> {
                     Toast.makeText(this, "My Job Posts Clicked", Toast.LENGTH_SHORT).show()
@@ -164,9 +167,6 @@ class UserDashboardScreen : AppCompatActivity() {
                 }
                 R.id.userOptReferEarn -> {
                     startActivity(Intent(this, UserReferAndEarn::class.java))
-                }
-                R.id.userOptFAQs -> {
-                    startActivity(Intent(this, UserFAQScreen::class.java))
                 }
                 R.id.userOptSettings -> {
                     startActivity(Intent(this, UserSettingsScreen::class.java))
@@ -305,6 +305,27 @@ class UserDashboardScreen : AppCompatActivity() {
             )
         }
 
+        private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+            val theta = lon1 - lon2
+            var dist = (Math.sin(deg2rad(lat1))
+                    * Math.sin(deg2rad(lat2))
+                    + (Math.cos(deg2rad(lat1))
+                    * Math.cos(deg2rad(lat2))
+                    * Math.cos(deg2rad(theta))))
+            dist = Math.acos(dist)
+            dist = rad2deg(dist)
+            dist *= 60 * 1.1515
+            return dist
+        }
+
+        private fun deg2rad(deg: Double): Double {
+            return deg * Math.PI / 180.0
+        }
+
+        private fun rad2deg(rad: Double): Double {
+            return rad * 180.0 / Math.PI
+        }
+
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
             try {
@@ -325,8 +346,7 @@ class UserDashboardScreen : AppCompatActivity() {
                 UserUtils.setPostalCode(context, postalCode)
                 UserUtils.setAddress(context, knownName)
                 binding.userLocation.text = UserUtils.getCity(context)
-                SearchServiceProvidersScreen.userLocationText =
-                    binding.userLocation.text.toString().trim()
+                SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
                 Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                     .show()

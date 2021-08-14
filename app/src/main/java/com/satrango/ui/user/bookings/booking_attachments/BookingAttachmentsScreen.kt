@@ -126,7 +126,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(nextBtn, "Enter Description")
                 } else {
                     UserUtils.job_description = description
-
                     if (!FROM_BOOK_INSTANTLY) {
                         when (data.category_id) {
                             "1" -> {

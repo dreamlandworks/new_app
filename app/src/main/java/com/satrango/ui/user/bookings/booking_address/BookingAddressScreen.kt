@@ -156,6 +156,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     snackBar(binding.nextBtn, "Select Address to Provider Service")
                 } else {
                     if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+
+                        val calender = Calendar.getInstance()
+                        UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
+                        UserUtils.started_at = currentDateAndTime()
+                        UserUtils.time_slot_from = (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
+
                         when (UserUtils.getSelectedKeywordCategoryId(this@BookingAddressScreen)) {
                             "1" -> {
                                 bookSingleMoveServiceProvider()
@@ -204,6 +210,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                 }
             }
+
+            backBtn.setOnClickListener {
+                onBackPressed()
+            }
         }
 
     }
@@ -228,8 +238,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 UserUtils.time_slot_to,
                 UserUtils.getUserId(this).toInt()
             )
-            val factory = ViewModelFactory(BookingRepository())
-            val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+            Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
+//            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -237,20 +247,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        val jsonResponse = JSONObject(it.data!!)
-                        Log.e("SINGLE MOVE", jsonResponse.toString())
-                        if (jsonResponse.getInt("status") == 200) {
-                            if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
-                                if (PermissionUtils.isNetworkConnected(this)) {
-                                    UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
-                                } else {
-                                    snackBar(binding.nextBtn, "No Internet Connection!")
-                                }
-                            } else {
-                                UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
-                            }
-                            showWaitingForSPConfirmationDialog()
+                        if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                            Log.e("SINGLE MOVE RESPONSE", it.data!!)
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                        } else {
+                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                         }
+                        showWaitingForSPConfirmationDialog()
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -276,9 +279,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 UserUtils.time_slot_to,
                 UserUtils.getUserId(this).toInt()
             )
-            Log.e("SINGLE MOVE", Gson().toJson(requestBody))
-            val factory = ViewModelFactory(BookingRepository())
-            val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+            Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -653,5 +654,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         })
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private fun currentDateAndTime(): String {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+    }
 
 }

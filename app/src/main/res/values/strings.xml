@@ -126,7 +126,7 @@
     <string name="rs_0_00">Rs 0.00</string>
     <string name="post_a_job">Post a Job</string>
     <string name="my_account">My Account</string>
-    <string name="my_booking">My Booking</string>
+    <string name="my_booking">My Bookings</string>
     <string name="my_job_posts">My Job Posts</string>
     <string name="my_profile">My Profile</string>
     <string name="settings">Settings</string>
@@ -366,10 +366,18 @@
     <string name="estimate_time">Estimate Time</string>
     <string name="job_details">Job Details</string>
     <string name="job_description">Job Description</string>
+    <string name="your_order_is_successfully_placed">Your order is successfully placed</string>
+    <string name="close">Close</string>
+    <string name="in_progress">In Progress</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
+    <string name="scheduled_in">Scheduled In:</string>
+    <string name="location">Location :</string>
+    <string name="no_booking_found">No Booking Found!</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
-        <!--        <item>Take picture with camera</item>-->
+        <item>Take picture with camera</item>
     </string-array>
 
     <string-array name="genderGroup">

@@ -24,8 +24,10 @@ import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQRepository
-import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.UserFAQViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProviderRepository
@@ -94,6 +96,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(BookingViewModel::class.java) -> return BookingViewModel(
                 baseRepository as BookingRepository
+            ) as T
+            modelClass.isAssignableFrom(MyBookingsViewModel::class.java) -> return MyBookingsViewModel(
+                baseRepository as MyBookingsRepository
             ) as T
         }
         return super.create(modelClass)

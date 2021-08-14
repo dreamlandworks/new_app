@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/purple_500"
-        app:title="User Reject"
+        app:title="User Request"
         app:titleTextColor="@color/white" />
 
     <LinearLayout
@@ -197,7 +197,7 @@
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"
-                android:text="@string/from"
+                android:text="@string/amount"
                 android:textSize="@dimen/_12sdp" />
 
             <TextView

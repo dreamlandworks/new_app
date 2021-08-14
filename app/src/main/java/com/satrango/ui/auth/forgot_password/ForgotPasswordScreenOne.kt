@@ -60,7 +60,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.getMail(this), RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel("", RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

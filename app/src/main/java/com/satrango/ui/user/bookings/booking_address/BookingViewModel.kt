@@ -1,6 +1,7 @@
 package com.satrango.ui.user.bookings.booking_address
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.satrango.remote.NetworkResponse
@@ -37,6 +38,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                 try {
                     val response = repository.bookSingleMoveServiceProvider(requestBody)
                     val jsonResponse = JSONObject(response.string())
+                    Log.e("BOOKING RESPONSE:", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
                         singleMoveBooking.value = NetworkResponse.Success(jsonResponse.getString("message"))

@@ -54,7 +54,7 @@
             app:boxStrokeColor="@color/purple_500">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fromDate"
+                android:id="@+id/fromTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableStart="@drawable/ic_timer"
@@ -79,7 +79,7 @@
             app:boxStrokeColor="@color/purple_500">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/toDate"
+                android:id="@+id/toTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_15sdp"

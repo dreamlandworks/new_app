@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
@@ -37,10 +39,12 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
+    private lateinit var marker: Marker
     private lateinit var binding: ActivityUserLocationSelectionScreenBinding
     private lateinit var viewModel: UserLocationChangeViewModel
     private lateinit var progressDialog: ProgressDialog
@@ -70,15 +74,52 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment =
-            supportFragmentManager.findFragmentById(com.satrango.R.id.map) as SupportMapFragment?
+            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
-
-        val factory = ViewModelFactory(UserLocationChangeRepository())
-        viewModel = ViewModelProvider(this, factory)[UserLocationChangeViewModel::class.java]
 
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
+
+        val factory = ViewModelFactory(UserLocationChangeRepository())
+        viewModel = ViewModelProvider(this, factory)[UserLocationChangeViewModel::class.java]
+
+        viewModel.allLocations(this).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    val locations = it.data!!
+                    val addresses = ArrayList<String>()
+                    locations.forEachIndexed { index, dataX ->
+                        if (locations[index].locality.isNotEmpty()) {
+                            addresses.add("${dataX.locality}, ${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
+                        } else {
+                            addresses.add("${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
+                        }
+                    }
+                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, addresses)
+                    binding.myLocation.setAdapter(adapter)
+                    binding.myLocation.threshold = 1
+                    binding.myLocation.setOnItemClickListener { parent, view, position, id ->
+                        val latLog = LatLng(locations[position].latitude.toDouble(), locations[position].longitude.toDouble())
+                        marker.position = latLog
+                        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLog, 16f))
+                        UserUtils.setCity(this, locations[position].city)
+                        UserUtils.setLatitude(this, locations[position].latitude)
+                        UserUtils.setLongitude(this, locations[position].longitude)
+                        UserUtils.setState(this, locations[position].state)
+                        UserUtils.setCountry(this, locations[position].country)
+                        UserUtils.setPostalCode(this, locations[position].zipcode)
+                        UserUtils.setAddress(this, locations[position].locality)
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    snackBar(binding.addBtn, it.message!!)
+                }
+            }
+        })
 
         if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
             fetchLocation(this)
@@ -99,15 +140,15 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
-        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null);
+        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+//        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
+//        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
 
-        mMap!!.addMarker(
-            MarkerOptions()
-                .position(latLong)
+        val markerOptions = MarkerOptions()
+            .position(latLong)
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-                .draggable(true)
-        )
+            .draggable(true)
+        marker = mMap!!.addMarker(markerOptions)!!
         mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
 //                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)

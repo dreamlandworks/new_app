@@ -291,9 +291,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
             binding.profilePic.setImageBitmap(imageBitmap)
-            val tempUri = getImageUri(applicationContext, imageBitmap!!)
             try {
-                imageStream = contentResolver.openInputStream(tempUri!!)
+                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
             } catch (e: Exception) {
                 snackBar(binding.applyBtn, e.message!!)
             }

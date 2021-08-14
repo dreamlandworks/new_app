@@ -13,7 +13,7 @@ object UserApiEndPoints {
     final const val USER_PROFILE_UPDATE = "user/update"
     final const val DELETE_USER_ADDRESS = "user/delete/address"
     final const val USER_GET_ALERTS = "user/alerts/get"
-    final const val USER_SEARCH_KEYWORDS = "user/autocomplete"
+    final const val USER_SEARCH_KEYWORDS = "user/phrase"
     final const val VERIFY_USER = "user/verify"
     final const val USER_KEYWORDS = "user/keywords"
     final const val USER_SEARCH_RESULTS = "user/search_result"
@@ -27,5 +27,7 @@ object UserApiEndPoints {
     final const val CONFIRM_PAYMENT = "fcm/booking_payments"
     final const val PROVIDER_RESPONSE = "user/sp_booking_response"
     final const val USER_DETAILS_ACCEPT = "user/booking_details"
+    final const val USER_BOOKING_DETAILS = "user/user_booking_details"
+    final const val AUTO_COMPLETE_ADDRESS = "user/autocomplete_address"
 
 }

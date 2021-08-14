@@ -10,6 +10,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -78,10 +79,20 @@ class ProviderDashboard : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
+            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+        }
+
         val factory = ViewModelFactory(ProviderDashboardRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderDashboardViewModel::class.java]
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, R.string.app_name)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolBar,
+            R.string.app_name,
+            R.string.app_name
+        )
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -268,7 +279,7 @@ class ProviderDashboard : AppCompatActivity() {
 
     private fun loadUserProfileData() {
         viewModel.userProfile(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
 
                 }
@@ -397,9 +408,26 @@ class ProviderDashboard : AppCompatActivity() {
             UserUtils.setAddress(this, knownName)
             binding.userLocation.text = UserUtils.getCity(this)
 
-            val requestBody = ProviderLocationReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.PROVIDER_KEY, 1, UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt())
+            val requestBody = ProviderLocationReqModel(
+                UserUtils.getAddress(this),
+                UserUtils.getCity(
+                    this
+                ),
+                UserUtils.getCountry(this),
+                RetrofitBuilder.PROVIDER_KEY,
+                1,
+                UserUtils.getPostalCode(
+                    this
+                ),
+                UserUtils.getState(this),
+                UserUtils.getLatitude(this),
+                UserUtils.getLongitude(this),
+                UserUtils.getUserId(
+                    this
+                ).toInt()
+            )
             viewModel.saveLocation(this, requestBody).observe(this, {
-                when(it) {
+                when (it) {
                     is NetworkResponse.Loading -> {
 
                     }
@@ -423,7 +451,10 @@ class ProviderDashboard : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(UserUtils.getUserId(this@ProviderDashboard), RetrofitBuilder.USER_KEY)
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(this@ProviderDashboard),
+                    RetrofitBuilder.USER_KEY
+                )
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
@@ -444,15 +475,31 @@ class ProviderDashboard : AppCompatActivity() {
 
                     updateHeaderDetails()
                 } else {
-                    Snackbar.make(UserDashboardScreen.binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        UserDashboardScreen.binding.navigationView,
+                        "Something went wrong!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: HttpException) {
-                Snackbar.make(UserDashboardScreen.binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    UserDashboardScreen.binding.navigationView,
+                    "Server Busy",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(UserDashboardScreen.binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    UserDashboardScreen.binding.navigationView,
+                    "Something Went Wrong",
+                    Snackbar.LENGTH_SHORT
+                )
                     .show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(UserDashboardScreen.binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    UserDashboardScreen.binding.navigationView,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

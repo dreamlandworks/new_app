@@ -89,7 +89,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            UserUtils.sendFCM(this@ViewUserBookingDetailsScreen, response.booking_details.fcm_token, "accept",  response.booking_details.amount + "|${response.booking_details.sp_id}|provider")
+                            Log.e("AMOUNT", response.booking_details.amount)
+                            UserUtils.sendFCM(this@ViewUserBookingDetailsScreen, response.booking_details.fcm_token, "accept",  "accept|" + response.booking_details.amount + "|${response.booking_details.sp_id}|provider")
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -136,7 +137,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.mobileNo.text = response.booking_details.mobile
         binding.scheduleDate.text = response.booking_details.scheduled_date
         binding.fromDate.text = response.booking_details.from
-        binding.amount.text = response.booking_details.amount
+        binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.estimateTime.text = response.booking_details.estimate_time + " " + response.booking_details.estimate_type
         binding.jobDetailsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

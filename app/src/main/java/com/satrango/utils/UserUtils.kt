@@ -3,6 +3,7 @@ package com.satrango.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.satrango.R
@@ -492,8 +493,7 @@ object UserUtils {
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
         val requestBody = FCMMessageReqModel(Notification("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
-            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-            Toast.makeText(context, response.string(), Toast.LENGTH_SHORT).show()
+            RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
         }
     }
 
@@ -506,6 +506,7 @@ object UserUtils {
         for (sp in spDetails.data) {
             for (spSlot in spDetails.slots_data) {
                 if (sp.users_id == spSlot.user_id) {
+                    Log.e("SEND FCM TO", sp.fcm_token)
                     sendFCM(context, sp.fcm_token, bookingId, from)
                 }
             }

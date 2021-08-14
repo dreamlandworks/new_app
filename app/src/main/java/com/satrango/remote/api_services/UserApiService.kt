@@ -15,7 +15,9 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.UserFAQResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
@@ -23,6 +25,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -153,5 +156,15 @@ interface UserApiService {
     suspend fun setProviderResponse(
         @Body json: ProviderResponseReqModel
     ): ResponseBody
+
+    @POST(UserApiEndPoints.USER_BOOKING_DETAILS)
+    suspend fun getMyBookingDetails(
+        @Body json: MyBookingsReqModel
+    ): MyBookingsResModel
+
+    @GET(UserApiEndPoints.AUTO_COMPLETE_ADDRESS)
+    suspend fun getAllLocations(
+        @Query("key") key: String
+    ): AllLocationsResModel
 
 }

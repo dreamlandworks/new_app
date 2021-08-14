@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu.faqs
+package com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
 import com.satrango.databinding.FaqRowBinding
-import com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models.Data
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.Data
 
 class UserFAQsAdapter(private val list: List<Data>) :
     RecyclerView.Adapter<UserFAQsAdapter.ViewHolder>() {

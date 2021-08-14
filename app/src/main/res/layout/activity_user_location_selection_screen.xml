@@ -26,12 +26,13 @@
             android:layout_margin="@dimen/_10sdp"
             android:elevation="@dimen/_10sdp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/myLocation"
                 android:layout_width="match_parent"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:drawableStart="@drawable/ic_location_searching"
-                android:drawablePadding="@dimen/_5sdp"
-                android:layout_height="wrap_content"/>
+                android:drawablePadding="@dimen/_10sdp"
+                android:layout_height="@dimen/_45sdp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

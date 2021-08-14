@@ -76,8 +76,8 @@ class ProviderSignUpThree : AppCompatActivity() {
     private fun addView() {
         val cricketerView: View = layoutInflater.inflate(R.layout.row_slot_item, null, false)
 
-        val fromDate = cricketerView.findViewById<TextInputEditText>(R.id.fromDate)
-        val toDate = cricketerView.findViewById<TextInputEditText>(R.id.toDate)
+        val fromDate = cricketerView.findViewById<TextInputEditText>(R.id.fromTime)
+        val toDate = cricketerView.findViewById<TextInputEditText>(R.id.toTime)
         val everyDay = cricketerView.findViewById<TextView>(R.id.everyDay)
         val weekDays = cricketerView.findViewById<TextView>(R.id.weekDays)
         val weekEnds = cricketerView.findViewById<TextView>(R.id.weekEnd)
@@ -422,8 +422,8 @@ class ProviderSignUpThree : AppCompatActivity() {
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)
 
-            val fromDate = slotView.findViewById<TextInputEditText>(R.id.fromDate)
-            val toDate = slotView.findViewById<TextInputEditText>(R.id.toDate)
+            val fromTime = slotView.findViewById<TextInputEditText>(R.id.fromTime)
+            val toTime = slotView.findViewById<TextInputEditText>(R.id.toTime)
 
             val everyDay = slotView.findViewById<TextView>(R.id.everyDay)
             val weekDays = slotView.findViewById<TextView>(R.id.weekDays)
@@ -439,47 +439,56 @@ class ProviderSignUpThree : AppCompatActivity() {
 
             val daysList = ArrayList<String>()
             var dayType = ""
-            var selectedFromDate = ""
-            var selectedToDate = ""
+            var selectedFromTime = ""
+            var selectedToTime = ""
 
-            if (fromDate.text.toString().isNotEmpty()) {
-                selectedFromDate = fromDate.text.toString().trim()
+            if (fromTime.text.toString().isNotEmpty()) {
+                selectedFromTime = fromTime.text.toString().trim()
             }
-            if (toDate.text.toString().isNotEmpty()) {
-                selectedToDate = toDate.text.toString().trim()
-            }
-            if (everyDay.currentTextColor == Color.WHITE) {
-                dayType = "EveryDay"
-            }
-            if (weekDays.currentTextColor == Color.WHITE) {
-                dayType = "WeekDays"
-            }
-            if (weekEnds.currentTextColor == Color.WHITE) {
-                dayType = "WeekEnds"
-            }
-            if (sunday.currentTextColor == Color.WHITE) {
-                daysList.add("1")
-            }
-            if (monday.currentTextColor == Color.WHITE) {
-                daysList.add("2")
-            }
-            if (tuesday.currentTextColor == Color.WHITE) {
-                daysList.add("3")
-            }
-            if (wednesday.currentTextColor == Color.WHITE) {
-                daysList.add("4")
-            }
-            if (thursday.currentTextColor == Color.WHITE) {
-                daysList.add("5")
-            }
-            if (friday.currentTextColor == Color.WHITE) {
-                daysList.add("6")
-            }
-            if (saturday.currentTextColor == Color.WHITE) {
-                daysList.add("7")
+            if (toTime.text.toString().isNotEmpty()) {
+                selectedToTime = toTime.text.toString().trim()
             }
 
-            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), selectedFromDate, selectedToDate, ))
+            val from = selectedFromTime.split(":")[0].toInt()
+            val to = selectedToTime.split(":")[0].toInt()
+
+            for (time in from..to) {
+                if (everyDay.currentTextColor == Color.WHITE) {
+                    dayType = "EveryDay"
+                }
+                if (weekDays.currentTextColor == Color.WHITE) {
+                    dayType = "WeekDays"
+                }
+                if (weekEnds.currentTextColor == Color.WHITE) {
+                    dayType = "WeekEnds"
+                }
+                if (sunday.currentTextColor == Color.WHITE) {
+                    daysList.add("1")
+                }
+                if (monday.currentTextColor == Color.WHITE) {
+                    daysList.add("2")
+                }
+                if (tuesday.currentTextColor == Color.WHITE) {
+                    daysList.add("3")
+                }
+                if (wednesday.currentTextColor == Color.WHITE) {
+                    daysList.add("4")
+                }
+                if (thursday.currentTextColor == Color.WHITE) {
+                    daysList.add("5")
+                }
+                if (friday.currentTextColor == Color.WHITE) {
+                    daysList.add("6")
+                }
+                if (saturday.currentTextColor == Color.WHITE) {
+                    daysList.add("7")
+                }
+
+                slotList.add(
+                    TimeslotResponse(TextUtils.join(",", daysList), "$from:${selectedFromTime.split(":")[1]}:${selectedFromTime.split(":")[2]}", "${from + 1}:${selectedFromTime.split(":")[1]}:${selectedFromTime.split(":")[2]}"))
+            }
+
+
         }
 
         return slotList

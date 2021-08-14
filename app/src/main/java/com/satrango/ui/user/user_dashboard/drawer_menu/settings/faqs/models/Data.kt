@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu.faqs.models
+package com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models
 
 data class Data(
     val answer: String,

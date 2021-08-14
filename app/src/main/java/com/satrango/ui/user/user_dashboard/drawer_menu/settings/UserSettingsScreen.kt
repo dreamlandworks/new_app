@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityUserSettingsScreenBinding
 import com.satrango.ui.auth.user_signup.TermsAndConditionScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -33,6 +34,7 @@ class UserSettingsScreen : AppCompatActivity() {
         binding.apply {
             termsAndConditions.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, TermsAndConditionScreen::class.java)) }
             privacyPolicy.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserPrivacyPolicyScreen::class.java)) }
+            faqs.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserFAQScreen::class.java)) }
         }
 
     }

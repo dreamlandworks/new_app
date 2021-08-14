@@ -63,6 +63,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.nextBtn.setOnClickListener {
             validateFields()
         }
+
+
     }
 
     @SuppressLint("SetTextI18n")

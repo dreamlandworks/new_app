@@ -227,7 +227,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dayRv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <TextView
@@ -241,7 +241,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timeRv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <TextView

@@ -51,11 +51,12 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen"></activity>
+        <activity android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen" />
         <activity android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen" />
         <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider" />
         <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.faqs.UserFAQScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
             android:screenOrientation="portrait" />
@@ -207,14 +208,13 @@
 
         <service android:name=".remote.fcm.FCMService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBSDwshVDwzn4ddIN728zPgFgarpjwjMQE" />
+            android:value="AIzaSyBFC4Jgdqm8a7tIeIVEJJL71KEHyuU1V0I" />
     </application>
 
 </manifest>

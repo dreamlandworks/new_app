@@ -43,13 +43,13 @@ class FCMService : FirebaseMessagingService() {
             } else {
                 if (!INSTANT_BOOKED) {
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                    intent.putExtra("response", it.body)
+                    intent.putExtra("response", it.title)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 } else {
                     if (it.body!!.split("|")[0] == "accept") {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                        intent.putExtra("response", it.body)
+                        intent.putExtra("response", it.title)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     }
@@ -93,20 +93,20 @@ class FCMService : FirebaseMessagingService() {
             builder = android.app.Notification.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.circlelogo)
                 .setContentTitle(getString(com.satrango.R.string.app_name))
-                .setContentText(body)
-//                .setContentText("You got a booking request!!!")
+//                .setContentText(body)
+                .setContentText("You got a booking request!!!")
                 .setSound(alarmSound)
                 .setContentIntent(contentIntent)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, com.satrango.R.drawable.circlelogo))
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.circlelogo))
         } else {
             builder = android.app.Notification.Builder(this)
                 .setSmallIcon(R.drawable.circlelogo)
                 .setContentTitle(getString(com.satrango.R.string.app_name))
-//                .setContentText("You got a booking request!!!")
-                .setContentText(body)
+                .setContentText("You got a booking request!!!")
+//                .setContentText(body)
                 .setSound(alarmSound)
                 .setContentIntent(contentIntent)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, com.satrango.R.drawable.circlelogo))
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.circlelogo))
         }
         notificationManager.notify(1234, builder.build())
     }

@@ -1,4 +1,4 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu.faqs
+package com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs
 
 import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity

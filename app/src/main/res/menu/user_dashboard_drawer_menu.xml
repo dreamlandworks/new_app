@@ -38,10 +38,6 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
     <item
-        android:id="@+id/userOptFAQs"
-        android:icon="@drawable/faqs"
-        android:title="@string/faqs" />
-    <item
         android:id="@+id/userOptLogOut"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout" />

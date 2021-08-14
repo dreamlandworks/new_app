@@ -84,16 +84,15 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
 
-                    keywordsList.forEach { keyword -> keywords.add(keyword.keyword) }
+                    keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
 
                     binding.searchBar.threshold = 1
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->
-                        keyword = keywordsList[position].keyword_id
+                        keyword = keywordsList[position].keywords_id
                         subCategoryId = keywordsList[position].subcategory_id
                         UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
-
                     }
                     progressDialog.dismiss()
                 }
