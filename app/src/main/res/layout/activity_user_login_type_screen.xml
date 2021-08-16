@@ -74,15 +74,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/btn_bg"
-            android:elevation="@dimen/_5sdp"
+            style="@style/filled_button_style"
             android:gravity="center_horizontal"
             android:letterSpacing=".1"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/user"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold" />
+            android:text="@string/user" />
 
         <TextView
             android:id="@+id/serviceProviderBtn"
@@ -90,15 +85,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/btn_bg"
+            style="@style/filled_button_style"
             android:elevation="@dimen/_5sdp"
             android:letterSpacing=".1"
             android:gravity="center_horizontal"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/service_provider"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold" />
+            android:text="@string/service_provider"/>
 
     </LinearLayout>
 
