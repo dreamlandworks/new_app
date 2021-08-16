@@ -357,6 +357,7 @@
     <string name="how_you_want_to_search_service_providers">How you want to Search Service Providers?</string>
     <string name="view_results">View Results</string>
     <string name="book_instantly">Book Instantly</string>
+    <string name="is_book_instant">Is Book Instant</string>
     <string name="booking_details">Booking Details</string>
     <string name="accept_to_get_booking">Accept to get Booking</string>
     <string name="accept">Accept</string>

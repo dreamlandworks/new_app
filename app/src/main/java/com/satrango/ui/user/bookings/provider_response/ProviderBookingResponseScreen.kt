@@ -20,6 +20,7 @@ import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -44,13 +45,12 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         initializeProgressDialog()
 
         if (response.split("|")[0] == "accept") {
-            FCMService.INSTANT_BOOKED = true
+            UserUtils.saveInstantBooking(this, true)
             binding.reject.visibility = View.GONE
             binding.paymentSuccessLayout.visibility = View.GONE
             binding.accept.visibility = View.VISIBLE
 
             amount = response.split("|")[1]
-            toast(this, amount)
             userId = response.split("|")[2]
 
             Handler().postDelayed({
@@ -64,6 +64,30 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
             binding.reject.visibility = View.VISIBLE
         }
 
+        binding.successCloseBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+
+        binding.acceptCloseBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+
+        binding.rejectCloseBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+
+        binding.noBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+
+        binding.yesBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
     }
 
     private fun makePayment() {
@@ -88,7 +112,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
     }
 
     override fun onPaymentError(p0: Int, error: String?) {
-        updateStatusInServer("", "failure")
+        updateStatusInServer("", "Failure")
         snackBar(binding.accept, "Payment Failed, Please try Again!")
     }
 

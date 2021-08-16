@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.user.bookings.booking_address.BookingAddressScreen">
 
-
     <include
         android:id="@+id/toolBar"
         layout="@layout/user_tool_bar" />
@@ -62,7 +61,7 @@
                                 android:singleLine="true"
                                 android:text="@string/app_name"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_14sdp"
+                                android:textSize="@dimen/text"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -72,7 +71,7 @@
                                 android:singleLine="true"
                                 android:text="@string/app_name"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_12sdp" />
+                                android:textSize="@dimen/sub_text" />
 
                         </LinearLayout>
 
@@ -92,7 +91,7 @@
                                 android:gravity="center_vertical"
                                 android:text="100.00"
                                 android:textColor="@color/red"
-                                android:textSize="@dimen/_14sdp"
+                                android:textSize="@dimen/text"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -100,7 +99,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/know_more"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_10sdp" />
+                                android:textSize="@dimen/sub_text" />
 
                         </LinearLayout>
 
@@ -128,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/booking"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/sub_text"
                 android:textStyle="bold" />
 
             <TextView
@@ -137,7 +136,7 @@
                 android:layout_marginHorizontal="@dimen/_20sdp"
                 android:text="@string/payment"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/sub_text"
                 android:textStyle="bold" />
 
             <TextView
@@ -145,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/confirmation"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/sub_text"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -172,6 +171,7 @@
                     android:layout_height="@dimen/_30sdp"
                     android:gravity="center"
                     android:text="@string/_1"
+                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -192,6 +192,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
+                    android:textSize="@dimen/sub_text"
                     android:text="@string/_2"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -212,6 +213,7 @@
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
                     android:text="@string/_3"
+                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -225,7 +227,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/address_of_service"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12sdp" />
+        android:textSize="@dimen/text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addressRv"
@@ -240,7 +242,7 @@
         android:layout_margin="@dimen/_10sdp"
         android:text="@string/or"
         android:textColor="@color/black"
-        android:textSize="@dimen/_14sdp" />
+        android:textSize="@dimen/text" />
 
     <TextView
         android:id="@+id/addNewAddress"
@@ -249,11 +251,8 @@
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/_10sdp"
         android:background="@drawable/blue_out_line"
-        android:paddingHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_10sdp"
-        android:text="@string/add_new_address"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_14sdp" />
+        style="@style/blue_outline_button_style"
+        android:text="@string/add_new_address" />
 
 
     <RelativeLayout
@@ -266,15 +265,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/blue_out_line"
-            android:elevation="@dimen/_3sdp"
+            style="@style/blue_outline_button_style"
             android:gravity="center"
             android:layout_margin="@dimen/_20sdp"
             android:layout_alignParentBottom="true"
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/back"
-            android:textColor="@color/blue"
-            android:textSize="@dimen/_14sdp" />
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/nextBtn"
@@ -282,16 +277,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:background="@drawable/category_bg"
-            android:elevation="@dimen/_3sdp"
+            style="@style/filled_button_style"
             android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:paddingVertical="@dimen/_10sdp"
             android:text="@string/next"
-            android:layout_margin="@dimen/_20sdp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            app:drawableEndCompat="@drawable/ic_baseline_skip_next_24" />
+            android:layout_margin="@dimen/_20sdp" />
 
     </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.ArrayAdapter
@@ -31,6 +32,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
@@ -139,11 +141,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
                     if (type == "ViewResults") {
-                        BookingAttachmentsScreen.FROM_BOOK_INSTANTLY = false
+                        UserUtils.saveFromInstantBooking(this, false)
                         binding.listCount.text = "Showing ${it.data.data.size} out of ${it.data.data.size} results"
                         binding.recyclerView.adapter = SearchServiceProviderAdapter(it.data.data)
                     } else {
-                        BookingAttachmentsScreen.FROM_BOOK_INSTANTLY = true
+                        UserUtils.saveFromInstantBooking(this, true)
                         binding.listCount.visibility = View.GONE
                         binding.recyclerView.visibility = View.GONE
                         startActivity(Intent(this, BookingAttachmentsScreen::class.java))

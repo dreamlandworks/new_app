@@ -48,7 +48,7 @@
                         android:singleLine="true"
                         android:text="Hi, "
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="@dimen/text"
                         android:textStyle="bold" />
 
 
@@ -58,7 +58,7 @@
                         android:paddingBottom="@dimen/_10sdp"
                         android:text="@string/what_do_you_need_today"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="@dimen/text"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/popular_services"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/browseAll"
@@ -123,7 +123,7 @@
                 android:layout_alignParentEnd="true"
                 android:text="@string/browse_all"
                 android:textColor="@color/red"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/sub_text"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
@@ -139,7 +139,7 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:text="@string/recommended_for_you"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 

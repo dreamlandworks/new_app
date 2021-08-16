@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_here"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/title" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/sign_up"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_28sdp"
+                    android:textSize="@dimen/sub_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -81,6 +81,7 @@
                     android:drawableEnd="@drawable/ic_graycheck"
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/first_name"
+                    android:textSize="@dimen/edit_text"
                     android:inputType="text"
                     android:maxLength="50"
                     android:maxLines="1"
@@ -107,6 +108,7 @@
                     android:drawableEnd="@drawable/ic_graycheck"
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/last_name"
+                    android:textSize="@dimen/edit_text"
                     android:inputType="text"
                     android:maxLength="50"
                     android:maxLines="1"
@@ -133,6 +135,7 @@
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/enter_mobile_number"
                     android:inputType="number"
+                    android:textSize="@dimen/edit_text"
                     android:maxLength="10"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -157,6 +160,7 @@
                     android:drawableEnd="@drawable/ic_graycheck"
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/email"
+                    android:textSize="@dimen/edit_text"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -173,6 +177,7 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/edit_text"
                     android:text="@string/male" />
 
                 <RadioButton
@@ -180,12 +185,14 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/edit_text"
                     android:text="@string/female" />
 
                 <RadioButton
                     android:id="@+id/others"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/edit_text"
                     android:layout_height="wrap_content"
                     android:text="@string/others" />
 
@@ -200,11 +207,11 @@
                 android:drawablePadding="@dimen/_10sdp"
                 android:focusable="true"
                 android:hint="@string/date_of_birth"
+                android:textSize="@dimen/edit_text"
                 android:isScrollContainer="true"
                 android:overScrollMode="always"
                 android:padding="@dimen/_14sdp"
                 android:singleLine="true"
-                android:textSize="16sp"
                 android:windowSoftInputMode="stateAlwaysVisible"
                 app:drawableLeftCompat="@drawable/ic_calenders"
                 app:drawableRightCompat="@drawable/ic_graycheck" />
@@ -229,6 +236,7 @@
                     android:id="@+id/termsAndConditions"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:textSize="@dimen/edit_text"
                     android:gravity="start|center_vertical"
                     android:text="@string/i_agree_to_the_terms_and_conditions_of_satrango_com" />
             </LinearLayout>
@@ -239,14 +247,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_15sdp"
+                style="@style/filled_button_style"
                 android:background="@drawable/btn_bg"
-                android:elevation="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_50sdp"
-                android:paddingVertical="@dimen/_10sdp"
                 android:text="@string/next_sm"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -262,7 +266,7 @@
                     android:gravity="center"
                     android:text="@string/already_have_account"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/loginBtn"
@@ -272,8 +276,8 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/_10sdp"
                     android:text="@string/log_in"
-                    android:textColor="@color/blue_500"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text"
+                    android:textColor="@color/blue_500" />
             </LinearLayout>
 
             <LinearLayout

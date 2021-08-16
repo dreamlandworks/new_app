@@ -60,6 +60,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpScreenThreeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         initializeProgressDialog()
         val factory = ViewModelFactory(ForgotPwdRepository())
@@ -86,7 +87,12 @@ class UserSignUpScreenThree : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (s.toString().contains("@") || s.toString().contains(".")) {
-                        email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_blue_24, 0, R.drawable.ic_greencheck, 0)
+                        email.setCompoundDrawablesWithIntrinsicBounds(
+                            R.drawable.ic_email_blue_24,
+                            0,
+                            R.drawable.ic_greencheck,
+                            0
+                        )
                     }
                 }
 
@@ -184,8 +190,14 @@ class UserSignUpScreenThree : AppCompatActivity() {
 
         val datePickerDialog = DatePickerDialog(
             this@UserSignUpScreenThree, { _, year, monthOfYear, dayOfMonth ->
-                binding.dateOfBirth.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_greencheck, 0)
+                binding.dateOfBirth.text =
+                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
                 selectedAge = getAge(year, monthOfYear + 1, dayOfMonth)
                 if (selectedAge < 13) {
                     snackBar(binding.dateOfBirth, "Age must be greater than 13 years")
@@ -275,9 +287,13 @@ class UserSignUpScreenThree : AppCompatActivity() {
     }
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(UserUtils.getMail(this), RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
+        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel(
+            UserUtils.getMail(this),
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getPhoneNo(this)
+        )
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -288,7 +304,12 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     if (it.message!! == "User Not Found") {
-                        startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
+                        startActivity(
+                            Intent(
+                                this@UserSignUpScreenThree,
+                                OTPVerificationScreen::class.java
+                            )
+                        )
                     } else {
                         snackBar(binding.nextBtn, it.message)
                     }

@@ -33,13 +33,11 @@ class MonthsAdapter(
             holder.binding.rowLayout.setBackgroundResource(R.drawable.category_bg)
             holder.binding.addressText.setBackgroundResource(R.drawable.category_bg)
             holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-            holder.binding.note.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
         } else {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_out_line)
             holder.binding.addressText.setBackgroundResource(R.drawable.blue_out_line)
             holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
-            holder.binding.note.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
         }
         if (listType == "AA") {

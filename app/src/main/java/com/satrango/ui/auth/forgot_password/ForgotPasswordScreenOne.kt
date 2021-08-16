@@ -60,9 +60,10 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
 
     private fun verifyUser() {
-        val forgotPwdVerifyReqModel = ForgotPwdVerifyReqModel("", RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
+        val forgotPwdVerifyReqModel =
+            ForgotPwdVerifyReqModel("", RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
         viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -95,7 +96,12 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s!!.length == 10) {
-                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_passwords, 0, R.drawable.ic_greencheck, 0)
+                    binding.mobileNo.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_passwords,
+                        0,
+                        R.drawable.ic_greencheck,
+                        0
+                    )
                 }
             }
 

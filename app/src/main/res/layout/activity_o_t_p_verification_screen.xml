@@ -8,8 +8,8 @@
     tools:context=".ui.auth.user_signup.otp_verification.OTPVerificationScreen">
 
     <RelativeLayout
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_250sdp"
         android:gravity="start|center"
         android:orientation="vertical"
         tools:ignore="RtlSymmetry">
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/one_step_more"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/title" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
                 android:letterSpacing=".06"
                 android:text="@string/to_go"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_22sdp"
+                android:textSize="@dimen/sub_title"
                 android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
@@ -62,7 +62,7 @@
             android:gravity="center"
             android:text="@string/verification_code"
             android:textColor="@color/black"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/title"
             android:textStyle="bold" />
 
         <TextView
@@ -70,9 +70,10 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/_15sdp"
             android:gravity="center"
+            android:lineSpacingExtra="@dimen/_5sdp"
             android:text="@string/please_type_verification_code_sent_to_mobile_number_email"
             android:textColor="@color/black"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/sub_text" />
 
         <LinearLayout
             android:id="@+id/layout_otp"
@@ -90,6 +91,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/pricebackground"
                 android:gravity="center"
+                android:textSize="@dimen/edit_text"
                 android:inputType="numberPassword"
                 android:maxLength="1"
                 android:textAlignment="center"
@@ -103,6 +105,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/pricebackground"
                 android:gravity="center"
+                android:textSize="@dimen/edit_text"
                 android:inputType="numberPassword"
                 android:maxLength="1"
                 android:textAlignment="center"
@@ -115,6 +118,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/pricebackground"
+                android:textSize="@dimen/edit_text"
                 android:gravity="center"
                 android:inputType="numberPassword"
                 android:maxLength="1"
@@ -128,6 +132,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/pricebackground"
+                android:textSize="@dimen/edit_text"
                 android:gravity="center"
                 android:imeOptions="actionDone"
                 android:inputType="numberPassword"
@@ -142,21 +147,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal"
-            android:padding="@dimen/_15sdp">
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_5sdp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/sub_text"
                 android:text="@string/didn_t_receive_otp" />
 
             <TextView
                 android:id="@+id/reSendOTP"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
                 android:text="@string/resend"
+                android:textSize="@dimen/sub_text"
                 android:textColor="@color/blue_700"
                 android:textStyle="bold" />
 
@@ -167,15 +175,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
+            style="@style/filled_button_style"
             android:background="@drawable/btn_bg"
-            android:elevation="@dimen/_5sdp"
             android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/_50sdp"
-            android:paddingVertical="@dimen/_10sdp"
             android:text="@string/next_sm"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
+            />
 
     </LinearLayout>
 </LinearLayout>

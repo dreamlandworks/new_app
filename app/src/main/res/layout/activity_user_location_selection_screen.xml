@@ -30,6 +30,8 @@
                 android:id="@+id/myLocation"
                 android:layout_width="match_parent"
                 android:paddingHorizontal="@dimen/_10sdp"
+                android:textSize="@dimen/edit_text"
+                android:singleLine="true"
                 android:drawableStart="@drawable/ic_location_searching"
                 android:drawablePadding="@dimen/_10sdp"
                 android:layout_height="@dimen/_45sdp"/>
@@ -55,14 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:layout_margin="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_10sdp"
                 android:text="@string/reset"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                style="@style/blue_outline_button_style" />
 
             <TextView
                 android:id="@+id/addBtn"
@@ -71,15 +68,10 @@
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg_sm"
                 android:layout_alignParentEnd="true"
-                android:elevation="@dimen/_5sdp"
+                style="@style/filled_button_style"
                 android:enabled="false"
                 android:layout_margin="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_30sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/add"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:text="@string/add" />
 
         </RelativeLayout>
 

@@ -95,7 +95,7 @@
                     android:singleLine="true"
                     android:text="@string/app_name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="@dimen/text"
                     android:textStyle="bold" />
 
                 <TextView
@@ -105,7 +105,7 @@
                     android:singleLine="true"
                     android:text="@string/app_name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/userDescription"
@@ -115,7 +115,7 @@
                     android:lines="2"
                     android:text="@string/app_name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/userDistance"
@@ -124,7 +124,7 @@
                     android:maxLines="2"
                     android:text="2.5kms"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
             </LinearLayout>
 
 
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/below"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:paddingBottom="@dimen/_10sdp"
                 android:orientation="horizontal">
 
@@ -141,26 +141,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_bg_sm"
-                    android:padding="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    style="@style/filled_button_style"
                     android:layout_centerInParent="true"
                     android:layout_alignParentTop="true"
-                    android:text="@string/book_later"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp" />
+                    android:text="@string/book_later" />
 
                 <TextView
                     android:id="@+id/bookNowBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_bg_pink_sm"
-                    android:padding="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    style="@style/filled_button_style"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/book_now"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp" />
+                    android:text="@string/book_now" />
 
             </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/right"
                 android:layout_width="wrap_content"
@@ -179,7 +178,7 @@
                     android:gravity="center_vertical"
                     android:text="100.00"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="@dimen/text"
                     android:textStyle="bold" />
 
                 <TextView
@@ -187,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/per_hour"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/userViewMore"
@@ -196,7 +195,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/view_more"
                     android:textColor="@color/blue"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </LinearLayout>
         </RelativeLayout>

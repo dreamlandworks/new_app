@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/one_more"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/title" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/step_to_earn"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_22sdp"
+                    android:textSize="@dimen/sub_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/my_tariff_is"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,6 +96,7 @@
                         android:hint="@string/per_hour"
                         android:inputType="number"
                         android:maxLines="1"
+                        android:textSize="@dimen/edit_text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,6 +119,7 @@
                         android:drawablePadding="@dimen/_10sdp"
                         android:hint="@string/per_day"
                         android:inputType="number"
+                        android:textSize="@dimen/edit_text"
                         android:maxLines="1"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -150,6 +152,7 @@
                         android:drawablePadding="@dimen/_10sdp"
                         android:editable="false"
                         android:hint="@string/min_charges"
+                        android:textSize="@dimen/edit_text"
                         android:inputType="number"
                         android:maxLines="1"
                         android:textColor="@color/black" />
@@ -173,6 +176,7 @@
                         android:layout_height="match_parent"
                         android:drawablePadding="@dimen/_10sdp"
                         android:editable="false"
+                        android:textSize="@dimen/edit_text"
                         android:hint="@string/extra_charge"
                         android:inputType="number"
                         android:maxLines="1"
@@ -207,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/my_availability"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -215,7 +219,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text="@string/you_can_always_use_offline_when_busy"
                     android:textColor="@color/gray"
-                    android:textSize="@dimen/_9sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </LinearLayout>
 
@@ -241,7 +245,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/add_more_slots"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/text"
                 app:drawableEndCompat="@drawable/ic_addmore" />
 
         </LinearLayout>

@@ -46,7 +46,6 @@ class MyBookingsScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-
         updateUI("InProgress")
         binding.inProgressBtn.setOnClickListener {
             binding.inProgressBtn.setBackgroundResource(R.drawable.btn_bg)

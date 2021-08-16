@@ -32,16 +32,12 @@ class FCMService : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
 
-    companion object {
-        var INSTANT_BOOKED = false
-    }
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
             if (it.title == "user") {
                 addNotification(it.body)
             } else {
-                if (!INSTANT_BOOKED) {
+                if (!UserUtils.getInstantBooking(this)) {
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                     intent.putExtra("response", it.title)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

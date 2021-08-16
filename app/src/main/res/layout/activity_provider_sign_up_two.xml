@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/two_more"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/title" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/steps_to_earn"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_22sdp"
+                    android:textSize="@dimen/sub_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -79,6 +79,7 @@
                     android:hint="@string/keywords_skills"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:inputType="text"
+                    android:textSize="@dimen/edit_text"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,6 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:textSize="@dimen/edit_text"
                     android:hint="@string/about_me_min_250_words"
                     android:inputType="textMultiLine"
                     android:lines="10" />

@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_back"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/title" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/log_in"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_28sdp"
+                    android:textSize="@dimen/sub_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -80,7 +80,8 @@
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/mobile_no"
                     android:inputType="phone"
-                    android:maxLength="10" />
+                    android:maxLength="10"
+                    android:textSize="@dimen/edit_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,9 +103,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_passwords"
-                    android:drawablePadding="@dimen/_10sdp"
+                    android:drawablePadding="@dimen/_12sdp"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:textSize="@dimen/edit_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,38 +117,36 @@
                 <CheckBox
                     android:id="@+id/rememberMe"
                     android:layout_width="wrap_content"
-                    android:checked="true"
                     android:layout_height="wrap_content"
-                    android:text="@string/remember_me" />
+                    android:checked="true"
+                    android:text="@string/remember_me"
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/forgetPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="@dimen/_10sdp"
                     android:text="@string/forget_password"
                     android:textColor="@color/gray"
+                    android:textSize="@dimen/sub_text"
                     tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/signInBtn"
+                style="@style/filled_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg"
-                android:elevation="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_50sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/login"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:text="@string/login" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -160,7 +160,7 @@
                     android:padding="@dimen/_10sdp"
                     android:text="@string/already_have_account"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/signUpBtn"
@@ -169,7 +169,7 @@
                     android:paddingVertical="@dimen/_10sdp"
                     android:text="@string/create_account"
                     android:textColor="@color/blue_500"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </LinearLayout>
 

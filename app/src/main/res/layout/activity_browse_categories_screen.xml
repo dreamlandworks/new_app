@@ -24,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryRV"
         android:layout_width="match_parent"
-        android:paddingHorizontal="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
         android:layout_height="wrap_content"/>
 
     <LinearLayout

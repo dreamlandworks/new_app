@@ -36,7 +36,7 @@ class SearchServiceProviderAdapter(
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
             binding.costPerHour.text = data.per_hour
-            binding.userDistance.text = "${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.postcode}"
+            binding.userDistance.text = "${UserUtils.distance(UserUtils.getLatitude(binding.profilePic.context).toDouble(), UserUtils.getLongitude(binding.profilePic.context).toDouble(), data.latitude.toDouble(), data.longitude.toDouble())} Kms"
 
             val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(binding.below.context), SearchServiceProviderResModel::class.java)
             for (sp in spDetails.slots_data) {

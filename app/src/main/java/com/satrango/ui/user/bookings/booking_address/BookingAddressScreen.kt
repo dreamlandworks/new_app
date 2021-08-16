@@ -75,7 +75,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
         initializeProgressDialog()
-        if (!BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+        if (!UserUtils.getFromInstantBooking(this)) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             updateUI(data)
         } else {
@@ -155,7 +155,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 if (UserUtils.temp_address_id.isEmpty() && UserUtils.address_id.isEmpty()) {
                     snackBar(binding.nextBtn, "Select Address to Provider Service")
                 } else {
-                    if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
 
                         val calender = Calendar.getInstance()
                         UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
@@ -220,7 +220,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
     @SuppressLint("SimpleDateFormat")
     private fun bookSingleMoveServiceProvider() {
-        if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+        if (UserUtils.getFromInstantBooking(this)) {
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 "0",
@@ -247,7 +247,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                        if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                         } else {
@@ -290,7 +290,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                         val jsonResponse = JSONObject(it.data!!)
                         Log.e("SINGLE MOVE", jsonResponse.toString())
                         if (jsonResponse.getInt("status") == 200) {
-                            if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                            if (UserUtils.getFromInstantBooking(this)) {
                                 if (PermissionUtils.isNetworkConnected(this)) {
                                     UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                                 } else {
@@ -386,7 +386,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
     override fun selectedMonth(position: Int, listType: String) {
         val tempAddress = arrayListOf<MonthsModel>()
-        if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+        if (UserUtils.getFromInstantBooking(this)) {
             if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
                 addressList.onEachIndexed { index, month ->
                     if (index == position || month.isSelected) {
@@ -444,7 +444,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
     }
 
     override fun onBackPressed() {
-        if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+        if (UserUtils.getFromInstantBooking(this)) {
             startActivity(Intent(this, BookingAttachmentsScreen::class.java))
         } else {
             when (data.category_id) {
@@ -588,7 +588,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
-                    if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                    if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                         } else {
@@ -636,7 +636,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
-                    if (BookingAttachmentsScreen.FROM_BOOK_INSTANTLY) {
+                    if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this),"user")
                         } else {

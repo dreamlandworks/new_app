@@ -95,7 +95,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-        if (!FROM_BOOK_INSTANTLY) {
+        if (!UserUtils.getFromInstantBooking(this)) {
             initializeProgressDialog()
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             updateUI(data)
@@ -126,7 +126,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(nextBtn, "Enter Description")
                 } else {
                     UserUtils.job_description = description
-                    if (!FROM_BOOK_INSTANTLY) {
+                    if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
                         when (data.category_id) {
                             "1" -> {
                                 val intent = Intent(
@@ -190,7 +190,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
-                    if (FROM_BOOK_INSTANTLY) {
+                    if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
@@ -351,9 +351,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
-                    if (FROM_BOOK_INSTANTLY) {
+                    if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
-                            FCMService.INSTANT_BOOKED = false
+                            UserUtils.saveInstantBooking(this, false)
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -541,7 +541,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     override fun onBackPressed() {
         finish()
-        if (FROM_BOOK_INSTANTLY) {
+        if (UserUtils.getFromInstantBooking(this)) {
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         } else {
             when(data.category_id) {

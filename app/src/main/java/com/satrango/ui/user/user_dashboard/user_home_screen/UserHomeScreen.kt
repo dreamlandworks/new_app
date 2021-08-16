@@ -69,7 +69,8 @@ class UserHomeScreen :
             startActivity(Intent(requireContext(), BrowseCategoriesScreen::class.java))
         }
 
-        binding.categoryRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.categoryRV.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         viewModel.getBrowseCategories(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -93,7 +94,8 @@ class UserHomeScreen :
     }
 
     private fun updatePopularServices(categoryId: String) {
-        binding.userPopularServicesRv.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        binding.userPopularServicesRv.layoutManager =
+            GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         viewModel.getPopularServicesList(requireContext(), categoryId).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -131,9 +133,23 @@ class UserHomeScreen :
         val tempList = ArrayList<BrowserCategoryModel>()
         categoriesList.forEachIndexed { index, browserCategoryModel ->
             if (position == index) {
-                tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, true))
+                tempList.add(
+                    BrowserCategoryModel(
+                        browserCategoryModel.category,
+                        browserCategoryModel.id,
+                        browserCategoryModel.image,
+                        true
+                    )
+                )
             } else {
-                tempList.add(BrowserCategoryModel(browserCategoryModel.category, browserCategoryModel.id, browserCategoryModel.image, false))
+                tempList.add(
+                    BrowserCategoryModel(
+                        browserCategoryModel.category,
+                        browserCategoryModel.id,
+                        browserCategoryModel.image,
+                        false
+                    )
+                )
             }
         }
         if (position == categoriesList.size - 1) {

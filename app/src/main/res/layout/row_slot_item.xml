@@ -20,8 +20,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:text="@string/time_slot"
             android:textColor="@color/black"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/text"/>
 
         <ImageView
             android:id="@+id/image_remove"
@@ -61,6 +60,7 @@
                 android:editable="false"
                 android:gravity="center"
                 android:hint="@string/from"
+                android:textSize="@dimen/edit_text"
                 android:maxLines="1"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,6 +86,7 @@
                 android:drawableStart="@drawable/ic_timer"
                 android:editable="false"
                 android:gravity="center"
+                android:textSize="@dimen/edit_text"
                 android:hint="@string/to"
                 android:maxLines="1"
                 android:textColor="@color/black"/>

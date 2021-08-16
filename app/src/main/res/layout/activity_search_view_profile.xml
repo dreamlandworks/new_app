@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context=".ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                                         android:singleLine="true"
                                         android:text="@string/app_name"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp"
+                                        android:textSize="@dimen/text"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -82,7 +82,7 @@
                                         android:singleLine="true"
                                         android:text="@string/app_name"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/sub_text" />
 
                                 </LinearLayout>
 
@@ -108,7 +108,7 @@
                                             android:gravity="center_vertical"
                                             android:text="100.00"
                                             android:textColor="@color/pink"
-                                            android:textSize="@dimen/_14sdp"
+                                            android:textSize="@dimen/text"
                                             android:textStyle="bold" />
 
                                         <TextView
@@ -204,6 +204,7 @@
                             android:gravity="center"
                             android:text="24"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/sub_text"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -225,6 +226,7 @@
                             android:gravity="center"
                             android:text="4.5"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/sub_text"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -246,6 +248,7 @@
                             android:gravity="center"
                             android:text="12"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/sub_text"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -266,6 +269,7 @@
                             android:gravity="center"
                             android:text="35"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/sub_text"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -278,7 +282,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/professional_info"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp"
+                android:textSize="@dimen/text"
                 android:textStyle="bold" />
 
             <View
@@ -297,7 +301,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/experience"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:id="@+id/experience"
@@ -307,7 +311,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -315,7 +319,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
                     android:text="@string/languages_known"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:id="@+id/languages"
@@ -326,7 +330,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -334,7 +338,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:text="@string/distance"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:id="@+id/distance"
@@ -345,7 +349,7 @@
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
             </RelativeLayout>
 
             <TextView
@@ -353,7 +357,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:text="@string/job_skills"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/skills"
@@ -363,7 +367,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -371,7 +375,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/about_me"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/aboutMe"
@@ -381,7 +385,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -394,7 +398,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/overall_rating"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:id="@+id/overAllReviews"
@@ -404,7 +408,7 @@
                     android:gravity="center"
                     android:text="4.5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/text"
                     app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
                 <TextView
@@ -415,7 +419,7 @@
                     android:gravity="center"
                     android:text="223"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/text"
                     app:drawableEndCompat="@drawable/ic_baseline_people_24" />
 
             </RelativeLayout>
@@ -430,7 +434,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/professionalism"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <RatingBar
                     style="?android:attr/ratingBarStyleSmall"
@@ -441,7 +445,7 @@
                     android:gravity="center"
                     android:rating="4.5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/sub_text"
                     android:theme="@style/RatingBar"
                     app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
@@ -454,7 +458,7 @@
                     android:gravity="center"
                     android:text="4.5/5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </RelativeLayout>
 
@@ -468,7 +472,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/behaviour"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <RatingBar
                     style="?android:attr/ratingBarStyleSmall"
@@ -479,7 +483,7 @@
                     android:gravity="center"
                     android:rating="4"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/sub_text"
                     android:theme="@style/RatingBar"
                     app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
@@ -492,7 +496,7 @@
                     android:gravity="center"
                     android:text="4/5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </RelativeLayout>
 
@@ -506,7 +510,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/satisfaction"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <RatingBar
                     style="?android:attr/ratingBarStyleSmall"
@@ -517,7 +521,7 @@
                     android:gravity="center"
                     android:rating="5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/sub_text"
                     android:theme="@style/RatingBar"
                     app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
@@ -530,7 +534,7 @@
                     android:gravity="center"
                     android:text="5/5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </RelativeLayout>
 
@@ -544,7 +548,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/requisite_skills"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <RatingBar
                     style="?android:attr/ratingBarStyleSmall"
@@ -555,7 +559,7 @@
                     android:gravity="center"
                     android:rating="5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/sub_text"
                     android:theme="@style/RatingBar"
                     app:drawableEndCompat="@drawable/ic_baseline_star_24" />
 
@@ -568,7 +572,7 @@
                     android:gravity="center"
                     android:text="5/5"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -596,7 +600,7 @@
                 android:padding="@dimen/_10sdp"
                 android:text="@string/book_later"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/bookNowBtn"
@@ -608,7 +612,7 @@
                 android:padding="@dimen/_10sdp"
                 android:text="@string/book_now"
                 android:textColor="@color/gray"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 

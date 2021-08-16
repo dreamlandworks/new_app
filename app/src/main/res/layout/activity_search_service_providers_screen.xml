@@ -81,20 +81,18 @@
             android:hint="@string/search_in_thousands_of_services"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/edit_text"
             tools:ignore="LabelFor" />
 
         <TextView
             android:id="@+id/goBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold"
+            android:paddingHorizontal="@dimen/_15sdp"
             android:text="@string/go"
+            android:layout_gravity="center_vertical"
+            style="@style/filled_button_style"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_10sdp"
             android:background="@drawable/btn_bg_sm"/>
 
     </LinearLayout>
@@ -110,6 +108,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_alignParentStart="true"
+            android:textSize="@dimen/sub_text"
             android:text="@string/showing_0_out_of_0_results"/>
 
         <ImageView

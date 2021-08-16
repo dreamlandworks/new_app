@@ -117,7 +117,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            UserUtils.sendFCM(this@ViewUserBookingDetailsScreen, response.booking_details.fcm_token, "reject",   "provider")
+                            UserUtils.sendFCM(this@ViewUserBookingDetailsScreen, response.booking_details.fcm_token, "reject",   "reject|" + response.booking_details.amount + "|${response.booking_details.sp_id} + |provider")
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()

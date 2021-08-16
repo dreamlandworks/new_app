@@ -34,11 +34,11 @@ class BrowseCategoriesAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
         if (list[position].selected) {
-            holder.binding.rootLayout.setBackgroundResource(R.drawable.category_bg)
+            holder.binding.title.setBackgroundResource(R.drawable.category_bg)
         } else {
             holder.binding.title.setTextColor(Color.parseColor("#000000"))
         }
-        holder.itemView.setOnClickListener {
+        holder.binding.title.setOnClickListener {
             browseCategoriesInterface.selectedCategory(list[position].id, position)
         }
     }

@@ -66,7 +66,7 @@
                                     android:singleLine="true"
                                     android:text="@string/app_name"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/_14sdp"
+                                    android:textSize="@dimen/text"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -76,7 +76,7 @@
                                     android:singleLine="true"
                                     android:text="@string/app_name"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/_12sdp" />
+                                    android:textSize="@dimen/sub_text" />
 
                             </LinearLayout>
 
@@ -96,7 +96,7 @@
                                     android:gravity="center_vertical"
                                     android:text="00.00"
                                     android:textColor="@color/red"
-                                    android:textSize="@dimen/_14sdp"
+                                    android:textSize="@dimen/text"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -104,7 +104,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/know_more"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/_10sdp" />
+                                    android:textSize="@dimen/sub_text" />
 
                             </LinearLayout>
 
@@ -229,7 +229,7 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:text="@string/work_description"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -244,6 +244,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:lines="5"
+                android:textSize="@dimen/edit_text"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -277,7 +278,7 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:text="@string/attachments"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/attachmentsRV"
@@ -305,16 +306,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/blue_out_line"
-                android:elevation="@dimen/_3sdp"
+                style="@style/blue_outline_button_style"
                 android:gravity="center"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/back"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/_14sdp" />
+                android:layout_margin="@dimen/_20sdp"
+                android:text="@string/back" />
 
             <TextView
                 android:id="@+id/nextBtn"
@@ -322,17 +318,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                style="@style/filled_button_style"
                 android:background="@drawable/category_bg"
-                android:elevation="@dimen/_3sdp"
-                android:gravity="center"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/next"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                app:drawableEndCompat="@drawable/ic_baseline_skip_next_24" />
+                android:layout_margin="@dimen/_20sdp"
+                android:text="@string/next" />
 
         </RelativeLayout>
     </LinearLayout>

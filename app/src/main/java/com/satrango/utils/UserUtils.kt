@@ -12,11 +12,14 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -416,6 +419,32 @@ object UserUtils {
         editor.commit()
     }
 
+    fun getInstantBooking(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.book_instantly), false)
+    }
+
+    fun saveInstantBooking(context: Context, fullName: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.book_instantly), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromInstantBooking(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.book_instantly), false)
+    }
+
+    fun saveFromInstantBooking(context: Context, fullName: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.is_book_instant), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
     fun getProviderAction(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.provider_action), "")!!
@@ -528,6 +557,33 @@ object UserUtils {
                 }
             }
         }
+    }
+
+    fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val theta = lon1 - lon2
+        var dist = (Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + (Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta))))
+        dist = Math.acos(dist)
+        dist = rad2deg(dist)
+        dist *= 60 * 1.1515
+        return roundOffDecimal(dist * 1.609344) // miles to kms
+    }
+
+    private fun deg2rad(deg: Double): Double {
+        return deg * Math.PI / 180.0
+    }
+
+    private fun rad2deg(rad: Double): Double {
+        return rad * 180.0 / Math.PI
+    }
+
+    fun roundOffDecimal(number: Double): Double {
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
+        return df.format(number).toDouble()
     }
 
 }

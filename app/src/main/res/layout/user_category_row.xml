@@ -4,11 +4,6 @@
     android:id="@+id/rootLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:layout_marginHorizontal="@dimen/_5sdp"
-    android:layout_marginVertical="@dimen/_10sdp"
     android:orientation="vertical">
 
     <TextView
@@ -16,10 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingVertical="@dimen/_5sdp"
-        android:paddingHorizontal="@dimen/_15sdp"
-        android:lines="2"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_12sdp" />
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="@dimen/_5sdp"
+        style="@style/filled_button_style"
+        android:textSize="@dimen/sub_text"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:text="@string/app_name" />
 </LinearLayout>

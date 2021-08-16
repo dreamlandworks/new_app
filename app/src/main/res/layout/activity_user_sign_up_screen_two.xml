@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_here"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/title" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/sign_up"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_28sdp"
+                    android:textSize="@dimen/sub_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -64,7 +64,7 @@
                 android:gravity="center"
                 android:text="@string/welcome_to_on_board"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_18sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/userName"
@@ -73,7 +73,7 @@
                 android:gravity="center"
                 android:text="@string/user"
                 android:textColor="@color/blue_500"
-                android:textSize="@dimen/_18sdp" />
+                android:textSize="@dimen/text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,6 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center|start"
+                    android:textSize="@dimen/sub_text"
                     android:text="@string/fetching_location_please_wait" />
 
             </LinearLayout>
@@ -103,6 +104,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_30sdp"
                 android:gravity="center"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:textSize="@dimen/sub_text"
                 android:text="@string/thanks_for_your_interest_but_we_fear_as_we_may_not_be_able_to_cater_some_services_in_your_area_please_do_not_mind_and_please_keep_up_with_us_and_proceed_to_register"
                 android:textColor="@color/red" />
 
@@ -111,15 +114,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                style="@style/filled_button_style"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/btn_bg"
-                android:elevation="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_50sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/next_sm"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:text="@string/next_sm" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,7 +133,7 @@
                     android:gravity="center"
                     android:text="@string/already_have_account"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/loginBtn"
@@ -146,7 +144,7 @@
                     android:padding="@dimen/_10sdp"
                     android:text="@string/log_in"
                     android:textColor="@color/blue_500"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/sub_text" />
             </LinearLayout>
 
             <LinearLayout

@@ -80,7 +80,7 @@ class ProviderDashboard : AppCompatActivity() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
         val factory = ViewModelFactory(ProviderDashboardRepository())
