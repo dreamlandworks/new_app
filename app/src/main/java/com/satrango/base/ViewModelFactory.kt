@@ -24,6 +24,8 @@ import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQRepository
@@ -99,6 +101,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(MyBookingsViewModel::class.java) -> return MyBookingsViewModel(
                 baseRepository as MyBookingsRepository
+            ) as T
+            modelClass.isAssignableFrom(MyAccountViewModel::class.java) -> return MyAccountViewModel(
+                baseRepository as MyAccountRepository
             ) as T
         }
         return super.create(modelClass)

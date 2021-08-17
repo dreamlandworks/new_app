@@ -59,6 +59,7 @@ class UserHomeScreen :
 
         binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
+                UserUtils.saveSearchFilter(requireContext(), "")
                 startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
             }
         }

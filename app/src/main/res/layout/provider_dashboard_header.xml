@@ -114,6 +114,7 @@
                     android:layout_marginHorizontal="@dimen/_5sdp"
                     android:textOff="@string/u"
                     android:textOn="@string/s"
+                    android:checked="true"
                     android:textSize="@dimen/_5sdp"
                     android:thumb="@drawable/custom_thumb_provider_header"
                     app:showText="true"

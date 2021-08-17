@@ -21,6 +21,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
+                    myBookings.value = NetworkResponse.Loading()
                     val response = repository.getMyBookings(requestBody)
                     if (response.status == 200) {
                         myBookings.value = NetworkResponse.Success(response.booking_details)

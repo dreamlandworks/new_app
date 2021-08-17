@@ -54,7 +54,7 @@
     </string-array>
 
     <array name="initial_slider_values">
-        <item>300</item>
-        <item>3000</item>
+        <item>250</item>
+        <item>2500</item>
     </array>
 </resources>

@@ -342,6 +342,7 @@
     <string name="google_id">googleId</string>
     <string name="twitter">twitterId</string>
     <string name="search_results_id">search_results_id</string>
+    <string name="search_filter">search_filter</string>
     <string name="temp_address_id">temp_address_id</string>
     <string name="at">at</string>
     <string name="please_wait">Please Wait…</string>
@@ -375,6 +376,19 @@
     <string name="scheduled_in">Scheduled In:</string>
     <string name="location">Location :</string>
     <string name="no_booking_found">No Booking Found!</string>
+    <string name="we_are_very_sorry_and_feel_regretted_for_the_inconvenience_occurred_please_let_us_help_you_in_finding_a_suitable_solution">We are very Sorry and feel regretted for the inconvenience occurred. Please let us help you in finding a suitable solution.</string>
+    <string name="_250_00">250.00</string>
+    <string name="_1_00_000_00">1,00,000.00</string>
+    <string name="my_problem_is_related_to">My Problem is related to</string>
+    <string name="booking_job_posting">Booking/Job Posting</string>
+    <string name="fund_transfers">Fund Transfers</string>
+    <string name="bugs_in_application">Bugs in Application</string>
+    <string name="submit">Submit</string>
+    <string name="raise_a_complaint">Raise a complaint</string>
+    <string name="no_transactions_found">No Transactions Found</string>
+    <string name="we_are_very_happy_and_thankful_for_your_feed_back_and_suggestions_which_will_in_turn_help_us_with_improvements_for_better_user_experience">We are very happy and Thankful for your feed back and suggestions which will in-turn help us with improvements for better user experience.</string>
+    <string name="about_us">About Us (250 Words)</string>
+    <string name="_0_km">0 km</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

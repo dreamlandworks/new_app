@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sort_results_by"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/clearAll"
@@ -35,7 +35,7 @@
                 android:layout_alignParentEnd="true"
                 android:text="@string/clear_all"
                 android:textColor="@color/red"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
         </RelativeLayout>
 
@@ -48,29 +48,25 @@
                 android:id="@+id/rating"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
+                android:background="@drawable/btn_bg_sm_blue_border"
                 android:text="@string/rating"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                style="@style/blue_outline_button_style" />
 
             <TextView
                 android:id="@+id/ranking"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/ranking"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                style="@style/blue_outline_button_style"
+                android:text="@string/ranking" />
 
             <TextView
                 android:id="@+id/nearMe"
@@ -78,13 +74,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_weight="1"
+                style="@style/blue_outline_button_style"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/near_me"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:text="@string/near_me" />
 
         </LinearLayout>
 
@@ -100,13 +94,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
+                style="@style/blue_outline_button_style"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/price_low_to_high"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:text="@string/price_low_to_high" />
 
             <TextView
                 android:id="@+id/priceHighToLow"
@@ -114,13 +106,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_weight="1"
+                android:paddingHorizontal="@dimen/_10sdp"
+                style="@style/blue_outline_button_style"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/price_high_to_low"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:text="@string/price_high_to_low" />
 
         </LinearLayout>
 
@@ -136,12 +126,10 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/fresher"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:paddingHorizontal="@dimen/_10sdp"
+                style="@style/blue_outline_button_style"
+                android:text="@string/fresher" />
 
             <TextView
                 android:id="@+id/experience"
@@ -149,13 +137,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_weight="1"
+                android:paddingHorizontal="@dimen/_10sdp"
+                style="@style/blue_outline_button_style"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/experience"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:text="@string/experience" />
 
             <TextView
                 android:id="@+id/any"
@@ -164,12 +150,10 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:elevation="@dimen/_5sdp"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/any"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp" />
+                android:paddingHorizontal="@dimen/_10sdp"
+                style="@style/blue_outline_button_style"
+                android:text="@string/any" />
 
         </LinearLayout>
 
@@ -185,7 +169,7 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/filter_results_by"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -198,15 +182,15 @@
                 android:padding="@dimen/_10sdp"
                 android:text="@string/distance_with_in"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/kms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10 km"
+                android:text="@string/_0_km"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/text"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -220,7 +204,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 Km"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <SeekBar
                 android:id="@+id/kmSeekBar"
@@ -232,7 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100 Km"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -247,7 +231,7 @@
                 android:padding="@dimen/_10sdp"
                 android:text="@string/amount"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/amountFrom"
@@ -255,7 +239,7 @@
                 android:layout_height="wrap_content"
                 android:text="250.00"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/text"
                 android:textStyle="bold" />
 
             <TextView
@@ -264,16 +248,16 @@
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:text="-"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/text"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/amountTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="250.00"
+                android:text="2500.00"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/text"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -288,22 +272,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="250.00"
-                android:textSize="@dimen/_12sdp" />
+                android:text="@string/_250_00"
+                android:textSize="@dimen/text" />
 
             <com.google.android.material.slider.RangeSlider
+                android:id="@+id/priceRange"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:valueFrom="250"
-                android:valueTo="1000000"
+                android:valueTo="100000"
                 app:values="@array/initial_slider_values" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10,00,000.00"
-                android:textSize="@dimen/_12sdp" />
+                android:text="@string/_1_00_000_00"
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -318,30 +303,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
+                style="@style/blue_outline_button_style"
                 android:background="@drawable/btn_bg_white_blue_border"
-                android:elevation="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/reset"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:text="@string/reset" />
 
             <TextView
                 android:id="@+id/applyBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                style="@style/filled_button_style"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg"
-                android:elevation="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_30sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="@string/apply"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
+                android:text="@string/apply" />
 
         </RelativeLayout>
     </LinearLayout>

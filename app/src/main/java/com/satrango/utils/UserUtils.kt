@@ -22,6 +22,9 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.sin
 
 object UserUtils {
 
@@ -450,10 +453,23 @@ object UserUtils {
         return sharedPreferences.getString(context.resources.getString(R.string.provider_action), "")!!
     }
 
-    fun saveProviderAction(context: Context, fullName: String) {
+    private fun saveProviderAction(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.provider_action), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.booking_id), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSearchFilter(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.search_filter), "")!!
+    }
+
+    fun saveSearchFilter(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.search_filter), fullName)
         editor.apply()
         editor.commit()
     }
@@ -561,12 +577,12 @@ object UserUtils {
 
     fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val theta = lon1 - lon2
-        var dist = (Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + (Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta))))
-        dist = Math.acos(dist)
+        var dist = (sin(deg2rad(lat1))
+                * sin(deg2rad(lat2))
+                + (cos(deg2rad(lat1))
+                * cos(deg2rad(lat2))
+                * cos(deg2rad(theta))))
+        dist = acos(dist)
         dist = rad2deg(dist)
         dist *= 60 * 1.1515
         return roundOffDecimal(dist * 1.609344) // miles to kms

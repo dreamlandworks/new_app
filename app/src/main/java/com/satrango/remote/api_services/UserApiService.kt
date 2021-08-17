@@ -15,6 +15,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.TransactionHistoryResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
@@ -166,5 +167,11 @@ interface UserApiService {
     suspend fun getAllLocations(
         @Query("key") key: String
     ): AllLocationsResModel
+
+    @GET(UserApiEndPoints.TRANSACTiON_HISTORY)
+    suspend fun getTransactionHistory(
+        @Query("key") key: String,
+        @Query("users_id") user_id: String
+    ): TransactionHistoryResModel
 
 }

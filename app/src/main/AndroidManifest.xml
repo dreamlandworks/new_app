@@ -51,7 +51,10 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen" />
         <activity android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen" />
         <activity android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen" />
         <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider" />

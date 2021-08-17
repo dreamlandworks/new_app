@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginVertical="@dimen/_5sdp"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -24,12 +25,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/category_bg"
+            android:layout_marginVertical="@dimen/_5sdp"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/in_progress"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp" />
+            style="@style/filled_button_style"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:background="@drawable/category_bg"
+            android:text="@string/in_progress" />
 
         <TextView
             android:id="@+id/pendingBtn"
@@ -38,7 +39,9 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
+            style="@style/filled_button_style"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
             android:text="@string/pending"
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
@@ -49,10 +52,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
             android:text="@string/completed"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:layout_marginVertical="@dimen/_5sdp"
+            style="@style/filled_button_style"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -61,6 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:visibility="gone"
         android:text="@string/no_booking_found"/>
 
     <androidx.recyclerview.widget.RecyclerView

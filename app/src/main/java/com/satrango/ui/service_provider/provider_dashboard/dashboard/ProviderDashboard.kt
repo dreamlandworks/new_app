@@ -111,8 +111,12 @@ class ProviderDashboard : AppCompatActivity() {
         toolBarBackTVBtn = headerView.findViewById(R.id.toolBarBackTVBtn)
         toolBarBackBtn = headerView.findViewById(R.id.toolBarBackBtn)
         updateHeaderDetails()
+        userProviderSwitch.isEnabled = true
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            toast(this, isChecked.toString())
+            if (!isChecked) {
+                finish()
+                startActivity(Intent(this, UserDashboardScreen::class.java))
+            }
         }
 
         backStack = ArrayDeque(4)

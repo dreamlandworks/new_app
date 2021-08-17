@@ -37,7 +37,7 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/terms_amp_conditions"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
@@ -67,7 +67,7 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/privacy_policy"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
@@ -95,12 +95,12 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/faqs"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/suggession"
+        android:id="@+id/feedBackBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -124,7 +124,7 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/suggestions_feed_back"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
@@ -151,12 +151,12 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/my_requests_complaints"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/complaints"
+        android:id="@+id/raiseComplaintBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -176,9 +176,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
-            android:text="@string/complaints"
+            android:text="@string/raise_a_complaint"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
 
     </LinearLayout>
 
@@ -205,7 +205,7 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/customer_care"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text" />
     </LinearLayout>
 
 </LinearLayout>

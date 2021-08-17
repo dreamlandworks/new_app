@@ -29,5 +29,6 @@ object UserApiEndPoints {
     final const val USER_DETAILS_ACCEPT = "user/booking_details"
     final const val USER_BOOKING_DETAILS = "user/user_booking_details"
     final const val AUTO_COMPLETE_ADDRESS = "user/autocomplete_address"
+    final const val TRANSACTiON_HISTORY = "user/get_transaction_history"
 
 }

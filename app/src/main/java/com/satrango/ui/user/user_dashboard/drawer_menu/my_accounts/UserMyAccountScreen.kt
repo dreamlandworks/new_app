@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
 import com.satrango.databinding.ActivityUserMyAccountScreenBinding
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 
 class UserMyAccountScreen : AppCompatActivity() {
 
@@ -30,6 +31,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         binding.apply {
 
             changePlan.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java)) }
+            transactionHistory.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java)) }
 
         }
 
