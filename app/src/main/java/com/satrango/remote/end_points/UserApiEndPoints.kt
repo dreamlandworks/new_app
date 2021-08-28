@@ -30,5 +30,10 @@ object UserApiEndPoints {
     final const val USER_BOOKING_DETAILS = "user/user_booking_details"
     final const val AUTO_COMPLETE_ADDRESS = "user/autocomplete_address"
     final const val TRANSACTiON_HISTORY = "user/get_transaction_history"
+    final const val SKILLS = "user/autocomplete"
+    final const val PLANS = "user/user_plans"
+    final const val USER_PLAN_PAYMENT = "user/membership_payments"
+    final const val BID_RANGE = "user/bid_range"
+    final const val POST_JOB_SINGLE_MOVE = "user/single_move_job_post"
 
 }

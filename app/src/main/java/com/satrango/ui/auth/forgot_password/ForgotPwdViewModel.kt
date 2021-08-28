@@ -3,10 +3,12 @@ package com.satrango.ui.auth.forgot_password
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -16,11 +18,11 @@ class ForgotPwdViewModel(private val repository: ForgotPwdRepository) : ViewMode
 
     fun verifyUser(context: Context, requestBody: ForgotPwdVerifyReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
                     verifyUser.value = NetworkResponse.Loading()
-                    val response = repository.verifyUser(requestBody)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.verifyUser(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         verifyUser.value = NetworkResponse.Success(jsonObject.getString("message"))
                     } else {

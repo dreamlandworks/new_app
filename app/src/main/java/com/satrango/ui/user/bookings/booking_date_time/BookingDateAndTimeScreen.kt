@@ -100,10 +100,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)
             } else {
-                val intent = Intent(
-                    this@BookingDateAndTimeScreen,
-                    BookingAttachmentsScreen::class.java
-                )
+                val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)
             }

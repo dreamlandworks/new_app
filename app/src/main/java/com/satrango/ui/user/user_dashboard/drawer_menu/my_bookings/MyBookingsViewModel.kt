@@ -3,13 +3,12 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewModel() {
@@ -19,10 +18,11 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
     fun getMyBookingDetails(context: Context, requestBody: MyBookingsReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
 
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
                     myBookings.value = NetworkResponse.Loading()
-                    val response = repository.getMyBookings(requestBody)
+                    val result = async { repository.getMyBookings(requestBody) }
+                    val response = result.await()
                     if (response.status == 200) {
                         myBookings.value = NetworkResponse.Success(response.booking_details)
                     } else {

@@ -1,5 +1,6 @@
 package com.satrango.ui.user.bookings.provider_response
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -147,10 +148,12 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showPaymentSuccessDialog() {
         binding.accept.visibility = View.GONE
         binding.reject.visibility = View.GONE
         binding.paymentSuccessLayout.visibility = View.VISIBLE
+        binding.orderRefId.text = "Your order is successfully placed. Booking id: ${UserUtils.getBookingRefId(this)}"
     }
 
     private fun initializeProgressDialog() {

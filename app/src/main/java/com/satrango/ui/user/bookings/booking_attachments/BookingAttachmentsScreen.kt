@@ -71,7 +71,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     companion object {
         lateinit var imagePathList: ArrayList<String>
         lateinit var encodedImages: ArrayList<Attachment>
-        var FROM_BOOK_INSTANTLY = false
     }
 
 
@@ -113,7 +112,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
             attachments.setOnClickListener {
                 getImageFromGallery()
-//                openImagePicker()
             }
 
             backBtn.setOnClickListener {

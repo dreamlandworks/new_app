@@ -3,11 +3,13 @@ package com.satrango.ui.service_provider.provider_dashboard.dashboard
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import org.json.JSONObject
@@ -21,13 +23,13 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
     fun userProfile(context: Context): MutableLiveData<NetworkResponse<Data>> {
         if (hasInternetConnection(context)) {
             userProfile.value = NetworkResponse.Loading()
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
-                    val response = repository.userProfile(context)
-                    if (response.status == 200) {
-                        userProfile.value = NetworkResponse.Success(response.data)
+                    val response = async { repository.userProfile(context) }
+                    if (response.await().status == 200) {
+                        userProfile.value = NetworkResponse.Success(response.await().data)
                     } else {
-                        userProfile.value = NetworkResponse.Failure(response.message)
+                        userProfile.value = NetworkResponse.Failure(response.await().message)
                     }
                 } catch (e: Exception) {
                     userProfile.value = NetworkResponse.Failure(e.message)

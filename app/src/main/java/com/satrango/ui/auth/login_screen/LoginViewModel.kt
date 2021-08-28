@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.hasInternetConnection
@@ -18,10 +19,10 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
     fun userLogin(context: Context, requestBody: UserLoginModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
             userLogin.value = NetworkResponse.Loading()
-            GlobalScope.launch(Dispatchers.Main) {
+            viewModelScope.launch {
                 try {
-                    val response = repository.login(requestBody)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.login(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
                     Log.e("LOGIN", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         userLogin.value = NetworkResponse.Success(jsonObject.getString("user id"))

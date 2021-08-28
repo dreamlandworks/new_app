@@ -21,6 +21,13 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBook
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
@@ -173,5 +180,30 @@ interface UserApiService {
         @Query("key") key: String,
         @Query("users_id") user_id: String
     ): TransactionHistoryResModel
+
+    @GET(UserApiEndPoints.SKILLS)
+    suspend fun getSkills(
+        @Query("key") key: String
+    ): PostJobSkillsResModel
+
+    @GET(UserApiEndPoints.PLANS)
+    suspend fun getUserPlans(
+        @Query("key") key: String
+    ): PostJobPlansResModel
+
+    @POST(UserApiEndPoints.USER_PLAN_PAYMENT)
+    suspend fun saveUserPaymentPlan(
+        @Body requestBody: UserPlanPaymentReqModel
+    ): UserPlanPaymentResModel
+
+    @GET(UserApiEndPoints.BID_RANGE)
+    suspend fun userBidRanges(
+        @Query("key") key: String
+    ): UserBidRangesResModel
+
+    @POST(UserApiEndPoints.POST_JOB_SINGLE_MOVE)
+    suspend fun postJobSingleMove(
+        @Body requestBody: PostJobSingleMoveReqModel
+    ): PostJobSingleMoveResModel
 
 }

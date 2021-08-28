@@ -3,6 +3,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_profile
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
@@ -11,6 +12,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -22,14 +24,14 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
 
     fun userProfileInfo(context: Context, userId: String): MutableLiveData<NetworkResponse<Data>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 userProfileInfo.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.userProfileInfo(userId)
-                    if (response.status == 200) {
-                        userProfileInfo.value = NetworkResponse.Success(response.data)
+                    val response = async { repository.userProfileInfo(userId) }
+                    if (response.await().status == 200) {
+                        userProfileInfo.value = NetworkResponse.Success(response.await().data)
                     } else {
-                        userProfileInfo.value = NetworkResponse.Failure(response.message)
+                        userProfileInfo.value = NetworkResponse.Failure(response.await().message)
                     }
                 } catch (e: Exception) {
                     userProfileInfo.value = NetworkResponse.Failure(e.message)
@@ -44,11 +46,11 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
 
     fun updateProfileInfo(context: Context, requestBody: UserProfileUpdateReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 updateProfileInfo.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.updateProfileInfo(requestBody)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.updateProfileInfo(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         updateProfileInfo.value = NetworkResponse.Success("Profile Updated!")
                     } else {
@@ -67,11 +69,11 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
 
     fun deleteUserAddress(context: Context, requestBody: BrowseCategoryReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 deleteUserAddress.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.deleteUserAddress(requestBody)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.deleteUserAddress(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         deleteUserAddress.value = NetworkResponse.Success("Address deleted!")
                     } else {

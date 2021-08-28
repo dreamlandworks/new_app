@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.satrango.R
 import com.satrango.databinding.ActivityUserMyAccountScreenBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
 
 class UserMyAccountScreen : AppCompatActivity() {
 

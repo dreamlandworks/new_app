@@ -102,6 +102,7 @@
     <string name="week_ends">Week-ends</string>
     <string name="choose">Choose</string>
     <string name="from">From</string>
+    <string name="from_job_post">From Job Post</string>
     <string name="to">To</string>
     <string name="s">S</string>
     <string name="m">M</string>
@@ -222,6 +223,7 @@
     <string name="unlimited">Unlimited</string>
     <string name="regular_caps">REGULAR</string>
     <string name="plans">Plans</string>
+    <string name="choose_your_plan">Choose Your Plans</string>
     <string name="ranking">Ranking</string>
     <string name="rating">Rating</string>
     <string name="reviews">Reviews</string>
@@ -247,6 +249,7 @@
     <string name="_0">0</string>
     <string name="booking">Booking</string>
     <string name="booking_id">Booking Id</string>
+    <string name="booking_ref_id">Booking Reference Id</string>
     <string name="provider_action">Provider Action</string>
     <string name="category_id">Category Id</string>
     <string name="key">Key</string>
@@ -389,6 +392,32 @@
     <string name="we_are_very_happy_and_thankful_for_your_feed_back_and_suggestions_which_will_in_turn_help_us_with_improvements_for_better_user_experience">We are very happy and Thankful for your feed back and suggestions which will in-turn help us with improvements for better user experience.</string>
     <string name="about_us">About Us (250 Words)</string>
     <string name="_0_km">0 km</string>
+    <string name="one_more_step">One More Step</string>
+    <string name="my_job_requires">My Job Requires</string>
+    <string name="work_at_a_specified_location">Work at a Specified Location</string>
+    <string name="ex_office_home_godowns_shops_etc">Ex: Office, Home, Godowns, Shops etc.</string>
+    <string name="work_at_multiple_locations">Work at Multiple Locations</string>
+    <string name="ex_delivering_couriersm_pick_amp_drop_etc"><![CDATA[Ex: Delivering Couriersm Pick & Drop etc.]]></string>
+    <string name="work_online_from_anywhere">Work Online from anywhere</string>
+    <string name="ex_app_developments_data_entry_etc">Ex: App Developments, Data entry etc.</string>
+    <string name="requirements">Requirements</string>
+    <string name="choose_a_plan">Choose a Plan</string>
+    <string name="simply_post_it_and_leave_it_we_will_work_out_the_rest">Simply post it and leave it. We will work out the rest.</string>
+    <string name="bid_per">Bid Per</string>
+    <string name="hour">Hour</string>
+    <string name="per_job">Per Job</string>
+    <string name="accept_bids_for">Accept Bids for</string>
+    <string name="languages">Languages</string>
+    <string name="keywords_skills_needed">Keywords / Skills Needed</string>
+    <string name="hours">Hours</string>
+    <string name="days">Days</string>
+    <string name="bid">Bid</string>
+    <string name="_1_day">1 Day</string>
+    <string name="_3_days">3 Days</string>
+    <string name="_7_days">7 Days</string>
+    <string name="you_have_successfully_posted_the_job_soon_you_will_receive_proposals_from_professionals_please_be_patient">You have successfully posted the Job. Soon you will receive proposals from professionals. Please be patient.</string>
+    <string name="my_posts">My Posts</string>
+    <string name="title">Title</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

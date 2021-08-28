@@ -24,9 +24,6 @@ import kotlin.collections.ArrayList
 class ProviderSignUpOne : AppCompatActivity() {
 
     private lateinit var response: ProviderOneModel
-    private lateinit var professionsMList: List<com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Profession>
-    private lateinit var qualificationMList: List<com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Qualification>
-    private lateinit var languagesMList: List<com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Language>
     private lateinit var viewModel: ProviderSignUpOneViewModel
     private lateinit var binding: ActivityProviderSignUpOneBinding
     private lateinit var progressDialog: ProgressDialog

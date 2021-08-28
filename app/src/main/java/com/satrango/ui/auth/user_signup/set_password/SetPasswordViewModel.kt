@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -19,11 +21,11 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
 
     fun resetPassword(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
                     resetPassword.value = NetworkResponse.Loading()
-                    val response = repository.resetPasswordInServer(context)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.resetPasswordInServer(context) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.get("status") == 200) {
                         resetPassword.value = NetworkResponse.Success(jsonObject.getString("message"))
                     } else {
@@ -39,11 +41,11 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
 
     fun createNewUser(context: Context, requestBody: UserSignUpModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 createNewUser.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.createNewUser(requestBody)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.createNewUser(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         createNewUser.value =
                             NetworkResponse.Success(jsonObject.getString("referral_id"))

@@ -28,6 +28,12 @@ import kotlin.math.sin
 
 object UserUtils {
 
+    var title = ""
+    var bids_period = 0
+    var bid_range_id = 0
+    var estimate_time = 0
+    var bid_per = 0
+
     var keywordId = 0
     var FORGOT_PWD = false
     var USER_ID = ""
@@ -40,6 +46,21 @@ object UserUtils {
     var job_description = ""
     var addressList = ArrayList<MonthsModel>()
     var finalAddressList = ArrayList<Addresses>()
+
+
+
+    fun setFromJobPost(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_job_post), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromJobPost(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
 
     fun setPassword(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
@@ -418,6 +439,19 @@ object UserUtils {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.booking_id), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getBookingRefId(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.booking_ref_id), "")!!
+    }
+
+    fun saveBookingRefId(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.booking_ref_id), fullName)
         editor.apply()
         editor.commit()
     }

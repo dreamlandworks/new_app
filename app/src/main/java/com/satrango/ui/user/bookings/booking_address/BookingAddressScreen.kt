@@ -54,9 +54,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
     private lateinit var viewModel: BookingViewModel
     private lateinit var addressList: ArrayList<MonthsModel>
-    private lateinit var binding: ActivityBookingAddressScreenBinding
     private lateinit var progressDialog: ProgressDialog
     private lateinit var data: Data
+    private lateinit var binding: ActivityBookingAddressScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +82,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             binding.spCard.visibility = View.GONE
         }
 
-
         addressList = arrayListOf()
         addressList.add(
             MonthsModel(
@@ -96,7 +95,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-
         profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -132,6 +130,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         binding.apply {
 
             addNewAddress.setOnClickListener {
+                UserUtils.setFromJobPost(this@BookingAddressScreen, false)
                 val intent = Intent(this@BookingAddressScreen, AddBookingAddressScreen::class.java)
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)

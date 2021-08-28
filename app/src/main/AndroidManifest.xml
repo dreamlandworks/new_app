@@ -51,7 +51,13 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAttachmentScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen" />
@@ -85,7 +91,7 @@
             android:name=".ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.UserPlanScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"

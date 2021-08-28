@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import java.lang.Exception
@@ -19,11 +21,11 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
 
     fun providerActivation(context: Context, requestBody: ProviderSignUpFourReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
                     providerActivation.value = NetworkResponse.Loading()
-                    val response = repository.serviceProviderActivation(requestBody)
-                    val res = response.string()
+                    val response = async { repository.serviceProviderActivation(requestBody) }
+                    val res = response.await().string()
                     Log.e("ACTIVATION:", res)
                     providerActivation.value = NetworkResponse.Success(res)
                 } catch (e: Exception) {

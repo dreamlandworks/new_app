@@ -26,6 +26,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -51,7 +52,9 @@ class AddBookingAddressScreen : AppCompatActivity() {
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-        data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        if (!UserUtils.getFromJobPost(this)) {
+            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        }
         initializeProgressDialog()
 
         binding.apply { 
@@ -170,9 +173,13 @@ class AddBookingAddressScreen : AppCompatActivity() {
                         progressDialog.dismiss()
                         toast(context, it.data!!)
                         finish()
-                        val intent = Intent(context, BookingAddressScreen::class.java)
-                        intent.putExtra(getString(R.string.service_provider), data)
-                        startActivity(intent)
+                        if (UserUtils.getFromJobPost(this)) {
+                            startActivity(Intent(this, PostJobDescriptionScreen::class.java))
+                        } else {
+                            val intent = Intent(this, BookingAddressScreen::class.java)
+                            intent.putExtra(getString(R.string.service_provider), data)
+                            startActivity(intent)
+                        }
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -194,6 +201,12 @@ class AddBookingAddressScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this, BookingAddressScreen::class.java))
+        if (UserUtils.getFromJobPost(this)) {
+            startActivity(Intent(this, PostJobDescriptionScreen::class.java))
+        } else {
+            val intent = Intent(this, BookingAddressScreen::class.java)
+            intent.putExtra(getString(R.string.service_provider), data)
+            startActivity(intent)
+        }
     }
 }

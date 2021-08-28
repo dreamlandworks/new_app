@@ -3,10 +3,12 @@ package com.satrango.ui.auth.user_signup.otp_verification
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -18,11 +20,11 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
 
     fun forgotPwdRequestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 forgotPwdRequestOTP.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.forgotPwdRequestOTP(context)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.forgotPwdRequestOTP(context) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         forgotPwdRequestOTP.value = NetworkResponse.Success(jsonObject.getString("id") + "|" + jsonObject.getInt("otp"))
                     } else {
@@ -39,11 +41,11 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
 
     fun requestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 requestOTP.value = NetworkResponse.Loading()
                 try {
-                    val response = repository.requestOTP(context)
-                    val jsonObject = JSONObject(response.string())
+                    val response = async { repository.requestOTP(context) }
+                    val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
                         requestOTP.value =
                             NetworkResponse.Success(jsonObject.getInt("otp").toString())

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
@@ -12,6 +13,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.Exception
@@ -23,12 +25,12 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
 
     fun getPopularServicesList(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 val popularServicesList = ArrayList<BrowserSubCategoryModel>()
                 popularServices.value = NetworkResponse.Loading()
                 try {
-                    val response = userHomeRepository.getPopularServices(categoryId)
-                    val responseObject = JSONObject(response.string())
+                    val response = async { userHomeRepository.getPopularServices(categoryId) }
+                    val responseObject = JSONObject(response.await().string())
                     if (responseObject.getInt("status") == 200) {
                         val subCategoriesArray = responseObject.getJSONArray("data")
                         for (index in 0 until subCategoriesArray.length()) {
@@ -56,12 +58,12 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
 
     fun getBrowseCategories(context: Context): MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>> {
         if (hasInternetConnection(context)) {
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 browseCategoriesList.value = NetworkResponse.Loading()
                 try {
                     val categoriesList = ArrayList<BrowserCategoryModel>()
-                    val response = userHomeRepository.getBrowseCategories()
-                    val responseObject = JSONObject(response.string())
+                    val response = async { userHomeRepository.getBrowseCategories() }
+                    val responseObject = JSONObject(response.await().string())
                     Log.e("BROWSER CATEGORIES", responseObject.toString())
                     if (responseObject.getInt("status") == 200) {
                         val categoriesArray = responseObject.getJSONArray("data")
