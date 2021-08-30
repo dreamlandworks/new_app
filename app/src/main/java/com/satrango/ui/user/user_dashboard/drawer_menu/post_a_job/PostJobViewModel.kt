@@ -10,6 +10,10 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
@@ -26,7 +30,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
     var userPlans = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data>>>()
     var planPayment = MutableLiveData<NetworkResponse<UserPlanPaymentResModel>>()
     var bidRanges = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data>>>()
+
     var postJobSingleMove = MutableLiveData<NetworkResponse<PostJobSingleMoveResModel>>()
+    var postJobBlueCollar = MutableLiveData<NetworkResponse<PostJobBlueCollarResModel>>()
+    var postJobMultiMove = MutableLiveData<NetworkResponse<PostJobMultiMoveResModel>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -140,6 +147,52 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             postJobSingleMove.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return postJobSingleMove
+    }
+
+    fun postJobBlueCollar(context: Context, requestBody: PostJobBlueCollarReqModel): MutableLiveData<NetworkResponse<PostJobBlueCollarResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    postJobBlueCollar.value = NetworkResponse.Loading()
+                    val response = async { repository.postJobBlueCollar(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        postJobBlueCollar.value = NetworkResponse.Success(data)
+                    } else {
+                        postJobBlueCollar.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    postJobBlueCollar.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            postJobBlueCollar.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return postJobBlueCollar
+    }
+
+    fun postJobMultiMove(context: Context, requestBody: PostJobMultiMoveReqModel): MutableLiveData<NetworkResponse<PostJobMultiMoveResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    postJobMultiMove.value = NetworkResponse.Loading()
+                    val response = async { repository.postJobMultiMove(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        postJobMultiMove.value = NetworkResponse.Success(data)
+                    } else {
+                        postJobMultiMove.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    postJobMultiMove.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            postJobMultiMove.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return postJobMultiMove
     }
 
 }

@@ -28,6 +28,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.Po
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import java.text.SimpleDateFormat
@@ -71,7 +72,20 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                 if (addressId == 0) {
                     snackBar(nextBtn, "Select Address")
                 } else {
-                    postJobSingleMove(addressId)
+                    if (UserUtils.getFromJobPostMultiMove(this@PostJobAddressScreen)) {
+                        for (address in addressList) {
+                            if (address.isSelected) {
+                                UserUtils.addressList.add(MonthsModel(address.month, address.day, address.isSelected))
+                            }
+                        }
+                        if (UserUtils.addressList.isNotEmpty()) {
+                            startActivity(Intent(this@PostJobAddressScreen, PostJobMultiMoveAddressScreen::class.java))
+                        } else {
+                            snackBar(nextBtn, "Select Address")
+                        }
+                    } else {
+                        postJobSingleMove(addressId)
+                    }
                 }
             }
 
@@ -97,7 +111,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.bids_period,
             SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(Date()),
             UserUtils.estimate_time,
-            PostJobDescriptionScreen.estimateTypeId,
+            UserUtils.estimateTypeId,
             UserUtils.job_description,
             RetrofitBuilder.USER_KEY,
             PostJobAttachmentsScreen.finalKeywords,
@@ -158,15 +172,27 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
     }
 
     override fun selectedMonth(position: Int, listType: String) {
-        val tempAddress = arrayListOf<MonthsModel>()
-        addressList.onEachIndexed { index, month ->
-            if (index == position) {
-                tempAddress.add(MonthsModel(month.month, month.day, true))
-            } else {
-                tempAddress.add(MonthsModel(month.month, month.day, false))
+        if (UserUtils.getFromJobPostMultiMove(this)) {
+            val tempAddress = arrayListOf<MonthsModel>()
+            addressList.onEachIndexed { index, month ->
+                if (index == position) {
+                    tempAddress.add(MonthsModel(month.month, month.day, true))
+                } else {
+                    tempAddress.add(MonthsModel(month.month, month.day, month.isSelected))
+                }
             }
+            addressList = tempAddress
+        } else {
+            val tempAddress = arrayListOf<MonthsModel>()
+            addressList.onEachIndexed { index, month ->
+                if (index == position) {
+                    tempAddress.add(MonthsModel(month.month, month.day, true))
+                } else {
+                    tempAddress.add(MonthsModel(month.month, month.day, false))
+                }
+            }
+            addressList = tempAddress
         }
-        addressList = tempAddress
         binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
     }
 
@@ -180,8 +206,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
-        val myPostsBtn = dialogView.findViewById<TextView>(R.id.myPostsBtn)
+        val homeBtn = dialogView.findViewById<TextView>(R.id.closBtn)
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))
@@ -190,11 +215,6 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))
         }
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
-        myPostsBtn.setOnClickListener {  }
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()

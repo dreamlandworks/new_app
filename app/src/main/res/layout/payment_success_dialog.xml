@@ -7,7 +7,7 @@
     android:background="@drawable/rounded_corner">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/acceptCloseBtn"
+        android:id="@+id/closeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -59,7 +59,7 @@
             android:textSize="@dimen/_14sdp" />
 
         <TextView
-            android:id="@+id/loginBtn"
+            android:id="@+id/closBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/_10sdp"

@@ -9,12 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.satrango.R
 import com.satrango.databinding.ActivityPostJobDateTimeScreenBinding
-import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
-import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_date_time.MonthsAdapter
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import java.time.YearMonth
@@ -62,7 +61,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
                     snackBar(binding.nextBtn, "Please Select TimeSlot")
                 } else {
-                    startActivity(Intent(this@PostJobDateTimeScreen, PostJobDescriptionScreen::class.java))
+                    if (UserUtils.getFromJobPostMultiMove(this@PostJobDateTimeScreen)) {
+                        startActivity(Intent(this@PostJobDateTimeScreen, PostJobMultiMoveDescriptionScreen::class.java))
+                    } else {
+                        startActivity(Intent(this@PostJobDateTimeScreen, PostJobDescriptionScreen::class.java))
+                    }
                 }
             }
 

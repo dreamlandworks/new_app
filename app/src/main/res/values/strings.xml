@@ -418,6 +418,8 @@
     <string name="you_have_successfully_posted_the_job_soon_you_will_receive_proposals_from_professionals_please_be_patient">You have successfully posted the Job. Soon you will receive proposals from professionals. Please be patient.</string>
     <string name="my_posts">My Posts</string>
     <string name="title">Title</string>
+    <string name="awarded">Awarded</string>
+    <string name="expired">Expired</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

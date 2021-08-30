@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.satrango.databinding.ActivityPostJobTypeScreenBinding
+import com.satrango.utils.UserUtils
 
 class PostJobTypeScreen : AppCompatActivity() {
 
@@ -17,15 +18,24 @@ class PostJobTypeScreen : AppCompatActivity() {
         binding.apply {
 
             specifiedLocationBtn.setOnClickListener {
+                UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, true)
+                UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, false)
+                UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, false)
                 startActivity(Intent(this@PostJobTypeScreen, PostJobDateTimeScreen::class.java))
             }
 
             multiLocationsBtn.setOnClickListener {
-
+                UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, true)
+                UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, false)
+                UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, false)
+                startActivity(Intent(this@PostJobTypeScreen, PostJobDateTimeScreen::class.java))
             }
 
             onlineBtn.setOnClickListener {
-
+                UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, true)
+                UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, false)
+                UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, false)
+                startActivity(Intent(this@PostJobTypeScreen, PostJobDateTimeScreen::class.java))
             }
 
         }

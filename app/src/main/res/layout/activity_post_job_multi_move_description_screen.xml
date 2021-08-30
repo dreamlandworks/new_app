@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen">
+    tools:context=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -162,27 +162,8 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
                 android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="@dimen/edit_text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:hint="@string/write_something_about_work">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/discription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:lines="5"
-                android:inputType="textMultiLine"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="@dimen/edit_text" />
 
@@ -310,6 +291,88 @@
                 android:paddingHorizontal="@dimen/_15sdp"
                 android:text="@string/days"
                 android:textSize="@dimen/sub_text" />
+
+        </LinearLayout>
+
+        <com.hootsuite.nachos.NachoTextView
+            android:id="@+id/languages"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/edit_text"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:background="@drawable/gray_corner"
+            android:hint="@string/languages"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:singleLine="true" />
+
+        <com.hootsuite.nachos.NachoTextView
+            android:id="@+id/keywordSkills"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:textSize="@dimen/edit_text"
+            android:background="@drawable/gray_corner"
+            android:hint="@string/keywords_skills_needed"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center_horizontal"
+            android:text="@string/accept_bids_for"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/oneDay"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textSize="@dimen/sub_text"
+                android:paddingVertical="@dimen/_5sdp"
+                android:background="@drawable/blue_out_line"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:text="@string/_1_day" />
+
+            <TextView
+                android:id="@+id/threeDays"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_5sdp"
+                android:textSize="@dimen/sub_text"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@drawable/blue_out_line"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:text="@string/_3_days" />
+
+            <TextView
+                android:id="@+id/sevenDays"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sub_text"
+                android:paddingVertical="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@drawable/blue_out_line"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:text="@string/_7_days" />
 
         </LinearLayout>
 

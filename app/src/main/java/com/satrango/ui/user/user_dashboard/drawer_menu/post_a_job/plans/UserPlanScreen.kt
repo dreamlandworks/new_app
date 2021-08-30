@@ -141,8 +141,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
-        val myPostsBtn = dialogView.findViewById<TextView>(R.id.myPostsBtn)
+        val homeBtn = dialogView.findViewById<TextView>(R.id.closBtn)
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))
@@ -151,11 +150,6 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))
         }
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
-        myPostsBtn.setOnClickListener {  }
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()
@@ -164,4 +158,5 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
     override fun onPaymentError(p0: Int, p1: String?) {
         snackBar(binding.recyclerView, "Payment Failed")
     }
+
 }

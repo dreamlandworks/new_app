@@ -23,6 +23,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
@@ -205,5 +209,15 @@ interface UserApiService {
     suspend fun postJobSingleMove(
         @Body requestBody: PostJobSingleMoveReqModel
     ): PostJobSingleMoveResModel
+
+    @POST(UserApiEndPoints.POST_JOB_BLUE_COLLAR)
+    suspend fun postJobBlueCollar(
+        @Body requestBody: PostJobBlueCollarReqModel
+    ): PostJobBlueCollarResModel
+
+    @POST(UserApiEndPoints.POST_JOB_MULTI_MOVE)
+    suspend fun postJobMultiMove(
+        @Body requestBody: PostJobMultiMoveReqModel
+    ): PostJobMultiMoveResModel
 
 }

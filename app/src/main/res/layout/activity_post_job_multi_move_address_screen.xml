@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen">
+    tools:context=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -156,24 +156,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
-            android:hint="@string/title">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="@dimen/edit_text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
             android:hint="@string/write_something_about_work">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -181,137 +163,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:lines="5"
                 android:inputType="textMultiLine"
+                android:lines="5"
                 android:textColor="@color/black"
                 android:textSize="@dimen/edit_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:text="@string/at"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/bid"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:id="@+id/perHour"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/blue_out_line"
-                android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:text="@string/per_hour"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/perDay"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:background="@drawable/blue_out_line"
-                android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:text="@string/per_day"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/perJob"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:background="@drawable/blue_out_line"
-                android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:text="@string/per_job"
-                android:textSize="@dimen/sub_text" />
-
-        </LinearLayout>
-
-        <Spinner
-            android:id="@+id/bidRangeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
+        <TextView
+            android:id="@+id/addressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line" />
+            android:background="@drawable/btn_bg_sm"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/at"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:text="@string/attachments"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/estimate_time"
-                android:textColor="@color/black" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attachmentsRV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/blue_500"
-                app:boxStrokeWidth="1dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/estimateTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:maxLength="10"
-                    android:textSize="@dimen/edit_text" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/hours"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:background="@drawable/blue_out_line"
-                android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:text="@string/hours"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/days"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:background="@drawable/blue_out_line"
-                android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:text="@string/days"
-                android:textSize="@dimen/sub_text" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/attachments"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/gray_corner"
+            android:src="@drawable/ic_baseline_add_24"
+            tools:ignore="ContentDescription" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -341,5 +244,4 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>

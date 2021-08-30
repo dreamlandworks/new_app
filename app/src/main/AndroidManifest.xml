@@ -51,21 +51,56 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen"></activity>
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAttachmentScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen" />
-        <activity android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen" />
-        <activity android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen" />
-        <activity android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider" />
-        <activity android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen"></activity>
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
             android:screenOrientation="portrait" />

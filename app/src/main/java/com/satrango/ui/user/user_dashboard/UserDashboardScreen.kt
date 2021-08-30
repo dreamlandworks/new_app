@@ -34,6 +34,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseC
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
@@ -159,7 +160,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, MyBookingsScreen::class.java))
                 }
                 R.id.userOptMyJobPosts -> {
-                    Toast.makeText(this, "My Job Posts Clicked", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MyJobPostsScreen::class.java))
                 }
                 R.id.userOptMyProfile -> {
                     startActivity(Intent(this, UserProfileScreen::class.java))

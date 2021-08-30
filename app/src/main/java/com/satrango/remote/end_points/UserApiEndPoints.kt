@@ -35,5 +35,7 @@ object UserApiEndPoints {
     final const val USER_PLAN_PAYMENT = "user/membership_payments"
     final const val BID_RANGE = "user/bid_range"
     final const val POST_JOB_SINGLE_MOVE = "user/single_move_job_post"
+    final const val POST_JOB_BLUE_COLLAR = "user/blue_collar_job_post"
+    final const val POST_JOB_MULTI_MOVE = "user/multi_move_job_post"
 
 }

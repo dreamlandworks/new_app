@@ -5,6 +5,10 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
@@ -32,6 +36,14 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun postJobSingleMove(requestBody: PostJobSingleMoveReqModel): PostJobSingleMoveResModel {
         return RetrofitBuilder.getUserRetrofitInstance().postJobSingleMove(requestBody)
+    }
+
+    suspend fun postJobBlueCollar(requestBody: PostJobBlueCollarReqModel): PostJobBlueCollarResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().postJobBlueCollar(requestBody)
+    }
+
+    suspend fun postJobMultiMove(requestBody: PostJobMultiMoveReqModel): PostJobMultiMoveResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().postJobMultiMove(requestBody)
     }
 
 }

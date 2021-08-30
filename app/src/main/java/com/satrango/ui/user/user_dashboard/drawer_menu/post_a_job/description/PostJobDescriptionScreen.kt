@@ -27,10 +27,6 @@ class PostJobDescriptionScreen : AppCompatActivity() {
     private lateinit var binding: ActivityPostJobDescriptionScreenBinding
     private lateinit var progressDialog: ProgressDialog
 
-    companion object {
-        var estimateTypeId = 0
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostJobDescriptionScreenBinding.inflate(layoutInflater)
@@ -49,27 +45,35 @@ class PostJobDescriptionScreen : AppCompatActivity() {
 
             nextBtn.setOnClickListener {
 
-                if (title.text.toString().isEmpty()) {
-                    snackBar(discription, "Enter Title")
-                } else if (discription.text.toString().isEmpty()) {
-                    snackBar(discription, "Enter work description")
-                } else if (UserUtils.bid_per == 0) {
-                    snackBar(bidRangeSpinner, "Select Bid per")
-                } else if (bidRangeSpinner.selectedItemPosition == 0) {
-                    snackBar(bidRangeSpinner, "Select Bid Range")
-                } else if (estimateTime.text.toString().isEmpty()) {
-                    snackBar(bidRangeSpinner, "Enter Estimate Time")
-                } else if (estimateTypeId == 0) {
-                    snackBar(estimateTime, "Select Estimate time type")
-                } else {
-                    UserUtils.title = title.text.toString().trim()
-                    UserUtils.job_description = discription.text.toString().trim()
-                    if (estimateTypeId == 1) {
-                        UserUtils.estimate_time = estimateTime.text.toString().toInt()
-                    } else {
-                        UserUtils.estimate_time = estimateTime.text.toString().toInt() * 24
+                when {
+                    title.text.toString().isEmpty() -> {
+                        snackBar(discription, "Enter Title")
                     }
-                    startActivity(Intent(this@PostJobDescriptionScreen, PostJobAttachmentsScreen::class.java))
+                    discription.text.toString().isEmpty() -> {
+                        snackBar(discription, "Enter work description")
+                    }
+                    UserUtils.bid_per == 0 -> {
+                        snackBar(bidRangeSpinner, "Select Bid per")
+                    }
+                    bidRangeSpinner.selectedItemPosition == 0 -> {
+                        snackBar(bidRangeSpinner, "Select Bid Range")
+                    }
+                    estimateTime.text.toString().isEmpty() -> {
+                        snackBar(bidRangeSpinner, "Enter Estimate Time")
+                    }
+                    UserUtils.estimateTypeId == 0 -> {
+                        snackBar(estimateTime, "Select Estimate time type")
+                    }
+                    else -> {
+                        UserUtils.title = title.text.toString().trim()
+                        UserUtils.job_description = discription.text.toString().trim()
+                        if (UserUtils.estimateTypeId == 1) {
+                            UserUtils.estimate_time = estimateTime.text.toString().toInt()
+                        } else {
+                            UserUtils.estimate_time = estimateTime.text.toString().toInt() * 24
+                        }
+                        startActivity(Intent(this@PostJobDescriptionScreen, PostJobAttachmentsScreen::class.java))
+                    }
                 }
             }
 
@@ -112,7 +116,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 days.setBackgroundResource(R.drawable.blue_out_line)
                 hours.setTextColor(Color.parseColor("#FFFFFF"))
                 days.setTextColor(Color.parseColor("#0A84FF"))
-                estimateTypeId = 1
+                UserUtils.estimateTypeId = 1
             }
 
             days.setOnClickListener {
@@ -120,7 +124,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 hours.setBackgroundResource(R.drawable.blue_out_line)
                 days.setTextColor(Color.parseColor("#FFFFFF"))
                 hours.setTextColor(Color.parseColor("#0A84FF"))
-                estimateTypeId = 2
+                UserUtils.estimateTypeId = 2
             }
 
         }

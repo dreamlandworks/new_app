@@ -35,6 +35,7 @@ object UserUtils {
     var bid_per = 0
 
     var keywordId = 0
+    var estimateTypeId = 0
     var FORGOT_PWD = false
     var USER_ID = ""
     var scheduled_date = ""
@@ -48,7 +49,6 @@ object UserUtils {
     var finalAddressList = ArrayList<Addresses>()
 
 
-
     fun setFromJobPost(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -60,6 +60,45 @@ object UserUtils {
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
+
+    fun setFromJobPostSingleMove(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.single_move), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromJobPostSingleMove(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.single_move), false)
+    }
+
+    fun setFromJobPostMultiMove(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.multi_move), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromJobPostMultiMove(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.multi_move), false)
+    }
+
+    fun setFromJobPostBlueCollar(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.blue_collar), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromJobPostBlueCollar(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.blue_collar), false)
     }
 
     fun setPassword(context: Context, password: String) {
