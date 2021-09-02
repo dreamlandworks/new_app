@@ -81,6 +81,7 @@
     <string name="dd_mm_yy">DD-MM-YY</string>
     <string name="gender">Gender</string>
     <string name="skills">Skills...</string>
+    <string name="skills_sm">Skills</string>
     <string name="academic_qualification">Academic Qualification</string>
     <string name="languages_known">Languages Known</string>
     <string name="keywords_skills">Keywords / Skills</string>
@@ -420,6 +421,27 @@
     <string name="title">Title</string>
     <string name="awarded">Awarded</string>
     <string name="expired">Expired</string>
+    <string name="no_jobs_posted_yet">No Jobs posted yet!</string>
+    <string name="id">ID</string>
+    <string name="expires_in">Expires in:</string>
+    <string name="scheduled_on">Scheduled on:</string>
+    <string name="average">Average</string>
+    <string name="edit">Edit</string>
+    <string name="award">Award</string>
+    <string name="bid_ranges">Bid Ranges</string>
+    <string name="work_at">Work at</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="discussion_board">Discussion Board</string>
+    <string name="view_bids">View Bids</string>
+    <string name="view_proposal">View Proposal</string>
+    <string name="view_post">View Post</string>
+    <string name="time">Time</string>
+    <string name="completes_in">Completes In</string>
+    <string name="proposal">Proposal</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="places">Places</string>
+    <string name="professional_information">Professional Information</string>
+    <string name="jobs_completed">Jobs Completed</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

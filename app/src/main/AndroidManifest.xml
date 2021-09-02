@@ -51,7 +51,10 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen"
             android:screenOrientation="portrait" />

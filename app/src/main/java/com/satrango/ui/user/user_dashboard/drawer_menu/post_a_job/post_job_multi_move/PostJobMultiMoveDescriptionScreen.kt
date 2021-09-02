@@ -12,6 +12,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,6 +38,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -233,7 +235,21 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
                     }
                     val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, bidRangesArray)
                     binding.bidRangeSpinner.adapter = adapter
-                    binding.bidRangeSpinner.setOnItemClickListener { parent, view, position, id -> UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt() }
+                    binding.bidRangeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt()
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                        }
+
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

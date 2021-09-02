@@ -3,6 +3,14 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.end_points.UserApiEndPoints
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
@@ -44,6 +52,22 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun postJobMultiMove(requestBody: PostJobMultiMoveReqModel): PostJobMultiMoveResModel {
         return RetrofitBuilder.getUserRetrofitInstance().postJobMultiMove(requestBody)
+    }
+
+    suspend fun myJobPosts(requestBody: MyJobPostReqModel): MyJobPostResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().userJobPostDetails(requestBody)
+    }
+
+    suspend fun myJobPostsViewDetails(requestBody: MyJobPostViewReqModel): MyJobPostViewResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().userJobPostViewDetails(requestBody)
+    }
+
+    suspend fun viewBids(requestBody: ViewBidsReqModel): ViewBidsResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().viewBids(requestBody)
+    }
+
+    suspend fun viewProposal(requestBody: ViewProposalReqModel): ViewProposalResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().viewProposal(requestBody)
     }
 
 }

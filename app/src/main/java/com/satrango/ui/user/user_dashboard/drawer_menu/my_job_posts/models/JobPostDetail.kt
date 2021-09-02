@@ -1,0 +1,31 @@
+package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models
+
+data class JobPostDetail(
+    val amount: String,
+    val average_bids_amount: String,
+    val bid_end_date: String,
+    val bid_range_name: String,
+    val bids_period: String,
+    val booking_id: String,
+    val booking_status: String,
+    val category_id: String,
+    val current_date: String,
+    val details: List<Detail>,
+    val estimate_time: String,
+    val estimate_type: String,
+    val expires_in: String,
+    val fname: Any,
+    val from: String,
+    val lname: Any,
+    val mobile: Any,
+    val post_created_on: String,
+    val post_job_id: String,
+    val post_job_ref_id: String,
+    val profile_pic: Any,
+    val range_slots: String,
+    val scheduled_date: String,
+    val sp_id: String,
+    val started_at: String,
+    val title: String,
+    val total_bids: Int
+)

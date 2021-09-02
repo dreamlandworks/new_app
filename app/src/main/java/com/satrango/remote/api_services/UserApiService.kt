@@ -18,6 +18,14 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.TransactionHistoryResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
@@ -219,5 +227,25 @@ interface UserApiService {
     suspend fun postJobMultiMove(
         @Body requestBody: PostJobMultiMoveReqModel
     ): PostJobMultiMoveResModel
+
+    @POST(UserApiEndPoints.USER_JOB_POST_DETAILS)
+    suspend fun userJobPostDetails(
+        @Body requestBody: MyJobPostReqModel
+    ): MyJobPostResModel
+
+    @POST(UserApiEndPoints.USER_JOB_POST_VIEW_DETAILS)
+    suspend fun userJobPostViewDetails(
+        @Body requestBody: MyJobPostViewReqModel
+    ): MyJobPostViewResModel
+
+    @POST(UserApiEndPoints.VIEW_BIDS)
+    suspend fun viewBids(
+        @Body requestBody: ViewBidsReqModel
+    ): ViewBidsResModel
+
+    @POST(UserApiEndPoints.VIEW_PROPOSAL)
+    suspend fun viewProposal(
+        @Body requestBody: ViewProposalReqModel
+    ): ViewProposalResModel
 
 }

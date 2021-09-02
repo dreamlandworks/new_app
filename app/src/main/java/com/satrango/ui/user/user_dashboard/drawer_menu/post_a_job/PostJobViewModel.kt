@@ -7,6 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
@@ -34,6 +42,11 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
     var postJobSingleMove = MutableLiveData<NetworkResponse<PostJobSingleMoveResModel>>()
     var postJobBlueCollar = MutableLiveData<NetworkResponse<PostJobBlueCollarResModel>>()
     var postJobMultiMove = MutableLiveData<NetworkResponse<PostJobMultiMoveResModel>>()
+
+    var myJobPosts = MutableLiveData<NetworkResponse<MyJobPostResModel>>()
+    var myJobPostsViewDetails = MutableLiveData<NetworkResponse<MyJobPostViewResModel>>()
+    var viewBids = MutableLiveData<NetworkResponse<ViewBidsResModel>>()
+    var viewProposal = MutableLiveData<NetworkResponse<ViewProposalResModel>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -193,6 +206,98 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             postJobMultiMove.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return postJobMultiMove
+    }
+
+    fun myJobPosts(context: Context, requestBody: MyJobPostReqModel): MutableLiveData<NetworkResponse<MyJobPostResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    myJobPosts.value = NetworkResponse.Loading()
+                    val response = async { repository.myJobPosts(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        myJobPosts.value = NetworkResponse.Success(data)
+                    } else {
+                        myJobPosts.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    myJobPosts.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            myJobPosts.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return myJobPosts
+    }
+
+    fun myJobPostsViewDetails(context: Context, requestBody: MyJobPostViewReqModel): MutableLiveData<NetworkResponse<MyJobPostViewResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    myJobPostsViewDetails.value = NetworkResponse.Loading()
+                    val response = async { repository.myJobPostsViewDetails(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        myJobPostsViewDetails.value = NetworkResponse.Success(data)
+                    } else {
+                        myJobPostsViewDetails.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    myJobPostsViewDetails.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            myJobPostsViewDetails.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return myJobPostsViewDetails
+    }
+
+    fun viewBids(context: Context, requestBody: ViewBidsReqModel): MutableLiveData<NetworkResponse<ViewBidsResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    viewBids.value = NetworkResponse.Loading()
+                    val response = async { repository.viewBids(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        viewBids.value = NetworkResponse.Success(data)
+                    } else {
+                        viewBids.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    viewBids.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            viewBids.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return viewBids
+    }
+
+    fun viewProposal(context: Context, requestBody: ViewProposalReqModel): MutableLiveData<NetworkResponse<ViewProposalResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    viewProposal.value = NetworkResponse.Loading()
+                    val response = async { repository.viewProposal(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        viewProposal.value = NetworkResponse.Success(data)
+                    } else {
+                        viewProposal.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    viewProposal.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+                viewProposal.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return viewProposal
     }
 
 }

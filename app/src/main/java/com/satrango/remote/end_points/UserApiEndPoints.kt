@@ -37,5 +37,9 @@ object UserApiEndPoints {
     final const val POST_JOB_SINGLE_MOVE = "user/single_move_job_post"
     final const val POST_JOB_BLUE_COLLAR = "user/blue_collar_job_post"
     final const val POST_JOB_MULTI_MOVE = "user/multi_move_job_post"
+    final const val USER_JOB_POST_DETAILS = "user/user_job_post_details"
+    final const val USER_JOB_POST_VIEW_DETAILS = "user/job_post_details"
+    final const val VIEW_BIDS = "user/job_post_bids_list"
+    final const val VIEW_PROPOSAL = "user/job_post_bids_details"
 
 }

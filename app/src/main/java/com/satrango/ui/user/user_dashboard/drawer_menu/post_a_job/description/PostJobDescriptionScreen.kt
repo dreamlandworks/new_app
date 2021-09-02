@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +21,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.Po
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class PostJobDescriptionScreen : AppCompatActivity() {
 
@@ -146,7 +148,21 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                     }
                     val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, bidRangesArray)
                     binding.bidRangeSpinner.adapter = adapter
-                    binding.bidRangeSpinner.setOnItemClickListener { parent, view, position, id -> UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt() }
+                    binding.bidRangeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt()
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                        }
+
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
