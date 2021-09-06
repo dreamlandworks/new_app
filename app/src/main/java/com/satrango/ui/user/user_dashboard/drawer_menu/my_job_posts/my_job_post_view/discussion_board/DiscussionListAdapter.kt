@@ -1,0 +1,84 @@
+package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.satrango.R
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionDetail
+import com.satrango.utils.UserUtils
+import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
+
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class DiscussionListAdapter(
+    private val list: List<DiscussionDetail>,
+    private val context: Context
+) : RecyclerView.Adapter<DiscussionListAdapter.ViewHolder>() {
+
+    private var USER_VIEW = 0
+    private var PROVIDER_VIEW = 1
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val profileImage = view.findViewById<CircleImageView>(R.id.profilePic)
+        val userName = view.findViewById<TextView>(R.id.userName)
+        val dateTime = view.findViewById<TextView>(R.id.time)
+        val message = view.findViewById<TextView>(R.id.message)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return if (viewType == USER_VIEW) {
+            ViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.discussion_board_user_row,
+                    parent,
+                    false
+                )
+            )
+        } else {
+            ViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.discussion_board_sp_row,
+                    parent,
+                    false
+                )
+            )
+        }
+    }
+
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val data = list[position]
+        Glide.with(holder.profileImage).load(RetrofitBuilder.BASE_URL + data.file_name)
+            .error(R.drawable.images).into(
+                holder.profileImage
+            )
+        holder.userName.text = "${data.fname} ${data.lname}"
+        val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val formatter = SimpleDateFormat("hh:mm a")
+        val formatedTime = formatter.format(parser.parse(data.created_dts))
+        holder.dateTime.text = formatedTime
+        holder.message.text = data.comment
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (list[position].users_id == UserUtils.getUserId(context)) {
+            return USER_VIEW
+        } else {
+            return PROVIDER_VIEW
+        }
+    }
+}

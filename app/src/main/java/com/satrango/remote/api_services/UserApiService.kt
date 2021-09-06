@@ -20,6 +20,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBook
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
@@ -247,5 +251,15 @@ interface UserApiService {
     suspend fun viewProposal(
         @Body requestBody: ViewProposalReqModel
     ): ViewProposalResModel
+
+    @POST(UserApiEndPoints.POST_DISCUSSION)
+    suspend fun postDiscussion(
+        @Body requestBody: DiscussionBoardMessageReqModel
+    ): DiscussionBoardMessageResModel
+
+    @POST(UserApiEndPoints.DISCUSSION_LIST)
+    suspend fun postDiscussionList(
+        @Body requestBody: DiscussionListReqModel
+    ): DiscussionListResModel
 
 }

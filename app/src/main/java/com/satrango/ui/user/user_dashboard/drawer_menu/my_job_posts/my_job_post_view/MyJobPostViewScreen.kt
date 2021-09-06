@@ -18,6 +18,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
@@ -26,6 +27,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
@@ -124,6 +126,15 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         binding.viewBidsBtn.setOnClickListener {
             val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
+            intent.putExtra("postJobId", data.job_post_details.post_job_id)
+            intent.putExtra("expiresIn", data.job_post_details.expires_in)
+            intent.putExtra("bidRanges", data.job_post_details.range_slots)
+            intent.putExtra("title", data.job_post_details.title)
+            startActivity(intent)
+        }
+
+        binding.discussionBoardBtn.setOnClickListener {
+            val intent = Intent(this, DiscussionBoardScreen::class.java)
             intent.putExtra("postJobId", data.job_post_details.post_job_id)
             intent.putExtra("expiresIn", data.job_post_details.expires_in)
             intent.putExtra("bidRanges", data.job_post_details.range_slots)

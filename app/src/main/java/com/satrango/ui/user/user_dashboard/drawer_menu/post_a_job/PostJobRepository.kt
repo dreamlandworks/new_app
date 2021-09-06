@@ -5,6 +5,10 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
@@ -68,6 +72,14 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun viewProposal(requestBody: ViewProposalReqModel): ViewProposalResModel {
         return RetrofitBuilder.getUserRetrofitInstance().viewProposal(requestBody)
+    }
+
+    suspend fun sendDiscussionMessage(requestBody: DiscussionBoardMessageReqModel): DiscussionBoardMessageResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().postDiscussion(requestBody)
+    }
+
+    suspend fun discussionList(requestBody: DiscussionListReqModel): DiscussionListResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().postDiscussionList(requestBody)
     }
 
 }

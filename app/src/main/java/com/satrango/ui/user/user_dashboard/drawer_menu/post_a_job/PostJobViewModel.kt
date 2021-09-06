@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
@@ -47,6 +48,9 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
     var myJobPostsViewDetails = MutableLiveData<NetworkResponse<MyJobPostViewResModel>>()
     var viewBids = MutableLiveData<NetworkResponse<ViewBidsResModel>>()
     var viewProposal = MutableLiveData<NetworkResponse<ViewProposalResModel>>()
+
+    var discussionMessage = MutableLiveData<NetworkResponse<DiscussionBoardMessageResModel>>()
+    var discussionList = MutableLiveData<NetworkResponse<List<DiscussionDetail>>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -298,6 +302,54 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                 viewProposal.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return viewProposal
+    }
+
+    fun discussionMessage(context: Context, requestBody: DiscussionBoardMessageReqModel): MutableLiveData<NetworkResponse<DiscussionBoardMessageResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    discussionMessage.value = NetworkResponse.Loading()
+                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
+                    val response = async { repository.sendDiscussionMessage(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        discussionMessage.value = NetworkResponse.Success(data)
+                    } else {
+                        discussionMessage.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    discussionMessage.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            discussionMessage.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return discussionMessage
+    }
+
+    fun discussionList(context: Context, requestBody: DiscussionListReqModel): MutableLiveData<NetworkResponse<List<DiscussionDetail>>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    discussionList.value = NetworkResponse.Loading()
+                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
+                    val response = async { repository.discussionList(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        discussionList.value = NetworkResponse.Success(data.discussion_details)
+                    } else {
+                        discussionList.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    discussionList.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            discussionList.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return discussionList
     }
 
 }

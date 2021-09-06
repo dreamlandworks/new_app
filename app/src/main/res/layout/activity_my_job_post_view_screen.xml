@@ -354,7 +354,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/dicussionBoardBtn"
+            android:id="@+id/discussionBoardBtn"
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

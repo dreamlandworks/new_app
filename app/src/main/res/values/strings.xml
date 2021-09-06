@@ -442,6 +442,17 @@
     <string name="places">Places</string>
     <string name="professional_information">Professional Information</string>
     <string name="jobs_completed">Jobs Completed</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="please_set">Please set</string>
+    <string name="goals">Goals</string>
+    <string name="accepted_bid">Accepted Bid</string>
+    <string name="release_the_payment_in">Release the payment in</string>
+    <string name="installment">Installment</string>
+    <string name="add_another_installment">Add another installment</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="payment_type">Payment Type</string>
+    <string name="pay_in_installments">Pay in Installments</string>
+    <string name="single_payment">Single Payment</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

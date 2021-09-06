@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/_20sdp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        android:gravity="center"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="@string/payment_type"/>
+
+    <TextView
+        android:id="@+id/installmentBtn"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/blue_out_line"
+        android:padding="@dimen/_10sdp"
+        android:textSize="@dimen/text"
+        android:textColor="@color/black"
+        android:text="@string/pay_in_installments"/>
+
+    <TextView
+        android:id="@+id/singlePaymentBtn"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/blue_out_line"
+        android:padding="@dimen/_10sdp"
+        android:textSize="@dimen/text"
+        android:textColor="@color/black"
+        android:text="@string/single_payment"/>
+
+</LinearLayout>

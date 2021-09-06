@@ -87,10 +87,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
                 stopRecording()
 
                 val videoFile = File(videoPath)
-                val userId = RequestBody.create(
-                    MultipartBody.FORM,
-                    UserUtils.getUserId(this@ProviderSignUpSix)
-                )
+                val userId = RequestBody.create(MultipartBody.FORM, UserUtils.getUserId(this@ProviderSignUpSix))
                 val videoNo = RequestBody.create(MultipartBody.FORM, "2")
                 val key = RequestBody.create(MultipartBody.FORM, RetrofitBuilder.PROVIDER_KEY)
                 viewModel.uploadVideo(
@@ -172,7 +169,6 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
             mOutputFile?.parentFile?.mkdirs()
             mMediaRecorder.setOutputFile(mOutputFile!!.absolutePath)
             mMediaRecorder.setPreviewDisplay(surfaceHolder.surface)
-//            println("Video PAth>>>>>>  " + mOutputFile!!.absolutePath)
             videoPath = mOutputFile!!.absolutePath
             mMediaRecorder.prepare()
             try {

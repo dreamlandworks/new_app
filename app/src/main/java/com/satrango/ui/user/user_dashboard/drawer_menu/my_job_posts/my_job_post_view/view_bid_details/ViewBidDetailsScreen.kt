@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewBidDetailsScreensBinding
@@ -47,6 +48,26 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         progressDialog.setMessage("Loading...")
         progressDialog.setCancelable(false)
 
+        binding.awardBtn.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val dialogView = layoutInflater.inflate(R.layout.payment_type_dialog, null)
+            val installmentBtn = dialogView.findViewById<TextView>(R.id.installmentBtn)
+            val singlePaymentBtn = dialogView.findViewById<TextView>(R.id.singlePaymentBtn)
+            installmentBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            singlePaymentBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(dialogView)
+            dialog.show()
+        }
+
+        binding.rejectBtn.setOnClickListener {
+
+        }
+
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
@@ -75,10 +96,10 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
                         var languagesText = ""
                         for (language in data.language) {
-                            if (languagesText.isEmpty()) {
-                                languagesText = language.name
+                            languagesText = if (languagesText.isEmpty()) {
+                                language.name
                             } else {
-                                languagesText = languagesText + "," + language.name
+                                languagesText + "," + language.name
                             }
                         }
                         languages.text = languagesText

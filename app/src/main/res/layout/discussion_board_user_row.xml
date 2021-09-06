@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="end">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_40sdp"
+        app:cardCornerRadius="@dimen/_15sdp"
+        app:cardElevation="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_out_line"
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_toStartOf="@+id/time"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:text="@string/userName"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:gravity="end"
+                    android:lines="1"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="@dimen/_8sdp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePic"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:src="@drawable/images"
+        android:elevation="@dimen/_10sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        />
+</RelativeLayout>

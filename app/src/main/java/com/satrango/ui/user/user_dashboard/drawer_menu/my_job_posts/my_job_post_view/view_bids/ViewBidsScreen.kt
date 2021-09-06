@@ -44,6 +44,7 @@ class ViewBidsScreen : AppCompatActivity() {
         binding.expiresOn.text = intent.getStringExtra("expiresIn")
         binding.bidRanges.text = intent.getStringExtra("bidRanges")
 
+
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
