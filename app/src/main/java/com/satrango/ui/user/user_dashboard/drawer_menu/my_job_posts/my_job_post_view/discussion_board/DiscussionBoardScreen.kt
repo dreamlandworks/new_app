@@ -122,11 +122,11 @@ class DiscussionBoardScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     val layoutManager =
-                        LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+                        LinearLayoutManager(this)
                     layoutManager.stackFromEnd = true
+                    layoutManager.isSmoothScrollbarEnabled = true
                     binding.recyclerView.layoutManager = layoutManager
                     binding.recyclerView.adapter = DiscussionListAdapter(it.data!!, this)
-                    toast(this, "Updated!")
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.recyclerView, it.message!!)
@@ -149,9 +149,9 @@ class DiscussionBoardScreen : AppCompatActivity() {
         viewModel.discussionMessage(this, requestBody).observe(this, {
             when (it) {
                 is com.satrango.remote.NetworkResponse.Loading -> {
-                    toast(this, "Sending...")
                     binding.sendBtn.visibility = View.GONE
                     binding.message.isClickable = false
+                    binding.message.isFocusable = false
                     binding.pinBtn.isClickable = false
                     binding.cameraBtn.isClickable = false
                     binding.progressBar.visibility = View.VISIBLE
@@ -159,18 +159,21 @@ class DiscussionBoardScreen : AppCompatActivity() {
                 }
                 is com.satrango.remote.NetworkResponse.Success -> {
                     binding.message.isClickable = true
-                    binding.pinBtn.isClickable = false
-                    binding.cameraBtn.isClickable = false
+                    binding.message.isFocusable = true
+                    binding.pinBtn.isClickable = true
+                    binding.cameraBtn.isClickable = true
                     encodedImages = ArrayList()
                     imagePathList = ArrayList()
                     binding.message.setText("")
                     binding.progressBar.visibility = View.GONE
                     binding.sendBtn.visibility = View.VISIBLE
+                    loadDiscussionList()
                 }
                 is com.satrango.remote.NetworkResponse.Failure -> {
                     binding.message.isClickable = true
-                    binding.pinBtn.isClickable = false
-                    binding.cameraBtn.isClickable = false
+                    binding.message.isFocusable = true
+                    binding.pinBtn.isClickable = true
+                    binding.cameraBtn.isClickable = true
                     binding.progressBar.visibility = View.GONE
                     binding.sendBtn.visibility = View.VISIBLE
                     snackBar(binding.recyclerView, it.message!!)

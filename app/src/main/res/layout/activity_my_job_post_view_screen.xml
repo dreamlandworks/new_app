@@ -1,372 +1,409 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen">
 
+    <include
+        android:id="@+id/toolBar"
+        layout="@layout/user_tool_bar" />
+
     <LinearLayout
+        android:id="@+id/noteLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/toolBar"
-            layout="@layout/user_tool_bar" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/note"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/app_name"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text" />
+
+        <TextView
+            android:id="@+id/retryBtn"
+            style="@style/blue_outline_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:elevation="0dp"
+            android:textSize="@dimen/sub_text"
+            android:background="@drawable/blue_out_line"/>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/dataLayout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:background="@drawable/btn_bg_sm" />
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_100sdp"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/title"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="@string/title"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text" />
+                    android:layout_height="@dimen/_60sdp"
+                    android:background="@drawable/btn_bg_sm" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
+                    android:layout_height="@dimen/_100sdp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/title"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text" />
 
                     <LinearLayout
-                        style="@style/blue_outline_button_style"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/blue_out_line"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/_10sdp">
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="end"
+                        android:orientation="horizontal">
 
-                        <TextView
+                        <LinearLayout
+                            style="@style/blue_outline_button_style"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/expires_in"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
+                            android:background="@drawable/blue_out_line"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="@dimen/_10sdp">
 
-                        <TextView
-                            android:id="@+id/expiresOn"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/expires_in"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/expiresOn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/expires_in"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/sub_text" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/blue_outline_button_style"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/expires_in"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/sub_text" />
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:background="@drawable/blue_out_line"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="@dimen/_10sdp">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/bid_ranges"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
 
-                    <LinearLayout
-                        style="@style/blue_outline_button_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:background="@drawable/blue_out_line"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/_10sdp">
+                            <TextView
+                                android:id="@+id/bidRanges"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/expires_in"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/sub_text" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/bid_ranges"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:id="@+id/bidRanges"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/expires_in"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/sub_text" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
-
-            </LinearLayout>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:orientation="horizontal">
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/scheduled_date"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sub_text" />
-
-                <TextView
-                    android:id="@+id/scheduleDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:singleLine="true"
-                    android:text="@string/expires_in"
-                    android:textSize="@dimen/text" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/estimate_time"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sub_text" />
-
-                <TextView
-                    android:id="@+id/estimateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:singleLine="true"
-                    android:text="@string/expires_in"
-                    android:textSize="@dimen/text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/languages_known"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/languages"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:singleLine="true"
-                android:text="@string/expires_in"
-                android:textSize="@dimen/text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/jobLocationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/work_at"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/jobLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/expires_in"
-                android:textSize="@dimen/text"
-
-                app:drawableStartCompat="@drawable/ic_location_icon" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/work_description"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/jobDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center"
-                android:text="@string/expires_in"
-                android:textSize="@dimen/text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/attachments"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/attachmentsRV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/bids"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sub_text" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/bidCount"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/scheduled_date"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text" />
+
+                    <TextView
+                        android:id="@+id/scheduleDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="@string/expires_in"
+                        android:textSize="@dimen/text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="@string/bids"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/text" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/estimate_time"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text" />
+
+                    <TextView
+                        android:id="@+id/estimateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="@string/expires_in"
+                        android:textSize="@dimen/text" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/average"
+                    android:text="@string/languages_known"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
                 <TextView
-                    android:id="@+id/avgAmount"
+                    android:id="@+id/languages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:singleLine="true"
                     android:text="@string/expires_in"
-                    android:textColor="@color/red"
                     android:textSize="@dimen/text" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/jobLocationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_at"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/jobLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/expires_in"
+                    android:textSize="@dimen/text"
+
+                    app:drawableStartCompat="@drawable/ic_location_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/jobDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:text="@string/expires_in"
+                    android:textSize="@dimen/text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/attachments"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/attachmentsRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bids"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text" />
+
+                    <TextView
+                        android:id="@+id/bidCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/bids"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/average"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text" />
+
+                    <TextView
+                        android:id="@+id/avgAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/expires_in"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/text" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/editPostBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/edit_post"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/viewBidsBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/view_bids"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/awardBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/award"
+                    android:textSize="@dimen/sub_text" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/discussionBoardBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:background="@drawable/blue_out_line"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/discussion_board"
+                android:textSize="@dimen/sub_text" />
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/editPostBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/edit_post"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/viewBidsBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/view_bids"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/awardBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/award"
-                android:textSize="@dimen/sub_text" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/discussionBoardBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/discussion_board"
-            android:textSize="@dimen/sub_text" />
-
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

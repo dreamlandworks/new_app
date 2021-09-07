@@ -104,6 +104,7 @@
     <string name="choose">Choose</string>
     <string name="from">From</string>
     <string name="from_job_post">From Job Post</string>
+    <string name="saveInstallmentDetId">saveInstallmentDetId</string>
     <string name="to">To</string>
     <string name="s">S</string>
     <string name="m">M</string>
@@ -446,13 +447,15 @@
     <string name="please_set">Please set</string>
     <string name="goals">Goals</string>
     <string name="accepted_bid">Accepted Bid</string>
-    <string name="release_the_payment_in">Release the payment in</string>
+    <string name="release_the_payment_in">Release the payment upto 3 installments</string>
     <string name="installment">Installment</string>
     <string name="add_another_installment">Add another installment</string>
     <string name="proceed_to_pay">Proceed to Pay</string>
     <string name="payment_type">Payment Type</string>
     <string name="pay_in_installments">Pay in Installments</string>
     <string name="single_payment">Single Payment</string>
+    <string name="retry">RETRY</string>
+    <string name="no_internet_connection">No Internet Connection!</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
@@ -464,5 +467,19 @@
         <item>Male</item>
         <item>Female</item>
         <item>Others</item>
+    </string-array>
+
+    <string-array name="installments">
+        <item>Set Goals</item>
+        <item>10%</item>
+        <item>20%</item>
+        <item>30%</item>
+        <item>40%</item>
+        <item>50%</item>
+        <item>60%</item>
+        <item>70%</item>
+        <item>80%</item>
+        <item>90%</item>
+        <item>100%</item>
     </string-array>
 </resources>

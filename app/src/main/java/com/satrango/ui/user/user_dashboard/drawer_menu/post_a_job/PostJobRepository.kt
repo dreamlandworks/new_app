@@ -2,7 +2,6 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job
 
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
@@ -11,6 +10,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.SetGoalsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
@@ -26,7 +30,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
-import okhttp3.RequestBody
 
 class PostJobRepository: BaseRepository() {
 
@@ -80,6 +83,18 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun discussionList(requestBody: DiscussionListReqModel): DiscussionListResModel {
         return RetrofitBuilder.getUserRetrofitInstance().postDiscussionList(requestBody)
+    }
+
+    suspend fun setGoals(): SetGoalsResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().setGoals(RetrofitBuilder.USER_KEY)
+    }
+
+    suspend fun saveInstallments(requestBody: SaveInstallmentReqModel): SaveInstallmentResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().saveInstallment(requestBody)
+    }
+
+    suspend fun installmentPayments(requestBody: InstallmentPaymentReqModel): InstallmentPaymentResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().installmentPayment(requestBody)
     }
 
 }

@@ -43,5 +43,8 @@ object UserApiEndPoints {
     final const val VIEW_PROPOSAL = "user/job_post_bids_details"
     final const val POST_DISCUSSION = "user/post_discussion"
     final const val DISCUSSION_LIST = "user/job_post_discussion_list"
+    final const val SET_GOALS = "user/goals_list"
+    final const val SAVE_INSTALLMENTS = "user/job_post_installments"
+    final const val INSTALLMENT_PAYMENT = "user/job_post_installments_payments"
 
 }

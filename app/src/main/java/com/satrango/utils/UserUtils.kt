@@ -62,6 +62,19 @@ object UserUtils {
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
     }
 
+    fun saveInstallmentDetId(context: Context, fromJobPost: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.saveInstallmentDetId), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getInstallmentDetId(context: Context): String? {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.saveInstallmentDetId), "0")
+    }
+
     fun setFromJobPostSingleMove(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()

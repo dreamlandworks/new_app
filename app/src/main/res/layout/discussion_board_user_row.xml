@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="end">
+    android:gravity="end"
+    android:paddingEnd="@dimen/_10sdp"
+    tools:ignore="RtlSymmetry">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_marginVertical="@dimen/_10sdp"
@@ -12,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/_40sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
         app:cardCornerRadius="@dimen/_15sdp"
         app:cardElevation="@dimen/_5sdp">
 
@@ -25,16 +28,17 @@
             android:paddingStart="@dimen/_10sdp"
             android:paddingVertical="@dimen/_10sdp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/userName"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:layout_toStartOf="@+id/time"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@string/userName"
                     android:textColor="@color/black"
@@ -46,11 +50,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/time"
                     android:gravity="end"
-                    android:lines="1"
-                    android:layout_alignParentEnd="true"
                     android:textSize="@dimen/_8sdp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/message"
@@ -66,9 +68,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePic"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
         android:src="@drawable/images"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/blue"
         android:elevation="@dimen/_10sdp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"

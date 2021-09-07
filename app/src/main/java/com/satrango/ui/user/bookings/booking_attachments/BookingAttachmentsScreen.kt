@@ -426,7 +426,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             dialog.dismiss()
         }
         Handler().postDelayed({
-            Checkout.preload(applicationContext)
             makePayment()
         }, 3000)
         dialog.setContentView(dialogView)
@@ -480,6 +479,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     private fun makePayment() {
+        Checkout.preload(applicationContext)
         val checkout = Checkout()
         checkout.setKeyID(getString(R.string.razorpay_api_key))
         try {

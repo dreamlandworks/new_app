@@ -1,10 +1,14 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +23,10 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.loadProfileImage
@@ -65,7 +72,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         }
 
         binding.rejectBtn.setOnClickListener {
-
+        
         }
 
         val factory = ViewModelFactory(PostJobRepository())
@@ -129,6 +136,13 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             attachmentsText.visibility = View.GONE
                         }
 
+                        awardBtn.setOnClickListener {
+
+                            val intent = Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java)
+                            intent.putExtra("postJobId", data.bid_details.)
+
+                        }
+
                     }
 
                 }
@@ -153,6 +167,35 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
     override fun onPause() {
         super.onPause()
         MyJobPostViewScreen.myJobPostViewScreen = false
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showPaymentTypeDialog() {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(com.satrango.R.layout.search_type_dialog)
+        val window = dialog.window
+        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val viewResults = dialog.findViewById<TextView>(com.satrango.R.id.viewResults)
+        val bookInstantly = dialog.findViewById<TextView>(com.satrango.R.id.bookInstantly)
+        val question = dialog.findViewById<TextView>(com.satrango.R.id.question)
+        question.text = "Select Payment Type"
+        viewResults.text = "Installments"
+        bookInstantly.text = "Spot"
+
+        viewResults.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, SetGoalsScreen::class.java)
+            intent.putExtra("postJobId", ViewBidsScreen.bookingId)
+            intent.putExtra("bidPrice", binding.bid.text.toString().trim())
+            startActivity(intent)
+        }
+        bookInstantly.setOnClickListener {
+            dialog.dismiss()
+
+        }
+        dialog.show()
     }
 
 }

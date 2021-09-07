@@ -1,13 +1,19 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,19 +27,21 @@ import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
+    private var bookingId: Int = 0
+    private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityMyJobPostViewScreenBinding
     private lateinit var progressDialog: ProgressDialog
+
     companion object {
         var myJobPostViewScreen = false
     }
@@ -55,31 +63,9 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         progressDialog.setCancelable(false)
 
         val factory = ViewModelFactory(PostJobRepository())
-        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        val requestBody = MyJobPostViewReqModel(
-            intent.getStringExtra("booking_id")!!.toInt(),
-            intent.getStringExtra("category_id")!!.toInt(),
-            RetrofitBuilder.USER_KEY,
-            intent.getStringExtra("post_job_id")!!.toInt(),
-            UserUtils.getUserId(this).toInt(),
-        )
-        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
-            when(it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    updateUI(it.data!!)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.viewBidsBtn, it.message!!)
-                }
-
-            }
-        })
+        bookingId = intent.getStringExtra("booking_id")!!.toInt()
 
     }
 
@@ -89,7 +75,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding.bidRanges.text = data.job_post_details.range_slots
         binding.expiresOn.text = data.job_post_details.expires_in
         binding.scheduleDate.text = data.job_post_details.scheduled_date
-        binding.estimateTime.text = "${data.job_post_details.estimate_time} ${data.job_post_details.estimate_type}"
+        binding.estimateTime.text =
+            "${data.job_post_details.estimate_time} ${data.job_post_details.estimate_type}"
 
         var languages = ""
         for (language in data.languages) {
@@ -107,10 +94,12 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
                 binding.jobLocation.visibility = View.GONE
                 binding.jobLocationText.visibility = View.GONE
             } else {
-                binding.jobLocation.text = data.job_details[0].city + ", " + data.job_details[0].state + ", " + data.job_details[0].country + ", " + data.job_details[0].zipcode
+                binding.jobLocation.text =
+                    data.job_details[0].city + ", " + data.job_details[0].state + ", " + data.job_details[0].country + ", " + data.job_details[0].zipcode
             }
         } else if (!data.job_details[0].locality.isNullOrBlank()) {
-            binding.jobLocation.text = data.job_details[0].locality + ", " + data.job_details[0].city + ", " + data.job_details[0].state + ", " + data.job_details[0].country + ", " + data.job_details[0].zipcode
+            binding.jobLocation.text =
+                data.job_details[0].locality + ", " + data.job_details[0].city + ", " + data.job_details[0].state + ", " + data.job_details[0].country + ", " + data.job_details[0].zipcode
         }
 
         binding.jobDescription.text = data.job_details[0].job_description
@@ -119,12 +108,14 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         for (image in data.attachments) {
             images.add(RetrofitBuilder.BASE_URL + image.file_name.substring(1))
         }
-        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.attachmentsRV.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
         binding.bidCount.text = data.job_post_details.total_bids.toString()
         binding.avgAmount.text = data.job_post_details.average_bids_amount
 
         binding.viewBidsBtn.setOnClickListener {
+            ViewBidsScreen.bookingId = bookingId
             val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
             intent.putExtra("postJobId", data.job_post_details.post_job_id)
             intent.putExtra("expiresIn", data.job_post_details.expires_in)
@@ -142,7 +133,84 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             startActivity(intent)
         }
 
+        binding.awardBtn.setOnClickListener {
+            showPaymentTypeDialog(data)
+        }
+
     }
+
+    @SuppressLint("SetTextI18n")
+    private fun showPaymentTypeDialog(data: MyJobPostViewResModel) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(com.satrango.R.layout.search_type_dialog)
+        val window = dialog.window
+        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val viewResults = dialog.findViewById<TextView>(com.satrango.R.id.viewResults)
+        val bookInstantly = dialog.findViewById<TextView>(com.satrango.R.id.bookInstantly)
+        val question = dialog.findViewById<TextView>(com.satrango.R.id.question)
+        question.text = "Select Payment Type"
+        viewResults.text = "Installments"
+        bookInstantly.text = "Spot"
+
+        viewResults.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, SetGoalsScreen::class.java)
+            intent.putExtra("postJobId", data.job_post_details.post_job_id)
+            intent.putExtra("bidPrice", data.job_post_details.average_bids_amount)
+            startActivity(intent)
+        }
+        bookInstantly.setOnClickListener {
+            dialog.dismiss()
+
+        }
+        dialog.show()
+    }
+
+    private fun connected() {
+        binding.noteLayout.visibility = View.GONE
+        loadScreen()
+    }
+
+    private fun loadScreen() {
+        val requestBody = MyJobPostViewReqModel(
+            bookingId,
+            intent.getStringExtra("category_id")!!.toInt(),
+            RetrofitBuilder.USER_KEY,
+            intent.getStringExtra("post_job_id")!!.toInt(),
+            UserUtils.getUserId(this).toInt(),
+        )
+        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    binding.dataLayout.visibility = View.GONE
+                    binding.noteLayout.visibility = View.GONE
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.dataLayout.visibility = View.VISIBLE
+                    updateUI(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    disconnected()
+                    binding.note.text = it.message!!
+                }
+
+            }
+        })
+    }
+
+    private fun disconnected() {
+        binding.noteLayout.visibility = View.VISIBLE
+        binding.note.text = getString(R.string.no_internet_connection)
+        binding.retryBtn.setOnClickListener {
+            connected()
+        }
+    }
+
 
     override fun deleteAttachment(position: Int, imagePath: String) {
 
@@ -153,9 +221,26 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         myJobPostViewScreen = true
     }
 
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
     override fun onPause() {
         super.onPause()
         myJobPostViewScreen = false
+        unregisterReceiver(broadcastReceiver)
+    }
+
+    private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val notConnected = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+            if (notConnected) {
+                disconnected()
+            } else {
+                connected()
+            }
+        }
     }
 
 }

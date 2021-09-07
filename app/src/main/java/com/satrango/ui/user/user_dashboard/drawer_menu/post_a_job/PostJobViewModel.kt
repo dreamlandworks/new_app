@@ -12,13 +12,15 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJob
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.UserBidRangesResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveReqModel
@@ -28,8 +30,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
 import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -51,6 +51,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
     var discussionMessage = MutableLiveData<NetworkResponse<DiscussionBoardMessageResModel>>()
     var discussionList = MutableLiveData<NetworkResponse<List<DiscussionDetail>>>()
+
+    var setGoals = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data>>>()
+    var saveInstallments = MutableLiveData<NetworkResponse<SaveInstallmentResModel>>()
+    var installmentsPayment = MutableLiveData<NetworkResponse<InstallmentPaymentResModel>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -350,6 +354,75 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             discussionList.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return discussionList
+    }
+
+    fun setGoals(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data>>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    setGoals.value = NetworkResponse.Loading()
+                    val response = async { repository.setGoals() }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        setGoals.value = NetworkResponse.Success(data.data)
+                    } else {
+                        setGoals.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    setGoals.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            setGoals.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return setGoals
+    }
+
+    fun saveInstallments(context: Context, requestBody: SaveInstallmentReqModel): MutableLiveData<NetworkResponse<SaveInstallmentResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    saveInstallments.value = NetworkResponse.Loading()
+                    val response = async { repository.saveInstallments(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        saveInstallments.value = NetworkResponse.Success(data)
+                    } else {
+                        saveInstallments.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    saveInstallments.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            saveInstallments.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return saveInstallments
+    }
+
+    fun installmentPayments(context: Context, requestBody: InstallmentPaymentReqModel): MutableLiveData<NetworkResponse<InstallmentPaymentResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    installmentsPayment.value = NetworkResponse.Loading()
+                    val response = async { repository.installmentPayments(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        installmentsPayment.value = NetworkResponse.Success(data)
+                    } else {
+                        installmentsPayment.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    installmentsPayment.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            installmentsPayment.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return installmentsPayment
     }
 
 }

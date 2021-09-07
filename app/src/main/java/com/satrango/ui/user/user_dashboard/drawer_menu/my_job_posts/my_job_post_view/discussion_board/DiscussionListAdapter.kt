@@ -54,11 +54,13 @@ class DiscussionListAdapter(
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
-        Glide.with(holder.profileImage).load(RetrofitBuilder.BASE_URL + data.file_name)
-            .error(R.drawable.images).into(
-                holder.profileImage
-            )
-        holder.userName.text = "${data.fname} ${data.lname}"
+        if (!data.profile_pic.isNullOrBlank()) {
+            Glide.with(holder.profileImage).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+                .error(R.drawable.images).into(
+                    holder.profileImage
+                )
+        }
+        holder.userName.text = data.fname + " " + data.lname
         val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val formatter = SimpleDateFormat("hh:mm a")
         val formatedTime = formatter.format(parser.parse(data.created_dts))

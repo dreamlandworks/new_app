@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.databinding.ViewBidsRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.BidDetail
 
@@ -31,6 +32,11 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
                 intent.putExtra("bidId", bidDetail.bid_id)
                 intent.putExtra("spId", bidDetail.sp_id)
                 binding.root.context.startActivity(intent)
+            }
+            binding.awardBtn.setOnClickListener {
+                val intent = Intent(binding.root.context, SetGoalsScreen::class.java)
+                intent.putExtra("postJobId", ViewBidsScreen.bookingId)
+                intent.putExtra("bidPrice", bidDetail.amount)
             }
         }
     }

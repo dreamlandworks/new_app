@@ -26,6 +26,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.SetGoalsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
@@ -261,5 +266,20 @@ interface UserApiService {
     suspend fun postDiscussionList(
         @Body requestBody: DiscussionListReqModel
     ): DiscussionListResModel
+
+    @GET(UserApiEndPoints.SET_GOALS)
+    suspend fun setGoals(
+        @Query("key") key: String
+    ): SetGoalsResModel
+
+    @POST(UserApiEndPoints.SAVE_INSTALLMENTS)
+    suspend fun saveInstallment(
+        @Body requestBody: SaveInstallmentReqModel
+    ): SaveInstallmentResModel
+
+    @POST(UserApiEndPoints.INSTALLMENT_PAYMENT)
+    suspend fun installmentPayment(
+        @Body requestBody: InstallmentPaymentReqModel
+    ): InstallmentPaymentResModel
 
 }

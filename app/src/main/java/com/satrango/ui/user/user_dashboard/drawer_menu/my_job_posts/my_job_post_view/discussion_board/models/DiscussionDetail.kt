@@ -3,7 +3,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post
 data class DiscussionDetail(
     val attachment_count: Any,
     val comment: String,
-    val file_name: Any,
+    val file_name: String,
     val fname: String,
     val id: String,
     val likes_count: Any,
