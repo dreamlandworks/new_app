@@ -116,6 +116,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         binding.viewBidsBtn.setOnClickListener {
             ViewBidsScreen.bookingId = bookingId
+            ViewBidsScreen.bookingId = data.job_post_details.post_job_id.toInt()
             val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
             intent.putExtra("postJobId", data.job_post_details.post_job_id)
             intent.putExtra("expiresIn", data.job_post_details.expires_in)

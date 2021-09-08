@@ -447,8 +447,7 @@
     <string name="please_set">Please set</string>
     <string name="goals">Goals</string>
     <string name="accepted_bid">Accepted Bid</string>
-    <string name="release_the_payment_in">Release the payment upto 3 installments</string>
-    <string name="installment">Installment</string>
+    <string name="release_the_payment">Release the payment</string>
     <string name="add_another_installment">Add another installment</string>
     <string name="proceed_to_pay">Proceed to Pay</string>
     <string name="payment_type">Payment Type</string>
@@ -456,6 +455,7 @@
     <string name="single_payment">Single Payment</string>
     <string name="retry">RETRY</string>
     <string name="no_internet_connection">No Internet Connection!</string>
+    <string name="installment">Installment</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -35,8 +35,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
-    private lateinit var progressDialog: ProgressDialog
     private lateinit var binding: ActivityViewBidDetailsScreensBinding
+    private lateinit var progressDialog: ProgressDialog
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,10 +137,8 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         }
 
                         awardBtn.setOnClickListener {
-
-                            val intent = Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java)
-                            intent.putExtra("postJobId", data.bid_details.)
-
+                            ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
+                            startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
                         }
 
                     }

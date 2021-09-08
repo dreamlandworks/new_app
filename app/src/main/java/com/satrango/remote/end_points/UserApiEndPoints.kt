@@ -46,5 +46,8 @@ object UserApiEndPoints {
     final const val SET_GOALS = "user/goals_list"
     final const val SAVE_INSTALLMENTS = "user/job_post_installments"
     final const val INSTALLMENT_PAYMENT = "user/job_post_installments_payments"
+    final const val COMPLAINT_MODULES = "user/complaint_modules_list"
+    final const val POST_FEEDBACK = "user/post_feedback"
+    final const val POST_COMPLAINT = "user/post_complaints"
 
 }

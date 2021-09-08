@@ -36,8 +36,8 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
             }
             if (status == "Pending") {
                 binding.editBtn.visibility = View.VISIBLE
-                binding.awardedBtn.visibility = View.VISIBLE
-                binding.awardedBtn.text = "Award"
+                binding.awardedBtn.visibility = View.GONE
+//                binding.awardedBtn.text = "Award"
             } else if (status == "Awarded") {
                 binding.editBtn.visibility = View.GONE
                 binding.awardedBtn.visibility = View.VISIBLE

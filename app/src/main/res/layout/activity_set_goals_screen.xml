@@ -58,7 +58,7 @@
             android:layout_height="match_parent"
             android:gravity="center|top"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_30sdp">
+            android:paddingHorizontal="@dimen/_20sdp">
 
 
             <LinearLayout
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:text="@string/release_the_payment_in"
+                android:text="@string/release_the_payment"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -125,6 +125,10 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_height="@dimen/_40sdp" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

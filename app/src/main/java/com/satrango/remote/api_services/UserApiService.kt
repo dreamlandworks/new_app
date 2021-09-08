@@ -49,6 +49,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintModuleResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
@@ -281,5 +286,20 @@ interface UserApiService {
     suspend fun installmentPayment(
         @Body requestBody: InstallmentPaymentReqModel
     ): InstallmentPaymentResModel
+
+    @GET(UserApiEndPoints.COMPLAINT_MODULES)
+    suspend fun getComplaintModules(
+        @Query("key") key: String
+    ): ComplaintModuleResModel
+
+    @POST(UserApiEndPoints.POST_FEEDBACK)
+    suspend fun postFeedBack(
+        @Body requestBody: FeedbackReqModel
+    ): FeedbackResModel
+
+    @POST(UserApiEndPoints.POST_COMPLAINT)
+    suspend fun postComplaint(
+        @Body requestBody: ComplaintReqModel
+    ): ComplaintResModel
 
 }

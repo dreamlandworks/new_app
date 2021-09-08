@@ -33,87 +33,10 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text" />
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/bookingBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:gravity="center"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                android:text="@string/booking_job_posting"
-                style="@style/blue_outline_button_style" />
-
-            <TextView
-                android:id="@+id/fundTransfersBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                style="@style/blue_outline_button_style"
-                android:text="@string/fund_transfers" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/bugsInApplicationBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                style="@style/blue_outline_button_style"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                android:gravity="center"
-                android:text="@string/bugs_in_application" />
-
-            <TextView
-                android:id="@+id/serviceProviderBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:paddingHorizontal="@dimen/_10sdp"
-                style="@style/blue_outline_button_style"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                android:gravity="center"
-                android:text="@string/service_provider" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="3">
-
-            <TextView
-                android:id="@+id/othersBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_bg_sm_blue_border"
-                android:gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                style="@style/blue_outline_button_style"
-                android:text="@string/others" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -128,6 +51,7 @@
             app:boxCornerRadiusBottomEnd="@dimen/_10sdp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/complaint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"

@@ -2,11 +2,15 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -14,10 +18,11 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetGoalsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.DataX
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
@@ -29,10 +34,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
+class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListener {
 
+    private lateinit var selectedInstallmentToUpdate: DataX
     private lateinit var viewModel: PostJobViewModel
-    private var bidPrice: Int = 0
+    private var bidPrice = 0.0
     private lateinit var goalsList: List<Data>
     private lateinit var binding: ActivitySetGoalsScreenBinding
     private lateinit var progressDialog: ProgressDialog
@@ -46,9 +52,8 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
         binding = ActivitySetGoalsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val jobPostId = intent.getStringExtra("postJobId")!!
-        bidPrice = intent.getStringExtra("bidPrice")!!.toInt()
-        binding.bidPrice.text = "Rs ${bidPrice.toString()}"
+        bidPrice = ViewBidsScreen.bidPrice
+        binding.bidPrice.text = "Rs $bidPrice"
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
@@ -93,59 +98,26 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
                     snackBar(binding.addAnotherAddressBtn, "Set Goal")
                 }
                 else -> {
-                    var installments = 0
-                    for (installment in installmentsList) {
-                        installments += installment.amount
-                    }
-                    if (installments <= bidPrice && currentInstallment <= 3) {
-                        installments += binding.installment.text.toString().toInt()
-                        if (currentInstallment == 2 && installments < bidPrice) {
-                            snackBar(
-                                binding.addAnotherAddressBtn,
-                                "Please add Correct amount $installments"
-                            )
-                        } else {
-                            installments = 0
-                            for (installment in installmentsList) {
-                                installments += installment.amount
-                            }
-                            if (installments <= bidPrice) {
-                                currentInstallment += 1
-                                installmentsList.add(
-                                    DataX(
-                                        binding.installment.text.toString().toInt(),
-                                        0,
-                                        goalsList[binding.setGoals.selectedItemPosition - 1].goal_id.toInt()
-                                    )
-                                )
-                                installments -= binding.installment.text.toString().toInt()
-                                binding.installment.setText("")
-                                binding.setGoals.setSelection(0)
-                            } else {
-                                snackBar(binding.addAnotherAddressBtn, "Installment price exceeds to Bid Price")
-                            }
-
-                        }
-                    } else {
-                        snackBar(
-                            binding.addAnotherAddressBtn,
-                            "Amount is not equal to bid price or Installments exceeded."
+                    currentInstallment += 1
+                    installmentsList.add(
+                        DataX(
+                            binding.installment.text.toString().toInt(),
+                            goalsList[binding.setGoals.selectedItemPosition - 1].goal_id.toInt(),
+                            currentInstallment
                         )
-                    }
+                    )
+                    binding.installment.setText("")
+                    binding.setGoals.setSelection(0)
+                    binding.recyclerView.layoutManager =
+                        LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                    binding.recyclerView.adapter = SetGoalsAdapter(installmentsList, this)
                 }
             }
         }
 
         binding.proceedToPayBtn.setOnClickListener {
 
-            var installments = 0
-            for (installment in installmentsList) {
-                installments += installment.amount
-            }
-            if (installments == bidPrice) {
-                toast(this, Gson().toJson(installmentsList))
-                makePayment()
-            } else {
+            if (binding.proceedToPayBtn.text == "Update Installment") {
 
                 when {
                     binding.installment.text.toString().isEmpty() -> {
@@ -155,64 +127,63 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
                         snackBar(binding.addAnotherAddressBtn, "Set Goal")
                     }
                     else -> {
-                        if (installments <= bidPrice && currentInstallment <= 3) {
-                            installments += binding.installment.text.toString().toInt()
-                            if (currentInstallment == 2 && installments < bidPrice) {
-                                snackBar(
-                                    binding.addAnotherAddressBtn,
-                                    "Please add Correct amount $installments"
+                        for (index in installmentsList.indices) {
+                            if (installmentsList[index].inst_no == selectedInstallmentToUpdate.inst_no) {
+                                installmentsList[index] = DataX(
+                                    binding.installment.text.toString().toInt(),
+                                    goalsList[binding.setGoals.selectedItemPosition - 1].goal_id.toInt(),
+                                    selectedInstallmentToUpdate.inst_no
                                 )
-                            } else {
-                                currentInstallment += 1
-                                installmentsList.add(
-                                    DataX(
-                                        binding.installment.text.toString().toInt(),
-                                        goalsList[binding.setGoals.selectedItemPosition - 1].goal_id.toInt(),
-                                        currentInstallment
-                                    )
-                                )
-                                installments -= binding.installment.text.toString().toInt()
-                                binding.installment.setText("")
-                                binding.setGoals.setSelection(0)
-                                installments = 0
-                                for (installment in installmentsList) {
-                                    installments += installment.amount
-                                }
-                                if (installments == bidPrice) {
-                                    val requestBody = SaveInstallmentReqModel(
-                                        0,
-                                        installmentsList,
-                                        RetrofitBuilder.USER_KEY,
-                                        jobPostId.toInt()
-                                    )
-                                    viewModel.saveInstallments(this, requestBody).observe(this, {
-                                        when(it) {
-                                            is NetworkResponse.Loading -> {
-                                                progressDialog.show()
-                                            }
-                                            is NetworkResponse.Success -> {
-                                                progressDialog.dismiss()
-                                                UserUtils.saveInstallmentDetId(this, it.data!!.installment_det_id.toString())
-                                                makePayment()
-                                            }
-                                            is NetworkResponse.Failure -> {
-                                                progressDialog.dismiss()
-                                                snackBar(binding.addAnotherAddressBtn, it.message!!)
-                                            }
-                                        }
-                                    })
-                                }
                             }
-                        } else {
-                            snackBar(
-                                binding.addAnotherAddressBtn,
-                                "Amount is not equal to bid price or Installments exceeded."
-                            )
                         }
+                        binding.installment.setText("")
+                        binding.setGoals.setSelection(0)
+                        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                        binding.recyclerView.adapter = SetGoalsAdapter(installmentsList, this)
+                        binding.proceedToPayBtn.text = "Proceed to Pay"
                     }
                 }
+            } else {
+                var installments = 0.0
+                for (installment in installmentsList) {
+                    installments += installment.amount
+                }
+                if (installments == bidPrice) {
+                    uploadToServer()
+                } else {
+                    snackBar(binding.addAnotherAddressBtn, "Amount is not equal to bid price.")
+                }
             }
+
         }
+    }
+
+    private fun uploadToServer() {
+        val requestBody = SaveInstallmentReqModel(
+            ViewBidsScreen.bookingId,
+            installmentsList,
+            RetrofitBuilder.USER_KEY,
+            ViewBidsScreen.postJobId
+        )
+        viewModel.saveInstallments(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    UserUtils.saveInstallmentDetId(
+                        this,
+                        it.data!!.installment_det_id.toString()
+                    )
+                    makePayment()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.addAnotherAddressBtn, it.message!!)
+                }
+            }
+        })
     }
 
     private fun makePayment() {
@@ -227,7 +198,10 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
                 bidPrice * 100
             ) // 500rs * 100 = 50000 paisa
             orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+            orderRequest.put(
+                "image",
+                "https://dev.satrango.com/public/assets/img/logo-black.png"
+            )
             orderRequest.put("theme.color", R.color.blue)
             checkout.open(this, orderRequest)
         } catch (e: Exception) {
@@ -257,12 +231,17 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
             UserUtils.getUserId(this).toInt()
         )
         viewModel.installmentPayments(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
+                    if (status == "Success") {
+                        paymentSuccessDialog(this)
+                    } else {
+                        snackBar(binding.recyclerView, "Payment Failed")
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -270,6 +249,31 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener {
                 }
             }
         })
+    }
+
+    private fun paymentSuccessDialog(context: Context) {
+        val dialog = BottomSheetDialog(context)
+        dialog.setCancelable(false)
+        val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun selectedInstallment(dataX: DataX) {
+        binding.installment.setText(dataX.amount.toString())
+        for (index in goalsList.indices) {
+            if (dataX.goal_id == goalsList[index].goal_id.toInt()) {
+                selectedInstallmentToUpdate = dataX
+                binding.setGoals.setSelection(index + 1)
+            }
+        }
+        binding.proceedToPayBtn.text = "Update Installment"
     }
 
 }

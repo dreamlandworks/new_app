@@ -27,6 +27,8 @@ class ViewBidsScreen : AppCompatActivity() {
 
     companion object {
         var bookingId = 0
+        var postJobId = 0
+        var bidPrice = 0.0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -34,6 +34,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRep
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProviderRepository
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProviderViewModel
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
@@ -109,6 +111,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(PostJobViewModel::class.java) -> return PostJobViewModel(
                 baseRepository as PostJobRepository
+            ) as T
+            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> return SettingsViewModel(
+                baseRepository as SettingsRepository
             ) as T
         }
         return super.create(modelClass)
