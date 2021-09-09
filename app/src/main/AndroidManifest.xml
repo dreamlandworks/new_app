@@ -24,7 +24,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission
@@ -47,13 +48,14 @@
         android:allowBackup="true"
         android:icon="@drawable/circlelogo"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
         android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/circlelogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen"></activity>
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen"
             android:screenOrientation="portrait" />

@@ -4,10 +4,9 @@ import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
@@ -95,6 +94,14 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun installmentPayments(requestBody: InstallmentPaymentReqModel): InstallmentPaymentResModel {
         return RetrofitBuilder.getUserRetrofitInstance().installmentPayment(requestBody)
+    }
+
+    suspend fun deleteAttachment(requestBody: AttachmentDeleteReqModel): AttachmentDeleteResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().deleteAttachment(requestBody)
+    }
+
+    suspend fun likeClicked(requestBody: LikePostDescussionReqModel): LikePostDiscussionResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().likePostDiscussion(requestBody)
     }
 
 }

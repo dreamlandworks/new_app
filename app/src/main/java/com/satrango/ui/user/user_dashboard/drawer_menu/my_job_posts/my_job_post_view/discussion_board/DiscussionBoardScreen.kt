@@ -27,6 +27,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.LikePostDescussionReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
@@ -38,7 +39,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class DiscussionBoardScreen : AppCompatActivity() {
+class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
 
     private lateinit var viewModel: PostJobViewModel
     private var postJobId: Int = 0
@@ -126,7 +127,7 @@ class DiscussionBoardScreen : AppCompatActivity() {
                     layoutManager.stackFromEnd = true
                     layoutManager.isSmoothScrollbarEnabled = true
                     binding.recyclerView.layoutManager = layoutManager
-                    binding.recyclerView.adapter = DiscussionListAdapter(it.data!!, this)
+                    binding.recyclerView.adapter = DiscussionListAdapter(it.data!!, this, this)
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.recyclerView, it.message!!)
@@ -386,6 +387,31 @@ class DiscussionBoardScreen : AppCompatActivity() {
             null
         )
         return Uri.parse(path)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    override fun likeClicked(id: String, position: Int) {
+        val requestBody = LikePostDescussionReqModel(
+            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
+            id.toInt(),
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(this).toInt()
+        )
+        viewModel.likeClicked(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+
+                }
+                is NetworkResponse.Success -> {
+                    binding.recyclerView.adapter!!.notifyItemChanged(position)
+                    loadDiscussionList()
+                }
+                is NetworkResponse.Failure -> {
+                    snackBar(binding.recyclerView, it.message!!)
+                }
+            }
+        })
+
     }
 
 }

@@ -49,5 +49,8 @@ object UserApiEndPoints {
     final const val COMPLAINT_MODULES = "user/complaint_modules_list"
     final const val POST_FEEDBACK = "user/post_feedback"
     final const val POST_COMPLAINT = "user/post_complaints"
+    final const val DELETE_ATTACHMENTS = "user/delete_attachment"
+    final const val LIKE_POST_DISCUSSION = "user/like_post_discussion"
+    final const val OFFERS_LIST = "user/offers_list"
 
 }

@@ -4,77 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:gravity="end"
+    android:orientation="horizontal"
     android:paddingEnd="@dimen/_10sdp"
     tools:ignore="RtlSymmetry">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/_30sdp"
-        app:cardCornerRadius="@dimen/_15sdp"
-        app:cardElevation="@dimen/_5sdp">
+    <RelativeLayout
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_out_line"
-            android:orientation="vertical"
-            android:paddingEnd="@dimen/_15sdp"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_10sdp">
+            android:layout_alignParentEnd="true"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardElevation="@dimen/_5sdp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:background="@drawable/blue_out_line"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_15sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/userName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/userName"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@string/time"
+                        android:textSize="@dimen/_8sdp" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/userName"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="@string/userName"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="@string/you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/time"
-                    android:gravity="end"
-                    android:textSize="@dimen/_8sdp" />
-
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="@string/you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePic"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:elevation="@dimen/_10sdp"
+            android:src="@drawable/images"
+            app:civ_border_color="@color/blue"
+            app:civ_border_width="1dp" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilePic"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:src="@drawable/images"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/blue"
-        android:elevation="@dimen/_10sdp"
+    <ImageView
+        android:id="@+id/likeBtn"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_alignBottom="@+id/card"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        />
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginEnd="@dimen/_35sdp"
+        android:background="@color/white"
+        android:src="@drawable/ic_outline_thumb_up_24" />
 </RelativeLayout>

@@ -9,6 +9,8 @@ import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -55,6 +57,9 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
     var setGoals = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data>>>()
     var saveInstallments = MutableLiveData<NetworkResponse<SaveInstallmentResModel>>()
     var installmentsPayment = MutableLiveData<NetworkResponse<InstallmentPaymentResModel>>()
+
+    var deleteAttachment = MutableLiveData<NetworkResponse<AttachmentDeleteResModel>>()
+    var likeClicked = MutableLiveData<NetworkResponse<LikePostDiscussionResModel>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -423,6 +428,52 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             installmentsPayment.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return installmentsPayment
+    }
+
+    fun deleteAttachment(context: Context, requestBody: AttachmentDeleteReqModel): MutableLiveData<NetworkResponse<AttachmentDeleteResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    deleteAttachment.value = NetworkResponse.Loading()
+                    val response = async { repository.deleteAttachment(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        deleteAttachment.value = NetworkResponse.Success(data)
+                    } else {
+                        deleteAttachment.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    deleteAttachment.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            deleteAttachment.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return deleteAttachment
+    }
+
+    fun likeClicked(context: Context, requestBody: LikePostDescussionReqModel): MutableLiveData<NetworkResponse<LikePostDiscussionResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    likeClicked.value = NetworkResponse.Loading()
+                    val response = async { repository.likeClicked(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        likeClicked.value = NetworkResponse.Success(data)
+                    } else {
+                        likeClicked.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    likeClicked.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            likeClicked.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return likeClicked
     }
 
 }

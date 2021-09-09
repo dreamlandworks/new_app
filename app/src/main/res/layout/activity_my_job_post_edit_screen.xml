@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen">
+    tools:context=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen">
 
     <include
         android:id="@+id/toolBar"
@@ -15,9 +15,9 @@
         android:id="@+id/noteLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/note"
@@ -34,10 +34,10 @@
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/retry"
+            android:background="@drawable/blue_out_line"
             android:elevation="0dp"
-            android:textSize="@dimen/sub_text"
-            android:background="@drawable/blue_out_line"/>
+            android:text="@string/retry"
+            android:textSize="@dimen/sub_text" />
 
     </LinearLayout>
 
@@ -126,14 +126,20 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/sub_text" />
 
-                            <TextView
-                                android:id="@+id/bidRanges"
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:text="@string/expires_in"
-                                android:textColor="@color/red"
-                                android:textSize="@dimen/sub_text" />
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/bidRanges"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/sub_text"
+                                    android:textColor="@color/black"
+                                    android:inputType="textCapWords" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
 
@@ -161,14 +167,18 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/sub_text" />
 
-                    <TextView
-                        android:id="@+id/scheduleDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:singleLine="true"
-                        android:text="@string/expires_in"
-                        android:textSize="@dimen/text" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/scheduleDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -185,14 +195,18 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/sub_text" />
 
-                    <TextView
-                        android:id="@+id/estimateTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:singleLine="true"
-                        android:text="@string/expires_in"
-                        android:textSize="@dimen/text" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/estimateTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="time" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -211,20 +225,25 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
-                <TextView
-                    android:id="@+id/languages"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:singleLine="true"
-                    android:text="@string/expires_in"
-                    android:textSize="@dimen/text" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/languages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapWords" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:orientation="vertical">
 
                 <TextView
@@ -235,17 +254,21 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
-                <TextView
-                    android:id="@+id/jobLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="@string/expires_in"
-                    android:textSize="@dimen/text"
 
-                    app:drawableStartCompat="@drawable/ic_location_icon" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        app:drawableStartCompat="@drawable/ic_location_icon" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -261,14 +284,19 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
-                <TextView
-                    android:id="@+id/jobDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center"
-                    android:text="@string/expires_in"
-                    android:textSize="@dimen/text" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -288,6 +316,26 @@
                     android:id="@+id/attachmentsRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/addressRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -352,7 +400,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/editPostBtn"
+                    android:id="@+id/cancelBtn"
                     style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -360,11 +408,11 @@
                     android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/edit_post"
+                    android:text="@string/Cancel"
                     android:textSize="@dimen/sub_text" />
 
                 <TextView
-                    android:id="@+id/viewBidsBtn"
+                    android:id="@+id/updateBtn"
                     style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -372,37 +420,10 @@
                     android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/view_bids"
-                    android:textSize="@dimen/sub_text" />
-
-                <TextView
-                    android:id="@+id/awardBtn"
-                    style="@style/blue_outline_button_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:visibility="gone"
-                    android:background="@drawable/blue_out_line"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/award"
+                    android:text="@string/update"
                     android:textSize="@dimen/sub_text" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/discussionBoardBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/discussion_board"
-                android:textSize="@dimen/sub_text" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -55,22 +55,6 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         progressDialog.setMessage("Loading...")
         progressDialog.setCancelable(false)
 
-        binding.awardBtn.setOnClickListener {
-            val dialog = BottomSheetDialog(this)
-            val dialogView = layoutInflater.inflate(R.layout.payment_type_dialog, null)
-            val installmentBtn = dialogView.findViewById<TextView>(R.id.installmentBtn)
-            val singlePaymentBtn = dialogView.findViewById<TextView>(R.id.singlePaymentBtn)
-            installmentBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            singlePaymentBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.setCancelable(false)
-            dialog.setContentView(dialogView)
-            dialog.show()
-        }
-
         binding.rejectBtn.setOnClickListener {
         
         }
@@ -136,9 +120,22 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             attachmentsText.visibility = View.GONE
                         }
 
-                        awardBtn.setOnClickListener {
-                            ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
-                            startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
+                        binding.awardBtn.setOnClickListener {
+                            val dialog = BottomSheetDialog(this@ViewBidDetailsScreen)
+                            val dialogView = layoutInflater.inflate(R.layout.payment_type_dialog, null)
+                            val installmentBtn = dialogView.findViewById<TextView>(R.id.installmentBtn)
+                            val singlePaymentBtn = dialogView.findViewById<TextView>(R.id.singlePaymentBtn)
+                            installmentBtn.setOnClickListener {
+                                ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
+                                startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
+                                dialog.dismiss()
+                            }
+                            singlePaymentBtn.setOnClickListener {
+                                dialog.dismiss()
+                            }
+                            dialog.setCancelable(false)
+                            dialog.setContentView(dialogView)
+                            dialog.show()
                         }
 
                     }

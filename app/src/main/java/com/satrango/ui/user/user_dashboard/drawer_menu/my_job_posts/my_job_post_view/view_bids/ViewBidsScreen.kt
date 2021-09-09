@@ -26,6 +26,7 @@ class ViewBidsScreen : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     companion object {
+        var categoryId = 0
         var bookingId = 0
         var postJobId = 0
         var bidPrice = 0.0
@@ -51,12 +52,10 @@ class ViewBidsScreen : AppCompatActivity() {
         binding.expiresOn.text = intent.getStringExtra("expiresIn")!!
         binding.bidRanges.text = intent.getStringExtra("bidRanges")!!
 
-        toast(this, bookingId.toString())
-
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        val requestBody = ViewBidsReqModel(RetrofitBuilder.USER_KEY, intent.getStringExtra("postJobId")!!.toInt())
+        val requestBody = ViewBidsReqModel(RetrofitBuilder.USER_KEY, postJobId)
         viewModel.viewBids(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

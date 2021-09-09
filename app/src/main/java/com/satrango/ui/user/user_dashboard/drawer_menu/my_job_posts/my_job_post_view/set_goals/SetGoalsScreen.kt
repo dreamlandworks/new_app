@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -165,6 +166,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             RetrofitBuilder.USER_KEY,
             ViewBidsScreen.postJobId
         )
+        toast(this, Gson().toJson(requestBody))
         viewModel.saveInstallments(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

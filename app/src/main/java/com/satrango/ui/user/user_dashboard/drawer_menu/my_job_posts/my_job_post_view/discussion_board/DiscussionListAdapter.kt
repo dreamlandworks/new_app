@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,7 +19,8 @@ import java.text.SimpleDateFormat
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class DiscussionListAdapter(
     private val list: List<DiscussionDetail>,
-    private val context: Context
+    private val context: Context,
+    private val discussionBoardInterface: DiscussionBoardInterface
 ) : RecyclerView.Adapter<DiscussionListAdapter.ViewHolder>() {
 
     private var USER_VIEW = 0
@@ -29,6 +31,7 @@ class DiscussionListAdapter(
         val userName = view.findViewById<TextView>(R.id.userName)
         val dateTime = view.findViewById<TextView>(R.id.time)
         val message = view.findViewById<TextView>(R.id.message)
+        val likeBtn = view.findViewById<ImageView>(R.id.likeBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -66,6 +69,19 @@ class DiscussionListAdapter(
         val formatedTime = formatter.format(parser.parse(data.created_dts))
         holder.dateTime.text = formatedTime
         holder.message.text = data.comment
+
+        if (!data.likes_count.isNullOrBlank()) {
+            if (data.likes_count.toInt() > 0) {
+                holder.likeBtn.setImageResource(R.drawable.ic_blue_filled_thumb_up_24)
+            } else {
+                holder.likeBtn.setImageResource(R.drawable.ic_outline_thumb_up_24)
+            }
+        }
+
+
+        holder.likeBtn.setOnClickListener {
+            discussionBoardInterface.likeClicked(data.id, position)
+        }
     }
 
     override fun getItemCount(): Int {

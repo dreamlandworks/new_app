@@ -1,7 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,9 +9,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +21,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -37,6 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
+    private var categoryId: Int = 0
     private var bookingId: Int = 0
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityMyJobPostViewScreenBinding
@@ -54,7 +53,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_post)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -66,7 +66,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         bookingId = intent.getStringExtra("booking_id")!!.toInt()
-
+        categoryId = intent.getStringExtra("category_id")!!.toInt()
     }
 
     @SuppressLint("SetTextI18n")
@@ -116,9 +116,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         binding.viewBidsBtn.setOnClickListener {
             ViewBidsScreen.bookingId = bookingId
-            ViewBidsScreen.bookingId = data.job_post_details.post_job_id.toInt()
+            ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
             val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
-            intent.putExtra("postJobId", data.job_post_details.post_job_id)
             intent.putExtra("expiresIn", data.job_post_details.expires_in)
             intent.putExtra("bidRanges", data.job_post_details.range_slots)
             intent.putExtra("title", data.job_post_details.title)
@@ -135,38 +134,20 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         }
 
         binding.awardBtn.setOnClickListener {
-            showPaymentTypeDialog(data)
-        }
-
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun showPaymentTypeDialog(data: MyJobPostViewResModel) {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(com.satrango.R.layout.search_type_dialog)
-        val window = dialog.window
-        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        val viewResults = dialog.findViewById<TextView>(com.satrango.R.id.viewResults)
-        val bookInstantly = dialog.findViewById<TextView>(com.satrango.R.id.bookInstantly)
-        val question = dialog.findViewById<TextView>(com.satrango.R.id.question)
-        question.text = "Select Payment Type"
-        viewResults.text = "Installments"
-        bookInstantly.text = "Spot"
-
-        viewResults.setOnClickListener {
-            dialog.dismiss()
             val intent = Intent(this, SetGoalsScreen::class.java)
             intent.putExtra("postJobId", data.job_post_details.post_job_id)
             intent.putExtra("bidPrice", data.job_post_details.average_bids_amount)
             startActivity(intent)
         }
-        bookInstantly.setOnClickListener {
-            dialog.dismiss()
 
+        binding.editPostBtn.setOnClickListener {
+            val intent = Intent(this, MyJobPostEditScreen::class.java)
+            ViewBidsScreen.bookingId = bookingId
+            ViewBidsScreen.categoryId = categoryId
+            ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
+            startActivity(intent)
         }
-        dialog.show()
+
     }
 
     private fun connected() {
@@ -177,7 +158,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     private fun loadScreen() {
         val requestBody = MyJobPostViewReqModel(
             bookingId,
-            intent.getStringExtra("category_id")!!.toInt(),
+            categoryId,
             RetrofitBuilder.USER_KEY,
             intent.getStringExtra("post_job_id")!!.toInt(),
             UserUtils.getUserId(this).toInt(),
@@ -235,7 +216,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
     private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val notConnected = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+            val notConnected =
+                intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
             if (notConnected) {
                 disconnected()
             } else {

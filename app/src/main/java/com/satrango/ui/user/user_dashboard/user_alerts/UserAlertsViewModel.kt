@@ -17,6 +17,7 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
 
     val normalAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
     val actionableAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
+    val userOffers = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>>()
 
     fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
@@ -43,13 +44,13 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
     fun getActionableAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
             actionableAlertsList.value = NetworkResponse.Loading()
-            CoroutineScope(Dispatchers.Main).launch {
+            viewModelScope.launch {
                 try {
-                    val response = repository.getUserAlerts("2")
-                    if (response.status == 200) {
-                        actionableAlertsList.value = NetworkResponse.Success(response.data)
+                    val response = async { repository.getUserAlerts("2") }
+                    if (response.await().status == 200) {
+                        actionableAlertsList.value = NetworkResponse.Success(response.await().data)
                     } else {
-                        actionableAlertsList.value = NetworkResponse.Failure(response.message)
+                        actionableAlertsList.value = NetworkResponse.Failure(response.await().message)
                     }
                 } catch (e: Exception) {
                     actionableAlertsList.value = NetworkResponse.Failure(e.message)
@@ -60,6 +61,28 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
             actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
         }
         return actionableAlertsList
+    }
+
+    fun getUserOffers(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>> {
+        if (hasInternetConnection(context)) {
+            userOffers.value = NetworkResponse.Loading()
+            viewModelScope.launch {
+                try {
+                    val response = async { repository.getUserOffers() }
+                    if (response.await().status == 200) {
+                        userOffers.value = NetworkResponse.Success(response.await().data)
+                    } else {
+                        userOffers.value = NetworkResponse.Failure(response.await().message)
+                    }
+                } catch (e: Exception) {
+                    userOffers.value = NetworkResponse.Failure(e.message)
+                }
+
+            }
+        } else {
+            userOffers.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return userOffers
     }
 
 }

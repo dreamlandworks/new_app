@@ -449,6 +449,7 @@
     <string name="accepted_bid">Accepted Bid</string>
     <string name="release_the_payment">Release the payment</string>
     <string name="add_another_installment">Add another installment</string>
+    <string name="add_installment">Add installment</string>
     <string name="proceed_to_pay">Proceed to Pay</string>
     <string name="payment_type">Payment Type</string>
     <string name="pay_in_installments">Pay in Installments</string>
@@ -456,6 +457,7 @@
     <string name="retry">RETRY</string>
     <string name="no_internet_connection">No Internet Connection!</string>
     <string name="installment">Installment</string>
+    <string name="update">Update</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

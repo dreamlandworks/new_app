@@ -40,7 +40,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpO
 import com.satrango.ui.service_provider.provider_dashboard.provider_home.ProviderHomeScreen
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.UserOffersScreen
+import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen

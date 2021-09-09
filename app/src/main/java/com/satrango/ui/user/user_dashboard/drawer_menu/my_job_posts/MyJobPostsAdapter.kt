@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.MyJobPostsRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 
 class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val status: String) :
     RecyclerView.Adapter<MyJobPostsAdapter.ViewHolder>() {
@@ -38,6 +40,13 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                 binding.editBtn.visibility = View.VISIBLE
                 binding.awardedBtn.visibility = View.GONE
 //                binding.awardedBtn.text = "Award"
+                binding.editBtn.setOnClickListener {
+                    val intent = Intent(binding.editBtn.context, MyJobPostEditScreen::class.java)
+                    ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
+                    ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
+                    ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
+                    binding.editBtn.context.startActivity(intent)
+                }
             } else if (status == "Awarded") {
                 binding.editBtn.visibility = View.GONE
                 binding.awardedBtn.visibility = View.VISIBLE

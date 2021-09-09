@@ -144,7 +144,7 @@
                     android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/add_another_installment"
+                    android:text="@string/add_installment"
                     android:textSize="@dimen/sub_text" />
 
                 <TextView

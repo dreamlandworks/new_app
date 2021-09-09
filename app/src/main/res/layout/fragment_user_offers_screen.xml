@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.user_dashboard.UserOffersScreen">
+    tools:context=".ui.user.user_dashboard.user_offers.UserOffersScreen">
 
     <include
         android:id="@+id/toolBar"
-        layout="@layout/user_tool_bar"/>
+        layout="@layout/user_tool_bar" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="This Page is under Development" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

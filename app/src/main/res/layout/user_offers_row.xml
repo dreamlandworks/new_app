@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="@dimen/_10sdp"
+    android:layout_marginHorizontal="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardElevation="@dimen/_5sdp"
+    android:layout_height="@dimen/_150sdp">
+
+    <ImageView
+        android:id="@+id/offerImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loading_icon"
+        tools:ignore="ContentDescription" />
+
+</com.google.android.material.card.MaterialCardView>

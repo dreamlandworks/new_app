@@ -243,6 +243,8 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:textSize="@dimen/sub_text"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_5sdp"

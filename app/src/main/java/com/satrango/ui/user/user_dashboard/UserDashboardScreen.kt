@@ -39,11 +39,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScr
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
+import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -404,7 +404,6 @@ class UserDashboardScreen : AppCompatActivity() {
             R.id.navigation_offers -> {
                 binding.toolBarLayout.visibility = View.GONE
                 binding.bottomNavigationView.menu.getItem(4).isChecked = true
-                logoutDialog()
                 return UserOffersScreen()
             }
         }

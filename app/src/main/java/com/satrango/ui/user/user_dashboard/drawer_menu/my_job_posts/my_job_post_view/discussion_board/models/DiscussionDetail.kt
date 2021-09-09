@@ -1,12 +1,12 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models
 
 data class DiscussionDetail(
-    val attachment_count: Any,
+    val attachment_count: String,
     val comment: String,
     val file_name: String,
     val fname: String,
     val id: String,
-    val likes_count: Any,
+    val likes_count: String,
     val lname: String,
     val mobile: String,
     val post_job_id: String,

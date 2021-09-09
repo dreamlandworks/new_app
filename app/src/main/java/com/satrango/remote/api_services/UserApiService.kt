@@ -20,10 +20,9 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBook
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
@@ -60,6 +59,7 @@ import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
+import com.satrango.ui.user.user_dashboard.user_offers.models.OffersResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -301,5 +301,20 @@ interface UserApiService {
     suspend fun postComplaint(
         @Body requestBody: ComplaintReqModel
     ): ComplaintResModel
+
+    @POST(UserApiEndPoints.DELETE_ATTACHMENTS)
+    suspend fun deleteAttachment(
+        @Body requestBody: AttachmentDeleteReqModel
+    ): AttachmentDeleteResModel
+
+    @POST(UserApiEndPoints.LIKE_POST_DISCUSSION)
+    suspend fun likePostDiscussion(
+        @Body requestBody: LikePostDescussionReqModel
+    ): LikePostDiscussionResModel
+
+    @GET(UserApiEndPoints.OFFERS_LIST)
+    suspend fun getOffersList(
+        @Query("key") key: String
+    ): OffersResModel
 
 }
