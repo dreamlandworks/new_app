@@ -4,6 +4,8 @@ data class JobPostDetails(
     val amount: String,
     val bid_range_name: String,
     val bids_period: String,
+    val booking_id: Int,
+    val bid_per: String,
     val booking_status: String,
     val estimate_time: String,
     val estimate_type: String,

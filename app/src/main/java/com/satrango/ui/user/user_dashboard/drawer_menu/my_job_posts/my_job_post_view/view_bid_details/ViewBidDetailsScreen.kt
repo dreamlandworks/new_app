@@ -23,7 +23,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
@@ -110,9 +110,9 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         experience.text = data.bid_details.exp
                         jobsCount.text = data.bid_details.jobs_completed
 
-                        val images = ArrayList<String>()
+                        val images = ArrayList<Attachment>()
                         for (image in data.attachments) {
-                            images.add(RetrofitBuilder.BASE_URL + image.file_name.substring(1))
+                            images.add(image)
                         }
                         attachmentsRV.layoutManager = LinearLayoutManager(this@ViewBidDetailsScreen, LinearLayoutManager.HORIZONTAL, false)
                         attachmentsRV.adapter = AttachmentsAdapter(images, this@ViewBidDetailsScreen)
@@ -150,7 +150,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
     }
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
+    override fun deleteAttachment(position: Int, imagePath: Attachment) {
 
     }
 

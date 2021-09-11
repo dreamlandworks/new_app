@@ -24,13 +24,16 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPostJobMultiMoveAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.Addresse
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.MyJobPostMultiMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
 import com.satrango.utils.UserUtils
@@ -44,13 +47,15 @@ import kotlin.collections.ArrayList
 
 class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
+    private lateinit var data: MyJobPostViewResModel
+    private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityPostJobMultiMoveAddressScreenBinding
     private lateinit var progressDialog: ProgressDialog
     private val GALLERY_REQUEST = 100
     private var addressIndex = 0
 
     companion object {
-        lateinit var imagePathList: ArrayList<String>
+        lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
         lateinit var encodedImages: ArrayList<Attachment>
     }
 
@@ -67,6 +72,9 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setMessage("Loading...")
+
+        val factory = ViewModelFactory(PostJobRepository())
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         if (UserUtils.addressList.isNotEmpty()) {
             loadAddressOnUI()
@@ -104,19 +112,83 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     if (addressIndex != UserUtils.addressList.size) {
                         loadAddressOnUI()
                     } else {
-                        postJobMultiMove()
+                        if (UserUtils.EDIT_MY_JOB_POST) {
+                            updatePostJobMultiMove()
+                        } else {
+                            postJobMultiMove()
+                        }
                     }
                 }
 
             }
 
         }
+
     }
+
+    private fun updatePostJobMultiMove() {
+
+        val addressList = ArrayList<Addresse>()
+        for (address in UserUtils.finalAddressList) {
+            var id = 0
+            for (add in data.job_details) {
+                if (add.address_id.toInt() == address.address_id) {
+                    id = add.id.toInt()
+                }
+            }
+            addressList.add(Addresse(
+                address.address_id,
+                id,
+                address.job_description,
+                address.sequence_no,
+                address.weight_type
+            ))
+        }
+
+        val requestBody = MyJobPostMultiMoveEditReqModel(
+            addressList,
+            encodedImages,
+            UserUtils.bid_per,
+            UserUtils.bid_range_id,
+            UserUtils.bids_period,
+            data.job_post_details.booking_id,
+            data.job_post_details.post_created_on,
+            UserUtils.estimate_time,
+            UserUtils.estimateTypeId,
+            RetrofitBuilder.USER_KEY,
+            PostJobMultiMoveDescriptionScreen.finalKeywords,
+            PostJobMultiMoveDescriptionScreen.finalLanguages,
+            data.job_post_details.post_job_id.toInt(),
+            UserUtils.scheduled_date,
+            UserUtils.time_slot_from,
+            UserUtils.title,
+            UserUtils.getUserId(this).toInt()
+        )
+
+        viewModel.updateMultiMoveMyJobPost(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.addressText, it.data!!.message)
+                    Handler().postDelayed({
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
+                    }, 3000)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.addressText, it.message!!)
+                }
+            }
+        })
+
+    }
+
 
     @SuppressLint("SimpleDateFormat")
     private fun postJobMultiMove() {
-        val factory = ViewModelFactory(PostJobRepository())
-        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = PostJobMultiMoveReqModel(
             UserUtils.finalAddressList,
@@ -179,6 +251,15 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
     private fun loadAddressOnUI() {
         binding.discription.setText("")
         binding.addressText.text = UserUtils.addressList[addressIndex].month
+
+        if (UserUtils.EDIT_MY_JOB_POST) {
+            data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+            for (add in data.job_details) {
+                if (add.address_id == UserUtils.addressList[addressIndex].day) {
+                    binding.discription.setText(add.job_description)
+                }
+            }
+        }
     }
 
     private fun getImageFromGallery() {
@@ -196,12 +277,12 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(getImageFilePath(imageUri))
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), ""))
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(getImageFilePath(imageUri!!))
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), ""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =
@@ -242,7 +323,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         return ""
     }
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
+    override fun deleteAttachment(position: Int, imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment) {
         imagePathList.remove(imagePath)
         binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
         Handler().postDelayed({

@@ -22,13 +22,11 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
-import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
@@ -38,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
 
-    private lateinit var images: java.util.ArrayList<String>
+    private lateinit var images: java.util.ArrayList<Attachment>
     private lateinit var displayData: MyJobPostViewResModel
     private lateinit var binding: ActivityMyJobPostEditScreenBinding
     private lateinit var viewModel: PostJobViewModel
@@ -164,9 +162,9 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
 
         binding.jobDescription.setText(data.job_details[0].job_description)
 
-        images = ArrayList<String>()
+        images = ArrayList()
         for (image in data.attachments) {
-            images.add(RetrofitBuilder.BASE_URL + image.file_name.substring(1))
+            images.add(image)
         }
         binding.attachmentsRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -177,7 +175,7 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
 
     }
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
+    override fun deleteAttachment(position: Int, imagePath: Attachment) {
         viewModel.deleteAttachment(this, AttachmentDeleteReqModel(displayData.attachments[position].id.toInt(), RetrofitBuilder.USER_KEY)).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

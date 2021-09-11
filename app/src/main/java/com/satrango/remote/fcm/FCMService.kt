@@ -72,6 +72,7 @@ class FCMService : FirebaseMessagingService() {
         val alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
         val notificationIntent = Intent(applicationContext, ViewUserBookingDetailsScreen::class.java)
         notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])

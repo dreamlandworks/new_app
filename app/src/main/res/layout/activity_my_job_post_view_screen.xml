@@ -15,9 +15,9 @@
         android:id="@+id/noteLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/note"
@@ -34,10 +34,10 @@
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/retry"
+            android:background="@drawable/blue_out_line"
             android:elevation="0dp"
-            android:textSize="@dimen/sub_text"
-            android:background="@drawable/blue_out_line"/>
+            android:text="@string/retry"
+            android:textSize="@dimen/sub_text" />
 
     </LinearLayout>
 
@@ -272,6 +272,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/attachmentsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
@@ -364,6 +365,33 @@
                     android:textSize="@dimen/sub_text" />
 
                 <TextView
+                    android:id="@+id/awardBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/award"
+                    android:textSize="@dimen/sub_text"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/discussionBoardBtn"
+                    style="@style/filled_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:background="@drawable/btn_bg"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/discussion_board"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
                     android:id="@+id/viewBidsBtn"
                     style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
@@ -375,34 +403,7 @@
                     android:text="@string/view_bids"
                     android:textSize="@dimen/sub_text" />
 
-                <TextView
-                    android:id="@+id/awardBtn"
-                    style="@style/blue_outline_button_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:visibility="gone"
-                    android:background="@drawable/blue_out_line"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/award"
-                    android:textSize="@dimen/sub_text" />
-
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/discussionBoardBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:background="@drawable/blue_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/discussion_board"
-                android:textSize="@dimen/sub_text" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

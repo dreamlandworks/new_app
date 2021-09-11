@@ -1,6 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models
 
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 
 data class DiscussionBoardMessageReqModel(
     val attachment_type: String,

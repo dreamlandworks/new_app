@@ -15,5 +15,6 @@ data class BookingDetail(
     val mobile: String,
     val scheduled_date: String,
     val sp_id: String,
-    val started_at: String
+    val started_at: String,
+    val otp: String
 )

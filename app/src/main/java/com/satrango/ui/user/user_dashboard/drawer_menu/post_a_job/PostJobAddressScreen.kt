@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPostJobAddressScreenBinding
@@ -22,6 +23,8 @@ import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen
@@ -37,6 +40,8 @@ import kotlin.collections.ArrayList
 
 class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
+    private lateinit var data: MyJobPostViewResModel
+    private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityPostJobAddressScreenBinding
     private lateinit var addressList: ArrayList<MonthsModel>
     private lateinit var progressDialog: ProgressDialog
@@ -50,6 +55,9 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+
+        val factory = ViewModelFactory(PostJobRepository())
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         binding.apply {
 
@@ -84,7 +92,12 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                             snackBar(nextBtn, "Select Address")
                         }
                     } else {
-                        postJobSingleMove(addressId)
+                        if (UserUtils.EDIT_MY_JOB_POST) {
+                            updatePostJobSingleMove(addressId)
+                        } else {
+                            postJobSingleMove(addressId)
+                        }
+
                     }
                 }
             }
@@ -97,11 +110,60 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
     }
 
+    private fun updatePostJobSingleMove(addressId: Int) {
+
+        val requestBody = MyJobPostSingleMoveEditReqModel(
+            addressId,
+            PostJobAttachmentsScreen.encodedImages,
+            UserUtils.bid_per,
+            UserUtils.bid_range_id,
+            UserUtils.bids_period,
+            data.job_post_details.booking_id,
+            data.job_post_details.post_created_on,
+            UserUtils.estimate_time,
+            UserUtils.estimateTypeId,
+            UserUtils.job_description,
+            RetrofitBuilder.USER_KEY,
+            PostJobAttachmentsScreen.finalKeywords,
+            PostJobAttachmentsScreen.finalLanguages,
+            data.job_post_details.post_job_id.toInt(),
+            UserUtils.scheduled_date,
+            UserUtils.time_slot_from,
+            UserUtils.title,
+            UserUtils.getUserId(this).toInt()
+        )
+
+        viewModel.updateSingleMoveMyJobPost(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.data!!.message)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
+
+    }
+
+    private fun updateUI() {
+        data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        for (index in addressList.indices) {
+            if (data.job_details[index].address_id == addressList[index].day) {
+                addressList[index] = MonthsModel(addressList[index].month, addressList[index].day, true)
+            }
+        }
+        binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen, LinearLayoutManager.HORIZONTAL, false)
+        binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun postJobSingleMove(addressId: Int) {
-
-        val factory = ViewModelFactory(PostJobRepository())
-        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = PostJobSingleMoveReqModel(
             addressId,
@@ -161,6 +223,11 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen, LinearLayoutManager.HORIZONTAL, false)
                     binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
                     progressDialog.dismiss()
+
+                    if (UserUtils.EDIT_MY_JOB_POST) {
+                        updateUI()
+                    }
+
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -176,7 +243,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             val tempAddress = arrayListOf<MonthsModel>()
             addressList.onEachIndexed { index, month ->
                 if (index == position) {
-                    tempAddress.add(MonthsModel(month.month, month.day, true))
+                    tempAddress.add(MonthsModel(month.month, month.day, !month.isSelected))
                 } else {
                     tempAddress.add(MonthsModel(month.month, month.day, month.isSelected))
                 }

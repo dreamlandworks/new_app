@@ -6,16 +6,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.databinding.AttachmentRowBinding
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 
-class AttachmentsAdapter(private val list: ArrayList<String>, private val attachmentsListener: AttachmentsListener): RecyclerView.Adapter<AttachmentsAdapter.ViewHolder>() {
+class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val attachmentsListener: AttachmentsListener): RecyclerView.Adapter<AttachmentsAdapter.ViewHolder>() {
 
     class ViewHolder(binding: AttachmentRowBinding): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
-        fun bind(imagePath: String) {
-            Glide.with(binding.image).load(imagePath).into(binding.image)
+        fun bind(imagePath: Attachment) {
+            if (imagePath.id.isNotEmpty()) {
+                Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+            } else {
+                Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
+            }
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
             }

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/_200sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardElevation="@dimen/_5sdp"
+    android:layout_marginVertical="@dimen/_10sdp"
+    android:layout_marginHorizontal="@dimen/_5sdp"
+    android:paddingHorizontal="@dimen/_5sdp"
     app:cardBackgroundColor="@color/white"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/_5sdp">
 
     <LinearLayout
@@ -16,29 +19,31 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/sub_text"
         android:text="@string/job_description"/>
 
     <TextView
         android:id="@+id/jobDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_12sdp"
-        android:padding="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:textColor="@color/black"
+        android:textSize="@dimen/text"
         android:text="@string/work_description"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
+        android:textSize="@dimen/sub_text"
         android:text="@string/my_location"/>
 
     <TextView
         android:id="@+id/jobLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_12sdp"
-        android:padding="@dimen/_10sdp"
+        android:textSize="@dimen/text"
+        android:paddingVertical="@dimen/_10sdp"
         android:textColor="@color/black"
         android:text="@string/my_location"/>
 

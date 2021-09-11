@@ -28,6 +28,8 @@ import kotlin.math.sin
 
 object UserUtils {
 
+    var EDIT_MY_JOB_POST_DETAILS = ""
+    var EDIT_MY_JOB_POST = false
     var title = ""
     var bids_period = 0
     var bid_range_id = 0

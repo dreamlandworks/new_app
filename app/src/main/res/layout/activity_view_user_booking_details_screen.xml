@@ -8,6 +8,7 @@
     tools:context=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/purple_500"
@@ -29,23 +30,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/userName"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
 
         </LinearLayout>
@@ -60,23 +54,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/scheduled_date"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/scheduleDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -97,23 +84,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/mobile_no"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/mobileNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -127,23 +107,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/estimate_time"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/estimateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
         </LinearLayout>
 
     </LinearLayout>
@@ -164,23 +137,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/from"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/fromDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -194,23 +160,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
                 android:text="@string/amount"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:text="@string/reject"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/text" />
 
         </LinearLayout>
 
@@ -220,36 +179,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
-        android:clickable="true"
-        android:elevation="@dimen/_5sdp"
-        android:focusable="true"
         android:text="@string/attachments"
-        android:textSize="@dimen/_12sdp" />
+        android:textSize="@dimen/sub_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attachmentsRV"
+        android:visibility="gone"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/_5sdp"
         android:layout_height="wrap_content"/>
 
     <TextView
+        android:id="@+id/jobDetailsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
-        android:clickable="true"
-        android:elevation="@dimen/_5sdp"
-        android:focusable="true"
         android:text="@string/job_details"
-        android:textSize="@dimen/_12sdp" />
+        android:textSize="@dimen/sub_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobDetailsRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:id="@+id/providerBtnsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_20sdp">
 
         <TextView
@@ -257,16 +215,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            style="@style/blue_outline_button_style"
             android:layout_margin="@dimen/_10sdp"
             android:background="@drawable/green_corner_border"
-            android:clickable="true"
-            android:elevation="@dimen/_5sdp"
-            android:focusable="true"
-            android:paddingHorizontal="@dimen/_30sdp"
-            android:paddingVertical="@dimen/_8sdp"
             android:text="@string/reject"
-            android:textColor="@color/purple_500"
-            android:textSize="@dimen/_12sdp" />
+            android:textColor="@color/purple_500" />
 
         <TextView
             android:id="@+id/acceptBtn"
@@ -274,18 +227,52 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
+            style="@style/filled_button_style"
             android:layout_margin="@dimen/_10sdp"
             android:background="@drawable/green_btn_bg"
-            android:clickable="true"
-            android:elevation="@dimen/_5sdp"
-            android:focusable="true"
-            android:paddingHorizontal="@dimen/_30sdp"
-            android:paddingVertical="@dimen/_8sdp"
             android:text="@string/accept"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp"
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/userBtnsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:background="@drawable/blue_out_line"
+            android:clickable="true"
+            style="@style/blue_outline_button_style"
+            android:focusable="true"
+            android:text="@string/back_sm"
+            tools:ignore="RelativeOverlap" />
+
+
+        <TextView
+            android:id="@+id/otpBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:background="@drawable/btn_bg"
+            android:clickable="true"
+            android:layout_alignParentEnd="true"
+            style="@style/filled_button_style"
+            android:elevation="@dimen/_5sdp"
+            android:focusable="true"
+            android:text="@string/completed"
+            tools:ignore="RelativeOverlap" />
+
+
+    </RelativeLayout>
+
 
 </LinearLayout>

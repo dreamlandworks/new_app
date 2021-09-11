@@ -1,23 +1,18 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.hootsuite.nachos.chip.ChipInfo
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
 import com.satrango.R
@@ -27,9 +22,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneViewModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
-import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
-import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
@@ -38,10 +31,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.InputStream
 
 class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
 
@@ -250,6 +239,9 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
                         }
 
                     }
+                    if (UserUtils.EDIT_MY_JOB_POST) {
+                        updateUI()
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -257,6 +249,109 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
                 }
             }
         })
+
+    }
+
+    private fun updateUI() {
+
+        val data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        binding.title.setText(data.job_post_details.title)
+
+        when (data.job_post_details.bid_per) {
+            "1" -> {
+                binding.perHour.setBackgroundResource(R.drawable.btn_bg)
+                binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perHour.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perJob.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 1
+            }
+            "2" -> {
+                binding.perDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perDay.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perHour.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perJob.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 2
+            }
+            "4" -> {
+                binding.perJob.setBackgroundResource(R.drawable.btn_bg)
+                binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perHour.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 4
+            }
+        }
+        for (index in bidRanges.indices) {
+            if (bidRanges[index].range_slots == data.job_post_details.range_slots) {
+                binding.bidRangeSpinner.setSelection(index + 1)
+            }
+        }
+        binding.estimateTime.setText(data.job_post_details.estimate_time)
+        when (data.job_post_details.estimate_type) {
+            "Hours" -> {
+                binding.hours.setBackgroundResource(R.drawable.btn_bg)
+                binding.days.setBackgroundResource(R.drawable.blue_out_line)
+                binding.hours.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.days.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.estimateTypeId = 1
+            }
+            "Days" -> {
+                binding.days.setBackgroundResource(R.drawable.btn_bg)
+                binding.hours.setBackgroundResource(R.drawable.blue_out_line)
+                binding.days.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.hours.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.estimateTypeId = 2
+            }
+
+        }
+
+        val chips = ArrayList<ChipInfo>()
+        for (language in data.languages) {
+            chips.add(ChipInfo(language, language))
+        }
+        binding.languages.setTextWithChips(chips)
+
+        val keywords = ArrayList<ChipInfo>()
+        for (keyword in data.keywords) {
+            keywords.add(ChipInfo(keyword, keyword))
+        }
+        binding.keywordSkills.setTextWithChips(keywords)
+
+        when(data.job_post_details.bids_period) {
+            "1" -> {
+                binding.oneDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.oneDay.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.threeDays.setTextColor(Color.parseColor("#0A84FF"))
+                binding.sevenDays.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 1
+            }
+            "3" -> {
+                binding.threeDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.threeDays.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.oneDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.sevenDays.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 3
+            }
+            "5" -> {
+                binding.sevenDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.threeDays.setTextColor(Color.parseColor("#0A84FF"))
+                binding.oneDay.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 7
+            }
+        }
+
 
     }
 

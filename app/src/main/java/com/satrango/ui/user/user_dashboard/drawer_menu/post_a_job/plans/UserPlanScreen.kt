@@ -24,6 +24,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
+import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -157,6 +158,11 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
 
     override fun onPaymentError(p0: Int, p1: String?) {
         snackBar(binding.recyclerView, "Payment Failed")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, UserHomeScreen::class.java))
     }
 
 }

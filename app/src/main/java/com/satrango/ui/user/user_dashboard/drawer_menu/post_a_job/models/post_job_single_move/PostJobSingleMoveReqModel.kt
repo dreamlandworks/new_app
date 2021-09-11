@@ -1,6 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move
 
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 
 data class PostJobSingleMoveReqModel(
     val address_id: Int,

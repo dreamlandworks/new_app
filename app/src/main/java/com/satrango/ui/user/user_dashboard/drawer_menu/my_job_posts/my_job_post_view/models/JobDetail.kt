@@ -8,5 +8,7 @@ data class JobDetail(
     val zipcode: String,
     val latitude: String,
     val longitude: String,
-    val country: String
+    val country: String,
+    val address_id: String,
+    val id: String
 )

@@ -3,25 +3,26 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPostJobDescriptionScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 
 class PostJobDescriptionScreen : AppCompatActivity() {
 
@@ -37,7 +38,8 @@ class PostJobDescriptionScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.post_a_job)
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
@@ -74,7 +76,12 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                         } else {
                             UserUtils.estimate_time = estimateTime.text.toString().toInt() * 24
                         }
-                        startActivity(Intent(this@PostJobDescriptionScreen, PostJobAttachmentsScreen::class.java))
+                        startActivity(
+                            Intent(
+                                this@PostJobDescriptionScreen,
+                                PostJobAttachmentsScreen::class.java
+                            )
+                        )
                     }
                 }
             }
@@ -134,7 +141,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         viewModel.bidRanges(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -146,22 +153,31 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                     for (bid in bidRanges) {
                         bidRangesArray.add(bid.range_slots)
                     }
-                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, bidRangesArray)
+                    val adapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        bidRangesArray
+                    )
                     binding.bidRangeSpinner.adapter = adapter
-                    binding.bidRangeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt()
+                    binding.bidRangeSpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                UserUtils.bid_range_id =
+                                    bidRanges[position + 1].bid_range_id.toInt()
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                            }
+
                         }
-
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                        }
-
+                    if (UserUtils.EDIT_MY_JOB_POST) {
+                        updateUI()
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -170,6 +186,67 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 }
             }
         })
+
+    }
+
+    private fun updateUI() {
+        val data =
+            Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        binding.title.setText(data.job_post_details.title)
+        binding.discription.setText(data.job_details[0].job_description)
+        when (data.job_post_details.bid_per) {
+            "1" -> {
+                binding.perHour.setBackgroundResource(R.drawable.btn_bg)
+                binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perHour.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perJob.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 1
+            }
+            "2" -> {
+                binding.perDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perDay.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perHour.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perJob.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 2
+            }
+            "4" -> {
+                binding.perJob.setBackgroundResource(R.drawable.btn_bg)
+                binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
+                binding.perJob.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.perDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.perHour.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bid_per = 4
+            }
+        }
+        for (index in bidRanges.indices) {
+            if (bidRanges[index].range_slots == data.job_post_details.range_slots) {
+                binding.bidRangeSpinner.setSelection(index + 1)
+            }
+        }
+        binding.estimateTime.setText(data.job_post_details.estimate_time)
+        when (data.job_post_details.estimate_type) {
+            "Hours" -> {
+                binding.hours.setBackgroundResource(R.drawable.btn_bg)
+                binding.days.setBackgroundResource(R.drawable.blue_out_line)
+                binding.hours.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.days.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.estimateTypeId = 1
+            }
+            "Days" -> {
+                binding.days.setBackgroundResource(R.drawable.btn_bg)
+                binding.hours.setBackgroundResource(R.drawable.blue_out_line)
+                binding.days.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.hours.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.estimateTypeId = 2
+            }
+
+        }
+
 
     }
 

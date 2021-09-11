@@ -18,6 +18,7 @@ class PostJobTypeScreen : AppCompatActivity() {
         binding.apply {
 
             specifiedLocationBtn.setOnClickListener {
+                UserUtils.EDIT_MY_JOB_POST = false
                 UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, true)
                 UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, false)
                 UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, false)
@@ -25,6 +26,7 @@ class PostJobTypeScreen : AppCompatActivity() {
             }
 
             multiLocationsBtn.setOnClickListener {
+                UserUtils.EDIT_MY_JOB_POST = false
                 UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, true)
                 UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, false)
                 UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, false)
@@ -32,6 +34,7 @@ class PostJobTypeScreen : AppCompatActivity() {
             }
 
             onlineBtn.setOnClickListener {
+                UserUtils.EDIT_MY_JOB_POST = false
                 UserUtils.setFromJobPostBlueCollar(this@PostJobTypeScreen, true)
                 UserUtils.setFromJobPostSingleMove(this@PostJobTypeScreen, false)
                 UserUtils.setFromJobPostMultiMove(this@PostJobTypeScreen, false)

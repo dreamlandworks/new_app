@@ -6,6 +6,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJob
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.MyPostJobEditResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.MyJobPostMultiMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -102,6 +106,18 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun likeClicked(requestBody: LikePostDescussionReqModel): LikePostDiscussionResModel {
         return RetrofitBuilder.getUserRetrofitInstance().likePostDiscussion(requestBody)
+    }
+
+    suspend fun updateSingleMoveMyJobPost(requestBody: MyJobPostSingleMoveEditReqModel): MyPostJobEditResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().updateMyPostJobSingleMove(requestBody)
+    }
+
+    suspend fun updateBlueCollarMyJobPost(requestBody: MyJobPostEditBlueCollarReqModel): MyPostJobEditResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().updateMyPostJobBlueCollar(requestBody)
+    }
+
+    suspend fun updateMultiMoveMyJobPost(requestBody: MyJobPostMultiMoveEditReqModel): MyPostJobEditResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().updateMyPostJobMultiMove(requestBody)
     }
 
 }

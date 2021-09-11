@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.JobDetailsRowBinding
-import com.satrango.ui.user.bookings.view_booking_details.models.Attachment
 import com.satrango.ui.user.bookings.view_booking_details.models.JobDetail
 
 class JobDetailsAdapter(private val list: List<JobDetail>) :

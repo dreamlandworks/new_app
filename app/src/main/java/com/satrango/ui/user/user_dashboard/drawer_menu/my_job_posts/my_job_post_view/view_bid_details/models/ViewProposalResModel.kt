@@ -1,5 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models
 
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
+
 data class ViewProposalResModel(
     val attachments: List<Attachment>,
     val bid_details: BidDetail,

@@ -1,8 +1,10 @@
 package com.satrango.ui.user.bookings.booking_address.models
 
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
+
 data class BlueCollarBookingReqModel(
     val amount: String,
-    val attachments: List<Attachment>,
+    val attachments: ArrayList<Attachment>,
     val created_on: String,
     val estimate_time: Int,
     val estimate_type_id: Int,

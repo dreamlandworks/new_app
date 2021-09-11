@@ -22,41 +22,44 @@
 
         <TextView
             android:id="@+id/inProgressBtn"
+            style="@style/filled_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginVertical="@dimen/_5sdp"
-            android:gravity="center"
-            style="@style/filled_button_style"
-            android:paddingHorizontal="@dimen/_10sdp"
+            android:layout_weight="1"
+            android:textSize="@dimen/sub_text"
             android:background="@drawable/category_bg"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_5sdp"
             android:text="@string/in_progress" />
 
         <TextView
             android:id="@+id/pendingBtn"
+            style="@style/filled_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:textSize="@dimen/sub_text"
             android:layout_weight="1"
             android:gravity="center"
-            style="@style/filled_button_style"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_5sdp"
             android:text="@string/pending"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp" />
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/completedBtn"
+            style="@style/filled_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:textSize="@dimen/sub_text"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/completed"
-            android:layout_marginVertical="@dimen/_5sdp"
-            style="@style/filled_button_style"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:textColor="@color/black" />
+            android:text="@string/completed"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

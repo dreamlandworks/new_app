@@ -9,14 +9,16 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.Bookin
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import java.lang.Exception
 
 class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewModel() {
 
     var myBookings = MutableLiveData<NetworkResponse<List<BookingDetail>>>()
+    var otpRequest = MutableLiveData<NetworkResponse<Int>>()
 
     fun getMyBookingDetails(context: Context, requestBody: MyBookingsReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
-
         if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
@@ -35,8 +37,29 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         } else {
             myBookings.value = NetworkResponse.Failure("No Internet Connection!")
         }
-
         return myBookings
+    }
+
+    fun otpRequest(context: Context, bookingId: Int): MutableLiveData<NetworkResponse<Int>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    otpRequest.value = NetworkResponse.Loading()
+                    val result = async { repository.generateOTP(bookingId) }
+                    val response = JSONObject(result.await().string())
+                    if (response.getInt("status") == 200) {
+                        otpRequest.value = NetworkResponse.Success(response.getInt("otp"))
+                    } else {
+                        otpRequest.value = NetworkResponse.Failure(response.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    otpRequest.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            otpRequest.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return otpRequest
     }
 
 }

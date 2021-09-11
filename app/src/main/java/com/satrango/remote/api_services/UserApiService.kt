@@ -22,6 +22,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJob
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.MyPostJobEditResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.MyJobPostMultiMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -312,9 +316,30 @@ interface UserApiService {
         @Body requestBody: LikePostDescussionReqModel
     ): LikePostDiscussionResModel
 
+    @POST(UserApiEndPoints.UPDATE_SINGLE_MOVE_MY_POST_JOB)
+    suspend fun updateMyPostJobSingleMove(
+        @Body requestBody: MyJobPostSingleMoveEditReqModel
+    ): MyPostJobEditResModel
+
+    @POST(UserApiEndPoints.UPDATE_BLUE_COLLAR_MY_POST_JOB)
+    suspend fun updateMyPostJobBlueCollar(
+        @Body requestBody: MyJobPostEditBlueCollarReqModel
+    ): MyPostJobEditResModel
+
+    @POST(UserApiEndPoints.UPDATE_MULTI_MOVE_MY_POST_JOB)
+    suspend fun updateMyPostJobMultiMove(
+        @Body requestBody: MyJobPostMultiMoveEditReqModel
+    ): MyPostJobEditResModel
+
     @GET(UserApiEndPoints.OFFERS_LIST)
     suspend fun getOffersList(
         @Query("key") key: String
     ): OffersResModel
+
+    @GET(UserApiEndPoints.BOOKING_STATUS_OTP)
+    suspend fun getBookingStatusOTP(
+        @Query("key") key: String,
+        @Query("booking_id") bookingId: Int
+    ): ResponseBody
 
 }

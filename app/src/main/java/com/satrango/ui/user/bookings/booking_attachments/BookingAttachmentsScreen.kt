@@ -32,17 +32,16 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAttachmentsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
@@ -69,7 +68,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private var addressIndex = 0
 
     companion object {
-        lateinit var imagePathList: ArrayList<String>
+        lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
         lateinit var encodedImages: ArrayList<Attachment>
     }
 
@@ -263,12 +262,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(getImageFilePath(imageUri))
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), ""))
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(getImageFilePath(imageUri!!))
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), ""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =
@@ -314,7 +313,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         return ""
     }
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
+    override fun deleteAttachment(position: Int, imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment) {
         imagePathList.remove(imagePath)
         binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
         Handler().postDelayed({

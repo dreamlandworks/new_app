@@ -52,5 +52,9 @@ object UserApiEndPoints {
     final const val DELETE_ATTACHMENTS = "user/delete_attachment"
     final const val LIKE_POST_DISCUSSION = "user/like_post_discussion"
     final const val OFFERS_LIST = "user/offers_list"
+    final const val UPDATE_SINGLE_MOVE_MY_POST_JOB = "user/update_single_move_job_post"
+    final const val UPDATE_BLUE_COLLAR_MY_POST_JOB = "user/update_blue_collar_job_post"
+    final const val UPDATE_MULTI_MOVE_MY_POST_JOB = "user/update_multi_move_job_post"
+    final const val BOOKING_STATUS_OTP = "user/generate_otp"
 
 }

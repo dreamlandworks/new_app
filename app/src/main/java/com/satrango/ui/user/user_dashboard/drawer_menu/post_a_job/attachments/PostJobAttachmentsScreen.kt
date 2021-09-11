@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
+import com.hootsuite.nachos.chip.ChipInfo
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
 import com.satrango.R
@@ -30,15 +32,18 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneViewModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.KeywordsResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
@@ -54,6 +59,7 @@ import kotlin.collections.ArrayList
 
 class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
+    private lateinit var data: MyJobPostViewResModel
     private lateinit var binding: ActivityPostJobAttachmentsScreenBinding
     private lateinit var viewModel: ProviderSignUpOneViewModel
     private lateinit var progressDialog: ProgressDialog
@@ -65,7 +71,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     private val GALLERY_REQUEST = 100
 
     companion object {
-        lateinit var imagePathList: ArrayList<String>
+        lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
         lateinit var encodedImages: ArrayList<Attachment>
 
         lateinit var finalKeywords: java.util.ArrayList<KeywordsResponse>
@@ -129,7 +135,12 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                         if (UserUtils.getFromJobPostMultiMove(this@PostJobAttachmentsScreen) || UserUtils.getFromJobPostSingleMove(this@PostJobAttachmentsScreen)) {
                             startActivity(Intent(this@PostJobAttachmentsScreen, PostJobAddressScreen::class.java))
                         } else if (UserUtils.getFromJobPostBlueCollar(this@PostJobAttachmentsScreen)) {
-                            postJobBlueCollar()
+                            if (UserUtils.EDIT_MY_JOB_POST) {
+                                updatePostJobBlueCollar()
+                            } else {
+                                postJobBlueCollar()
+                            }
+
                         }
                     }
                 }
@@ -178,6 +189,100 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         loadLanguages()
         loadkeyWords()
 
+        if (UserUtils.EDIT_MY_JOB_POST) {
+            updateUI()
+        }
+    }
+
+    private fun updatePostJobBlueCollar() {
+        val factory = ViewModelFactory(PostJobRepository())
+        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+
+        val requestBody = MyJobPostEditBlueCollarReqModel(
+            encodedImages,
+            UserUtils.bid_per,
+            UserUtils.bid_range_id,
+            UserUtils.bids_period,
+            data.job_post_details.booking_id,
+            data.job_post_details.post_created_on,
+            UserUtils.estimate_time,
+            UserUtils.estimateTypeId,
+            UserUtils.job_description,
+            RetrofitBuilder.USER_KEY,
+            finalKeywords,
+            finalLanguages,
+            data.job_post_details.post_job_id.toInt(),
+            UserUtils.scheduled_date,
+            UserUtils.time_slot_from,
+            UserUtils.title,
+            UserUtils.getUserId(this).toInt()
+        )
+        viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    snackBar(binding.nextBtn, it.data!!.message)
+                    Handler().postDelayed({
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
+                    }, 3000)
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun updateUI() {
+        data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        val chips = ArrayList<ChipInfo>()
+        for (language in data.languages) {
+            chips.add(ChipInfo(language, language))
+        }
+        binding.languages.setTextWithChips(chips)
+        val keywords = ArrayList<ChipInfo>()
+        for (keyword in data.keywords) {
+            keywords.add(ChipInfo(keyword, keyword))
+        }
+        binding.keywordSkills.setTextWithChips(keywords)
+
+        when(data.job_post_details.bids_period) {
+            "1" -> {
+                binding.oneDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.oneDay.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.threeDays.setTextColor(Color.parseColor("#0A84FF"))
+                binding.sevenDays.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 1
+            }
+            "3" -> {
+                binding.threeDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.threeDays.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.oneDay.setTextColor(Color.parseColor("#0A84FF"))
+                binding.sevenDays.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 3
+            }
+            "5" -> {
+                binding.sevenDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
+                binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
+                binding.sevenDays.setTextColor(Color.parseColor("#FFFFFF"))
+                binding.threeDays.setTextColor(Color.parseColor("#0A84FF"))
+                binding.oneDay.setTextColor(Color.parseColor("#0A84FF"))
+                UserUtils.bids_period = 7
+            }
+        }
+
+        imagePathList = data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
+        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -356,12 +461,12 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(getImageFilePath(imageUri))
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), ""))
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(getImageFilePath(imageUri!!))
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), ""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =
@@ -402,13 +507,37 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         return ""
     }
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
-        imagePathList.remove(imagePath)
-        binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
-        Handler().postDelayed({
-            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-            encodedImages.remove(encodedImages[position])
-        }, 500)
+    override fun deleteAttachment(position: Int, imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment) {
+        if (imagePath.id.isNotEmpty()) {
+            val factory = ViewModelFactory(PostJobRepository())
+            val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+            viewModel.deleteAttachment(this, AttachmentDeleteReqModel(imagePath.id.toInt(), RetrofitBuilder.USER_KEY)).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
+                        Handler().postDelayed({
+                            imagePathList.remove(imagePath)
+                            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+                        }, 500)
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                    }
+                }
+            })
+        } else {
+            imagePathList.remove(imagePath)
+            binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
+            Handler().postDelayed({
+                binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+                encodedImages.remove(encodedImages[position])
+            }, 500)
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 package com.satrango.ui.user.bookings.booking_attachments.models
 
-import com.satrango.ui.user.bookings.booking_address.models.Attachment
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 
 data class MultiMoveReqModel(
     val addresses: List<Addresses>,

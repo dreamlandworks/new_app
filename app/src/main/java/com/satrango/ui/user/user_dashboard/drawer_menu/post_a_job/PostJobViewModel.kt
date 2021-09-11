@@ -11,6 +11,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJob
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.MyPostJobEditResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.MyJobPostMultiMoveEditReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -60,6 +64,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
     var deleteAttachment = MutableLiveData<NetworkResponse<AttachmentDeleteResModel>>()
     var likeClicked = MutableLiveData<NetworkResponse<LikePostDiscussionResModel>>()
+
+    var updateSingleMoveMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
+    var updateBlueCollarMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
+    var updateMultiMoveMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -249,6 +257,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     myJobPostsViewDetails.value = NetworkResponse.Loading()
+                    Log.e("JSON REQUEST", Gson().toJson(requestBody))
                     val response = async { repository.myJobPostsViewDetails(requestBody) }
                     val data = response.await()
                     Log.e("JSON RESPONSE", Gson().toJson(data))
@@ -474,6 +483,75 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             likeClicked.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return likeClicked
+    }
+
+    fun updateSingleMoveMyJobPost(context: Context, requestBody: MyJobPostSingleMoveEditReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    updateSingleMoveMyJobPost.value = NetworkResponse.Loading()
+                    val response = async { repository.updateSingleMoveMyJobPost(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        updateSingleMoveMyJobPost.value = NetworkResponse.Success(data)
+                    } else {
+                        updateSingleMoveMyJobPost.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    updateSingleMoveMyJobPost.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            updateSingleMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return updateSingleMoveMyJobPost
+    }
+
+    fun updateBlueCollarMyJobPost(context: Context, requestBody: MyJobPostEditBlueCollarReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    updateBlueCollarMyJobPost.value = NetworkResponse.Loading()
+                    val response = async { repository.updateBlueCollarMyJobPost(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        updateBlueCollarMyJobPost.value = NetworkResponse.Success(data)
+                    } else {
+                        updateBlueCollarMyJobPost.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    updateBlueCollarMyJobPost.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            updateBlueCollarMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return updateBlueCollarMyJobPost
+    }
+
+    fun updateMultiMoveMyJobPost(context: Context, requestBody: MyJobPostMultiMoveEditReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    updateMultiMoveMyJobPost.value = NetworkResponse.Loading()
+                    val response = async { repository.updateMultiMoveMyJobPost(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    if (data.status == 200) {
+                        updateMultiMoveMyJobPost.value = NetworkResponse.Success(data)
+                    } else {
+                        updateMultiMoveMyJobPost.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    updateMultiMoveMyJobPost.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            updateMultiMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return updateMultiMoveMyJobPost
     }
 
 }

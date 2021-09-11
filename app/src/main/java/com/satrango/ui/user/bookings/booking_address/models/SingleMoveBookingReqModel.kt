@@ -1,5 +1,7 @@
 package com.satrango.ui.user.bookings.booking_address.models
 
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
+
 data class SingleMoveBookingReqModel(
     val address_id: Int,
     val amount: String,

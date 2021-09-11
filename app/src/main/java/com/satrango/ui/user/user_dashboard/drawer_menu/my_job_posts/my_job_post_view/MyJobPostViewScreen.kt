@@ -21,12 +21,13 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
@@ -104,13 +105,17 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         binding.jobDescription.text = data.job_details[0].job_description
 
-        val images = ArrayList<String>()
+        val images = ArrayList<Attachment>()
         for (image in data.attachments) {
-            images.add(RetrofitBuilder.BASE_URL + image.file_name.substring(1))
+            images.add(image)
+        }
+        if (images.isEmpty()) {
+            binding.attachmentsLayout.visibility = View.GONE
         }
         binding.attachmentsRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
+
         binding.bidCount.text = data.job_post_details.total_bids.toString()
         binding.avgAmount.text = data.job_post_details.average_bids_amount
 
@@ -141,11 +146,11 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         }
 
         binding.editPostBtn.setOnClickListener {
-            val intent = Intent(this, MyJobPostEditScreen::class.java)
+            UserUtils.EDIT_MY_JOB_POST = true
             ViewBidsScreen.bookingId = bookingId
             ViewBidsScreen.categoryId = categoryId
             ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
-            startActivity(intent)
+            startActivity(Intent(this, PostJobDateTimeScreen::class.java))
         }
 
     }
@@ -194,7 +199,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     }
 
 
-    override fun deleteAttachment(position: Int, imagePath: String) {
+    override fun deleteAttachment(position: Int, imagePath: Attachment) {
 
     }
 
