@@ -56,5 +56,9 @@ object UserApiEndPoints {
     final const val UPDATE_BLUE_COLLAR_MY_POST_JOB = "user/update_blue_collar_job_post"
     final const val UPDATE_MULTI_MOVE_MY_POST_JOB = "user/update_multi_move_job_post"
     final const val BOOKING_STATUS_OTP = "user/generate_otp"
+    final const val POST_JOB_STATUS = "user/update_post_job_status"
+    final const val MY_ACCOUNT_DETAILS = "user/get_account_details"
+    final const val RESCHEDULE_BOOKING = "user/reschedule_booking"
+    final const val SP_SLOTS = "user/get_sp_slots"
 
 }

@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityOTPVerificationScreenBinding
 import com.satrango.remote.NetworkResponse
@@ -52,6 +53,10 @@ class OTPVerificationScreen : AppCompatActivity() {
                         startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
                         finish()
                     } else {
+                        firstNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                        secondNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                        thirdNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                        fourthNo.setBackgroundResource(R.drawable.wrongpricebackground)
                         snackBar(nextBtn, "Invalid OTP")
                     }
                 }

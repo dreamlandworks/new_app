@@ -2,6 +2,7 @@ package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -20,11 +21,13 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -39,6 +42,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     companion object {
+        var RESCHEDULE = false
         var FROM_MY_BOOKINGS_SCREEN = false
     }
 
@@ -60,8 +64,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
             binding.providerBtnsLayout.visibility = View.GONE
             binding.userBtnsLayout.visibility = View.VISIBLE
-            binding.backBtn.setOnClickListener { onBackPressed() }
-            binding.otpBtn.setOnClickListener { otpDialog() }
         } else {
             binding.providerBtnsLayout.visibility = View.VISIBLE
         }
@@ -193,7 +195,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
         viewModel.otpRequest(this, bookingId.toInt()).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -212,22 +214,38 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
+        binding.userName.text =
+            response.booking_details.fname + " " + response.booking_details.lname
         binding.mobileNo.text = response.booking_details.mobile
-        binding.scheduleDate.text = response.booking_details.scheduled_date
-        binding.fromDate.text = response.booking_details.from
+        binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
-        binding.estimateTime.text =
-            response.booking_details.estimate_time + " " + response.booking_details.estimate_type
+        binding.time.text = response.booking_details.from
+        binding.bookingIdText.text = bookingId
+
         binding.jobDetailsRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details)
-        binding.attachmentsRV.adapter = JobDetailsAttachmentsAdapter(response.attachments)
-        if (binding.jobDetailsRV.childCount == 0) {
+
+        if (response.job_details.isEmpty()) {
             binding.jobDetailsText.visibility = View.GONE
         }
+        if (response.attachments.isEmpty()) {
+            binding.attachmentsText.visibility = View.GONE
+        }
+        binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details)
+        binding.attachmentsRV.adapter = JobDetailsAttachmentsAdapter(response.attachments)
+
+        binding.cancelBookingBtn.setOnClickListener { onBackPressed() }
+        binding.reScheduleBtn.setOnClickListener {
+            ViewBidsScreen.bookingId = bookingId.toInt()
+            UserUtils.re_scheduled_date = response.booking_details.scheduled_date
+            UserUtils.re_scheduled_time_slot_from = response.booking_details.time_slot_id
+            UserUtils.spid = response.booking_details.sp_id
+            RESCHEDULE = true
+            startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
+        }
+
     }
 
 }

@@ -4,13 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.satrango.databinding.ViewBidsRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.BidDetail
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.lang.Exception
 
 class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<ViewBidsAdapter.ViewHolder>() {
 
@@ -34,9 +42,32 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
                 binding.root.context.startActivity(intent)
             }
             binding.awardBtn.setOnClickListener {
-                val intent = Intent(binding.root.context, SetGoalsScreen::class.java)
-                intent.putExtra("postJobId", ViewBidsScreen.bookingId)
-                intent.putExtra("bidPrice", bidDetail.amount)
+                ViewBidsScreen.bidPrice = bidDetail.amount.toDouble()
+                ViewBidsScreen.bidId = bidDetail.bid_id.toInt()
+                ViewBidsScreen.spId = bidDetail.sp_id.toInt()
+                binding.rejectBtn.context.startActivity(Intent(binding.root.context, SetGoalsScreen::class.java))
+            }
+            binding.rejectBtn.setOnClickListener {
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val requestBody = RejectJobPostStatusReqModel(
+                            ViewBidsScreen.bookingId,
+                            RetrofitBuilder.USER_KEY,
+                            ViewBidsScreen.postJobId,
+                            bidDetail.bid_id.toInt(),
+                            29
+                        )
+                        val response = RetrofitBuilder.getUserRetrofitInstance().rejectJobPostStatus(requestBody)
+                        val jsonResponse = JSONObject(response.string())
+                        if (jsonResponse.getInt("status") == 200) {
+                            binding.rejectBtn.text = "Rejected"
+                        } else {
+                            Toast.makeText(binding.awardBtn.context, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(binding.awardBtn.context, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

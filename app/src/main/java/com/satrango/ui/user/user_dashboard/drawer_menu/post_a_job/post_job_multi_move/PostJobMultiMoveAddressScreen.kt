@@ -28,6 +28,7 @@ import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.Addresse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.multi_move.MyJobPostMultiMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -218,6 +219,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     if (it.data!!.user_plan_id == "1") {
                         showSuccessDialog()
                     } else {
+                        UserMyAccountScreen.FROM_MY_ACCOUNT = false
                         startActivity(Intent(this, UserPlanScreen::class.java))
                     }
 

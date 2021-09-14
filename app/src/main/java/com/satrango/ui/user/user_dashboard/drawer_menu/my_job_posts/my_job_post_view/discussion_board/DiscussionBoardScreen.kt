@@ -64,7 +64,6 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
         binding.title.text = intent.getStringExtra("title")!!
         binding.bidRanges.text = intent.getStringExtra("bidRanges")!!
         binding.expiresOn.text = intent.getStringExtra("expiresIn")!!
-        toast(this, postJobId.toString())
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -281,7 +280,6 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                 imagePathList.add(getImageFilePath(imageUri!!))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 attachmentType = "image"
-                toast(this, encodeToBase64FromUri(imageUri))
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
@@ -292,7 +290,6 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                     val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
                     encodedImages.add(Attachment(UserUtils.encodeToBase64(yourSelectedImage)!!))
                     attachmentType = "image"
-                    toast(this, UserUtils.encodeToBase64(yourSelectedImage)!!)
                 }
             } catch (e: Exception) {
                 snackBar(binding.recyclerView, e.message!!)
@@ -320,7 +317,6 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                 )
 //                val encodedString = encodeFileToBase64Binary(file)
 //                encodedImages.add(Attachment(encodedString!!))
-                toast(this, file.absolutePath)
             } catch (e: Exception) {
                 toast(this, e.message!!)
             }

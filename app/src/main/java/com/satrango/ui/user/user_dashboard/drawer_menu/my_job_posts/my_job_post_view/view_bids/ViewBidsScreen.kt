@@ -12,6 +12,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewBidsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.BidDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
@@ -26,6 +27,8 @@ class ViewBidsScreen : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     companion object {
+        var spId = 0
+        var bidId = 0
         var categoryId = 0
         var bookingId = 0
         var postJobId = 0
@@ -63,7 +66,14 @@ class ViewBidsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = ViewBidsAdapter(it.data!!.bid_details)
+                    val list = it.data!!
+                    val filteredList = ArrayList<BidDetail>()
+                    for (bid in list.bid_details) {
+                        if (bid.bid_type == "0") {
+                          filteredList.add(bid)
+                        }
+                    }
+                    binding.recyclerView.adapter = ViewBidsAdapter(filteredList)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

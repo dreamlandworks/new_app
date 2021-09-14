@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
-        app:cardBackgroundColor="@color/white"
+        android:layout_marginVertical="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_40sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginVertical="@dimen/_5sdp">
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/_15sdp"
+        app:cardElevation="@dimen/_5sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/blue_out_line"
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
 
@@ -32,24 +34,72 @@
                     android:id="@+id/bookingId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="@string/app_name"
-                    android:textColor="@color/blue"
-                    android:textSize="@dimen/text"/>
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text" />
 
-                <TextView
-                    android:id="@+id/amount"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/amount"
                     android:layout_alignParentEnd="true"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/text"/>
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="@dimen/_5sdp">
+
+                    <TextView
+                        android:id="@+id/amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:text="00.00"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.card.MaterialCardView>
 
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/blue" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/spName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/scheduled_in"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text" />
+
+                <TextView
+                    android:id="@+id/timeRemaining"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text="(30 Min to start)"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sub_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="vertical">
 
@@ -63,23 +113,23 @@
                         android:layout_height="wrap_content"
                         android:text="@string/scheduled_in"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/sub_text"/>
+                        android:textSize="@dimen/sub_text" />
 
                     <TextView
                         android:id="@+id/scheduleDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/amount"
                         android:layout_marginStart="@dimen/_10sdp"
+                        android:text="@string/amount"
                         android:textColor="@color/gray"
-                        android:textSize="@dimen/text"/>
+                        android:textSize="@dimen/sub_text" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -87,15 +137,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/location"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/sub_text"/>
+                        android:textSize="@dimen/sub_text" />
 
                     <TextView
                         android:id="@+id/myLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/location"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:textSize="@dimen/text"/>
+                        android:text="@string/location"
+                        android:textSize="@dimen/sub_text" />
 
                 </LinearLayout>
 
@@ -103,66 +153,133 @@
                     android:id="@+id/jobDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/work_description"
-                    android:lines="2"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:textSize="@dimen/text"/>
+                    android:lines="2"
+                    android:text="@string/work_description"
+                    android:textSize="@dimen/sub_text" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_10sdp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profilePic"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/images"/>
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/spName"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:gravity="center_vertical"
+                    android:id="@+id/cancelBookingBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/blue_out_line"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/cancel_booking"
+                    android:textSize="@dimen/sub_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/reScheduleBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_5sdp"
-                    android:layout_height="match_parent"
-                    android:text="@string/scheduled_in"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text"/>
+                    android:background="@drawable/blue_out_line"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/re_schedule"
+                    android:textSize="@dimen/sub_text"
+                    android:textStyle="normal" />
 
-                <ImageView
-                    android:id="@+id/phoneBtn"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_phoneno"
-                    tools:ignore="ContentDescription" />
+                <TextView
+                    android:id="@+id/startBtn"
+                    style="@style/filled_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:background="@drawable/btn_bg"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/start"
+                    android:textSize="@dimen/sub_text"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textStyle="normal" />
 
-                <ImageView
-                    android:id="@+id/messageBtn"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:scaleType="center"
-                    tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_chat_blue"/>
-
-                <ImageView
-                    android:id="@+id/jobLocation"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:scaleType="center"
-                    tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_baseline_navigation_24"/>
             </LinearLayout>
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:translationZ="@dimen/_5sdp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="@dimen/_15sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/phoneBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_bg"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_phoneno_white"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePic"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:src="@drawable/images" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="@dimen/_15sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/messageBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_bg"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_chat"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</FrameLayout>

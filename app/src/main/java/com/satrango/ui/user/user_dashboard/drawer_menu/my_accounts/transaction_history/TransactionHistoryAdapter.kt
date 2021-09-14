@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.TransactionHistoryRowBinding
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.Data
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.models.Data
 
 class TransactionHistoryAdapter(private val list: List<Data>): RecyclerView.Adapter<TransactionHistoryAdapter.ViewHolder>() {
 

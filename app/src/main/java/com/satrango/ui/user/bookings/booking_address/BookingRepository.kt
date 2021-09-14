@@ -7,9 +7,7 @@ import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReq
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.*
 import okhttp3.ResponseBody
 
 class BookingRepository: BaseRepository() {
@@ -40,6 +38,14 @@ class BookingRepository: BaseRepository() {
 
     suspend fun setProviderResponse(requestBody: ProviderResponseReqModel): ResponseBody {
         return RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+    }
+
+    suspend fun reschedule(requestBody: RescheduleBookingReqModel): RescheduleBookingResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().rescheduleBooking(requestBody)
+    }
+
+    suspend fun getSpSlots(spId: Int): ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance().getSpSlots(RetrofitBuilder.USER_KEY, spId)
     }
 
 }

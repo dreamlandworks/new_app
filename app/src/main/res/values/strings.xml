@@ -459,6 +459,14 @@
     <string name="installment">Installment</string>
     <string name="update">Update</string>
     <string name="collect_otp_from_your_service_provider">Collect OTP From Your Service Provider</string>
+    <string name="would_you_like_to">Would you like to?</string>
+    <string name="cancel_booking">Cancel Booking</string>
+    <string name="re_schedule">Re-schedule</string>
+    <string name="start">Start</string>
+    <string name="date">Date</string>
+    <string name="otp">OTP</string>
+    <string name="request_placed">Request Placed</string>
+    <string name="your_re_schedule_request_is_placed_successfully_we_will_intimate_you_once_it_is_accepted_by_the_service_provider">Your re=schedule request is placed successfully. We will intimate you once it is accepted by the Service Provider</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

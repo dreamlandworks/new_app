@@ -96,12 +96,6 @@ class UserDashboardScreen : AppCompatActivity() {
         binding.navigationView.layoutParams = params
         toggle.syncState()
 
-        Toast.makeText(
-            this,
-            "Your Referral User ID: ${UserUtils.getReferralId(this)} | ${UserUtils.getUserId(this)}",
-            Toast.LENGTH_SHORT
-        ).show()
-
         val headerView = binding.navigationView.getHeaderView(0)
         profileImage = headerView.findViewById(R.id.profileImage)
         userProviderSwitch = headerView.findViewById(R.id.userProviderSwitch)

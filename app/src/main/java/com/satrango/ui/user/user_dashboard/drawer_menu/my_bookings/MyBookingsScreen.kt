@@ -1,6 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.utils.UserUtils
@@ -106,5 +108,9 @@ class MyBookingsScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, UserDashboardScreen::class.java))
     }
 }

@@ -55,7 +55,7 @@ class SplashScreen : AppCompatActivity() {
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                     val referralUserId = deepLink.toString().split("=")[1]
-                    UserUtils.setReferralId(this, referralUserId)
+                    UserUtils.saveReferralId(this, referralUserId)
                 }
                 setUserNavigation()
             }

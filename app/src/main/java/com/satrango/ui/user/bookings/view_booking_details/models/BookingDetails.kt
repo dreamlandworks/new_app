@@ -7,9 +7,11 @@ data class BookingDetails(
     val fcm_token: String,
     val fname: String,
     val from: String,
+    val time_slot_id: String,
     val lname: String,
     val mobile: String,
     val scheduled_date: String,
     val started_at: String,
-    val sp_id: String
+    val sp_id: String,
+    val otp: String
 )

@@ -138,12 +138,13 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             startActivity(intent)
         }
 
-        binding.awardBtn.setOnClickListener {
-            val intent = Intent(this, SetGoalsScreen::class.java)
-            intent.putExtra("postJobId", data.job_post_details.post_job_id)
-            intent.putExtra("bidPrice", data.job_post_details.average_bids_amount)
-            startActivity(intent)
-        }
+//        binding.awardBtn.setOnClickListener {
+//            val intent = Intent(this, SetGoalsScreen::class.java)
+//            intent.putExtra("postJobId", data.job_post_details.post_job_id)
+//            intent.putExtra("bidId", data.job_post_details.bid_id)
+//            intent.putExtra("bidPrice", data.job_post_details.average_bids_amount)
+//            startActivity(intent)
+//        }
 
         binding.editPostBtn.setOnClickListener {
             UserUtils.EDIT_MY_JOB_POST = true

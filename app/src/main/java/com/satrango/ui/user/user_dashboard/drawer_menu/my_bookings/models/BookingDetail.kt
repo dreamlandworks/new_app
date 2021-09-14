@@ -10,6 +10,7 @@ data class BookingDetail(
     val estimate_type: String,
     val fname: String,
     val from: String,
+    val time_slot_id: String,
     val profile_pic: String,
     val lname: String,
     val mobile: String,

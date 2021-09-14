@@ -18,6 +18,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.SetGoalsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
@@ -33,6 +34,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
+import okhttp3.ResponseBody
 
 class PostJobRepository: BaseRepository() {
 
@@ -118,6 +120,10 @@ class PostJobRepository: BaseRepository() {
 
     suspend fun updateMultiMoveMyJobPost(requestBody: MyJobPostMultiMoveEditReqModel): MyPostJobEditResModel {
         return RetrofitBuilder.getUserRetrofitInstance().updateMyPostJobMultiMove(requestBody)
+    }
+
+    suspend fun rejectPostJobStatus(requestBody: RejectJobPostStatusReqModel): ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance().rejectJobPostStatus(requestBody)
     }
 
 }

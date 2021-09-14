@@ -11,11 +11,10 @@ import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReq
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.TransactionHistoryResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.models.TransactionHistoryResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
@@ -34,6 +33,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.SetGoalsResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
@@ -59,6 +59,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
@@ -341,5 +342,27 @@ interface UserApiService {
         @Query("key") key: String,
         @Query("booking_id") bookingId: Int
     ): ResponseBody
+
+    @POST(UserApiEndPoints.POST_JOB_STATUS)
+    suspend fun rejectJobPostStatus(
+        @Body requestBody: RejectJobPostStatusReqModel
+    ): ResponseBody
+
+    @GET(UserApiEndPoints.MY_ACCOUNT_DETAILS)
+    suspend fun getMyAccountDetails(
+        @Query("key") key: String,
+        @Query("users_id") userId: Int
+    ): MyAccountDetailsResModel
+
+    @GET(UserApiEndPoints.SP_SLOTS)
+    suspend fun getSpSlots(
+        @Query("key") key: String,
+        @Query("sp_id") spId: Int
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.RESCHEDULE_BOOKING)
+    suspend fun rescheduleBooking(
+        @Body requestBody: RescheduleBookingReqModel
+    ): RescheduleBookingResModel
 
 }

@@ -162,20 +162,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String, type: String) {
-//        val requestBody = SearchServiceProviderReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.USER_KEY, keywordId.toInt(), UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt(), subCategory.toInt())
-        val requestBody = SearchServiceProviderReqModel(
-            "Near Mandovi Showroom",
-            "Chilakaluripet",
-            "India",
-            RetrofitBuilder.USER_KEY,
-            keywordId.toInt(),
-            "575014",
-            "Karnataka",
-            "16.0948",
-            "80.1656",
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt()
-        )
+        val requestBody = SearchServiceProviderReqModel(UserUtils.getAddress(this), UserUtils.getCity(this), UserUtils.getCountry(this), RetrofitBuilder.USER_KEY, keywordId.toInt(), UserUtils.getPostalCode(this), UserUtils.getState(this), UserUtils.getLatitude(this), UserUtils.getLongitude(this), UserUtils.getUserId(this).toInt(), subCategory.toInt())
+//        val requestBody = SearchServiceProviderReqModel(
+//            "Near Mandovi Showroom",
+//            "Chilakaluripet",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            keywordId.toInt(),
+//            "575014",
+//            "Karnataka",
+//            "16.0948",
+//            "80.1656",
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt()
+//        )
 
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
@@ -187,7 +187,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
                     if (type == "ViewResults") {
                         UserUtils.saveFromInstantBooking(this, false)
-//                        binding.listCount.text = "Showing ${it.data.data.size} out of ${it.data.data.size} results"
+                        binding.listCount.text = "Showing ${it.data.data.size} out of ${it.data.data.size} results"
                         binding.recyclerView.adapter = SearchServiceProviderAdapter(it.data.data)
                     } else {
                         UserUtils.saveFromInstantBooking(this, true)
@@ -210,14 +210,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     private fun showBookingTypeDialog() {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(com.satrango.R.layout.search_type_dialog)
-        val window = dialog.window
-        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        val viewResults = dialog.findViewById<TextView>(com.satrango.R.id.viewResults)
-        val bookInstantly = dialog.findViewById<TextView>(com.satrango.R.id.bookInstantly)
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(com.satrango.R.layout.search_type_dialog, null)
+        val viewResults = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
+        val bookInstantly = dialogView.findViewById<TextView>(com.satrango.R.id.bookInstantly)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
         viewResults.setOnClickListener {
             dialog.dismiss()
             loadSearchResults(keyword, subCategoryId, "ViewResults")
@@ -226,6 +223,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             dialog.dismiss()
             loadSearchResults(keyword, subCategoryId, "BookInstantly")
         }
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
         dialog.show()
     }
 
@@ -254,8 +256,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 if (minutes == 0 && seconds == 0) {
                     dialog.dismiss()
                     weAreSorryDialog()
-//                    Checkout.preload(applicationContext)
-//                    makePayment()
                 }
                 if (seconds == 0) {
                     seconds = 59

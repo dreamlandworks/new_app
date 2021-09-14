@@ -8,5 +8,7 @@ data class InstallmentPaymentReqModel(
     val key: String,
     val payment_status: String,
     val reference_id: String,
-    val users_id: Int
+    val users_id: Int,
+    val bid_id: Int,
+    val sp_id: Int
 )

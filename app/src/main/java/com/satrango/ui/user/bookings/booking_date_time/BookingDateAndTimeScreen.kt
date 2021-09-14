@@ -1,24 +1,34 @@
 package com.satrango.ui.user.bookings.booking_date_time
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingDateAndTimeScreenBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
+import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleBookingReqModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.BlockedTimeSlot
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.*
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -31,6 +41,9 @@ import kotlin.collections.ArrayList
 class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
 
+    private lateinit var blocked_time_slots: List<BlockedTimeSlot>
+    private lateinit var preferred_time_slots: List<PreferredTimeSlot>
+    private lateinit var slots_data: SlotsData
     private lateinit var availableTimeSlots: java.util.ArrayList<MonthsModel>
     private lateinit var availableSlots: java.util.ArrayList<MonthsModel>
     private lateinit var spDetails: SearchServiceProviderResModel
@@ -48,17 +61,49 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
-        data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-        spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+        if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
+            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+            spDetails = Gson().fromJson(
+                UserUtils.getSelectedSPDetails(this),
+                SearchServiceProviderResModel::class.java
+            )
+            loadDates()
+            loadTimings(0)
+            updateUI(data)
+        } else {
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setCancelable(false)
+            progressDialog.setMessage("Loading...")
+            val factory = ViewModelFactory(BookingRepository())
+            val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+            viewModel.spSlots(this, UserUtils.spid.toInt()).observe(this, {
+                when (it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        slots_data = it.data!!
+                        preferred_time_slots = slots_data.preferred_time_slots
+                        blocked_time_slots = slots_data.blocked_time_slots
+                        calendar = Calendar.getInstance()
+                        loadDates()
+                        loadTimings(0)
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.nextBtn, it.message!!)
+                    }
+                }
+            })
 
-        calendar = Calendar.getInstance()
-        loadDates()
-        loadTimings(0)
-        updateUI(data)
+        }
+
 
         binding.nextBtn.setOnClickListener {
             validateFields()
@@ -95,36 +140,113 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
-            if (data.category_id == "3") {
-                val intent = Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
-                intent.putExtra(getString(R.string.service_provider), data)
-                startActivity(intent)
+            if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+                rescheduleBooking()
             } else {
-                val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
-                intent.putExtra(getString(R.string.service_provider), data)
-                startActivity(intent)
+                if (data.category_id == "3") {
+                    val intent =
+                        Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
+                    intent.putExtra(getString(R.string.service_provider), data)
+                    startActivity(intent)
+                } else {
+                    val intent =
+                        Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
+                    intent.putExtra(getString(R.string.service_provider), data)
+                    startActivity(intent)
+                }
             }
         }
+    }
+
+    private fun rescheduleBooking() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
+
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+
+        val requestBody = RescheduleBookingReqModel(
+            ViewBidsScreen.bookingId,
+            RetrofitBuilder.USER_KEY,
+            UserUtils.scheduled_date,
+            UserUtils.time_slot_from,
+            UserUtils.re_scheduled_date,
+            UserUtils.re_scheduled_time_slot_from.toInt(),
+            UserUtils.getUserId(this).toInt()
+        )
+
+        viewModel.rescheduleBooking(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    showRescheduledDialog()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun showRescheduledDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.reschedule_requested_dialog, null)
+        val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
+        val myBookingsBtn = dialogView.findViewById<TextView>(R.id.myBookingsBtn)
+        homeBtn.setOnClickListener {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        myBookingsBtn.setOnClickListener {
+            startActivity(Intent(this, MyBookingsScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun loadDates() {
         loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
         availableSlots = ArrayList()
-        for(day in daysList) {
-            for (slots in spDetails.slots_data) {
-                if (slots.user_id == data.users_id) {
-                    for(slot in slots.preferred_time_slots) {
-                        val inFormat = SimpleDateFormat("dd-MM-yyyy")
-                        val d = day.month.split("-")
-                        val date= inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
-                        val outFormat = SimpleDateFormat("EEEE")
-                        val goal: String = outFormat.format(date!!)
-                        val weekDays = resources.getStringArray(R.array.days)
-                        for (index in weekDays.indices) {
-                            if (weekDays[index] == goal) {
-                                if (slot.day_slot == (index + 1).toString()) {
-                                    availableSlots.add(day)
+
+        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+            for (day in daysList) {
+                for (slot in preferred_time_slots) {
+                    val inFormat = SimpleDateFormat("dd-MM-yyyy")
+                    val d = day.month.split("-")
+                    val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
+                    val outFormat = SimpleDateFormat("EEEE")
+                    val goal: String = outFormat.format(date!!)
+                    val weekDays = resources.getStringArray(R.array.days)
+                    for (index in weekDays.indices) {
+                        if (weekDays[index] == goal) {
+                            if (slot.day_slot == (index + 1).toString()) {
+                                availableSlots.add(day)
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            for (day in daysList) {
+                for (slots in spDetails.slots_data) {
+                    if (slots.user_id == data.users_id) {
+                        for (slot in slots.preferred_time_slots) {
+                            val inFormat = SimpleDateFormat("dd-MM-yyyy")
+                            val d = day.month.split("-")
+                            val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
+                            val outFormat = SimpleDateFormat("EEEE")
+                            val goal: String = outFormat.format(date!!)
+                            val weekDays = resources.getStringArray(R.array.days)
+                            for (index in weekDays.indices) {
+                                if (weekDays[index] == goal) {
+                                    if (slot.day_slot == (index + 1).toString()) {
+                                        availableSlots.add(day)
+                                    }
                                 }
                             }
                         }
@@ -132,7 +254,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
             }
         }
-        binding.dayRv.layoutManager = LinearLayoutManager(this@BookingDateAndTimeScreen, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.dayRv.layoutManager = LinearLayoutManager(
+            this@BookingDateAndTimeScreen,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         binding.dayRv.adapter = MonthsAdapter(availableSlots, this@BookingDateAndTimeScreen, "D")
     }
 
@@ -140,12 +267,22 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         availableTimeSlots = ArrayList()
         val bookedSlots = ArrayList<MonthsModel>()
         val actualTimeSlots = ArrayList<MonthsModel>()
-        for (slot in spDetails.slots_data)  {
-            if (slot.user_id == data.users_id) {
-                for (time in slot.blocked_time_slots) {
-                    if (time.date == availableSlots[position].month) {
-                        bookedSlots.add(MonthsModel(time.time_slot_from, "", false))}
+
+        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+            for (time in blocked_time_slots) {
+                if (time.date == availableSlots[position].month) {
+                    bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
+                }
+            }
+        } else {
+            for (slot in spDetails.slots_data) {
+                if (slot.user_id == data.users_id) {
+                    for (time in slot.blocked_time_slots) {
+                        if (time.date == availableSlots[position].month) {
+                            bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
+                        }
                     }
+                }
             }
         }
         val timingsList = resources.getStringArray(R.array.bookingTimings)
@@ -163,8 +300,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 availableTimeSlots.add(actualTimeSlots[index])
             }
         }
-        binding.timeRv.layoutManager = LinearLayoutManager(this@BookingDateAndTimeScreen, LinearLayoutManager.HORIZONTAL, false)
-        binding.timeRv.adapter = MonthsAdapter(availableTimeSlots, this@BookingDateAndTimeScreen, "T")
+        binding.timeRv.layoutManager = LinearLayoutManager(
+            this@BookingDateAndTimeScreen,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        binding.timeRv.adapter =
+            MonthsAdapter(availableTimeSlots, this@BookingDateAndTimeScreen, "T")
     }
 
     private fun loadDays(
@@ -175,13 +317,33 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         daysList = arrayListOf()
         for (day in 1..daysInMonth) {
             if (day >= calendar.get(Calendar.DAY_OF_MONTH)) {
-                daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false))
+                daysList.add(
+                    MonthsModel(
+                        calendar.get(Calendar.YEAR).toString() + "-" + String.format(
+                            "%02d",
+                            month
+                        ) + "-" + String.format(
+                            "%02d",
+                            day
+                        ), day.toString(), false
+                    )
+                )
 //                Log.e("DATE:", Gson().toJson(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false)))
             }
         }
         daysInMonth = getDaysInMonth(year, month + 1)
         for (day in 1..daysInMonth) {
-            daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day), day.toString(), false))
+            daysList.add(
+                MonthsModel(
+                    calendar.get(Calendar.YEAR).toString() + "-" + String.format(
+                        "%02d",
+                        month + 1
+                    ) + "-" + String.format(
+                        "%02d",
+                        day
+                    ), day.toString(), false
+                )
+            )
 //            Log.e("DATE:", Gson().toJson(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day), day.toString(), false)))
         }
         return daysList
@@ -234,9 +396,14 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
     override fun onBackPressed() {
         finish()
-        val intent = Intent(this, UserSearchViewProfileScreen::class.java)
-        intent.putExtra(getString(R.string.service_provider), data)
-        startActivity(intent)
+        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+            super.onBackPressed()
+        } else {
+            val intent = Intent(this, UserSearchViewProfileScreen::class.java)
+            intent.putExtra(getString(R.string.service_provider), data)
+            startActivity(intent)
+        }
+
     }
 
 }

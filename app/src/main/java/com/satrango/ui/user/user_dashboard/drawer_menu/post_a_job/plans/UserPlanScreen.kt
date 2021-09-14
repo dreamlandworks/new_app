@@ -20,6 +20,7 @@ import com.satrango.databinding.ActivityUserPlanScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
@@ -161,8 +162,11 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        startActivity(Intent(this, UserHomeScreen::class.java))
+        if (UserMyAccountScreen.FROM_MY_ACCOUNT) {
+            super.onBackPressed()
+        } else {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
     }
 
 }

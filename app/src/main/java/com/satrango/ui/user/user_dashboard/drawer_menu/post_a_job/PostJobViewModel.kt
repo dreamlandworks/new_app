@@ -22,6 +22,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.SaveInstallmentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
@@ -38,6 +39,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.U
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
@@ -68,6 +71,8 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
     var updateSingleMoveMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
     var updateBlueCollarMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
     var updateMultiMoveMyJobPost = MutableLiveData<NetworkResponse<MyPostJobEditResModel>>()
+
+    var rejectJobPostStatus = MutableLiveData<NetworkResponse<String>>()
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
@@ -552,6 +557,30 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             updateMultiMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return updateMultiMoveMyJobPost
+    }
+
+    fun rejectPostJobStatus(context: Context, requestBody: RejectJobPostStatusReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    rejectJobPostStatus.value = NetworkResponse.Loading()
+                    val response = async { repository.rejectPostJobStatus(requestBody) }
+                    val data = response.await()
+                    Log.e("JSON RESPONSE", Gson().toJson(data))
+                    val jsonResponse = JSONObject(data.string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        rejectJobPostStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        rejectJobPostStatus.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    rejectJobPostStatus.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            rejectJobPostStatus.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return rejectJobPostStatus
     }
 
 }

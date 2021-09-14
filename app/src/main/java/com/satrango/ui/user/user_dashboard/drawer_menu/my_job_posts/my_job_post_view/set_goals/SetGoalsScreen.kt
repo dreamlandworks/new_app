@@ -139,7 +139,8 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                         }
                         binding.installment.setText("")
                         binding.setGoals.setSelection(0)
-                        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                        binding.recyclerView.layoutManager =
+                            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                         binding.recyclerView.adapter = SetGoalsAdapter(installmentsList, this)
                         binding.proceedToPayBtn.text = "Proceed to Pay"
                     }
@@ -230,7 +231,9 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             RetrofitBuilder.USER_KEY,
             status,
             referenceId,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            ViewBidsScreen.bidId,
+            ViewBidsScreen.spId
         )
         viewModel.installmentPayments(this, requestBody).observe(this, {
             when (it) {

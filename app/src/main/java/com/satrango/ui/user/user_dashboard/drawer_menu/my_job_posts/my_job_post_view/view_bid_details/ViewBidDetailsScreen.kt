@@ -25,16 +25,19 @@ import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
+    private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityViewBidDetailsScreensBinding
     private lateinit var progressDialog: ProgressDialog
 
@@ -56,11 +59,11 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         progressDialog.setCancelable(false)
 
         binding.rejectBtn.setOnClickListener {
-        
+            rejectBid()
         }
 
         val factory = ViewModelFactory(PostJobRepository())
-        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = ViewProposalReqModel(intent.getStringExtra("bidId")!!.toInt(), RetrofitBuilder.USER_KEY, intent.getStringExtra("spId")!!.toInt())
         viewModel.viewProposal(this, requestBody).observe(this, {
@@ -121,21 +124,10 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         }
 
                         binding.awardBtn.setOnClickListener {
-                            val dialog = BottomSheetDialog(this@ViewBidDetailsScreen)
-                            val dialogView = layoutInflater.inflate(R.layout.payment_type_dialog, null)
-                            val installmentBtn = dialogView.findViewById<TextView>(R.id.installmentBtn)
-                            val singlePaymentBtn = dialogView.findViewById<TextView>(R.id.singlePaymentBtn)
-                            installmentBtn.setOnClickListener {
-                                ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
-                                startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
-                                dialog.dismiss()
-                            }
-                            singlePaymentBtn.setOnClickListener {
-                                dialog.dismiss()
-                            }
-                            dialog.setCancelable(false)
-                            dialog.setContentView(dialogView)
-                            dialog.show()
+                            ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
+                            ViewBidsScreen.bidId = data.bid_details.bid_id.toInt()
+                            ViewBidsScreen.spId = data.bid_details.sp_id.toInt()
+                            startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
                         }
 
                     }
@@ -150,6 +142,31 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
     }
 
+    private fun rejectBid() {
+        val requestBody = RejectJobPostStatusReqModel(
+            ViewBidsScreen.bookingId,
+            RetrofitBuilder.USER_KEY,
+            ViewBidsScreen.postJobId,
+            ViewBidsScreen.bidId,
+            29
+        )
+        viewModel.rejectPostJobStatus(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.aboutMe, "Bid Rejected!")
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.aboutMe, it.message!!)
+                }
+            }
+        })
+    }
+
     override fun deleteAttachment(position: Int, imagePath: Attachment) {
 
     }
@@ -162,35 +179,6 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
     override fun onPause() {
         super.onPause()
         MyJobPostViewScreen.myJobPostViewScreen = false
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun showPaymentTypeDialog() {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(com.satrango.R.layout.search_type_dialog)
-        val window = dialog.window
-        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        val viewResults = dialog.findViewById<TextView>(com.satrango.R.id.viewResults)
-        val bookInstantly = dialog.findViewById<TextView>(com.satrango.R.id.bookInstantly)
-        val question = dialog.findViewById<TextView>(com.satrango.R.id.question)
-        question.text = "Select Payment Type"
-        viewResults.text = "Installments"
-        bookInstantly.text = "Spot"
-
-        viewResults.setOnClickListener {
-            dialog.dismiss()
-            val intent = Intent(this, SetGoalsScreen::class.java)
-            intent.putExtra("postJobId", ViewBidsScreen.bookingId)
-            intent.putExtra("bidPrice", binding.bid.text.toString().trim())
-            startActivity(intent)
-        }
-        bookInstantly.setOnClickListener {
-            dialog.dismiss()
-
-        }
-        dialog.show()
     }
 
 }

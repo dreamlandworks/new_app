@@ -28,6 +28,7 @@ import kotlin.math.sin
 
 object UserUtils {
 
+    var spid = ""
     var EDIT_MY_JOB_POST_DETAILS = ""
     var EDIT_MY_JOB_POST = false
     var title = ""
@@ -41,7 +42,9 @@ object UserUtils {
     var FORGOT_PWD = false
     var USER_ID = ""
     var scheduled_date = ""
+    var re_scheduled_date = ""
     var time_slot_from = ""
+    var re_scheduled_time_slot_from = ""
     var time_slot_to = ""
     var started_at = ""
     var address_id = "0"
@@ -391,16 +394,16 @@ object UserUtils {
         return sharedPreferences.getString(context.resources.getString(R.string.userId), "")!!
     }
 
-    fun setReferralId(context: Context, referralId: String) {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
-        val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.userReferralId), referralId)
-        editor.apply()
-        editor.commit()
-    }
+//    fun setReferralId(context: Context, referralId: String) {
+//        val sharedPreferences = context.getSharedPreferences(
+//            context.resources.getString(R.string.userDetails),
+//            Context.MODE_PRIVATE
+//        )
+//        val editor = sharedPreferences.edit()
+//        editor.putString(context.resources.getString(R.string.userReferralId), referralId)
+//        editor.apply()
+//        editor.commit()
+//    }
 
     fun saveSelectedSPDetails(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(

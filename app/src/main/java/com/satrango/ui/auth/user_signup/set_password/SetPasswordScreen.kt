@@ -167,7 +167,7 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    UserUtils.setReferralId(this@SetPasswordScreen, it.data!!)
+//                    UserUtils.setReferralId(this@SetPasswordScreen, it.data!!)
                     showCustomDialog()
                 }
                 is NetworkResponse.Failure -> {

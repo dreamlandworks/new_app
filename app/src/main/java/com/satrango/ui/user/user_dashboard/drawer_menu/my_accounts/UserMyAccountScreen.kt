@@ -1,17 +1,27 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserMyAccountScreenBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
+import com.satrango.utils.snackBar
 
 class UserMyAccountScreen : AppCompatActivity() {
+
+    companion object {
+        var FROM_MY_ACCOUNT = false
+    }
 
     private lateinit var binding: ActivityUserMyAccountScreenBinding
 
@@ -29,11 +39,46 @@ class UserMyAccountScreen : AppCompatActivity() {
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
 
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Loading...")
+        progressDialog.setCancelable(false)
+
+        val factory = ViewModelFactory(MyAccountRepository())
+        val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
+        viewModel.myAccountDetails(this).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    updateUI(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.applyBtn, it.message!!)
+                }
+            }
+        })
+
+    }
+
+    private fun updateUI(data: MyAccountDetailsResModel) {
+
         binding.apply {
 
-            changePlan.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java)) }
-            transactionHistory.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java)) }
+            jobPosts.text = data.total_job_posts
+            referrals.text = data.total_referrals
+            bookings.text = data.total_bookings
+            thisMonth.text = data.commission_earned.this_month.toString()
+            previousMonth.text = data.commission_earned.prev_month.toString()
+            change.text = data.commission_earned.change.toString()
 
+            changePlan.setOnClickListener {
+                FROM_MY_ACCOUNT = true
+                startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java))
+            }
+            transactionHistory.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java)) }
         }
 
     }

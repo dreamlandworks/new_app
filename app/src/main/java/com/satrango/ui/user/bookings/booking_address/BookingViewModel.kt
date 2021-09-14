@@ -5,15 +5,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.*
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
 import com.satrango.utils.UserUtils
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +32,8 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val confirmBooking = MutableLiveData<NetworkResponse<String>>()
     val viewBookingDetails = MutableLiveData<NetworkResponse<BookingDetailsResModel>>()
     val providerResponse = MutableLiveData<NetworkResponse<String>>()
+    val rescheduleBooking = MutableLiveData<NetworkResponse<RescheduleBookingResModel>>()
+    val spSlots = MutableLiveData<NetworkResponse<SlotsData>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -173,6 +175,42 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             providerResponse.value = NetworkResponse.Failure("No Internet Connection")
         }
         return providerResponse
+    }
+
+    fun rescheduleBooking(context: Context, requestBody: RescheduleBookingReqModel): MutableLiveData<NetworkResponse<RescheduleBookingResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                rescheduleBooking.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.reschedule(requestBody) }
+                    rescheduleBooking.value = NetworkResponse.Success(response.await())
+                } catch (e: Exception) {
+                    rescheduleBooking.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            rescheduleBooking.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return rescheduleBooking
+    }
+
+    fun spSlots(context: Context, spId: Int): MutableLiveData<NetworkResponse<SlotsData>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                spSlots.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.getSpSlots(spId) }
+                    val jsonObject = JSONObject(JSONObject(response.await().string()).getJSONObject("slots_data").toString())
+                    jsonObject.put("user_id", UserUtils.getUserId(context))
+                    spSlots.value = NetworkResponse.Success(Gson().fromJson(jsonObject.toString(), SlotsData::class.java))
+                } catch (e: Exception) {
+                    spSlots.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            spSlots.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return spSlots
     }
 
 }

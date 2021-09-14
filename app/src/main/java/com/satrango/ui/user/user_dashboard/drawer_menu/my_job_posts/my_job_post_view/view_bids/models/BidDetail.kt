@@ -7,6 +7,7 @@ data class BidDetail(
     val estimate_type: String,
     val proposal: String,
     val sp_profile: String,
+    val bid_type: String,
     val sp_fcm_token: String,
     val sp_fname: String,
     val sp_id: String,

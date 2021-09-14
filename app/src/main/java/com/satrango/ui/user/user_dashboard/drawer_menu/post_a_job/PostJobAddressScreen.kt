@@ -23,6 +23,7 @@ import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
@@ -192,6 +193,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     if (it.data!!.user_plan_id == "0") {
+                        UserMyAccountScreen.FROM_MY_ACCOUNT = false
                         startActivity(Intent(this@PostJobAddressScreen, UserPlanScreen::class.java))
                     } else {
                         showSuccessDialog()
