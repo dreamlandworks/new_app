@@ -1,7 +1,6 @@
-package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,30 +11,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
-import com.satrango.databinding.ActivityMyBookingsScreenBinding
+import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
-import com.satrango.utils.UserUtils
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.ProviderMyBookingAdapter
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
 
-class MyBookingsScreen : AppCompatActivity() {
+class ProviderMyBookingsScreen : AppCompatActivity() {
 
+    private lateinit var binding: ActivityProviderMyBookingsScreenBinding
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var viewModel: MyBookingsViewModel
-    private lateinit var binding: ActivityMyBookingsScreenBinding
+    private lateinit var viewModel: ProviderBookingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyBookingsScreenBinding.inflate(layoutInflater)
+        binding = ActivityProviderMyBookingsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val factory = ViewModelFactory(MyBookingsRepository())
-        viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+        val factory = ViewModelFactory(ProviderBookingRepository())
+        viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
@@ -50,7 +47,7 @@ class MyBookingsScreen : AppCompatActivity() {
 
         updateUI("InProgress")
         binding.inProgressBtn.setOnClickListener {
-            binding.inProgressBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.inProgressBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.completedBtn.setBackgroundResource(0)
             binding.pendingBtn.setBackgroundResource(0)
             binding.inProgressBtn.setTextColor(Color.parseColor("#FFFFFF"))
@@ -59,7 +56,7 @@ class MyBookingsScreen : AppCompatActivity() {
             updateUI("InProgress")
         }
         binding.pendingBtn.setOnClickListener {
-            binding.pendingBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.pendingBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.completedBtn.setBackgroundResource(0)
             binding.inProgressBtn.setBackgroundResource(0)
             binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
@@ -68,7 +65,7 @@ class MyBookingsScreen : AppCompatActivity() {
             updateUI("Pending")
         }
         binding.completedBtn.setOnClickListener {
-            binding.completedBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.completedBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.inProgressBtn.setBackgroundResource(0)
             binding.pendingBtn.setBackgroundResource(0)
             binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
@@ -79,23 +76,24 @@ class MyBookingsScreen : AppCompatActivity() {
     }
 
     private fun updateUI(status: String) {
-        val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 2)
 
-        viewModel.getMyBookingDetails(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.bookingListWithDetails(this, requestBody).observe(this, {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    val list = ArrayList<BookingDetail>()
+                    val list = ArrayList<com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.BookingDetail>()
                     for (details in it.data!!) {
                         if (details.booking_status.equals(status, ignoreCase = true)) {
                             list.add(details)
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = MyBookingsAdapter(list)
+                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -108,9 +106,5 @@ class MyBookingsScreen : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun onBackPressed() {
-        startActivity(Intent(this, UserDashboardScreen::class.java))
     }
 }

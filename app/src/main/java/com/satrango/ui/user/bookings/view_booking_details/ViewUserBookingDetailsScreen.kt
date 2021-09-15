@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewUserBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
@@ -29,13 +31,17 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRep
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
+    private var userId = ""
+    private var categoryId = ""
     private var bookingId = ""
     private lateinit var response: BookingDetailsResModel
     private lateinit var binding: ActivityViewUserBookingDetailsScreenBinding
@@ -44,6 +50,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     companion object {
         var RESCHEDULE = false
         var FROM_MY_BOOKINGS_SCREEN = false
+        var FROM_PROVIDER = false
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -59,18 +66,32 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+
+
         if (FROM_MY_BOOKINGS_SCREEN) {
-            binding.toolBar.title = "My Booking Details"
-            binding.toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
+            toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
             binding.providerBtnsLayout.visibility = View.GONE
             binding.userBtnsLayout.visibility = View.VISIBLE
         } else {
             binding.providerBtnsLayout.visibility = View.VISIBLE
         }
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.reScheduleBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
+        }
 
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-        val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-        val userId = intent.getStringExtra(getString(R.string.user_id))!!
+        categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+        userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
@@ -236,13 +257,23 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details)
         binding.attachmentsRV.adapter = JobDetailsAttachmentsAdapter(response.attachments)
 
-        binding.cancelBookingBtn.setOnClickListener { onBackPressed() }
+        binding.cancelBookingBtn.setOnClickListener {
+            if (FROM_PROVIDER) {
+                UserBookingCancelScreen.FROM_PROVIDER = true
+            }
+            val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            binding.root.context.startActivity(intent)
+        }
         binding.reScheduleBtn.setOnClickListener {
+            RESCHEDULE = true
             ViewBidsScreen.bookingId = bookingId.toInt()
+            BookingDateAndTimeScreen.FROM_PROVIDER = FROM_PROVIDER
+            UserUtils.spid = response.booking_details.sp_id
             UserUtils.re_scheduled_date = response.booking_details.scheduled_date
             UserUtils.re_scheduled_time_slot_from = response.booking_details.time_slot_id
-            UserUtils.spid = response.booking_details.sp_id
-            RESCHEDULE = true
             startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
         }
 

@@ -46,7 +46,7 @@ class MyJobPostsScreen : AppCompatActivity() {
         updateUI("Pending")
 
         binding.pendingBtn.setOnClickListener {
-            binding.pendingBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.pendingBtn.setBackgroundResource(R.drawable.user_btn_bg)
             binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.awardedBtn.setBackgroundResource(0)
             binding.awardedBtn.setTextColor(Color.parseColor("#000000"))
@@ -55,7 +55,7 @@ class MyJobPostsScreen : AppCompatActivity() {
             updateUI("Pending")
         }
         binding.awardedBtn.setOnClickListener {
-            binding.awardedBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.awardedBtn.setBackgroundResource(R.drawable.user_btn_bg)
             binding.awardedBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.pendingBtn.setBackgroundResource(0)
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
@@ -64,7 +64,7 @@ class MyJobPostsScreen : AppCompatActivity() {
             updateUI("Awarded")
         }
         binding.expiredBtn.setOnClickListener {
-            binding.expiredBtn.setBackgroundResource(R.drawable.btn_bg)
+            binding.expiredBtn.setBackgroundResource(R.drawable.user_btn_bg)
             binding.expiredBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.pendingBtn.setBackgroundResource(0)
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))

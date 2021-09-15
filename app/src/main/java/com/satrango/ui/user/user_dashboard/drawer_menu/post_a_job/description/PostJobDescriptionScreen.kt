@@ -91,7 +91,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
             }
 
             perHour.setOnClickListener {
-                perHour.setBackgroundResource(R.drawable.btn_bg)
+                perHour.setBackgroundResource(R.drawable.user_btn_bg)
                 perDay.setBackgroundResource(R.drawable.blue_out_line)
                 perJob.setBackgroundResource(R.drawable.blue_out_line)
                 perHour.setTextColor(Color.parseColor("#FFFFFF"))
@@ -101,7 +101,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
             }
 
             perDay.setOnClickListener {
-                perDay.setBackgroundResource(R.drawable.btn_bg)
+                perDay.setBackgroundResource(R.drawable.user_btn_bg)
                 perHour.setBackgroundResource(R.drawable.blue_out_line)
                 perJob.setBackgroundResource(R.drawable.blue_out_line)
                 perDay.setTextColor(Color.parseColor("#FFFFFF"))
@@ -111,7 +111,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
             }
 
             perJob.setOnClickListener {
-                perJob.setBackgroundResource(R.drawable.btn_bg)
+                perJob.setBackgroundResource(R.drawable.user_btn_bg)
                 perDay.setBackgroundResource(R.drawable.blue_out_line)
                 perHour.setBackgroundResource(R.drawable.blue_out_line)
                 perJob.setTextColor(Color.parseColor("#FFFFFF"))
@@ -121,7 +121,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
             }
 
             hours.setOnClickListener {
-                hours.setBackgroundResource(R.drawable.btn_bg)
+                hours.setBackgroundResource(R.drawable.user_btn_bg)
                 days.setBackgroundResource(R.drawable.blue_out_line)
                 hours.setTextColor(Color.parseColor("#FFFFFF"))
                 days.setTextColor(Color.parseColor("#0A84FF"))
@@ -129,7 +129,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
             }
 
             days.setOnClickListener {
-                days.setBackgroundResource(R.drawable.btn_bg)
+                days.setBackgroundResource(R.drawable.user_btn_bg)
                 hours.setBackgroundResource(R.drawable.blue_out_line)
                 days.setTextColor(Color.parseColor("#FFFFFF"))
                 hours.setTextColor(Color.parseColor("#0A84FF"))
@@ -196,7 +196,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
         binding.discription.setText(data.job_details[0].job_description)
         when (data.job_post_details.bid_per) {
             "1" -> {
-                binding.perHour.setBackgroundResource(R.drawable.btn_bg)
+                binding.perHour.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perHour.setTextColor(Color.parseColor("#FFFFFF"))
@@ -205,7 +205,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 UserUtils.bid_per = 1
             }
             "2" -> {
-                binding.perDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.perDay.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perJob.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perDay.setTextColor(Color.parseColor("#FFFFFF"))
@@ -214,7 +214,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 UserUtils.bid_per = 2
             }
             "4" -> {
-                binding.perJob.setBackgroundResource(R.drawable.btn_bg)
+                binding.perJob.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.perDay.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perHour.setBackgroundResource(R.drawable.blue_out_line)
                 binding.perJob.setTextColor(Color.parseColor("#FFFFFF"))
@@ -231,14 +231,14 @@ class PostJobDescriptionScreen : AppCompatActivity() {
         binding.estimateTime.setText(data.job_post_details.estimate_time)
         when (data.job_post_details.estimate_type) {
             "Hours" -> {
-                binding.hours.setBackgroundResource(R.drawable.btn_bg)
+                binding.hours.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.days.setBackgroundResource(R.drawable.blue_out_line)
                 binding.hours.setTextColor(Color.parseColor("#FFFFFF"))
                 binding.days.setTextColor(Color.parseColor("#0A84FF"))
                 UserUtils.estimateTypeId = 1
             }
             "Days" -> {
-                binding.days.setBackgroundResource(R.drawable.btn_bg)
+                binding.days.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.hours.setBackgroundResource(R.drawable.blue_out_line)
                 binding.days.setTextColor(Color.parseColor("#FFFFFF"))
                 binding.hours.setTextColor(Color.parseColor("#0A84FF"))

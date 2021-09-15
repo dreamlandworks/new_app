@@ -27,7 +27,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_alignParentStart="true"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/user_btn_bg"
             android:src="@drawable/ic_baseline_skip_previous_24"
             app:tint="@color/white"
             tools:ignore="ContentDescription" />
@@ -37,7 +37,7 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/user_btn_bg"
             android:src="@drawable/ic_play_svg"
             app:tint="@color/white"
             tools:ignore="ContentDescription" />
@@ -47,7 +47,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/user_btn_bg"
             android:src="@drawable/ic_baseline_skip_next_24"
             app:tint="@color/white"
             tools:ignore="ContentDescription" />

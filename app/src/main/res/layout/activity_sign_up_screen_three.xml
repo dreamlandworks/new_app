@@ -248,7 +248,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_15sdp"
                 style="@style/filled_button_style"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/user_btn_bg"
                 android:text="@string/next_sm"
                  />
 

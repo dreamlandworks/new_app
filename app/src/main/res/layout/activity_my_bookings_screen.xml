@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/grey_800"
-    tools:context=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen">
+    tools:context=".ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen">
 
     <include
         android:id="@+id/toolBar"

@@ -1,7 +1,7 @@
 package com.satrango.remote
 
 import com.google.gson.GsonBuilder
-import com.satrango.remote.api_services.ServiceProviderApiService
+import com.satrango.remote.api_services.ProviderApiService
 import com.satrango.remote.api_services.UserApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,7 +38,7 @@ object RetrofitBuilder {
 
     }
 
-    fun getServiceProviderRetrofitInstance(): ServiceProviderApiService {
+    fun getServiceProviderRetrofitInstance(): ProviderApiService {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -57,7 +57,7 @@ object RetrofitBuilder {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .build().create(ServiceProviderApiService::class.java)
+            .build().create(ProviderApiService::class.java)
     }
 
     fun getFCMRetrofitInstance(): UserApiService {

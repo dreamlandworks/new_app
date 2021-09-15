@@ -140,7 +140,7 @@
                     android:id="@+id/bookLaterBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_bg_sm"
+                    android:background="@drawable/user_btn_bg_sm"
                     android:paddingHorizontal="@dimen/_10sdp"
                     style="@style/filled_button_style"
                     android:layout_centerInParent="true"

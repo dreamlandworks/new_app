@@ -34,11 +34,17 @@ class MonthsAdapter(
             holder.binding.addressText.setBackgroundResource(R.drawable.category_bg)
             holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+                holder.binding.rowLayout.setBackgroundResource(R.drawable.provider_btn_bg)
+            }
         } else {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_out_line)
             holder.binding.addressText.setBackgroundResource(R.drawable.blue_out_line)
             holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
+            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+                holder.binding.rowLayout.setBackgroundResource(R.drawable.purple_out_line)
+            }
         }
         if (listType == "AA") {
             holder.binding.rowLayout.visibility = View.GONE

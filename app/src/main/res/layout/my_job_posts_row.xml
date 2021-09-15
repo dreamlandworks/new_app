@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:background="@drawable/btn_bg"
+                    android:background="@drawable/user_btn_bg"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
                     android:text="@string/award"

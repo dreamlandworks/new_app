@@ -184,7 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:background="@drawable/btn_bg_sm"
+            android:background="@drawable/user_btn_bg_sm"
             android:padding="@dimen/_10sdp"
             android:text="@string/at"
             android:textColor="@color/white"

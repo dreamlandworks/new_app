@@ -118,7 +118,7 @@
                 android:layout_gravity="center"
                 style="@style/filled_button_style"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/user_btn_bg"
                 android:text="@string/next_sm" />
 
             <LinearLayout

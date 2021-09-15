@@ -548,6 +548,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 else -> {
                     finish()
+                    BookingDateAndTimeScreen.FROM_PROVIDER = false
                     val intent = Intent(this, BookingDateAndTimeScreen::class.java)
                     intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)

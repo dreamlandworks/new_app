@@ -233,6 +233,7 @@
     <string name="professional_info">Professional Info</string>
     <string name="distance">Distance</string>
     <string name="view_profile">View Profile</string>
+    <string name="view_details">View Details</string>
     <string name="month">/Month</string>
     <string name="just_now">Just Now</string>
     <string name="review_later">Review Later</string>
@@ -467,6 +468,18 @@
     <string name="otp">OTP</string>
     <string name="request_placed">Request Placed</string>
     <string name="your_re_schedule_request_is_placed_successfully_we_will_intimate_you_once_it_is_accepted_by_the_service_provider">Your re=schedule request is placed successfully. We will intimate you once it is accepted by the Service Provider</string>
+    <string name="looks_like_we_haven_t_got_the_chance_to_serve_you_we_will_wait_till_next_time">Looks like we haven\'t got the chance to serve you. We will wait till next time.</string>
+    <string name="please_select_below_to_proceed">Please select below to proceed</string>
+    <string name="service_provider_not_responding_properly">Service Provider not responding properly</string>
+    <string name="found_some_other_app_option_to_serve_better">Found some other app/option to serve better</string>
+    <string name="i_am_not_in_need_of_this_service_now">I am not in need of this service now</string>
+    <string name="app_is_not_user_friendly_lot_of_bugs">App is not user-friendly / lot of bugs</string>
+    <string name="others_please_specify">Others, Please Specify</string>
+    <string name="sp_cancel_message">Looks like you have a problem with this booking. Please let us know the reason to assist you better in future</string>
+    <string name="sp_cancel_message_radio1">User not responding properly</string>
+    <string name="sp_cancel_message_radio2">User not accepted for Re-schedule request</string>
+    <string name="sp_cancel_message_radio3">I have other commitments at booking time</string>
+    <string name="sp_cancel_message_radio4">Not in my skillset</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

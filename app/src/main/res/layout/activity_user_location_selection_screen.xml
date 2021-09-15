@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_25sdp"
-                android:background="@drawable/btn_bg_sm"
+                android:background="@drawable/user_btn_bg_sm"
                 android:layout_alignParentEnd="true"
                 style="@style/filled_button_style"
                 android:enabled="false"

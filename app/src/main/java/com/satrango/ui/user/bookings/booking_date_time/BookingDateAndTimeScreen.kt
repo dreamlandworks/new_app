@@ -12,12 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingDateAndTimeScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -25,13 +27,12 @@ import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScree
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.*
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -40,6 +41,9 @@ import kotlin.collections.ArrayList
 
 class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
+    companion object {
+        var FROM_PROVIDER = false
+    }
 
     private lateinit var blocked_time_slots: List<BlockedTimeSlot>
     private lateinit var preferred_time_slots: List<PreferredTimeSlot>
@@ -65,6 +69,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.nextBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+        }
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
@@ -187,22 +197,66 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
+                    weAreSorryDialog()
                 }
             }
         })
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun weAreSorryDialog() {
+        val dialog = BottomSheetDialog(this)
+        dialog.setCancelable(false)
+        val dialogView = layoutInflater.inflate(R.layout.no_service_provider_found, null)
+        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
+        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+        val title = dialogView.findViewById<TextView>(R.id.title)
+        val headerMessage = dialogView.findViewById<TextView>(R.id.header_message)
+        val message = dialogView.findViewById<TextView>(R.id.message)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        headerMessage.text = "Your request not accepted"
+        message.text = "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
+        yesBtn.text = "No, Leave it"
+        noBtn.text = "Cancel Booking"
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            onBackPressed()
+        }
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+            onBackPressed()
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
     private fun showRescheduledDialog() {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.reschedule_requested_dialog, null)
+        val title = dialogView.findViewById<TextView>(R.id.title)
         val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
         val myBookingsBtn = dialogView.findViewById<TextView>(R.id.myBookingsBtn)
-        homeBtn.setOnClickListener {
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
-        myBookingsBtn.setOnClickListener {
-            startActivity(Intent(this, MyBookingsScreen::class.java))
+        if (FROM_PROVIDER) {
+            homeBtn.setBackgroundResource(R.drawable.purple_out_line)
+            myBookingsBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            homeBtn.setTextColor(resources.getColor(R.color.purple_500))
+            title.setTextColor(resources.getColor(R.color.purple_500))
+            homeBtn.setOnClickListener {
+                startActivity(Intent(this, ProviderDashboard::class.java))
+            }
+            myBookingsBtn.setOnClickListener {
+                startActivity(Intent(this, ProviderDashboard::class.java))
+            }
+        } else {
+            homeBtn.setOnClickListener {
+                startActivity(Intent(this, UserDashboardScreen::class.java))
+            }
+            myBookingsBtn.setOnClickListener {
+                startActivity(Intent(this, UserMyBookingsScreen::class.java))
+            }
         }
         dialog.setContentView(dialogView)
         dialog.show()

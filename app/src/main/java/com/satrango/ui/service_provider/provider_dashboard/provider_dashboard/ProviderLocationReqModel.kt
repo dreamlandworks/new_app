@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard.dashboard
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard
 
 data class ProviderLocationReqModel(
     val address: String,

@@ -74,6 +74,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 //            skillsRating.text = data.
 
             bookLaterBtn.setOnClickListener {
+                BookingDateAndTimeScreen.FROM_PROVIDER = false
                 val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)

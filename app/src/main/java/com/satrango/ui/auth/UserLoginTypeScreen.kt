@@ -1,31 +1,24 @@
 package com.satrango.ui.auth
 
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
-import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.*
-import java.util.regex.Pattern
 
 
 class UserLoginTypeScreen : AppCompatActivity() {

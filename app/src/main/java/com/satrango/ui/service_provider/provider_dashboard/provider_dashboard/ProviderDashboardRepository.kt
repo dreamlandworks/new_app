@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard.dashboard
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard
 
 import android.content.Context
 import com.satrango.base.BaseRepository
@@ -6,7 +6,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.utils.UserUtils
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 
 class ProviderDashboardRepository: BaseRepository() {

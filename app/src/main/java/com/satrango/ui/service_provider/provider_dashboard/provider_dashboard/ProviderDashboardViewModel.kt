@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard.dashboard
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody
 import org.json.JSONObject
 
 class ProviderDashboardViewModel(private val repository: ProviderDashboardRepository) :

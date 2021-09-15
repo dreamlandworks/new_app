@@ -55,7 +55,9 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen"></activity>
+        <activity android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen"
             android:screenOrientation="portrait" />
@@ -106,7 +108,7 @@
             android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen"
+            android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen"
@@ -191,7 +193,7 @@
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.dashboard.ProviderDashboard"
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.UserDashboardScreen"

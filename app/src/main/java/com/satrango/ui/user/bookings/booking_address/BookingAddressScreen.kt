@@ -455,6 +455,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 }
                 "3" -> {
                     finish()
+                    BookingDateAndTimeScreen.FROM_PROVIDER = false
                     val intent = Intent(this, BookingDateAndTimeScreen::class.java)
                     intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)

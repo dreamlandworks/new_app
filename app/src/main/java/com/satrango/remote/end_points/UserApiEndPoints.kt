@@ -60,5 +60,6 @@ object UserApiEndPoints {
     final const val MY_ACCOUNT_DETAILS = "user/get_account_details"
     final const val RESCHEDULE_BOOKING = "user/reschedule_booking"
     final const val SP_SLOTS = "user/get_sp_slots"
+    final const val CANCEL_BOOKING = "user/cancel_booking"
 
 }

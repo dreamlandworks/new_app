@@ -93,7 +93,7 @@
             android:layout_gravity="center_vertical"
             style="@style/filled_button_style"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:background="@drawable/btn_bg_sm"/>
+            android:background="@drawable/user_btn_bg_sm"/>
 
     </LinearLayout>
 

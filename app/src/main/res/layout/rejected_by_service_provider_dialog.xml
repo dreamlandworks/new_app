@@ -106,7 +106,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/btn_bg_sm"
+                android:background="@drawable/user_btn_bg_sm"
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"

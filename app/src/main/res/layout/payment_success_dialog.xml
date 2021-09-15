@@ -68,7 +68,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_20sdp"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/user_btn_bg"
             android:gravity="center"
             android:elevation="@dimen/_5sdp"
             android:text="@string/close"

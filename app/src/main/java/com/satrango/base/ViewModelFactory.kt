@@ -18,8 +18,10 @@ import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationReposito
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
-import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardRepository
-import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboardRepository
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboardViewModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingRepository
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
@@ -114,6 +116,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> return SettingsViewModel(
                 baseRepository as SettingsRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderBookingViewModel::class.java) -> return ProviderBookingViewModel(
+                baseRepository as ProviderBookingRepository
             ) as T
         }
         return super.create(modelClass)

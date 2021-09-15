@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard.dashboard
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -37,13 +37,14 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.provider_home.ProviderHomeScreen
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
+import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -150,7 +151,7 @@ class ProviderDashboard : AppCompatActivity() {
 
                 }
                 R.id.providerOptMyBooking -> {
-
+                    startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                 }
                 R.id.providerOptMyBids -> {
 

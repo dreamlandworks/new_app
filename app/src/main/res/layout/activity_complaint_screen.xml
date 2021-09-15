@@ -86,7 +86,7 @@
                 style="@style/filled_button_style"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/user_btn_bg"
                 android:text="@string/submit" />
 
         </RelativeLayout>

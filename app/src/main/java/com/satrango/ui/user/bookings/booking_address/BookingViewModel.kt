@@ -11,6 +11,7 @@ import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
+import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
@@ -34,6 +35,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val providerResponse = MutableLiveData<NetworkResponse<String>>()
     val rescheduleBooking = MutableLiveData<NetworkResponse<RescheduleBookingResModel>>()
     val spSlots = MutableLiveData<NetworkResponse<SlotsData>>()
+    val cancelBooking = MutableLiveData<NetworkResponse<String>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -211,6 +213,28 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             spSlots.value = NetworkResponse.Failure("No Internet Connection")
         }
         return spSlots
+    }
+
+    fun cancelBooking(context: Context, requestBody: UserBookingCancelReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                cancelBooking.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.cancelBooking(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
+                    if (jsonObject.getInt("status") == 200) {
+                        cancelBooking.value = NetworkResponse.Success(jsonObject.getString("message"))
+                    } else {
+                        cancelBooking.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    cancelBooking.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            cancelBooking.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return cancelBooking
     }
 
 }

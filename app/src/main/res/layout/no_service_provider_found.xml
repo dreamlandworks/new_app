@@ -33,6 +33,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -43,6 +44,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/header_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -87,14 +89,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/btn_bg_sm_blue_border"
+                android:background="@drawable/blue_out_line"
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_3sdp"
-                android:text="No Thanks, \nSearch again"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="No Thanks, Search again"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="bold" />
@@ -106,12 +108,12 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/btn_bg_sm"
+                android:background="@drawable/user_btn_bg"
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"
-                android:paddingHorizontal="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/yes_post_it"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp"

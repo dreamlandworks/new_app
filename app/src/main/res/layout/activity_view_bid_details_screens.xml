@@ -24,7 +24,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_70sdp"
-                android:background="@drawable/btn_bg_sm">
+                android:background="@drawable/user_btn_bg_sm">
 
                 <ImageView
                     android:id="@+id/profilePic"
@@ -480,7 +480,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/user_btn_bg"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/award"

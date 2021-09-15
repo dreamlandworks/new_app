@@ -38,7 +38,6 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move.MyJobPostSingleMoveEditReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
@@ -149,7 +148,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
 
             oneDay.setOnClickListener {
-                oneDay.setBackgroundResource(R.drawable.btn_bg)
+                oneDay.setBackgroundResource(R.drawable.user_btn_bg)
                 threeDays.setBackgroundResource(R.drawable.blue_out_line)
                 sevenDays.setBackgroundResource(R.drawable.blue_out_line)
                 oneDay.setTextColor(Color.parseColor("#FFFFFF"))
@@ -159,7 +158,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
 
             threeDays.setOnClickListener {
-                threeDays.setBackgroundResource(R.drawable.btn_bg)
+                threeDays.setBackgroundResource(R.drawable.user_btn_bg)
                 oneDay.setBackgroundResource(R.drawable.blue_out_line)
                 sevenDays.setBackgroundResource(R.drawable.blue_out_line)
                 threeDays.setTextColor(Color.parseColor("#FFFFFF"))
@@ -169,7 +168,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
 
             sevenDays.setOnClickListener {
-                sevenDays.setBackgroundResource(R.drawable.btn_bg)
+                sevenDays.setBackgroundResource(R.drawable.user_btn_bg)
                 oneDay.setBackgroundResource(R.drawable.blue_out_line)
                 threeDays.setBackgroundResource(R.drawable.blue_out_line)
                 sevenDays.setTextColor(Color.parseColor("#FFFFFF"))
@@ -253,7 +252,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
         when(data.job_post_details.bids_period) {
             "1" -> {
-                binding.oneDay.setBackgroundResource(R.drawable.btn_bg)
+                binding.oneDay.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
                 binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
                 binding.oneDay.setTextColor(Color.parseColor("#FFFFFF"))
@@ -262,7 +261,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 UserUtils.bids_period = 1
             }
             "3" -> {
-                binding.threeDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.threeDays.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
                 binding.sevenDays.setBackgroundResource(R.drawable.blue_out_line)
                 binding.threeDays.setTextColor(Color.parseColor("#FFFFFF"))
@@ -271,7 +270,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 UserUtils.bids_period = 3
             }
             "5" -> {
-                binding.sevenDays.setBackgroundResource(R.drawable.btn_bg)
+                binding.sevenDays.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.oneDay.setBackgroundResource(R.drawable.blue_out_line)
                 binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
                 binding.sevenDays.setTextColor(Color.parseColor("#FFFFFF"))

@@ -10,6 +10,7 @@ import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
+import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
@@ -364,5 +365,10 @@ interface UserApiService {
     suspend fun rescheduleBooking(
         @Body requestBody: RescheduleBookingReqModel
     ): RescheduleBookingResModel
+
+    @POST(UserApiEndPoints.CANCEL_BOOKING)
+    suspend fun cancelBooking(
+        @Body requestBody: UserBookingCancelReqModel
+    ): ResponseBody
 
 }

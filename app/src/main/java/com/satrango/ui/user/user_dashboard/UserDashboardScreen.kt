@@ -29,11 +29,11 @@ import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.login_screen.LoginScreen
-import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
@@ -151,7 +151,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserMyAccountScreen::class.java))
                 }
                 R.id.userOptMyBooking -> {
-                    startActivity(Intent(this, MyBookingsScreen::class.java))
+                    startActivity(Intent(this, UserMyBookingsScreen::class.java))
                 }
                 R.id.userOptMyJobPosts -> {
                     startActivity(Intent(this, MyJobPostsScreen::class.java))

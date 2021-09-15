@@ -70,7 +70,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:background="@drawable/btn_bg_sm">
+            android:background="@drawable/user_btn_bg_sm">
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:background="@drawable/btn_bg_sm">
+            android:background="@drawable/user_btn_bg_sm">
 
             <TextView
                 android:layout_width="match_parent"
@@ -129,7 +129,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:background="@drawable/btn_bg_sm">
+            android:background="@drawable/user_btn_bg_sm">
 
             <TextView
                 android:layout_width="match_parent"
