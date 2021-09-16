@@ -28,7 +28,7 @@ import kotlin.math.sin
 
 object UserUtils {
 
-    var spid = ""
+    var spid = "0"
     var EDIT_MY_JOB_POST_DETAILS = ""
     var EDIT_MY_JOB_POST = false
     var title = ""

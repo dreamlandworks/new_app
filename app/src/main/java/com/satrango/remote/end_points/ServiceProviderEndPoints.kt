@@ -7,5 +7,7 @@ object ServiceProviderEndPoints {
     final const val VIDEO_VERIFICATION = "provider/video_verification"
     final const val PROVIDER_LOCATION = "provider/update_location"
     final const val BOOKING_LIST_WITH_DETAILS = "provider/get_sp_booking_details"
+    final const val EXTRA_DEMAND = "provider/post_sp_extra_demand"
+    final const val EXPENDITURE_INCURRED = "provider/update_final_expenditure"
 
 }

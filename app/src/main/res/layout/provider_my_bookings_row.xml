@@ -252,6 +252,8 @@
             android:id="@+id/profilePic"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
+            app:civ_border_color="@color/purple_500"
+            app:civ_border_width="@dimen/_1sdp"
             android:layout_marginVertical="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:src="@drawable/images" />

@@ -55,7 +55,8 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen" />
         <activity android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen" />
         <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen" />
         <activity

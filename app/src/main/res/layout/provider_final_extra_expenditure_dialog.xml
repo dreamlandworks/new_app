@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_white_24dp"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/final_expenditure"
+        android:textColor="@color/purple_500"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:gravity="end|center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="@string/adv_demand_raised"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/raiseExtraDemand"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
+                android:text="@string/_250_00"
+                android:textSize="@dimen/text"
+                android:textColor="@color/red"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text="@string/expenditure_incurred"
+                android:textSize="@dimen/text"
+                android:gravity="center|end"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/finalExpenditure"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
+                android:inputType="phone"
+                android:background="@drawable/gray_corner"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/material_bills_should_be_provided_by_you_only"
+        android:textSize="@dimen/_9sdp"
+        android:textColor="@color/red"/>
+
+    <TextView
+        android:id="@+id/submitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:layout_marginVertical="@dimen/_15sdp"
+        android:layout_gravity="center"
+        style="@style/filled_button_style"
+        android:background="@drawable/provider_btn_bg"/>
+</LinearLayout>

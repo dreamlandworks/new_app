@@ -40,12 +40,12 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         return myBookings
     }
 
-    fun otpRequest(context: Context, bookingId: Int): MutableLiveData<NetworkResponse<Int>> {
+    fun otpRequest(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<Int>> {
         if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     otpRequest.value = NetworkResponse.Loading()
-                    val result = async { repository.generateOTP(bookingId) }
+                    val result = async { repository.generateOTP(bookingId, spId) }
                     val response = JSONObject(result.await().string())
                     if (response.getInt("status") == 200) {
                         otpRequest.value = NetworkResponse.Success(response.getInt("otp"))

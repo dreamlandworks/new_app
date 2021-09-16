@@ -480,6 +480,27 @@
     <string name="sp_cancel_message_radio2">User not accepted for Re-schedule request</string>
     <string name="sp_cancel_message_radio3">I have other commitments at booking time</string>
     <string name="sp_cancel_message_radio4">Not in my skillset</string>
+    <string name="otp_for_closing">OTP for Closing</string>
+    <string name="status">Status</string>
+    <string name="reached_user_location">Reached User Location</string>
+    <string name="otp_entered_and_work_started">OTP Entered and Work started</string>
+    <string name="you_marked_the_work_complete">You marked the work complete</string>
+    <string name="otp_entered_and_work_marked_complete_by_user">OTP Entered and Work marked complete by User</string>
+    <string name="panic">PANIC</string>
+    <string name="call">Call</string>
+    <string name="message">Message</string>
+    <string name="view_files">View Files</string>
+    <string name="request_installment">Request Installment</string>
+    <string name="raise_extra_demand">Raise Extra Demand</string>
+    <string name="total">Total</string>
+    <string name="material_cost">Material Cost</string>
+    <string name="technician_charges">Technician Charges</string>
+    <string name="material_bills_should_be_provided_by_you_only">Material Bills should be provided by you only.</string>
+    <string name="view_status">View Status</string>
+    <string name="mark_complete">Mark Complete</string>
+    <string name="final_expenditure">Final Expenditure</string>
+    <string name="adv_demand_raised">Adv demand raised</string>
+    <string name="expenditure_incurred">Expenditure Incurred</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
