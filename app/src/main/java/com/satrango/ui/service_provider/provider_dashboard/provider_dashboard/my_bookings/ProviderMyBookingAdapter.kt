@@ -19,7 +19,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.utils.UserUtils
 
 class ProviderMyBookingAdapter(
-    private val list: List<com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.BookingDetail>,
+    private val list: List<BookingDetail>,
     private val status: String,
     private val providerMyBookingInterface: ProviderMyBookingInterface
 ): RecyclerView.Adapter<ProviderMyBookingAdapter.ViewHolder>() {
@@ -55,6 +55,10 @@ class ProviderMyBookingAdapter(
                     binding.startBtn.text = "Pause"
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.cancelBookingBtn.text = "Mark Complete"
+
+                    binding.cancelBookingBtn.setOnClickListener {
+                        providerMyBookingInterface.markComplete(data.extra_demand_total_amount.toString(), data.booking_id.toInt())
+                    }
 
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true

@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.BookingDetail
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,6 +23,8 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
     val bookingListWithDetails = MutableLiveData<NetworkResponse<List<BookingDetail>>>()
     val extraDemand = MutableLiveData<NetworkResponse<String>>()
     val expenditureIncurred = MutableLiveData<NetworkResponse<String>>()
+    val userRating = MutableLiveData<NetworkResponse<String>>()
+    val invoice = MutableLiveData<NetworkResponse<ProviderInvoiceResModel>>()
 
     fun bookingListWithDetails(context: Context, requestBody: ProviderBookingReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
         if (hasInternetConnection(context)) {
@@ -34,7 +39,7 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                         bookingListWithDetails.value = NetworkResponse.Failure(response.message)
                     }
                 } catch (e: Exception) {
-
+                    bookingListWithDetails.value = NetworkResponse.Failure(e.message)
                 }
             }
         } else {
@@ -57,7 +62,7 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                         extraDemand.value = NetworkResponse.Failure(jsonResponse.getString("message"))
                     }
                 } catch (e: Exception) {
-
+                    extraDemand.value = NetworkResponse.Failure(e.message)
                 }
             }
         } else {
@@ -80,13 +85,58 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                         expenditureIncurred.value = NetworkResponse.Failure(jsonResponse.getString("message"))
                     }
                 } catch (e: Exception) {
-
+                    expenditureIncurred.value = NetworkResponse.Failure(e.message)
                 }
             }
         } else {
             expenditureIncurred.value = NetworkResponse.Failure("No Internet Connection")
         }
         return expenditureIncurred
+    }
+
+    fun userRating(context: Context, requestBody: UserRatingReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    userRating.value = NetworkResponse.Loading()
+                    val request = async { repository.userReview(requestBody) }
+                    val response = request.await()
+                    val jsonResponse = JSONObject(response.string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        userRating.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        userRating.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    userRating.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            userRating.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return userRating
+    }
+
+    fun getInvoice(context: Context, requestBody: ProviderInvoiceReqModel): MutableLiveData<NetworkResponse<ProviderInvoiceResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    invoice.value = NetworkResponse.Loading()
+                    val request = async { repository.getInvoice(requestBody) }
+                    val response = request.await()
+                    if (response.status == 200) {
+                        invoice.value = NetworkResponse.Success(response)
+                    } else {
+                        invoice.value = NetworkResponse.Failure(response.message)
+                    }
+                } catch (e: Exception) {
+                    invoice.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            invoice.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return invoice
     }
 
 }

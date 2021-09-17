@@ -501,6 +501,27 @@
     <string name="final_expenditure">Final Expenditure</string>
     <string name="adv_demand_raised">Adv demand raised</string>
     <string name="expenditure_incurred">Expenditure Incurred</string>
+    <string name="work_summary">Work Summary</string>
+    <string name="work_started_at">Work Started at</string>
+    <string name="work_completed_at">Work Completed At</string>
+    <string name="total_time_lapsed">Total Time Lapsed</string>
+    <string name="distance_charges">Distance Charges</string>
+    <string name="service_charges">Service Charges</string>
+    <string name="gst_18">GST(18%)</string>
+    <string name="total_dues">TOTAL DUES</string>
+    <string name="booking_charges">Booking Charges</string>
+    <string name="less_amount">LESS AMOUNT</string>
+    <string name="you_have_successfully_completed_a_booking_please_help_us_in_rating_your_experience_with_service_provider">You have successfully completed a booking. Please help us in rating your experience with service provider.</string>
+    <string name="please_rate_your_experience">Please rate your experience</string>
+    <string name="_0_5">0/5</string>
+    <string name="overall_review">Overall Review</string>
+    <string name="customer_rating">Customer Rating</string>
+    <string name="booking_quality">Booking Quality</string>
+    <string name="app_review">App Review</string>
+    <string name="job_satisfaction">Job Satisfaction</string>
+    <string name="amount_due">Amount Due</string>
+    <string name="amount_already_paid">Amount Already Paid</string>
+    <string name="time_lapsed">Time Lapsed</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

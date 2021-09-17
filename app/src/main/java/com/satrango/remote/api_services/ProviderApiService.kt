@@ -6,8 +6,11 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Provider
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -53,5 +56,15 @@ interface ProviderApiService {
     suspend fun expenditureIncurred(
         @Body json: ExpenditureIncurredReqModel
     ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.USER_REVIEW)
+    suspend fun userReview(
+        @Body json: UserRatingReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.INVOICE)
+    suspend fun getInvoice(
+        @Body json: ProviderInvoiceReqModel
+    ): ProviderInvoiceResModel
 
 }

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen">
+
+    <include
+        android:id="@+id/toolBar"
+        layout="@layout/provider_tool_bar" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15sdp"
+        android:text="@string/you_have_successfully_completed_a_booking_please_help_us_in_rating_your_experience_with_service_provider"
+        android:textSize="@dimen/text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15sdp"
+        android:gravity="center"
+        android:text="@string/please_rate_your_experience"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/overall_review"
+            android:textSize="@dimen/sub_text" />
+
+        <RatingBar
+            android:id="@+id/overAllRatingBtn"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:backgroundTint="@color/yellow"
+            app:drawableEndCompat="@drawable/ic_baseline_star_24" />
+
+        <TextView
+            android:id="@+id/overAllRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/_0_5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/customer_rating"
+            android:textSize="@dimen/sub_text" />
+
+        <RatingBar
+            android:id="@+id/customerRatingBtn"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:isIndicator="false"
+            android:backgroundTint="@color/yellow"
+            app:drawableEndCompat="@drawable/ic_baseline_star_24" />
+
+        <TextView
+            android:id="@+id/customerRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/_0_5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/booking_quality"
+            android:textSize="@dimen/sub_text" />
+
+        <RatingBar
+            android:id="@+id/bookingQualityRatingBtn"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:isIndicator="false"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:backgroundTint="@color/yellow"
+            app:drawableEndCompat="@drawable/ic_baseline_star_24" />
+
+        <TextView
+            android:id="@+id/bookingQualityRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/_0_5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_review"
+            android:textSize="@dimen/sub_text" />
+
+        <RatingBar
+            android:id="@+id/appReviewBtn"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:backgroundTint="@color/yellow"
+            app:drawableEndCompat="@drawable/ic_baseline_star_24" />
+
+        <TextView
+            android:id="@+id/appReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/_0_5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/job_satisfaction"
+            android:textSize="@dimen/sub_text" />
+
+        <RatingBar
+            android:id="@+id/jobSatisfactionBtn"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:backgroundTint="@color/yellow"
+            app:drawableEndCompat="@drawable/ic_baseline_star_24" />
+
+        <TextView
+            android:id="@+id/jobSatisfaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="@string/_0_5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15sdp"
+        app:boxStrokeColor="@color/purple_500"
+        app:boxStrokeWidth="@dimen/_1sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/feedBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:lines="5" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/submitBtn"
+        style="@style/filled_button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/_15sdp"
+        android:background="@drawable/provider_btn_bg"
+        android:text="@string/submit" />
+
+</LinearLayout>

@@ -9,5 +9,7 @@ object ServiceProviderEndPoints {
     final const val BOOKING_LIST_WITH_DETAILS = "provider/get_sp_booking_details"
     final const val EXTRA_DEMAND = "provider/post_sp_extra_demand"
     final const val EXPENDITURE_INCURRED = "provider/update_final_expenditure"
+    final const val USER_REVIEW = "provider/post_user_review"
+    final const val INVOICE = "provider/get_booking_work_summary"
 
 }

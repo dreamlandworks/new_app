@@ -437,7 +437,7 @@ class ProviderDashboard : AppCompatActivity() {
 
                     }
                     is NetworkResponse.Success -> {
-                        toast(this, it.data!!)
+//                        toast(this, it.data!!)
                     }
                     is NetworkResponse.Failure -> {
                         if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {

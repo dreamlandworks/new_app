@@ -4,4 +4,6 @@ interface ProviderMyBookingInterface {
 
     fun requestOTP(bookingId: Int)
 
+    fun markComplete(extraDemand: String, bookingId: Int)
+
 }

@@ -21,6 +21,7 @@ import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
@@ -120,6 +121,45 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         })
     }
 
+    private fun finalExpenditureDialog(extraDemandAmount: String, bookingId: Int) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
+        val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
+        val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
+        raisedExtraDemand.text = extraDemandAmount
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+        submitBtn.setOnClickListener {
+            if (finalExpenditure.text.toString().isEmpty()) {
+                toast(this, "Enter Expenditure Incurred")
+            } else {
+                val factory = ViewModelFactory(ProviderBookingRepository())
+                val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+                val requestBody = ExpenditureIncurredReqModel(bookingId, finalExpenditure.text.toString().toInt(), RetrofitBuilder.PROVIDER_KEY)
+                viewModel.expenditureIncurred(this, requestBody).observe(this, {
+                    when(it) {
+                        is NetworkResponse.Loading -> {
+                            progressDialog.show()
+                        }
+                        is NetworkResponse.Success -> {
+                            progressDialog.dismiss()
+                            dialog.dismiss()
+                        }
+                        is NetworkResponse.Failure -> {
+                            progressDialog.dismiss()
+                            toast(this, it.message!!)
+                        }
+                    }
+                })
+            }
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
     override fun requestOTP(bookingId: Int) {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
@@ -141,6 +181,10 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     }
                 }
             })
+    }
+
+    override fun markComplete(extraDemand: String, bookingId: Int) {
+        finalExpenditureDialog(extraDemand, bookingId)
     }
 
     @SuppressLint("SetTextI18n")
