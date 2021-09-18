@@ -115,7 +115,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderBookingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
-        val requestBody = ProviderInvoiceReqModel(117, RetrofitBuilder.PROVIDER_KEY)
+        val requestBody = ProviderInvoiceReqModel(bookingId.toInt(), RetrofitBuilder.PROVIDER_KEY)
         viewModel.getInvoice(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

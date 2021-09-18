@@ -6,12 +6,16 @@ import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
@@ -60,7 +64,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
@@ -371,5 +374,21 @@ interface UserApiService {
     suspend fun cancelBooking(
         @Body requestBody: UserBookingCancelReqModel
     ): ResponseBody
+
+    @POST(UserApiEndPoints.UPDATE_EXTRA_DEMAND_STATUS)
+    suspend fun changeExtraDemandStatus(
+        @Body requestBody: ChangeExtraDemandStatusReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.POST_APPROVE_REJECT_INSTALLMENTS)
+    suspend fun postInstallmentApproveReject(
+        @Body requestBody: PostApproveRejectReqModel
+    ): PostApproveRejectResModel
+
+    @GET(UserApiEndPoints.GOALS_INSTALLMENTS_REQUESTS_LIST)
+    suspend fun getInstallmentsRequestList(
+        @Query("key") key: String,
+        @Query("post_job_id") postJobId: Int
+    ): GoalsInstallmentsResModel
 
 }

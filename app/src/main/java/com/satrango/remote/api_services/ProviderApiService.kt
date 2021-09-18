@@ -10,6 +10,9 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -66,5 +69,16 @@ interface ProviderApiService {
     suspend fun getInvoice(
         @Body json: ProviderInvoiceReqModel
     ): ProviderInvoiceResModel
+
+    @GET(ServiceProviderEndPoints.GOALS_INSTALLMENTS_LIST)
+    suspend fun getGoalsInstallmentsList(
+        @Query("key") key: String,
+        @Query("post_job_id") postJobId: Int
+    ): ProviderGoalsInstallmentsListResModel
+
+    @POST(ServiceProviderEndPoints.POST_REQUEST_INSTALLMENT)
+    suspend fun postRequestInstallment(
+        @Body requestBody: ProviderPostRequestInstallmentReqModel
+    ): ProviderPostRequestInstallmentResModel
 
 }

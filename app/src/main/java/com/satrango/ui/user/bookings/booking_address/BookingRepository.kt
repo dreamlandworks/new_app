@@ -2,12 +2,16 @@ package com.satrango.ui.user.bookings.booking_address
 
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import okhttp3.ResponseBody
 
@@ -51,6 +55,18 @@ class BookingRepository: BaseRepository() {
 
     suspend fun cancelBooking(requestBody: UserBookingCancelReqModel): ResponseBody {
         return RetrofitBuilder.getUserRetrofitInstance().cancelBooking(requestBody)
+    }
+
+    suspend fun changeExtraDemandStatus(requestBody: ChangeExtraDemandStatusReqModel): ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance().changeExtraDemandStatus(requestBody)
+    }
+
+    suspend fun getInstallments(postJobId: Int): GoalsInstallmentsResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().getInstallmentsRequestList(RetrofitBuilder.USER_KEY, postJobId)
+    }
+
+    suspend fun postInstallmentApproveReject(requestBody: PostApproveRejectReqModel): PostApproveRejectResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().postInstallmentApproveReject(requestBody)
     }
 
 }

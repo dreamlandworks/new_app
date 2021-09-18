@@ -61,5 +61,9 @@ object UserApiEndPoints {
     final const val RESCHEDULE_BOOKING = "user/reschedule_booking"
     final const val SP_SLOTS = "user/get_sp_slots"
     final const val CANCEL_BOOKING = "user/cancel_booking"
+    final const val UPDATE_EXTRA_DEMAND_STATUS = "user/update_extra_demand_status"
+    final const val GOALS_INSTALLMENTS_REQUESTS_LIST = "user/get_goals_installments_requested_list"
+    final const val POST_APPROVE_REJECT_INSTALLMENTS = "user/job_post_approve_reject_installment"
+
 
 }

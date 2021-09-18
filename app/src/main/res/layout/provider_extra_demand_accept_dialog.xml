@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_white_24dp"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/extra_demand"
+        android:textColor="@color/purple_500"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:text="@string/service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis"
+            android:gravity="center"
+            android:textSize="@dimen/text"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/adv_for_material"
+                android:gravity="center|end"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/materialCharges"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/rs_0_00"
+                android:gravity="center"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/technician_charges"
+                android:gravity="center|end"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/technicianCharges"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/rs_0_00"
+                android:gravity="center"
+                android:textSize="@dimen/text"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_gravity="center|end"
+        android:background="@color/purple_500"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_gravity="center|end"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total"
+            android:textSize="@dimen/text"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/totalCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rs_0_00"
+            android:textSize="@dimen/text"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textColor="@color/red"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_gravity="center|end"
+        android:background="@color/purple_500"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/rejectBtn"
+            style="@style/purple_outline_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/purple_out_line"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/reject" />
+
+        <TextView
+            android:id="@+id/acceptBtn"
+            style="@style/filled_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:background="@drawable/provider_btn_bg"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/accept" />
+
+    </LinearLayout>
+
+</LinearLayout>

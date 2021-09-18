@@ -26,12 +26,14 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
@@ -410,11 +412,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
                     if (FROM_PROVIDER) {
-                        snackBar(binding.acceptBtn, "OTP Verification Success")
+                        toast(this, "OTP Verification Success")
                         binding.startBtn.visibility = View.GONE
-                        onBackPressed()
                     } else {
-                        successDialog()
+//                        successDialog()
                     }
                     dialog.dismiss()
                 } else {
@@ -425,10 +426,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()
-    }
-
-    private fun successDialog() {
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -478,6 +475,77 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.raiseExtraDemandBtn.setOnClickListener {
             showExtraDemandDialog()
         }
+
+        if (!FROM_PROVIDER) {
+            if (response.booking_details.post_job_id != "0") {
+                binding.requestInstallmentBtn.visibility = View.GONE
+            }
+            if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
+                if (response.booking_details.extra_demand_total_amount != 0.0) {
+                    if (response.booking_details.extra_demand_status == "0") {
+                        showExtraDemandAcceptDialog()
+                    }
+                }
+            }
+        }
+
+        binding.requestInstallmentBtn.setOnClickListener {
+            UserInstallmentsRequestScreen.postJobId = response.booking_details.post_job_id.toInt()
+            UserUtils.spid = response.booking_details.sp_id
+            startActivity(Intent(this, UserInstallmentsRequestScreen::class.java))
+        }
+
+    }
+
+    private fun showExtraDemandAcceptDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
+        val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
+        val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
+        val totalCost = dialogView.findViewById<TextView>(R.id.totalCost)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+
+        materialCharges.text = response.booking_details.material_advance.toString()
+        technicianCharges.text = response.booking_details.technician_charges.toString()
+        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        acceptBtn.setOnClickListener {
+            changeExtraDemandStatus(2, dialog)
+        }
+
+        rejectBtn.setOnClickListener {
+            changeExtraDemandStatus(1, dialog)
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun changeExtraDemandStatus(status: Int, dialog: BottomSheetDialog) {
+
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody = ChangeExtraDemandStatusReqModel(bookingId.toInt(), RetrofitBuilder.USER_KEY, status)
+        viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    dialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                }
+            }
+        })
 
     }
 
@@ -566,10 +634,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             }
                         }
                     })
-
                 }
             }
-
         }
         closeBtn.setOnClickListener { dialog.dismiss() }
         dialog.setContentView(dialogView)

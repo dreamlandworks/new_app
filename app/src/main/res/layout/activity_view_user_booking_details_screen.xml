@@ -344,58 +344,89 @@
             android:id="@+id/pendingLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/cancelBookingBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:background="@drawable/blue_out_line"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/cancel_booking"
-                android:textSize="@dimen/sub_text"
-                tools:ignore="RelativeOverlap" />
+                android:orientation="horizontal"
+                android:gravity="end">
 
-            <TextView
-                android:id="@+id/reScheduleBtn"
-                style="@style/filled_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_10sdp"
-                android:background="@drawable/user_btn_bg"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/re_schedule"
-                android:textSize="@dimen/sub_text"
-                tools:ignore="RelativeOverlap" />
+                <TextView
+                    android:id="@+id/cancelBookingBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/cancel_booking"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RelativeOverlap" />
 
-            <TextView
-                android:id="@+id/startBtn"
-                style="@style/filled_button_style"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/installmentRequestBtn"
+                    style="@style/blue_outline_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_15sdp"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/installment_requests"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RelativeOverlap" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:background="@drawable/user_btn_bg"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:paddingHorizontal="@dimen/_15sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/start"
-                android:textSize="@dimen/sub_text"
-                tools:ignore="RelativeOverlap" />
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/reScheduleBtn"
+                    style="@style/filled_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/user_btn_bg"
+                    android:clickable="true"
+                    android:elevation="@dimen/_5sdp"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/re_schedule"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RelativeOverlap" />
+
+                <TextView
+                    android:id="@+id/startBtn"
+                    style="@style/filled_button_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/user_btn_bg"
+                    android:clickable="true"
+                    android:elevation="@dimen/_5sdp"
+                    android:focusable="true"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/start"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RelativeOverlap" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 

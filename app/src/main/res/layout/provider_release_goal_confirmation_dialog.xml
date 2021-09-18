@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_white_24dp"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/confirmation"
+        android:textColor="@color/purple_500"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_30sdp"
+        android:gravity="center"
+        android:text="@string/this_request_can_only_be_processed_if_condition_below_is_met"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:progress="50"
+            app:indicatorColor="@color/purple_500"
+            app:indicatorSize="@dimen/_80sdp"
+            app:trackColor="@color/lightGray" />
+
+        <TextView
+            android:id="@+id/percent"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/custom_thumb_provider_header"
+            android:gravity="center"
+            android:text="50%"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:textSize="@dimen/text"
+        android:text="@string/completion_of_work"
+        android:textColor="@color/purple_500"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/backBtn"
+            style="@style/purple_outline_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/purple_out_line"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/back" />
+
+        <TextView
+            android:id="@+id/confirmBtn"
+            style="@style/filled_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:background="@drawable/provider_btn_bg"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/confirm" />
+
+    </LinearLayout>
+</LinearLayout>

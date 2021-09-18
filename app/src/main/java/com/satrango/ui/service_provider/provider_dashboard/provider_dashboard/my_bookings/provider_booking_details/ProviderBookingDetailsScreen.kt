@@ -27,6 +27,7 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
@@ -122,6 +123,12 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         binding.markCompleteBtn.setOnClickListener {
             finalExpenditureDialog()
+        }
+
+        binding.requestInstallmentBtn.setOnClickListener {
+            ProviderReleaseGoalsScreen.postJobId = response.booking_details.post_job_id
+            ProviderReleaseGoalsScreen.userId = userId
+            startActivity(Intent(this, ProviderReleaseGoalsScreen::class.java))
         }
 
     }

@@ -10,6 +10,8 @@ data class BookingDetails(
     val time_slot_id: String,
     val lname: String,
     val mobile: String,
+    val post_job_id: String,
+    val extra_demand_status: String,
     val extra_demand_total_amount: Double,
     val material_advance: Double,
     val technician_charges: Double,

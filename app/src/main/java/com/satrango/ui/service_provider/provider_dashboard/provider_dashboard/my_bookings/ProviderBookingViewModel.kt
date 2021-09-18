@@ -11,6 +11,9 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
@@ -25,6 +28,8 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
     val expenditureIncurred = MutableLiveData<NetworkResponse<String>>()
     val userRating = MutableLiveData<NetworkResponse<String>>()
     val invoice = MutableLiveData<NetworkResponse<ProviderInvoiceResModel>>()
+    val installmentsList = MutableLiveData<NetworkResponse<ProviderGoalsInstallmentsListResModel>>()
+    val postRequestInstallment = MutableLiveData<NetworkResponse<ProviderPostRequestInstallmentResModel>>()
 
     fun bookingListWithDetails(context: Context, requestBody: ProviderBookingReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
         if (hasInternetConnection(context)) {
@@ -137,6 +142,50 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
             invoice.value = NetworkResponse.Failure("No Internet Connection")
         }
         return invoice
+    }
+
+    fun getInstallmentsList(context: Context, postJobId: Int): MutableLiveData<NetworkResponse<ProviderGoalsInstallmentsListResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    installmentsList.value = NetworkResponse.Loading()
+                    val request = async { repository.getGoalsInstallmentsList(postJobId) }
+                    val response = request.await()
+                    if (response.status == 200) {
+                        installmentsList.value = NetworkResponse.Success(response)
+                    } else {
+                        installmentsList.value = NetworkResponse.Failure(response.message)
+                    }
+                } catch (e: Exception) {
+                    installmentsList.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            installmentsList.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return installmentsList
+    }
+
+    fun postRequestInstallment(context: Context, requestBody: ProviderPostRequestInstallmentReqModel): MutableLiveData<NetworkResponse<ProviderPostRequestInstallmentResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    postRequestInstallment.value = NetworkResponse.Loading()
+                    val request = async { repository.postRequestInstallment(requestBody) }
+                    val response = request.await()
+                    if (response.status == 200) {
+                        postRequestInstallment.value = NetworkResponse.Success(response)
+                    } else {
+                        postRequestInstallment.value = NetworkResponse.Failure(response.message)
+                    }
+                } catch (e: Exception) {
+                    postRequestInstallment.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            postRequestInstallment.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return postRequestInstallment
     }
 
 }

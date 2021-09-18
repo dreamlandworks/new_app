@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ProviderMyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.BookingDetail
-import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
+import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
@@ -22,9 +22,10 @@ class ProviderMyBookingAdapter(
     private val list: List<BookingDetail>,
     private val status: String,
     private val providerMyBookingInterface: ProviderMyBookingInterface
-): RecyclerView.Adapter<ProviderMyBookingAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ProviderMyBookingAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: ProviderMyBookingsRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: ProviderMyBookingsRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
         @SuppressLint("SetTextI18n")
@@ -48,7 +49,8 @@ class ProviderMyBookingAdapter(
                 binding.spName.text = "Unknown"
             }
             if (!data.profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+                    .into(binding.profilePic)
             }
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
@@ -57,15 +59,28 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.text = "Mark Complete"
 
                     binding.cancelBookingBtn.setOnClickListener {
-                        providerMyBookingInterface.markComplete(data.extra_demand_total_amount.toString(), data.booking_id.toInt())
+                        providerMyBookingInterface.markComplete(
+                            data.extra_demand_total_amount.toString(),
+                            data.booking_id.toInt()
+                        )
                     }
 
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                        val intent =
+                            Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.booking_id),
+                            data.booking_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.category_id),
+                            data.category_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.user_id),
+                            data.users_id
+                        )
                         UserUtils.spid = data.sp_id
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         binding.root.context.startActivity(intent)
@@ -73,10 +88,20 @@ class ProviderMyBookingAdapter(
 
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                        val intent =
+                            Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.booking_id),
+                            data.booking_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.category_id),
+                            data.category_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.user_id),
+                            data.users_id
+                        )
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         UserUtils.spid = data.sp_id
                         binding.root.context.startActivity(intent)
@@ -88,10 +113,20 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.text = "Cancel Booking"
 
                     binding.cancelBookingBtn.setOnClickListener {
-                        val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                        val intent =
+                            Intent(binding.root.context, UserBookingCancelScreen::class.java)
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.booking_id),
+                            data.booking_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.category_id),
+                            data.category_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.user_id),
+                            data.users_id
+                        )
                         UserBookingCancelScreen.FROM_PROVIDER = true
                         binding.root.context.startActivity(intent)
                     }
@@ -103,7 +138,12 @@ class ProviderMyBookingAdapter(
                         ViewUserBookingDetailsScreen.RESCHEDULE = true
                         UserUtils.spid = data.sp_id
                         BookingDateAndTimeScreen.FROM_PROVIDER = true
-                        binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
+                        binding.root.context.startActivity(
+                            Intent(
+                                binding.root.context,
+                                BookingDateAndTimeScreen::class.java
+                            )
+                        )
                     }
 
                     binding.startBtn.setOnClickListener {
@@ -112,10 +152,20 @@ class ProviderMyBookingAdapter(
 
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                        val intent =
+                            Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.booking_id),
+                            data.booking_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.category_id),
+                            data.category_id
+                        )
+                        intent.putExtra(
+                            binding.root.context.getString(R.string.user_id),
+                            data.users_id
+                        )
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         UserUtils.spid = data.sp_id
                         ViewUserBookingDetailsScreen.FROM_PENDING = true
@@ -137,7 +187,13 @@ class ProviderMyBookingAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(ProviderMyBookingsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ProviderMyBookingsRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

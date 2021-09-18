@@ -55,7 +55,9 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen"></activity>
+        <activity android:name=".ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen" />
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen" />

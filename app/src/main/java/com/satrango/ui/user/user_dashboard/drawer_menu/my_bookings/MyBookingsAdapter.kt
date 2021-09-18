@@ -65,14 +65,14 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                 intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
                 binding.root.context.startActivity(intent)
             }
-            binding.card.setOnClickListener {
-                ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-                intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                binding.root.context.startActivity(intent)
-            }
+//            binding.card.setOnClickListener {
+//                ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+//                val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+//                intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+//                intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+//                intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+//                binding.root.context.startActivity(intent)
+//            }
         }
 
     }

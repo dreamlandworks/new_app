@@ -8,6 +8,9 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -32,6 +35,14 @@ class ProviderBookingRepository: BaseRepository() {
 
     suspend fun getInvoice(requestBody: ProviderInvoiceReqModel): ProviderInvoiceResModel {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getInvoice(requestBody)
+    }
+
+    suspend fun getGoalsInstallmentsList(postJobId: Int): ProviderGoalsInstallmentsListResModel {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().getGoalsInstallmentsList(RetrofitBuilder.PROVIDER_KEY, postJobId)
+    }
+
+    suspend fun postRequestInstallment(requestBody: ProviderPostRequestInstallmentReqModel): ProviderPostRequestInstallmentResModel {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().postRequestInstallment(requestBody)
     }
 
 }

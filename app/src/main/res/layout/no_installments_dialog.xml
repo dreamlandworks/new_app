@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_white_24dp"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/no_installments"
+        android:textColor="@color/purple_500"
+        android:textSize="@dimen/title"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/there_are_not_installments_set_for_this_booking"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sad_face_icon"
+        android:layout_gravity="center"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back_sm"
+        style="@style/filled_button_style"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_gravity="center"
+        android:background="@drawable/provider_btn_bg"/>
+
+</LinearLayout>

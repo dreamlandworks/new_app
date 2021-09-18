@@ -522,6 +522,19 @@
     <string name="amount_due">Amount Due</string>
     <string name="amount_already_paid">Amount Already Paid</string>
     <string name="time_lapsed">Time Lapsed</string>
+    <string name="release">Release</string>
+    <string name="started_on">Started On</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="this_request_can_only_be_processed_if_condition_below_is_met">This request can only be processed if condition below is met</string>
+    <string name="completion_of_work">Completion of Work</string>
+    <string name="extra_demand">Extra Demand</string>
+    <string name="service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis">Service Provider has placed the following extra demand for successful completion of your work after his analysis.</string>
+    <string name="adv_for_material">Adv for Material</string>
+    <string name="request">Request</string>
+    <string name="no_installments">No Installments</string>
+    <string name="there_are_not_installments_set_for_this_booking">There are not installments set for this booking</string>
+    <string name="installment_requests">Installment Requests</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

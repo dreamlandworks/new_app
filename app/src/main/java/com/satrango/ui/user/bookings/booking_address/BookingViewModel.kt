@@ -7,18 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
 import com.satrango.utils.UserUtils
 import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -36,6 +38,9 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val rescheduleBooking = MutableLiveData<NetworkResponse<RescheduleBookingResModel>>()
     val spSlots = MutableLiveData<NetworkResponse<SlotsData>>()
     val cancelBooking = MutableLiveData<NetworkResponse<String>>()
+    val changeExtraDemandStatus = MutableLiveData<NetworkResponse<String>>()
+    val getInstallmentsList = MutableLiveData<NetworkResponse<GoalsInstallmentsResModel>>()
+    val postApproveReject = MutableLiveData<NetworkResponse<PostApproveRejectResModel>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -235,6 +240,70 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             cancelBooking.value = NetworkResponse.Failure("No Internet Connection")
         }
         return cancelBooking
+    }
+
+    fun changeExtraDemandStatus(context: Context, requestBody: ChangeExtraDemandStatusReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                changeExtraDemandStatus.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.changeExtraDemandStatus(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
+                    if (jsonObject.getInt("status") == 200) {
+                        changeExtraDemandStatus.value = NetworkResponse.Success(jsonObject.getString("message"))
+                    } else {
+                        changeExtraDemandStatus.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    changeExtraDemandStatus.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            changeExtraDemandStatus.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return changeExtraDemandStatus
+    }
+
+    fun getInstallmentsList(context: Context, postJobId: Int): MutableLiveData<NetworkResponse<GoalsInstallmentsResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                getInstallmentsList.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.getInstallments(postJobId) }
+                    if (response.await().status == 200) {
+                        getInstallmentsList.value = NetworkResponse.Success(response.await())
+                    } else {
+                        getInstallmentsList.value = NetworkResponse.Failure(response.await().message)
+                    }
+                } catch (e: Exception) {
+                    getInstallmentsList.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            getInstallmentsList.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return getInstallmentsList
+    }
+
+    fun postApproveReject(context: Context, requestBody: PostApproveRejectReqModel): MutableLiveData<NetworkResponse<PostApproveRejectResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                postApproveReject.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.postInstallmentApproveReject(requestBody) }
+                    if (response.await().status == 200) {
+                        postApproveReject.value = NetworkResponse.Success(response.await())
+                    } else {
+                        postApproveReject.value = NetworkResponse.Failure(response.await().message)
+                    }
+                } catch (e: Exception) {
+                    postApproveReject.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            postApproveReject.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return postApproveReject
     }
 
 }
