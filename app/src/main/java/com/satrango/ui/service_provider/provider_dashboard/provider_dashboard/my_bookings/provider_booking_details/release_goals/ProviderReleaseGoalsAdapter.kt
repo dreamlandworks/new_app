@@ -3,6 +3,7 @@ package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.m
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.ProviderReleaseGoalsRowBinding
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.GoalsInstallmentsDetail
@@ -41,9 +42,21 @@ class ProviderReleaseGoalsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-        holder.binding.requestBtn.setOnClickListener {
-            providerReleaseGoalsInterface.sendRequest(list[position])
+        if (list[position].inst_request_status_id == "33") {
             holder.binding.requestBtn.text = "Requested"
+        }
+        holder.binding.requestBtn.setOnClickListener {
+            if (holder.binding.requestBtn.text.toString().trim() == "Requested") {
+                Toast.makeText(
+                    holder.binding.requestBtn.context,
+                    "Already Requested",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                providerReleaseGoalsInterface.sendRequest(list[position])
+                holder.binding.requestBtn.text = "Requested"
+            }
+
         }
     }
 

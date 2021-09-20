@@ -268,7 +268,6 @@ class ProviderDashboard : AppCompatActivity() {
             R.id.navigation_offers -> {
                 binding.toolBarLayout.visibility = View.GONE
                 binding.bottomNavigationView.menu.getItem(4).isChecked = true
-                logoutDialog()
                 return UserOffersScreen()
             }
         }

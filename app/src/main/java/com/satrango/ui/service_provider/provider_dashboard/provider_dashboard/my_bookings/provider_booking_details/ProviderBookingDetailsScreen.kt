@@ -113,7 +113,6 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
             intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
             ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-            ViewUserBookingDetailsScreen.FROM_PENDING = false
             binding.root.context.startActivity(intent)
         }
 

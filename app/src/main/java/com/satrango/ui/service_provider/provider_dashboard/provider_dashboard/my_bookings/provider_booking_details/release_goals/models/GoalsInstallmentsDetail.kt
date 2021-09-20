@@ -10,5 +10,6 @@ data class GoalsInstallmentsDetail(
     val inst_paid_status: String,
     val inst_request_status_id: String,
     val post_job_id: String,
+    val description: String,
     val transaction_id: String
 )

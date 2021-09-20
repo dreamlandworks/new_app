@@ -88,8 +88,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     private fun updateUI(status: String) {
-        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 2)
+//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 12)
 
         viewModel.bookingListWithDetails(this, requestBody).observe(this, {
             when (it) {
@@ -163,7 +163,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     override fun requestOTP(bookingId: Int) {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt(), UserUtils.spid.toInt())
+        viewModel.otpRequest(this, bookingId)
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -173,7 +173,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        otpDialog(requestedOTP)
+                        otpDialog(requestedOTP, bookingId)
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -188,7 +188,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     @SuppressLint("SetTextI18n")
-    private fun otpDialog(requestedOTP: Int) {
+    private fun otpDialog(requestedOTP: Int, bookingId: Int) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -311,13 +311,29 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             } else if (fourthNo.text.toString().trim().isEmpty()) {
                 snackBar(binding.recyclerView, "Invalid OTP")
             } else {
-                val otp = firstNo.text.toString().trim() + secondNo.text.toString()
-                    .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
+                val otp = firstNo.text.toString().trim() + secondNo.text.toString().trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
-                    snackBar(binding.recyclerView, "OTP Verification Success")
-                    finish()
-                    startActivity(intent)
-                    dialog.dismiss()
+                    val factory = ViewModelFactory(MyBookingsRepository())
+                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    viewModel.validateOTP(this, bookingId, UserUtils.spid.toInt())
+                        .observe(this, {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    progressDialog.dismiss()
+                                    dialog.dismiss()
+                                    finish()
+                                    startActivity(intent)
+                                    snackBar(binding.recyclerView, "OTP Verification Success")
+                                }
+                                is NetworkResponse.Failure -> {
+                                    progressDialog.dismiss()
+                                    snackBar(binding.recyclerView, it.message!!)
+                                }
+                            }
+                        })
                 } else {
                     snackBar(binding.recyclerView, "Invalid OTP")
                 }

@@ -17,6 +17,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
 
     var myBookings = MutableLiveData<NetworkResponse<List<BookingDetail>>>()
     var otpRequest = MutableLiveData<NetworkResponse<Int>>()
+    var validateOTP = MutableLiveData<NetworkResponse<Int>>()
 
     fun getMyBookingDetails(context: Context, requestBody: MyBookingsReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
         if (hasInternetConnection(context)) {
@@ -40,12 +41,12 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         return myBookings
     }
 
-    fun otpRequest(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<Int>> {
+    fun otpRequest(context: Context, bookingId: Int): MutableLiveData<NetworkResponse<Int>> {
         if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     otpRequest.value = NetworkResponse.Loading()
-                    val result = async { repository.generateOTP(bookingId, spId) }
+                    val result = async { repository.generateOTP(bookingId) }
                     val response = JSONObject(result.await().string())
                     if (response.getInt("status") == 200) {
                         otpRequest.value = NetworkResponse.Success(response.getInt("otp"))
@@ -60,6 +61,28 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
             otpRequest.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return otpRequest
+    }
+
+    fun validateOTP(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<Int>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    validateOTP.value = NetworkResponse.Loading()
+                    val result = async { repository.validateOTP(bookingId, spId) }
+                    val response = JSONObject(result.await().string())
+                    if (response.getInt("status") == 200) {
+                        validateOTP.value = NetworkResponse.Success(response.getInt("otp"))
+                    } else {
+                        validateOTP.value = NetworkResponse.Failure(response.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    validateOTP.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            validateOTP.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return validateOTP
     }
 
 }

@@ -49,7 +49,7 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.getInstallmentsList(this, 0).observe(this, {
+        viewModel.getInstallmentsList(this, postJobId).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

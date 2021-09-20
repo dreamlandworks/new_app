@@ -29,6 +29,7 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
@@ -89,33 +90,63 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         if (FROM_MY_BOOKINGS_SCREEN) {
             toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
             binding.providerBtnsLayout.visibility = View.GONE
-            binding.userBtnsLayout.visibility = View.VISIBLE
-            if (FROM_PENDING) {
-                binding.pendingLayout.visibility = View.VISIBLE
-                binding.inProgressLayout.visibility = View.GONE
+            if (FROM_PROVIDER) {
+                toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+                binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
+                binding.reScheduleBtn.setBackgroundResource(R.drawable.purple_out_line)
+                binding.reScheduleBtn.setTextColor(resources.getColor(R.color.purple_500))
+                binding.startBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                binding.cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
+                binding.cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
+                binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+                binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+                binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
+                binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
+                if (FROM_PENDING) {
+                    binding.userLayout.visibility = View.VISIBLE
+                    binding.spLayout.visibility = View.GONE
+                    binding.completedBtn.text = "Start"
+                    binding.completedBtn.setOnClickListener {
+                        requestOTP()
+                    }
+                    binding.startBtn.setOnClickListener {
+                        requestOTP()
+                    }
+                } else {
+                    binding.spLayout.visibility = View.VISIBLE
+                    binding.userLayout.visibility = View.GONE
+                    binding.completedBtn.text = "Mark Complete"
+                    binding.completedBtn.setOnClickListener {
+                        finalExpenditureDialog()
+                    }
+                }
+
             } else {
-                binding.inProgressLayout.visibility = View.VISIBLE
-                binding.pendingLayout.visibility = View.GONE
+                if (FROM_PENDING) {
+                    binding.userLayout.visibility = View.VISIBLE
+                    binding.spLayout.visibility = View.GONE
+                    binding.startBtn.visibility = View.GONE
+                } else {
+                    binding.spLayout.visibility = View.VISIBLE
+                    binding.userLayout.visibility = View.GONE
+                    binding.viewFilesBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    binding.viewFilesBtn.setTextColor(resources.getColor(R.color.blue))
+                    binding.inProgressViewStatusBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    binding.inProgressViewStatusBtn.setTextColor(resources.getColor(R.color.blue))
+                    binding.completedBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    binding.completedBtn.setTextColor(resources.getColor(R.color.blue))
+                    binding.completedBtn.text = "Mark Complete"
+                    binding.requestInstallmentBtn.visibility = View.GONE
+                    binding.raiseExtraDemandBtn.visibility = View.GONE
+                    binding.completedBtn.setOnClickListener {
+                        requestOTP()
+                    }
+                }
             }
         } else {
             binding.providerBtnsLayout.visibility = View.VISIBLE
-        }
-        if (FROM_PROVIDER) {
-            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.reScheduleBtn.setBackgroundResource(R.drawable.purple_out_line)
-            binding.reScheduleBtn.setTextColor(resources.getColor(R.color.purple_500))
-            binding.startBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-            binding.cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
-            binding.cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
-            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
-            binding.startBtn.text = "Start"
-            binding.startBtn.setOnClickListener {
-                requestOTP()
-            }
+            binding.spLayout.visibility = View.GONE
+            binding.userLayout.visibility = View.GONE
         }
 
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
@@ -214,17 +245,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     })
             }
 
-            completedBtn.setOnClickListener {
-                finalExpenditureDialog()
-            }
-
         }
 
     }
 
     private fun finalExpenditureDialog() {
         val dialog = BottomSheetDialog(this)
-        val dialogView = layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
+        val dialogView =
+            layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
@@ -237,10 +265,15 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 toast(this, "Enter Expenditure Incurred")
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
-                val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
-                val requestBody = ExpenditureIncurredReqModel(bookingId.toInt(), finalExpenditure.text.toString().toInt(), RetrofitBuilder.PROVIDER_KEY)
+                val viewModel =
+                    ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+                val requestBody = ExpenditureIncurredReqModel(
+                    bookingId.toInt(),
+                    finalExpenditure.text.toString().toInt(),
+                    RetrofitBuilder.PROVIDER_KEY
+                )
                 viewModel.expenditureIncurred(this, requestBody).observe(this, {
-                    when(it) {
+                    when (it) {
                         is NetworkResponse.Loading -> {
                             progressDialog.show()
                         }
@@ -264,7 +297,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     private fun requestOTP() {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt(), UserUtils.spid.toInt())
+        viewModel.otpRequest(this, bookingId.toInt())
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -272,20 +305,20 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        requestedOTP = it.data!!
+                        val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        otpDialog()
+                        otpDialog(requestedOTP, bookingId)
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
-                        snackBar(binding.acceptBtn, it.message!!)
+                        snackBar(binding.inProgressViewStatusBtn, it.message!!)
                     }
                 }
             })
     }
 
     @SuppressLint("SetTextI18n")
-    fun otpDialog() {
+    fun otpDialog(requestedOTP: Int, bookingId: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -410,14 +443,37 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             } else {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
-                if (requestedOTP == otp.toInt()) {
+                if (this.requestedOTP == otp.toInt()) {
                     if (FROM_PROVIDER) {
-                        toast(this, "OTP Verification Success")
                         binding.startBtn.visibility = View.GONE
                     } else {
-//                        successDialog()
+                        UserUtils.spid = "0"
                     }
-                    dialog.dismiss()
+                    val factory = ViewModelFactory(MyBookingsRepository())
+                    val viewModel =
+                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
+                        .observe(this, {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    progressDialog.dismiss()
+                                    dialog.dismiss()
+                                    finish()
+                                    startActivity(intent)
+                                    snackBar(
+                                        binding.inProgressViewStatusBtn,
+                                        "OTP Verification Success"
+                                    )
+                                }
+                                is NetworkResponse.Failure -> {
+                                    progressDialog.dismiss()
+                                    snackBar(binding.inProgressViewStatusBtn, it.message!!)
+                                }
+                            }
+                        })
                 } else {
                     snackBar(binding.acceptBtn, "Invalid OTP")
                 }
@@ -487,12 +543,20 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     }
                 }
             }
+        } else {
+            binding.requestInstallmentBtn.visibility = View.GONE
         }
 
         binding.requestInstallmentBtn.setOnClickListener {
             UserInstallmentsRequestScreen.postJobId = response.booking_details.post_job_id.toInt()
             UserUtils.spid = response.booking_details.sp_id
-            startActivity(Intent(this, UserInstallmentsRequestScreen::class.java))
+            ProviderReleaseGoalsScreen.userId = userId
+            if (FROM_PROVIDER) {
+                startActivity(Intent(this, ProviderReleaseGoalsScreen::class.java))
+            } else {
+                startActivity(Intent(this, UserInstallmentsRequestScreen::class.java))
+            }
+
         }
 
     }
@@ -530,9 +594,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        val requestBody = ChangeExtraDemandStatusReqModel(bookingId.toInt(), RetrofitBuilder.USER_KEY, status)
+        val requestBody =
+            ChangeExtraDemandStatusReqModel(bookingId.toInt(), RetrofitBuilder.USER_KEY, status)
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -559,7 +624,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
         val totalCost = dialogView.findViewById<TextView>(R.id.totalCost)
 
-        materialCharges.addTextChangedListener(object: TextWatcher {
+        materialCharges.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -575,13 +640,17 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 if (technicianCharges.text.toString().isNotEmpty()) {
                     totalCost.text = materialCharges.text.toString()
                 }
-                if (technicianCharges.text.toString().isNotEmpty() && materialCharges.text.toString().isNotEmpty()) {
-                    totalCost.text = (materialCharges.text.toString().toInt() + technicianCharges.text.toString().toInt()).toString()
+                if (technicianCharges.text.toString()
+                        .isNotEmpty() && materialCharges.text.toString().isNotEmpty()
+                ) {
+                    totalCost.text =
+                        (materialCharges.text.toString().toInt() + technicianCharges.text.toString()
+                            .toInt()).toString()
                 }
             }
 
         })
-        technicianCharges.addTextChangedListener(object: TextWatcher {
+        technicianCharges.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -597,8 +666,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 if (technicianCharges.text.toString().isNotEmpty()) {
                     totalCost.text = materialCharges.text.toString()
                 }
-                if (technicianCharges.text.toString().isNotEmpty() && materialCharges.text.toString().isNotEmpty()) {
-                    totalCost.text = (materialCharges.text.toString().toInt() + technicianCharges.text.toString().toInt()).toString()
+                if (technicianCharges.text.toString()
+                        .isNotEmpty() && materialCharges.text.toString().isNotEmpty()
+                ) {
+                    totalCost.text =
+                        (materialCharges.text.toString().toInt() + technicianCharges.text.toString()
+                            .toInt()).toString()
                 }
             }
 
@@ -607,7 +680,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
 
             when {
-                materialCharges.text.toString().isEmpty() && technicianCharges.text.toString().isEmpty() -> {
+                materialCharges.text.toString().isEmpty() && technicianCharges.text.toString()
+                    .isEmpty() -> {
                     toast(this, "Enter Material Charges or Technician Charges")
                 }
                 else -> {
@@ -616,10 +690,18 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     val tCharges = technicianCharges.text.toString()
 
                     val factory = ViewModelFactory(ProviderBookingRepository())
-                    val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
-                    val requestBody = ExtraDemandReqModel(bookingId, SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format((Date())), totalCost.text.toString().trim(), mCharges, tCharges, RetrofitBuilder.PROVIDER_KEY)
+                    val viewModel =
+                        ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+                    val requestBody = ExtraDemandReqModel(
+                        bookingId,
+                        SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format((Date())),
+                        totalCost.text.toString().trim(),
+                        mCharges,
+                        tCharges,
+                        RetrofitBuilder.PROVIDER_KEY
+                    )
                     viewModel.extraDemand(this, requestBody).observe(this, {
-                        when(it) {
+                        when (it) {
                             is NetworkResponse.Loading -> {
                                 progressDialog.show()
                             }

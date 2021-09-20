@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderReleaseGoalsScreenBinding
@@ -88,6 +89,27 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
     }
 
     override fun sendRequest(data: GoalsInstallmentsDetail) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.provider_release_goal_confirmation_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val backBtn = dialogView.findViewById<TextView>(R.id.backBtn)
+        val confirmBtn = dialogView.findViewById<TextView>(R.id.confirmBtn)
+        val percentage = dialogView.findViewById<TextView>(R.id.percent)
+        val progress = dialogView.findViewById<CircularProgressIndicator>(R.id.progressBar)
+        closeBtn.setOnClickListener { dialog.dismiss() }
+        backBtn.setOnClickListener { dialog.dismiss() }
+        confirmBtn.setOnClickListener {
+            dialog.dismiss()
+            showConfirmationDialog(data)
+        }
+        percentage.text = data.description.split(" ")[0].trim()
+        progress.progress = percentage.text.toString().split("%")[0].toInt()
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
+    private fun showConfirmationDialog(data: GoalsInstallmentsDetail) {
         val requestBody = ProviderPostRequestInstallmentReqModel(
             data.booking_id.toInt(),
             data.inst_no.toInt(),
