@@ -13,5 +13,7 @@ object ServiceProviderEndPoints {
     final const val INVOICE = "provider/get_booking_work_summary"
     final const val GOALS_INSTALLMENTS_LIST = "provider/get_goals_installments_list"
     final const val POST_REQUEST_INSTALLMENT = "provider/job_post_request_installment"
+    final const val RESUME_BOOKING = "provider/resume_booking"
+    final const val PAUSE_BOOKING = "provider/pause_booking"
 
 }

@@ -3,6 +3,7 @@ package com.satrango.ui.user.bookings.booking_address
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
@@ -67,6 +68,10 @@ class BookingRepository: BaseRepository() {
 
     suspend fun postInstallmentApproveReject(requestBody: PostApproveRejectReqModel): PostApproveRejectResModel {
         return RetrofitBuilder.getUserRetrofitInstance().postInstallmentApproveReject(requestBody)
+    }
+
+    suspend fun getBookingStatusList(bookingId: Int): GetBookingStatusListResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().getBookingStatusList(RetrofitBuilder.USER_KEY, bookingId)
     }
 
 }

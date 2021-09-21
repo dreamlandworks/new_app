@@ -21,6 +21,8 @@ import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderPauseBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
@@ -30,9 +32,13 @@ import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface {
 
+    private lateinit var myBookingViewModel: MyBookingsViewModel
     private lateinit var binding: ActivityProviderMyBookingsScreenBinding
     private lateinit var progressDialog: ProgressDialog
     private lateinit var viewModel: ProviderBookingViewModel
@@ -44,6 +50,9 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+
+        val myBookingFactory = ViewModelFactory(MyBookingsRepository())
+        myBookingViewModel = ViewModelProvider(this, myBookingFactory)[MyBookingsViewModel::class.java]
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
@@ -123,7 +132,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     private fun finalExpenditureDialog(extraDemandAmount: String, bookingId: Int) {
         val dialog = BottomSheetDialog(this)
-        val dialogView = layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
+        val dialogView =
+            layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
@@ -136,10 +146,15 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 toast(this, "Enter Expenditure Incurred")
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
-                val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
-                val requestBody = ExpenditureIncurredReqModel(bookingId, finalExpenditure.text.toString().toInt(), RetrofitBuilder.PROVIDER_KEY)
+                val viewModel =
+                    ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+                val requestBody = ExpenditureIncurredReqModel(
+                    bookingId,
+                    finalExpenditure.text.toString().toInt(),
+                    RetrofitBuilder.PROVIDER_KEY
+                )
                 viewModel.expenditureIncurred(this, requestBody).observe(this, {
-                    when(it) {
+                    when (it) {
                         is NetworkResponse.Loading -> {
                             progressDialog.show()
                         }
@@ -161,9 +176,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     override fun requestOTP(bookingId: Int) {
-        val factory = ViewModelFactory(MyBookingsRepository())
-        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId)
+
+        myBookingViewModel.otpRequest(this, bookingId)
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -185,6 +199,60 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     override fun markComplete(extraDemand: String, bookingId: Int) {
         finalExpenditureDialog(extraDemand, bookingId)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    override fun pauseBooking(bookingId: Int) {
+        val requestBody = ProviderPauseBookingReqModel(
+            bookingId,
+            RetrofitBuilder.PROVIDER_KEY,
+            SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+            UserUtils.getUserId(this).toInt()
+        )
+        myBookingViewModel.pauseBooking(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        })
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    override fun resumeBooking(bookingId: Int) {
+        val requestBody = ProviderBookingResumeReqModel(
+            bookingId,
+            RetrofitBuilder.PROVIDER_KEY,
+            SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+            UserUtils.getUserId(this).toInt()
+        )
+        myBookingViewModel.resumeBooking(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        })
     }
 
     @SuppressLint("SetTextI18n")
@@ -311,10 +379,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             } else if (fourthNo.text.toString().trim().isEmpty()) {
                 snackBar(binding.recyclerView, "Invalid OTP")
             } else {
-                val otp = firstNo.text.toString().trim() + secondNo.text.toString().trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
+                val otp = firstNo.text.toString().trim() + secondNo.text.toString()
+                    .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
                     val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    val viewModel =
+                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
                     viewModel.validateOTP(this, bookingId, UserUtils.spid.toInt())
                         .observe(this, {
                             when (it) {

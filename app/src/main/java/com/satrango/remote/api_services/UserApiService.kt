@@ -7,6 +7,7 @@ import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
@@ -396,5 +397,11 @@ interface UserApiService {
         @Query("key") key: String,
         @Query("post_job_id") postJobId: Int
     ): GoalsInstallmentsResModel
+
+    @GET(UserApiEndPoints.GET_BOOKING_STATUS_LIST)
+    suspend fun getBookingStatusList(
+        @Query("key") key: String,
+        @Query("booking_id") bookingId: Int
+    ): GetBookingStatusListResModel
 
 }

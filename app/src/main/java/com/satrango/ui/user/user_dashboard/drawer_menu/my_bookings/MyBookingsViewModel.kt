@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderPauseBookingReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.*
-import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -18,6 +19,8 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
     var myBookings = MutableLiveData<NetworkResponse<List<BookingDetail>>>()
     var otpRequest = MutableLiveData<NetworkResponse<Int>>()
     var validateOTP = MutableLiveData<NetworkResponse<Int>>()
+    var resumeBooking = MutableLiveData<NetworkResponse<String>>()
+    var pauseBooking = MutableLiveData<NetworkResponse<String>>()
 
     fun getMyBookingDetails(context: Context, requestBody: MyBookingsReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
         if (hasInternetConnection(context)) {
@@ -84,5 +87,50 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         }
         return validateOTP
     }
+
+    fun pauseBooking(context: Context, requestBody: ProviderPauseBookingReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    pauseBooking.value = NetworkResponse.Loading()
+                    val result = async { repository.pauseBooking(requestBody) }
+                    val response = JSONObject(result.await().string())
+                    if (response.getInt("status") == 200) {
+                        pauseBooking.value = NetworkResponse.Success(response.getString("message"))
+                    } else {
+                        pauseBooking.value = NetworkResponse.Failure(response.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    pauseBooking.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            pauseBooking.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return pauseBooking
+    }
+
+    fun resumeBooking(context: Context, requestBody: ProviderBookingResumeReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    resumeBooking.value = NetworkResponse.Loading()
+                    val result = async { repository.resumeBooking(requestBody) }
+                    val response = JSONObject(result.await().string())
+                    if (response.getInt("status") == 200) {
+                        resumeBooking.value = NetworkResponse.Success(response.getString("message"))
+                    } else {
+                        resumeBooking.value = NetworkResponse.Failure(response.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    resumeBooking.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            resumeBooking.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return resumeBooking
+    }
+
 
 }

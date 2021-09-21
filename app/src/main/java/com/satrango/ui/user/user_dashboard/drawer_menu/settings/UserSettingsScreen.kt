@@ -37,7 +37,11 @@ class UserSettingsScreen : AppCompatActivity() {
             termsAndConditions.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, TermsAndConditionScreen::class.java)) }
             privacyPolicy.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserPrivacyPolicyScreen::class.java)) }
             faqs.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserFAQScreen::class.java)) }
-            raiseComplaintBtn.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, ComplaintScreen::class.java)) }
+            raiseComplaintBtn.setOnClickListener {
+                ComplaintScreen.FROM_PROVIDER = false
+                ComplaintScreen.bookingId = 0
+                startActivity(Intent(this@UserSettingsScreen, ComplaintScreen::class.java))
+            }
             feedBackBtn.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, FeedBackScreen::class.java)) }
         }
 

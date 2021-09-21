@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen">
+    tools:context=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
 
         <include
             android:id="@+id/toolBar"
-            layout="@layout/provider_tool_bar" />
+            layout="@layout/user_tool_bar" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
                 android:layout_margin="@dimen/_10sdp"
-                app:cardBackgroundColor="@color/purple_500"
+                app:cardBackgroundColor="@color/blue"
                 app:cardCornerRadius="@dimen/_15sdp"
                 app:cardElevation="@dimen/_5sdp">
 
@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_45sdp"
                             android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/purple_out_line"
+                            android:background="@drawable/blue_out_line"
                             android:gravity="center"
                             android:orientation="vertical"
                             android:paddingHorizontal="@dimen/_10sdp">
@@ -121,7 +121,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/purple_out_line"
+                    android:background="@drawable/blue_out_line"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingHorizontal="@dimen/_15sdp"
@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_5sdp"
-                    android:background="@drawable/purple_out_line"
+                    android:background="@drawable/blue_out_line"
                     android:elevation="@dimen/_5sdp"
                     android:orientation="horizontal">
 
@@ -220,7 +220,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/purple_out_line"
+                    android:background="@drawable/blue_out_line"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingHorizontal="@dimen/_15sdp"
@@ -322,7 +322,7 @@
                         android:layout_marginEnd="@dimen/_15sdp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardBackgroundColor="@color/purple_500"
+                        app:cardBackgroundColor="@color/blue"
                         app:cardCornerRadius="@dimen/_60sdp">
 
                         <ImageView
@@ -361,7 +361,7 @@
                         android:layout_marginEnd="@dimen/_15sdp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardBackgroundColor="@color/purple_500"
+                        app:cardBackgroundColor="@color/blue"
                         app:cardCornerRadius="@dimen/_60sdp">
 
                         <ImageView
@@ -384,16 +384,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginVertical="@dimen/_15sdp"
             android:gravity="end"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/viewFilesBtn"
-                style="@style/purple_outline_button_style"
+                style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/purple_out_line"
+                android:background="@drawable/blue_out_line"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/view_files"
@@ -401,11 +401,11 @@
 
             <TextView
                 android:id="@+id/viewDetailsBtn"
-                style="@style/purple_outline_button_style"
+                style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:background="@drawable/purple_out_line"
+                android:background="@drawable/blue_out_line"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/view_details"
@@ -413,11 +413,11 @@
 
             <TextView
                 android:id="@+id/markCompleteBtn"
-                style="@style/purple_outline_button_style"
+                style="@style/filled_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:background="@drawable/purple_out_line"
+                android:background="@drawable/user_btn_bg"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/mark_complete"
@@ -425,39 +425,5 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/requestInstallmentBtn"
-                style="@style/purple_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/purple_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/request_installment"
-                android:textSize="@dimen/sub_text" />
-
-            <TextView
-                android:id="@+id/raiseExtraDemandBtn"
-                style="@style/purple_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:background="@drawable/purple_out_line"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/raise_extra_demand"
-                android:textSize="@dimen/sub_text" />
-
-        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

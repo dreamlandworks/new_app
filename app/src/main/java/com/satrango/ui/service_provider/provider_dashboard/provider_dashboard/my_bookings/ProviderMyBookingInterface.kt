@@ -6,4 +6,8 @@ interface ProviderMyBookingInterface {
 
     fun markComplete(extraDemand: String, bookingId: Int)
 
+    fun pauseBooking(bookingId: Int)
+
+    fun resumeBooking(bookingId: Int)
+
 }

@@ -12,9 +12,11 @@ import com.satrango.databinding.MyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
+import com.satrango.ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
 
 class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
@@ -49,7 +51,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = false
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        val intent = Intent(binding.root.context, UserMyBookingDetailsScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
@@ -60,7 +62,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        val intent = Intent(binding.root.context, UserMyBookingDetailsScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
@@ -122,14 +124,13 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 //                        BookingDateAndTimeScreen.FROM_PROVIDER = false
 //                        binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
 //                    }
-//                    binding.startBtn.setOnClickListener {
-//                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-//                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-//                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-//                        binding.root.context.startActivity(intent)
-//                    }
+                    binding.reScheduleBtn.setOnClickListener {
+                        binding.startBtn.setOnClickListener {
+                            ComplaintScreen.bookingId = data.booking_id.toInt()
+                            ComplaintScreen.FROM_PROVIDER = false
+                            binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
+                        }
+                    }
                 }
             }
         }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
@@ -41,6 +42,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val changeExtraDemandStatus = MutableLiveData<NetworkResponse<String>>()
     val getInstallmentsList = MutableLiveData<NetworkResponse<GoalsInstallmentsResModel>>()
     val postApproveReject = MutableLiveData<NetworkResponse<PostApproveRejectResModel>>()
+    val getBookingStatusList = MutableLiveData<NetworkResponse<GetBookingStatusListResModel>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -304,6 +306,27 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             postApproveReject.value = NetworkResponse.Failure("No Internet Connection")
         }
         return postApproveReject
+    }
+
+    fun getBookingStatusList(context: Context, bookingId: Int): MutableLiveData<NetworkResponse<GetBookingStatusListResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                getBookingStatusList.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.getBookingStatusList(bookingId) }
+                    if (response.await().status == 200) {
+                        getBookingStatusList.value = NetworkResponse.Success(response.await())
+                    } else {
+                        getBookingStatusList.value = NetworkResponse.Failure(response.await().message)
+                    }
+                } catch (e: Exception) {
+                    getBookingStatusList.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            getBookingStatusList.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return getBookingStatusList
     }
 
 }

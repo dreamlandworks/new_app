@@ -16,6 +16,7 @@ import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
 
 class ProviderMyBookingAdapter(
@@ -54,7 +55,11 @@ class ProviderMyBookingAdapter(
             }
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
-                    binding.startBtn.text = "Pause"
+                    if (data.pause_status.equals("Yes", true)) {
+                        binding.startBtn.text = "Resume"
+                    } else {
+                        binding.startBtn.text = "Pause"
+                    }
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.cancelBookingBtn.text = "Mark Complete"
 
@@ -63,15 +68,13 @@ class ProviderMyBookingAdapter(
                     }
 
                     binding.startBtn.setOnClickListener {
-                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
-                        UserUtils.spid = data.sp_id
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
-                        binding.root.context.startActivity(intent)
+                        if (data.pause_status.equals("Yes", true)) {
+                            binding.startBtn.text = "Pause"
+                           providerMyBookingInterface.resumeBooking(data.booking_id.toInt())
+                        } else {
+                            binding.startBtn.text = "Resume"
+                            providerMyBookingInterface.pauseBooking(data.booking_id.toInt())
+                        }
                     }
 
                     binding.card.setOnClickListener {
@@ -107,12 +110,7 @@ class ProviderMyBookingAdapter(
                         ViewUserBookingDetailsScreen.RESCHEDULE = true
                         UserUtils.spid = data.sp_id
                         BookingDateAndTimeScreen.FROM_PROVIDER = true
-                        binding.root.context.startActivity(
-                            Intent(
-                                binding.root.context,
-                                BookingDateAndTimeScreen::class.java
-                            )
-                        )
+                        binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                     }
 
                     binding.startBtn.setOnClickListener {
@@ -120,7 +118,7 @@ class ProviderMyBookingAdapter(
                     }
 
                     binding.card.setOnClickListener {
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
                         UserUtils.spid = data.sp_id
                         intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
@@ -135,6 +133,11 @@ class ProviderMyBookingAdapter(
                     binding.startBtn.text = "Raise Ticket"
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.cancelBookingBtn.visibility = View.GONE
+                    binding.startBtn.setOnClickListener {
+                        ComplaintScreen.bookingId = data.booking_id.toInt()
+                        ComplaintScreen.FROM_PROVIDER = true
+                        binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
+                    }
                 }
             }
 

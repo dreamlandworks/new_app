@@ -55,14 +55,31 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen"></activity>
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen" />
-        <activity android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen" />
+        <activity android:name=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen"></activity>
+        <activity
+            android:name=".ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen"
             android:screenOrientation="portrait" />

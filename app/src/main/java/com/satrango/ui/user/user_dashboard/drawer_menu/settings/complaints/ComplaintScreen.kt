@@ -34,6 +34,11 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private lateinit var binding: ActivityComplaintScreenBinding
     private lateinit var progressDialog: ProgressDialog
 
+    companion object {
+        var FROM_PROVIDER = false
+        var bookingId = 0
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityComplaintScreenBinding.inflate(layoutInflater)
@@ -51,6 +56,14 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
         progressDialog.setCancelable(false)
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundResource(R.color.purple_500)
+            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.complaintBox.boxStrokeColor = resources.getColor(R.color.purple_500)
+        }
 
         val factory = ViewModelFactory(SettingsRepository())
         viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
@@ -127,7 +140,8 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             binding.complaint.text.toString().trim(),
             RetrofitBuilder.USER_KEY,
             moduleId,
-            UserUtils.getUserId(this)
+            UserUtils.getUserId(this),
+            0
         )
 
         viewModel.postComplaint(this, requestBody).observe(this, {

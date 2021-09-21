@@ -5,5 +5,6 @@ data class ComplaintReqModel(
     val description: String,
     val key: String,
     val module_id: Int,
-    val users_id: String
+    val users_id: String,
+    val booking_id: Int
 )

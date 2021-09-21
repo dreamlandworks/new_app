@@ -33,10 +33,21 @@ class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private va
         holder.binding.title.text = list[position].category
 
         if (list[position].selected) {
-            holder.binding.title.setBackgroundResource(R.drawable.category_bg)
+            if (ComplaintScreen.FROM_PROVIDER) {
+                holder.binding.title.setBackgroundResource(R.drawable.provider_btn_bg)
+                holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.white))
+            } else {
+                holder.binding.title.setBackgroundResource(R.drawable.category_bg)
+                holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.white))
+            }
         } else {
-            holder.binding.title.setBackgroundResource(R.drawable.blue_out_line)
-            holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.blue))
+            if (ComplaintScreen.FROM_PROVIDER) {
+                holder.binding.title.setBackgroundResource(R.drawable.purple_out_line)
+                holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.purple_500))
+            } else {
+                holder.binding.title.setBackgroundResource(R.drawable.blue_out_line)
+                holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.blue))
+            }
         }
         holder.binding.title.setOnClickListener {
             browseCategoriesInterface.selectedCategory(list[position].id, position)

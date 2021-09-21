@@ -12,6 +12,7 @@ data class BookingDetail(
     val from: String,
     val lname: String,
     val mobile: String,
+    val pause_status: String,
     val extra_demand_total_amount: Double,
     val material_advance: Double,
     val technician_charges: Double,

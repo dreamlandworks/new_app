@@ -6,6 +6,8 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Provider
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderPauseBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
@@ -80,5 +82,15 @@ interface ProviderApiService {
     suspend fun postRequestInstallment(
         @Body requestBody: ProviderPostRequestInstallmentReqModel
     ): ProviderPostRequestInstallmentResModel
+
+    @POST(ServiceProviderEndPoints.PAUSE_BOOKING)
+    suspend fun pauseBooking(
+        @Body requestBody: ProviderPauseBookingReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.RESUME_BOOKING)
+    suspend fun resumeBooking(
+        @Body requestBody: ProviderBookingResumeReqModel
+    ): ResponseBody
 
 }

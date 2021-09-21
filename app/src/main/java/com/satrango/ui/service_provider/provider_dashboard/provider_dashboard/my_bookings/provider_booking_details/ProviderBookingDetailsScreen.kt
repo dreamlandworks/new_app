@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
@@ -92,6 +93,21 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.viewDetailsBtn, it.message!!)
+                }
+            }
+        })
+        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
         })
