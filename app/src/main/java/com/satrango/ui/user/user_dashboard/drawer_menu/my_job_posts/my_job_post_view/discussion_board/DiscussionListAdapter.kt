@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionDetail
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
@@ -28,10 +30,11 @@ class DiscussionListAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profileImage = view.findViewById<CircleImageView>(R.id.profilePic)
+        val layout = view.findViewById<LinearLayout>(R.id.layout)
         val userName = view.findViewById<TextView>(R.id.userName)
-        val dateTime = view.findViewById<TextView>(R.id.time)
-        val message = view.findViewById<TextView>(R.id.message)
         val likeBtn = view.findViewById<ImageView>(R.id.likeBtn)
+        val message = view.findViewById<TextView>(R.id.message)
+        val dateTime = view.findViewById<TextView>(R.id.time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -78,9 +81,13 @@ class DiscussionListAdapter(
             }
         }
 
-
         holder.likeBtn.setOnClickListener {
             discussionBoardInterface.likeClicked(data.id, position)
+        }
+
+        if (MyJobPostViewScreen.FROM_PROVIDER) {
+            holder.layout.setBackgroundResource(R.drawable.purple_out_line)
+            holder.profileImage.borderColor = holder.profileImage.context.resources.getColor(R.color.purple_500)
         }
     }
 

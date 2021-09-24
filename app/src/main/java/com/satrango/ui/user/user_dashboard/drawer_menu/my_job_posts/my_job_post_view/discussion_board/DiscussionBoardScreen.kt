@@ -16,14 +16,19 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityDiscussionBoardScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionBoardMessageReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionListReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.LikePostDescussionReqModel
@@ -31,8 +36,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -59,6 +66,24 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
         super.onCreate(savedInstanceState)
         binding = ActivityDiscussionBoardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_post)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+
+
+        if (MyJobPostViewScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
+            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutThree.setBackgroundResource(R.drawable.provider_chat_edit_text_bg)
+            binding.sendBtn.setImageResource(R.drawable.ic_round_send_purple_24)
+        }
 
         postJobId = intent.getStringExtra("postJobId")!!.toInt()
         binding.title.text = intent.getStringExtra("title")!!

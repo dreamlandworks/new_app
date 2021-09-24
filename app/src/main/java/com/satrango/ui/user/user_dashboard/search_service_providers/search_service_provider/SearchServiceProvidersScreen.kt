@@ -71,6 +71,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
         binding.sortFilterBtn.setOnClickListener {
             UserUtils.saveSearchFilter(this, "")
+            SortAndFilterServiceProvider.FROM_PROVIDER = false
             startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
         }
 
@@ -189,6 +190,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         UserUtils.saveFromInstantBooking(this, false)
                         binding.listCount.text = "Showing ${it.data.data.size} out of ${it.data.data.size} results"
                         binding.recyclerView.adapter = SearchServiceProviderAdapter(it.data.data)
+                        if (it.data.data.isNotEmpty()) {
+                            binding.sortFilterBtn.visibility = View.VISIBLE
+                        } else {
+                            binding.sortFilterBtn.visibility = View.GONE
+                        }
                     } else {
                         UserUtils.saveFromInstantBooking(this, true)
                         binding.listCount.visibility = View.GONE

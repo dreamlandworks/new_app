@@ -15,5 +15,8 @@ object ServiceProviderEndPoints {
     final const val POST_REQUEST_INSTALLMENT = "provider/job_post_request_installment"
     final const val RESUME_BOOKING = "provider/resume_booking"
     final const val PAUSE_BOOKING = "provider/pause_booking"
+    final const val PROVIDER_JOBS_LIST = "provider/sp_job_post_bids_list"
+    final const val PROVIDER_JOB_POSTS_LIST = "provider/sp_job_post_list"
+    final const val POST_BID = "provider/sp_post_bid"
 
 }

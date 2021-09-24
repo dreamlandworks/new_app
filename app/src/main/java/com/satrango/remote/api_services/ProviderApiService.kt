@@ -4,6 +4,7 @@ import com.satrango.remote.end_points.ServiceProviderEndPoints
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderLocationReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.ProviderMyBidsResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
@@ -12,6 +13,8 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
@@ -92,5 +95,20 @@ interface ProviderApiService {
     suspend fun resumeBooking(
         @Body requestBody: ProviderBookingResumeReqModel
     ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.PROVIDER_JOBS_LIST)
+    suspend fun getBidsList(
+        @Body requestBody: ProviderBookingReqModel
+    ): ProviderMyBidsResModel
+
+    @POST(ServiceProviderEndPoints.PROVIDER_JOB_POSTS_LIST)
+    suspend fun getBidJobsList(
+        @Body requestBody: ProviderBookingReqModel
+    ): ProviderMyBidsResModel
+
+    @POST(ServiceProviderEndPoints.POST_BID)
+    suspend fun postBid(
+        @Body requestBody: ProviderPostBidReqModel
+    ): ProviderPostBidResModel
 
 }

@@ -1,20 +1,16 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewBidDetailsScreensBinding
@@ -30,7 +26,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
-import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -41,6 +36,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var binding: ActivityViewBidDetailsScreensBinding
     private lateinit var progressDialog: ProgressDialog
 
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,24 +46,40 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_proposal)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_proposal)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+
+        if (ViewBidsScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
+            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutFive.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutSix.setBackgroundResource(R.drawable.purple_out_line)
+            binding.awardBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.awardBtn.setTextColor(resources.getColor(R.color.white))
+            binding.awardBtn.visibility = View.GONE
+            binding.rejectBtn.visibility = View.GONE
+        }
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")
         progressDialog.setCancelable(false)
 
-        binding.rejectBtn.setOnClickListener {
-            rejectBid()
-        }
-
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        val requestBody = ViewProposalReqModel(intent.getStringExtra("bidId")!!.toInt(), RetrofitBuilder.USER_KEY, intent.getStringExtra("spId")!!.toInt())
+        val requestBody = ViewProposalReqModel(
+            intent.getStringExtra("bidId")!!.toInt(),
+            RetrofitBuilder.USER_KEY,
+            intent.getStringExtra("spId")!!.toInt()
+        )
         viewModel.viewProposal(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -77,10 +89,13 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                     binding.apply {
 
                         val data = it.data!!
-                        Glide.with(profilePic).load(RetrofitBuilder.BASE_URL + data.bid_details.sp_profile).into(profilePic)
+                        Glide.with(profilePic)
+                            .load(RetrofitBuilder.BASE_URL + data.bid_details.sp_profile)
+                            .into(profilePic)
                         spName.text = data.bid_details.sp_fname + " " + data.bid_details.sp_lname
                         spOccupation.text = data.bid_details.profession
-                        completesIn.text = data.bid_details.esimate_time + " " + data.bid_details.estimate_type
+                        completesIn.text =
+                            data.bid_details.esimate_time + " " + data.bid_details.estimate_type
                         bid.text = data.bid_details.amount
 
                         proposal.text = data.bid_details.proposal
@@ -117,17 +132,36 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         for (image in data.attachments) {
                             images.add(image)
                         }
-                        attachmentsRV.layoutManager = LinearLayoutManager(this@ViewBidDetailsScreen, LinearLayoutManager.HORIZONTAL, false)
-                        attachmentsRV.adapter = AttachmentsAdapter(images, this@ViewBidDetailsScreen)
+                        attachmentsRV.layoutManager = LinearLayoutManager(
+                            this@ViewBidDetailsScreen,
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        attachmentsRV.adapter =
+                            AttachmentsAdapter(images, this@ViewBidDetailsScreen)
                         if (images.isEmpty()) {
                             attachmentsText.visibility = View.GONE
                         }
 
-                        binding.awardBtn.setOnClickListener {
-                            ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
-                            ViewBidsScreen.bidId = data.bid_details.bid_id.toInt()
-                            ViewBidsScreen.spId = data.bid_details.sp_id.toInt()
-                            startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
+                        if (ViewBidsScreen.FROM_PROVIDER) {
+                            binding.awardBtn.setOnClickListener {
+                                onBackPressed()
+                            }
+                        } else {
+                            binding.awardBtn.setOnClickListener {
+                                ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
+                                ViewBidsScreen.bidId = data.bid_details.bid_id.toInt()
+                                ViewBidsScreen.spId = data.bid_details.sp_id.toInt()
+                                startActivity(
+                                    Intent(
+                                        this@ViewBidDetailsScreen,
+                                        SetGoalsScreen::class.java
+                                    )
+                                )
+                            }
+                            binding.rejectBtn.setOnClickListener {
+                                rejectBid()
+                            }
                         }
 
                     }
@@ -151,7 +185,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
             29
         )
         viewModel.rejectPostJobStatus(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }

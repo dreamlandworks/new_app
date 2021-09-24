@@ -13,12 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivitySortAndFilterServiceProviderBinding
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 
 
 class SortAndFilterServiceProvider : AppCompatActivity() {
+
+    companion object {
+        var FROM_PROVIDER = false
+    }
+
 
     private lateinit var binding: ActivitySortAndFilterServiceProviderBinding
 
@@ -32,9 +38,31 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.sort_filter)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.sort_filter)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundResource(R.color.purple_500)
+            binding.rating.setBackgroundResource(R.drawable.purple_out_line)
+            binding.rating.setTextColor(resources.getColor(R.color.purple_500))
+            binding.ranking.setBackgroundResource(R.drawable.purple_out_line)
+            binding.ranking.setTextColor(resources.getColor(R.color.purple_500))
+            binding.nearMe.setBackgroundResource(R.drawable.purple_out_line)
+            binding.nearMe.setTextColor(resources.getColor(R.color.purple_500))
+            binding.priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+            binding.priceLowToHigh.setTextColor(resources.getColor(R.color.purple_500))
+            binding.priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+            binding.priceHighToLow.setTextColor(resources.getColor(R.color.purple_500))
+            binding.fresher.setBackgroundResource(R.drawable.purple_out_line)
+            binding.experience.setBackgroundResource(R.drawable.purple_out_line)
+            binding.any.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.applyBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.applyBtn.setTextColor(resources.getColor(R.color.white))
+        }
 
         binding.apply {
 
@@ -56,108 +84,220 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             })
 
             rating.setOnClickListener {
-                if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    rating.setTextColor(Color.parseColor("#0A84FF"))
+                if (FROM_PROVIDER) {
+                    if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        rating.setBackgroundResource(R.drawable.provider_btn_bg)
+                        rating.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 } else {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#FFFFFF"))
+                    if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        rating.setBackgroundResource(R.drawable.user_btn_bg)
+                        rating.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 }
             }
             ranking.setOnClickListener {
-                if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    ranking.setTextColor(Color.parseColor("#0A84FF"))
+                if (FROM_PROVIDER) {
+                    if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        ranking.setBackgroundResource(R.drawable.provider_btn_bg)
+                        ranking.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 } else {
-                    ranking.setBackgroundResource(R.drawable.user_btn_bg)
-                    ranking.setTextColor(Color.parseColor("#FFFFFF"))
+                    if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        ranking.setBackgroundResource(R.drawable.user_btn_bg)
+                        ranking.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 }
             }
             nearMe.setOnClickListener {
-                if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                if (FROM_PROVIDER) {
+                    if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        nearMe.setBackgroundResource(R.drawable.provider_btn_bg)
+                        nearMe.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 } else {
-                    nearMe.setBackgroundResource(R.drawable.user_btn_bg)
-                    nearMe.setTextColor(Color.parseColor("#FFFFFF"))
+                    if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                    } else {
+                        nearMe.setBackgroundResource(R.drawable.user_btn_bg)
+                        nearMe.setTextColor(Color.parseColor("#FFFFFF"))
+                    }
                 }
             }
 
             priceLowToHigh.setOnClickListener {
-                if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
-                    priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
-                    priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                if (FROM_PROVIDER) {
+                    if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.provider_btn_bg)
+                        priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        priceLowToHigh.setBackgroundResource(R.drawable.provider_btn_bg)
+                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 } else {
-                    priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
-                    priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
-                    priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                    if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
+                        priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
+                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 }
             }
             priceHighToLow.setOnClickListener {
-                if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
-                    priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
-                    priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                if (FROM_PROVIDER) {
+                    if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.provider_btn_bg)
+                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        priceHighToLow.setBackgroundResource(R.drawable.provider_btn_bg)
+                        priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 } else {
-                    priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
-                    priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
-                    priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                    if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
+                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
+                        priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 }
             }
             fresher.setOnClickListener {
-                if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    fresher.setTextColor(Color.parseColor("#0A84FF"))
-                    experience.setBackgroundResource(R.drawable.user_btn_bg)
-                    experience.setTextColor(Color.parseColor("#FFFFFF"))
-                    any.setBackgroundResource(R.drawable.user_btn_bg)
-                    any.setTextColor(Color.parseColor("#FFFFFF"))
+                if (FROM_PROVIDER) {
+                    if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        fresher.setBackgroundResource(R.drawable.purple_out_line)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.provider_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        any.setBackgroundResource(R.drawable.provider_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        fresher.setBackgroundResource(R.drawable.provider_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.purple_out_line)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.purple_out_line)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 } else {
-                    fresher.setBackgroundResource(R.drawable.user_btn_bg)
-                    fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                    experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    experience.setTextColor(Color.parseColor("#0A84FF"))
-                    any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    any.setTextColor(Color.parseColor("#0A84FF"))
+                    if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.user_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        any.setBackgroundResource(R.drawable.user_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        fresher.setBackgroundResource(R.drawable.user_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 }
             }
             experience.setOnClickListener {
-                if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    experience.setTextColor(Color.parseColor("#0A84FF"))
-                    fresher.setBackgroundResource(R.drawable.user_btn_bg)
-                    fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                    any.setBackgroundResource(R.drawable.user_btn_bg)
-                    any.setTextColor(Color.parseColor("#FFFFFF"))
+                if (FROM_PROVIDER) {
+                    if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        experience.setBackgroundResource(R.drawable.purple_out_line)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        fresher.setBackgroundResource(R.drawable.provider_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        any.setBackgroundResource(R.drawable.provider_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        experience.setBackgroundResource(R.drawable.provider_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.purple_out_line)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.purple_out_line)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 } else {
-                    experience.setBackgroundResource(R.drawable.user_btn_bg)
-                    experience.setTextColor(Color.parseColor("#FFFFFF"))
-                    fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    fresher.setTextColor(Color.parseColor("#0A84FF"))
-                    any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    any.setTextColor(Color.parseColor("#0A84FF"))
+                    if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        fresher.setBackgroundResource(R.drawable.user_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        any.setBackgroundResource(R.drawable.user_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        experience.setBackgroundResource(R.drawable.user_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 }
             }
             any.setOnClickListener {
-                if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
-                    any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    any.setTextColor(Color.parseColor("#0A84FF"))
-                    fresher.setBackgroundResource(R.drawable.user_btn_bg)
-                    fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                    experience.setBackgroundResource(R.drawable.user_btn_bg)
-                    experience.setTextColor(Color.parseColor("#FFFFFF"))
+                if (FROM_PROVIDER) {
+                    if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        any.setBackgroundResource(R.drawable.purple_out_line)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                        fresher.setBackgroundResource(R.drawable.provider_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.provider_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        any.setBackgroundResource(R.drawable.provider_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.purple_out_line)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.purple_out_line)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 } else {
-                    any.setBackgroundResource(R.drawable.user_btn_bg)
-                    any.setTextColor(Color.parseColor("#FFFFFF"))
-                    fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    fresher.setTextColor(Color.parseColor("#0A84FF"))
-                    experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
-                    experience.setTextColor(Color.parseColor("#0A84FF"))
+                    if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
+                        any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
+                        fresher.setBackgroundResource(R.drawable.user_btn_bg)
+                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.user_btn_bg)
+                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        any.setBackgroundResource(R.drawable.user_btn_bg)
+                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                    }
                 }
             }
 
@@ -207,10 +347,27 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 distanceValue = binding.kms.text.toString().split(" ")[0]
                 priceRangeFromValue = binding.amountFrom.text.toString()
                 priceRangeToValue = binding.amountTo.text.toString()
-                val filter = SearchFilterModel(ratingValue, rankingValue, nearMeValue, lowToHighValue, highToLowValue, fresherValue, experienceValue, anyValue, distanceValue, priceRangeFromValue, priceRangeToValue)
+                val filter = SearchFilterModel(
+                    ratingValue,
+                    rankingValue,
+                    nearMeValue,
+                    lowToHighValue,
+                    highToLowValue,
+                    fresherValue,
+                    experienceValue,
+                    anyValue,
+                    distanceValue,
+                    priceRangeFromValue,
+                    priceRangeToValue
+                )
                 UserUtils.saveSearchFilter(this@SortAndFilterServiceProvider, Gson().toJson(filter))
                 finish()
-                startActivity(Intent(this@SortAndFilterServiceProvider, SearchServiceProvidersScreen::class.java))
+                if (FROM_PROVIDER) {
+                    startActivity(Intent(this@SortAndFilterServiceProvider, ProviderMyBidsScreen::class.java))
+                } else {
+                    startActivity(Intent(this@SortAndFilterServiceProvider, SearchServiceProvidersScreen::class.java))
+                }
+
             }
         }
     }

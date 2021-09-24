@@ -97,6 +97,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                         UserUtils.setFromJobPostMultiMove(binding.editBtn.context, true)
                     }
                 }
+                MyJobPostViewScreen.FROM_PROVIDER = false
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                 intent.putExtra("booking_id", jobPostDetail.booking_id)
                 intent.putExtra("category_id", jobPostDetail.category_id)

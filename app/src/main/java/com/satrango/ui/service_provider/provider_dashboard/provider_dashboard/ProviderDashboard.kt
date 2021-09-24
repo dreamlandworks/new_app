@@ -37,6 +37,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.provider_home.ProviderHomeScreen
 import com.satrango.ui.user.user_dashboard.UserChatScreen
@@ -154,7 +155,8 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                 }
                 R.id.providerOptMyBids -> {
-
+                    UserUtils.saveSearchFilter(this, "")
+                    startActivity(Intent(this, ProviderMyBidsScreen::class.java))
                 }
                 R.id.providerOptMyProfile -> {
 

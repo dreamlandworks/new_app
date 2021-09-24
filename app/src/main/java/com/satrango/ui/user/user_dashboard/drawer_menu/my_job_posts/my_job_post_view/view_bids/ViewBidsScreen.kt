@@ -33,6 +33,7 @@ class ViewBidsScreen : AppCompatActivity() {
         var bookingId = 0
         var postJobId = 0
         var bidPrice = 0.0
+        var FROM_PROVIDER = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +47,13 @@ class ViewBidsScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_bids)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
+            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+        }
 
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Loading...")

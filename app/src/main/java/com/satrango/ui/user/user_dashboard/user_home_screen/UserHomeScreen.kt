@@ -64,6 +64,7 @@ class UserHomeScreen :
             }
         }
         binding.searchBar.setOnClickListener {
+            UserUtils.saveSearchFilter(requireContext(), "")
             startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
         }
         binding.browseAll.setOnClickListener {

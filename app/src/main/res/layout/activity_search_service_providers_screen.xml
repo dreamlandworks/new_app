@@ -115,6 +115,7 @@
             android:id="@+id/sortFilterBtn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/settings_black"

@@ -535,6 +535,15 @@
     <string name="no_installments">No Installments</string>
     <string name="there_are_not_installments_set_for_this_booking">There are not installments set for this booking</string>
     <string name="installment_requests">Installment Requests</string>
+    <string name="new_jobs">New Jobs</string>
+    <string name="bids_placed">Bids Placed</string>
+    <string name="awarded_expired">Awarded/expired</string>
+    <string name="edit_bid">Edit Bid</string>
+    <string name="bid_amount">Bid Amount</string>
+    <string name="estimated_time">Estimated Time</string>
+    <string name="proposal_why_choose_me">Proposal (Why Choose Me?)</string>
+    <string name="open">Open</string>
+    <string name="sealed">Sealed</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

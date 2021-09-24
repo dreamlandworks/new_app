@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_70sdp"
                 android:background="@drawable/user_btn_bg_sm">
@@ -72,6 +73,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/layoutOne"
                         style="@style/blue_outline_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -100,6 +102,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutTwo"
                         style="@style/blue_outline_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -127,6 +130,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutThree"
                         style="@style/blue_outline_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -168,6 +172,7 @@
             app:cardElevation="@dimen/_5sdp">
 
             <LinearLayout
+                android:id="@+id/layoutFour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -218,6 +223,7 @@
             app:cardElevation="@dimen/_5sdp">
 
             <LinearLayout
+                android:id="@+id/layoutFive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -339,6 +345,7 @@
             app:cardElevation="@dimen/_5sdp">
 
             <LinearLayout
+                android:id="@+id/layoutSix"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

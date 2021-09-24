@@ -9,6 +9,7 @@
     app:cardElevation="@dimen/_5sdp">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/blue_out_line"
