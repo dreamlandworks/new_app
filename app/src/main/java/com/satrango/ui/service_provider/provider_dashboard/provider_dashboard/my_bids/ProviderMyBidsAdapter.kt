@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.ProviderMybidsRowBinding
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.JobPostDetail
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderPlaceBidScreen
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderViewPlacedBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 
 class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView.Adapter<ProviderMyBidsAdapter.ViewHolder>() {
@@ -32,13 +34,58 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView
             }
             binding.bidCount.text = data.total_bids.toString()
             binding.avgAmount.text = data.average_bids_amount
-            binding.card.setOnClickListener {
-                MyJobPostViewScreen.FROM_PROVIDER = true
-                val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
-                intent.putExtra("booking_id", data.booking_id)
-                intent.putExtra("category_id", data.category_id)
-                intent.putExtra("post_job_id", data.post_job_id)
-                binding.root.context.startActivity(intent)
+
+            if (data.bid_type == "Open") {
+                binding.card.setOnClickListener {
+                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                    ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
+                    val intent = Intent(binding.root.context, ProviderViewPlacedBidScreen::class.java)
+                    intent.putExtra("booking_id", data.booking_id)
+                    intent.putExtra("category_id", data.category_id)
+                    intent.putExtra("post_job_id", data.post_job_id)
+                    intent.putExtra("bid_id", data.bid_id)
+                    intent.putExtra("title", data.title)
+                    intent.putExtra("expiresIn", data.expires_in)
+                    intent.putExtra("bidRange", data.range_slots)
+                    intent.putExtra("user_id", data.booking_user_id)
+                    binding.root.context.startActivity(intent)
+                }
+                binding.editBidBtn.setOnClickListener {
+                    ProviderPlaceBidScreen.FROM_EDIT_BID = true
+                    ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
+                    val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+                    intent.putExtra("expiresIn", data.expires_in)
+                    intent.putExtra("bidRanges", data.range_slots)
+                    intent.putExtra("title", data.title)
+                    ProviderPlaceBidScreen.postJobId = data.post_job_id.toInt()
+                    ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
+                    binding.root.context.startActivity(intent)
+                }
+            } else if (data.bid_type == "Awarded" || data.bid_type == "Expired") {
+                binding.editBidBtn.visibility = View.GONE
+                ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                binding.card.setOnClickListener {
+                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    MyJobPostViewScreen.bookingId = data.booking_id.toInt()
+                    MyJobPostViewScreen.postJobId = data.post_job_id.toInt()
+                    MyJobPostViewScreen.categoryId = data.category_id.toInt()
+                    MyJobPostViewScreen.userId = data.booking_user_id.toInt()
+                    val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
+                    binding.root.context.startActivity(intent)
+                }
+            } else {
+                binding.card.setOnClickListener {
+                    ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
+                    MyJobPostViewScreen.bookingId = data.booking_id.toInt()
+                    MyJobPostViewScreen.categoryId = data.category_id.toInt()
+                    MyJobPostViewScreen.userId = data.booking_user_id.toInt()
+                    MyJobPostViewScreen.postJobId = data.post_job_id.toInt()
+                    val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
+                    binding.root.context.startActivity(intent)
+                }
             }
 
         }

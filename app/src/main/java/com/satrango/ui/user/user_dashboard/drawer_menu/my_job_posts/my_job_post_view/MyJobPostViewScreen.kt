@@ -14,31 +14,30 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostViewScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.ProviderPlaceBidScreen
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
-    private var categoryId: Int = 0
-    private var bookingId: Int = 0
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityMyJobPostViewScreenBinding
     private lateinit var progressDialog: ProgressDialog
@@ -46,6 +45,10 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     companion object {
         var myJobPostViewScreen = false
         var FROM_PROVIDER = false
+        var bookingId: Int = 0
+        var categoryId: Int = 0
+        var postJobId: Int = 0
+        var userId: Int = 0
     }
 
     @SuppressLint("SetTextI18n")
@@ -69,9 +72,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        bookingId = intent.getStringExtra("booking_id")!!.toInt()
-        categoryId = intent.getStringExtra("category_id")!!.toInt()
-
         if (FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setBackgroundResource(R.drawable.provider_btn_bg_sm)
@@ -85,7 +85,12 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             binding.editPostBtn.setTextColor(resources.getColor(R.color.white))
             binding.discussionBoardBtn.setTextColor(resources.getColor(R.color.purple_500))
             binding.viewBidsBtn.setTextColor(resources.getColor(R.color.purple_500))
-            binding.editPostBtn.text = "Place Bid"
+
+            if (ProviderPlaceBidScreen.FROM_EDIT_BID) {
+                binding.editPostBtn.text = "Edit Bid"
+            } else {
+                binding.editPostBtn.text = "Place Bid"
+            }
         }
     }
 
@@ -209,13 +214,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun loadScreen() {
-        val requestBody = MyJobPostViewReqModel(
-            bookingId,
-            categoryId,
-            RetrofitBuilder.USER_KEY,
-            intent.getStringExtra("post_job_id")!!.toInt(),
-            UserUtils.getUserId(this).toInt(),
-        )
+        val requestBody = MyJobPostViewReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, postJobId, userId)
         viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

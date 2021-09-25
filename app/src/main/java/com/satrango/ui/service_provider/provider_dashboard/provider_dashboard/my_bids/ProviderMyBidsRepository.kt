@@ -3,9 +3,12 @@ package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.m
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.ProviderMyBidsResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderBidEditReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidResModel
+import okhttp3.ResponseBody
 
 class ProviderMyBidsRepository: BaseRepository() {
 
@@ -19,6 +22,14 @@ class ProviderMyBidsRepository: BaseRepository() {
 
     suspend fun postBid(requestBody: ProviderPostBidReqModel): ProviderPostBidResModel {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().postBid(requestBody)
+    }
+
+    suspend fun deleteBidAttachment(requestBody: ProviderDeleteBidAttachmentReqModel): ResponseBody {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().deleteBidAttachment(requestBody)
+    }
+
+    suspend fun editBids(requestBody: ProviderBidEditReqModel): ResponseBody {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().editBid(requestBody)
     }
 
 }

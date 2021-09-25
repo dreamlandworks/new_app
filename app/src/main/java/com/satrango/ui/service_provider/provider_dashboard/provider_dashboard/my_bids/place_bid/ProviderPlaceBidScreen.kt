@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid
+package com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -23,14 +23,20 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsRepository
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsViewModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderBidEditReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidReqModel
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
-import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.io.FileNotFoundException
@@ -43,8 +49,10 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     private val GALLERY_REQUEST: Int = 100
     companion object {
         var bookingId = 0
+        var postJobId = 0
+        var FROM_EDIT_BID = false
+        var EDIT_BID_ID = ""
     }
-    private var postJobId = 0
     private lateinit var binding: ActivityProviderPlaceBidScreenBinding
     var estimateTimeType = 0
     var submissionType = 0
@@ -72,7 +80,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         binding.expiresOn.text = intent.getStringExtra("expiresIn")!!
         binding.bidRanges.text = intent.getStringExtra("bidRanges")!!
         binding.title.text = intent.getStringExtra("title")!!
-        postJobId = intent.getStringExtra("postJobId")!!.toInt()
+
+        encodedImages = ArrayList()
 
         binding.apply {
 
@@ -121,6 +130,47 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
 
         }
 
+        if (FROM_EDIT_BID) {
+            val factory = ViewModelFactory(PostJobRepository())
+            val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+            val requestBody1 = ViewProposalReqModel(EDIT_BID_ID.toInt(), RetrofitBuilder.USER_KEY, 2)
+            viewModel.viewProposal(this, requestBody1).observe(this, {
+                when (it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        updateBidDetails(it.data!!)
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.bidAmount, it.message!!)
+                    }
+                }
+            })
+        }
+
+    }
+
+    private fun updateBidDetails(data: ViewProposalResModel) {
+        binding.apply {
+
+            bidAmount.setText(data.bid_details.amount)
+            estimateTime.setText(data.bid_details.esimate_time)
+            if (data.bid_details.estimate_type == "Hours") {
+                hoursBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                hoursBtn.setTextColor(resources.getColor(R.color.white))
+                estimateTimeType = 1
+            } else {
+                daysBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                daysBtn.setTextColor(resources.getColor(R.color.white))
+                estimateTimeType = 2
+            }
+            proposalDescription.setText(data.bid_details.proposal)
+            attachmentsRV.layoutManager = LinearLayoutManager(this@ProviderPlaceBidScreen, LinearLayoutManager.HORIZONTAL, false)
+            attachmentsRV.adapter = AttachmentsAdapter(data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>, this@ProviderPlaceBidScreen)
+        }
     }
 
     private fun resetFields() {
@@ -173,34 +223,63 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     private fun submitToServer() {
         val factory = ViewModelFactory(ProviderMyBidsRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
-        val requestBody = ProviderPostBidReqModel(
-            binding.bidAmount.text.toString().trim(),
-            encodedImages,
-            submissionType,
-            bookingId,
-            binding.estimateTime.text.toString().toInt(),
-            estimateTimeType,
-            RetrofitBuilder.PROVIDER_KEY,
-            postJobId,
-            binding.proposalDescription.text.toString().trim(),
-            UserUtils.getUserId(this).toInt()
-        )
-        viewModel.postBid(this, requestBody).observe(this, {
-            when(it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
+
+        if (FROM_EDIT_BID) {
+            val requestBody = ProviderBidEditReqModel(
+                binding.bidAmount.text.toString().trim(),
+                encodedImages,
+                EDIT_BID_ID.toInt(),
+                submissionType,
+                binding.estimateTime.text.toString().toInt(),
+                estimateTimeType,
+                RetrofitBuilder.PROVIDER_KEY,
+                binding.proposalDescription.text.toString().trim()
+            )
+            viewModel.editBid(this, requestBody).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        toast(this, it.data!!.string())
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.bidAmount, it.message!!)
+                    }
                 }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.bidAmount, it.data!!.message)
-                    resetFields()
+            })
+        } else {
+            val requestBody = ProviderPostBidReqModel(
+                binding.bidAmount.text.toString().trim(),
+                encodedImages,
+                submissionType,
+                bookingId,
+                binding.estimateTime.text.toString().toInt(),
+                estimateTimeType,
+                RetrofitBuilder.PROVIDER_KEY,
+                postJobId,
+                binding.proposalDescription.text.toString().trim(),
+                UserUtils.getUserId(this).toInt()
+            )
+            viewModel.postBid(this, requestBody).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.bidAmount, it.data!!.message)
+                        resetFields()
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.bidAmount, it.message!!)
+                    }
                 }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.bidAmount, it.message!!)
-                }
-            }
-        })
+            })
+        }
     }
 
     private fun getImageFromGallery() {
@@ -225,7 +304,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                             "",
                             getImageFilePath(imageUri),
                             ""
-                        )
+                        ,"")
                     )
                     encodedImages.add(
                         Attachment(
@@ -242,6 +321,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                         "",
                         getImageFilePath(imageUri!!),
                         ""
+                        ,""
                     )
                 )
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
@@ -293,12 +373,29 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         position: Int,
         imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
     ) {
-        imagePathList.remove(imagePath)
-        binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
-        Handler().postDelayed({
-            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-            encodedImages.remove(encodedImages[position])
-        }, 500)
+        val factory = ViewModelFactory(ProviderMyBidsRepository())
+        val viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
+        viewModel.deleteBidAttachment(this, ProviderDeleteBidAttachmentReqModel(imagePath.bid_attach_id.toInt(), RetrofitBuilder.PROVIDER_KEY)).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                    imagePathList.remove(imagePath)
+                    binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
+                    Handler().postDelayed({
+                        binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+                        encodedImages.remove(encodedImages[position])
+                    }, 500)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.bidAmount, it.message!!)
+                }
+            }
+        })
     }
 
 }

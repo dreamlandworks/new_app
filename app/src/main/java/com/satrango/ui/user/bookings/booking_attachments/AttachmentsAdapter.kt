@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.databinding.AttachmentRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
 
@@ -16,13 +17,20 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
         val binding = binding
 
         fun bind(imagePath: Attachment) {
-            if (imagePath.id.isNotEmpty()) {
+            if (imagePath.file_name.isNotEmpty()) {
                 Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
             } else {
                 Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
             }
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
+            }
+            if (MyJobPostViewScreen.FROM_PROVIDER) {
+                if (ProviderPlaceBidScreen.FROM_EDIT_BID) {
+                    binding.closeBtn.visibility = View.VISIBLE
+                } else {
+                    binding.closeBtn.visibility = View.GONE
+                }
             }
         }
     }

@@ -462,12 +462,12 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), ""))
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), "",""))
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), ""))
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "",""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =

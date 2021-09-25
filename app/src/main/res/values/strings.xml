@@ -544,6 +544,8 @@
     <string name="proposal_why_choose_me">Proposal (Why Choose Me?)</string>
     <string name="open">Open</string>
     <string name="sealed">Sealed</string>
+    <string name="post_details">Post Details</string>
+    <string name="open_bid">Open Bid</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

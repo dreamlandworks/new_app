@@ -151,7 +151,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
     }
 
     private fun updateUI(status: String) {
-        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 2)
         viewModel.bidsList(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

@@ -5,6 +5,8 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.Provide
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.ProviderMyBidsResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderBidEditReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
@@ -13,8 +15,8 @@ import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
@@ -110,5 +112,15 @@ interface ProviderApiService {
     suspend fun postBid(
         @Body requestBody: ProviderPostBidReqModel
     ): ProviderPostBidResModel
+
+    @POST(ServiceProviderEndPoints.DELETE_BID_ATTACHMENT)
+    suspend fun deleteBidAttachment(
+        @Body requestBody: ProviderDeleteBidAttachmentReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.EDIT_BID)
+    suspend fun editBid(
+        @Body requestBody: ProviderBidEditReqModel
+    ): ResponseBody
 
 }

@@ -242,6 +242,8 @@
                         android:id="@+id/editBidBtn"
                         style="@style/filled_button_style"
                         android:layout_width="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"

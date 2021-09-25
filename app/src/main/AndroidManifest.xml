@@ -55,7 +55,8 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.ProviderPlaceBidScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderViewPlacedBidScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderPlaceBidScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen" />
         <activity android:name=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen" />
         <activity

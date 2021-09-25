@@ -98,10 +98,10 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     }
                 }
                 MyJobPostViewScreen.FROM_PROVIDER = false
+                MyJobPostViewScreen.bookingId = jobPostDetail.booking_id.toInt()
+                MyJobPostViewScreen.categoryId = jobPostDetail.category_id.toInt()
+                MyJobPostViewScreen.userId = jobPostDetail.post_job_id.toInt()
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
-                intent.putExtra("booking_id", jobPostDetail.booking_id)
-                intent.putExtra("category_id", jobPostDetail.category_id)
-                intent.putExtra("post_job_id", jobPostDetail.post_job_id)
                 binding.root.context.startActivity(intent)
             }
         }

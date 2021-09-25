@@ -7,19 +7,24 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.JobPostDetail
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderBidEditReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.place_bid.models.ProviderPostBidResModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidResModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 
 class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) : ViewModel() {
 
     val bidsList = MutableLiveData<NetworkResponse<List<JobPostDetail>>>()
     val jobsList = MutableLiveData<NetworkResponse<List<JobPostDetail>>>()
     val postBid = MutableLiveData<NetworkResponse<ProviderPostBidResModel>>()
+    val deleteBidAttachment = MutableLiveData<NetworkResponse<ResponseBody>>()
+    val editBid = MutableLiveData<NetworkResponse<ResponseBody>>()
 
     fun bidsList(
         context: Context,
@@ -95,6 +100,48 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
             postBid.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return postBid
+    }
+
+    fun deleteBidAttachment(
+        context: Context,
+        requestBody: ProviderDeleteBidAttachmentReqModel
+    ): MutableLiveData<NetworkResponse<ResponseBody>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    deleteBidAttachment.value = NetworkResponse.Loading()
+                    val request = async { repository.deleteBidAttachment(requestBody) }
+                    val response = request.await()
+                    deleteBidAttachment.value = NetworkResponse.Success(response)
+                } catch (e: Exception) {
+                    deleteBidAttachment.value = NetworkResponse.Failure(e.message!!)
+                }
+            }
+        } else {
+            deleteBidAttachment.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return deleteBidAttachment
+    }
+
+    fun editBid(
+        context: Context,
+        requestBody: ProviderBidEditReqModel
+    ): MutableLiveData<NetworkResponse<ResponseBody>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    editBid.value = NetworkResponse.Loading()
+                    val request = async { repository.editBids(requestBody) }
+                    val response = request.await()
+                    editBid.value = NetworkResponse.Success(response)
+                } catch (e: Exception) {
+                    editBid.value = NetworkResponse.Failure(e.message!!)
+                }
+            }
+        } else {
+            editBid.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return editBid
     }
 
 }

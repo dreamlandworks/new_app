@@ -18,5 +18,7 @@ object ServiceProviderEndPoints {
     final const val PROVIDER_JOBS_LIST = "provider/sp_job_post_bids_list"
     final const val PROVIDER_JOB_POSTS_LIST = "provider/sp_job_post_list"
     final const val POST_BID = "provider/sp_post_bid"
+    final const val DELETE_BID_ATTACHMENT = "provider/delete_bid_attachment"
+    final const val EDIT_BID = "provider/sp_edit_bid"
 
 }
