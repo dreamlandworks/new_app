@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
+import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,12 +64,12 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
         return actionableAlertsList
     }
 
-    fun getUserOffers(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>> {
+    fun getUserOffers(context: Context, requestBody: OffersListReqModel): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>> {
         if (hasInternetConnection(context)) {
             userOffers.value = NetworkResponse.Loading()
             viewModelScope.launch {
                 try {
-                    val response = async { repository.getUserOffers() }
+                    val response = async { repository.getUserOffers(requestBody) }
                     if (response.await().status == 200) {
                         userOffers.value = NetworkResponse.Success(response.await().data)
                     } else {

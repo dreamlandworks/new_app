@@ -1,5 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move
 
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 
 data class PostJobSingleMoveReqModel(

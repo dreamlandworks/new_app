@@ -109,14 +109,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:background="@drawable/green_corner_border"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/everyday"
-            android:textAllCaps="false"
-            android:textColor="@color/purple_500"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold" />
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            style="@style/purple_outline_button_style"
+            android:background="@drawable/purple_out_line"
+            android:text="@string/everyday" />
 
         <TextView
             android:id="@+id/weekDays"
@@ -124,14 +122,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:background="@drawable/green_corner_border"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            style="@style/purple_outline_button_style"
+            android:background="@drawable/purple_out_line"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/week_days"
-            android:textAllCaps="false"
-            android:textColor="@color/purple_500"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold" />
+            android:text="@string/week_days" />
 
         <TextView
             android:id="@+id/weekEnd"
@@ -139,14 +135,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:background="@drawable/green_corner_border"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            style="@style/purple_outline_button_style"
+            android:background="@drawable/purple_out_line"
             android:gravity="center"
-            android:paddingVertical="@dimen/_10sdp"
-            android:text="@string/week_ends"
-            android:textAllCaps="false"
-            android:textColor="@color/purple_500"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold" />
+            android:text="@string/week_ends" />
 
     </LinearLayout>
 
@@ -155,6 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_15sdp"
         android:layout_marginStart="@dimen/_10sdp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -169,7 +164,7 @@
             android:id="@+id/sunday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_8sdp"
             android:text="@string/s"
             android:textColor="@color/black"
@@ -180,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_7sdp"
             android:text="@string/m"
             android:textColor="@color/black"
@@ -190,7 +185,7 @@
             android:id="@+id/tuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_7sdp"
             android:text="@string/t"
             android:textColor="@color/black"
@@ -201,7 +196,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_8sdp"
             android:text="@string/_W"
             android:textColor="@color/black"
@@ -211,7 +206,7 @@
             android:id="@+id/thursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_8sdp"
             android:text="@string/t"
             android:textColor="@color/black"
@@ -222,7 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_8sdp"
             android:text="@string/f"
             android:textColor="@color/black"
@@ -232,7 +227,7 @@
             android:id="@+id/saturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/purpleborderbutton"
+            android:background="@drawable/purple_out_line"
             android:padding="@dimen/_8sdp"
             android:text="@string/s"
             android:textColor="@color/black"

@@ -1,8 +1,8 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.single_move
 
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.KeywordsResponse
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 
 data class MyJobPostSingleMoveEditReqModel(
     val address_id: Int,

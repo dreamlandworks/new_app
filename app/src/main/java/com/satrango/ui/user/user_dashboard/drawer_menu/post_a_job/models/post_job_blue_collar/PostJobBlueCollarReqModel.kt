@@ -1,8 +1,8 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar
 
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.KeywordsResponse
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 
 data class PostJobBlueCollarReqModel(
     val attachments: List<Attachment>,

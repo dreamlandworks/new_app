@@ -303,16 +303,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    if (it.message!! == "User Not Found") {
-                        startActivity(
-                            Intent(
-                                this@UserSignUpScreenThree,
-                                OTPVerificationScreen::class.java
-                            )
-                        )
-                    } else {
-                        snackBar(binding.nextBtn, it.message)
-                    }
+                    startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
                 }
             }
         })

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderViewPlacedBidScreen">
+    tools:context=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen">
 
     <include
         android:id="@+id/toolBar"

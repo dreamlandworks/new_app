@@ -1,9 +1,9 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move
 
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.KeywordsResponse
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 
 data class PostJobMultiMoveReqModel(
     val addresses: List<Addresses>,

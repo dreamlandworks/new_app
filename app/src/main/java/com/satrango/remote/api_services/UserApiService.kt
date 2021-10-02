@@ -6,8 +6,8 @@ import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
@@ -69,7 +69,8 @@ import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
-import com.satrango.ui.user.user_dashboard.user_offers.models.OffersResModel
+import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
+import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListResModel
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -337,10 +338,10 @@ interface UserApiService {
         @Body requestBody: MyJobPostMultiMoveEditReqModel
     ): MyPostJobEditResModel
 
-    @GET(UserApiEndPoints.OFFERS_LIST)
+    @POST(UserApiEndPoints.OFFERS_LIST)
     suspend fun getOffersList(
-        @Query("key") key: String
-    ): OffersResModel
+        @Body requestBody: OffersListReqModel
+    ): OffersListResModel
 
     @GET(UserApiEndPoints.BOOKING_STATUS_OTP)
     suspend fun getBookingStatusOTP(

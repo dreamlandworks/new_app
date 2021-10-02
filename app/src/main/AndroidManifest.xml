@@ -55,27 +55,36 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderViewPlacedBidScreen"></activity>
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.ProviderPlaceBidScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen" />
-        <activity android:name=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen" />
+        <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen"></activity>
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen"
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen"
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen"
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.ProviderBookingDetailsScreen"
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderMyBookingsScreen"
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen"
@@ -218,7 +227,7 @@
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboard"
+            android:name=".ui.service_provider.provider_dashboard.ProviderDashboard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.UserDashboardScreen"

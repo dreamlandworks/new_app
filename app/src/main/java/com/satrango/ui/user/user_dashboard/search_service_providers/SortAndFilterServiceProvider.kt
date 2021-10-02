@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivitySortAndFilterServiceProviderBinding
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils

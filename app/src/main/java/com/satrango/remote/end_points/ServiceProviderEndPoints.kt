@@ -20,5 +20,9 @@ object ServiceProviderEndPoints {
     final const val POST_BID = "provider/sp_post_bid"
     final const val DELETE_BID_ATTACHMENT = "provider/delete_bid_attachment"
     final const val EDIT_BID = "provider/sp_edit_bid"
+    final const val SP_ALERTS = "provider/get_sp_alerts"
+    final const val PROFESSIONAL_DETAILS = "provider/get_sp_professional_details"
+    final const val UPDATE_SKILLS = "provider/update_sp_prof_details"
+    final const val UPDATE_TARIFF = "provider/update_sp_tariff_time_slot"
 
 }

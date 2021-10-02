@@ -1,25 +1,38 @@
 package com.satrango.ui.user.user_dashboard.user_offers
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
+import com.google.android.gms.location.*
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.FragmentUserOffersScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
-import com.satrango.utils.UserUtils
-import com.satrango.utils.loadProfileImage
-import com.satrango.utils.snackBar
+import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
+import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScreenBinding, UserAlertsRepository>() {
 
@@ -45,7 +58,21 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
         progressDialog.setMessage("Loading...")
         progressDialog.setCancelable(false)
 
-        viewModel.getUserOffers(requireContext()).observe(requireActivity(), {
+        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
+            UserDashboardScreen.fetchLocation(requireContext())
+        }
+
+        val requestBody = OffersListReqModel(
+            UserUtils.getCity(requireContext()),
+            UserUtils.getCountry(requireContext()),
+            RetrofitBuilder.USER_KEY,
+            2,
+            UserUtils.getPostalCode(requireContext()),
+            UserUtils.getState(requireContext()),
+            UserUtils.getUserId(requireContext()).toInt()
+        )
+
+        viewModel.getUserOffers(requireContext(), requestBody).observe(requireActivity(), {
             when(it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

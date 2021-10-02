@@ -18,12 +18,18 @@ import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationReposito
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboardRepository
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderDashboardViewModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsRepository
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.ProviderMyBidsViewModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingRepository
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardRepository
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardViewModel
+import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertRepository
+import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileViewModel
+import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOfferRepository
+import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOfferViewModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesRepository
@@ -124,6 +130,15 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(ProviderMyBidsViewModel::class.java) -> return ProviderMyBidsViewModel(
                 baseRepository as ProviderMyBidsRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderAlertsViewModel::class.java) -> return ProviderAlertsViewModel(
+                baseRepository as ProviderAlertRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderOfferViewModel::class.java) -> return ProviderOfferViewModel(
+                baseRepository as ProviderOfferRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderProfileViewModel::class.java) -> return ProviderProfileViewModel(
+                baseRepository as ProviderProfileRepository
             ) as T
         }
         return super.create(modelClass)

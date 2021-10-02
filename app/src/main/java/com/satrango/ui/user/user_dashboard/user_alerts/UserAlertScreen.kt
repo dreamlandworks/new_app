@@ -57,13 +57,9 @@ class UserAlertScreen :
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
-        binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
                     R.string.black_color
-                )
-            )
-        )
+                )))
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
@@ -71,7 +67,12 @@ class UserAlertScreen :
                     binding.progressBar.visibility = View.VISIBLE
                 }
                 is NetworkResponse.Success -> {
-                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE)
+                    if (it.data!!.isNotEmpty()) {
+                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE)
+                        binding.regularBadge.text = it.data.size.toString()
+                    } else {
+                        binding.regularBadge.visibility = View.GONE
+                    }
                     binding.progressBar.visibility = View.GONE
                 }
                 is NetworkResponse.Failure -> {
@@ -84,13 +85,9 @@ class UserAlertScreen :
 
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
-        binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
                     R.string.white_color
-                )
-            )
-        )
+                )))
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
@@ -99,7 +96,12 @@ class UserAlertScreen :
                     binding.progressBar.visibility = View.VISIBLE
                 }
                 is NetworkResponse.Success -> {
-                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, NOT_ACTIONABLE)
+                    if (it.data!!.isNotEmpty()) {
+                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE)
+                        binding.actionNeededBadge.text = it.data.size.toString()
+                    } else {
+                        binding.actionNeededBadge.visibility = View.GONE
+                    }
                     binding.progressBar.visibility = View.GONE
                 }
                 is NetworkResponse.Failure -> {

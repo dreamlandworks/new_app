@@ -273,6 +273,59 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text"
+                    android:textColor="@color/black"
+                    android:text="@string/gender"/>
+
+                <TextView
+                    android:id="@+id/male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sub_text"
+                    style="@style/blue_outline_button_style"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:text="@string/male"/>
+
+                <TextView
+                    android:id="@+id/female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sub_text"
+                    style="@style/blue_outline_button_style"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:text="@string/female"/>
+
+                <TextView
+                    android:id="@+id/notToMentionBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sub_text"
+                    style="@style/blue_outline_button_style"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
+                    android:text="@string/prefer_not_to_mention"/>
+
+
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/addressText"
                 android:layout_width="match_parent"

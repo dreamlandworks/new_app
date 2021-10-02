@@ -80,7 +80,8 @@
     <string name="your_name">Your Name</string>
     <string name="dd_mm_yy">DD-MM-YY</string>
     <string name="gender">Gender</string>
-    <string name="skills">Skills...</string>
+    <string name="skills_">Skills...</string>
+    <string name="skills">Skills</string>
     <string name="skills_sm">Skills</string>
     <string name="academic_qualification">Academic Qualification</string>
     <string name="languages_known">Languages Known</string>
@@ -546,6 +547,12 @@
     <string name="sealed">Sealed</string>
     <string name="post_details">Post Details</string>
     <string name="open_bid">Open Bid</string>
+    <string name="your_bid_is_successfully_submitted_you_can_view_the_status_in_my_bids">Your bid is successfully submitted. You can view the status in My Bids</string>
+    <string name="submission_type">Submission Type</string>
+    <string name="notifications">Notifications</string>
+    <string name="prefer_not_to_mention">Prefer not to mention</string>
+    <string name="personal">Personal</string>
+    <string name="tariff_amp_timings"><![CDATA[Tariff & Timings]]></string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

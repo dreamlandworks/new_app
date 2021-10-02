@@ -34,7 +34,6 @@ class UserHomeScreen :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
             UserDashboardScreen.fetchLocation(requireContext())
         }

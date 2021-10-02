@@ -2,17 +2,13 @@ package com.satrango.ui.user.user_dashboard.search_service_providers.search_serv
 
 import android.R
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
-import android.view.Window
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -133,7 +129,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
 
-                    binding.searchBar.threshold = 1
+                    binding.searchBar.threshold = 3
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->

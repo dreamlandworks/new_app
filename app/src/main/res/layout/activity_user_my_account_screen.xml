@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen">
 
-
     <include
         android:id="@+id/toolBar"
         layout="@layout/user_tool_bar" />

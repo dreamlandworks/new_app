@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.text.InputType
 import android.text.method.KeyListener
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserProfileScreenBinding
@@ -44,6 +46,7 @@ import java.util.*
 
 class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
+    private var gender = ""
     private var selectedAge = 0
     private val GALLERY_REQUEST = 100
     private val CAMERA_REQUEST: Int = 101
@@ -98,9 +101,39 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     mobile.isEmpty() -> snackBar(binding.applyBtn, "Enter mobile number")
                     email.isEmpty() -> snackBar(binding.applyBtn, "Enter Email Id")
                     dob.isEmpty() -> snackBar(binding.applyBtn, "Select Date od Birth")
-
+                    gender.isEmpty() -> snackBar(binding.applyBtn, "Select Gender")
                     else -> updateUserProfileToServer()
                 }
+            }
+
+            male.setOnClickListener {
+                male.setBackgroundResource(R.drawable.category_bg)
+                male.setTextColor(resources.getColor(R.color.white))
+                female.setBackgroundResource(R.drawable.blue_out_line)
+                female.setTextColor(resources.getColor(R.color.blue))
+                notToMentionBtn.setBackgroundResource(R.drawable.blue_out_line)
+                notToMentionBtn.setTextColor(resources.getColor(R.color.blue))
+                gender = "male"
+            }
+
+            female.setOnClickListener {
+                female.setBackgroundResource(R.drawable.category_bg)
+                female.setTextColor(resources.getColor(R.color.white))
+                male.setBackgroundResource(R.drawable.blue_out_line)
+                male.setTextColor(resources.getColor(R.color.blue))
+                notToMentionBtn.setBackgroundResource(R.drawable.blue_out_line)
+                notToMentionBtn.setTextColor(resources.getColor(R.color.blue))
+                gender = "female"
+            }
+
+            notToMentionBtn.setOnClickListener {
+                notToMentionBtn.setBackgroundResource(R.drawable.category_bg)
+                notToMentionBtn.setTextColor(resources.getColor(R.color.white))
+                male.setBackgroundResource(R.drawable.blue_out_line)
+                male.setTextColor(resources.getColor(R.color.blue))
+                female.setBackgroundResource(R.drawable.blue_out_line)
+                female.setTextColor(resources.getColor(R.color.blue))
+                gender = "others"
             }
 
             backBtn.setOnClickListener {
@@ -145,19 +178,6 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
                 dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
             }
-//            dateOfBirth.setOnTouchListener(OnTouchListener { v, event ->
-//                val DRAWABLE_LEFT = 0
-//                val DRAWABLE_TOP = 1
-//                val DRAWABLE_RIGHT = 2
-//                val DRAWABLE_BOTTOM = 3
-//                if (event.action == MotionEvent.ACTION_UP) {
-//                    if (event.rawX >= dateOfBirth.right - dateOfBirth.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-//                        dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
-//                        return@OnTouchListener true
-//                    }
-//                }
-//                false
-//            })
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener
             emailId.keyListener = null
@@ -168,20 +188,6 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
                 emailId.keyListener = emailId.tag as KeyListener
             }
-//            emailId.setOnTouchListener(OnTouchListener { v, event ->
-//                val DRAWABLE_LEFT = 0
-//                val DRAWABLE_TOP = 1
-//                val DRAWABLE_RIGHT = 2
-//                val DRAWABLE_BOTTOM = 3
-//                if (event.action == MotionEvent.ACTION_UP) {
-//                    if (event.rawX >= emailId.right - emailId.compoundDrawables[DRAWABLE_RIGHT].bounds.width()
-//                    ) {
-//                        emailId.keyListener = emailId.tag as KeyListener
-//                        return@OnTouchListener true
-//                    }
-//                }
-//                false
-//            })
         }
 
     }
@@ -222,10 +228,11 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             binding.firstName.text.toString().trim(),
             selectedEncodedImage,
             binding.lastName.text.toString().trim(),
+            gender,
             UserUtils.getUserId(this@UserProfileScreen),
             RetrofitBuilder.USER_KEY
         )
-
+        Log.e("JSON", Gson().toJson(requestBody))
         viewModel.updateProfileInfo(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -239,6 +246,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.applyBtn, it.message!!)
+                    progressDialog.dismiss()
                 }
             }
         })
@@ -260,6 +268,23 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     binding.lastName.setText(responseData.lname)
                     binding.phoneNo.setText(responseData.mobile)
                     binding.emailId.setText(responseData.email_id)
+
+                    gender = responseData.gender
+                    when (responseData.gender) {
+                        "male" -> {
+                            binding.male.setBackgroundResource(R.drawable.category_bg)
+                            binding.male.setTextColor(resources.getColor(R.color.white))
+                        }
+                        "female" -> {
+                            binding.female.setBackgroundResource(R.drawable.category_bg)
+                            binding.female.setTextColor(resources.getColor(R.color.white))
+                        }
+                        else -> {
+                            binding.notToMentionBtn.setBackgroundResource(R.drawable.category_bg)
+                            binding.notToMentionBtn.setTextColor(resources.getColor(R.color.white))
+                        }
+                    }
+
                     binding.dateOfBirth.setText(responseData.dob)
                     val layoutManager = LinearLayoutManager(this@UserProfileScreen)
                     layoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -321,7 +346,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     private fun deleteAddressOnServer(addressId: String) {
         val requestBody = BrowseCategoryReqModel(addressId, RetrofitBuilder.USER_KEY)
         viewModel.deleteUserAddress(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     snackBar(binding.applyBtn, "Deleting Address...")
                 }

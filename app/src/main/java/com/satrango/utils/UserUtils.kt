@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import android.util.Log
-import android.widget.Toast
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.remote.Notification
@@ -12,7 +11,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
-import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

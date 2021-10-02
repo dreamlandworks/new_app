@@ -2,12 +2,10 @@ package com.satrango.ui.user.bookings.provider_response
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.activity.contextaware.ContextAware
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.razorpay.Checkout
@@ -17,7 +15,6 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingResponseScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen

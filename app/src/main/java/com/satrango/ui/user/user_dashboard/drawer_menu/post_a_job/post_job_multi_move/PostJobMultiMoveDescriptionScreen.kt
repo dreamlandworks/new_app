@@ -19,6 +19,8 @@ import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPostJobMultiMoveDescriptionScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneViewModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
@@ -27,8 +29,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddress
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.KeywordsResponse
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.LangResponse
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 

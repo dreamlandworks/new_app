@@ -3,24 +3,29 @@ package com.satrango.remote.api_services
 import com.satrango.remote.end_points.ServiceProviderEndPoints
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.ProviderLocationReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.models.ProviderMyBidsResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderBidEditReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderBookingResumeReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.models.ProviderPauseBookingReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.models.ExtraDemandReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bids.place_bid.models.ProviderPostBidResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
-import com.satrango.ui.service_provider.provider_dashboard.provider_dashboard.my_bookings.provider_booking_details.review.UserRatingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
+import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.ProviderMyBidsResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderBidEditReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResumeReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderPauseBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderPostBidReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderPostBidResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.UserRatingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -35,7 +40,7 @@ interface ProviderApiService {
 
     @POST(ServiceProviderEndPoints.ACTIVATION_CONFIRMATION)
     suspend fun providerActivationConfirmation(
-        @Body json: ProviderSignUpFourReqModel
+        @Body requestBody: ProviderSignUpFourReqModel
     ): ResponseBody
 
     @Multipart
@@ -49,32 +54,32 @@ interface ProviderApiService {
 
     @POST(ServiceProviderEndPoints.PROVIDER_LOCATION)
     suspend fun saveProviderLocation(
-        @Body json: ProviderLocationReqModel
+        @Body requestBody: ProviderLocationReqModel
     ): ResponseBody
 
     @POST(ServiceProviderEndPoints.BOOKING_LIST_WITH_DETAILS)
     suspend fun bookingListWithDetails(
-        @Body json: ProviderBookingReqModel
+        @Body requestBody: ProviderBookingReqModel
     ): ProviderBookingResModel
 
     @POST(ServiceProviderEndPoints.EXTRA_DEMAND)
     suspend fun postExtraDemand(
-        @Body json: ExtraDemandReqModel
+        @Body requestBody: ExtraDemandReqModel
     ): ResponseBody
 
     @POST(ServiceProviderEndPoints.EXPENDITURE_INCURRED)
     suspend fun expenditureIncurred(
-        @Body json: ExpenditureIncurredReqModel
+        @Body requestBody: ExpenditureIncurredReqModel
     ): ResponseBody
 
     @POST(ServiceProviderEndPoints.USER_REVIEW)
     suspend fun userReview(
-        @Body json: UserRatingReqModel
+        @Body requestBody: UserRatingReqModel
     ): ResponseBody
 
     @POST(ServiceProviderEndPoints.INVOICE)
     suspend fun getInvoice(
-        @Body json: ProviderInvoiceReqModel
+        @Body requestBody: ProviderInvoiceReqModel
     ): ProviderInvoiceResModel
 
     @GET(ServiceProviderEndPoints.GOALS_INSTALLMENTS_LIST)
@@ -121,6 +126,26 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.EDIT_BID)
     suspend fun editBid(
         @Body requestBody: ProviderBidEditReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.SP_ALERTS)
+    suspend fun getProviderAlerts(
+        @Body requestBody: ProviderAlertsReqModel
+    ): UserAlertsResModel
+
+    @POST(ServiceProviderEndPoints.PROFESSIONAL_DETAILS)
+    suspend fun getProfessionalDetails(
+        @Body requestBody: ProviderBookingReqModel
+    ): ProviderProfileProfessionResModel
+
+    @POST(ServiceProviderEndPoints.UPDATE_SKILLS)
+    suspend fun updateSkills(
+        @Body requestBody: UpdateSkillsReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.UPDATE_TARIFF)
+    suspend fun updateTariff(
+        @Body requestBody: UpdateTariffReqModel
     ): ResponseBody
 
 }

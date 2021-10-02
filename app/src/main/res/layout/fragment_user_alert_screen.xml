@@ -19,19 +19,19 @@
         android:paddingHorizontal="@dimen/_20sdp">
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/regularBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:background="@drawable/category_bg"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:paddingVertical="@dimen/_10sdp"
                 android:text="@string/regular"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11sdp" />
@@ -50,20 +50,20 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/actionNeededBtn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/blue_out_line"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:gravity="center"
                 android:textSize="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:paddingVertical="@dimen/_10sdp"
                 android:text="@string/action_needed"
                 android:textColor="@color/black" />
 

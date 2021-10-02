@@ -18,7 +18,6 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.UserUtils
 import java.util.*
-import kotlin.time.hours
 
 class SearchServiceProviderAdapter(
     private val list: List<Data>

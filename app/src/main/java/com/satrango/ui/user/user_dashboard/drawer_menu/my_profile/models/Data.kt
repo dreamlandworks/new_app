@@ -6,6 +6,7 @@ data class Data(
     val email_id: String,
     val fname: String,
     val lname: String,
+    val gender: String,
     val mobile: String,
     val profile_pic: String,
     val referral_id: String,
