@@ -24,5 +24,8 @@ object ServiceProviderEndPoints {
     final const val PROFESSIONAL_DETAILS = "provider/get_sp_professional_details"
     final const val UPDATE_SKILLS = "provider/update_sp_prof_details"
     final const val UPDATE_TARIFF = "provider/update_sp_tariff_time_slot"
+    final const val MY_ACCOUNT = "provider/get_sp_account_details"
+    final const val REVIEWS = "provider/get_sp_review_details"
+    final const val FAQs = "provider/sp_faq"
 
 }

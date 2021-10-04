@@ -78,7 +78,10 @@ class UserMyAccountScreen : AppCompatActivity() {
                 FROM_MY_ACCOUNT = true
                 startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java))
             }
-            transactionHistory.setOnClickListener { startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java)) }
+            transactionHistory.setOnClickListener {
+                TransactionHistoryScreen.FROM_PROVIDER = false
+                startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java))
+            }
         }
 
     }

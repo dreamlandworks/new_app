@@ -18,6 +18,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class UserSettingsScreen : AppCompatActivity() {
 
+    companion object {
+        var FROM_PROVIDER = false
+    }
+
     private lateinit var binding: ActivityUserSettingsScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,9 @@ class UserSettingsScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
 
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
 
         binding.apply {
             termsAndConditions.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, TermsAndConditionScreen::class.java)) }

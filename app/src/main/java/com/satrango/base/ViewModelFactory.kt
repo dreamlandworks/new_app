@@ -22,6 +22,8 @@ import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardRepo
 import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardViewModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertRepository
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
@@ -139,6 +141,9 @@ open class ViewModelFactory(private val baseRepository: BaseRepository) :
             ) as T
             modelClass.isAssignableFrom(ProviderProfileViewModel::class.java) -> return ProviderProfileViewModel(
                 baseRepository as ProviderProfileRepository
+            ) as T
+            modelClass.isAssignableFrom(ProviderMyAccountViewModel::class.java) -> return ProviderMyAccountViewModel(
+                baseRepository as ProviderMyAccountRepository
             ) as T
         }
         return super.create(modelClass)

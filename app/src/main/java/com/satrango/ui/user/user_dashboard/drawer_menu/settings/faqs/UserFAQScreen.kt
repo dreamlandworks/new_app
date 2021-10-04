@@ -11,6 +11,7 @@ import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserFAQScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -35,6 +36,10 @@ class UserFAQScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.faqs)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+
+        if (UserSettingsScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
 
         val factory = ViewModelFactory(UserFAQRepository())
         viewModel = ViewModelProvider(this, factory)[UserFAQViewModel::class.java]

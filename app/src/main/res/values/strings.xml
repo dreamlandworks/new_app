@@ -553,6 +553,9 @@
     <string name="prefer_not_to_mention">Prefer not to mention</string>
     <string name="personal">Personal</string>
     <string name="tariff_amp_timings"><![CDATA[Tariff & Timings]]></string>
+    <string name="tasks">Tasks</string>
+    <string name="earnings_this_month">Earnings this month</string>
+    <string name="my_reviews">My Reviews</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -1,14 +1,21 @@
 package com.satrango.ui.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.messaging.FirebaseMessaging
+import com.satrango.R
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
@@ -154,6 +161,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
 //            .start()
 
     }
+
+
 
 
     override fun onBackPressed() {

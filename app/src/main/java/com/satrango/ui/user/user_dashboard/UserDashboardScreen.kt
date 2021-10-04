@@ -163,6 +163,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserReferAndEarn::class.java))
                 }
                 R.id.userOptSettings -> {
+                    UserSettingsScreen.FROM_PROVIDER = false
                     startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
                 R.id.userOptLogOut -> {

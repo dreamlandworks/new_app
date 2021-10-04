@@ -2,16 +2,18 @@ package com.satrango.ui.service_provider.provider_dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.media.Image
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -38,6 +40,7 @@ import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen
@@ -47,7 +50,7 @@ import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
-import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -151,7 +154,7 @@ class ProviderDashboard : AppCompatActivity() {
                     loadFragment(ProviderHomeScreen())
                 }
                 R.id.providerOptMyAccount -> {
-
+                    startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                 }
                 R.id.providerOptMyBooking -> {
                     startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
@@ -164,7 +167,8 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderProfileScreen::class.java))
                 }
                 R.id.providerOptSettings -> {
-
+                    UserSettingsScreen.FROM_PROVIDER = true
+                    startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
                 R.id.providerOptLogOut -> {
                     logoutDialog()
@@ -191,23 +195,26 @@ class ProviderDashboard : AppCompatActivity() {
         toolBarBackTVBtn.setOnClickListener { onBackPressed() }
     }
 
-    private fun showActivationDialog() {
-        val dialog = BottomSheetDialog(this)
-        val dialogView =
-            LayoutInflater.from(this).inflate(R.layout.service_provider_activation_dialog, null)
-        dialog.setCancelable(false)
-        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+    private fun showActivationDialog(context: Context) {
+        val dialog = BottomSheetDialog(context)
+        val dialogView = layoutInflater.inflate(R.layout.service_provider_activation_dialog, null)
+        val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
         val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
         val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
-        closeBtn.setOnClickListener { dialog.dismiss() }
-        yesBtn.setOnClickListener {
-            startActivity(Intent(this, ProviderSignUpOne::class.java))
+        closeBtn.setOnClickListener {
             dialog.dismiss()
+            startActivity(Intent(this, UserLoginTypeScreen::class.java))
+        }
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, ProviderSignUpOne::class.java))
         }
         noBtn.setOnClickListener {
             dialog.dismiss()
+            startActivity(Intent(this, UserLoginTypeScreen::class.java))
         }
         dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
         dialog.show()
     }
 
@@ -286,17 +293,21 @@ class ProviderDashboard : AppCompatActivity() {
     }
 
     private fun loadUserProfileData() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage("Loading...")
         viewModel.userProfile(this).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
-
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
                     val response = it.data!!
                     when (response.sp_activated) {
                         "1" -> {
                             // Service Provider Not Activated
-                            showActivationDialog()
+                            showActivationDialog(this)
                         }
                         "2" -> {
                             // Service Provider Approval Waiting
@@ -319,7 +330,11 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 }
                 is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
                     snackBar(binding.fab, it.message!!)
+                    Handler().postDelayed({
+                        startActivity(Intent(this, UserLoginTypeScreen::class.java))
+                    }, 4000)
                 }
             }
         })
@@ -447,63 +462,5 @@ class ProviderDashboard : AppCompatActivity() {
                 .show()
         }
     }
-
-    @SuppressLint("SetTextI18n")
-    private fun getUserProfilePicture() {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val requestBody = BrowseCategoryReqModel(
-                    UserUtils.getUserId(this@ProviderDashboard),
-                    RetrofitBuilder.USER_KEY
-                )
-                val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
-                val responseData = response.data
-                if (response.status == 200) {
-                    if (responseData.profile_pic != null) {
-                        val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
-                        loadProfileImage(UserDashboardScreen.binding.image)
-                    } else {
-                        UserUtils.saveUserProfilePic(this@ProviderDashboard, "")
-                    }
-                    UserUtils.saveUserName(
-                        this@ProviderDashboard,
-                        responseData.fname + " " + responseData.lname
-                    )
-                    if (responseData.referral_id != null) {
-                        UserUtils.saveReferralId(this@ProviderDashboard, responseData.referral_id)
-                    }
-
-                    updateHeaderDetails()
-                } else {
-                    Snackbar.make(
-                        UserDashboardScreen.binding.navigationView,
-                        "Something went wrong!",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: HttpException) {
-                Snackbar.make(
-                    UserDashboardScreen.binding.navigationView,
-                    "Server Busy",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            } catch (e: JsonSyntaxException) {
-                Snackbar.make(
-                    UserDashboardScreen.binding.navigationView,
-                    "Something Went Wrong",
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
-            } catch (e: SocketTimeoutException) {
-                Snackbar.make(
-                    UserDashboardScreen.binding.navigationView,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
 
 }

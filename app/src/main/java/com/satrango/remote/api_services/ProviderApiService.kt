@@ -1,10 +1,13 @@
 package com.satrango.remote.api_services
 
 import com.satrango.remote.end_points.ServiceProviderEndPoints
+import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.models.ProviderReviewResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.ProviderMyBidsResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderBidEditReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderDeleteBidAttachmentReqModel
@@ -25,6 +28,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -147,5 +151,22 @@ interface ProviderApiService {
     suspend fun updateTariff(
         @Body requestBody: UpdateTariffReqModel
     ): ResponseBody
+
+    @GET(ServiceProviderEndPoints.MY_ACCOUNT)
+    suspend fun myAccount(
+        @Query("key") key: String,
+        @Query("sp_id") sp_id: Int,
+    ): ProviderMyAccountResModel
+
+    @GET(ServiceProviderEndPoints.REVIEWS)
+    suspend fun reviews(
+        @Query("key") key: String,
+        @Query("sp_id") sp_id: Int,
+    ): ProviderReviewResModel
+
+    @GET(ServiceProviderEndPoints.FAQs)
+    suspend fun providerFAQs(
+        @Query("key") key: String
+    ): UserFAQResModel
 
 }
