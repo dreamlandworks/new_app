@@ -329,6 +329,7 @@
             app:drawableStartCompat="@drawable/current_plan" />
 
         <TextView
+            android:id="@+id/currentPlan"
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

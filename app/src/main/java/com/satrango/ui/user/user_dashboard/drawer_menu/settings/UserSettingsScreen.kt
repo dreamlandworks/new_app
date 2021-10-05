@@ -45,7 +45,7 @@ class UserSettingsScreen : AppCompatActivity() {
             privacyPolicy.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserPrivacyPolicyScreen::class.java)) }
             faqs.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserFAQScreen::class.java)) }
             raiseComplaintBtn.setOnClickListener {
-                ComplaintScreen.FROM_PROVIDER = false
+                ComplaintScreen.FROM_PROVIDER = FROM_PROVIDER
                 ComplaintScreen.bookingId = 0
                 startActivity(Intent(this@UserSettingsScreen, ComplaintScreen::class.java))
             }

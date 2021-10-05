@@ -77,14 +77,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
                     val modules = it.data!!
                     moduleNames = ArrayList()
                     for (module in modules) {
-                        moduleNames.add(
-                            BrowserCategoryModel(
-                                module.module_name,
-                                module.id,
-                                "",
-                                false
-                            )
-                        )
+                        moduleNames.add(BrowserCategoryModel(module.module_name, module.id, "", false))
                     }
                     binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
                     binding.recyclerView.adapter = ComplaintsAdapter(moduleNames, this)

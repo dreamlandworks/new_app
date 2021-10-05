@@ -15,6 +15,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -39,6 +40,13 @@ class FeedBackScreen : AppCompatActivity() {
             resources.getString(R.string.suggestions_feed_back)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
+
+        if (UserSettingsScreen.FROM_PROVIDER) {
+            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
 
         binding.submitBtn.setOnClickListener {
 

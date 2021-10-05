@@ -6,6 +6,8 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.Provide
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.models.ProviderReviewResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.ProviderMyBidsResModel
@@ -28,6 +30,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
+import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import okhttp3.MultipartBody
@@ -168,5 +171,16 @@ interface ProviderApiService {
     suspend fun providerFAQs(
         @Query("key") key: String
     ): UserFAQResModel
+
+    @GET(ServiceProviderEndPoints.SP_PLANS)
+    suspend fun getPlans(
+        @Query("key") key: String,
+        @Query("sp_id") sp_id: Int
+    ): ProviderPlansResModel
+
+    @POST(ServiceProviderEndPoints.MEMBERSHIP_PAYMENT)
+    suspend fun saveMemberShipPlan(
+        @Body requestBody: ProviderMemberShipPlanPaymentReqModel
+    ): ProviderMemberShipPlanPaymentResModel
 
 }

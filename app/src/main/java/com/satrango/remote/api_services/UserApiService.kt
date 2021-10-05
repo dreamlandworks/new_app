@@ -225,7 +225,8 @@ interface UserApiService {
 
     @GET(UserApiEndPoints.PLANS)
     suspend fun getUserPlans(
-        @Query("key") key: String
+        @Query("key") key: String,
+        @Query("users_id") user_id: Int
     ): PostJobPlansResModel
 
     @POST(UserApiEndPoints.USER_PLAN_PAYMENT)

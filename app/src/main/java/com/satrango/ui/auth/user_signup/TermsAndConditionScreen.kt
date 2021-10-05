@@ -10,6 +10,7 @@ import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityTermsAndConditionScreenBinding
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -28,6 +29,10 @@ class TermsAndConditionScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.terms_amp_conditions)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+
+        if (UserSettingsScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
 
         binding.apply {
 

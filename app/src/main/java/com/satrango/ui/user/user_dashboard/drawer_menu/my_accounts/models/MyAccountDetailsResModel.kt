@@ -6,5 +6,6 @@ data class MyAccountDetailsResModel(
     val status: Int,
     val total_bookings: String,
     val total_job_posts: String,
-    val total_referrals: String
+    val total_referrals: String,
+    val activated_plan: String
 )

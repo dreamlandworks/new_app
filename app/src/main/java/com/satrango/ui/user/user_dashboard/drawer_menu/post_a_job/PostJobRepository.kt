@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job
 
+import android.content.Context
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
@@ -34,6 +35,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
+import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
 
 class PostJobRepository: BaseRepository() {
@@ -42,8 +44,8 @@ class PostJobRepository: BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().getSkills(RetrofitBuilder.USER_KEY)
     }
 
-    suspend fun getUserPlans(): PostJobPlansResModel {
-        return RetrofitBuilder.getUserRetrofitInstance().getUserPlans(RetrofitBuilder.USER_KEY)
+    suspend fun getUserPlans(context: Context): PostJobPlansResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().getUserPlans(RetrofitBuilder.USER_KEY, UserUtils.getUserId(context).toInt())
     }
 
     suspend fun saveUserPaymentPlan(requestBody: UserPlanPaymentReqModel): UserPlanPaymentResModel {

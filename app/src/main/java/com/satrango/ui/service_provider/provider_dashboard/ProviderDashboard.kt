@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -28,9 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -48,16 +44,10 @@ import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScre
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
 import java.util.*
 
 class ProviderDashboard : AppCompatActivity() {
@@ -186,10 +176,10 @@ class ProviderDashboard : AppCompatActivity() {
         referralId.text = resources.getString(R.string.referralId) + UserUtils.getReferralId(this)
         toolBarTitle.text = resources.getString(R.string.welcome) + UserUtils.getUserName(this)
         profileImage.setOnClickListener {
-            startActivity(Intent(this, UserProfileScreen::class.java))
+            startActivity(Intent(this, ProviderProfileScreen::class.java))
         }
         binding.image.setOnClickListener {
-            startActivity(Intent(this, UserProfileScreen::class.java))
+            startActivity(Intent(this, ProviderProfileScreen::class.java))
         }
         toolBarBackBtn.setOnClickListener { onBackPressed() }
         toolBarBackTVBtn.setOnClickListener { onBackPressed() }
@@ -334,7 +324,7 @@ class ProviderDashboard : AppCompatActivity() {
                     snackBar(binding.fab, it.message!!)
                     Handler().postDelayed({
                         startActivity(Intent(this, UserLoginTypeScreen::class.java))
-                    }, 4000)
+                    }, 3000)
                 }
             }
         })

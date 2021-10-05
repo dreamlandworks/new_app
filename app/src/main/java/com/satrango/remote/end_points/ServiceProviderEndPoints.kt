@@ -27,5 +27,7 @@ object ServiceProviderEndPoints {
     final const val MY_ACCOUNT = "provider/get_sp_account_details"
     final const val REVIEWS = "provider/get_sp_review_details"
     final const val FAQs = "provider/sp_faq"
+    final const val SP_PLANS = "provider/sp_plans"
+    final const val MEMBERSHIP_PAYMENT = "provider/membership_payments"
 
 }

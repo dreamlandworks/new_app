@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/regularCard"
@@ -92,7 +92,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/no_of_free_posts_per_month" />
+                        android:text="@string/platform_fees_per_booking" />
 
                     <View
                         android:layout_width="@dimen/_5sdp"
@@ -100,7 +100,7 @@
                         android:background="@color/gray" />
 
                     <TextView
-                        android:id="@+id/regularPostsCount"
+                        android:id="@+id/platformFeePerBooking"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -120,7 +120,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/no_of_proposals_eligible_for_each_post" />
+                        android:text="@string/sealed_bids" />
 
                     <View
                         android:layout_width="@dimen/_5sdp"
@@ -128,7 +128,35 @@
                         android:background="@color/gray" />
 
                     <TextView
-                        android:id="@+id/regularProposalsCount"
+                        android:id="@+id/sealedBids"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/_5" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/premium_tag" />
+
+                    <View
+                        android:layout_width="@dimen/_5sdp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/premiumTag"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -185,13 +213,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_10sdp"
-        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_20sdp"
         app:cardElevation="@dimen/_5sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/pink_corner_border"
+            android:background="@drawable/provider_btn_bg"
             android:orientation="vertical"
             android:paddingTop="@dimen/_10sdp">
 
@@ -205,31 +233,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/regular_caps"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/premiumAmount"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/_35sdp"
-                    android:text="145.00"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/_13sdp"
-                    android:textStyle="bold" />
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="@dimen/_5sdp">
 
-                <TextView
-                    android:id="@+id/premiumAmountPeriod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="@string/month"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/white_border"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:paddingVertical="@dimen/_5sdp">
 
+                        <TextView
+                            android:id="@+id/premiumAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="145.00"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/premiumAmountPeriod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:text="@string/month"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>
 
             <View
@@ -237,7 +280,7 @@
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:background="@color/blue" />
+                android:background="@color/white" />
 
             <TextView
                 android:id="@+id/premiumDesc"
@@ -245,7 +288,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/this_is_the_regular_plan" />
+                android:text="@string/this_is_the_regular_plan"
+                android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -258,7 +302,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/benefits"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
@@ -279,7 +323,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/no_of_free_posts_per_month" />
+                        android:text="@string/platform_fees_per_booking"
+                        android:textColor="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_5sdp"
@@ -287,12 +332,13 @@
                         android:background="@color/gray" />
 
                     <TextView
-                        android:id="@+id/premiumPostsCount"
+                        android:id="@+id/premiumPlatformFeePerBooking"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/_10" />
+                        android:text="@string/_10"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -307,7 +353,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/no_of_proposals_eligible_for_each_post" />
+                        android:text="@string/premium_tag_over_profile"
+                        android:textColor="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_5sdp"
@@ -315,12 +362,13 @@
                         android:background="@color/gray" />
 
                     <TextView
-                        android:id="@+id/premiumProposals"
+                        android:id="@+id/premiumPremiumTag"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/unlimited" />
+                        android:text="@string/yes"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -335,7 +383,68 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/premium_customer_support" />
+                        android:text="@string/no_of_bids_per_month"
+                        android:textColor="@color/white" />
+
+                    <View
+                        android:layout_width="@dimen/_5sdp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/premiumNoOfBidsPerMonth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/x"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/no_of_sealed_bids_per_month"
+                        android:textColor="@color/white" />
+
+                    <View
+                        android:layout_width="@dimen/_5sdp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/premiumSealedBidsPerMonth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/x"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/premium_customer_support"
+                        android:textColor="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_5sdp"
@@ -348,7 +457,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/x" />
+                        android:text="@string/yes"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -361,7 +471,7 @@
                 android:background="@color/pink"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:text="@string/buy_now"
+                android:text="@string/choose_this_plan"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp" />
 

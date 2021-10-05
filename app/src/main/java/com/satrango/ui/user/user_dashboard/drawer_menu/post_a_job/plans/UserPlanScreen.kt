@@ -35,8 +35,8 @@ import java.util.*
 
 class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListener {
 
-    private lateinit var progressDialog: ProgressDialog
     private var paymentData: Data? = null
+    private lateinit var progressDialog: ProgressDialog
     private lateinit var binding: ActivityUserPlanScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!, this)
+                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!.data,  it.data.activated_plan.toInt(),this)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -116,7 +116,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             "Success",
-            30,
+            paymentData!!.period.toInt(),
             paymentData!!.id.toInt(),
             paymentId!!,
             UserUtils.getUserId(this).toInt()

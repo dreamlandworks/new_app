@@ -15,6 +15,7 @@ import com.satrango.databinding.ActivityProviderMyAccountScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen
+import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -60,6 +61,10 @@ class ProviderMyAccountScreen : AppCompatActivity() {
 
             }
         })
+
+        binding.changePlan.setOnClickListener {
+            startActivity(Intent(this, ProviderPlansScreen::class.java))
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -74,6 +79,8 @@ class ProviderMyAccountScreen : AppCompatActivity() {
             previousMonth.text = data.commission_earned.prev_month.toString()
             change.text = data.commission_earned.change.toString()
             reviewsCount.text = data.total_reviews
+            currentPlan.text = data.activated_plan
+
             transactionHistory.setOnClickListener {
                 TransactionHistoryScreen.FROM_PROVIDER = true
                 startActivity(Intent(this@ProviderMyAccountScreen, TransactionHistoryScreen::class.java))

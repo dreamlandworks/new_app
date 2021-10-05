@@ -73,6 +73,7 @@ class UserMyAccountScreen : AppCompatActivity() {
             thisMonth.text = data.commission_earned.this_month.toString()
             previousMonth.text = data.commission_earned.prev_month.toString()
             change.text = data.commission_earned.change.toString()
+            currentPlan.text = data.activated_plan
 
             changePlan.setOnClickListener {
                 FROM_MY_ACCOUNT = true

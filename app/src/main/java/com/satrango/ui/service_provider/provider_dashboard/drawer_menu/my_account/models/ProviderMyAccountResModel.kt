@@ -9,5 +9,6 @@ data class ProviderMyAccountResModel(
     val total_reviews: String,
     val total_completed_bids: Int,
     val total_completed_bookings: Int,
-    val total_referrals: String
+    val total_referrals: String,
+    val activated_plan: String,
 )

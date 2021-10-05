@@ -34,6 +34,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
 import com.satrango.utils.hasInternetConnection
@@ -45,7 +46,7 @@ import org.json.JSONObject
 class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
     var skills = MutableLiveData<NetworkResponse<List<Data>>>()
-    var userPlans = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data>>>()
+    var userPlans = MutableLiveData<NetworkResponse<PostJobPlansResModel>>()
     var planPayment = MutableLiveData<NetworkResponse<UserPlanPaymentResModel>>()
     var bidRanges = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data>>>()
 
@@ -98,16 +99,16 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
         return skills
     }
 
-    fun getUserPlans(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data>>> {
+    fun getUserPlans(context: Context): MutableLiveData<NetworkResponse<PostJobPlansResModel>> {
 
         if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userPlans.value = NetworkResponse.Loading()
-                    val response = async { repository.getUserPlans() }
+                    val response = async { repository.getUserPlans(context) }
                     val data = response.await()
                     if (data.status == 200) {
-                        userPlans.value = NetworkResponse.Success(data.data)
+                        userPlans.value = NetworkResponse.Success(data)
                     } else {
                         userPlans.value = NetworkResponse.Failure(data.message)
                     }

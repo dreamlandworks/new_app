@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.ChoosePlanRowBinding
+import com.satrango.databinding.ProviderChoosePlanRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 
-class UserPlanAdapter(private val list: List<Data>, private val userPlanListener: UserPlanListener) :
+class UserPlanAdapter(private val list: List<Data>, private val activatedPlan: Int, private val userPlanListener: UserPlanListener) :
     RecyclerView.Adapter<UserPlanAdapter.ViewHolder>() {
+
     class ViewHolder(binding: ChoosePlanRowBinding): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
@@ -53,8 +56,12 @@ class UserPlanAdapter(private val list: List<Data>, private val userPlanListener
         return ViewHolder(ChoosePlanRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position], userPlanListener)
+        if (activatedPlan == 2) {
+            holder.binding.premiumText.text = "Activated"
+        }
     }
 
     override fun getItemCount(): Int {

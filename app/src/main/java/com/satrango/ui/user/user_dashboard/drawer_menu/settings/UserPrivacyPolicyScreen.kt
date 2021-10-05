@@ -27,6 +27,10 @@ class UserPrivacyPolicyScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.privacy_policy)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        if (UserSettingsScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
+
         binding.privacyPolicy.text = HtmlCompat.fromHtml(getString(R.string.privacy_policy_data) + "<br/><br/>" + getString(R.string.disclaimer), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 }
