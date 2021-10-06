@@ -63,6 +63,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.model
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.models.ComplaintRequestResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
@@ -405,5 +406,10 @@ interface UserApiService {
         @Query("key") key: String,
         @Query("booking_id") bookingId: Int
     ): GetBookingStatusListResModel
+
+    @POST(UserApiEndPoints.COMPLAINT_REQUESTS)
+    suspend fun complaintsRequests(
+        @Body requestBody: MyJobPostReqModel
+    ): ComplaintRequestResModel
 
 }

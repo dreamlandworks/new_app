@@ -10,8 +10,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.model
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.models.ComplaintRequestResModel
 import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -21,6 +21,7 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
     val complaintModules = MutableLiveData<NetworkResponse<List<Data>>>()
     val postComplaint = MutableLiveData<NetworkResponse<ComplaintResModel>>()
     val postFeedback = MutableLiveData<NetworkResponse<FeedbackResModel>>()
+    val complaintRequests = MutableLiveData<NetworkResponse<ComplaintRequestResModel>>()
 
     fun complaintModules(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
@@ -86,6 +87,28 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
             postFeedback.value = NetworkResponse.Failure("No Internet Connection")
         }
         return postFeedback
+    }
+
+    fun complaintRequests(context: Context): MutableLiveData<NetworkResponse<ComplaintRequestResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    complaintRequests.value = NetworkResponse.Loading()
+                    val response = async { repository.complaintRequests(context) }
+                    val data = response.await()
+                    if (data.status == 200) {
+                        complaintRequests.value = NetworkResponse.Success(data)
+                    } else {
+                        complaintRequests.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    complaintRequests.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            complaintRequests.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return complaintRequests
     }
 
 }

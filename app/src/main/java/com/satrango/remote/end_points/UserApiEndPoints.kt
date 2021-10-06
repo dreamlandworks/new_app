@@ -66,5 +66,6 @@ object UserApiEndPoints {
     final const val GOALS_INSTALLMENTS_REQUESTS_LIST = "user/get_goals_installments_requested_list"
     final const val POST_APPROVE_REJECT_INSTALLMENTS = "user/job_post_approve_reject_installment"
     final const val GET_BOOKING_STATUS_LIST = "user/get_booking_status_list"
+    final const val COMPLAINT_REQUESTS = "user/complaints_requests_list"
 
 }

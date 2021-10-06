@@ -13,6 +13,7 @@ import com.satrango.ui.auth.user_signup.TermsAndConditionScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen
 import com.satrango.utils.UserUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -50,6 +51,7 @@ class UserSettingsScreen : AppCompatActivity() {
                 startActivity(Intent(this@UserSettingsScreen, ComplaintScreen::class.java))
             }
             feedBackBtn.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, FeedBackScreen::class.java)) }
+            myRequests.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, ComplaintRequestScreen::class.java)) }
         }
 
     }

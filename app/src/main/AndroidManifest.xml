@@ -55,7 +55,8 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"></activity>
+        <activity android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen" />
