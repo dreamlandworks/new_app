@@ -89,7 +89,7 @@ interface UserApiService {
 
     @POST(UserApiEndPoints.OTP_REQUEST)
     suspend fun userRequestOTP(
-        @Body json: OTPVeriticationModel
+        @Body json: OTPVerificationModel
     ): ResponseBody
 
     @POST(UserApiEndPoints.OTP_REQUEST_FORGOT_PWD)

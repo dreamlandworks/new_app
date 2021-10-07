@@ -64,7 +64,6 @@ class OTPVerificationScreen : AppCompatActivity() {
 
             binding.reSendOTP.setOnClickListener {
                 requestOTP()
-                snackBar(reSendOTP, "OTP Sent")
             }
         }
 
@@ -91,6 +90,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         UserUtils.USER_ID = data.split("|")[0]
                     }
                     is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }
@@ -106,6 +106,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         otp = it.data!!.toInt()
                     }
                     is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }

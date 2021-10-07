@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
@@ -62,11 +64,9 @@ class SetPasswordScreen : AppCompatActivity() {
                 } else {
                     UserUtils.setPassword(this@SetPasswordScreen, pwd)
                     if (UserUtils.FORGOT_PWD) {
-                        toast(this@SetPasswordScreen, "Forgot password")
                         resetPwdOnServer()
                     } else {
                         signUpToServer()
-                        toast(this@SetPasswordScreen, "New Creation")
                     }
                 }
             }
@@ -158,6 +158,7 @@ class SetPasswordScreen : AppCompatActivity() {
             UserUtils.getGender(this),
             RetrofitBuilder.USER_KEY
         )
+        Log.e("JSON", Gson().toJson(requestBody))
         viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -167,7 +168,6 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-//                    UserUtils.setReferralId(this@SetPasswordScreen, it.data!!)
                     showCustomDialog()
                 }
                 is NetworkResponse.Failure -> {

@@ -36,7 +36,6 @@ class ProviderSignUpTwo : AppCompatActivity() {
         progressDialog.setMessage("Loading...")
 
         profession_Id = intent.getStringExtra("profession_id")!!
-        toast(this, profession_Id)
 
         val factory = ViewModelFactory(ProviderSignUpTwoRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpTwoViewModel::class.java]

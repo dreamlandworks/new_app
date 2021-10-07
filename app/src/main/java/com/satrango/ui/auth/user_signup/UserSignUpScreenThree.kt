@@ -75,6 +75,24 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 email.setText(UserUtils.getMail(this@UserSignUpScreenThree))
             }
 
+            if (email.text.toString().contains("@") || email.text.toString().contains(".")) {
+                email.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_email_blue_24,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
+            }
+
+            if (mobileNo.text.toString().length == 10) {
+                mobileNo.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_phoneno,
+                    0,
+                    R.drawable.ic_greencheck,
+                    0
+                )
+            }
+
             email.addTextChangedListener(object : TextWatcher {
 
                 override fun beforeTextChanged(
@@ -89,6 +107,30 @@ class UserSignUpScreenThree : AppCompatActivity() {
                     if (s.toString().contains("@") || s.toString().contains(".")) {
                         email.setCompoundDrawablesWithIntrinsicBounds(
                             R.drawable.ic_email_blue_24,
+                            0,
+                            R.drawable.ic_greencheck,
+                            0
+                        )
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable) {}
+            })
+
+            mobileNo.addTextChangedListener(object : TextWatcher {
+
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    if (s.toString().length == 10) {
+                        mobileNo.setCompoundDrawablesWithIntrinsicBounds(
+                            R.drawable.ic_phoneno,
                             0,
                             R.drawable.ic_greencheck,
                             0
