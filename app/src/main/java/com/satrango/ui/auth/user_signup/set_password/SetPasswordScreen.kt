@@ -1,5 +1,6 @@
 package com.satrango.ui.auth.user_signup.set_password
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -34,7 +36,7 @@ class SetPasswordScreen : AppCompatActivity() {
 
     private lateinit var viewModel: SetPasswordViewModel
     private lateinit var binding: ActivitySetPasswordScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,10 +128,11 @@ class SetPasswordScreen : AppCompatActivity() {
         dialog.show()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun signUpToServer() {

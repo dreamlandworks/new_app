@@ -1,5 +1,6 @@
 package com.satrango.ui.auth.forgot_password
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityForgotPasswordScreenOneBinding
@@ -20,7 +22,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
     private lateinit var viewModel: ForgotPwdViewModel
     private lateinit var binding: ActivityForgotPasswordScreenOneBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +54,12 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
-
 
     private fun verifyUser() {
         val forgotPwdVerifyReqModel =

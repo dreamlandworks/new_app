@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -53,7 +54,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     private var selectedEncodedImage = ""
     private lateinit var binding: ActivityUserProfileScreenBinding
     private lateinit var viewModel: UserProfileViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,17 +62,11 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         binding = ActivityUserProfileScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_profile)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(UserProfileRepository())
         viewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-
-        initializeProgressDialog()
         showUserProfile()
 
         binding.apply {
@@ -190,6 +185,14 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             }
         }
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_profile)
     }
 
     private fun openImagePicker() {
@@ -328,10 +331,11 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading Profile...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     override fun deleteAddress(addressId: String) {

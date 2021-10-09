@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -45,6 +46,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         var FROM_PROVIDER = false
     }
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var blocked_time_slots: List<BlockedTimeSlot>
     private lateinit var preferred_time_slots: List<PreferredTimeSlot>
     private lateinit var slots_data: SlotsData
@@ -62,19 +64,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding = ActivityBookingDateAndTimeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-
-        if (FROM_PROVIDER) {
-            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.nextBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-        }
+        initializeToolBar()
+        initializeProgressDialog()
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
@@ -86,9 +77,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             loadTimings(0)
             updateUI(data)
         } else {
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setCancelable(false)
-            progressDialog.setMessage("Loading...")
             val factory = ViewModelFactory(BookingRepository())
             val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
             viewModel.spSlots(this, UserUtils.spid.toInt()).observe(this, {
@@ -120,6 +108,21 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
 
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.nextBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -168,10 +171,14 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
+    }
+
     private fun rescheduleBooking() {
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]

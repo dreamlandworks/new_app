@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -62,7 +63,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var data: MyJobPostViewResModel
     private lateinit var binding: ActivityPostJobAttachmentsScreenBinding
     private lateinit var viewModel: ProviderSignUpOneViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     private lateinit var responseLanguages: ProviderOneModel
     private lateinit var keywordsMList: List<Data>
@@ -83,15 +84,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityPostJobAttachmentsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.post_a_job)
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        initializeToolBar()
+        initializeProgressDialog()
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()
@@ -192,6 +186,20 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         if (UserUtils.EDIT_MY_JOB_POST) {
             updateUI()
         }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun updatePostJobBlueCollar() {

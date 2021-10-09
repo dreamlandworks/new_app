@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.satrango.R
@@ -36,6 +37,8 @@ import java.util.*
 
 class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScreenBinding, UserAlertsRepository>() {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
+
     override fun getFragmentViewModel(): Class<UserAlertsViewModel> = UserAlertsViewModel::class.java
 
     override fun getFragmentBinding(
@@ -47,16 +50,8 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.offers)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
-
-        val progressDialog = ProgressDialog(requireContext())
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
             UserDashboardScreen.fetchLocation(requireContext())
@@ -88,6 +83,22 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { activity?.onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity?.onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.offers)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
 }

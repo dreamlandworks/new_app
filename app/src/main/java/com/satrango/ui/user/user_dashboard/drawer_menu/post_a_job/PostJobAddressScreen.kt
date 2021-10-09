@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -44,17 +45,14 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityPostJobAddressScreenBinding
     private lateinit var addressList: ArrayList<MonthsModel>
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostJobAddressScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        intializeToolBar()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -108,6 +106,13 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
         loadAddress()
 
+    }
+
+    private fun intializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
     }
 
     private fun updatePostJobSingleMove(addressId: Int) {
@@ -264,10 +269,11 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun showSuccessDialog() {
@@ -287,5 +293,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         dialog.setContentView(dialogView)
         dialog.show()
     }
+
+
 
 }

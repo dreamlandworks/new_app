@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -32,7 +33,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private lateinit var viewModel: SettingsViewModel
     private lateinit var moduleNames: java.util.ArrayList<BrowserCategoryModel>
     private lateinit var binding: ActivityComplaintScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
         var FROM_PROVIDER = false
@@ -44,26 +45,8 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
         binding = ActivityComplaintScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-        backTextBtn.text = resources.getString(R.string.back)
-        backTextBtn.setOnClickListener { onBackPressed() }
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.raise_a_complaint)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
-        imageView.visibility = View.GONE
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
-        if (FROM_PROVIDER) {
-            toolBar.setBackgroundResource(R.color.purple_500)
-            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
-            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
-            binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-            binding.complaintBox.boxStrokeColor = resources.getColor(R.color.purple_500)
-        }
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(SettingsRepository())
         viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
@@ -116,6 +99,24 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
         }
 
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backTextBtn.text = resources.getString(R.string.back)
+        backTextBtn.setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.raise_a_complaint)
+        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        imageView.visibility = View.GONE
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundResource(R.color.purple_500)
+            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.complaintBox.boxStrokeColor = resources.getColor(R.color.purple_500)
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -188,5 +189,12 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
         }
         moduleNames = tempList
         binding.recyclerView.adapter = ComplaintsAdapter(tempList, this)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 }

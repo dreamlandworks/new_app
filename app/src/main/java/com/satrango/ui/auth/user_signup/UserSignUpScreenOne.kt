@@ -13,6 +13,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -30,6 +31,7 @@ import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.util.*
 
 class UserSignUpScreenOne : AppCompatActivity() {
@@ -48,7 +50,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
     // Facebook SignIn Object
     private lateinit var facebookCallBackManager: CallbackManager
 
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +60,8 @@ class UserSignUpScreenOne : AppCompatActivity() {
         initializeProgressDialog()
         initializeSocialLogins()
         PermissionUtils.checkAndRequestPermissions(this)
+
+//        toast(this, UserUtils.fetchLocation(this))
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         textWatchers()
 
@@ -105,10 +109,11 @@ class UserSignUpScreenOne : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun textWatchers() {
@@ -182,7 +187,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
         }
     }
 
-    private fun fetchLocation() {
+    fun fetchLocation() {
         progressDialog.show()
         if (ActivityCompat.checkSelfPermission(
                 this,

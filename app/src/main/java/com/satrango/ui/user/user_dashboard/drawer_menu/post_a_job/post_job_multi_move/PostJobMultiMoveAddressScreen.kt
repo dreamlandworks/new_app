@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -51,7 +52,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var data: MyJobPostViewResModel
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityPostJobMultiMoveAddressScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private val GALLERY_REQUEST = 100
     private var addressIndex = 0
 
@@ -65,14 +66,8 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityPostJobMultiMoveAddressScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -125,6 +120,13 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
         }
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
     }
 
     private fun updatePostJobMultiMove() {
@@ -332,6 +334,13 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
             encodedImages.remove(encodedImages[position])
         }, 500)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
 

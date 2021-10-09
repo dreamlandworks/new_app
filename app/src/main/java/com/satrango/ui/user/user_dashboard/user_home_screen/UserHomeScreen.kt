@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserHomeScreenBinding
 import com.satrango.remote.NetworkResponse
@@ -27,7 +29,7 @@ class UserHomeScreen :
     BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
     BrowseCategoriesInterface {
 
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var categoriesList: ArrayList<BrowserCategoryModel>
 
     @SuppressLint("SetTextI18n")
@@ -44,6 +46,14 @@ class UserHomeScreen :
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withImage, resources.getString(
+            R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
+    }
+
     private fun loadHomeScreen() {
 
         if (!PermissionUtils.isNetworkConnected(requireContext())) {
@@ -51,10 +61,7 @@ class UserHomeScreen :
             return
         }
 
-        progressDialog = ProgressDialog(requireContext())
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
-
+        initializeProgressDialog()
 
         binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {

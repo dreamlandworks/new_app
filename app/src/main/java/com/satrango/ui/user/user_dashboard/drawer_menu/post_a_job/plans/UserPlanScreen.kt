@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.razorpay.Checkout
@@ -36,7 +37,7 @@ import java.util.*
 class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListener {
 
     private var paymentData: Data? = null
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityUserPlanScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,19 +45,8 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         binding = ActivityUserPlanScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-        backTextBtn.text = resources.getString(R.string.back)
-        backTextBtn.setOnClickListener { onBackPressed() }
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.choose_your_plan)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
-        imageView.visibility = View.GONE
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -76,6 +66,17 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backTextBtn.text = resources.getString(R.string.back)
+        backTextBtn.setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.choose_your_plan)
+        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        imageView.visibility = View.GONE
     }
 
     override fun loadPayment(data: Data) {
@@ -167,6 +168,13 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         } else {
             startActivity(Intent(this, UserDashboardScreen::class.java))
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
 }

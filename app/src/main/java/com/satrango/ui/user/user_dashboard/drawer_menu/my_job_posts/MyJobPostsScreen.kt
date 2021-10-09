@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostsScreenBinding
@@ -25,23 +27,15 @@ import de.hdodenhof.circleimageview.CircleImageView
 class MyJobPostsScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyJobPostsScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyJobPostsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_job_posts)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
+        initializeToolBar()
+        initializeProgressDialog()
 
         updateUI("Pending")
 
@@ -72,6 +66,22 @@ class MyJobPostsScreen : AppCompatActivity() {
             binding.awardedBtn.setTextColor(Color.parseColor("#000000"))
             updateUI("Expired")
         }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_job_posts)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun updateUI(status: String) {

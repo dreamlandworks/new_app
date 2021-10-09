@@ -1,5 +1,6 @@
 package com.satrango.ui.auth.user_signup.otp_verification
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.IntentFilter
@@ -8,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -23,7 +25,7 @@ class OTPVerificationScreen : AppCompatActivity() {
     private var otp: Int = 0
     private lateinit var viewModel: OTPVerificationViewModel
     private lateinit var binding: ActivityOTPVerificationScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +71,13 @@ class OTPVerificationScreen : AppCompatActivity() {
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
         progressDialog.show()
     }
-
     private fun requestOTP() {
         if (UserUtils.FORGOT_PWD) {
             viewModel.forgotPwdRequestOTP(this).observe(this, {

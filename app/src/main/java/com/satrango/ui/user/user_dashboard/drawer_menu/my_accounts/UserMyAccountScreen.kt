@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserMyAccountScreenBinding
@@ -23,6 +25,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         var FROM_MY_ACCOUNT = false
     }
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityUserMyAccountScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,18 +33,8 @@ class UserMyAccountScreen : AppCompatActivity() {
         binding = ActivityUserMyAccountScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-        backTextBtn.text = resources.getString(R.string.back)
-        backTextBtn.setOnClickListener { onBackPressed() }
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.account)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
-        imageView.visibility = View.GONE
-
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(MyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
@@ -61,6 +54,24 @@ class UserMyAccountScreen : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backTextBtn.text = resources.getString(R.string.back)
+        backTextBtn.setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.account)
+        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        imageView.visibility = View.GONE
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun updateUI(data: MyAccountDetailsResModel) {

@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -39,7 +40,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
     private lateinit var binding: ActivityUserMyBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
 
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var userId = ""
     private var categoryId = ""
     private var bookingId = ""
@@ -49,9 +50,8 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding = ActivityUserMyBookingDetailsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -59,13 +59,6 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
-
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
 
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
@@ -105,6 +98,22 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     @SuppressLint("SetTextI18n")

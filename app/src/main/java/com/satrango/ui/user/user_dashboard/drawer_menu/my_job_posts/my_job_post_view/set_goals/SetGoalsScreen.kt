@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -42,7 +43,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
     private var bidPrice = 0.0
     private lateinit var goalsList: List<Data>
     private lateinit var binding: ActivitySetGoalsScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var currentInstallment = 0
 
     private var installmentsList = ArrayList<DataX>()
@@ -56,9 +57,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
         bidPrice = ViewBidsScreen.bidPrice
         binding.bidPrice.text = "Rs $bidPrice"
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -158,6 +157,13 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             }
 
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun uploadToServer() {

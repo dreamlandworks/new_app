@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostEditScreenBinding
@@ -40,13 +41,22 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var displayData: MyJobPostViewResModel
     private lateinit var binding: ActivityMyJobPostEditScreenBinding
     private lateinit var viewModel: PostJobViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyJobPostEditScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeToolBar()
+        initializeProgressDialog()
+
+        val factory = ViewModelFactory(PostJobRepository())
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+
+    }
+
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
@@ -54,14 +64,13 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
             resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+    }
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
-        val factory = ViewModelFactory(PostJobRepository())
-        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     override fun onStart() {

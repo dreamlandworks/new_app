@@ -33,36 +33,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         binding = ActivitySortAndFilterServiceProviderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-        backTextBtn.text = resources.getString(R.string.back)
-        backTextBtn.setOnClickListener { onBackPressed() }
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.sort_filter)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
-        imageView.visibility = View.GONE
-
-        if (FROM_PROVIDER) {
-            toolBar.setBackgroundResource(R.color.purple_500)
-            binding.rating.setBackgroundResource(R.drawable.purple_out_line)
-            binding.rating.setTextColor(resources.getColor(R.color.purple_500))
-            binding.ranking.setBackgroundResource(R.drawable.purple_out_line)
-            binding.ranking.setTextColor(resources.getColor(R.color.purple_500))
-            binding.nearMe.setBackgroundResource(R.drawable.purple_out_line)
-            binding.nearMe.setTextColor(resources.getColor(R.color.purple_500))
-            binding.priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
-            binding.priceLowToHigh.setTextColor(resources.getColor(R.color.purple_500))
-            binding.priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
-            binding.priceHighToLow.setTextColor(resources.getColor(R.color.purple_500))
-            binding.fresher.setBackgroundResource(R.drawable.purple_out_line)
-            binding.experience.setBackgroundResource(R.drawable.purple_out_line)
-            binding.any.setBackgroundResource(R.drawable.purple_out_line)
-            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
-            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
-            binding.applyBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-            binding.applyBtn.setTextColor(resources.getColor(R.color.white))
-        }
+        initializeToolBar()
 
         binding.apply {
 
@@ -369,6 +340,39 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
 
             }
+        }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backTextBtn.text = resources.getString(R.string.back)
+        backTextBtn.setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.sort_filter)
+        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        imageView.visibility = View.GONE
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundResource(R.color.purple_500)
+            binding.rating.setBackgroundResource(R.drawable.purple_out_line)
+            binding.rating.setTextColor(resources.getColor(R.color.purple_500))
+            binding.ranking.setBackgroundResource(R.drawable.purple_out_line)
+            binding.ranking.setTextColor(resources.getColor(R.color.purple_500))
+            binding.nearMe.setBackgroundResource(R.drawable.purple_out_line)
+            binding.nearMe.setTextColor(resources.getColor(R.color.purple_500))
+            binding.priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+            binding.priceLowToHigh.setTextColor(resources.getColor(R.color.purple_500))
+            binding.priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+            binding.priceHighToLow.setTextColor(resources.getColor(R.color.purple_500))
+            binding.fresher.setBackgroundResource(R.drawable.purple_out_line)
+            binding.experience.setBackgroundResource(R.drawable.purple_out_line)
+            binding.any.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.applyBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.applyBtn.setTextColor(resources.getColor(R.color.white))
         }
     }
 

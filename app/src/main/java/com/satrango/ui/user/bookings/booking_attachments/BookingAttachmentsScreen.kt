@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -61,7 +62,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityBookingAttachmentsScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private val GALLERY_REQUEST = 100
     private val CAMERA_REQUEST: Int = 100
     private lateinit var data: Data
@@ -72,23 +73,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         lateinit var encodedImages: ArrayList<Attachment>
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookingAttachmentsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
-            onBackPressed()
-        }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
-            onBackPressed()
-        }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        initializeToolBar()
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -161,6 +151,20 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             }
 
         }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            onBackPressed()
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            onBackPressed()
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
     }
 
     private fun bookMultiMoveServiceProvider() {
@@ -372,10 +376,11 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     @SuppressLint("SetTextI18n")

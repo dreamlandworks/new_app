@@ -9,8 +9,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -39,7 +41,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
     private var userId = ""
     private var categoryId = ""
     private var bookingId = ""
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityUserBookingCancelScreenBinding
 
     companion object {
@@ -51,42 +53,18 @@ class UserBookingCancelScreen : AppCompatActivity() {
         binding = ActivityUserBookingCancelScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.offers)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
+        initializeToolBar()
 
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
-        if (FROM_PROVIDER) {
-            binding.apply {
-
-                toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-                card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
-                message.text = resources.getString(R.string.sp_cancel_message)
-                radioBtn1.text = resources.getString(R.string.sp_cancel_message_radio1)
-                radioBtn2.text = resources.getString(R.string.sp_cancel_message_radio2)
-                radioBtn3.text = resources.getString(R.string.sp_cancel_message_radio3)
-                radioBtn4.text = resources.getString(R.string.sp_cancel_message_radio4)
-                cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
-                cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
-                submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-                cancel_id = 25
-            }
-        }
         cancel_id = 24
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
@@ -112,6 +90,39 @@ class UserBookingCancelScreen : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.offers)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.apply {
+                card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
+                message.text = resources.getString(R.string.sp_cancel_message)
+                radioBtn1.text = resources.getString(R.string.sp_cancel_message_radio1)
+                radioBtn2.text = resources.getString(R.string.sp_cancel_message_radio2)
+                radioBtn3.text = resources.getString(R.string.sp_cancel_message_radio3)
+                radioBtn4.text = resources.getString(R.string.sp_cancel_message_radio4)
+                cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
+                cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
+                submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                cancel_id = 25
+            }
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     @SuppressLint("SetTextI18n")

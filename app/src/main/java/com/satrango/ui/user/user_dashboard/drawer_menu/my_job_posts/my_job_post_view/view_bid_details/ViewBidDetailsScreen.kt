@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -34,7 +35,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityViewBidDetailsScreensBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
 
     @SuppressLint("SetTextI18n")
@@ -43,32 +44,8 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityViewBidDetailsScreensBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_proposal)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
-
-        if (ViewBidsScreen.FROM_PROVIDER) {
-            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
-            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutFive.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutSix.setBackgroundResource(R.drawable.purple_out_line)
-            binding.awardBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-            binding.awardBtn.setTextColor(resources.getColor(R.color.white))
-            binding.awardBtn.visibility = View.GONE
-            binding.rejectBtn.visibility = View.GONE
-        }
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -174,6 +151,37 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_proposal)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+        if (ViewBidsScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
+            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutFive.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutSix.setBackgroundResource(R.drawable.purple_out_line)
+            binding.awardBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.awardBtn.setTextColor(resources.getColor(R.color.white))
+            binding.awardBtn.visibility = View.GONE
+            binding.rejectBtn.visibility = View.GONE
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun rejectBid() {

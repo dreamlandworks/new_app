@@ -65,24 +65,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
         super.onCreate(savedInstanceState)
         binding = ActivityDiscussionBoardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_post)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
-
-
-        if (MyJobPostViewScreen.FROM_PROVIDER) {
-            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
-            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
-            binding.layoutThree.setBackgroundResource(R.drawable.provider_chat_edit_text_bg)
-            binding.sendBtn.setImageResource(R.drawable.ic_round_send_purple_24)
-        }
+        initializeToolBar()
 
         postJobId = intent.getStringExtra("postJobId")!!.toInt()
         binding.title.text = intent.getStringExtra("title")!!
@@ -134,6 +117,24 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
 
         loadDiscussionList()
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_post)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+        if (MyJobPostViewScreen.FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
+            binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+            binding.layoutThree.setBackgroundResource(R.drawable.provider_chat_edit_text_bg)
+            binding.sendBtn.setImageResource(R.drawable.ic_round_send_purple_24)
+        }
     }
 
     private fun loadDiscussionList() {

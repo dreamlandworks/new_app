@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -36,12 +37,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
     private lateinit var viewModel: SearchServiceProviderViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
         var userLocationText = ""
         var subCategoryId = ""
         var keyword = ""
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(
+            com.satrango.R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(com.satrango.R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.white))
     }
 
     @SuppressLint("SetTextI18n")
@@ -50,20 +59,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         binding = ActivitySearchServiceProvidersScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
-
-        binding.userLocation.text = UserUtils.getCity(this)
-
-        binding.toolBarBackBtn.setOnClickListener {
-            finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
-        binding.toolBarBackTVBtn.setOnClickListener {
-            finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
+        initializeToolBar()
+        initializeProgressDialog()
 
         binding.sortFilterBtn.setOnClickListener {
             UserUtils.saveSearchFilter(this, "")
@@ -154,6 +151,18 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             } else {
                 snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
             }
+        }
+    }
+
+    private fun initializeToolBar() {
+        binding.userLocation.text = UserUtils.getCity(this)
+        binding.toolBarBackBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        binding.toolBarBackTVBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
         }
     }
 

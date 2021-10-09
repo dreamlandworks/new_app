@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -15,14 +17,12 @@ import com.satrango.databinding.ActivityBrowseCategoriesScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
-import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
-import com.satrango.utils.loadProfileImage
-import com.satrango.utils.toast
+import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 
 class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var viewModel: BrowseCategoriesViewModel
     private lateinit var categoriesList: java.util.ArrayList<BrowserCategoryModel>
     private lateinit var binding: ActivityBrowseCategoriesScreenBinding
@@ -32,6 +32,12 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         binding = ActivityBrowseCategoriesScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeToolBar()
+        initializeProgressDialog()
+        loadBrowseCategoriesScreen()
+    }
+
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
@@ -41,7 +47,13 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
             startActivity(Intent(this, UserProfileScreen::class.java))
         }
         loadProfileImage(imageView)
-        loadBrowseCategoriesScreen()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun loadBrowseCategoriesScreen() {
@@ -54,7 +66,7 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         viewModel.getBrowseCategories(this).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
-
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     categoriesList = it.data as java.util.ArrayList<BrowserCategoryModel>
@@ -63,7 +75,8 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                     displaySubCategories(categoriesList[0].id)
                 }
                 is NetworkResponse.Failure -> {
-                    toast(this, it.message!!)
+                    progressDialog.dismiss()
+                    snackBar(binding.categoryRV, it.message!!)
                 }
             }
 
@@ -94,15 +107,15 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         viewModel.getBrowseSubCategories(this, categoryId).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    progressDialog.dismiss()
                     binding.subCategoryRV.adapter = BrowseSubCategoriesAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
-                    binding.progressBar.visibility = View.GONE
-                    toast(this, it.message!!)
+                    progressDialog.dismiss()
+                    snackBar(binding.categoryRV, it.message!!)
                 }
             }
         })

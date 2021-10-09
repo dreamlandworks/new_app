@@ -8,6 +8,7 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -30,7 +31,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
     private lateinit var amount: String
     private lateinit var binding: ActivityProviderBookingResponseScreenBinding
     private lateinit var viewModel: BookingViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,10 +154,11 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         binding.orderRefId.text = "Your order is successfully placed. Booking id: ${UserUtils.getBookingRefId(this)}"
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     override fun onBackPressed() {

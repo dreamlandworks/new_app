@@ -28,14 +28,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         binding = ActivitySearchViewProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-        backTextBtn.text = resources.getString(R.string.back)
-        backTextBtn.setOnClickListener { onBackPressed() }
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_profile)
-        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
-        imageView.visibility = View.GONE
+        initializeToolBar()
 
         val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
         val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
@@ -91,6 +84,17 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backTextBtn.text = resources.getString(R.string.back)
+        backTextBtn.setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_profile)
+        val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
+        imageView.visibility = View.GONE
     }
 
     override fun onBackPressed() {

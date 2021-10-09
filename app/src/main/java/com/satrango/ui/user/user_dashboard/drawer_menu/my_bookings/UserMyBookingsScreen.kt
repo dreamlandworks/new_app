@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyBookingsScreenBinding
@@ -25,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class UserMyBookingsScreen : AppCompatActivity() {
 
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var viewModel: MyBookingsViewModel
     private lateinit var binding: ActivityMyBookingsScreenBinding
 
@@ -37,16 +39,8 @@ class UserMyBookingsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(MyBookingsRepository())
         viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_booking)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
+        initializeToolBar()
+        initializeProgressDialog()
 
         updateUI("InProgress")
         binding.inProgressBtn.setOnClickListener {
@@ -76,6 +70,15 @@ class UserMyBookingsScreen : AppCompatActivity() {
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
             updateUI("Completed")
         }
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_booking)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
     }
 
     private fun updateUI(status: String) {
@@ -109,6 +112,13 @@ class UserMyBookingsScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     override fun onBackPressed() {

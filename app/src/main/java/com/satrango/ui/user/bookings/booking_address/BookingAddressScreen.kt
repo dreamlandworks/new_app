@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -54,7 +55,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
     private lateinit var viewModel: BookingViewModel
     private lateinit var addressList: ArrayList<MonthsModel>
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var data: Data
     private lateinit var binding: ActivityBookingAddressScreenBinding
 
@@ -63,18 +64,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         binding = ActivityBookingAddressScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
-        initializeProgressDialog()
         if (!UserUtils.getFromInstantBooking(this)) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             updateUI(data)
@@ -215,6 +210,16 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             }
         }
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -429,10 +434,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         binding.addressRv.adapter = MonthsAdapter(addressList, this@BookingAddressScreen, "AA")
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     @SuppressLint("SetTextI18n")

@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.hootsuite.nachos.chip.ChipInfo
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
@@ -36,7 +38,7 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostJobMultiMoveDescriptionScreenBinding
     private lateinit var viewModel: ProviderSignUpOneViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     private lateinit var responseLanguages: ProviderOneModel
     private lateinit var keywordsMList: List<Data>
@@ -53,17 +55,11 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
         binding = ActivityPostJobMultiMoveDescriptionScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(ProviderSignUpOneRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpOneViewModel::class.java]
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
 
         loadLanguages()
         loadKeyWords()
@@ -250,6 +246,13 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
     }
 
     private fun updateUI() {
@@ -450,6 +453,13 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
 }

@@ -30,16 +30,7 @@ class UserSettingsScreen : AppCompatActivity() {
         binding = ActivityUserSettingsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.settings)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-
-        if (FROM_PROVIDER) {
-            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-        }
+        initializeToolBar()
 
         binding.apply {
             termsAndConditions.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, TermsAndConditionScreen::class.java)) }
@@ -54,5 +45,17 @@ class UserSettingsScreen : AppCompatActivity() {
             myRequests.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, ComplaintRequestScreen::class.java)) }
         }
 
+    }
+
+    private fun initializeToolBar() {
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.settings)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        if (FROM_PROVIDER) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
     }
 }

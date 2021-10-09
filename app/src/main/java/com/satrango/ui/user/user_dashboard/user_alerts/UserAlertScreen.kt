@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.user_alerts
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserAlertScreenBinding
@@ -21,19 +23,25 @@ class UserAlertScreen :
 
     private val ACTIONABLE: String = "1"
     private val NOT_ACTIONABLE: String = "2"
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeToolBar()
+        initializeProgressDialog()
+
+        loadUserAlertsScreen()
+
+    }
+
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { activity?.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity?.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.alerts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-
-        loadUserAlertsScreen()
-
     }
 
     private fun loadUserAlertsScreen() {
@@ -54,6 +62,13 @@ class UserAlertScreen :
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
+    }
+
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
@@ -64,7 +79,7 @@ class UserAlertScreen :
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
@@ -73,10 +88,10 @@ class UserAlertScreen :
                     } else {
                         binding.regularBadge.visibility = View.GONE
                     }
-                    binding.progressBar.visibility = View.GONE
+                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    progressDialog.dismiss()
                     toast(requireContext(), it.message!!)
                 }
             }
@@ -93,7 +108,7 @@ class UserAlertScreen :
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
@@ -102,10 +117,10 @@ class UserAlertScreen :
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
                     }
-                    binding.progressBar.visibility = View.GONE
+                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    progressDialog.dismiss()
                     toast(requireContext(), it.message!!)
                 }
             }

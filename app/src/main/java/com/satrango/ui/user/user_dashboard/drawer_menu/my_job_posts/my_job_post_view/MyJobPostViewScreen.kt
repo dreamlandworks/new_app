@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostViewScreenBinding
@@ -38,7 +39,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
     private lateinit var viewModel: PostJobViewModel
     private lateinit var binding: ActivityMyJobPostViewScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
         var myJobPostViewScreen = false
@@ -55,6 +56,15 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityMyJobPostViewScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeToolBar()
+        initializeProgressDialog()
+
+        val factory = ViewModelFactory(PostJobRepository())
+        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
@@ -62,14 +72,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
-        val factory = ViewModelFactory(PostJobRepository())
-        viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-
         if (FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setBackgroundResource(R.drawable.provider_btn_bg_sm)
@@ -276,6 +278,13 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
                 connected()
             }
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
 }

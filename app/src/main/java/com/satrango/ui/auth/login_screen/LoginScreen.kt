@@ -1,11 +1,13 @@
 package com.satrango.ui.auth.login_screen
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
@@ -36,7 +38,7 @@ class LoginScreen : AppCompatActivity() {
 
     // Facebook SignIn Object
     private lateinit var facebookCallBackManager: CallbackManager
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +57,8 @@ class LoginScreen : AppCompatActivity() {
 
             val userCredentials = UserUtils.getLoginCredentials(this@LoginScreen)
             if (userCredentials[resources.getString(R.string.phoneNo)]!!.isNotEmpty()) {
-                binding.mobileNo.setText(userCredentials[resources.getString(R.string.phoneNo)])
-                binding.password.setText(userCredentials[resources.getString(R.string.password)])
+                mobileNo.setText(userCredentials[resources.getString(R.string.phoneNo)])
+                password.setText(userCredentials[resources.getString(R.string.password)])
             }
 
             googleSigInBtn.setOnClickListener {
@@ -112,10 +114,11 @@ class LoginScreen : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
+        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
     private fun loginToServer(phoneNo: String, password: String, type: String) {

@@ -21,6 +21,12 @@ class UserPrivacyPolicyScreen : AppCompatActivity() {
         binding = ActivityUserPrivacyPolicyScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeToolBar()
+
+        binding.privacyPolicy.text = HtmlCompat.fromHtml(getString(R.string.privacy_policy_data) + "<br/><br/>" + getString(R.string.disclaimer), HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
@@ -30,7 +36,5 @@ class UserPrivacyPolicyScreen : AppCompatActivity() {
         if (UserSettingsScreen.FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
         }
-
-        binding.privacyPolicy.text = HtmlCompat.fromHtml(getString(R.string.privacy_policy_data) + "<br/><br/>" + getString(R.string.disclaimer), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 }

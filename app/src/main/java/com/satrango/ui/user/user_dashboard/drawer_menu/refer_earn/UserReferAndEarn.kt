@@ -33,6 +33,15 @@ class UserReferAndEarn : AppCompatActivity() {
         binding = ActivityUserReferAndEarnBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        intializeToolBar()
+
+        binding.apply {
+            applyBtn.setOnClickListener { createReferLink() }
+        }
+
+    }
+
+    private fun intializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
         backTextBtn.text = resources.getString(R.string.back)
@@ -41,13 +50,6 @@ class UserReferAndEarn : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.refer_amp_earn)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
-
-        binding.apply {
-            applyBtn.setOnClickListener { createReferLink() }
-
-
-        }
-
     }
 
     private fun createReferLink() {
