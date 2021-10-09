@@ -86,24 +86,34 @@ class UserSignUpScreenOne : AppCompatActivity() {
                 val last_Name = lastName.text.toString().trim()
                 val phoneNo = mobileNo.text.toString().trim()
 
-                if (first_Name.isEmpty()) {
-                    firstName.error = "Enter First Name"
-                    firstName.requestFocus()
-                } else if (last_Name.isEmpty()) {
-                    lastName.error = "Enter Last Name"
-                    lastName.requestFocus()
-                } else if (phoneNo.isEmpty()) {
-                    mobileNo.error = "Enter Mobile No"
-                    mobileNo.requestFocus()
-                } else if (phoneNo.length < 10) {
-                    mobileNo.error = "Enter Valid Mobile No"
-                    mobileNo.requestFocus()
-                } else {
-                    UserUtils.setFirstName(this@UserSignUpScreenOne, first_Name)
-                    UserUtils.setLastName(this@UserSignUpScreenOne, last_Name)
-                    UserUtils.setPhoneNo(this@UserSignUpScreenOne, phoneNo)
-                    PermissionUtils.checkAndRequestPermissions(this@UserSignUpScreenOne)
-                    fetchLocation()
+                when {
+                    first_Name.isEmpty() -> {
+                        firstName.error = "Please Enter First Name"
+                        firstName.requestFocus()
+                    }
+                    last_Name.isEmpty() -> {
+                        lastName.error = "Please Enter Last Name"
+                        lastName.requestFocus()
+                    }
+                    phoneNo.isEmpty() -> {
+                        mobileNo.error = "Please Enter 10 digit Mobile Number"
+                        mobileNo.requestFocus()
+                    }
+                    phoneNo.length != 10 -> {
+                        mobileNo.error = "Please Enter 10 digit Mobile Number"
+                        mobileNo.requestFocus()
+                    }
+                    phoneNo.length < 10 -> {
+                        mobileNo.error = "Please Enter 10 digit Mobile Number"
+                        mobileNo.requestFocus()
+                    }
+                    else -> {
+                        UserUtils.setFirstName(this@UserSignUpScreenOne, first_Name)
+                        UserUtils.setLastName(this@UserSignUpScreenOne, last_Name)
+                        UserUtils.setPhoneNo(this@UserSignUpScreenOne, phoneNo)
+                        PermissionUtils.checkAndRequestPermissions(this@UserSignUpScreenOne)
+                        fetchLocation()
+                    }
                 }
             }
         }

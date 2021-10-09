@@ -56,13 +56,16 @@ class SetPasswordScreen : AppCompatActivity() {
                 val cPwd = reEnterPassword.text.toString().trim()
 
                 if (pwd.isEmpty()) {
-                    password.error = "Enter Password"
+                    password.error = "Please Enter Password"
                     password.requestFocus()
                 } else if (cPwd.isEmpty()) {
-                    reEnterPassword.error = "Enter Confirm Password"
+                    reEnterPassword.error = "Please Enter Confirm Password"
                     reEnterPassword.requestFocus()
+                } else if(pwd.isEmpty() && cPwd.isEmpty()) {
+                    password.error = "Please Enter Password & Please confirm your password"
+                    password.requestFocus()
                 } else if (pwd != cPwd) {
-                    snackBar(binding.nextBtn, "Confirm Password not valid")
+                    snackBar(binding.nextBtn, "Passwords don't match. Please enter again")
                 } else {
                     UserUtils.setPassword(this@SetPasswordScreen, pwd)
                     if (UserUtils.FORGOT_PWD) {
@@ -90,7 +93,7 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    congratulationsDialog(this, it.data!!)
+                    congratulationsDialog(this, "Your password is successfully set. \nPlease login to continue")
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -171,7 +174,8 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    showCustomDialog()
+                    congratulationsDialog(this, "Your password is successfully set. \nPlease login to continue")
+//                    showCustomDialog()
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.nextBtn, it.message!!)

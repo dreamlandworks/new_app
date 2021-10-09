@@ -7,5 +7,6 @@ data class ProviderResponseReqModel(
     val description: String,
     val key: String,
     val sp_id: Int,
-    val status_id: Int
+    val status_id: Int,
+    val users_id: Int
 )

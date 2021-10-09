@@ -563,6 +563,9 @@
     <string name="no_of_bids_per_month">No. of Bids Per Month</string>
     <string name="no_of_sealed_bids_per_month">No. of Sealed Bids Per Month</string>
     <string name="choose_this_plan">Choose this plan</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="set_your">Set Your</string>
+    <string name="password_">Password!</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

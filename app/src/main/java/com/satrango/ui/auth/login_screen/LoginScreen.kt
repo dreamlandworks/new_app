@@ -87,15 +87,15 @@ class LoginScreen : AppCompatActivity() {
 
                 when {
                     phoneNo.isEmpty() -> {
-                        mobileNo.error = "Enter Phone number"
+                        mobileNo.error = "Please Enter Valid 10 digit Mobile number"
                         mobileNo.requestFocus()
                     }
                     phoneNo.length != 10 -> {
-                        mobileNo.error = "Enter Valid Phone number"
+                        mobileNo.error = "Please Enter Valid 10 digit Mobile number"
                         mobileNo.requestFocus()
                     }
                     pwd.isEmpty() -> {
-                        password.error = "Enter Password"
+                        password.error = "Please Enter Password"
                         password.requestFocus()
                     }
                     else -> {

@@ -71,14 +71,10 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             .into(profilePic)
                         spName.text = data.bid_details.sp_fname + " " + data.bid_details.sp_lname
                         spOccupation.text = data.bid_details.profession
-                        completesIn.text =
-                            data.bid_details.esimate_time + " " + data.bid_details.estimate_type
+                        completesIn.text = data.bid_details.esimate_time + " " + data.bid_details.estimate_type
                         bid.text = data.bid_details.amount
-
                         proposal.text = data.bid_details.proposal
-
                         gender.text = data.bid_details.sp_gender
-//                        myLocation.text = data.bid_details.ci
 
                         var languagesText = ""
                         for (language in data.language) {

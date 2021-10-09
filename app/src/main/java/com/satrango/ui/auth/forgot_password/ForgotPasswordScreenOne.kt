@@ -41,9 +41,9 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
             resetPasswordBtn.setOnClickListener {
                 val mobile = mobileNo.text.toString().trim()
                 if (mobile.isEmpty()) {
-                    snackBar(mobileNo, "Enter Mobile Number")
+                    snackBar(mobileNo, "Please Enter Valid 10 digit Mobile Number")
                 } else if (mobile.length != 10) {
-                    snackBar(mobileNo, "Enter Valid Mobile Number")
+                    snackBar(mobileNo, "Please Enter Valid 10 digit Mobile Number")
                 } else {
                     UserUtils.setPhoneNo(this@ForgotPasswordScreenOne, mobile)
                     verifyUser()
@@ -75,7 +75,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.resetPasswordBtn, it.message!!)
+                    snackBar(binding.resetPasswordBtn, "No User found with this Mobile Number. Please try again")
                 }
             }
         })

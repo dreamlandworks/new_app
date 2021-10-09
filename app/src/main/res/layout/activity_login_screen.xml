@@ -189,7 +189,6 @@
                     android:id="@+id/googleSigInBtn"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/ic_google_symbol"
                     tools:ignore="ContentDescription" />
 
@@ -197,6 +196,7 @@
                     android:id="@+id/facebookSignInBtn"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:src="@drawable/ic_facebook"
                     tools:ignore="ContentDescription" />

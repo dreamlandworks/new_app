@@ -179,7 +179,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     "",
                     RetrofitBuilder.USER_KEY,
                     response.booking_details.sp_id.toInt(),
-                    5
+                    5,
+                    userId.toInt()
                 )
                 viewModel.setProviderResponse(this@ViewUserBookingDetailsScreen, requestBody)
                     .observe(this@ViewUserBookingDetailsScreen, {
@@ -213,7 +214,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     "",
                     RetrofitBuilder.USER_KEY,
                     response.booking_details.sp_id.toInt(),
-                    5
+                    4,
+                    userId.toInt()
                 )
                 viewModel.setProviderResponse(this@ViewUserBookingDetailsScreen, requestBody)
                     .observe(this@ViewUserBookingDetailsScreen, {

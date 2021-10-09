@@ -15,10 +15,10 @@
         tools:ignore="RtlSymmetry">
 
         <ImageView
-            android:layout_width="@dimen/_500sdp"
+            android:layout_width="@dimen/_400sdp"
             android:layout_height="@dimen/_500sdp"
-            android:layout_marginStart="-80dp"
-            android:layout_marginTop="-75dp"
+            android:layout_marginStart="-100dp"
+            android:layout_marginTop="-100dp"
             android:src="@drawable/login_bg"
             tools:ignore="ContentDescription" />
 
@@ -144,41 +144,35 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="@dimen/_5sdp">
+            android:layout_marginTop="@dimen/_20sdp"
+            android:textSize="@dimen/sub_text"
+            android:textColor="@color/grey_60"
+            android:text="@string/didn_t_receive_otp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/sub_text"
-                android:text="@string/didn_t_receive_otp" />
-
-            <TextView
-                android:id="@+id/reSendOTP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/resend"
-                android:textSize="@dimen/sub_text"
-                android:textColor="@color/blue_700"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/reSendOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="@string/resend_code"
+            android:textSize="@dimen/sub_text"
+            android:textColor="@color/blue_700"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/nextBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             style="@style/filled_button_style"
             android:background="@drawable/user_btn_bg"
             android:layout_gravity="center"
-            android:text="@string/next_sm"
+            android:text="@string/verify"
             />
 
     </LinearLayout>

@@ -698,69 +698,69 @@ object UserUtils {
         return rad * 180.0 / Math.PI
     }
 
-    fun roundOffDecimal(number: Double): Double {
+    private fun roundOffDecimal(number: Double): Double {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         return df.format(number).toDouble()
     }
 
-    fun fetchLocation(context: Context): String {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return ""
-        }
-
-        var locationCity = ""
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000).setPriority(
-            LocationRequest.PRIORITY_HIGH_ACCURACY)
-        val locationCallBack = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                for (location in locationResult.locations) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    locationCity = fetchLocationDetails(context, latitude, longitude)
-                }
-            }
-        }
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper()!!)
-        fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-        return "Hello $locationCity"
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double): String {
-        val geoCoder = Geocoder(context, Locale.getDefault())
-        val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-//        if (address.isEmpty()) return false
-        val addressName: String = address[0].getAddressLine(0)
-        val city: String = address[0].locality
-        val state: String = address[0].adminArea
-        val country: String = address[0].countryName
-        val postalCode: String = address[0].postalCode
-        val knownName: String = address[0].featureName
-        setLatitude(context, latitude.toString())
-        setLongitude(context, longitude.toString())
-        setCity(context, city)
-        setState(context, state)
-        setCountry(context, country)
-        setPostalCode(context, postalCode)
-        setAddress(context, knownName)
-        return getCity(context)
-    }
+//    fun fetchLocation(context: Context): String {
+//        if (ActivityCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return ""
+//        }
+//
+//        var locationCity = ""
+//        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000).setPriority(
+//            LocationRequest.PRIORITY_HIGH_ACCURACY)
+//        val locationCallBack = object : LocationCallback() {
+//            override fun onLocationResult(locationResult: LocationResult) {
+//                super.onLocationResult(locationResult)
+//                for (location in locationResult.locations) {
+//                    val latitude = location.latitude
+//                    val longitude = location.longitude
+//                    locationCity = fetchLocationDetails(context, latitude, longitude)
+//                }
+//            }
+//        }
+//        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+//        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper()!!)
+//        fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+//        return "Hello $locationCity"
+//    }
+//
+//    @SuppressLint("SetTextI18n")
+//    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double): String {
+//        val geoCoder = Geocoder(context, Locale.getDefault())
+//        val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+////        if (address.isEmpty()) return false
+//        val addressName: String = address[0].getAddressLine(0)
+//        val city: String = address[0].locality
+//        val state: String = address[0].adminArea
+//        val country: String = address[0].countryName
+//        val postalCode: String = address[0].postalCode
+//        val knownName: String = address[0].featureName
+//        setLatitude(context, latitude.toString())
+//        setLongitude(context, longitude.toString())
+//        setCity(context, city)
+//        setState(context, state)
+//        setCountry(context, country)
+//        setPostalCode(context, postalCode)
+//        setAddress(context, knownName)
+//        return getCity(context)
+//    }
 
 }

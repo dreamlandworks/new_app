@@ -14,6 +14,7 @@ data class BidDetail(
     val qualification: String,
     val sp_fcm_token: Any,
     val sp_fname: String,
+    val job_title: String,
     val sp_gender: String,
     val sp_id: String,
     val sp_lname: String,

@@ -48,7 +48,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                 val numThree = thirdNo.text.toString().trim()
                 val numFourth = fourthNo.text.toString().trim()
                 if (numOne.isEmpty() || numTwo.isEmpty() || numThree.isEmpty() || numFourth.isEmpty()) {
-                    snackBar(firstNo, "Enter OTP to verify")
+                    snackBar(firstNo, "Please Enter valid OTP")
                 } else {
                     val userOTP = numOne + numTwo + numThree + numFourth
                     if (otp.toString() == userOTP) {

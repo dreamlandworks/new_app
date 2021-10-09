@@ -171,23 +171,31 @@ class UserSignUpScreenThree : AppCompatActivity() {
 
                 when {
                     first_name.isEmpty() -> {
-                        firstName.error = "Enter First Name"
+                        firstName.error = "Please Enter First Name"
                         firstName.requestFocus()
                     }
                     last_name.isEmpty() -> {
-                        lastName.error = "Enter Last Name"
+                        lastName.error = "Please Enter Last Name"
                         lastName.requestFocus()
                     }
                     phoneNo.isEmpty() -> {
-                        mobileNo.error = "Enter Phone No"
+                        mobileNo.error = "Please Enter Mobile Number"
+                        mobileNo.requestFocus()
+                    }
+                    phoneNo.length != 10 -> {
+                        mobileNo.error = "Please Enter 10 digit Mobile Number"
                         mobileNo.requestFocus()
                     }
                     mail.isEmpty() -> {
-                        email.error = "Enter Mail Id"
+                        email.error = "Please Enter Mail Id"
+                        email.requestFocus()
+                    }
+                    !mail.contains("@") || !mail.contains(".") -> {
+                        email.error = "Please Enter valid Mail Id"
                         email.requestFocus()
                     }
                     dob == resources.getString(R.string.date_of_birth) -> {
-                        dateOfBirth.error = "Select Date Of Birth"
+                        dateOfBirth.error = "Please Select Date Of Birth"
                         dateOfBirth.requestFocus()
                     }
                     selectedAge < 13 -> {
@@ -195,10 +203,10 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         dateOfBirth.requestFocus()
                     }
                     !checkBox.isChecked -> {
-                        snackBar(checkBox, "Accept Terms and Conditions")
+                        snackBar(checkBox, "Please Accept Terms and Conditions")
                     }
                     selectedGender != R.id.male && selectedGender != R.id.female && selectedGender != R.id.others -> {
-                        snackBar(genderGroup, "Select Gender")
+                        snackBar(genderGroup, "Please Select Gender")
                     }
                     else -> {
                         UserUtils.setFirstName(this@UserSignUpScreenThree, first_name)
