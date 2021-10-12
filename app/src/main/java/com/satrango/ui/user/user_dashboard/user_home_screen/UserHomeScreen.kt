@@ -19,6 +19,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseC
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -66,6 +67,7 @@ class UserHomeScreen :
         binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 UserUtils.saveSearchFilter(requireContext(), "")
+                SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = false
                 startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
             }
         }
@@ -111,7 +113,10 @@ class UserHomeScreen :
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(it.data!!)
+                    val list = it.data!! as ArrayList<BrowserSubCategoryModel>
+                    list.addAll(list)
+                    list.addAll(list)
+                    binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(list)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

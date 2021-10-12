@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.user_home_screen
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.satrango.databinding.UserPopularServicesRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 
 class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>) :
     RecyclerView.Adapter<UserPopularServicesAdapter.ViewHolder>() {
@@ -18,6 +20,11 @@ class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>
             Glide.with(binding.rowImage).load(RetrofitBuilder.BASE_URL + model.image)
                 .into(binding.rowImage)
             binding.rowTitle.text = model.sub_name
+            binding.root.setOnClickListener {
+                SearchServiceProvidersScreen.subCategoryId = model.category_id
+                SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
+                binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
+            }
         }
     }
 

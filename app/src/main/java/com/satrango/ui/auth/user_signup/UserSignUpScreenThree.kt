@@ -202,11 +202,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         dateOfBirth.error = "Age should be greater than 13 years"
                         dateOfBirth.requestFocus()
                     }
-                    !checkBox.isChecked -> {
-                        snackBar(checkBox, "Please Accept Terms and Conditions")
-                    }
                     selectedGender != R.id.male && selectedGender != R.id.female && selectedGender != R.id.others -> {
                         snackBar(genderGroup, "Please Select Gender")
+                    }
+                    !checkBox.isChecked -> {
+                        snackBar(checkBox, "Please Accept Terms and Conditions")
                     }
                     else -> {
                         UserUtils.setFirstName(this@UserSignUpScreenThree, first_name)

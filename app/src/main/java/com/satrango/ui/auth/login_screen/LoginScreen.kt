@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -74,6 +75,8 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.FORGOT_PWD = false
                 startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
             }
+
+
 
             signInBtn.setOnClickListener {
                 val phoneNo = mobileNo.text.toString().trim()

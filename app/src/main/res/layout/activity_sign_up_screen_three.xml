@@ -84,7 +84,6 @@
                     android:singleLine="true"
                     android:inputType="text"
                     android:maxLength="50"
-                    android:maxLines="1"
                     app:boxStrokeColor="@color/boxStokeColor" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +111,6 @@
                     android:textSize="@dimen/edit_text"
                     android:inputType="text"
                     android:maxLength="50"
-                    android:maxLines="1"
                     app:boxStrokeColor="@color/boxStokeColor" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -138,8 +136,7 @@
                     android:inputType="number"
                     android:singleLine="true"
                     android:textSize="@dimen/edit_text"
-                    android:maxLength="10"
-                    android:maxLines="1" />
+                    android:maxLength="10" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -164,8 +161,7 @@
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/email"
                     android:textSize="@dimen/edit_text"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <RadioGroup
