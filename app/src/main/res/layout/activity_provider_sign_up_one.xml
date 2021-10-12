@@ -49,7 +49,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/steps_to_earn"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sub_title"
+                    android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -106,7 +106,6 @@
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:textSize="@dimen/edit_text"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 android:background="@drawable/gray_corner"
                 android:hint="@string/languages_known"
                 android:paddingHorizontal="@dimen/_10sdp"

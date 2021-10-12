@@ -157,6 +157,8 @@ class ProviderSignUpOne : AppCompatActivity() {
                 for (pro in response.data.list_profession) {
                     if (binding.profession.text.toString().trim() == pro.name) {
                         profList.add(ProfessionResponse(pro.name, pro.id))
+                    } else {
+                        profList.add(ProfessionResponse(binding.profession.text.toString().trim(), "0"))
                     }
                 }
                 val qualList = mutableListOf<QualificationResponse>()
@@ -173,11 +175,7 @@ class ProviderSignUpOne : AppCompatActivity() {
                 ProviderUtils.qualification = qualList
                 ProviderUtils.experience = binding.experience.selectedItem.toString()
                 val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
-                if (profList.isEmpty()) {
-                    intent.putExtra("profession_id", "0")
-                } else {
-                    intent.putExtra("profession_id", profList[0].prof_id)
-                }
+                intent.putExtra("profession_id", profList[0].prof_id)
                 startActivity(intent)
             }
         }

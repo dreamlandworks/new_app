@@ -10,9 +10,11 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpFourBinding
 import com.satrango.remote.NetworkResponse
@@ -78,6 +80,7 @@ class ProviderSignUpFour : AppCompatActivity() {
             ProviderUtils.keywordsSkills!!,
             ProviderUtils.slotsList!!,
         )
+        Log.e("JSON", Gson().toJson(requestBody))
         viewModel.providerActivation(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {

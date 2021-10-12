@@ -109,8 +109,11 @@ class ProviderSignUpTwo : AppCompatActivity() {
             val keysList = mutableListOf<KeywordsResponse>()
             for (chip in binding.keywordSkills.allChips) {
                 for (key in keywordsMList) {
-                    if (chip.text.toString() == key.keyword) {
+                    val chipText = chip.text.toString()
+                    if (chipText == key.keyword) {
                         keysList.add(KeywordsResponse(key.id, key.keyword))
+                    } else {
+                        keysList.add(KeywordsResponse("0", chipText))
                     }
                 }
             }
