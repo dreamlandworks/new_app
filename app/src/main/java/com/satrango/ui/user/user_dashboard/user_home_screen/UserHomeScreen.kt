@@ -1,7 +1,6 @@
 package com.satrango.ui.user.user_dashboard.user_home_screen
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,8 +48,11 @@ class UserHomeScreen :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withImage, resources.getString(
-            R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            requireActivity(), BeautifulProgressDialog.withImage, resources.getString(
+                R.string.loading
+            )
+        )
         progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
@@ -116,6 +118,7 @@ class UserHomeScreen :
                     val list = it.data!! as ArrayList<BrowserSubCategoryModel>
                     list.addAll(list)
                     list.addAll(list)
+                    shrinkTo(list, 6)
                     binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(list)
                 }
                 is NetworkResponse.Failure -> {
@@ -170,6 +173,14 @@ class UserHomeScreen :
         }
         binding.categoryRV.adapter = BrowseCategoriesAdapter(tempList, this)
         updatePopularServices(categoryId)
+    }
+
+    fun shrinkTo(list: ArrayList<BrowserSubCategoryModel>, newSize: Int) {
+        val size = list.size
+        if (newSize >= size) return
+        for (i in newSize until size) {
+            list.removeAt(list.size - 1)
+        }
     }
 
 }

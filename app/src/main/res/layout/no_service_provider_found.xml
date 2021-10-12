@@ -73,7 +73,7 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="@dimen/_5sdp"
-            android:text="@string/would_you_like_to_post_the_job_and_get_lowest_bidders_for_your_work"
+            android:text="@string/no_sp_found"
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
 
@@ -96,7 +96,8 @@
                 android:gravity="center_horizontal"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
-                android:text="No Thanks, Search again"
+                android:visibility="gone"
+                android:text="@string/no_thanks_search_again"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="bold" />
@@ -105,19 +106,13 @@
                 android:id="@+id/yesBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_10sdp"
+                android:layout_centerInParent="true"
                 android:background="@drawable/user_btn_bg"
-                android:clickable="true"
-                android:elevation="@dimen/_5sdp"
-                android:focusable="true"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/yes_post_it"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
-                android:textStyle="bold" />
+                style="@style/filled_button_style"
+                android:text="@string/post_a_job"
+                android:textColor="@color/white" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

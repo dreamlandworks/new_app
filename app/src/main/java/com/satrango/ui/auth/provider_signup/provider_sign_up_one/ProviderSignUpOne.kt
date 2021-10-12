@@ -121,45 +121,65 @@ class ProviderSignUpOne : AppCompatActivity() {
 
     private fun validateFields() {
 
-        if (binding.profession.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Your Profession")
-        } else if (binding.qualification.text.toString().isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Your Qualification")
-        } else if (binding.experience.selectedItemPosition == 0) {
-            snackBar(binding.nextBtn, "Select Your Experience")
-        } else if (binding.languages.allChips.isEmpty()) {
-            snackBar(binding.nextBtn, "Enter Your Known Languages")
-        } else {
-            val langList = mutableListOf<LangResponse>()
-            for (chip in binding.languages.allChips) {
-                for (language in response.data.language) {
-                    if (chip.text.toString() == language.name) {
-                        langList.add(LangResponse(language.id, language.name))
+//        val specialCharactersString = "!@#$%&*()'+,-./:;<=>?[]^_`{|}"
+        when {
+            binding.profession.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Please Enter Your Profession")
+            }
+//            binding.profession.text.toString().contains(specialCharactersString) -> {
+//                snackBar(binding.nextBtn, "Please avoid special characters in profession")
+//            }
+            binding.qualification.text.toString().isEmpty() -> {
+                snackBar(binding.nextBtn, "Please Enter Your Qualification")
+            }
+//            binding.qualification.text.toString().contains(specialCharactersString) -> {
+//                snackBar(binding.nextBtn, "Please avoid special characters in qualification")
+//            }
+            binding.experience.selectedItemPosition == 0 -> {
+                snackBar(binding.nextBtn, "Please Select Your Experience")
+            }
+            binding.languages.allChips.isEmpty() -> {
+                snackBar(binding.nextBtn, "Please Enter Your Known Languages")
+            }
+//            binding.languages.text.toString().contains(specialCharactersString) -> {
+//                snackBar(binding.nextBtn, "Please avoid special characters in languages")
+//            }
+            else -> {
+                val langList = mutableListOf<LangResponse>()
+                for (chip in binding.languages.allChips) {
+                    for (language in response.data.language) {
+                        if (chip.text.toString() == language.name) {
+                            langList.add(LangResponse(language.id, language.name))
+                        }
                     }
                 }
-            }
-            val profList = mutableListOf<ProfessionResponse>()
-            for (pro in response.data.list_profession) {
-                if (binding.profession.text.toString().trim() == pro.name) {
-                    profList.add(ProfessionResponse(pro.name, pro.id))
+                val profList = mutableListOf<ProfessionResponse>()
+                for (pro in response.data.list_profession) {
+                    if (binding.profession.text.toString().trim() == pro.name) {
+                        profList.add(ProfessionResponse(pro.name, pro.id))
+                    }
                 }
-            }
-            val qualList = mutableListOf<QualificationResponse>()
-            for (qual in response.data.qualification) {
-                if (binding.qualification.text.toString().trim() == qual.qualification) {
-                    qualList.add(QualificationResponse(qual.qualification, qual.id))
+                val qualList = mutableListOf<QualificationResponse>()
+                for (qual in response.data.qualification) {
+                    if (binding.qualification.text.toString().trim() == qual.qualification) {
+                        qualList.add(QualificationResponse(qual.qualification, qual.id))
+                    }
                 }
+                if (qualList.isEmpty()) {
+                    qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
+                }
+                ProviderUtils.languagesKnown = langList
+                ProviderUtils.profession = profList
+                ProviderUtils.qualification = qualList
+                ProviderUtils.experience = binding.experience.selectedItem.toString()
+                val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
+                if (profList.isEmpty()) {
+                    intent.putExtra("profession_id", "0")
+                } else {
+                    intent.putExtra("profession_id", profList[0].prof_id)
+                }
+                startActivity(intent)
             }
-            if (qualList.isEmpty()) {
-                qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
-            }
-            ProviderUtils.languagesKnown = langList
-            ProviderUtils.profession = profList
-            ProviderUtils.qualification = qualList
-            ProviderUtils.experience = binding.experience.selectedItem.toString()
-            val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
-            intent.putExtra("profession_id", profList[0].prof_id)
-            startActivity(intent)
         }
     }
 

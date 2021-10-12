@@ -23,6 +23,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
@@ -31,6 +32,8 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
+import org.json.JSONObject
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
@@ -170,14 +173,14 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         binding.goBtn.setOnClickListener {
             if (binding.searchBar.text.toString().isNotEmpty()) {
                 UserUtils.saveSearchFilter(this, "")
-                showBookingTypeDialog()
+                loadSearchResults(keyword, subCategoryId)
             } else {
                 snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
             }
         }
 
         if (FROM_POPULAR_SERVICES) {
-            showBookingTypeDialog()
+            loadSearchResults(keyword, subCategoryId)
         }
     }
 
@@ -194,7 +197,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadSearchResults(keywordId: String, subCategory: String, type: String) {
+    private fun loadSearchResults(keywordId: String, subCategory: String) {
         val requestBody = SearchServiceProviderReqModel(
             UserUtils.getAddress(this),
             UserUtils.getCity(this),
@@ -208,19 +211,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.getUserId(this).toInt(),
             subCategory.toInt()
         )
-//        val requestBody = SearchServiceProviderReqModel(
-//            "Near Mandovi Showroom",
-//            "Chilakaluripet",
-//            "India",
-//            RetrofitBuilder.USER_KEY,
-//            keywordId.toInt(),
-//            "575014",
-//            "Karnataka",
-//            "16.0948",
-//            "80.1656",
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt()
-//        )
 
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
@@ -230,21 +220,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
-                    if (type == "ViewResults") {
-                        UserUtils.saveFromInstantBooking(this, false)
-                        binding.listCount.text =
-                            "Showing ${it.data.data.size} out of ${it.data.data.size} results"
-                        binding.recyclerView.adapter = SearchServiceProviderAdapter(it.data.data)
-                        if (it.data.data.isNotEmpty()) {
-                            binding.sortFilterBtn.visibility = View.VISIBLE
-                        } else {
-                            binding.sortFilterBtn.visibility = View.GONE
-                        }
+                    if (it.data.data.isEmpty()) {
+                        weAreSorryDialog()
                     } else {
-                        UserUtils.saveFromInstantBooking(this, true)
-                        binding.listCount.visibility = View.GONE
-                        binding.recyclerView.visibility = View.GONE
-                        startActivity(Intent(this, BookingAttachmentsScreen::class.java))
+                        showBookingTypeDialog()
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -260,6 +239,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         startActivity(Intent(this, UserDashboardScreen::class.java))
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showBookingTypeDialog() {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(com.satrango.R.layout.search_type_dialog, null)
@@ -269,13 +249,29 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         if (FROM_POPULAR_SERVICES) {
             keyword = "0"
         }
+        val data = Gson().fromJson(
+            UserUtils.getSelectedSPDetails(this),
+            SearchServiceProviderResModel::class.java
+        )
+        toast(this, JSONObject(Gson().toJson(data).toString()).toString())
         viewResults.setOnClickListener {
             dialog.dismiss()
-            loadSearchResults(keyword, subCategoryId, "ViewResults")
+            UserUtils.saveFromInstantBooking(this, false)
+            binding.listCount.text = "Showing ${data.data.size} out of ${data.data.size} results"
+            binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data)
+            if (data.data.isNotEmpty()) {
+                binding.sortFilterBtn.visibility = View.VISIBLE
+            } else {
+                binding.sortFilterBtn.visibility = View.GONE
+            }
         }
         bookInstantly.setOnClickListener {
             dialog.dismiss()
-            loadSearchResults(keyword, subCategoryId, "BookInstantly")
+            binding.listCount.text = "Showing ${data.data.size} out of ${data.data.size} results"
+            UserUtils.saveFromInstantBooking(this, true)
+            binding.listCount.visibility = View.GONE
+            binding.recyclerView.visibility = View.GONE
+            startActivity(Intent(this, BookingAttachmentsScreen::class.java))
         }
         closeBtn.setOnClickListener {
             dialog.dismiss()
@@ -339,7 +335,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             snackBar(yesBtn, "Post the Job")
             dialog.dismiss()
             finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
+            startActivity(Intent(this, PostJobTypeScreen::class.java))
         }
         noBtn.setOnClickListener {
             dialog.dismiss()

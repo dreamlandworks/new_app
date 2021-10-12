@@ -74,11 +74,11 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:layout_weight="1"
-                            android:editable="false"
                             android:background="@drawable/locationbackground"
                             android:drawableStart="@drawable/ic_search"
                             android:drawableEnd="@drawable/ic_mic"
                             android:drawablePadding="@dimen/_5sdp"
+                            android:editable="false"
                             android:hint="@string/search_in_thousands_of_services"
                             android:paddingHorizontal="@dimen/_10sdp"
                             android:singleLine="true"
@@ -128,11 +128,17 @@
 
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userPopularServicesRv"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:paddingHorizontal="@dimen/_5sdp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userPopularServicesRv"
+                android:layout_width="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -140,7 +146,8 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:text="@string/recommended_for_you"
             android:textColor="@color/black"
-            android:textSize="@dimen/text" />
+            android:textSize="@dimen/text"
+            android:visibility="gone" />
 
     </LinearLayout>
 

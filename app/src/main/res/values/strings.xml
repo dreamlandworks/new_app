@@ -361,6 +361,7 @@
     <string name="yes_post_it">Yes, Post It</string>
     <string name="looks_like_we_still_don_t_have_service_provider_available_in_your_location">Looks like we still don\'t have Service Provider available in your location</string>
     <string name="would_you_like_to_post_the_job_and_get_lowest_bidders_for_your_work">Would you like to Post the Job and get lowest bidders for your work.</string>
+    <string name="no_sp_found">We regret there are no service providers for your query at this time. Please try to post a job indeed to receive quotes from other service providers</string>
     <string name="yes_book_for_me">Yes, Book for Me</string>
     <string name="how_you_want_to_search_service_providers">How you want to Search Service Providers?</string>
     <string name="view_results">View Results</string>
@@ -566,6 +567,7 @@
     <string name="resend_code">Resend Code</string>
     <string name="set_your">Set Your</string>
     <string name="password_">Password!</string>
+    <string name="no_thanks_search_again">No Thanks, Search again</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

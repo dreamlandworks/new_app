@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -48,6 +49,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScr
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
+import org.json.JSONObject
 import java.util.*
 
 class ProviderDashboard : AppCompatActivity() {
@@ -321,10 +323,8 @@ class ProviderDashboard : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.fab, it.message!!)
-                    Handler().postDelayed({
-                        startActivity(Intent(this, UserLoginTypeScreen::class.java))
-                    }, 3000)
+                    toast(this, "Error : ${it.data.toString()}" )
+                    startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
             }
         })

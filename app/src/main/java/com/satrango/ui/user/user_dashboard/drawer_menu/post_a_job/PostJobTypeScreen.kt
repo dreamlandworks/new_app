@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.satrango.databinding.ActivityPostJobTypeScreenBinding
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.UserUtils
 
 class PostJobTypeScreen : AppCompatActivity() {
@@ -43,4 +44,9 @@ class PostJobTypeScreen : AppCompatActivity() {
 
         }
     }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, UserDashboardScreen::class.java))
+    }
+
 }
