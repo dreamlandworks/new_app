@@ -67,6 +67,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         initializeToolBar()
         initializeProgressDialog()
 
+        calendar = Calendar.getInstance()
+
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             spDetails = Gson().fromJson(
@@ -89,7 +91,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         slots_data = it.data!!
                         preferred_time_slots = slots_data.preferred_time_slots
                         blocked_time_slots = slots_data.blocked_time_slots
-                        calendar = Calendar.getInstance()
                         loadDates()
                         loadTimings(0)
                     }

@@ -130,6 +130,9 @@ class UserDashboardScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
+        binding.userLocation.text = UserUtils.getCity(this)
+        SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+
         binding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.userOptHome -> {
@@ -242,7 +245,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     return
                 }
             }
-            fetchLocation(this)
+//            fetchLocation(this)
         }
     }
 

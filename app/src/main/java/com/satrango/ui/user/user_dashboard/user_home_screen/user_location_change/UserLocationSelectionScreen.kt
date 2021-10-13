@@ -9,16 +9,17 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,18 +29,20 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.gson.Gson
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
-import com.satrango.remote.NetworkResponse
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
-import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeReqModel
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
@@ -48,6 +51,8 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityUserLocationSelectionScreenBinding
     private lateinit var viewModel: UserLocationChangeViewModel
     private lateinit var progressDialog: ProgressDialog
+
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallBack: LocationCallback
@@ -67,15 +72,30 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             finish()
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_location)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_location)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
+        Places.initialize(this, "AIzaSyBnV7CqdduNTaXztcoe1kOJOSK2sY9bzRY")
+
+        val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
+        autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME))
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                toast(this@UserLocationSelectionScreen, place.name.toString())
+            }
+
+            override fun onError(status: Status) {
+                Log.e("ERROR: ", status.statusMessage!!)
+                toast(this@UserLocationSelectionScreen, "An error occurred: $status")
+            }
+        })
+
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment!!.getMapAsync(this)
+//        val mapFragment =
+//            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+//        mapFragment!!.getMapAsync(this)
 
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
@@ -84,42 +104,56 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory(UserLocationChangeRepository())
         viewModel = ViewModelProvider(this, factory)[UserLocationChangeViewModel::class.java]
 
-        viewModel.allLocations(this).observe(this, {
-            when(it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    val locations = it.data!!
-                    val addresses = ArrayList<String>()
-                    locations.forEachIndexed { index, dataX ->
-                        if (locations[index].locality.isNotEmpty()) {
-                            addresses.add("${dataX.locality}, ${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
-                        } else {
-                            addresses.add("${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
-                        }
-                    }
-                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, addresses)
-                    binding.myLocation.setAdapter(adapter)
-                    binding.myLocation.threshold = 1
-                    binding.myLocation.setOnItemClickListener { parent, view, position, id ->
-                        val latLog = LatLng(locations[position].latitude.toDouble(), locations[position].longitude.toDouble())
-                        marker.position = latLog
-                        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLog, 16f))
-                        UserUtils.setCity(this, locations[position].city)
-                        UserUtils.setLatitude(this, locations[position].latitude)
-                        UserUtils.setLongitude(this, locations[position].longitude)
-                        UserUtils.setState(this, locations[position].state)
-                        UserUtils.setCountry(this, locations[position].country)
-                        UserUtils.setPostalCode(this, locations[position].zipcode)
-                        UserUtils.setAddress(this, locations[position].locality)
-                    }
-                }
-                is NetworkResponse.Failure -> {
-                    snackBar(binding.addBtn, it.message!!)
-                }
-            }
-        })
+        binding.myLocation.setOnClickListener {
+            val fields = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .build(this)
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
+//        viewModel.allLocations(this).observe(this, {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    val locations = it.data!!
+//                    val addresses = ArrayList<String>()
+//                    locations.forEachIndexed { index, dataX ->
+//                        if (locations[index].locality.isNotEmpty()) {
+//                            addresses.add("${dataX.locality}, ${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
+//                        } else {
+//                            addresses.add("${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
+//                        }
+//                    }
+//                    val adapter = ArrayAdapter(
+//                        this,
+//                        android.R.layout.simple_spinner_dropdown_item,
+//                        addresses
+//                    )
+//                    binding.myLocation.setAdapter(adapter)
+//                    binding.myLocation.threshold = 3
+//                    binding.myLocation.setOnItemClickListener { parent, view, position, id ->
+//                        val latLog = LatLng(
+//                            locations[position].latitude.toDouble(),
+//                            locations[position].longitude.toDouble()
+//                        )
+//                        marker.position = latLog
+//                        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLog, 16f))
+//                        UserUtils.setCity(this, locations[position].city)
+//                        UserUtils.setLatitude(this, locations[position].latitude)
+//                        UserUtils.setLongitude(this, locations[position].longitude)
+//                        UserUtils.setState(this, locations[position].state)
+//                        UserUtils.setCountry(this, locations[position].country)
+//                        UserUtils.setPostalCode(this, locations[position].zipcode)
+//                        UserUtils.setAddress(this, locations[position].locality)
+//                    }
+//                }
+//                is NetworkResponse.Failure -> {
+//                    snackBar(binding.addBtn, it.message!!)
+//                }
+//            }
+//        })
 
         if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
             fetchLocation(this)
@@ -139,7 +173,10 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
+        val latLong = LatLng(
+            UserUtils.getLatitude(this).toDouble(),
+            UserUtils.getLongitude(this).toDouble()
+        )
         mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
 //        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
 //        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
@@ -156,7 +193,11 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onMarkerDragEnd(marker: Marker) {
                 mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-                fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
+                fetchLocationDetails(
+                    this@UserLocationSelectionScreen,
+                    marker.position.latitude,
+                    marker.position.longitude
+                )
             }
 
             override fun onMarkerDrag(arg0: Marker) {
@@ -223,9 +264,25 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             UserUtils.setPostalCode(context, postalCode)
             UserUtils.setAddress(context, knownName)
             if (UserUtils.getAddress(context).isNotEmpty()) {
-                binding.myLocation.setText("${UserUtils.getAddress(context)}, ${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
+                binding.myLocation.setText(
+                    "${UserUtils.getAddress(context)}, ${
+                        UserUtils.getCity(
+                            context
+                        )
+                    }, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${
+                        UserUtils.getPostalCode(
+                            context
+                        )
+                    }"
+                )
             } else {
-                binding.myLocation.setText("${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
+                binding.myLocation.setText(
+                    "${UserUtils.getCity(context)}, ${
+                        UserUtils.getState(
+                            context
+                        )
+                    }, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}"
+                )
             }
             binding.addBtn.isEnabled = true
         } catch (e: Exception) {
@@ -235,7 +292,26 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onBackPressed() {
-        finish()
-        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        super.onBackPressed()
+//        finish()
+//        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                val place = Autocomplete.getPlaceFromIntent(data!!)
+                binding.myLocation.setText(place.name)
+//                Log.i(TAG, "Place: " +  + ", " + place.id)
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                val status = Autocomplete.getStatusFromIntent(data!!)
+                snackBar(binding.addBtn, status.statusMessage!!)
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 }

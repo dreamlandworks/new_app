@@ -432,6 +432,7 @@ class ProviderDashboard : AppCompatActivity() {
                     this
                 ).toInt()
             )
+            toast(this, Gson().toJson(requestBody))
             viewModel.saveLocation(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {

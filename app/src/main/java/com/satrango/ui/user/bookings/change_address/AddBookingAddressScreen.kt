@@ -15,10 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.*
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityChangeBookingAddressScreenBinding
@@ -52,8 +49,9 @@ class AddBookingAddressScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (!UserUtils.getFromJobPost(this)) {
+        if (!UserUtils.getFromInstantBooking(this)) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
         }
         initializeProgressDialog()
@@ -77,18 +75,25 @@ class AddBookingAddressScreen : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (binding.flatNo.text.toString().isEmpty()) {
-            snackBar(binding.addBtn, "Enter Flat No")
-        } else if (binding.flatName.text.toString().isEmpty()) {
-            snackBar(binding.addBtn, "Enter Flat Name")
-        } else if (binding.streetName.text.toString().isEmpty()) {
-            snackBar(binding.addBtn, "Enter Street Name")
-        } else if (binding.pinCode.text.toString().isEmpty()) {
-            snackBar(binding.addBtn, "Enter PinCode")
-        } else if (binding.city.text.toString().isEmpty()) {
-            snackBar(binding.addBtn, "Enter City Name")
-        } else {
-            fetchLocation(this)
+        when {
+            binding.flatNo.text.toString().isEmpty() -> {
+                snackBar(binding.addBtn, "Enter Flat No")
+            }
+            binding.flatName.text.toString().isEmpty() -> {
+                snackBar(binding.addBtn, "Enter Flat Name")
+            }
+            binding.streetName.text.toString().isEmpty() -> {
+                snackBar(binding.addBtn, "Enter Street Name")
+            }
+            binding.pinCode.text.toString().isEmpty() -> {
+                snackBar(binding.addBtn, "Enter PinCode")
+            }
+            binding.city.text.toString().isEmpty() -> {
+                snackBar(binding.addBtn, "Enter City Name")
+            }
+            else -> {
+                fetchLocation(this)
+            }
         }
     }
 
@@ -153,7 +158,7 @@ class AddBookingAddressScreen : AppCompatActivity() {
             val requestBody = AddBookingAddressReqModel(
                 knownName,
                 knownName,
-                city,
+                binding.city.text.toString(),
                 country,
                 "${binding.flatNo.text.toString().trim()} ${binding.flatName.text.toString().trim()}",
                 RetrofitBuilder.USER_KEY,
@@ -203,12 +208,12 @@ class AddBookingAddressScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (UserUtils.getFromJobPost(this)) {
-            startActivity(Intent(this, PostJobDescriptionScreen::class.java))
-        } else {
+        if (!UserUtils.getFromInstantBooking(this)) {
             val intent = Intent(this, BookingAddressScreen::class.java)
             intent.putExtra(getString(R.string.service_provider), data)
             startActivity(intent)
+        } else {
+            startActivity(Intent(this, PostJobDescriptionScreen::class.java))
         }
     }
 }

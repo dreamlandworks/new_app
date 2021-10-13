@@ -25,7 +25,6 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         var FROM_PROVIDER = false
     }
 
-
     private lateinit var binding: ActivitySortAndFilterServiceProviderBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +35,11 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         initializeToolBar()
 
         binding.apply {
+
+            resetBtn.setOnClickListener {
+                finish()
+                startActivity(intent)
+            }
 
             kmSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 @SuppressLint("SetTextI18n")
@@ -349,8 +353,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.sort_filter)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.sort_filter)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
 

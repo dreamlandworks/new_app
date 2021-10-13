@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen">
 
@@ -40,8 +40,8 @@
             android:layout_centerInParent="true"
             android:background="@drawable/locationbackground"
             android:orientation="horizontal"
-            android:paddingVertical="@dimen/_5sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,12 +70,12 @@
         <AutoCompleteTextView
             android:id="@+id/searchBar"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_weight="1"
             android:background="@drawable/locationbackground"
             android:drawableStart="@drawable/ic_search"
-            android:layout_marginStart="@dimen/_10sdp"
             android:drawableEnd="@drawable/ic_mic"
             android:drawablePadding="@dimen/_5sdp"
             android:hint="@string/search_in_thousands_of_services"
@@ -86,14 +86,14 @@
 
         <TextView
             android:id="@+id/goBtn"
+            style="@style/filled_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:text="@string/go"
             android:layout_gravity="center_vertical"
-            style="@style/filled_button_style"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:background="@drawable/user_btn_bg_sm"/>
+            android:background="@drawable/user_btn_bg_sm"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:text="@string/go" />
 
     </LinearLayout>
 
@@ -102,23 +102,44 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/_10sdp">
 
-        <TextView
-            android:id="@+id/listCount"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_alignParentStart="true"
-            android:textSize="@dimen/sub_text"
-            android:text="@string/showing_0_out_of_0_results"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/showing"
+                android:textSize="@dimen/sub_text" />
+
+            <TextView
+                android:id="@+id/listCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0_out_of_0"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/results_for"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/sortFilterBtn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/settings_black"
+            android:visibility="gone"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 
@@ -127,6 +148,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingVertical="@dimen/_5sdp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

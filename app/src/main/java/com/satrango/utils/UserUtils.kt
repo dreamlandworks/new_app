@@ -417,10 +417,7 @@ object UserUtils {
 //    }
 
     fun saveSelectedSPDetails(context: Context, spDetails: String) {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.selected_service_provider), spDetails)
         editor.apply()
@@ -428,10 +425,7 @@ object UserUtils {
     }
 
     fun getSelectedSPDetails(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.selected_service_provider), "")!!
     }
 
@@ -539,7 +533,7 @@ object UserUtils {
 
     fun getFromInstantBooking(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.book_instantly), false)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.is_book_instant), false)
     }
 
     fun saveFromInstantBooking(context: Context, fullName: Boolean) {

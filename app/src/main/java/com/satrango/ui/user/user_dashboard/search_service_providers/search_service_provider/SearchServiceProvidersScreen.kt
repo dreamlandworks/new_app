@@ -81,17 +81,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this)
-                .isNotEmpty()
-        ) {
-            val spDetails = Gson().fromJson(
-                UserUtils.getSelectedSPDetails(this),
-                SearchServiceProviderResModel::class.java
-            )
-            val filter =
-                Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
-            val list =
-                ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+            val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetails.data) {
                 if (filter.priceRangeFrom.toDouble() <= sp.per_hour.toDouble() && filter.priceRangeTo.toDouble() >= sp.per_hour.toDouble()) {
                     if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
@@ -114,22 +107,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
             when {
                 filter.lowToHigh -> {
-                    binding.listCount.text =
-                        "Showing ${spDetails.data.size} out of ${spDetails.data.size} results"
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
                 }
                 filter.highToLow -> {
-                    binding.listCount.text =
-                        "Showing ${spDetails.data.size} out of ${spDetails.data.size} results"
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
                 }
                 else -> {
-                    binding.listCount.text =
-                        "Showing ${spDetails.data.size} out of ${spDetails.data.size} results"
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list)
                 }
@@ -149,16 +140,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
 
                     binding.searchBar.threshold = 3
-                    val adapter =
-                        ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
+                    val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->
                         keyword = keywordsList[position].keywords_id
                         subCategoryId = keywordsList[position].subcategory_id
-                        UserUtils.saveSelectedKeywordCategoryId(
-                            this,
-                            keywordsList[position].category_id
-                        )
+                        UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
                     }
                     progressDialog.dismiss()
                 }
@@ -198,20 +185,34 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String) {
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keywordId.toInt(),
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt()
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
+//            RetrofitBuilder.USER_KEY,
+//            keywordId.toInt(),
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt()
+//        )
 
+        val requestBody = SearchServiceProviderReqModel(
+            "Indira Mahal",
+            "Hubli",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            2,
+            "575001",
+            "Karnataka",
+            "12.2359",
+            "14.0496",
+            44,
+            2
+        )
+//        toast(this, Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -253,11 +254,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.getSelectedSPDetails(this),
             SearchServiceProviderResModel::class.java
         )
-        toast(this, JSONObject(Gson().toJson(data).toString()).toString())
+//        toast(this, JSONObject(Gson().toJson(data).toString()).toString())
         viewResults.setOnClickListener {
             dialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
-            binding.listCount.text = "Showing ${data.data.size} out of ${data.data.size} results"
+            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data)
             if (data.data.isNotEmpty()) {
                 binding.sortFilterBtn.visibility = View.VISIBLE
@@ -267,7 +268,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
         bookInstantly.setOnClickListener {
             dialog.dismiss()
-            binding.listCount.text = "Showing ${data.data.size} out of ${data.data.size} results"
+            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             UserUtils.saveFromInstantBooking(this, true)
             binding.listCount.visibility = View.GONE
             binding.recyclerView.visibility = View.GONE

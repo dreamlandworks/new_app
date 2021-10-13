@@ -316,7 +316,7 @@
     <string name="your_password_is_successfully_set_nplease_login_to_continue">Your password is successfully set.<br />Please login to continue</string>
     <string name="my_bids">My Bids</string>
     <string name="go">Go</string>
-    <string name="showing_0_out_of_0_results">Showing 0 out of 0 results</string>
+    <string name="_0_out_of_0">0 out of 0</string>
     <string name="book_later">Book Later</string>
     <string name="book_now">Book Now</string>
     <string name="yyyy_mm_dd">YYYY-MM-DD</string>
@@ -568,6 +568,8 @@
     <string name="set_your">Set Your</string>
     <string name="password_">Password!</string>
     <string name="no_thanks_search_again">No Thanks, Search again</string>
+    <string name="results_for">results for</string>
+    <string name="showing">Showing</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

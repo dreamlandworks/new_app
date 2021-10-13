@@ -127,7 +127,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             addNewAddress.setOnClickListener {
                 UserUtils.setFromJobPost(this@BookingAddressScreen, false)
                 val intent = Intent(this@BookingAddressScreen, AddBookingAddressScreen::class.java)
-                intent.putExtra(getString(R.string.service_provider), data)
+                if (!UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+                    intent.putExtra(getString(R.string.service_provider), data)
+                }
                 startActivity(intent)
             }
 

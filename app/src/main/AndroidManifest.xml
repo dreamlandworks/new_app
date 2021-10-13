@@ -55,7 +55,7 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"></activity>
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"/>
         <activity android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen" />
@@ -320,7 +320,8 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBFC4Jgdqm8a7tIeIVEJJL71KEHyuU1V0I" />
+            android:value="AIzaSyBnV7CqdduNTaXztcoe1kOJOSK2sY9bzRY" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
