@@ -53,9 +53,9 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
         initializeToolBar()
         initializeProgressDialog()
 
-        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
-            UserDashboardScreen.fetchLocation(requireContext())
-        }
+//        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
+//            UserDashboardScreen.fetchLocation(requireContext())
+//        }
 
         val requestBody = OffersListReqModel(
             UserUtils.getCity(requireContext()),

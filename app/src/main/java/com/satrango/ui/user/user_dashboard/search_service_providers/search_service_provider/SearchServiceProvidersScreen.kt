@@ -32,8 +32,6 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
-import org.json.JSONObject
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
@@ -81,10 +79,17 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
-            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
-            val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this)
+                .isNotEmpty()
+        ) {
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedSPDetails(this),
+                SearchServiceProviderResModel::class.java
+            )
+            val filter =
+                Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+            val list =
+                ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetails.data) {
                 if (filter.priceRangeFrom.toDouble() <= sp.per_hour.toDouble() && filter.priceRangeTo.toDouble() >= sp.per_hour.toDouble()) {
                     if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
@@ -110,13 +115,15 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
+                    binding.recyclerView.adapter =
+                        SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
                 }
                 filter.highToLow -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
+                    binding.recyclerView.adapter =
+                        SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour })
                 }
                 else -> {
                     binding.listCount.visibility = View.VISIBLE
@@ -140,12 +147,16 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
 
                     binding.searchBar.threshold = 3
-                    val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
+                    val adapter =
+                        ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->
                         keyword = keywordsList[position].keywords_id
                         subCategoryId = keywordsList[position].subcategory_id
-                        UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
+                        UserUtils.saveSelectedKeywordCategoryId(
+                            this,
+                            keywordsList[position].category_id
+                        )
                     }
                     progressDialog.dismiss()
                 }

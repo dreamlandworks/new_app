@@ -36,9 +36,9 @@ class UserHomeScreen :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
-            UserDashboardScreen.fetchLocation(requireContext())
-        }
+//        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
+//            UserDashboardScreen.fetchLocation(requireContext())
+//        }
         if (UserUtils.getUserName(requireContext()).isNotEmpty()) {
             binding.userName.text = "Hiii, ${UserUtils.getUserName(requireContext())}"
         }

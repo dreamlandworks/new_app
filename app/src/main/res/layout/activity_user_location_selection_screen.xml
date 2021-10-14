@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen">
 
     <include
@@ -16,68 +16,75 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="@color/blue_500"
-            app:boxStrokeWidthFocused="@dimen/_1sdp"
-            app:boxBackgroundColor="@color/white"
-            android:hint="@string/my_location"
             android:layout_margin="@dimen/_10sdp"
-            android:elevation="@dimen/_10sdp">
+            android:elevation="@dimen/_10sdp"
+            android:hint="@string/my_location"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@color/blue_500"
+            app:boxStrokeWidthFocused="@dimen/_1sdp">
 
             <AutoCompleteTextView
                 android:id="@+id/myLocation"
                 android:layout_width="match_parent"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:textSize="@dimen/edit_text"
-                android:singleLine="true"
+                android:layout_height="@dimen/_45sdp"
                 android:drawableStart="@drawable/ic_location_searching"
                 android:drawablePadding="@dimen/_10sdp"
-                android:layout_height="@dimen/_45sdp"/>
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/edit_text"
+                android:visibility="gone" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <fragment android:id="@+id/autocomplete_fragment"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_80sdp"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-<!--        <fragment-->
-<!--            android:id="@+id/map"-->
-<!--            android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--            android:layout_alignBottom="@+id/autocomplete_fragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            tools:context="example.com.mapexample.MapsActivity" />-->
+            <fragment
+                android:id="@+id/autocomplete_fragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp" />
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="example.com.mapexample.MapsActivity" />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/_10sdp">
 
             <TextView
                 android:id="@+id/resetBtn"
+                style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:layout_margin="@dimen/_10sdp"
-                android:text="@string/reset"
-                style="@style/blue_outline_button_style" />
+                android:text="@string/reset" />
 
             <TextView
                 android:id="@+id/addBtn"
+                style="@style/filled_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/user_btn_bg_sm"
-                android:layout_alignParentEnd="true"
-                style="@style/filled_button_style"
                 android:enabled="false"
-                android:layout_margin="@dimen/_10sdp"
                 android:text="@string/add" />
 
         </RelativeLayout>

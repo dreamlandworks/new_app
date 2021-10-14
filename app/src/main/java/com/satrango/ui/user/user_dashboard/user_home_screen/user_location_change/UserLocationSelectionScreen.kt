@@ -47,6 +47,8 @@ import java.util.*
 
 class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
     private lateinit var marker: Marker
     private lateinit var binding: ActivityUserLocationSelectionScreenBinding
     private lateinit var viewModel: UserLocationChangeViewModel
@@ -76,26 +78,33 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        Places.initialize(this, "AIzaSyBnV7CqdduNTaXztcoe1kOJOSK2sY9bzRY")
+        Places.initialize(this, getString(R.string.google_maps_and_places_api_key))
 
         val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
-        autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME))
+        autocompleteFragment!!.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                toast(this@UserLocationSelectionScreen, place.name.toString())
+                val latLong = LatLng(place.latLng!!.latitude, place.latLng!!.longitude)
+                mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+                val markerOptions = MarkerOptions()
+                    .position(latLong)
+                    .draggable(true)
+                marker = mMap!!.addMarker(markerOptions)!!
+                latitude = place.latLng!!.latitude
+                longitude = place.latLng!!.longitude
+//                toast(this@UserLocationSelectionScreen, "${place.name}, ${place.latLng!!.latitude}, ${place.latLng!!.longitude}, ${place.address}, ${place.attributions}")
             }
 
             override fun onError(status: Status) {
-                Log.e("ERROR: ", status.statusMessage!!)
                 toast(this@UserLocationSelectionScreen, "An error occurred: $status")
             }
         })
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-//        val mapFragment =
-//            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-//        mapFragment!!.getMapAsync(this)
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment!!.getMapAsync(this)
 
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
@@ -165,6 +174,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.addBtn.setOnClickListener {
+            fetchLocationDetails(this, latitude, longitude)
             finish()
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         }
@@ -173,19 +183,17 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLong = LatLng(
-            UserUtils.getLatitude(this).toDouble(),
-            UserUtils.getLongitude(this).toDouble()
-        )
-        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+//        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
+//        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+
 //        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
 //        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
 
-        val markerOptions = MarkerOptions()
-            .position(latLong)
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-            .draggable(true)
-        marker = mMap!!.addMarker(markerOptions)!!
+//        val markerOptions = MarkerOptions()
+//            .position(latLong)
+////                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
+//            .draggable(true)
+//        marker = mMap!!.addMarker(markerOptions)!!
         mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
 //                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
@@ -193,11 +201,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onMarkerDragEnd(marker: Marker) {
                 mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-                fetchLocationDetails(
-                    this@UserLocationSelectionScreen,
-                    marker.position.latitude,
-                    marker.position.longitude
-                )
+                fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
             }
 
             override fun onMarkerDrag(arg0: Marker) {
@@ -264,17 +268,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             UserUtils.setPostalCode(context, postalCode)
             UserUtils.setAddress(context, knownName)
             if (UserUtils.getAddress(context).isNotEmpty()) {
-                binding.myLocation.setText(
-                    "${UserUtils.getAddress(context)}, ${
-                        UserUtils.getCity(
-                            context
-                        )
-                    }, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${
-                        UserUtils.getPostalCode(
-                            context
-                        )
-                    }"
-                )
+                binding.myLocation.setText("${UserUtils.getAddress(context)}, ${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
             } else {
                 binding.myLocation.setText(
                     "${UserUtils.getCity(context)}, ${
@@ -291,11 +285,11 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+//    override fun onBackPressed() {
+//        super.onBackPressed()
 //        finish()
 //        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-    }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
