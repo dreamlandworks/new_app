@@ -3,6 +3,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderViewPlacedBidScreenBinding
@@ -33,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
 
     private lateinit var viewModel: PostJobViewModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityProviderViewPlacedBidScreenBinding
     private var categoryId = 0
     private var postJobId = 0
@@ -54,9 +56,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -177,5 +177,12 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
 
     override fun deleteAttachment(position: Int, imagePath: Attachment) {
 
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

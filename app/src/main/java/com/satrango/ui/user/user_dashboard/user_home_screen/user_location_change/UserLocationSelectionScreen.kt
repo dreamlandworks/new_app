@@ -78,7 +78,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        Places.initialize(this, getString(R.string.google_maps_and_places_api_key))
+        Places.initialize(this, getString(R.string.google_maps_key))
 
         val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
         autocompleteFragment!!.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
@@ -183,17 +183,17 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-//        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
-//        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
+        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
 
 //        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
 //        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
 
-//        val markerOptions = MarkerOptions()
-//            .position(latLong)
-////                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-//            .draggable(true)
-//        marker = mMap!!.addMarker(markerOptions)!!
+        val markerOptions = MarkerOptions()
+            .position(latLong)
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
+            .draggable(true)
+        marker = mMap!!.addMarker(markerOptions)!!
         mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
 //                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)

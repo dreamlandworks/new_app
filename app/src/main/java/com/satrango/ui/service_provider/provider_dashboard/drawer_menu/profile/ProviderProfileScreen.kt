@@ -1,5 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
@@ -7,15 +8,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderProfileScreenBinding
@@ -39,7 +44,7 @@ class ProviderProfileScreen : AppCompatActivity() {
     companion object {
         lateinit var professionalDetails: ProviderProfileProfessionResModel
         lateinit var binding: ActivityProviderProfileScreenBinding
-        lateinit var progressDialog: ProgressDialog
+        lateinit var progressDialog: BeautifulProgressDialog
         var selectedEncodedImage = ""
     }
 
@@ -47,6 +52,12 @@ class ProviderProfileScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderProfileScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
@@ -199,9 +210,10 @@ class ProviderProfileScreen : AppCompatActivity() {
         return Uri.parse(path)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading Profile...")
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

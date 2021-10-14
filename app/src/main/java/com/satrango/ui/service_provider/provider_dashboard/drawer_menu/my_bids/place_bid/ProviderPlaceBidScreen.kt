@@ -1,5 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
@@ -16,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
@@ -48,7 +50,7 @@ import java.io.InputStream
 
 class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
 
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private val CAMERA_REQUEST: Int = 101
     private val GALLERY_REQUEST: Int = 100
     companion object {
@@ -78,9 +80,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         binding.expiresOn.text = intent.getStringExtra("expiresIn")!!
         binding.bidRanges.text = intent.getStringExtra("bidRanges")!!
@@ -425,6 +425,13 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 }
             }
         })
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

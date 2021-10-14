@@ -5,15 +5,16 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.hardware.Camera
 import android.media.MediaRecorder
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
@@ -45,16 +46,20 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var mMediaRecorder: MediaRecorder
     private lateinit var mServiceCamera: Camera
     private lateinit var surfaceHolder: SurfaceHolder
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpSevenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Video Uploading...")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
+
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(ProviderSignUpFiveRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFiveViewModel::class.java]
@@ -256,6 +261,13 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
             e.printStackTrace()
         }
 //        Toast.makeText(this, videoPath, Toast.LENGTH_SHORT).show()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

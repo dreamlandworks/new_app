@@ -3,6 +3,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -33,7 +35,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityProviderInVoiceScreenBinding
     private lateinit var response: BookingDetailsResModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var categoryId = ""
     private var bookingId = ""
     private var userId = ""
@@ -47,9 +49,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -161,5 +161,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

@@ -6,8 +6,9 @@
     <color name="blue_700">#0070FF</color>
     <color name="blue_500">#0A84FF</color>
     <color name="blue_300">#5FAEFD</color>
+    <color name="progressDialogColor">#F1F2F3</color>
 
-    <color name="purple_700">#8D5FF5</color>
+    <color name="purple_700">#6D31F5</color>
     <color name="purple_500">#8D5FF5</color>
 
     <color name="red">#ff3300</color>

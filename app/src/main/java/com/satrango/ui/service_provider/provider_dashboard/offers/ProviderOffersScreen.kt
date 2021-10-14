@@ -1,6 +1,8 @@
 package com.satrango.ui.service_provider.provider_dashboard.offers
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentProviderOffersScreenBinding
@@ -22,6 +25,8 @@ import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProviderOffersScreenBinding, ProviderOfferRepository>() {
+
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun getFragmentViewModel(): Class<ProviderOfferViewModel> = ProviderOfferViewModel::class.java
 
@@ -42,6 +47,8 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
+        initializeProgressDialog()
+
         loadProviderOffersScreen()
     }
 
@@ -51,10 +58,6 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             PermissionUtils.connectionAlert(requireContext()) { loadProviderOffersScreen() }
             return
         }
-
-        val progressDialog = ProgressDialog(requireContext())
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
 
         val requestBody = OffersListReqModel(
             UserUtils.getCity(requireContext()),
@@ -82,6 +85,13 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             }
         })
 
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

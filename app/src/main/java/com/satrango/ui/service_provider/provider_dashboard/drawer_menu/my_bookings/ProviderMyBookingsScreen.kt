@@ -3,16 +3,21 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
@@ -41,7 +46,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     private lateinit var myBookingViewModel: MyBookingsViewModel
     private lateinit var binding: ActivityProviderMyBookingsScreenBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var viewModel: ProviderBookingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,15 +54,19 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         binding = ActivityProviderMyBookingsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
+
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
         val myBookingFactory = ViewModelFactory(MyBookingsRepository())
         myBookingViewModel = ViewModelProvider(this, myBookingFactory)[MyBookingsViewModel::class.java]
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
@@ -413,5 +422,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

@@ -7,14 +7,18 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
+import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpFourBinding
 import com.satrango.remote.NetworkResponse
@@ -36,6 +40,12 @@ class ProviderSignUpFour : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpFourBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
 
         val factory = ViewModelFactory(ProviderSignUpFourRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]

@@ -6,14 +6,18 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +29,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
@@ -45,23 +50,23 @@ import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScre
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
-import org.json.JSONObject
 import java.util.*
+
 
 class ProviderDashboard : AppCompatActivity() {
 
-    private lateinit var viewModel: ProviderDashboardViewModel
-    private lateinit var binding: ActivityProviderDashboardBinding
     private lateinit var referralId: TextView
     private lateinit var toolBarTitle: TextView
-    private lateinit var toolBarBackTVBtn: TextView
     private lateinit var toolBarBackBtn: ImageView
-    private lateinit var userProviderSwitch: SwitchCompat
+    private lateinit var toolBarBackTVBtn: TextView
     private lateinit var profileImage: CircleImageView
+    private lateinit var userProviderSwitch: SwitchCompat
+    private lateinit var viewModel: ProviderDashboardViewModel
+    private lateinit var progressDialog: BeautifulProgressDialog
+    private lateinit var binding: ActivityProviderDashboardBinding
 
     private var flag: Boolean = true
     private lateinit var backStack: Deque<Int>
@@ -73,6 +78,14 @@ class ProviderDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
+
+        initializeProgressDialog()
 
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -285,9 +298,6 @@ class ProviderDashboard : AppCompatActivity() {
     }
 
     private fun loadUserProfileData() {
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
         viewModel.userProfile(this).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -323,7 +333,7 @@ class ProviderDashboard : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(this, "Error : ${it.data.toString()}" )
+                    toast(this, "Error : ${it.data.toString()}")
                     startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
             }
@@ -432,7 +442,7 @@ class ProviderDashboard : AppCompatActivity() {
                     this
                 ).toInt()
             )
-            toast(this, Gson().toJson(requestBody))
+//            toast(this, Gson().toJson(requestBody))
             viewModel.saveLocation(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -452,6 +462,13 @@ class ProviderDashboard : AppCompatActivity() {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

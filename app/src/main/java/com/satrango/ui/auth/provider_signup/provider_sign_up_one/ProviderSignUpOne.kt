@@ -1,13 +1,20 @@
 package com.satrango.ui.auth.provider_signup.provider_sign_up_one
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
+import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpOneBinding
 import com.satrango.remote.NetworkResponse
@@ -18,6 +25,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Provider
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.snackBar
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,16 +34,20 @@ class ProviderSignUpOne : AppCompatActivity() {
     private lateinit var response: ProviderOneModel
     private lateinit var viewModel: ProviderSignUpOneViewModel
     private lateinit var binding: ActivityProviderSignUpOneBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpOneBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
+
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(ProviderSignUpOneRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpOneViewModel::class.java]
@@ -179,6 +191,13 @@ class ProviderSignUpOne : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

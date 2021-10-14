@@ -1,12 +1,18 @@
 package com.satrango.ui.auth.provider_signup.provider_sign_up_two
 
 import android.R
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
 import com.satrango.base.ViewModelFactory
@@ -24,16 +30,20 @@ class ProviderSignUpTwo : AppCompatActivity() {
     private lateinit var keywordsMList: List<com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.Data>
     private lateinit var viewModel: ProviderSignUpTwoViewModel
     private lateinit var binding: ActivityProviderSignUpTwoBinding
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpTwoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Loading...")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(com.satrango.R.color.purple_700))
+        }
+
+        initializeProgressDialog()
 
         profession_Id = intent.getStringExtra("profession_id")!!
 
@@ -121,5 +131,13 @@ class ProviderSignUpTwo : AppCompatActivity() {
             ProviderUtils.aboutMe = binding.aboutMe.text.toString().trim()
             startActivity(Intent(this@ProviderSignUpTwo, ProviderSignUpThree::class.java))
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(
+            com.satrango.R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${com.satrango.R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.progressDialogColor))
     }
 }

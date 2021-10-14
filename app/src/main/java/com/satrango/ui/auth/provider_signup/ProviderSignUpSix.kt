@@ -5,14 +5,19 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.hardware.Camera
 import android.media.MediaRecorder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
 import android.view.SurfaceHolder
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpSixBinding
@@ -41,7 +46,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var mMediaRecorder: MediaRecorder
     private lateinit var mServiceCamera: Camera
     private lateinit var surfaceHolder: SurfaceHolder
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var timerApp: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +54,13 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
         binding = ActivityProviderSignUpSixBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage("Video Uploading...")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
 
+        initializeProgressDialog()
         val factory = ViewModelFactory(ProviderSignUpFiveRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFiveViewModel::class.java]
 
@@ -247,6 +255,13 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
         super.onPause()
         timerApp?.onFinish()
         timerApp?.cancel()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

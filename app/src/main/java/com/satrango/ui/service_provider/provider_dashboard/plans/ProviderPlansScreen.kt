@@ -1,14 +1,18 @@
 package com.satrango.ui.service_provider.provider_dashboard.plans
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.razorpay.Checkout
@@ -21,8 +25,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderPaymentListener
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanListener
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -34,8 +36,9 @@ import java.util.*
 
 class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, PaymentResultListener {
 
-    private var paymentData: com.satrango.ui.service_provider.provider_dashboard.plans.models.Data? = null
-    private lateinit var progressDialog: ProgressDialog
+    private var paymentData: com.satrango.ui.service_provider.provider_dashboard.plans.models.Data? =
+        null
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityProviderPlansScreensBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +46,21 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
         binding = ActivityProviderPlansScreensBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeProgressDialog()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
             .setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
             .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_account)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -65,7 +73,8 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = ProviderPlanAdapter(it.data!!.data, it.data.activated_plan,  this)
+                    binding.recyclerView.adapter =
+                        ProviderPlanAdapter(it.data!!.data, it.data.activated_plan, this)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -129,7 +138,7 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
         )
 
         viewModel.saveMemberShip(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -157,5 +166,16 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
         } else {
             showSuccessDialog()
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

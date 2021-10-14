@@ -2,6 +2,7 @@ package com.satrango.ui.user.bookings.view_booking_details.installments_request
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -72,9 +73,9 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
-        progressDialog.setLayoutColor(resources.getColor(R.color.white))
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
     override fun acceptInstallment(data: GoalsInstallmentsDetail) {

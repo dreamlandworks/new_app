@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.user_alerts
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,9 +65,9 @@ class UserAlertScreen :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
-        progressDialog.setLayoutColor(resources.getColor(R.color.white))
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
     private fun loadNotActionableAlerts() {

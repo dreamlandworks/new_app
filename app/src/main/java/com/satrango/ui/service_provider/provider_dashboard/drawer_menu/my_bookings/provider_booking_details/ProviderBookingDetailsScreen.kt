@@ -3,6 +3,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
@@ -44,7 +46,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityProviderBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var userId = ""
     private var categoryId = ""
     private var bookingId = ""
@@ -54,10 +56,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding = ActivityProviderBookingDetailsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
-
+        initializeProgressDialog()
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
@@ -284,5 +283,12 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         dialog.setContentView(dialogView)
         dialog.setCancelable(false)
         dialog.show()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

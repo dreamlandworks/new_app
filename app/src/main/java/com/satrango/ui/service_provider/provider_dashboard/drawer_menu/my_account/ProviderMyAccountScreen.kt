@@ -3,12 +3,17 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_accou
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyAccountScreenBinding
@@ -23,6 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderMyAccountScreen : AppCompatActivity() {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityProviderMyAccountScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,18 +36,8 @@ class ProviderMyAccountScreen : AppCompatActivity() {
         binding = ActivityProviderMyAccountScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
-
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading...")
-        progressDialog.setCancelable(false)
+        initializeToolBar()
+        initializeProgressDialog()
 
         val factory = ViewModelFactory(ProviderMyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyAccountViewModel::class.java]
@@ -67,6 +63,23 @@ class ProviderMyAccountScreen : AppCompatActivity() {
         }
     }
 
+    private fun initializeToolBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
+
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
+            .setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+            .setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: ProviderMyAccountResModel) {
 
@@ -90,5 +103,12 @@ class ProviderMyAccountScreen : AppCompatActivity() {
             }
         }
 
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }
