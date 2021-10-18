@@ -101,10 +101,18 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.spLayout.visibility = View.GONE
                     binding.completedBtn.text = "Start"
                     binding.completedBtn.setOnClickListener {
-                        requestOTP()
+                        if (FROM_PROVIDER) {
+                            requestOTP("SP")
+                        } else {
+                            requestOTP("User")
+                        }
                     }
                     binding.startBtn.setOnClickListener {
-                        requestOTP()
+                        if (FROM_PROVIDER) {
+                            requestOTP("SP")
+                        } else {
+                            requestOTP("User")
+                        }
                     }
                 } else {
                     binding.spLayout.visibility = View.VISIBLE
@@ -133,7 +141,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.requestInstallmentBtn.visibility = View.GONE
                     binding.raiseExtraDemandBtn.visibility = View.GONE
                     binding.completedBtn.setOnClickListener {
-                        requestOTP()
+                        if (FROM_PROVIDER) {
+                            requestOTP("SP")
+                        } else {
+                            requestOTP("User")
+                        }
                     }
                 }
             }
@@ -307,10 +319,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun requestOTP() {
+    private fun requestOTP(userType: String) {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt())
+        viewModel.otpRequest(this, bookingId.toInt(), userType)
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {

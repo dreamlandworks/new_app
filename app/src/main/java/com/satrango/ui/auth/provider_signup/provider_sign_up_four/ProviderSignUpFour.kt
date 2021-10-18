@@ -1,6 +1,7 @@
 package com.satrango.ui.auth.provider_signup.provider_sign_up_four
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -122,8 +123,14 @@ class ProviderSignUpFour : AppCompatActivity() {
 
     private fun galleryIntent() {
         ProviderUtils.imagePath = ""
-        val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(i, SELECT_FILE)
+//        val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//        startActivityForResult(i, SELECT_FILE)
+        val intent = Intent()
+        val mineType = arrayOf("image/jpeg", "image/jpg", "image/png")
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mineType)
+        startActivityForResult(intent, SELECT_FILE)
     }
 
     private fun cameraIntent() {
@@ -133,11 +140,37 @@ class ProviderSignUpFour : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_FILE) {
-                onSelectFromGalleryResult(data)
-            } else if (requestCode == REQUEST_CAMERA) onCaptureImageResult(data!!)
+        var imageStream: InputStream? = null
+        if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImage = data.data
+            try {
+                imageStream = contentResolver.openInputStream(data.data!!)
+                binding.imagePath.text = data.data!!.path
+                ProviderUtils.imagePath = data.data!!.path!!
+            } catch (e: Exception) {
+                snackBar(binding.submitBtn, e.message!!)
+            }
         }
+//        else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+//            val extras: Bundle = data.extras!!
+//            val imageBitmap = extras["data"] as Bitmap?
+//            try {
+//                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
+//            } catch (e: Exception) {
+//                snackBar(binding.submitBtn, e.message!!)
+//            }
+//        }
+        if (imageStream != null) {
+            val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+            selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
+            toast(this, selectedEncodedImage)
+        }
+
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == SELECT_FILE) {
+//                onSelectFromGalleryResult(data)
+//            } else if (requestCode == REQUEST_CAMERA) onCaptureImageResult(data!!)
+//        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -145,8 +178,7 @@ class ProviderSignUpFour : AppCompatActivity() {
         val thumbnail = data.extras!!["data"] as Bitmap?
         val bytes = ByteArrayOutputStream()
         thumbnail!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val destination =
-            File(Environment.getExternalStorageDirectory(), System.currentTimeMillis().toString())
+        val destination = File(Environment.getExternalStorageDirectory(), System.currentTimeMillis().toString())
         val fo: FileOutputStream
         try {
             fo = FileOutputStream(destination)

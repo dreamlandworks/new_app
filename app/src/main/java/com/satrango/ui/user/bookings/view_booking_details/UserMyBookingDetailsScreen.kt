@@ -148,15 +148,19 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-            requestOTP()
+            if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+                requestOTP("SP")
+            } else {
+                requestOTP("User")
+            }
         }
 
     }
 
-    private fun requestOTP() {
+    private fun requestOTP(userType: String) {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt())
+        viewModel.otpRequest(this, bookingId.toInt(), userType)
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {

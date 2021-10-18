@@ -187,7 +187,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     override fun requestOTP(bookingId: Int) {
 
-        myBookingViewModel.otpRequest(this, bookingId)
+        myBookingViewModel.otpRequest(this, bookingId, "SP")
             .observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {

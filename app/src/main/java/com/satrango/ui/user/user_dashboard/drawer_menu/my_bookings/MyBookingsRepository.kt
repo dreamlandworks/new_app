@@ -14,8 +14,8 @@ class MyBookingsRepository: BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().getMyBookingDetails(requestBody)
     }
 
-    suspend fun generateOTP(bookingId: Int): ResponseBody {
-        return RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId)
+    suspend fun generateOTP(bookingId: Int, userType: String): ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId, userType)
     }
 
     suspend fun validateOTP(bookingId: Int, spId: Int): ResponseBody {

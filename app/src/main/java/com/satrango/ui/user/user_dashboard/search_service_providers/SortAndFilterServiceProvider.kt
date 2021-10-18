@@ -37,8 +37,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         binding.apply {
 
             resetBtn.setOnClickListener {
-                finish()
-                startActivity(intent)
+                onBackPressed()
             }
 
             kmSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {

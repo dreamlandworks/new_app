@@ -1,6 +1,7 @@
 package com.satrango.ui.auth.provider_signup.provider_sign_up_five
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,6 +28,7 @@ class ProviderSignUpFiveViewModel(private val repository: ProviderSignUpFiveRepo
                 try {
                     val response = async { repository.uploadVideo(userId, videoNo, key, videoRecord) }
                     val jsonResponse = JSONObject(response.await().string())
+                    Log.e("VEDIO: ", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         videoStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {

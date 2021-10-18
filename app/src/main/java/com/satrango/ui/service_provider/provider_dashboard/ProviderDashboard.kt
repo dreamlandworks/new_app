@@ -2,11 +2,9 @@ package com.satrango.ui.service_provider.provider_dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
@@ -32,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -40,6 +37,9 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.login_screen.LoginScreen
+import com.satrango.ui.auth.provider_signup.ProviderSignUpSeven
+import com.satrango.ui.auth.provider_signup.ProviderSignUpSix
+import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen
@@ -200,7 +200,7 @@ class ProviderDashboard : AppCompatActivity() {
         toolBarBackTVBtn.setOnClickListener { onBackPressed() }
     }
 
-    private fun showActivationDialog(context: Context) {
+    private fun showActivationDialog(context: Context, activationCode: String) {
         val dialog = BottomSheetDialog(context)
         val dialogView = layoutInflater.inflate(R.layout.service_provider_activation_dialog, null)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
@@ -212,7 +212,23 @@ class ProviderDashboard : AppCompatActivity() {
         }
         yesBtn.setOnClickListener {
             dialog.dismiss()
-            startActivity(Intent(this, ProviderSignUpOne::class.java))
+            when (activationCode) {
+                "0" -> {
+                    startActivity(Intent(this, ProviderSignUpOne::class.java))
+                }
+                "1" -> {
+                    startActivity(Intent(this, ProviderSignUpFive::class.java))
+                }
+                "2" -> {
+                    startActivity(Intent(this, ProviderSignUpSix::class.java))
+                }
+                "3" -> {
+                    startActivity(Intent(this, ProviderSignUpSeven::class.java))
+                }
+                "4" -> {
+                    startActivity(Intent(this, ProviderDashboard::class.java))
+                }
+            }
         }
         noBtn.setOnClickListener {
             dialog.dismiss()
@@ -256,6 +272,7 @@ class ProviderDashboard : AppCompatActivity() {
         dialog.setPositiveButton("YES") { dialogInterface, _ ->
             dialogInterface.dismiss()
             UserUtils.setUserLoggedInVia(this, "", "")
+            UserUtils.deleteUserCredentials(this)
             startActivity(Intent(this, LoginScreen::class.java))
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->
@@ -309,7 +326,7 @@ class ProviderDashboard : AppCompatActivity() {
                     when (response.sp_activated) {
                         "1" -> {
                             // Service Provider Not Activated
-                            showActivationDialog(this)
+                            showActivationDialog(this, response.activation_code)
                         }
                         "2" -> {
                             // Service Provider Approval Waiting

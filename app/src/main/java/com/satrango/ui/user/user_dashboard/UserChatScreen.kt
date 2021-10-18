@@ -54,7 +54,6 @@ class UserChatScreen : Fragment() {
                 onlineBtn.setBackgroundResource(0)
             }
 
-
         }
 
         return binding.root

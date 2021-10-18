@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -52,6 +53,10 @@ class LoginScreen : AppCompatActivity() {
         PermissionUtils.checkAndRequestPermissions(this)
         initializeProgressDialog()
 
+        Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
+            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+        }
+
         val factory = ViewModelFactory(LoginRepository())
         viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
@@ -76,8 +81,6 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.FORGOT_PWD = false
                 startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
             }
-
-
 
             signInBtn.setOnClickListener {
                 val phoneNo = mobileNo.text.toString().trim()
@@ -261,6 +264,13 @@ class LoginScreen : AppCompatActivity() {
 
     override fun onBackPressed() {
         moveTaskToBack(true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.password)]!!.isNotEmpty()) {
+            startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
+        }
     }
 
 }

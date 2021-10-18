@@ -58,6 +58,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var daysList: ArrayList<MonthsModel>
     private lateinit var binding: ActivityBookingDateAndTimeScreenBinding
     private lateinit var data: Data
+    private var userType = ""
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +68,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        if (FROM_PROVIDER) {
+            userType = "SP"
+        } else {
+            userType = "User"
+        }
 
         calendar = Calendar.getInstance()
 
@@ -192,7 +199,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.time_slot_from,
             UserUtils.re_scheduled_date,
             UserUtils.re_scheduled_time_slot_from.toInt(),
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            userType
         )
 
         viewModel.rescheduleBooking(this, requestBody).observe(this, {

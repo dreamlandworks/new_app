@@ -1,9 +1,11 @@
 package com.satrango.ui.service_provider.provider_dashboard
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
 import com.satrango.utils.hasInternetConnection
@@ -25,6 +27,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
             viewModelScope.launch {
                 try {
                     val response = async { repository.userProfile(context) }
+                    Log.e("PROFILE: ", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
                         userProfile.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -45,6 +48,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                 try {
                     val response = repository.uploadUserLocation(requestBody)
                     val jsonResponse = JSONObject(response.string())
+                    Log.e("LOCATION", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         saveLocation.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {

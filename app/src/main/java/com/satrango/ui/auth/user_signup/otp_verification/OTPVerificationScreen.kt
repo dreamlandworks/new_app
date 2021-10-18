@@ -60,7 +60,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         secondNo.setBackgroundResource(R.drawable.wrongpricebackground)
                         thirdNo.setBackgroundResource(R.drawable.wrongpricebackground)
                         fourthNo.setBackgroundResource(R.drawable.wrongpricebackground)
-                        snackBar(nextBtn, "Invalid OTP")
+                        snackBar(nextBtn, "Please Enter valid OTP")
                     }
                 }
             }

@@ -45,6 +45,7 @@ class UserHomeScreen :
             binding.userName.text = "Hiii, ${UserUtils.getUserName(requireContext())}"
         }
         loadHomeScreen()
+        toast(requireContext(), UserUtils.getUserId(requireContext()))
 
     }
 

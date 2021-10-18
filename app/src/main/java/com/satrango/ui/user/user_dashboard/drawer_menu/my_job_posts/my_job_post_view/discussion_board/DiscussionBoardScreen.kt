@@ -6,13 +6,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -47,6 +48,7 @@ import kotlin.collections.ArrayList
 
 class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
 
+    private var sender = ""
     private lateinit var viewModel: PostJobViewModel
     private var postJobId: Int = 0
     private val PERMISSIONS_REQUEST_CODE: Int = 103
@@ -98,7 +100,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
         binding.pdfBtn.setOnClickListener {
             binding.pinLayout.visibility = View.GONE
             snackBar(binding.recyclerView, "This Feature is in development stage")
-//            getPdfFromFileStorage()
+            getPdfFromFileStorage()
         }
 
         binding.sendBtn.setOnClickListener {
@@ -134,6 +136,9 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
             binding.layoutThree.setBackgroundResource(R.drawable.provider_chat_edit_text_bg)
             binding.sendBtn.setImageResource(R.drawable.ic_round_send_purple_24)
+            sender = "SP"
+        } else {
+            sender = "User"
         }
     }
 
@@ -169,7 +174,8 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             postJobId,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            sender
         )
         viewModel.discussionMessage(this, requestBody).observe(this, {
             when (it) {
@@ -335,18 +341,64 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
 //                        )
 //                    }
 //                }
-                val file = File(
-                    Environment.getExternalStorageDirectory().absolutePath + "/" + data.data!!.path!!.split(
-                        ":"
-                    )[1]
-                )
+//                val file = File(
+//                    Environment.getExternalStorageDirectory().absolutePath + "/" + data.data!!.path!!.split(
+//                        ":"
+//                    )[1]
+//                )
 //                val encodedString = encodeFileToBase64Binary(file)
 //                encodedImages.add(Attachment(encodedString!!))
+                copyFileToInternalStorage(data.data!!, "")?.let { toast(this, it) }
             } catch (e: Exception) {
                 toast(this, e.message!!)
             }
         }
 
+    }
+
+    private fun copyFileToInternalStorage(uri: Uri, newDirName: String): String? {
+        val returnCursor: Cursor? = getContentResolver().query(
+            uri, arrayOf(
+                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
+            ), null, null, null
+        )
+
+
+        /*
+     * Get the column indexes of the data in the Cursor,
+     *     * move to the first row in the Cursor, get the data,
+     *     * and display it.
+     * */
+        val nameIndex: Int = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        val sizeIndex: Int = returnCursor.getColumnIndex(OpenableColumns.SIZE)
+        returnCursor.moveToFirst()
+        val name: String = returnCursor.getString(nameIndex)
+        val size = java.lang.Long.toString(returnCursor.getLong(sizeIndex))
+        val output: File
+        if (newDirName != "") {
+            val dir = File(getFilesDir().toString() + "/" + newDirName)
+            if (!dir.exists()) {
+                dir.mkdir()
+            }
+            output = File(getFilesDir().toString() + "/" + newDirName + "/" + name)
+        } else {
+            output = File(getFilesDir().toString() + "/" + name)
+        }
+        try {
+            val inputStream: InputStream = getContentResolver().openInputStream(uri)!!
+            val outputStream = FileOutputStream(output)
+            var read = 0
+            val bufferSize = 1024
+            val buffers = ByteArray(bufferSize)
+            while (inputStream.read(buffers).also { read = it } != -1) {
+                outputStream.write(buffers, 0, read)
+            }
+            inputStream.close()
+            outputStream.close()
+        } catch (e: java.lang.Exception) {
+            Log.e("Exception", e.message!!)
+        }
+        return output.path
     }
 
     private fun encodeFileToBase64Binary(yourFile: File): String? {
@@ -419,7 +471,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             UserUtils.getUserId(this).toInt()
         )
         viewModel.likeClicked(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
 
                 }

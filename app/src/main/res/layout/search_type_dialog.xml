@@ -24,11 +24,65 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/you_query_has"
+        android:textColor="@color/grey_60"
+        android:textSize="@dimen/text" />
+
+    <TextView
+        android:id="@+id/providerCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:text="@string/_0"
+        android:textColor="@color/red"
+        android:textSize="@dimen/text"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/service_providers"
+        android:textColor="@color/grey_60"
+        android:textSize="@dimen/text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/in"
+        android:textColor="@color/grey_60"
+        android:textSize="@dimen/text" />
+
+    <TextView
+        android:id="@+id/jobLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/installment"
+        android:textColor="@color/red"
+        android:textSize="@dimen/text"
+        android:textStyle="bold"/>
+
+    <TextView
         android:id="@+id/question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:padding="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
         android:text="@string/would_you_like_to"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
@@ -36,9 +90,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_15sdp">
+        android:layout_marginVertical="@dimen/_15sdp"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/viewResults"

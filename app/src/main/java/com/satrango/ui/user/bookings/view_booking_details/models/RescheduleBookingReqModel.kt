@@ -7,5 +7,6 @@ data class RescheduleBookingReqModel(
     val rescheduled_time_slot_from: String,
     val scheduled_date: String,
     val scheduled_time_slot_id: Int,
-    val users_id: Int
+    val users_id: Int,
+    val user_type: String
 )

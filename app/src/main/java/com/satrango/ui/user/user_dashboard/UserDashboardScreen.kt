@@ -196,6 +196,7 @@ class UserDashboardScreen : AppCompatActivity() {
         dialog.setPositiveButton("YES") { dialogInterface, _ ->
             dialogInterface.dismiss()
             UserUtils.setUserLoggedInVia(this, "", "")
+            UserUtils.deleteUserCredentials(this)
             startActivity(Intent(this, LoginScreen::class.java))
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->

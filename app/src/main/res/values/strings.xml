@@ -571,6 +571,9 @@
     <string name="no_thanks_search_again">No Thanks, Search again</string>
     <string name="results_for">results for</string>
     <string name="showing">Showing</string>
+    <string name="you_query_has">Your query has</string>
+    <string name="service_providers">Service Providers</string>
+    <string name="in">in</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

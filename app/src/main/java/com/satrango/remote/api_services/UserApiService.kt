@@ -348,7 +348,8 @@ interface UserApiService {
     @GET(UserApiEndPoints.BOOKING_STATUS_OTP)
     suspend fun getBookingStatusOTP(
         @Query("key") key: String,
-        @Query("booking_id") bookingId: Int
+        @Query("booking_id") bookingId: Int,
+        @Query("user_type") userType: String
     ): ResponseBody
 
     @GET(UserApiEndPoints.VALIDATE_OTP)

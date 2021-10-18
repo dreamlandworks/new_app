@@ -9,5 +9,6 @@ data class DiscussionBoardMessageReqModel(
     val created_on: String,
     val key: String,
     val post_job_id: Int,
-    val users_id: Int
+    val users_id: Int,
+    val user_type: String
 )
