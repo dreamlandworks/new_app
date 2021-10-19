@@ -237,6 +237,7 @@
     <string name="view_profile">View Profile</string>
     <string name="view_details">View Details</string>
     <string name="month">/Month</string>
+    <string name="month_">Month</string>
     <string name="just_now">Just Now</string>
     <string name="review_later">Review Later</string>
     <string name="review_now">Review Now</string>
@@ -280,7 +281,7 @@
     <string name="street_name">Street Name</string>
     <string name="zip_pincode">Zip / Pincode</string>
     <string name="city_name">City Name</string>
-    <string name="add">Add</string>
+    <string name="add">Add Location</string>
     <string name="reset">Reset</string>
     <string name="hello_there">Hello There,</string>
     <string name="confirm_activation">Confirm Activation</string>
@@ -574,6 +575,12 @@
     <string name="you_query_has">Your query has</string>
     <string name="service_providers">Service Providers</string>
     <string name="in">in</string>
+    <string name="please_select_date_of_service">Please select date of service</string>
+    <string name="use_current_location">Use Current Location</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -304,11 +304,11 @@
                     android:src="@drawable/ic_facebook"
                     tools:ignore="ContentDescription" />
 
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/facebookSignBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+<!--                <com.facebook.login.widget.LoginButton-->
+<!--                    android:id="@+id/facebookSignBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:visibility="gone" />-->
 
             </LinearLayout>
         </LinearLayout>

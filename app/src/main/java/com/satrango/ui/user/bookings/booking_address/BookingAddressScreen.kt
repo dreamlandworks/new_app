@@ -391,7 +391,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         dialog.show()
     }
 
-    override fun selectedMonth(position: Int, listType: String) {
+    override fun selectedMonth(position: Int, dateTime: String, listType: String) {
         val tempAddress = arrayListOf<MonthsModel>()
         if (UserUtils.getFromInstantBooking(this)) {
             if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {

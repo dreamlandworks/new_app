@@ -1,15 +1,17 @@
 package com.satrango.ui.user.bookings.booking_date_time
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
@@ -37,7 +39,12 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.Month
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +54,10 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         var FROM_PROVIDER = false
     }
 
+    private lateinit var morningTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var afternoonTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var eveningTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var nightTimings: java.util.ArrayList<MonthsModel>
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var blocked_time_slots: List<BlockedTimeSlot>
     private lateinit var preferred_time_slots: List<PreferredTimeSlot>
@@ -60,6 +71,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var data: Data
     private var userType = ""
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +81,15 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         initializeToolBar()
         initializeProgressDialog()
 
-        if (FROM_PROVIDER) {
-            userType = "SP"
+        userType = if (FROM_PROVIDER) {
+            "SP"
         } else {
-            userType = "User"
+            "User"
         }
 
         calendar = Calendar.getInstance()
+
+        binding.selectedMonth.text = LocalDate.now().month.name
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
@@ -182,7 +196,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -232,7 +250,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val message = dialogView.findViewById<TextView>(R.id.message)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         headerMessage.text = "Your request not accepted"
-        message.text = "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
+        message.text =
+            "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
         yesBtn.text = "No, Leave it"
         noBtn.text = "Cancel Booking"
         closeBtn.setOnClickListener {
@@ -316,7 +335,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             for (index in weekDays.indices) {
                                 if (weekDays[index] == goal) {
                                     if (slot.day_slot == (index + 1).toString()) {
-                                        availableSlots.add(day)
+                                        if (!availableSlots.contains(day)) {
+                                            availableSlots.add(day)
+                                        }
                                     }
                                 }
                             }
@@ -334,6 +355,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.dayRv.adapter = MonthsAdapter(availableSlots, this@BookingDateAndTimeScreen, "D")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadTimings(position: Int) {
         availableTimeSlots = ArrayList()
         val bookedSlots = ArrayList<MonthsModel>()
@@ -371,13 +393,71 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 availableTimeSlots.add(actualTimeSlots[index])
             }
         }
-        binding.timeRv.layoutManager = LinearLayoutManager(
-            this@BookingDateAndTimeScreen,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        binding.timeRv.adapter =
-            MonthsAdapter(availableTimeSlots, this@BookingDateAndTimeScreen, "T")
+//        binding.timeRv.layoutManager = LinearLayoutManager(
+//            this@BookingDateAndTimeScreen,
+//            LinearLayoutManager.HORIZONTAL,
+//            false
+//        )
+        binding.morningTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.afternoonTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.eveningTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.nightTimeRv.layoutManager = GridLayoutManager(this, 2)
+        morningTimings = ArrayList<MonthsModel>()
+        afternoonTimings = ArrayList<MonthsModel>()
+        eveningTimings = ArrayList<MonthsModel>()
+        nightTimings = ArrayList<MonthsModel>()
+        availableTimeSlots.forEachIndexed { index, monthsModel ->
+            when {
+                isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!morningTimings.contains(availableTimeSlots[index - 1])) {
+                            morningTimings.add(availableTimeSlots[index - 1])
+                        }
+                    }
+                    morningTimings.add(monthsModel)
+                }
+                isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
+                            afternoonTimings.add(availableTimeSlots[index - 1])
+                        }
+                    }
+                    afternoonTimings.add(monthsModel)
+                }
+                isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
+                            eveningTimings.add(availableTimeSlots[index - 1])
+                        }
+                    }
+                    eveningTimings.add(monthsModel)
+                }
+                isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!nightTimings.contains(availableTimeSlots[index - 1])) {
+                            nightTimings.add(availableTimeSlots[index - 1])
+                        }
+                    }
+                    nightTimings.add(monthsModel)
+                }
+            }
+        }
+//        binding.morningTimeRv.adapter = MonthsAdapter(availableTimeSlots.distinctBy { data -> data.month } as ArrayList<MonthsModel>,
+//            this@BookingDateAndTimeScreen,
+//            "T")
+        binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+        binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+        binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+        binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun isNowTimeBetween(startTime: String?, endTime: String?, compareTime: String): Boolean {
+        val start: LocalTime = LocalTime.parse(startTime!!.split(":")[0] + ":" + startTime.split(":")[1]) //"22:00"
+        val end: LocalTime = LocalTime.parse(endTime!!.split(":")[0] + ":" + endTime.split(":")[1]) //"10:00"
+        val now: LocalTime = LocalTime.parse(compareTime.split(":")[0] + ":" + compareTime.split(":")[1])
+        if (start.isBefore(end)) return now.isAfter(start) && now.isBefore(end)
+        return if (now.isBefore(start)) now.isBefore(start) && now.isBefore(end) else now.isAfter(start) && now.isAfter(end)
     }
 
     private fun loadDays(
@@ -388,17 +468,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         daysList = arrayListOf()
         for (day in 1..daysInMonth) {
             if (day >= calendar.get(Calendar.DAY_OF_MONTH)) {
-                daysList.add(
-                    MonthsModel(
-                        calendar.get(Calendar.YEAR).toString() + "-" + String.format(
-                            "%02d",
-                            month
-                        ) + "-" + String.format(
-                            "%02d",
-                            day
-                        ), day.toString(), false
-                    )
-                )
+                daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false))
 //                Log.e("DATE:", Gson().toJson(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false)))
             }
         }
@@ -434,13 +504,19 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
-    override fun selectedMonth(position: Int, listType: String) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun selectedMonth(position: Int, dateTime: String,  listType: String) {
         val tempMonths = arrayListOf<MonthsModel>()
 
         if (listType == "D") { // Days List
             availableSlots.onEachIndexed { index, month ->
                 if (index == position) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
+                    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+                    val date: LocalDate = LocalDate.parse(month.month, formatter)
+                    val dow: Month? = date.month
+                    val output: String = dow!!.getDisplayName(TextStyle.FULL, Locale.US)
+                    binding.selectedMonth.text = output
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
                 }
@@ -452,17 +528,66 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
         if (listType == "T") { // Timings List
             availableTimeSlots.onEachIndexed { index, month ->
-                if (index == position) {
+                if (dateTime == month.month) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
                 }
             }
-            availableTimeSlots = tempMonths
-            binding.timeRv.adapter = MonthsAdapter(availableTimeSlots, this, "T")
-            binding.timeRv.scrollToPosition(position)
-        }
 
+            availableTimeSlots = tempMonths
+
+            morningTimings = ArrayList()
+            afternoonTimings = ArrayList()
+            eveningTimings = ArrayList()
+            nightTimings = ArrayList()
+
+            availableTimeSlots.onEachIndexed { index, monthsModel ->
+                when {
+                    isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!morningTimings.contains(availableTimeSlots[index - 1])) {
+                                morningTimings.add(availableTimeSlots[index - 1])
+                            }
+                        }
+                        morningTimings.add(monthsModel)
+                    }
+                    isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
+                                afternoonTimings.add(availableTimeSlots[index - 1])
+                            }
+                        }
+                        afternoonTimings.add(monthsModel)
+                    }
+                    isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
+                                eveningTimings.add(availableTimeSlots[index - 1])
+                            }
+                        }
+                        eveningTimings.add(monthsModel)
+                    }
+                    isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!nightTimings.contains(availableTimeSlots[index - 1])) {
+                                nightTimings.add(availableTimeSlots[index - 1])
+                            }
+                        }
+                        nightTimings.add(monthsModel)
+                    }
+                }
+            }
+
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this, "T")
+//            binding.morningTimeRv.scrollToPosition(position)
+            binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this, "T")
+//            binding.afternoonTimeRv.scrollToPosition(position)
+            binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
+//            binding.eveningTimeRv.scrollToPosition(position)
+            binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
+//            binding.nightTimeRv.scrollToPosition(position)
+        }
     }
 
     override fun onBackPressed() {

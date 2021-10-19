@@ -193,7 +193,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
-    override fun selectedMonth(position: Int, listType: String) {
+    override fun selectedMonth(position: Int, dateTime: String, listType: String) {
         val tempMonths = arrayListOf<MonthsModel>()
 
         if (listType == "D") { // Days List

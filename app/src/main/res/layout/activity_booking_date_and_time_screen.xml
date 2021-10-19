@@ -171,8 +171,8 @@
                     android:layout_height="@dimen/_30sdp"
                     android:gravity="center"
                     android:text="@string/_1"
-                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -193,8 +193,8 @@
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
                     android:text="@string/_2"
-                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -213,19 +213,33 @@
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
                     android:text="@string/_3"
-                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
-        android:text="@string/select_date"
-        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="@string/please_select_date_of_service"
+        android:textSize="@dimen/text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_400" />
+
+    <TextView
+        android:id="@+id/selectedMonth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/month_"
         android:textSize="@dimen/text" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -235,27 +249,100 @@
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:text="@string/select_time"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/timeRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_5sdp" />
+        android:layout_margin="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/select_time"
+        android:textSize="@dimen/text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_400" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/morning"
+                android:textSize="@dimen/text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/morningTimeRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/afternoon"
+                android:textSize="@dimen/text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/afternoonTimeRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/evening"
+                android:textSize="@dimen/text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eveningTimeRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/night"
+                android:textSize="@dimen/text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nightTimeRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/nextBtn"
+        style="@style/filled_button_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_margin="@dimen/_20sdp"
         android:background="@drawable/category_bg"
-        style="@style/filled_button_style"
         android:text="@string/next" />
 
 </LinearLayout>

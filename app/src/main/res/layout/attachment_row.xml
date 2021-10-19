@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/_5sdp"
-        android:src="@drawable/com_facebook_close"/>
-
+        android:src="@drawable/ic_close_white_24dp"/>
 
 </RelativeLayout>

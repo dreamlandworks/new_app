@@ -178,11 +178,11 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/facebookSignBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+<!--                <com.facebook.login.widget.LoginButton-->
+<!--                    android:id="@+id/facebookSignBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:visibility="gone" />-->
 
                 <ImageView
                     android:id="@+id/googleSigInBtn"

@@ -66,14 +66,17 @@
             android:padding="@dimen/_10sdp">
 
             <TextView
-                android:id="@+id/resetBtn"
+                android:id="@+id/currentLocationBtn"
                 style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/btn_bg_sm_blue_border"
-                android:text="@string/reset" />
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/use_current_location"
+                android:textSize="@dimen/sub_text" />
 
             <TextView
                 android:id="@+id/addBtn"
@@ -85,7 +88,10 @@
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/user_btn_bg_sm"
                 android:enabled="false"
-                android:text="@string/add" />
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/add"
+                android:textSize="@dimen/sub_text" />
 
         </RelativeLayout>
 

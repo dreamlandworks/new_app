@@ -244,7 +244,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
     }
 
-    override fun selectedMonth(position: Int, listType: String) {
+    override fun selectedMonth(position: Int, dateTime: String, listType: String) {
         if (UserUtils.getFromJobPostMultiMove(this)) {
             val tempAddress = arrayListOf<MonthsModel>()
             addressList.onEachIndexed { index, month ->

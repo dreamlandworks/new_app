@@ -168,9 +168,8 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             fetchLocation(this)
         }
 
-        binding.resetBtn.setOnClickListener {
-            finish()
-            startActivity(intent)
+        binding.currentLocationBtn.setOnClickListener {
+            fetchLocation(this)
         }
 
         binding.addBtn.setOnClickListener {
@@ -183,31 +182,35 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
-        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+        if (UserUtils.getLatitude(this).isNotEmpty() && UserUtils.getLongitude(this).isNotEmpty()) {
+
+            val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
+            mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
 
 //        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
 //        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
 
-        val markerOptions = MarkerOptions()
-            .position(latLong)
+            val markerOptions = MarkerOptions()
+                .position(latLong)
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-            .draggable(true)
-        marker = mMap!!.addMarker(markerOptions)!!
-        mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {
+                .draggable(true)
+            marker = mMap!!.addMarker(markerOptions)!!
+            mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
+                override fun onMarkerDragStart(marker: Marker) {
 //                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
-            }
+                }
 
-            override fun onMarkerDragEnd(marker: Marker) {
-                mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-                fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
-            }
+                override fun onMarkerDragEnd(marker: Marker) {
+                    mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
+                    fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
+                }
 
-            override fun onMarkerDrag(arg0: Marker) {
+                override fun onMarkerDrag(arg0: Marker) {
 //                Log.i("System out", "onMarkerDrag...")
-            }
-        })
+                }
+            })
+
+        }
     }
 
     private fun fetchLocation(context: Context) {
@@ -284,12 +287,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
                 .show()
         }
     }
-
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        finish()
-//        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {

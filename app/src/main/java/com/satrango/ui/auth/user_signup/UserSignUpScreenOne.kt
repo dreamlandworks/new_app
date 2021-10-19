@@ -15,11 +15,11 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.GraphRequest
-import com.facebook.login.LoginResult
+//import com.facebook.CallbackManager
+//import com.facebook.FacebookCallback
+//import com.facebook.FacebookException
+//import com.facebook.GraphRequest
+//import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -49,7 +49,7 @@ class UserSignUpScreenOne : AppCompatActivity() {
     private val GOOGLE_SIGN_IN: Int = 100
 
     // Facebook SignIn Object
-    private lateinit var facebookCallBackManager: CallbackManager
+//    private lateinit var facebookCallBackManager: CallbackManager
 
     private lateinit var progressDialog: BeautifulProgressDialog
 
@@ -78,9 +78,9 @@ class UserSignUpScreenOne : AppCompatActivity() {
                 startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
             }
 
-            facebookSignInBtn.setOnClickListener {
-                facebookSignBtn.performClick()
-            }
+//            facebookSignInBtn.setOnClickListener {
+//                facebookSignBtn.performClick()
+//            }
 
             nextBtn.setOnClickListener {
                 val first_Name = firstName.text.toString().trim()
@@ -268,50 +268,50 @@ class UserSignUpScreenOne : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
         // Facebook SignIn Object Initialization
-        facebookCallBackManager = CallbackManager.Factory.create()
+//        facebookCallBackManager = CallbackManager.Factory.create()
 
-        binding.facebookSignBtn.registerCallback(
-            facebookCallBackManager,
-            object : FacebookCallback<LoginResult> {
-
-                override fun onSuccess(result: LoginResult?) {
-                    val token = result!!.accessToken
-                    val request = GraphRequest.newMeRequest(
-                        token
-                    ) { jsonObject, _ ->
-                        val userId = jsonObject.getString("id")
-                        val userName = jsonObject.getString("name")
-                        UserUtils.setFacebookId(this@UserSignUpScreenOne, userId)
-                        UserUtils.setFirstName(this@UserSignUpScreenOne , userName.split(" ")[0])
-                        try {
-                            UserUtils.setLastName(this@UserSignUpScreenOne, userName.split(" ")[1])
-                        } catch (e: java.lang.Exception) {}
-                        startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenThree::class.java))
-                    }
-                    val parameters = Bundle()
-                    parameters.putString("fields", "id, name")
-                    request.parameters = parameters
-                    request.executeAsync()
-                }
-
-                override fun onCancel() {
-                    snackBar(binding.nextBtn, "Login Cancelled")
-                }
-
-                override fun onError(error: FacebookException?) {
-                    snackBar(binding.nextBtn, error!!.message!!)
-                }
-
-            })
+//        binding.facebookSignBtn.registerCallback(
+//            facebookCallBackManager,
+//            object : FacebookCallback<LoginResult> {
+//
+//                override fun onSuccess(result: LoginResult?) {
+//                    val token = result!!.accessToken
+//                    val request = GraphRequest.newMeRequest(
+//                        token
+//                    ) { jsonObject, _ ->
+//                        val userId = jsonObject.getString("id")
+//                        val userName = jsonObject.getString("name")
+//                        UserUtils.setFacebookId(this@UserSignUpScreenOne, userId)
+//                        UserUtils.setFirstName(this@UserSignUpScreenOne , userName.split(" ")[0])
+//                        try {
+//                            UserUtils.setLastName(this@UserSignUpScreenOne, userName.split(" ")[1])
+//                        } catch (e: java.lang.Exception) {}
+//                        startActivity(Intent(this@UserSignUpScreenOne, UserSignUpScreenThree::class.java))
+//                    }
+//                    val parameters = Bundle()
+//                    parameters.putString("fields", "id, name")
+//                    request.parameters = parameters
+//                    request.executeAsync()
+//                }
+//
+//                override fun onCancel() {
+//                    snackBar(binding.nextBtn, "Login Cancelled")
+//                }
+//
+//                override fun onError(error: FacebookException?) {
+//                    snackBar(binding.nextBtn, error!!.message!!)
+//                }
+//
+//            })
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
+//        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GOOGLE_SIGN_IN) {
             try {
-                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)
                 validateGoogleSignInResult(result)
             } catch (e: Exception) {
                 snackBar(binding.nextBtn, e.message!!)

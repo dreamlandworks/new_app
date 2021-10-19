@@ -818,7 +818,6 @@ class ProviderSignUpThree : AppCompatActivity() {
                     slotList.add(
                         TimeslotResponse(
                             TextUtils.join(",", daysList),
-
                             "$time:00:00",
                             "${time + 1}:00:00"
                         )

@@ -27,6 +27,7 @@ class SearchServiceProviderAdapter(
     class ViewHolder(binding: SearchServiceProviderRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+
         @SuppressLint("SetTextI18n")
         fun bindValues(data: Data) {
             Glide.with(binding.profilePic).load(data.profile_pic).into(binding.profilePic)
@@ -35,9 +36,19 @@ class SearchServiceProviderAdapter(
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
             binding.costPerHour.text = data.per_hour
-            binding.userDistance.text = "${UserUtils.distance(UserUtils.getLatitude(binding.profilePic.context).toDouble(), UserUtils.getLongitude(binding.profilePic.context).toDouble(), data.latitude.toDouble(), data.longitude.toDouble())} Kms"
+            binding.userDistance.text = "${
+                UserUtils.distance(
+                    UserUtils.getLatitude(binding.profilePic.context).toDouble(),
+                    UserUtils.getLongitude(binding.profilePic.context).toDouble(),
+                    data.latitude.toDouble(),
+                    data.longitude.toDouble()
+                )
+            } Kms"
 
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(binding.below.context), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedSPDetails(binding.profilePic.context),
+                SearchServiceProviderResModel::class.java
+            )
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
                     for (booking in sp.blocked_time_slots) {
@@ -49,12 +60,14 @@ class SearchServiceProviderAdapter(
             }
 
             binding.root.setOnClickListener {
-                val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
+                val intent =
+                    Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
-                val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
+                val intent =
+                    Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
             }
@@ -76,7 +89,13 @@ class SearchServiceProviderAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(SearchServiceProviderRowBinding.inflate(LayoutInflater.from(parent.context)))
+        return ViewHolder(
+            SearchServiceProviderRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
