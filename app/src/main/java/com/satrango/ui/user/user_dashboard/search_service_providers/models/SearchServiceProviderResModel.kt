@@ -5,6 +5,7 @@ data class SearchServiceProviderResModel(
     val message: String,
     val search_results_id: Int,
     val slots_data: List<SlotsData>,
+    val charges: List<Charges>,
     val status: Int,
     val temp_address_id: Int
 )

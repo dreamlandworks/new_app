@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/neosans_pro_regular</item>
         <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="SignInSignUpEditText" parent="Theme.AppCompat.Light">
@@ -55,6 +56,16 @@
         <item name="android:textColor">@color/blue</item>
         <item name="android:textSize">@dimen/button</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_corners</item>
     </style>
 
 </resources>

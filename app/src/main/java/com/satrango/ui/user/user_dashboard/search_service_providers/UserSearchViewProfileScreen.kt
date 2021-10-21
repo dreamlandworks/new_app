@@ -1,11 +1,13 @@
 package com.satrango.ui.user.user_dashboard.search_service_providers
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.satrango.R
@@ -17,12 +19,14 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
+import java.text.DecimalFormat
 import java.util.*
 
 class UserSearchViewProfileScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchViewProfileBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchViewProfileBinding.inflate(layoutInflater)
@@ -31,7 +35,11 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         initializeToolBar()
 
         val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-        val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+        val spDetails = Gson().fromJson(
+            UserUtils.getSelectedSPDetails(this),
+            SearchServiceProviderResModel::class.java
+        )
+        Log.e("JSON", Gson().toJson(spDetails))
         for (sp in spDetails.slots_data) {
             if (data.users_id == sp.user_id) {
                 for (booking in sp.blocked_time_slots) {
@@ -46,20 +54,26 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
         binding.apply {
 
-            Glide.with(profilePic).load(data.profile_pic).placeholder(R.drawable.images).into(profilePic)
+            Glide.with(profilePic).load(data.profile_pic).placeholder(R.drawable.images).into(
+                profilePic
+            )
             userName.text = data.fname
             occupation.text = data.profession
             costPerHour.text = data.per_hour
+            val df = DecimalFormat("#.##")
+            val distanceInKms = data.distance_miles.toDouble() * 1.609344
+            distance.text = "${df.format(distanceInKms)} Kms"
+            skills.text = data.profession
+            experience.text = data.exp
+            aboutMe.text = data.about_me
+            languages.text = data.languages_known
+
 //            ranking.text = data.points_count
 //            rating.text = data.points_count
 //            reviews.text = data.points_count
 //            jobs.text = data.points_count
-            experience.text = data.exp
-//            languages.text = data.
-//            distance.text = data.
-//            skills.text = data.
-            aboutMe.text = data.about_me
 //            overAllReviews.text = data.
+
 //            audience.text = data.
 //            professionRating.text = data.
 //            behaviourRating.text = data.

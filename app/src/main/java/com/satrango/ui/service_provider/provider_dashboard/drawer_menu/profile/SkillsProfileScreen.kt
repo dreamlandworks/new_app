@@ -144,9 +144,7 @@ class SkillsProfileScreen :
             }
 
             updateBtn.setOnClickListener {
-
                 validateFields()
-
             }
         }
 
@@ -214,10 +212,10 @@ class SkillsProfileScreen :
                         description.text.toString().trim(),
                         experience.selectedItem.toString(),
                         RetrofitBuilder.PROVIDER_KEY,
-                        keywordsList,
-                        langList,
-                        professionList,
-                        qualificationList,
+                        keywordsList.distinctBy { keywordsResponse -> keywordsResponse.name },
+                        langList.distinctBy { langResponse -> langResponse.name },
+                        professionList.distinctBy { professionResponse -> professionResponse.name },
+                        qualificationList.distinctBy { qualificationResponse -> qualificationResponse.name },
                         UserUtils.getUserId(requireContext())
                     )
                     Log.e("JSON", Gson().toJson(requestBody))
@@ -228,7 +226,7 @@ class SkillsProfileScreen :
                             }
                             is NetworkResponse.Success -> {
                                 ProviderProfileScreen.progressDialog.dismiss()
-                                toast(requireContext(), it.data!!.string())
+//                                toast(requireContext(), it.data!!.string())
                             }
                             is NetworkResponse.Failure -> {
                                 ProviderProfileScreen.progressDialog.dismiss()
@@ -253,7 +251,7 @@ class SkillsProfileScreen :
                     response = it.data!!
 
                     val languagesList = ArrayList<String>()
-                    languagesMList = response.data.language
+                    languagesMList = response.data.language.distinctBy { language -> language.name }
                     for (data in languagesMList) {
                         languagesList.add(data.name)
                     }
@@ -268,7 +266,7 @@ class SkillsProfileScreen :
 
 
                     val professionList = ArrayList<String>()
-                    professionMList = response.data.list_profession
+                    professionMList = response.data.list_profession.distinctBy { profession -> profession.name }
                     for (data in professionMList) {
                         professionList.add(data.name)
                     }
@@ -282,7 +280,7 @@ class SkillsProfileScreen :
                     binding.profession.enableEditChipOnTouch(true, true)
 
                     val qualificationList = ArrayList<String>()
-                    qualificationMList = response.data.qualification
+                    qualificationMList = response.data.qualification.distinctBy { qualification -> qualification.qualification }
                     for (data in qualificationMList) {
                         qualificationList.add(data.qualification)
                     }
@@ -296,7 +294,7 @@ class SkillsProfileScreen :
                     binding.qualification.enableEditChipOnTouch(true, true)
 
                     val skillsList = ArrayList<String>()
-                    skillsMList = response.data.keywords
+                    skillsMList = response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
                     for (data in skillsMList) {
                         skillsList.add(data.keyword)
                     }
@@ -311,7 +309,7 @@ class SkillsProfileScreen :
 
                     experienceList = ArrayList()
                     experienceList.add("Select Experience")
-                    experienceMList = response.data.experience
+                    experienceMList = response.data.experience.distinctBy { experience -> experience.exp }
                     for (data in experienceMList) {
                         experienceList.add(data.exp)
                     }

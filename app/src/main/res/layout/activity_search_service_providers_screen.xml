@@ -139,7 +139,6 @@
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/settings_black"
-            android:visibility="gone"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 

@@ -9,12 +9,14 @@ import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.lang.Exception
 
 class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): ViewModel() {
 
     val normalAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
     val actionableAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
+    val updateAlertsToRead = MutableLiveData<NetworkResponse<String>>()
 
     fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
@@ -58,6 +60,29 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
             actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
         }
         return actionableAlertsList
+    }
+
+    fun updateAlertsToRead(context: Context, alertType: String): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            updateAlertsToRead.value = NetworkResponse.Loading()
+            viewModelScope.launch {
+                try {
+                    val response = async { repository.updateAlertToRead(context, alertType) }
+                    val jsonResponse = JSONObject(response.await().string())
+                    if (jsonResponse.getInt("id") == 200) {
+                        updateAlertsToRead.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        updateAlertsToRead.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    updateAlertsToRead.value = NetworkResponse.Failure(e.message)
+                }
+
+            }
+        } else {
+            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return updateAlertsToRead
     }
 
 }

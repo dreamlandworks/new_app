@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
@@ -58,16 +59,26 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
 //            UserDashboardScreen.fetchLocation(requireContext())
 //        }
 
+//        val requestBody = OffersListReqModel(
+//            UserUtils.getCity(requireContext()),
+//            UserUtils.getCountry(requireContext()),
+//            RetrofitBuilder.USER_KEY,
+//            2,
+//            UserUtils.getPostalCode(requireContext()),
+//            UserUtils.getState(requireContext()),
+//            UserUtils.getUserId(requireContext()).toInt(),
+//            ""
+//        )
         val requestBody = OffersListReqModel(
-            UserUtils.getCity(requireContext()),
-            UserUtils.getCountry(requireContext()),
+            "",
+            "",
             RetrofitBuilder.USER_KEY,
             2,
-            UserUtils.getPostalCode(requireContext()),
-            UserUtils.getState(requireContext()),
-            UserUtils.getUserId(requireContext()).toInt()
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            "latest"
         )
-
         viewModel.getUserOffers(requireContext(), requestBody).observe(requireActivity(), {
             when(it) {
                 is NetworkResponse.Loading -> {
@@ -75,7 +86,62 @@ class UserOffersScreen : BaseFragment<UserAlertsViewModel, FragmentUserOffersScr
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserOffersAdapter(it.data!!)
+                    binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.root, it.message!!)
+                }
+            }
+        })
+
+        val expiryRequestBody = OffersListReqModel(
+            "",
+            "",
+            RetrofitBuilder.USER_KEY,
+            2,
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            "expiry"
+        )
+        viewModel.getUserOffers(requireContext(), expiryRequestBody).observe(requireActivity(), {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.root, it.message!!)
+                }
+            }
+        })
+
+        val referralRequestBody = OffersListReqModel(
+            "",
+            "",
+            RetrofitBuilder.USER_KEY,
+            5,
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            ""
+        )
+        viewModel.getUserOffers(requireContext(), referralRequestBody).observe(requireActivity(), {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

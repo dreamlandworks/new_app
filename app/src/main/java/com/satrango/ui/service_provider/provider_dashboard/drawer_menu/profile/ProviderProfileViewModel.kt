@@ -1,9 +1,11 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
@@ -28,6 +30,7 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
                     professionalDetails.value = NetworkResponse.Loading()
                     val request = async { repository.getProfessionalDetails(requestBody) }
                     val response = request.await()
+                    Log.e("PROFILE", Gson().toJson(response))
                     if (response.status == 200) {
                         professionalDetails.value = NetworkResponse.Success(response)
                     } else {
@@ -51,6 +54,7 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
                     val request = async { repository.updateSkills(requestBody) }
                     val response = request.await()
                     val jsonObject = JSONObject(response.string())
+                    Log.e("JSON", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         updateSkills.value = NetworkResponse.Success(response)
                     } else {

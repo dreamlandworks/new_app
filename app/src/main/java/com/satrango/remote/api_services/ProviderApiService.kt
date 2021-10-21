@@ -6,6 +6,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.Provide
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.alerts.models.UpdateAlertsToReadReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
@@ -182,5 +183,10 @@ interface ProviderApiService {
     suspend fun saveMemberShipPlan(
         @Body requestBody: ProviderMemberShipPlanPaymentReqModel
     ): ProviderMemberShipPlanPaymentResModel
+
+    @POST(ServiceProviderEndPoints.UPDATE_ALERTS_TO_READ)
+    suspend fun updateAlertsToRead(
+        @Body requestBody: UpdateAlertsToReadReqModel
+    ): ResponseBody
 
 }

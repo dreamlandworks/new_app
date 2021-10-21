@@ -51,7 +51,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                 try {
                     val response = async { repository.bookSingleMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("BOOKING RESPONSE:", jsonResponse.toString())
+                    Log.e("SINGLE BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
@@ -77,8 +77,9 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                 try {
                     val response = async { repository.bookBlueCollarServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
+                    Log.e("BLUECOLLAR BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
-                        UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
+                        UserUtils.saveBookingId(context,jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
                         blueCollarBooking.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {
@@ -101,6 +102,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                 try {
                     val response = async { repository.bookMultiMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
+                    Log.e("MULTIMOVE BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))

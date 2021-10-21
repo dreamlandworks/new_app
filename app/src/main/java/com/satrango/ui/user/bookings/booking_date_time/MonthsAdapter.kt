@@ -92,9 +92,10 @@ class MonthsAdapter(
 //        }
 
         if (listType == "AA") {
-            holder.binding.rowLayout.visibility = View.GONE
+            holder.binding.description.visibility = View.GONE
 //            holder.binding.addressText.visibility = View.VISIBLE
-//            holder.binding.addressText.text = list[position].month
+
+            holder.binding.title.text = list[position].month
             holder.itemView.setOnClickListener {
                 monthsInterface.selectedMonth(position, list[position].month, listType)
                 notifyItemChanged(position)

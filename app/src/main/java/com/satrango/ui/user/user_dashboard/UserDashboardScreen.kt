@@ -127,6 +127,7 @@ class UserDashboardScreen : AppCompatActivity() {
         }
 
         binding.userLocation.setOnClickListener {
+            UserLocationSelectionScreen.FROM_USER_DASHBOARD = true
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 

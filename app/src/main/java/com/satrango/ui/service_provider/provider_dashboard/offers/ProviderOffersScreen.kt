@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.BaseFragment
@@ -60,15 +61,15 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
         }
 
         val requestBody = OffersListReqModel(
-            UserUtils.getCity(requireContext()),
-            UserUtils.getCountry(requireContext()),
+            "",
+            "",
             RetrofitBuilder.USER_KEY,
-            3,
-            UserUtils.getPostalCode(requireContext()),
-            UserUtils.getState(requireContext()),
-            UserUtils.getUserId(requireContext()).toInt()
+            2,
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            "latest"
         )
-
         viewModel.getOffers(requireContext(), requestBody).observe(requireActivity(), {
             when(it) {
                 is NetworkResponse.Loading -> {
@@ -76,7 +77,8 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserOffersAdapter(it.data!!)
+                    binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.latestOfferRv.adapter = UserOffersAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -84,6 +86,61 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
             }
         })
+
+        val expiryRequestBody = OffersListReqModel(
+            "",
+            "",
+            RetrofitBuilder.USER_KEY,
+            2,
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            "expiry"
+        )
+        viewModel.getOffers(requireContext(), expiryRequestBody).observe(requireActivity(), {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.expiryOfferRv.adapter = UserOffersAdapter(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.root, it.message!!)
+                }
+            }
+        })
+
+        val referralRequestBody = OffersListReqModel(
+            "",
+            "",
+            RetrofitBuilder.USER_KEY,
+            5,
+            "",
+            "",
+            UserUtils.getUserId(requireContext()).toInt(),
+            ""
+        )
+        viewModel.getOffers(requireContext(), referralRequestBody).observe(requireActivity(), {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding.referralOfferRv.adapter = UserOffersAdapter(it.data!!)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.root, it.message!!)
+                }
+            }
+        })
+
 
     }
 

@@ -268,7 +268,7 @@ class LoginScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.password)]!!.isNotEmpty()) {
+        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.password)]!!.isNotEmpty() && UserUtils.getUserId(this).isNotEmpty()) {
             startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
         }
     }

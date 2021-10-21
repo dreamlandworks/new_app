@@ -52,7 +52,7 @@
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="verification_code">Verification Code</string>
     <string name="please_type_verification_code_sent_to_mobile_number_email">Please type verification code sent to Mobile number / Email</string>
-    <string name="didn_t_receive_otp">Didn\t receive OTP?</string>
+    <string name="didn_t_receive_otp" tools:ignore="StringEscaping">Didn\'t receive OTP?</string>
     <string name="resend">RESEND</string>
     <string name="verify">Verify</string>
     <string name="enter_password">Enter Password</string>
@@ -581,6 +581,12 @@
     <string name="afternoon">Afternoon</string>
     <string name="evening">Evening</string>
     <string name="night">Night</string>
+    <string name="latest_offers">Latest Offers</string>
+    <string name="offers_expiring_soon">Offers expiring soon</string>
+    <string name="referral_offers">Referral Offers</string>
+    <string name="yesdeo">YESDEO</string>
+    <string name="claim_now">Claim Now</string>
+    <string name="share">Share</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

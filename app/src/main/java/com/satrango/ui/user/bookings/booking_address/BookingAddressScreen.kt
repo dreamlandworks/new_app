@@ -254,13 +254,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
+                        showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                         } else {
                             UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                         }
-                        showWaitingForSPConfirmationDialog()
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -294,19 +294,15 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        val jsonResponse = JSONObject(it.data!!)
-                        Log.e("SINGLE MOVE", jsonResponse.toString())
-                        if (jsonResponse.getInt("status") == 200) {
-                            if (UserUtils.getFromInstantBooking(this)) {
-                                if (PermissionUtils.isNetworkConnected(this)) {
-                                    UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
-                                } else {
-                                    snackBar(binding.nextBtn, "No Internet Connection!")
-                                }
+                        showWaitingForSPConfirmationDialog()
+                        if (UserUtils.getFromInstantBooking(this)) {
+                            if (PermissionUtils.isNetworkConnected(this)) {
+                                UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                             } else {
-                                UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                                snackBar(binding.nextBtn, "No Internet Connection!")
                             }
-                            showWaitingForSPConfirmationDialog()
+                        } else {
+                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                         }
                     }
                     is NetworkResponse.Failure -> {

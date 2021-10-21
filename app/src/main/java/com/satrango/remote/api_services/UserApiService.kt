@@ -68,6 +68,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserUpdateAlertsToReadReqModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
@@ -412,5 +413,10 @@ interface UserApiService {
     suspend fun complaintsRequests(
         @Body requestBody: MyJobPostReqModel
     ): ComplaintRequestResModel
+
+    @POST(UserApiEndPoints.UPDATE_ALERTS_TO_READ)
+    suspend fun updateAlertToRead(
+        @Body requestBody: UserUpdateAlertsToReadReqModel
+    ): ResponseBody
 
 }

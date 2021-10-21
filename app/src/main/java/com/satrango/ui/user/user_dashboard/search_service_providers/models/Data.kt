@@ -24,6 +24,7 @@ data class Data(
     val per_day: String,
     val per_hour: String,
     val distance_miles: String,
+    val languages_known: String,
     val points_count: Any,
     val postcode: String,
     val profession: String,

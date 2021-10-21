@@ -24,7 +24,7 @@
                 android:layout_marginHorizontal="@dimen/_20sdp"
                 android:layout_weight="1"
                 android:background="@drawable/gray_corner"
-                android:hint="@string/languages_known"
+                android:hint="@string/professional_info"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="@dimen/edit_text" />

@@ -29,5 +29,6 @@ object ServiceProviderEndPoints {
     final const val FAQs = "provider/sp_faq"
     final const val SP_PLANS = "provider/sp_plans"
     final const val MEMBERSHIP_PAYMENT = "provider/membership_payments"
+    final const val UPDATE_ALERTS_TO_READ = "provider/update_sp_alert"
 
 }

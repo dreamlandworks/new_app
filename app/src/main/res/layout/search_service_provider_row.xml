@@ -189,9 +189,10 @@
                         style="@style/filled_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
                         android:background="@drawable/user_btn_bg_sm"
                         android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
                         android:paddingVertical="@dimen/_5sdp"
                         android:text="@string/book_later"
                         android:textSize="@dimen/_9sdp" />
@@ -201,10 +202,10 @@
                         style="@style/filled_button_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:background="@drawable/btn_bg_pink_sm"
                         android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
                         android:paddingVertical="@dimen/_5sdp"
                         android:text="@string/book_now"
                         android:textSize="@dimen/_9sdp" />

@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.lang.Exception
 
 class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewModel() {
@@ -19,13 +20,14 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
     val normalAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
     val actionableAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
     val userOffers = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>>()
+    val updateAlertsToRead = MutableLiveData<NetworkResponse<String>>()
 
     fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
         if (hasInternetConnection(context)) {
             normalAlertsList.value = NetworkResponse.Loading()
             viewModelScope.launch {
                 try {
-                    val response = async { repository.getUserAlerts("1") }
+                    val response = async { repository.getUserAlerts(context, "1") }
                     if (response.await().status == 200) {
                         normalAlertsList.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -47,7 +49,7 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
             actionableAlertsList.value = NetworkResponse.Loading()
             viewModelScope.launch {
                 try {
-                    val response = async { repository.getUserAlerts("2") }
+                    val response = async { repository.getUserAlerts(context, "2") }
                     if (response.await().status == 200) {
                         actionableAlertsList.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -84,6 +86,29 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
             userOffers.value = NetworkResponse.Failure("No Internet Connection")
         }
         return userOffers
+    }
+
+    fun updateAlertsToRead(context: Context): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            userOffers.value = NetworkResponse.Loading()
+            viewModelScope.launch {
+                try {
+                    val response = async { repository.updateAlertsToRead(context) }
+                    val jsonResponse = JSONObject(response.await().string())
+                    if (jsonResponse.getInt("id") == 200) {
+                        updateAlertsToRead.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        updateAlertsToRead.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    updateAlertsToRead.value = NetworkResponse.Failure(e.message)
+                }
+
+            }
+        } else {
+            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return updateAlertsToRead
     }
 
 }

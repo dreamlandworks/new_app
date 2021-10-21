@@ -16,6 +16,7 @@ import com.satrango.databinding.FragmentUserAlertScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -31,7 +32,6 @@ class UserAlertScreen :
 
         initializeToolBar()
         initializeProgressDialog()
-
         loadUserAlertsScreen()
 
     }
@@ -53,6 +53,7 @@ class UserAlertScreen :
         }
 
         loadNotActionableAlerts()
+        updateAlertsToRead()
 
         binding.actionNeededBtn.setOnClickListener {
             loadActionableAlerts()
@@ -61,6 +62,23 @@ class UserAlertScreen :
         binding.regularBtn.setOnClickListener {
             loadNotActionableAlerts()
         }
+    }
+
+    private fun updateAlertsToRead() {
+        viewModel.updateAlertsToRead(requireContext()).observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.actionNeededBadge, it.message!!)
+                }
+            }
+        })
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -88,6 +106,8 @@ class UserAlertScreen :
                         binding.regularBadge.text = it.data.size.toString()
                     } else {
                         binding.regularBadge.visibility = View.GONE
+                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), ACTIONABLE)
+                        snackBar(binding.actionNeededBadge, "Regular Alerts are empty")
                     }
                     progressDialog.dismiss()
                 }
@@ -117,6 +137,8 @@ class UserAlertScreen :
                         binding.actionNeededBadge.text = it.data.size.toString()
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
+                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE)
+                        snackBar(binding.actionNeededBadge, "Actionable Alerts are empty")
                     }
                     progressDialog.dismiss()
                 }

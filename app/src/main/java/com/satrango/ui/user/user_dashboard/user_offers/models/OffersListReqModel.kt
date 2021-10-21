@@ -7,5 +7,6 @@ data class OffersListReqModel(
     val offer_type_id: Int,
     val postal_code: String,
     val state: String,
-    val users_id: Int
+    val users_id: Int,
+    val sort_type: String
 )

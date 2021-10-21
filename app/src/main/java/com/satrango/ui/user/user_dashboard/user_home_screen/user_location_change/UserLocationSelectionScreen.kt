@@ -39,6 +39,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -46,6 +47,10 @@ import java.util.*
 
 
 class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
+
+    companion object {
+        var FROM_USER_DASHBOARD = false
+    }
 
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -120,54 +125,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
 
-//        viewModel.allLocations(this).observe(this, {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    val locations = it.data!!
-//                    val addresses = ArrayList<String>()
-//                    locations.forEachIndexed { index, dataX ->
-//                        if (locations[index].locality.isNotEmpty()) {
-//                            addresses.add("${dataX.locality}, ${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
-//                        } else {
-//                            addresses.add("${dataX.city}, ${dataX.state}, ${dataX.country}, ${dataX.zipcode}")
-//                        }
-//                    }
-//                    val adapter = ArrayAdapter(
-//                        this,
-//                        android.R.layout.simple_spinner_dropdown_item,
-//                        addresses
-//                    )
-//                    binding.myLocation.setAdapter(adapter)
-//                    binding.myLocation.threshold = 3
-//                    binding.myLocation.setOnItemClickListener { parent, view, position, id ->
-//                        val latLog = LatLng(
-//                            locations[position].latitude.toDouble(),
-//                            locations[position].longitude.toDouble()
-//                        )
-//                        marker.position = latLog
-//                        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLog, 16f))
-//                        UserUtils.setCity(this, locations[position].city)
-//                        UserUtils.setLatitude(this, locations[position].latitude)
-//                        UserUtils.setLongitude(this, locations[position].longitude)
-//                        UserUtils.setState(this, locations[position].state)
-//                        UserUtils.setCountry(this, locations[position].country)
-//                        UserUtils.setPostalCode(this, locations[position].zipcode)
-//                        UserUtils.setAddress(this, locations[position].locality)
-//                    }
-//                }
-//                is NetworkResponse.Failure -> {
-//                    snackBar(binding.addBtn, it.message!!)
-//                }
-//            }
-//        })
-
-        if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
-            fetchLocation(this)
-        }
-
         binding.currentLocationBtn.setOnClickListener {
             fetchLocation(this)
         }
@@ -175,7 +132,11 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         binding.addBtn.setOnClickListener {
             fetchLocationDetails(this, latitude, longitude)
             finish()
-            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            if (FROM_USER_DASHBOARD) {
+                startActivity(Intent(this, UserDashboardScreen::class.java))
+            } else {
+                startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            }
         }
 
     }
@@ -183,34 +144,34 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (UserUtils.getLatitude(this).isNotEmpty() && UserUtils.getLongitude(this).isNotEmpty()) {
-
-            val latLong = LatLng(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
-            mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
-
-//        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLong))
-//        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
-
-            val markerOptions = MarkerOptions()
-                .position(latLong)
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-                .draggable(true)
-            marker = mMap!!.addMarker(markerOptions)!!
-            mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
-                override fun onMarkerDragStart(marker: Marker) {
-//                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
-                }
-
-                override fun onMarkerDragEnd(marker: Marker) {
-                    mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-                    fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
-                }
-
-                override fun onMarkerDrag(arg0: Marker) {
-//                Log.i("System out", "onMarkerDrag...")
-                }
-            })
-
+            loadLocation(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
+        } else {
+            fetchLocation(this)
         }
+    }
+
+    private fun loadLocation(latitude: Double, longitude: Double) {
+        val latLong = LatLng(latitude, longitude)
+        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
+        val markerOptions = MarkerOptions()
+            .position(latLong)
+            .draggable(true)
+        mMap!!.clear()
+        marker = mMap!!.addMarker(markerOptions)!!
+        mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
+            override fun onMarkerDragStart(marker: Marker) {
+//                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
+            }
+
+            override fun onMarkerDragEnd(marker: Marker) {
+//                mMap!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
+            }
+
+            override fun onMarkerDrag(marker: Marker) {
+//                Log.i("System out", "onMarkerDrag...")
+//                fetchLocationDetails(this@UserLocationSelectionScreen, marker.position.latitude, marker.position.longitude)
+            }
+        })
     }
 
     private fun fetchLocation(context: Context) {
@@ -238,17 +199,13 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    fetchLocationDetails(context, latitude, longitude)
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    loadLocation(latitude, longitude)
                 }
             }
         }
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallBack,
-            Looper.myLooper()!!
-        )
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper()!!)
     }
 
     @SuppressLint("SetTextI18n")
@@ -262,7 +219,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             val country: String = address[0].countryName
             val postalCode: String = address[0].postalCode
             val knownName: String = address[0].featureName
-            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             UserUtils.setLatitude(context, latitude.toString())
             UserUtils.setLongitude(context, longitude.toString())
             UserUtils.setCity(context, city)
@@ -270,39 +226,46 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             UserUtils.setCountry(context, country)
             UserUtils.setPostalCode(context, postalCode)
             UserUtils.setAddress(context, knownName)
-            if (UserUtils.getAddress(context).isNotEmpty()) {
-                binding.myLocation.setText("${UserUtils.getAddress(context)}, ${UserUtils.getCity(context)}, ${UserUtils.getState(context)}, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}")
-            } else {
-                binding.myLocation.setText(
-                    "${UserUtils.getCity(context)}, ${
-                        UserUtils.getState(
-                            context
-                        )
-                    }, ${UserUtils.getCountry(context)}, ${UserUtils.getPostalCode(context)}"
-                )
+            try {
+                fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+            } catch (e: Exception) {
+
             }
-            binding.addBtn.isEnabled = true
         } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+            Toast.makeText(context, "Please Check you Internet Connection!: ${e.message}", Toast.LENGTH_LONG)
                 .show()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                val place = Autocomplete.getPlaceFromIntent(data!!)
-                binding.myLocation.setText(place.name)
-//                Log.i(TAG, "Place: " +  + ", " + place.id)
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                val status = Autocomplete.getStatusFromIntent(data!!)
-                snackBar(binding.addBtn, status.statusMessage!!)
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-            return
-        }
         super.onActivityResult(requestCode, resultCode, data)
+        try {
+            val place = Autocomplete.getPlaceFromIntent(data!!)
+            binding.myLocation.setText(place.name)
+            latitude = place.latLng!!.latitude
+            longitude = place.latLng!!.longitude
+            toast(this, place.latLng!!.latitude.toString() + " | " + place.latLng!!.longitude)
+        } catch (e: java.lang.Exception) {
+
+        }
+
+//        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+//            when (resultCode) {
+//                AutocompleteActivity.RESULT_OK -> {
+//                    val place = Autocomplete.getPlaceFromIntent(data!!)
+//                    binding.myLocation.setText(place.name)
+//                    toast(this, place.latLng!!.latitude.toString() + " | " + place.latLng!!.longitude)
+//                }
+//                AutocompleteActivity.RESULT_ERROR -> {
+//                    val status = Autocomplete.getStatusFromIntent(data!!)
+//                    snackBar(binding.addBtn, status.statusMessage!!)
+//                }
+//                AutocompleteActivity.RESULT_CANCELED -> {
+//                    // The user canceled the operation.
+//                }
+//            }
+//            return
+//        }
     }
 
 }

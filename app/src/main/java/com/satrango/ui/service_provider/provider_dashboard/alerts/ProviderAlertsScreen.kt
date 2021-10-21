@@ -17,6 +17,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -104,6 +105,20 @@ class ProviderAlertsScreen :
                 }
             }
         })
+        viewModel.updateAlertsToRead(requireContext(), "1").observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.actionNeededBadge, it.message!!)
+                }
+            }
+        })
     }
 
     private fun loadActionableAlerts() {
@@ -127,6 +142,20 @@ class ProviderAlertsScreen :
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE)
                     toast(requireContext(), it.message!!)
+                }
+            }
+        })
+        viewModel.updateAlertsToRead(requireContext(), "2").observe(viewLifecycleOwner, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.actionNeededBadge, it.message!!)
                 }
             }
         })
