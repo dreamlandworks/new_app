@@ -106,18 +106,27 @@
                     android:textSize="@dimen/_8sdp"
                     android:textStyle="bold" />
 
-                <androidx.appcompat.widget.SwitchCompat
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/userProviderSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/_5sdp"
-                    android:textOff="@string/u"
-                    android:textOn="@string/s"
                     android:textSize="@dimen/_5sdp"
-                    android:thumb="@drawable/custom_thumb"
-                    app:showText="true"
-                    app:track="@drawable/custom_track" />
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+<!--                <androidx.appcompat.widget.SwitchCompat-->
+<!--                    android:id="@+id/userProviderSwitch"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginHorizontal="@dimen/_5sdp"-->
+<!--                    android:textOff="@string/u"-->
+<!--                    android:textOn="@string/s"-->
+<!--                    android:textSize="@dimen/_5sdp"-->
+<!--                    android:thumb="@drawable/custom_thumb"-->
+<!--                    app:showText="true"-->
+<!--                    app:track="@drawable/custom_track" />-->
 
                 <TextView
                     android:layout_width="wrap_content"

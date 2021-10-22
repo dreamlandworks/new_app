@@ -17,7 +17,6 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAlertScreen :
@@ -53,7 +52,6 @@ class UserAlertScreen :
         }
 
         loadNotActionableAlerts()
-        updateAlertsToRead()
 
         binding.actionNeededBtn.setOnClickListener {
             loadActionableAlerts()
@@ -64,8 +62,8 @@ class UserAlertScreen :
         }
     }
 
-    private fun updateAlertsToRead() {
-        viewModel.updateAlertsToRead(requireContext()).observe(viewLifecycleOwner, {
+    private fun updateAlertsToRead(type: String) {
+        viewModel.updateAlertsToRead(requireContext(), type).observe(viewLifecycleOwner, {
             when(it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -75,7 +73,6 @@ class UserAlertScreen :
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.actionNeededBadge, it.message!!)
                 }
             }
         })
@@ -88,6 +85,7 @@ class UserAlertScreen :
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
@@ -98,27 +96,33 @@ class UserAlertScreen :
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
+                    binding.note.visibility = View.GONE
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
+                        binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE)
                         binding.regularBadge.text = it.data.size.toString()
                     } else {
                         binding.regularBadge.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), ACTIONABLE)
-                        snackBar(binding.actionNeededBadge, "Regular Alerts are empty")
+                        binding.note.text = "Regular Alerts are empty"
+                        binding.note.visibility = View.VISIBLE
                     }
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
+                    binding.note.visibility = View.VISIBLE
+                    binding.note.text = it.message!!
                 }
             }
         })
+        updateAlertsToRead("1")
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
         binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
@@ -129,25 +133,32 @@ class UserAlertScreen :
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is NetworkResponse.Loading -> {
+                    binding.note.visibility = View.GONE
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
+
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE)
                         binding.actionNeededBadge.text = it.data.size.toString()
+                        binding.note.visibility = View.GONE
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE)
-                        snackBar(binding.actionNeededBadge, "Actionable Alerts are empty")
+                        binding.note.visibility = View.VISIBLE
+                        binding.note.text = "Actionable Alerts are empty"
                     }
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
+                    binding.note.visibility = View.VISIBLE
+                    binding.note.text = it.message!!
                 }
             }
         })
+        updateAlertsToRead("2")
+        
     }
 
 

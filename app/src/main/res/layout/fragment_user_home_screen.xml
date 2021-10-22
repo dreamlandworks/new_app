@@ -69,10 +69,9 @@
 
                         <AutoCompleteTextView
                             android:id="@+id/searchBar"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_gravity="center"
-                            android:layout_marginEnd="@dimen/_10sdp"
                             android:layout_weight="1"
                             android:background="@drawable/locationbackground"
                             android:drawableStart="@drawable/ic_search"
@@ -85,12 +84,6 @@
                             android:textSize="@dimen/_12sdp"
                             tools:ignore="LabelFor" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/settings"
-                            tools:ignore="ContentDescription" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -107,7 +100,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:paddingVertical="@dimen/_15sdp">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -139,7 +139,8 @@
                 <FrameLayout
                     android:id="@+id/fragmentContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?attr/actionBarSize"/>
 
                 <com.google.android.material.bottomappbar.BottomAppBar
                     android:id="@+id/bottom_bar"

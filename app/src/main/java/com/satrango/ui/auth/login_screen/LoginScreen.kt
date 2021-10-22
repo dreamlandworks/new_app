@@ -40,7 +40,7 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
 
     // Facebook SignIn Object
-//    private lateinit var facebookCallBackManager: CallbackManager
+    // private lateinit var facebookCallBackManager: CallbackManager
     private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,6 +145,7 @@ class LoginScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     UserUtils.setUserLoggedInVia(this, type, it.data!!)
+                    UserUtils.setPhoneNo(this, phoneNo)
                     progressDialog.dismiss()
                     startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }

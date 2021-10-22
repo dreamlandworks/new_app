@@ -9,7 +9,6 @@ import com.satrango.ui.user.user_dashboard.user_alerts.models.UserUpdateAlertsTo
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListResModel
 import com.satrango.utils.UserUtils
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 
 open class UserAlertsRepository: BaseRepository() {
@@ -19,9 +18,9 @@ open class UserAlertsRepository: BaseRepository() {
             .getUserAlerts(UserAlertsReqModel(UserUtils.getUserId(context), alertType, RetrofitBuilder.USER_KEY, "1"))
     }
 
-    suspend fun updateAlertsToRead(context: Context) : ResponseBody {
+    suspend fun updateAlertsToRead(context: Context, type: String) : ResponseBody {
         return RetrofitBuilder.getUserRetrofitInstance()
-            .updateAlertToRead(UserUpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY))
+            .updateAlertToRead(UserUpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY, type))
     }
 
     suspend fun getUserOffers(requestBody: OffersListReqModel) : OffersListResModel {

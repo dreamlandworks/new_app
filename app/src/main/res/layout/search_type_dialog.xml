@@ -87,10 +87,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_15sdp"
             android:text="@string/would_you_like_to"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/title"
             android:textStyle="bold" />
 
         <RelativeLayout

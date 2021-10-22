@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
@@ -59,7 +60,7 @@ class UserDashboardScreen : AppCompatActivity() {
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackTVBtn: TextView
     private lateinit var toolBarBackBtn: ImageView
-    private lateinit var userProviderSwitch: SwitchCompat
+    private lateinit var userProviderSwitch: SwitchMaterial
     private lateinit var profileImage: CircleImageView
 
     private var flag: Boolean = true

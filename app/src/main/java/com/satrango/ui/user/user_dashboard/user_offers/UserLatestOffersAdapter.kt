@@ -1,22 +1,29 @@
 package com.satrango.ui.user.user_dashboard.user_offers
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.satrango.R
 import com.satrango.databinding.UserLatestOfferRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
 import com.satrango.ui.user.user_dashboard.user_offers.models.Data
 
 class UserLatestOffersAdapter(private val list: List<Data>) :
     RecyclerView.Adapter<UserLatestOffersAdapter.ViewHolder>() {
 
     class ViewHolder(binding: UserLatestOfferRowBinding) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: Data) {
             Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image)
                 .into(binding.image)
+            if(ProviderOffersScreen.FROM_PROVIDER) {
+                binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
+                binding.title.text = "Activate"
+            }
         }
-
         val binding = binding
     }
 

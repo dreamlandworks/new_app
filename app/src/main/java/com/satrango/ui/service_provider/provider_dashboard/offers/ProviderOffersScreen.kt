@@ -17,7 +17,7 @@ import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentProviderOffersScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.user_dashboard.user_offers.UserOffersAdapter
+import com.satrango.ui.user.user_dashboard.user_offers.*
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -29,6 +29,9 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
 
     private lateinit var progressDialog: BeautifulProgressDialog
 
+    companion object {
+        var FROM_PROVIDER = false
+    }
     override fun getFragmentViewModel(): Class<ProviderOfferViewModel> = ProviderOfferViewModel::class.java
 
     override fun getFragmentBinding(
@@ -59,12 +62,13 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             PermissionUtils.connectionAlert(requireContext()) { loadProviderOffersScreen() }
             return
         }
+        FROM_PROVIDER = true
 
         val requestBody = OffersListReqModel(
             "",
             "",
             RetrofitBuilder.USER_KEY,
-            2,
+            3,
             "",
             "",
             UserUtils.getUserId(requireContext()).toInt(),
@@ -78,7 +82,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.latestOfferRv.adapter = UserOffersAdapter(it.data!!)
+                    binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -91,7 +95,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             "",
             "",
             RetrofitBuilder.USER_KEY,
-            2,
+            3,
             "",
             "",
             UserUtils.getUserId(requireContext()).toInt(),
@@ -105,7 +109,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.expiryOfferRv.adapter = UserOffersAdapter(it.data!!)
+                    binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -132,7 +136,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.referralOfferRv.adapter = UserOffersAdapter(it.data!!)
+                    binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

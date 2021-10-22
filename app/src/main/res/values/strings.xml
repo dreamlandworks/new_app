@@ -587,6 +587,7 @@
     <string name="yesdeo">YESDEO</string>
     <string name="claim_now">Claim Now</string>
     <string name="share">Share</string>
+    <string name="no_alerts_found">No Alerts Found</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -1,13 +1,18 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn
 
+import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.text.ClipboardManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -17,28 +22,42 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.satrango.R
 import com.satrango.databinding.ActivityUserReferAndEarnBinding
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.utils.UserUtils
 import com.satrango.utils.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class UserReferAndEarn : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserReferAndEarnBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserReferAndEarnBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         intializeToolBar()
+        val referralLink = "http://satrango.com/referral?id=${UserUtils.getPhoneNo(this)}"
 
-        binding.apply {
-            applyBtn.setOnClickListener { createReferLink() }
+        binding.backBtn.setOnClickListener { onBackPressed() }
+        binding.apply { applyBtn.setOnClickListener { createReferLink() } }
+        binding.copyLink.setOnClickListener { setClipboard(this, referralLink) }
+        binding.referralLink.setText(referralLink)
+
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private fun setClipboard(context: Context, text: String) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.text = text
+        } else {
+            val clipboard =
+                context.getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = ClipData.newPlainText("Copied Text", text)
+            clipboard.setPrimaryClip(clip)
         }
-
+        toast(context,"Copied")
     }
 
     private fun intializeToolBar() {

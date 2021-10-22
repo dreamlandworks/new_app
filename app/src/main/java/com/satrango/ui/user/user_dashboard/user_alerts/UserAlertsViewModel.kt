@@ -1,15 +1,15 @@
 package com.satrango.ui.user.user_dashboard.user_alerts
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -72,6 +72,7 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
             viewModelScope.launch {
                 try {
                     val response = async { repository.getUserOffers(requestBody) }
+                    Log.e("OFFERS", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
                         userOffers.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -88,12 +89,12 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
         return userOffers
     }
 
-    fun updateAlertsToRead(context: Context): MutableLiveData<NetworkResponse<String>> {
+    fun updateAlertsToRead(context: Context, type: String): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
             userOffers.value = NetworkResponse.Loading()
             viewModelScope.launch {
                 try {
-                    val response = async { repository.updateAlertsToRead(context) }
+                    val response = async { repository.updateAlertsToRead(context, type) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("id") == 200) {
                         updateAlertsToRead.value = NetworkResponse.Success(jsonResponse.getString("message"))
