@@ -244,7 +244,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             binding.myLocation.setText(place.name)
             latitude = place.latLng!!.latitude
             longitude = place.latLng!!.longitude
-            toast(this, place.latLng!!.latitude.toString() + " | " + place.latLng!!.longitude)
         } catch (e: java.lang.Exception) {
 
         }

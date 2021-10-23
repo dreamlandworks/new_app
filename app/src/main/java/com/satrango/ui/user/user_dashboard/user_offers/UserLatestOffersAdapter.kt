@@ -1,6 +1,7 @@
 package com.satrango.ui.user.user_dashboard.user_offers
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +10,7 @@ import com.satrango.R
 import com.satrango.databinding.UserLatestOfferRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_offers.models.Data
 
 class UserLatestOffersAdapter(private val list: List<Data>) :
@@ -22,6 +24,10 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
             if(ProviderOffersScreen.FROM_PROVIDER) {
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.title.text = "Activate"
+            }
+            binding.title.setOnClickListener {
+                SearchServiceProvidersScreen.offerId = data.id.toInt()
+                binding.title.context.startActivity(Intent(binding.title.context, SearchServiceProvidersScreen::class.java))
             }
         }
         val binding = binding

@@ -132,8 +132,13 @@ class UserDashboardScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-        binding.userLocation.text = UserUtils.getCity(this)
-        SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+        if (UserUtils.getCity(this).isNotEmpty()) {
+            binding.userLocation.text = UserUtils.getCity(this)
+            SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+        } else {
+            fetchLocation(this)
+        }
+
 
         binding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {

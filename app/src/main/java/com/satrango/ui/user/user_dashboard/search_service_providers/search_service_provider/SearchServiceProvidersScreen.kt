@@ -36,6 +36,7 @@ import com.satrango.utils.snackBar
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
+
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
     private lateinit var viewModel: SearchServiceProviderViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -45,6 +46,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         var userLocationText = ""
         var subCategoryId = ""
         var keyword = "0"
+        var offerId = 0
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -223,7 +225,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             "16.491638988116897",
             "80.65992294142048",
             46,
-            8
+            8,
+            offerId
         )
 //        toast(this, Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
@@ -249,8 +252,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
-        startActivity(Intent(this, UserDashboardScreen::class.java))
+        if (offerId == 0) {
+            finish()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }else {
+            super.onBackPressed()
+        }
+
     }
 
     @SuppressLint("SetTextI18n")

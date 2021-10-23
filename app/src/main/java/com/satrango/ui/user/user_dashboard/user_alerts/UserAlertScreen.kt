@@ -158,7 +158,7 @@ class UserAlertScreen :
             }
         })
         updateAlertsToRead("2")
-        
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.user_offers
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.satrango.databinding.UserLatestOfferRowBinding
 import com.satrango.databinding.UserOffersRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_offers.models.Data
 
 class UserExpiryOffersAdapter(private val list: List<Data>): RecyclerView.Adapter<UserExpiryOffersAdapter.ViewHolder>() {

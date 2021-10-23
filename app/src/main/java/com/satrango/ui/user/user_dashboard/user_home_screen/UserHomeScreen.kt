@@ -69,6 +69,7 @@ class UserHomeScreen :
             if (hasFocus) {
                 UserUtils.saveSearchFilter(requireContext(), "")
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = false
+                SearchServiceProvidersScreen.offerId = 0
                 startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))
             }
         }
