@@ -31,9 +31,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:elevation="@dimen/_6sdp"
                     android:paddingEnd="@dimen/_10sdp"
-                    tools:ignore="RtlSymmetry"
-                    android:elevation="@dimen/_6sdp">
+                    tools:ignore="RtlSymmetry">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
@@ -591,43 +591,41 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_15sdp"
-        app:cardCornerRadius="@dimen/_10sdp"
-        app:cardElevation="@dimen/_5sdp">
+        android:layout_margin="@dimen/_20sdp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/bookLaterBtn"
+            style="@style/blue_outline_button_style"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/blue_out_line"
+            android:gravity="center"
+            android:elevation="0dp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/book_later"
+            android:textSize="@dimen/sub_text" />
 
-            <TextView
-                android:id="@+id/bookLaterBtn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/blue"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/book_later"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text" />
+        <TextView
+            android:id="@+id/bookNowBtn"
+            style="@style/filled_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:elevation="0dp"
+            android:background="@drawable/category_bg"
+            android:gravity="center"
+            android:text="@string/book_now"
+            android:textSize="@dimen/sub_text" />
 
-            <TextView
-                android:id="@+id/bookNowBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/grey_600"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/book_now"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/text" />
+    </RelativeLayout>
 
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

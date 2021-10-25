@@ -173,11 +173,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         })
 
         binding.goBtn.setOnClickListener {
-            if (binding.searchBar.text.toString().isNotEmpty()) {
+            if (binding.searchBar.text.toString().isEmpty()) {
+                snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
+            } else if (UserUtils.getLatitude(this).isEmpty() && UserUtils.getLongitude(this).isEmpty()) {
+                snackBar(binding.goBtn, "Please select location")
+            } else {
                 UserUtils.saveSearchFilter(this, "")
                 loadSearchResults(keyword, subCategoryId)
-            } else {
-                snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
             }
         }
 

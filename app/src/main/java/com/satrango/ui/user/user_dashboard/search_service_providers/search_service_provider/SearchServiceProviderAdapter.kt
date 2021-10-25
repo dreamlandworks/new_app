@@ -44,14 +44,21 @@ class SearchServiceProviderAdapter(
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
             binding.costPerHour.text = data.per_hour
-            binding.userDistance.text = "${
-                UserUtils.distance(
-                    UserUtils.getLatitude(binding.profilePic.context).toDouble(),
-                    UserUtils.getLongitude(binding.profilePic.context).toDouble(),
-                    data.latitude.toDouble(),
-                    data.longitude.toDouble()
-                )
-            } Kms"
+
+            if (data.category_id == "3") {
+                if (UserUtils.getLatitude(binding.profilePic.context).isNotEmpty() && UserUtils.getLongitude(binding.profilePic.context).isNotEmpty()) {
+                    binding.userDistance.text = "${
+                        UserUtils.distance(
+                            UserUtils.getLatitude(binding.profilePic.context).toDouble(),
+                            UserUtils.getLongitude(binding.profilePic.context).toDouble(),
+                            data.latitude.toDouble(),
+                            data.longitude.toDouble()
+                        )
+                    } Kms"
+                }
+            } else {
+                binding.userDistance.visibility = View.GONE
+            }
 
             val spDetails = Gson().fromJson(
                 UserUtils.getSelectedSPDetails(binding.profilePic.context),

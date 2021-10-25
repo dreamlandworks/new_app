@@ -274,6 +274,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "",""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
+            toast(this, imagePathList.size.toString())
             binding.attachmentsRV.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
