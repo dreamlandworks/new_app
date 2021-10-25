@@ -3,6 +3,7 @@ package com.satrango.ui.user.user_dashboard.search_service_providers.search_serv
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -28,13 +29,17 @@ import com.satrango.utils.UserUtils
 class SearchServiceProviderAdapter(
     private val list: List<Data>,
     private val activity: Activity,
-    private val charges: List<Charges>
-) :
-    RecyclerView.Adapter<SearchServiceProviderAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<SearchServiceProviderAdapter.ViewHolder>() {
 
     class ViewHolder(binding: SearchServiceProviderRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+
+        fun TextView.showStrikeThrough(show: Boolean) {
+            paintFlags =
+                if (show) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
 
         @SuppressLint("SetTextI18n")
         fun bindValues(data: Data) {
@@ -43,13 +48,16 @@ class SearchServiceProviderAdapter(
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
-            binding.costPerHour.text = data.per_hour
+            binding.costPerHour.text = UserUtils.roundOffDecimal(data.final_amount.toDouble()).toString()
+            if (SearchServiceProvidersScreen.offerId != 0) {
+                binding.actualCost.text = UserUtils.roundOffDecimal(data.actual_amount.toDouble()).toString()
+                binding.actualCost.showStrikeThrough(true)
+            } else {
+                binding.actualCost.visibility = View.GONE
+            }
             binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms"
 
-            val spDetails = Gson().fromJson(
-                UserUtils.getSelectedSPDetails(binding.profilePic.context),
-                SearchServiceProviderResModel::class.java
-            )
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(binding.profilePic.context), SearchServiceProviderResModel::class.java)
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
                     for (booking in sp.blocked_time_slots) {
@@ -117,12 +125,17 @@ class SearchServiceProviderAdapter(
         val cpkmsText = layout.findViewById<TextView>(R.id.cpkmText)
         val cpkmsCost = layout.findViewById<TextView>(R.id.cpkmCost)
 
-        cgstText.text = "CGST:"
-        cgstCost.text = "${UserUtils.roundOffDecimal(charges.CGST_amount.toDouble())} (${charges.CGST_percentage})"
-        sgstText.text = "SGST:"
-        sgstCost.text = "${UserUtils.roundOffDecimal(charges.SGST_amount.toDouble())} (${charges.SGST_percentage})"
-        cpkmsText.text = "Distance Per Kms:"
-        cpkmsCost.text = UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()
+        cgstText.text = "CGST(${charges.CGST_percentage}%): "
+        cgstCost.text = "${UserUtils.roundOffDecimal(charges.CGST_amount.toDouble())}"
+        sgstText.text = "SGST(${charges.SGST_percentage}%): "
+        sgstCost.text = "${UserUtils.roundOffDecimal(charges.SGST_amount.toDouble())}"
+        if (charges.category_id == "3") {
+            cpkmsText.text = "Distance Per Kms:"
+            cpkmsCost.text = "Rs" + UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()
+        } else {
+            cpkmsText.visibility = View.GONE
+            cpkmsCost.visibility = View.GONE
+        }
 
         popup.contentView = layout
         popup.height = WindowManager.LayoutParams.WRAP_CONTENT

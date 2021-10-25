@@ -25,9 +25,9 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.title.text = "Activate"
             }
-            binding.title.setOnClickListener {
+            binding.image.setOnClickListener {
                 SearchServiceProvidersScreen.offerId = data.id.toInt()
-                binding.title.context.startActivity(
+                binding.image.context.startActivity(
                     Intent(
                         binding.title.context,
                         SearchServiceProvidersScreen::class.java
