@@ -44,21 +44,7 @@ class SearchServiceProviderAdapter(
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
             binding.costPerHour.text = data.per_hour
-
-            if (data.category_id == "3") {
-                if (UserUtils.getLatitude(binding.profilePic.context).isNotEmpty() && UserUtils.getLongitude(binding.profilePic.context).isNotEmpty()) {
-                    binding.userDistance.text = "${
-                        UserUtils.distance(
-                            UserUtils.getLatitude(binding.profilePic.context).toDouble(),
-                            UserUtils.getLongitude(binding.profilePic.context).toDouble(),
-                            data.latitude.toDouble(),
-                            data.longitude.toDouble()
-                        )
-                    } Kms"
-                }
-            } else {
-                binding.userDistance.visibility = View.GONE
-            }
+            binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms"
 
             val spDetails = Gson().fromJson(
                 UserUtils.getSelectedSPDetails(binding.profilePic.context),
@@ -100,7 +86,6 @@ class SearchServiceProviderAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -117,11 +102,12 @@ class SearchServiceProviderAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindValues(list[position])
         holder.binding.userViewMore.setOnClickListener {
-            displayPopupWindow(holder.binding.userViewMore, activity, charges)
+            displayPopupWindow(holder.binding.userViewMore, activity, list[position])
         }
     }
 
-    private fun displayPopupWindow(anchorView: View, activity: Activity, charges: List<Charges>) {
+    @SuppressLint("SetTextI18n")
+    private fun displayPopupWindow(anchorView: View, activity: Activity, charges: Data) {
         val popup = PopupWindow(anchorView.context)
         val layout: View = activity.layoutInflater.inflate(R.layout.popup_content, null)
         val cgstText = layout.findViewById<TextView>(R.id.cgstText)
@@ -131,12 +117,12 @@ class SearchServiceProviderAdapter(
         val cpkmsText = layout.findViewById<TextView>(R.id.cpkmText)
         val cpkmsCost = layout.findViewById<TextView>(R.id.cpkmCost)
 
-        cgstText.text = charges[0].description
-        cgstCost.text = charges[0].amount
-        sgstText.text = charges[2].description
-        sgstCost.text = charges[2].amount
-        cpkmsText.text = charges[1].description
-        cpkmsCost.text = charges[1].amount
+        cgstText.text = "CGST:"
+        cgstCost.text = "${UserUtils.roundOffDecimal(charges.CGST_amount.toDouble())} (${charges.CGST_percentage})"
+        sgstText.text = "SGST:"
+        sgstCost.text = "${UserUtils.roundOffDecimal(charges.SGST_amount.toDouble())} (${charges.SGST_percentage})"
+        cpkmsText.text = "Distance Per Kms:"
+        cpkmsCost.text = UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()
 
         popup.contentView = layout
         popup.height = WindowManager.LayoutParams.WRAP_CONTENT

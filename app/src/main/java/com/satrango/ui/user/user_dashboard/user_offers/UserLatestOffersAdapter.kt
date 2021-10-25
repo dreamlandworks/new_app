@@ -21,15 +21,21 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
         fun bind(data: Data) {
             Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image)
                 .into(binding.image)
-            if(ProviderOffersScreen.FROM_PROVIDER) {
+            if (ProviderOffersScreen.FROM_PROVIDER) {
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.title.text = "Activate"
             }
             binding.title.setOnClickListener {
                 SearchServiceProvidersScreen.offerId = data.id.toInt()
-                binding.title.context.startActivity(Intent(binding.title.context, SearchServiceProvidersScreen::class.java))
+                binding.title.context.startActivity(
+                    Intent(
+                        binding.title.context,
+                        SearchServiceProvidersScreen::class.java
+                    )
+                )
             }
         }
+
         val binding = binding
     }
 

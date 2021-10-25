@@ -73,28 +73,14 @@ class MonthsAdapter(
         holder.bind(list[position])
         if (list[position].isSelected) {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
-//            holder.binding.addressText.setBackgroundResource(R.drawable.blue_bg_sm)
-//            holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.description.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             if (BookingDateAndTimeScreen.FROM_PROVIDER) {
                 holder.binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
         }
-//        else {
-//            holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_out_line)
-//            holder.binding.addressText.setBackgroundResource(R.drawable.blue_out_line)
-//            holder.binding.addressText.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
-//            holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.black))
-//            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
-//                holder.binding.rowLayout.setBackgroundResource(R.drawable.purple_out_line)
-//            }
-//        }
-
         if (listType == "AA") {
             holder.binding.description.visibility = View.GONE
-//            holder.binding.addressText.visibility = View.VISIBLE
-
             holder.binding.title.text = list[position].month
             holder.itemView.setOnClickListener {
                 monthsInterface.selectedMonth(position, list[position].month, listType)
@@ -105,9 +91,6 @@ class MonthsAdapter(
             monthsInterface.selectedMonth(position, list[position].month, listType)
             notifyDataSetChanged()
         }
-//        if (listType == "T") {
-//            holder.binding.title.text = list[position].month
-//        }
     }
 
     override fun getItemCount(): Int {

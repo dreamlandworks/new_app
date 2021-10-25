@@ -125,11 +125,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
         }
 
-
         binding.nextBtn.setOnClickListener {
             validateFields()
         }
-
 
     }
 
@@ -402,13 +400,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.afternoonTimeRv.layoutManager = GridLayoutManager(this, 2)
         binding.eveningTimeRv.layoutManager = GridLayoutManager(this, 2)
         binding.nightTimeRv.layoutManager = GridLayoutManager(this, 2)
-        morningTimings = ArrayList<MonthsModel>()
-        afternoonTimings = ArrayList<MonthsModel>()
-        eveningTimings = ArrayList<MonthsModel>()
-        nightTimings = ArrayList<MonthsModel>()
+        morningTimings = ArrayList()
+        afternoonTimings = ArrayList()
+        eveningTimings = ArrayList()
+        nightTimings = ArrayList()
         availableTimeSlots.forEachIndexed { index, monthsModel ->
             when {
-                isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
                     if (index >= 1) {
                         if (!morningTimings.contains(availableTimeSlots[index - 1])) {
                             morningTimings.add(availableTimeSlots[index - 1])
@@ -416,7 +414,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     }
                     morningTimings.add(monthsModel)
                 }
-                isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
                     if (index >= 1) {
                         if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
                             afternoonTimings.add(availableTimeSlots[index - 1])
@@ -424,7 +422,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     }
                     afternoonTimings.add(monthsModel)
                 }
-                isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
                     if (index >= 1) {
                         if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
                             eveningTimings.add(availableTimeSlots[index - 1])
@@ -432,7 +430,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     }
                     eveningTimings.add(monthsModel)
                 }
-                isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
                     if (index >= 1) {
                         if (!nightTimings.contains(availableTimeSlots[index - 1])) {
                             nightTimings.add(availableTimeSlots[index - 1])
@@ -449,15 +447,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
         binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
         binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun isNowTimeBetween(startTime: String?, endTime: String?, compareTime: String): Boolean {
-        val start: LocalTime = LocalTime.parse(startTime!!.split(":")[0] + ":" + startTime.split(":")[1]) //"22:00"
-        val end: LocalTime = LocalTime.parse(endTime!!.split(":")[0] + ":" + endTime.split(":")[1]) //"10:00"
-        val now: LocalTime = LocalTime.parse(compareTime.split(":")[0] + ":" + compareTime.split(":")[1])
-        if (start.isBefore(end)) return now.isAfter(start) && now.isBefore(end)
-        return if (now.isBefore(start)) now.isBefore(start) && now.isBefore(end) else now.isAfter(start) && now.isAfter(end)
     }
 
     private fun loadDays(
@@ -544,7 +533,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
             availableTimeSlots.onEachIndexed { index, monthsModel ->
                 when {
-                    isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                    UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
                         if (index >= 1) {
                             if (!morningTimings.contains(availableTimeSlots[index - 1])) {
                                 morningTimings.add(availableTimeSlots[index - 1])
@@ -552,7 +541,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                         morningTimings.add(monthsModel)
                     }
-                    isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                    UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
                         if (index >= 1) {
                             if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
                                 afternoonTimings.add(availableTimeSlots[index - 1])
@@ -560,7 +549,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                         afternoonTimings.add(monthsModel)
                     }
-                    isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                    UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
                         if (index >= 1) {
                             if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
                                 eveningTimings.add(availableTimeSlots[index - 1])
@@ -568,7 +557,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                         eveningTimings.add(monthsModel)
                     }
-                    isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                    UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
                         if (index >= 1) {
                             if (!nightTimings.contains(availableTimeSlots[index - 1])) {
                                 nightTimings.add(availableTimeSlots[index - 1])
