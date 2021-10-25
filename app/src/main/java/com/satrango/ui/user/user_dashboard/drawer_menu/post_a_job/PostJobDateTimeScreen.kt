@@ -3,12 +3,15 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
@@ -27,6 +30,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.Po
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import java.time.LocalDate
 import java.time.YearMonth
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,10 +39,15 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var timeSlots: java.util.ArrayList<MonthsModel>
+    private lateinit var morningTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var afternoonTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var eveningTimings: java.util.ArrayList<MonthsModel>
+    private lateinit var nightTimings: java.util.ArrayList<MonthsModel>
     private lateinit var daysList: ArrayList<MonthsModel>
     private lateinit var calendar: Calendar
     private lateinit var binding: ActivityPostJobDateTimeScreenBinding
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostJobDateTimeScreenBinding.inflate(layoutInflater)
@@ -56,6 +65,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         }
 
         calendar = Calendar.getInstance()
+        binding.selectedMonth.text = LocalDate.now().month.name
         loadDates()
         loadTimings()
 
@@ -79,6 +89,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadData() {
 
         val factory = ViewModelFactory(PostJobRepository())
@@ -108,6 +119,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI(data: MyJobPostViewResModel) {
         UserUtils.EDIT_MY_JOB_POST_DETAILS = Gson().toJson(data)
         for (index in daysList.indices) {
@@ -120,8 +132,44 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         for (index in timeSlots.indices) {
             if (timeSlots[index].month.split("\n")[0] == data.job_post_details.from) {
                 timeSlots[index] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                binding.timeRv.adapter!!.notifyItemChanged(index)
-                binding.timeRv.scrollToPosition(index)
+                when {
+                    UserUtils.isNowTimeBetween("07:00", "12:00", timeSlots[index].month) -> {
+                        for (morning in morningTimings.indices) {
+                            if (morningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+                                morningTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+                                binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this, "T")
+                                binding.morningTimeRv.scrollToPosition(index)
+                            }
+                        }
+                    }
+                    UserUtils.isNowTimeBetween("12:00", "16:00", timeSlots[index].month) -> {
+                        for (morning in afternoonTimings.indices) {
+                            if (afternoonTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+                                afternoonTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+                                binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this, "T")
+                                binding.afternoonTimeRv.scrollToPosition(index)
+                            }
+                        }
+                    }
+                    UserUtils.isNowTimeBetween("16:00", "21:00", timeSlots[index].month) -> {
+                        for (morning in eveningTimings.indices) {
+                            if (eveningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+                                eveningTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+                                binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
+                                binding.eveningTimeRv.scrollToPosition(index)
+                            }
+                        }
+                    }
+                    UserUtils.isNowTimeBetween("21:00", "07:00", timeSlots[index].month) -> {
+                        for (morning in nightTimings.indices) {
+                            if (nightTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+                                nightTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+                                binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
+                                binding.nightTimeRv.scrollToPosition(index)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -193,6 +241,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun selectedMonth(position: Int, dateTime: String, listType: String) {
         val tempMonths = arrayListOf<MonthsModel>()
 
@@ -210,25 +259,116 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         }
         if (listType == "T") { // Timings List
             timeSlots.onEachIndexed { index, month ->
-                if (index == position) {
+                if (month.month == dateTime) {
                     tempMonths.add(MonthsModel(month.month, month.day, true))
                 } else {
                     tempMonths.add(MonthsModel(month.month, month.day, false))
                 }
             }
             timeSlots = tempMonths
-            binding.timeRv.adapter = MonthsAdapter(timeSlots, this, "T")
-            binding.timeRv.scrollToPosition(position)
+            morningTimings = ArrayList()
+            afternoonTimings = ArrayList()
+            eveningTimings = ArrayList()
+            nightTimings = ArrayList()
+            timeSlots.onEachIndexed { index, monthsModel ->
+                when {
+                    UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!morningTimings.contains(timeSlots[index - 1])) {
+                                morningTimings.add(timeSlots[index - 1])
+                            }
+                        }
+                        morningTimings.add(monthsModel)
+                    }
+                    UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!afternoonTimings.contains(timeSlots[index - 1])) {
+                                afternoonTimings.add(timeSlots[index - 1])
+                            }
+                        }
+                        afternoonTimings.add(monthsModel)
+                    }
+                    UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!eveningTimings.contains(timeSlots[index - 1])) {
+                                eveningTimings.add(timeSlots[index - 1])
+                            }
+                        }
+                        eveningTimings.add(monthsModel)
+                    }
+                    UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!nightTimings.contains(timeSlots[index - 1])) {
+                                nightTimings.add(timeSlots[index - 1])
+                            }
+                        }
+                        nightTimings.add(monthsModel)
+                    }
+                }
+            }
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this, "T")
+            binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this, "T")
+            binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
+            binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadTimings() {
         timeSlots = ArrayList()
         val timingsList = resources.getStringArray(R.array.bookingTimings)
         for (index in timingsList.indices) {
             timeSlots.add(MonthsModel(timingsList[index], "", false))
         }
-        binding.timeRv.layoutManager = LinearLayoutManager(this@PostJobDateTimeScreen, LinearLayoutManager.HORIZONTAL, false)
-        binding.timeRv.adapter = MonthsAdapter(timeSlots, this@PostJobDateTimeScreen, "T")
+        binding.morningTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.afternoonTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.eveningTimeRv.layoutManager = GridLayoutManager(this, 2)
+        binding.nightTimeRv.layoutManager = GridLayoutManager(this, 2)
+        morningTimings = ArrayList()
+        afternoonTimings = ArrayList()
+        eveningTimings = ArrayList()
+        nightTimings = ArrayList()
+        timeSlots.forEachIndexed { index, monthsModel ->
+            when {
+                UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!morningTimings.contains(timeSlots[index - 1])) {
+                            morningTimings.add(timeSlots[index - 1])
+                        }
+                    }
+                    morningTimings.add(monthsModel)
+                }
+                UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!afternoonTimings.contains(timeSlots[index - 1])) {
+                            afternoonTimings.add(timeSlots[index - 1])
+                        }
+                    }
+                    afternoonTimings.add(monthsModel)
+                }
+                UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!eveningTimings.contains(timeSlots[index - 1])) {
+                            eveningTimings.add(timeSlots[index - 1])
+                        }
+                    }
+                    eveningTimings.add(monthsModel)
+                }
+                UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!nightTimings.contains(timeSlots[index - 1])) {
+                            nightTimings.add(timeSlots[index - 1])
+                        }
+                    }
+                    nightTimings.add(monthsModel)
+                }
+            }
+        }
+//        binding.timeRv.layoutManager = LinearLayoutManager(this@PostJobDateTimeScreen, LinearLayoutManager.HORIZONTAL, false)
+//        binding.timeRv.adapter = MonthsAdapter(timeSlots, this@PostJobDateTimeScreen, "T")
+        binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
+        binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
+        binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
+        binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
     }
 }

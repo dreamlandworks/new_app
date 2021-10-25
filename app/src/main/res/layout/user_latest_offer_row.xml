@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/_120sdp"
+    android:layout_width="@dimen/_80sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/_10sdp"
     app:cardElevation="@dimen/_5sdp"
@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="@dimen/_80sdp"
             android:scaleType="fitXY"
             android:src="@drawable/circlelogo"
             tools:ignore="ContentDescription" />
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:padding="@dimen/_10sdp"
+            android:visibility="gone"
             android:text="@string/book_now"
             android:gravity="center"
             android:textStyle="bold"

@@ -8,9 +8,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Looper
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.time.LocalTime
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.acos
@@ -692,7 +695,7 @@ object UserUtils {
         return rad * 180.0 / Math.PI
     }
 
-    private fun roundOffDecimal(number: Double): Double {
+    fun roundOffDecimal(number: Double): Double {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         return df.format(number).toDouble()
@@ -756,5 +759,14 @@ object UserUtils {
 //        setAddress(context, knownName)
 //        return getCity(context)
 //    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun isNowTimeBetween(startTime: String?, endTime: String?, compareTime: String): Boolean {
+        val start: LocalTime = LocalTime.parse(startTime!!.split(":")[0] + ":" + startTime.split(":")[1]) //"22:00"
+        val end: LocalTime = LocalTime.parse(endTime!!.split(":")[0] + ":" + endTime.split(":")[1]) //"10:00"
+        val now: LocalTime = LocalTime.parse(compareTime.split(":")[0] + ":" + compareTime.split(":")[1])
+        if (start.isBefore(end)) return now.isAfter(start) && now.isBefore(end)
+        return if (now.isBefore(start)) now.isBefore(start) && now.isBefore(end) else now.isAfter(start) && now.isAfter(end)
+    }
 
 }
