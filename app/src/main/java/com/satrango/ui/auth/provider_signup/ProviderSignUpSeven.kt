@@ -147,6 +147,7 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
         val goToDashboardBtn = dialogSheet.findViewById<TextView>(R.id.goToDashboardBtn)
         closeBtn.setOnClickListener { dialog.dismiss() }
         goToDashboardBtn.setOnClickListener {
+            ProviderDashboard.FROM_FCM_SERVICE = false
             startActivity(Intent(this@ProviderSignUpSeven, ProviderDashboard::class.java))
         }
         dialog.setContentView(dialogSheet)

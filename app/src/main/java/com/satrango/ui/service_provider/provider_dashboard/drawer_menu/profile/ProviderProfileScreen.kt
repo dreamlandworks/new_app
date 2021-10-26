@@ -61,9 +61,11 @@ class ProviderProfileScreen : AppCompatActivity() {
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            ProviderDashboard.FROM_FCM_SERVICE = false
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            ProviderDashboard.FROM_FCM_SERVICE = false
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE

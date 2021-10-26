@@ -304,7 +304,10 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         val myBidsBtn = dialogView.findViewById<TextView>(R.id.myBidsBtn)
         messageText.text = message
         closeBtn.setOnClickListener { dialog.dismiss() }
-        homeBtn.setOnClickListener { startActivity(Intent(this, ProviderDashboard::class.java)) }
+        homeBtn.setOnClickListener {
+            ProviderDashboard.FROM_FCM_SERVICE = false
+            startActivity(Intent(this, ProviderDashboard::class.java))
+        }
         myBidsBtn.setOnClickListener { startActivity(Intent(this, ProviderMyBidsScreen::class.java)) }
         dialog.setContentView(dialogView)
         dialog.setCancelable(false)

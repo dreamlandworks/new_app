@@ -83,7 +83,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         if (FROM_MY_BOOKINGS_SCREEN) {
             toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
-            binding.providerBtnsLayout.visibility = View.GONE
             if (FROM_PROVIDER) {
                 toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
                 binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
@@ -150,7 +149,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         } else {
-            binding.providerBtnsLayout.visibility = View.VISIBLE
             binding.spLayout.visibility = View.GONE
             binding.userLayout.visibility = View.GONE
         }
@@ -178,82 +176,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.acceptBtn, it.message!!)
+                    snackBar(binding.inProgressViewStatusBtn, it.message!!)
                 }
             }
         })
-        binding.apply {
-
-            acceptBtn.setOnClickListener {
-                val requestBody = ProviderResponseReqModel(
-                    response.booking_details.amount,
-                    bookingId.toInt(),
-                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
-                    "",
-                    RetrofitBuilder.USER_KEY,
-                    response.booking_details.sp_id.toInt(),
-                    5,
-                    userId.toInt()
-                )
-                viewModel.setProviderResponse(this@ViewUserBookingDetailsScreen, requestBody)
-                    .observe(this@ViewUserBookingDetailsScreen, {
-                        when (it) {
-                            is NetworkResponse.Loading -> {
-                                progressDialog.show()
-                            }
-                            is NetworkResponse.Success -> {
-                                progressDialog.dismiss()
-                                Log.e("AMOUNT", response.booking_details.amount)
-                                UserUtils.sendFCM(
-                                    this@ViewUserBookingDetailsScreen,
-                                    response.booking_details.fcm_token,
-                                    "accept",
-                                    "accept|" + response.booking_details.amount + "|${response.booking_details.sp_id}|provider"
-                                )
-                            }
-                            is NetworkResponse.Failure -> {
-                                progressDialog.dismiss()
-                                snackBar(binding.acceptBtn, it.message!!)
-                            }
-                        }
-                    })
-            }
-
-            rejectBtn.setOnClickListener {
-                val requestBody = ProviderResponseReqModel(
-                    response.booking_details.amount,
-                    bookingId.toInt(),
-                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
-                    "",
-                    RetrofitBuilder.USER_KEY,
-                    response.booking_details.sp_id.toInt(),
-                    4,
-                    userId.toInt()
-                )
-                viewModel.setProviderResponse(this@ViewUserBookingDetailsScreen, requestBody)
-                    .observe(this@ViewUserBookingDetailsScreen, {
-                        when (it) {
-                            is NetworkResponse.Loading -> {
-                                progressDialog.show()
-                            }
-                            is NetworkResponse.Success -> {
-                                progressDialog.dismiss()
-                                UserUtils.sendFCM(
-                                    this@ViewUserBookingDetailsScreen,
-                                    response.booking_details.fcm_token,
-                                    "reject",
-                                    "reject|" + response.booking_details.amount + "|${response.booking_details.sp_id} + |provider"
-                                )
-                            }
-                            is NetworkResponse.Failure -> {
-                                progressDialog.dismiss()
-                                snackBar(binding.acceptBtn, it.message!!)
-                            }
-                        }
-                    })
-            }
-
-        }
 
     }
 
@@ -458,13 +384,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
 
             if (firstNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.acceptBtn, "Invalid OTP")
+                snackBar(binding.startBtn, "Invalid OTP")
             } else if (secondNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.acceptBtn, "Invalid OTP")
+                snackBar(binding.startBtn, "Invalid OTP")
             } else if (thirdNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.acceptBtn, "Invalid OTP")
+                snackBar(binding.startBtn, "Invalid OTP")
             } else if (fourthNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.acceptBtn, "Invalid OTP")
+                snackBar(binding.startBtn, "Invalid OTP")
             } else {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
@@ -500,7 +426,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             }
                         })
                 } else {
-                    snackBar(binding.acceptBtn, "Invalid OTP")
+                    snackBar(binding.startBtn, "Invalid OTP")
                 }
             }
         }
