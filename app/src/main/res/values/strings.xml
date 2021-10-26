@@ -591,6 +591,8 @@
     <string name="new_booking">New Booking</string>
     <string name="date_amp_time"><![CDATA[Date & Time]]></string>
     <string name="work">Work</string>
+    <string name="location_not_provided">Location not provided</string>
+    <string name="description_not_mentioned">Description not mentioned</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

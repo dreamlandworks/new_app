@@ -637,8 +637,10 @@ object UserUtils {
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
         val requestBody = FCMMessageReqModel(Notification("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
-            RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Log.e("FCM RESPONSE:", Gson().toJson(response))
         }
+
     }
 
     fun sendFCMtoSelectedServiceProvider(

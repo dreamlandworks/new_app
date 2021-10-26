@@ -78,8 +78,8 @@ class FCMService : FirebaseMessagingService() {
         notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
-        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.enableLights(true)

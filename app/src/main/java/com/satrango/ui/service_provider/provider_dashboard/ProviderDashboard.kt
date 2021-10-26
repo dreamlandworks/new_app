@@ -33,6 +33,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -61,6 +62,9 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -197,16 +201,52 @@ class ProviderDashboard : AppCompatActivity() {
             true
         }
 
+        Log.e("FROM_FCM_SERVICE:", FROM_FCM_SERVICE.toString())
         if (FROM_FCM_SERVICE) {
-            showBookingAlert()
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+
+            val bookingFactory = ViewModelFactory(BookingRepository())
+            val bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
+            val requestBody = BookingDetailsReqModel(
+                bookingId.toInt(),
+                categoryId.toInt(),
+                RetrofitBuilder.USER_KEY,
+                userId.toInt()
+            )
+            Log.e("RequestBody:", Gson().toJson(requestBody))
+            bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
+                when (it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                        Log.e("Loading...:", "Loading...")
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        response = it.data!!
+                        Log.e("Response:", Gson().toJson(response))
+                        CoroutineScope(Dispatchers.Main).launch {
+                            showBookingAlert(bookingViewModel, bookingId, userId, response)
+                        }
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+//                    snackBar(binding.bottomNavigationView, it.message!!)
+                        Log.e("Error:", Gson().toJson(response))
+                    }
+                }
+            })
         }
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
-    private fun showBookingAlert() {
-        val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-        val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-        val userId = intent.getStringExtra(getString(R.string.user_id))!!
+    private fun showBookingAlert(
+        bookingViewModel: BookingViewModel,
+        bookingId: String,
+        userId: String,
+        response: BookingDetailsResModel
+    ) {
 
         val bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
@@ -221,48 +261,32 @@ class ProviderDashboard : AppCompatActivity() {
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
         val progressBar = bottomSheet.findViewById<CircularProgressIndicator>(R.id.progressBar)
 
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        time.text = response.booking_details.estimate_time
+        try {
+            timeFrom.text = response.booking_details.started_at.split(" ")[1]
+        } catch (e: java.lang.Exception) {
+            timeFrom.text = response.booking_details.started_at
+        }
+        date.text = response.booking_details.scheduled_date
+        if (response.job_details.isNotEmpty()) {
+            jobDescription.text = response.job_details[0].job_description
+            jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+        }
 
-        val requestBody = BookingDetailsReqModel(
-            bookingId.toInt(),
-            categoryId.toInt(),
-            RetrofitBuilder.USER_KEY,
-            userId.toInt()
-        )
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    response = it.data!!
-                    time.text = response.booking_details.estimate_time
-                    jobDescription.text = response.job_details[0].job_description
-                    jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
-                    timeFrom.text = response.booking_details.started_at
-                    date.text = response.booking_details.scheduled_date
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.bottomNavigationView, it.message!!)
-                }
-            }
-        })
+        Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
             val requestBody = ProviderResponseReqModel(
-                response.booking_details.amount,
+                this.response.booking_details.amount,
                 bookingId.toInt(),
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 "",
                 RetrofitBuilder.USER_KEY,
-                response.booking_details.sp_id.toInt(),
+                this.response.booking_details.sp_id.toInt(),
                 5,
                 userId.toInt()
             )
-            viewModel.setProviderResponse(this@ProviderDashboard, requestBody)
+            bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
                 .observe(this@ProviderDashboard, {
                     when (it) {
                         is NetworkResponse.Loading -> {
@@ -270,12 +294,12 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            Log.e("AMOUNT", response.booking_details.amount)
+                            Log.e("AMOUNT", this.response.booking_details.amount)
                             UserUtils.sendFCM(
                                 this@ProviderDashboard,
-                                response.booking_details.fcm_token,
+                                this.response.booking_details.fcm_token,
                                 "accept",
-                                "accept|" + response.booking_details.amount + "|${response.booking_details.sp_id}|provider"
+                                "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
                             bottomSheetDialog.dismiss()
                         }
@@ -289,16 +313,16 @@ class ProviderDashboard : AppCompatActivity() {
 
         rejectBtn.setOnClickListener {
             val requestBody = ProviderResponseReqModel(
-                response.booking_details.amount,
+                this.response.booking_details.amount,
                 bookingId.toInt(),
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 "",
                 RetrofitBuilder.USER_KEY,
-                response.booking_details.sp_id.toInt(),
+                this.response.booking_details.sp_id.toInt(),
                 4,
                 userId.toInt()
             )
-            viewModel.setProviderResponse(this@ProviderDashboard, requestBody)
+            bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
                 .observe(this@ProviderDashboard, {
                     when (it) {
                         is NetworkResponse.Loading -> {
@@ -308,9 +332,9 @@ class ProviderDashboard : AppCompatActivity() {
                             progressDialog.dismiss()
                             UserUtils.sendFCM(
                                 this@ProviderDashboard,
-                                response.booking_details.fcm_token,
+                                this.response.booking_details.fcm_token,
                                 "reject",
-                                "reject|" + response.booking_details.amount + "|${response.booking_details.sp_id} + |provider"
+                                "reject|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id} + |provider"
                             )
                             bottomSheetDialog.dismiss()
                         }
