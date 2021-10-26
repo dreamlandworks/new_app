@@ -137,10 +137,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="100.00"
+                        android:text="10.00"
+                        android:layout_marginBottom="@dimen/_2sdp"
                         android:singleLine="true"
                         android:textColor="@color/red"
                         android:textSize="@dimen/text"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/actualCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="100.00"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sub_text"
                         android:textStyle="bold" />
 
                     <TextView

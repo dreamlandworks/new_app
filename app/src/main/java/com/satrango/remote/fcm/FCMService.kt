@@ -17,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.FCMReqModel
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.provider_response.ProviderBookingResponseScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.utils.PermissionUtils
@@ -72,7 +73,8 @@ class FCMService : FirebaseMessagingService() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
-        val notificationIntent = Intent(applicationContext, ViewUserBookingDetailsScreen::class.java)
+        ProviderDashboard.FROM_FCM_SERVICE = true
+        val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
         notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
@@ -88,17 +90,17 @@ class FCMService : FirebaseMessagingService() {
 
             builder = android.app.Notification.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.circlelogo)
-                .setContentTitle(getString(com.satrango.R.string.app_name))
+                .setContentTitle(getString(R.string.app_name))
 //                .setContentText(body)
-                .setContentText("You got a booking request!!!")
+                .setContentText("You got a booking request!")
                 .setSound(alarmSound)
                 .setContentIntent(contentIntent)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.circlelogo))
         } else {
             builder = android.app.Notification.Builder(this)
                 .setSmallIcon(R.drawable.circlelogo)
-                .setContentTitle(getString(com.satrango.R.string.app_name))
-                .setContentText("You got a booking request!!!")
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("You got a booking request!")
 //                .setContentText(body)
                 .setSound(alarmSound)
                 .setContentIntent(contentIntent)

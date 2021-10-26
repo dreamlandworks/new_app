@@ -279,9 +279,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             homeBtn.setTextColor(resources.getColor(R.color.purple_500))
             title.setTextColor(resources.getColor(R.color.purple_500))
             homeBtn.setOnClickListener {
+                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
             myBookingsBtn.setOnClickListener {
+                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
         } else {

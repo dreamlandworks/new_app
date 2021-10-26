@@ -102,6 +102,7 @@ class UserDashboardScreen : AppCompatActivity() {
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 finish()
+                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
         }

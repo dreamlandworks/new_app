@@ -263,6 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:text="@string/mobile_no"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
@@ -271,6 +272,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text" />
 
@@ -303,38 +305,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp" />
-
-        <RelativeLayout
-            android:id="@+id/providerBtnsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
-
-            <TextView
-                android:id="@+id/rejectBtn"
-                style="@style/blue_outline_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/green_corner_border"
-                android:text="@string/reject"
-                android:textColor="@color/purple_500" />
-
-            <TextView
-                android:id="@+id/acceptBtn"
-                style="@style/filled_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/green_btn_bg"
-                android:text="@string/accept"
-                tools:ignore="RelativeOverlap" />
-
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

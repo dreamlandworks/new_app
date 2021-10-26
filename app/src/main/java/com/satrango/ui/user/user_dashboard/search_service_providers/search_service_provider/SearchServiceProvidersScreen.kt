@@ -120,20 +120,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this, spDetails.charges)
+                        SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
                 }
                 filter.highToLow -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this, spDetails.charges)
+                        SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
                 }
                 else -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this, spDetails.charges)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
                 }
             }
 
@@ -286,7 +286,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             dialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this, data.charges)
+            binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
 //            if (data.data.isNotEmpty()) {
 //                binding.sortFilterBtn.visibility = View.VISIBLE
 //            } else {

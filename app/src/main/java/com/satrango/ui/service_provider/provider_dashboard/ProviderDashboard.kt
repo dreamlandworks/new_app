@@ -10,6 +10,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
@@ -30,6 +31,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -48,16 +51,23 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen
 import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScreen
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ProviderDashboard : AppCompatActivity() {
 
+    private lateinit var response: BookingDetailsResModel
     private lateinit var referralId: TextView
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackBtn: ImageView
@@ -74,6 +84,10 @@ class ProviderDashboard : AppCompatActivity() {
     private lateinit var locationCallBack: LocationCallback
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    companion object {
+        var FROM_FCM_SERVICE = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderDashboardBinding.inflate(layoutInflater)
@@ -82,7 +96,7 @@ class ProviderDashboard : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
         initializeProgressDialog()
@@ -183,6 +197,153 @@ class ProviderDashboard : AppCompatActivity() {
             true
         }
 
+        if (FROM_FCM_SERVICE) {
+            showBookingAlert()
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun showBookingAlert() {
+        val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+        val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+        val userId = intent.getStringExtra(getString(R.string.user_id))!!
+
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
+        bottomSheetDialog.setCancelable(false)
+        val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = bottomSheet.findViewById<TextView>(R.id.rejectBtn)
+        val time = bottomSheet.findViewById<TextView>(R.id.time)
+        val jobDescription = bottomSheet.findViewById<TextView>(R.id.jobDescription)
+        val jobLocation = bottomSheet.findViewById<TextView>(R.id.jobLocation)
+        val timeFrom = bottomSheet.findViewById<TextView>(R.id.timeFrom)
+        val date = bottomSheet.findViewById<TextView>(R.id.date)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        val progressBar = bottomSheet.findViewById<CircularProgressIndicator>(R.id.progressBar)
+
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+
+        val requestBody = BookingDetailsReqModel(
+            bookingId.toInt(),
+            categoryId.toInt(),
+            RetrofitBuilder.USER_KEY,
+            userId.toInt()
+        )
+        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    response = it.data!!
+                    time.text = response.booking_details.estimate_time
+                    jobDescription.text = response.job_details[0].job_description
+                    jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                    timeFrom.text = response.booking_details.started_at
+                    date.text = response.booking_details.scheduled_date
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.bottomNavigationView, it.message!!)
+                }
+            }
+        })
+
+        acceptBtn.setOnClickListener {
+            val requestBody = ProviderResponseReqModel(
+                response.booking_details.amount,
+                bookingId.toInt(),
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+                "",
+                RetrofitBuilder.USER_KEY,
+                response.booking_details.sp_id.toInt(),
+                5,
+                userId.toInt()
+            )
+            viewModel.setProviderResponse(this@ProviderDashboard, requestBody)
+                .observe(this@ProviderDashboard, {
+                    when (it) {
+                        is NetworkResponse.Loading -> {
+                            progressDialog.show()
+                        }
+                        is NetworkResponse.Success -> {
+                            progressDialog.dismiss()
+                            Log.e("AMOUNT", response.booking_details.amount)
+                            UserUtils.sendFCM(
+                                this@ProviderDashboard,
+                                response.booking_details.fcm_token,
+                                "accept",
+                                "accept|" + response.booking_details.amount + "|${response.booking_details.sp_id}|provider"
+                            )
+                            bottomSheetDialog.dismiss()
+                        }
+                        is NetworkResponse.Failure -> {
+                            progressDialog.dismiss()
+                            snackBar(binding.bottomNavigationView, it.message!!)
+                        }
+                    }
+                })
+        }
+
+        rejectBtn.setOnClickListener {
+            val requestBody = ProviderResponseReqModel(
+                response.booking_details.amount,
+                bookingId.toInt(),
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+                "",
+                RetrofitBuilder.USER_KEY,
+                response.booking_details.sp_id.toInt(),
+                4,
+                userId.toInt()
+            )
+            viewModel.setProviderResponse(this@ProviderDashboard, requestBody)
+                .observe(this@ProviderDashboard, {
+                    when (it) {
+                        is NetworkResponse.Loading -> {
+                            progressDialog.show()
+                        }
+                        is NetworkResponse.Success -> {
+                            progressDialog.dismiss()
+                            UserUtils.sendFCM(
+                                this@ProviderDashboard,
+                                response.booking_details.fcm_token,
+                                "reject",
+                                "reject|" + response.booking_details.amount + "|${response.booking_details.sp_id} + |provider"
+                            )
+                            bottomSheetDialog.dismiss()
+                        }
+                        is NetworkResponse.Failure -> {
+                            progressDialog.dismiss()
+                            snackBar(binding.bottomNavigationView, it.message!!)
+                        }
+                    }
+                })
+        }
+        var minutes = 2
+        var seconds = 59
+        val mainHandler = Handler(Looper.getMainLooper())
+        var progressTime = 180
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                time.text = "$minutes:$seconds"
+                progressTime -= 1
+                progressBar.progress = progressTime
+
+                seconds -= 1
+                if (minutes == 0 && seconds == 0) {
+                    bottomSheetDialog.dismiss()
+                }
+                if (seconds == 0) {
+                    seconds = 59
+                    minutes -= 1
+                }
+                mainHandler.postDelayed(this, 1000)
+            }
+        })
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.show()
     }
 
     @SuppressLint("SetTextI18n")
@@ -226,6 +387,7 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderSignUpSeven::class.java))
                 }
                 "4" -> {
+                    FROM_FCM_SERVICE = false
                     startActivity(Intent(this, ProviderDashboard::class.java))
                 }
             }
