@@ -19,7 +19,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPostJobAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.booking_date_time.MonthsAdapter
+import com.satrango.ui.user.bookings.booking_address.UserBookingAddressAdapter
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
@@ -163,8 +163,8 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                 addressList[index] = MonthsModel(addressList[index].month, addressList[index].day, true)
             }
         }
-        binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen, LinearLayoutManager.HORIZONTAL, false)
-        binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
+        binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen)
+        binding.addressRv.adapter = UserBookingAddressAdapter(addressList, this@PostJobAddressScreen, "AA")
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -226,8 +226,8 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     for (address in responseData.address) {
                         addressList.add(MonthsModel(address.locality + ", " + address.city + ", " + address.zipcode, address.id, false))
                     }
-                    binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen, LinearLayoutManager.HORIZONTAL, false)
-                    binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
+                    binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen)
+                    binding.addressRv.adapter = UserBookingAddressAdapter(addressList, this@PostJobAddressScreen, "AA")
                     progressDialog.dismiss()
 
                     if (UserUtils.EDIT_MY_JOB_POST) {
@@ -266,7 +266,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             }
             addressList = tempAddress
         }
-        binding.addressRv.adapter = MonthsAdapter(addressList, this@PostJobAddressScreen, "AA")
+        binding.addressRv.adapter = UserBookingAddressAdapter(addressList, this@PostJobAddressScreen, "AA")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
