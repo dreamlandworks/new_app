@@ -1,7 +1,6 @@
 package com.satrango.ui.user.bookings.booking_address
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -28,16 +27,15 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
-import com.satrango.ui.user.bookings.booking_date_time.MonthsAdapter
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
+import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
@@ -60,6 +58,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
     private lateinit var data: Data
     private lateinit var binding: ActivityBookingAddressScreenBinding
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookingAddressScreenBinding.inflate(layoutInflater)
@@ -74,9 +73,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         if (!UserUtils.getFromInstantBooking(this)) {
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             updateUI(data)
-        } else {
-            binding.spCard.visibility = View.GONE
         }
+//        else {
+//            binding.spCard.visibility = View.GONE
+//        }
 
         addressList = arrayListOf()
         addressList.add(
@@ -107,13 +107,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                             )
                         )
                     }
-                    binding.addressRv.layoutManager = LinearLayoutManager(
-                        this@BookingAddressScreen,
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
+                    binding.addressRv.layoutManager = LinearLayoutManager(this@BookingAddressScreen)
                     binding.addressRv.adapter =
-                        MonthsAdapter(addressList, this@BookingAddressScreen, "AA")
+                        UserBookingAddressAdapter(addressList, this@BookingAddressScreen, "AA")
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -140,7 +136,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 for (address in addressList) {
                     if (address.isSelected) {
                         if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
-                            UserUtils.temp_address_id = UserUtils.getTempAddressId(this@BookingAddressScreen)
+                            UserUtils.temp_address_id =
+                                UserUtils.getTempAddressId(this@BookingAddressScreen)
                             UserUtils.address_id = "0"
                         } else {
                             UserUtils.temp_address_id = "0"
@@ -156,8 +153,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
                         val calender = Calendar.getInstance()
                         UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
-                        UserUtils.started_at = currentDateAndTime()
-                        UserUtils.time_slot_from = (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
+                        UserUtils.started_at = currentDateAndTime().toString() + ":00:00"
+                        UserUtils.time_slot_from =
+                            (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
 
                         when (UserUtils.getSelectedKeywordCategoryId(this@BookingAddressScreen)) {
                             "1" -> {
@@ -257,9 +255,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         } else {
-                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoSelectedServiceProvider(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         }
                     }
                     is NetworkResponse.Failure -> {
@@ -268,7 +274,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     }
                 }
             })
-        }  else {
+        } else {
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 data.per_hour,
@@ -297,12 +303,20 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             if (PermissionUtils.isNetworkConnected(this)) {
-                                UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                                UserUtils.sendFCMtoAllServiceProviders(
+                                    this,
+                                    UserUtils.getBookingId(this),
+                                    "user"
+                                )
                             } else {
                                 snackBar(binding.nextBtn, "No Internet Connection!")
                             }
                         } else {
-                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoSelectedServiceProvider(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         }
                     }
                     is NetworkResponse.Failure -> {
@@ -348,9 +362,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     seconds = 59
                     minutes -= 1
                 }
-                if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].isNotEmpty()) {
+                if (UserUtils.getProviderAction(this@BookingAddressScreen)
+                        .split("|")[0].isNotEmpty()
+                ) {
                     dialog.dismiss()
-                    if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].trim() == "accept") {
+                    if (UserUtils.getProviderAction(this@BookingAddressScreen)
+                            .split("|")[0].trim() == "accept"
+                    ) {
                         serviceProviderAcceptDialog(this@BookingAddressScreen)
                     } else {
                         serviceProviderRejectDialog(this@BookingAddressScreen)
@@ -430,12 +448,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 addressList = tempAddress
             }
         }
-        binding.addressRv.adapter = MonthsAdapter(addressList, this@BookingAddressScreen, "AA")
+        binding.addressRv.adapter =
+            UserBookingAddressAdapter(addressList, this@BookingAddressScreen, "AA")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -550,7 +573,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             UserUtils.getUserId(this).toInt()
         )
         viewModel.confirmPayment(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -595,7 +618,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
@@ -643,12 +670,20 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this),"user")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this),  "user")
+                        UserUtils.sendFCMtoSelectedServiceProvider(
+                            this,
+                            UserUtils.getBookingId(this),
+                            "user"
+                        )
                     }
                 }
                 is NetworkResponse.Failure -> {

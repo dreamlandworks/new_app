@@ -170,9 +170,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
         }
         if (UserUtils.scheduled_date.isEmpty()) {
-            snackBar(binding.nextBtn, "Please Select Date")
+            return
+//            snackBar(binding.nextBtn, "Please Select Date")
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
-            snackBar(binding.nextBtn, "Please Select TimeSlot")
+            return
+//            snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
             if (ViewUserBookingDetailsScreen.RESCHEDULE) {
                 rescheduleBooking()
@@ -248,8 +250,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val message = dialogView.findViewById<TextView>(R.id.message)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         headerMessage.text = "Your request not accepted"
-        message.text =
-            "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
+        message.text = "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
         yesBtn.text = "No, Leave it"
         noBtn.text = "Cancel Booking"
         closeBtn.setOnClickListener {
@@ -579,6 +580,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
 //            binding.nightTimeRv.scrollToPosition(position)
         }
+        validateFields()
     }
 
     override fun onBackPressed() {

@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
 import com.satrango.databinding.MonthsRowBinding
+import com.satrango.databinding.UserBookingAddressRowBinding
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -48,7 +49,6 @@ class MonthsAdapter(
                     binding.title.text = h_mm_a.format(fromTime!!) + " - " + h_mm_a.format(toTime!!)
                     binding.description.visibility = View.GONE
                     binding.card.layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
-//                    binding.card.layoutParams.height = 30
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
@@ -82,6 +82,7 @@ class MonthsAdapter(
         if (listType == "AA") {
             holder.binding.description.visibility = View.GONE
             holder.binding.title.text = list[position].month
+            holder.binding.card.layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
             holder.itemView.setOnClickListener {
                 monthsInterface.selectedMonth(position, list[position].month, listType)
                 notifyItemChanged(position)
@@ -89,7 +90,6 @@ class MonthsAdapter(
         }
         holder.itemView.setOnClickListener {
             monthsInterface.selectedMonth(position, list[position].month, listType)
-            notifyDataSetChanged()
         }
     }
 

@@ -171,8 +171,8 @@
                     android:layout_height="@dimen/_30sdp"
                     android:gravity="center"
                     android:text="@string/_1"
-                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -192,9 +192,9 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
-                    android:textSize="@dimen/sub_text"
                     android:text="@string/_2"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -213,8 +213,8 @@
                     android:background="@drawable/blue_circle_color"
                     android:gravity="center"
                     android:text="@string/_3"
-                    android:textSize="@dimen/sub_text"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -229,31 +229,45 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/addressRv"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_5sdp" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/_10sdp"
-        android:text="@string/or"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/addNewAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:background="@drawable/blue_out_line"
-        style="@style/blue_outline_button_style"
-        android:text="@string/add_new_address" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addressRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:text="@string/or"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/addNewAddress"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:background="@drawable/blue_out_line"
+                android:text="@string/add_new_address"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -262,26 +276,29 @@
 
         <TextView
             android:id="@+id/backBtn"
+            style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_out_line"
-            style="@style/blue_outline_button_style"
-            android:gravity="center"
-            android:layout_margin="@dimen/_20sdp"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/blue_out_line"
+            android:gravity="center"
             android:text="@string/back" />
 
         <TextView
             android:id="@+id/nextBtn"
+            style="@style/filled_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/category_bg"
-            style="@style/filled_button_style"
-            android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:text="@string/next"
-            android:layout_margin="@dimen/_20sdp" />
+            android:layout_margin="@dimen/_20sdp"
+            android:background="@drawable/category_bg"
+            android:gravity="center"
+            android:text="@string/next" />
 
     </RelativeLayout>
 

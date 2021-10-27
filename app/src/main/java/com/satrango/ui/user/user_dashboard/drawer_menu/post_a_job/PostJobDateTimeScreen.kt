@@ -191,9 +191,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             }
         }
         if (UserUtils.scheduled_date.isEmpty()) {
-            snackBar(binding.nextBtn, "Please Select Date")
+            return
+//            snackBar(binding.nextBtn, "Please Select Date")
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
-            snackBar(binding.nextBtn, "Please Select TimeSlot")
+            return
+//            snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
             if (UserUtils.getFromJobPostMultiMove(this@PostJobDateTimeScreen)) {
                 startActivity(Intent(this@PostJobDateTimeScreen, PostJobMultiMoveDescriptionScreen::class.java))
@@ -311,6 +313,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
             binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
         }
+        validateFields()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

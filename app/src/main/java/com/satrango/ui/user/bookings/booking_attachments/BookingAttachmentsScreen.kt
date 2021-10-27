@@ -90,9 +90,10 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             if (UserUtils.addressList.isNotEmpty()) {
                 loadAddressOnUI()
             }
-        } else {
-            binding.spCard.visibility = View.GONE
         }
+//        else {
+//            binding.spCard.visibility = View.GONE
+//        }
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()

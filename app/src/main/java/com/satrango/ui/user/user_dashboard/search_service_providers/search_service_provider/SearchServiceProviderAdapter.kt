@@ -75,12 +75,14 @@ class SearchServiceProviderAdapter(
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
+                UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent =
                     Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
             }
             binding.bookNowBtn.setOnClickListener {
+                UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
                     val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
                     intent.putExtra(binding.root.context.getString(R.string.service_provider), data)

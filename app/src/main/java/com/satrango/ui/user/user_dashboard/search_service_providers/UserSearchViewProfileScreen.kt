@@ -82,11 +82,13 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
             bookLaterBtn.setOnClickListener {
                 BookingDateAndTimeScreen.FROM_PROVIDER = false
+                UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
                 intent.putExtra(getString(R.string.service_provider), data)
                 startActivity(intent)
             }
             bookNowBtn.setOnClickListener {
+                UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
                     val intent = Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java)
                     intent.putExtra(getString(R.string.service_provider), data)
