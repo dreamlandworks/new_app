@@ -593,6 +593,9 @@
     <string name="work">Work</string>
     <string name="location_not_provided">Location not provided</string>
     <string name="description_not_mentioned">Description not mentioned</string>
+    <string name="current_location">Current Location</string>
+    <string name="using_gps">Using GPS</string>
+    <string name="recent_searches">RECENT SEARCHES</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

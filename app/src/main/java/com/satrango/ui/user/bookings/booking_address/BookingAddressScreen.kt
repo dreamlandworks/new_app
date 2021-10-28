@@ -1,8 +1,12 @@
 package com.satrango.ui.user.bookings.booking_address
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -11,11 +15,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
+import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -40,6 +47,7 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -52,6 +60,8 @@ import kotlin.collections.ArrayList
 
 class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResultListener {
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var locationCallBack: LocationCallback
     private lateinit var viewModel: BookingViewModel
     private lateinit var addressList: ArrayList<MonthsModel>
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -79,15 +89,27 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 //        }
 
         addressList = arrayListOf()
-        addressList.add(
-            MonthsModel(
-                UserUtils.getAddress(this@BookingAddressScreen) + ", " + UserUtils.getCity(
-                    this@BookingAddressScreen
-                ) + ", " + UserUtils.getPostalCode(this@BookingAddressScreen),
-                UserUtils.getTempAddressId(this@BookingAddressScreen),
-                false
-            )
-        )
+        binding.recentLocation.text = UserUtils.getAddress(this)
+        binding.recentLocationText.text = UserUtils.getCity(this)
+        binding.recentSearch.setOnClickListener {
+            binding.recentSearch.setBackgroundResource(R.drawable.blue_bg_sm)
+            binding.recentLocation.setTextColor(resources.getColor(R.color.white))
+            binding.recentLocationText.setTextColor(resources.getColor(R.color.white))
+            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+                binding.recentSearch.setBackgroundResource(R.drawable.purple_bg_sm)
+            }
+            addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
+            validateFields()
+        }
+        binding.rowLayout.setOnClickListener {
+            binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
+            binding.currentLocation.setTextColor(resources.getColor(R.color.white))
+            binding.currentLocationText.setTextColor(resources.getColor(R.color.white))
+            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+                binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
+            }
+            fetchLocation(this)
+        }
 
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
@@ -99,17 +121,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 is NetworkResponse.Success -> {
                     val responseData = it.data!!
                     for (address in responseData.address) {
-                        addressList.add(
-                            MonthsModel(
-                                address.locality + ", " + address.city + ", " + address.zipcode,
-                                address.id,
-                                false
-                            )
-                        )
+                        addressList.add(MonthsModel(address.locality + ", " + address.city + ", " + address.zipcode, address.id, false))
                     }
                     binding.addressRv.layoutManager = LinearLayoutManager(this@BookingAddressScreen)
                     binding.addressRv.adapter =
-                        UserBookingAddressAdapter(addressList, this@BookingAddressScreen, "AA")
+                        UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -131,79 +147,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             }
 
             nextBtn.setOnClickListener {
-                UserUtils.temp_address_id = "0"
-                UserUtils.address_id = "0"
-                for (address in addressList) {
-                    if (address.isSelected) {
-                        if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
-                            UserUtils.temp_address_id =
-                                UserUtils.getTempAddressId(this@BookingAddressScreen)
-                            UserUtils.address_id = "0"
-                        } else {
-                            UserUtils.temp_address_id = "0"
-                            UserUtils.address_id = address.day
-                        }
-                    }
-                }
-
-                if (UserUtils.temp_address_id.isEmpty() && UserUtils.address_id.isEmpty()) {
-                    snackBar(binding.nextBtn, "Select Address to Provider Service")
-                } else {
-                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
-
-                        val calender = Calendar.getInstance()
-                        UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
-                        UserUtils.started_at = currentDateAndTime().toString() + ":00:00"
-                        UserUtils.time_slot_from =
-                            (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
-
-                        when (UserUtils.getSelectedKeywordCategoryId(this@BookingAddressScreen)) {
-                            "1" -> {
-                                bookSingleMoveServiceProvider()
-                            }
-                            "2" -> {
-                                bookBlueCollarServiceProvider()
-                            }
-                            "3" -> {
-                                UserUtils.addressList = ArrayList()
-                                addressList.forEach {
-                                    if (it.isSelected) {
-                                        UserUtils.addressList.add(it)
-                                    }
-                                }
-                                if (UserUtils.addressList.isEmpty()) {
-                                    snackBar(binding.nextBtn, "Please Select Addresses")
-                                } else {
-                                    bookMultiMoveServiceProvider()
-                                }
-                            }
-                        }
-                    } else {
-                        when (data.category_id) {
-                            "1" -> {
-                                bookSingleMoveServiceProvider()
-                            }
-                            "3" -> {
-                                UserUtils.addressList = ArrayList()
-                                addressList.forEach {
-                                    if (it.isSelected) {
-                                        UserUtils.addressList.add(it)
-                                    }
-                                }
-                                if (UserUtils.addressList.isEmpty()) {
-                                    snackBar(binding.nextBtn, "Please Select Addresses")
-                                } else {
-                                    val intent = Intent(
-                                        this@BookingAddressScreen,
-                                        BookingAttachmentsScreen::class.java
-                                    )
-                                    intent.putExtra(getString(R.string.service_provider), data)
-                                    startActivity(intent)
-                                }
-                            }
-                        }
-                    }
-                }
+                validateFields()
             }
 
             backBtn.setOnClickListener {
@@ -211,6 +155,82 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             }
         }
 
+    }
+
+    private fun validateFields() {
+        UserUtils.temp_address_id = "0"
+        UserUtils.address_id = "0"
+        for (address in addressList) {
+            if (address.isSelected) {
+                if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
+                    UserUtils.temp_address_id =
+                        UserUtils.getTempAddressId(this@BookingAddressScreen)
+                    UserUtils.address_id = "0"
+                } else {
+                    UserUtils.temp_address_id = "0"
+                    UserUtils.address_id = address.day
+                }
+            }
+        }
+
+        if (UserUtils.temp_address_id.isEmpty() && UserUtils.address_id.isEmpty()) {
+            snackBar(binding.nextBtn, "Select Address to Provider Service")
+        } else {
+            if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+
+                val calender = Calendar.getInstance()
+                UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
+                UserUtils.started_at = currentDateAndTime().toString() + ":00:00"
+                UserUtils.time_slot_from =
+                    (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
+
+                when (UserUtils.getSelectedKeywordCategoryId(this@BookingAddressScreen)) {
+                    "1" -> {
+                        bookSingleMoveServiceProvider()
+                    }
+                    "2" -> {
+                        bookBlueCollarServiceProvider()
+                    }
+                    "3" -> {
+                        UserUtils.addressList = ArrayList()
+                        addressList.forEach {
+                            if (it.isSelected) {
+                                UserUtils.addressList.add(it)
+                            }
+                        }
+                        if (UserUtils.addressList.isEmpty()) {
+                            snackBar(binding.nextBtn, "Please Select Addresses")
+                        } else {
+                            bookMultiMoveServiceProvider()
+                        }
+                    }
+                }
+            } else {
+                when (data.category_id) {
+                    "1" -> {
+                        bookSingleMoveServiceProvider()
+                    }
+                    "3" -> {
+                        UserUtils.addressList = ArrayList()
+                        addressList.forEach {
+                            if (it.isSelected) {
+                                UserUtils.addressList.add(it)
+                            }
+                        }
+                        if (UserUtils.addressList.isEmpty()) {
+                            snackBar(binding.nextBtn, "Please Select Addresses")
+                        } else {
+                            val intent = Intent(
+                                this@BookingAddressScreen,
+                                BookingAttachmentsScreen::class.java
+                            )
+                            intent.putExtra(getString(R.string.service_provider), data)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initializeToolBar() {
@@ -339,6 +359,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
+            finish()
+            startActivity(intent)
             dialog.dismiss()
         }
         var minutes = 2
@@ -449,7 +471,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             }
         }
         binding.addressRv.adapter =
-            UserBookingAddressAdapter(addressList, this@BookingAddressScreen, "AA")
+            UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -697,6 +719,72 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
     @SuppressLint("SimpleDateFormat")
     private fun currentDateAndTime(): String {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+    }
+
+    fun fetchLocation(context: Context) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+
+        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        locationCallBack = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    fetchLocationDetails(context, latitude, longitude)
+                }
+            }
+        }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallBack,
+            Looper.myLooper()!!
+        )
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+        try {
+            val geoCoder = Geocoder(context, Locale.getDefault())
+            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+            val addressName: String = address.get(0).getAddressLine(0)
+            val city: String = address.get(0).locality
+            val state: String = address.get(0).adminArea
+            val country: String = address.get(0).countryName
+            val postalCode: String = address.get(0).postalCode
+            val knownName: String = address.get(0).featureName
+            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+            UserUtils.setLatitude(context, latitude.toString())
+            UserUtils.setLongitude(context, longitude.toString())
+            UserUtils.setCity(context, city)
+            UserUtils.setState(context, state)
+            UserUtils.setCountry(context, country)
+            UserUtils.setPostalCode(context, postalCode)
+            UserUtils.setAddress(context, knownName)
+            addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
+            validateFields()
+        } catch (e: Exception) {
+            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+                .show()
+        }
     }
 
 }
