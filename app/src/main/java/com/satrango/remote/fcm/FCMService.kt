@@ -30,19 +30,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.security.Provider
 import android.os.AsyncTask
+import androidx.annotation.RequiresApi
 import okhttp3.internal.waitMillis
+import java.time.Instant
 import java.util.concurrent.Executors
 
 
 class FCMService : FirebaseMessagingService() {
 
+    companion object {
+        var fcmInstant: Instant? = null
+    }
     private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
-            if (it.title == "user") {
-                addNotification(it.body)
+            if (it.title == "accepted") {
+                if (notificationManager != null) {
+                    notificationManager.cancelAll()
+                }
+            } else if (it.title == "user") {
+                if (!ProviderDashboard.FROM_FCM_SERVICE) {
+                    addNotification(it.body)
+                }
             } else {
                 if (!UserUtils.getInstantBooking(this)) {
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
@@ -71,6 +83,7 @@ class FCMService : FirebaseMessagingService() {
         Log.e("FCM TOKEN UPDATE", token)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongConstant")
     private fun addNotification(body: String?) {
 
@@ -118,8 +131,11 @@ class FCMService : FirebaseMessagingService() {
         ProviderDashboard.minutes = 2
         ProviderDashboard.seconds = 59
         ProviderDashboard.progressTime = 180
-
-        ProviderDashboard.IN_PROVIDER_DASHBOARD = false
+//        ProviderDashboard.IN_PROVIDER_DASHBOARD = false
+        fcmInstant = Instant.now()
+        Handler().postDelayed({
+            notificationManager.cancelAll()
+        }, 180000)
 
 //        Thread {
 //            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
@@ -136,22 +152,22 @@ class FCMService : FirebaseMessagingService() {
 //            }
 //    }.start()
 
-        val threadPool = Executors.newSingleThreadExecutor()
-        threadPool.submit(Runnable {
-            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
-                ProviderDashboard.progressTime -= 1
-                ProviderDashboard.seconds -= 1
-                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
-                    notificationManager.cancelAll()
-                }
-                if (ProviderDashboard.seconds == 0) {
-                    ProviderDashboard.seconds = 59
-                    ProviderDashboard.minutes -= 1
-                }
-            }
-            Log.e("THREAD: ", "ONGOING....")
-            threadPool.waitMillis(1000)
-        })
+//        val threadPool = Executors.newSingleThreadExecutor()
+//        threadPool.submit(Runnable {
+//            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
+//                ProviderDashboard.progressTime -= 1
+//                ProviderDashboard.seconds -= 1
+//                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
+//                    notificationManager.cancelAll()
+//                }
+//                if (ProviderDashboard.seconds == 0) {
+//                    ProviderDashboard.seconds = 59
+//                    ProviderDashboard.minutes -= 1
+//                }
+//            }
+//            Log.e("THREAD: ", "ONGOING....")
+//            threadPool.waitMillis(1000)
+//        })
 
 //        val t: Thread = object : Thread() {
 //            override fun run() {
@@ -195,7 +211,6 @@ class FCMService : FirebaseMessagingService() {
 //                }
 //            }
 //        })
-
 
     }
 }

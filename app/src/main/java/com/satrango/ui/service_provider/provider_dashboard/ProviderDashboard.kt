@@ -20,6 +20,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSeven
@@ -66,18 +68,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
 import java.util.*
 
 
 class ProviderDashboard : AppCompatActivity() {
 
-    private lateinit var response: BookingDetailsResModel
     private lateinit var referralId: TextView
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackBtn: ImageView
     private lateinit var toolBarBackTVBtn: TextView
     private lateinit var profileImage: CircleImageView
     private lateinit var userProviderSwitch: SwitchCompat
+    private lateinit var response: BookingDetailsResModel
     private lateinit var viewModel: ProviderDashboardViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityProviderDashboardBinding
@@ -93,9 +97,10 @@ class ProviderDashboard : AppCompatActivity() {
         var minutes = 2
         var seconds = 59
         var progressTime = 180
-        var IN_PROVIDER_DASHBOARD = false
+//        var IN_PROVIDER_DASHBOARD = false
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderDashboardBinding.inflate(layoutInflater)
@@ -244,6 +249,7 @@ class ProviderDashboard : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun showBookingAlert(
         bookingViewModel: BookingViewModel,
@@ -275,7 +281,7 @@ class ProviderDashboard : AppCompatActivity() {
         closeBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
             FROM_FCM_SERVICE = false
-            IN_PROVIDER_DASHBOARD = false
+//            IN_PROVIDER_DASHBOARD = false
         }
 
         Log.e("ResponseDialog:", Gson().toJson(response))
@@ -308,7 +314,7 @@ class ProviderDashboard : AppCompatActivity() {
                             )
                             bottomSheetDialog.dismiss()
                             FROM_FCM_SERVICE = false
-                            IN_PROVIDER_DASHBOARD = false
+//                            IN_PROVIDER_DASHBOARD = false
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -345,7 +351,7 @@ class ProviderDashboard : AppCompatActivity() {
                             )
                             bottomSheetDialog.dismiss()
                             FROM_FCM_SERVICE = false
-                            IN_PROVIDER_DASHBOARD = false
+//                            IN_PROVIDER_DASHBOARD = false
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -354,9 +360,17 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 })
         }
-        IN_PROVIDER_DASHBOARD = true
+//        IN_PROVIDER_DASHBOARD = true
 
-        if (IN_PROVIDER_DASHBOARD) {
+        val dashboardInstant = Instant.now()
+        val diff: Duration = Duration.between(dashboardInstant, FCMService.fcmInstant)
+        val mins = diff.toMinutes()
+        val secs = diff.seconds
+        seconds = (60 - secs).toInt()
+        minutes = (3 - mins).toInt()
+        toast(this, "$minutes:$seconds")
+
+//        if (IN_PROVIDER_DASHBOARD) {
             val mainHandler = Handler(Looper.getMainLooper())
             mainHandler.post(object : Runnable {
                 override fun run() {
@@ -367,7 +381,7 @@ class ProviderDashboard : AppCompatActivity() {
                     seconds -= 1
                     if (minutes == 0 && seconds == 0) {
                         bottomSheetDialog.dismiss()
-                        IN_PROVIDER_DASHBOARD = false
+//                        IN_PROVIDER_DASHBOARD = false
                     }
                     if (seconds == 0) {
                         seconds = 59
@@ -378,7 +392,7 @@ class ProviderDashboard : AppCompatActivity() {
                     mainHandler.postDelayed(this, 1000)
                 }
             })
-        }
+//        }
 
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.show()

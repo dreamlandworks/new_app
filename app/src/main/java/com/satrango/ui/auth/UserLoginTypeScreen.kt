@@ -1,12 +1,15 @@
 package com.satrango.ui.auth
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -21,17 +24,23 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant.now
 import java.util.*
+import kotlin.concurrent.thread
 
 
 class UserLoginTypeScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserLoginTypeScreenBinding
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserLoginTypeScreenBinding.inflate(layoutInflater)
@@ -160,6 +169,19 @@ class UserLoginTypeScreen : AppCompatActivity() {
 //            .withTitle("Sample title")
 //            .withRequestCode(0)
 //            .start()
+
+
+
+
+
+//        val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
+//        val date1 = simpleDateFormat.parse("18:06:50")
+//        val date2 = simpleDateFormat.parse("18:10:15")
+//        val diff: Long = date2!!.time - date1!!.time
+//        val seconds = diff / 1000
+//        val minutes = seconds / 60
+//        val hours = minutes / 60
+//        val days = hours / 24
 
     }
 

@@ -12,7 +12,10 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.11372950819672131" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.11372950819672131" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_user_dashboard_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/fragment_user_home_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/user_booking_address_row.xml" value="0.18" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/user_popular_services_row.xml" value="0.15703125" />
       </map>
     </option>
   </component>

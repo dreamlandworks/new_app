@@ -57,7 +57,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
                 Checkout.preload(applicationContext)
                 makePayment()
             }, 3000)
-
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         } else {
             binding.accept.visibility = View.GONE
             binding.paymentSuccessLayout.visibility = View.GONE

@@ -393,8 +393,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
             validateFields()
         } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG).show()
         }
     }
 

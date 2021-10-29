@@ -643,6 +643,23 @@ object UserUtils {
 
     }
 
+    fun sendCancelFCM(
+        context: Context,
+        token: String,
+        from: String
+    ) {
+        saveProviderAction(context, "")
+        val map = mutableMapOf<String, String>()
+        map["Content-Type"] = "application/json"
+        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        val requestBody = FCMMessageReqModel(Notification("accepted", "accepted", from), "high", token)
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Log.e("FCM RESPONSE:", Gson().toJson(response))
+        }
+
+    }
+
     fun sendFCMtoSelectedServiceProvider(
         context: Context,
         bookingId: String,
@@ -676,11 +693,20 @@ object UserUtils {
                     }
                     if (count == 0) {
                         Log.e("FCM:", sp.fcm_token)
-                        sendFCM(context, sp.fcm_token, bookingId, from)
+                        if (bookingId == "accepted") {
+                            sendCancelFCM(context, sp.fcm_token, from)
+                        } else {
+                            sendFCM(context, sp.fcm_token, bookingId, from)
+                        }
+
                     }
                 } else {
                     Log.e("FCM:", sp.fcm_token)
-                    sendFCM(context, sp.fcm_token, bookingId, from)
+                    if (bookingId == "accepted") {
+                        sendCancelFCM(context, sp.fcm_token, from)
+                    } else {
+                        sendFCM(context, sp.fcm_token, bookingId, from)
+                    }
                 }
             }
         }
