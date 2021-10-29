@@ -11,7 +11,10 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.media.RingtoneManager.getDefaultUri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
@@ -25,6 +28,10 @@ import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.security.Provider
+import android.os.AsyncTask
+import okhttp3.internal.waitMillis
+import java.util.concurrent.Executors
 
 
 class FCMService : FirebaseMessagingService() {
@@ -91,9 +98,9 @@ class FCMService : FirebaseMessagingService() {
             builder = android.app.Notification.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.circlelogo)
                 .setContentTitle(getString(R.string.app_name))
-//                .setContentText(body)
                 .setContentText("You got a booking request!")
                 .setSound(alarmSound)
+                .setAutoCancel(true)
                 .setContentIntent(contentIntent)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.circlelogo))
         } else {
@@ -101,11 +108,94 @@ class FCMService : FirebaseMessagingService() {
                 .setSmallIcon(R.drawable.circlelogo)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("You got a booking request!")
-//                .setContentText(body)
                 .setSound(alarmSound)
+                .setAutoCancel(true)
                 .setContentIntent(contentIntent)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.circlelogo))
         }
         notificationManager.notify(1234, builder.build())
+
+        ProviderDashboard.minutes = 2
+        ProviderDashboard.seconds = 59
+        ProviderDashboard.progressTime = 180
+
+        ProviderDashboard.IN_PROVIDER_DASHBOARD = false
+
+//        Thread {
+//            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
+//                ProviderDashboard.progressTime -= 1
+//                ProviderDashboard.seconds -= 1
+//                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
+//                    notificationManager.cancelAll()
+//                }
+//                if (ProviderDashboard.seconds == 0) {
+//                    ProviderDashboard.seconds = 59
+//                    ProviderDashboard.minutes -= 1
+//                }
+//                Thread.sleep( 1000)
+//            }
+//    }.start()
+
+        val threadPool = Executors.newSingleThreadExecutor()
+        threadPool.submit(Runnable {
+            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
+                ProviderDashboard.progressTime -= 1
+                ProviderDashboard.seconds -= 1
+                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
+                    notificationManager.cancelAll()
+                }
+                if (ProviderDashboard.seconds == 0) {
+                    ProviderDashboard.seconds = 59
+                    ProviderDashboard.minutes -= 1
+                }
+            }
+            Log.e("THREAD: ", "ONGOING....")
+            threadPool.waitMillis(1000)
+        })
+
+//        val t: Thread = object : Thread() {
+//            override fun run() {
+//                try {
+//                    if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
+//                        ProviderDashboard.progressTime -= 1
+//                        ProviderDashboard.seconds -= 1
+//                        if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
+//                            notificationManager.cancelAll()
+//                        }
+//                        if (ProviderDashboard.seconds == 0) {
+//                            ProviderDashboard.seconds = 59
+//                            ProviderDashboard.minutes -= 1
+//                        }
+//                    }
+//                    Log.e("THREAD: ", "ONGOING....")
+//                    sleep(1000)
+//                } finally {
+//                    Log.e("FINAL THREAD: ", "ONGOING....")
+//                }
+//            }
+//        }
+//        t.start()
+
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        mainHandler.post(object : Runnable {
+//            override fun run() {
+//                mainHandler.postDelayed(this, 1000)
+//
+//                if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
+//                    ProviderDashboard.progressTime -= 1
+//                    ProviderDashboard.seconds -= 1
+//                    if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
+//                        notificationManager.cancelAll()
+//                    }
+//                    if (ProviderDashboard.seconds == 0) {
+//                        ProviderDashboard.seconds = 59
+//                        ProviderDashboard.minutes -= 1
+//                    }
+//                    Log.e("THREAD: ", "ONGOING....")
+//                }
+//            }
+//        })
+
+
     }
 }

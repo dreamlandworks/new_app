@@ -88,7 +88,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
                 startActivity(intent)
             }
             bookNowBtn.setOnClickListener {
-                UserUtils.saveFromInstantBooking(binding.root.context, true)
+                UserUtils.saveFromInstantBooking(binding.root.context, false)
                 if (data.category_id == "3") {
                     val intent = Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java)
                     intent.putExtra(getString(R.string.service_provider), data)

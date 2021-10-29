@@ -264,7 +264,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 UserUtils.getUserId(this).toInt()
             )
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
-//            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -281,6 +280,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                                 "user"
                             )
                         } else {
+                            Log.e("SINGLE MOVE SELECTED", it.data!!)
                             UserUtils.sendFCMtoSelectedServiceProvider(
                                 this,
                                 UserUtils.getBookingId(this),
@@ -376,7 +376,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
                     dialog.dismiss()
-                    weAreSorryDialog()
+                    try {
+                        weAreSorryDialog()
+                    } catch (e: java.lang.Exception) {}
                     Checkout.preload(applicationContext)
                     makePayment()
                 }
@@ -472,6 +474,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         }
         binding.addressRv.adapter =
             UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
+        validateFields()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

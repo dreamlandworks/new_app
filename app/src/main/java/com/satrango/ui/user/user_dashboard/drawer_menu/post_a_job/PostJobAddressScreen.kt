@@ -304,6 +304,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             addressList = tempAddress
         }
         binding.addressRv.adapter = UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@PostJobAddressScreen, "AA")
+        validateFields()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

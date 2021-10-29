@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.utils.UserUtils
@@ -51,6 +52,7 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                     if (response.await().status == 200) {
                         UserUtils.setTempAddressId(context, response.await().temp_address_id.toString())
                         UserUtils.setSearchResultsId(context, response.await().search_results_id.toString())
+                        Log.e("JSON:", Gson().toJson(response.await()))
                         searchResultsList.value = NetworkResponse.Success(response.await())
                     } else {
                         searchResultsList.value = NetworkResponse.Failure(response.await().message)

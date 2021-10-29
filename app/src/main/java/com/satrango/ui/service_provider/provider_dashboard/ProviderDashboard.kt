@@ -90,6 +90,10 @@ class ProviderDashboard : AppCompatActivity() {
 
     companion object {
         var FROM_FCM_SERVICE = false
+        var minutes = 2
+        var seconds = 59
+        var progressTime = 180
+        var IN_PROVIDER_DASHBOARD = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -261,16 +265,17 @@ class ProviderDashboard : AppCompatActivity() {
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
         val progressBar = bottomSheet.findViewById<CircularProgressIndicator>(R.id.progressBar)
 
-        time.text = response.booking_details.estimate_time
-        try {
-            timeFrom.text = response.booking_details.started_at.split(" ")[1]
-        } catch (e: java.lang.Exception) {
-            timeFrom.text = response.booking_details.started_at
-        }
+        timeFrom.text = response.booking_details.from
         date.text = response.booking_details.scheduled_date
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
             jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+        }
+
+        closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            FROM_FCM_SERVICE = false
+            IN_PROVIDER_DASHBOARD = false
         }
 
         Log.e("ResponseDialog:", Gson().toJson(response))
@@ -302,6 +307,8 @@ class ProviderDashboard : AppCompatActivity() {
                                 "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
                             bottomSheetDialog.dismiss()
+                            FROM_FCM_SERVICE = false
+                            IN_PROVIDER_DASHBOARD = false
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -337,6 +344,8 @@ class ProviderDashboard : AppCompatActivity() {
                                 "reject|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id} + |provider"
                             )
                             bottomSheetDialog.dismiss()
+                            FROM_FCM_SERVICE = false
+                            IN_PROVIDER_DASHBOARD = false
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -345,27 +354,32 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 })
         }
-        var minutes = 2
-        var seconds = 59
-        val mainHandler = Handler(Looper.getMainLooper())
-        var progressTime = 180
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                time.text = "$minutes:$seconds"
-                progressTime -= 1
-                progressBar.progress = progressTime
+        IN_PROVIDER_DASHBOARD = true
 
-                seconds -= 1
-                if (minutes == 0 && seconds == 0) {
-                    bottomSheetDialog.dismiss()
+        if (IN_PROVIDER_DASHBOARD) {
+            val mainHandler = Handler(Looper.getMainLooper())
+            mainHandler.post(object : Runnable {
+                override fun run() {
+                    time.text = "$minutes:$seconds"
+                    progressTime -= 1
+                    progressBar.progress = progressTime
+
+                    seconds -= 1
+                    if (minutes == 0 && seconds == 0) {
+                        bottomSheetDialog.dismiss()
+                        IN_PROVIDER_DASHBOARD = false
+                    }
+                    if (seconds == 0) {
+                        seconds = 59
+                        minutes -= 1
+                    }
+                    Log.e("DASHBOARD THREAD: ", "ONGOING....")
+
+                    mainHandler.postDelayed(this, 1000)
                 }
-                if (seconds == 0) {
-                    seconds = 59
-                    minutes -= 1
-                }
-                mainHandler.postDelayed(this, 1000)
-            }
-        })
+            })
+        }
+
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.show()
     }

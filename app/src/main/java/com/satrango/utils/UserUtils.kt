@@ -667,10 +667,20 @@ object UserUtils {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
         for (sp in spDetails.data) {
             for (spSlot in spDetails.slots_data) {
-                for (booking in spSlot.blocked_time_slots) {
-                    if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                if (spSlot.blocked_time_slots.isNotEmpty()) {
+                    var count = 0
+                    for (booking in spSlot.blocked_time_slots) {
+                        if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                            count += 1
+                        }
+                    }
+                    if (count == 0) {
+                        Log.e("FCM:", sp.fcm_token)
                         sendFCM(context, sp.fcm_token, bookingId, from)
                     }
+                } else {
+                    Log.e("FCM:", sp.fcm_token)
+                    sendFCM(context, sp.fcm_token, bookingId, from)
                 }
             }
         }
