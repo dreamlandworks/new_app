@@ -11,10 +11,8 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.media.RingtoneManager.getDefaultUri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig
+import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
@@ -28,12 +26,7 @@ import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.Provider
-import android.os.AsyncTask
-import androidx.annotation.RequiresApi
-import okhttp3.internal.waitMillis
 import java.time.Instant
-import java.util.concurrent.Executors
 
 
 class FCMService : FirebaseMessagingService() {
@@ -47,11 +40,23 @@ class FCMService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString() )
             if (it.title == "accepted") {
-                if (notificationManager != null) {
-                    notificationManager.cancelAll()
-                }
-            } else if (it.title == "user") {
+//                    if (ProviderDashboard.bookingId.isNotEmpty() && ProviderDashboard.bookingId == it.body.toString()) {
+                        notificationManager.cancelAll()
+                        if (ProviderDashboard.bottomSheetDialog != null) {
+                            if (ProviderDashboard.bottomSheetDialog.isShowing) {
+                                ProviderDashboard.bottomSheetDialog.dismiss()
+                                ProviderDashboard.FROM_FCM_SERVICE = false
+                            }
+                        }
+//                    }
+            } else
+//                if (it.title == "timeRequired") {
+//                UserUtils.sendFCMtoAllServiceProviders(this, "", "time|${BookingAddressScreen.}")
+//            } else
+                if (it.title == "user") {
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     addNotification(it.body)
                 }
@@ -90,7 +95,6 @@ class FCMService : FirebaseMessagingService() {
         val requestID = System.currentTimeMillis().toInt()
 
         val alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
         ProviderDashboard.FROM_FCM_SERVICE = true
@@ -128,14 +132,14 @@ class FCMService : FirebaseMessagingService() {
         }
         notificationManager.notify(1234, builder.build())
 
-        ProviderDashboard.minutes = 2
-        ProviderDashboard.seconds = 59
-        ProviderDashboard.progressTime = 180
+//        ProviderDashboard.minutes = 2
+//        ProviderDashboard.seconds = 59
+//        ProviderDashboard.progressTime = 180
 //        ProviderDashboard.IN_PROVIDER_DASHBOARD = false
         fcmInstant = Instant.now()
-        Handler().postDelayed({
-            notificationManager.cancelAll()
-        }, 180000)
+//        Handler().postDelayed({
+//            notificationManager.cancelAll()
+//        }, 18000)
 
 //        Thread {
 //            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {

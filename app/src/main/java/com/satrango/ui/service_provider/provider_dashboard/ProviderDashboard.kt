@@ -97,7 +97,8 @@ class ProviderDashboard : AppCompatActivity() {
         var minutes = 2
         var seconds = 59
         var progressTime = 180
-//        var IN_PROVIDER_DASHBOARD = false
+        var bookingId = ""
+        lateinit var bottomSheetDialog: BottomSheetDialog
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -212,7 +213,7 @@ class ProviderDashboard : AppCompatActivity() {
 
         Log.e("FROM_FCM_SERVICE:", FROM_FCM_SERVICE.toString())
         if (FROM_FCM_SERVICE) {
-            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
 
@@ -246,6 +247,8 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 }
             })
+        } else {
+            bookingId = ""
         }
     }
 
@@ -258,7 +261,7 @@ class ProviderDashboard : AppCompatActivity() {
         response: BookingDetailsResModel
     ) {
 
-        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog.setCancelable(false)
         val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
@@ -312,6 +315,7 @@ class ProviderDashboard : AppCompatActivity() {
                                 "accept",
                                 "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
+                            ProviderDashboard.bookingId = ""
                             bottomSheetDialog.dismiss()
                             FROM_FCM_SERVICE = false
 //                            IN_PROVIDER_DASHBOARD = false
@@ -349,6 +353,7 @@ class ProviderDashboard : AppCompatActivity() {
                                 "reject",
                                 "reject|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id} + |provider"
                             )
+                            ProviderDashboard.bookingId = ""
                             bottomSheetDialog.dismiss()
                             FROM_FCM_SERVICE = false
 //                            IN_PROVIDER_DASHBOARD = false
@@ -360,39 +365,37 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 })
         }
-//        IN_PROVIDER_DASHBOARD = true
+
+//        UserUtils.sendTimeRequestFCM(this, response.booking_details.fcm_token, "timeRequired")
 
         val dashboardInstant = Instant.now()
-        val diff: Duration = Duration.between(dashboardInstant, FCMService.fcmInstant)
+        val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
         val mins = diff.toMinutes()
         val secs = diff.seconds
-        seconds = (60 - secs).toInt()
-        minutes = (3 - mins).toInt()
-        toast(this, "$minutes:$seconds")
+        seconds = (59 - secs).toInt()
+        minutes = (2 - mins).toInt()
 
-//        if (IN_PROVIDER_DASHBOARD) {
-            val mainHandler = Handler(Looper.getMainLooper())
-            mainHandler.post(object : Runnable {
-                override fun run() {
-                    time.text = "$minutes:$seconds"
-                    progressTime -= 1
-                    progressBar.progress = progressTime
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                time.text = "$minutes:$seconds"
+                progressTime -= 1
+                progressBar.progress = progressTime
 
-                    seconds -= 1
-                    if (minutes == 0 && seconds == 0) {
-                        bottomSheetDialog.dismiss()
-//                        IN_PROVIDER_DASHBOARD = false
-                    }
-                    if (seconds == 0) {
-                        seconds = 59
-                        minutes -= 1
-                    }
-                    Log.e("DASHBOARD THREAD: ", "ONGOING....")
-
-                    mainHandler.postDelayed(this, 1000)
+                seconds -= 1
+                if (minutes == 0 && seconds == 0) {
+                    ProviderDashboard.bookingId = ""
+                    FROM_FCM_SERVICE = false
+                    bottomSheetDialog.dismiss()
                 }
-            })
-//        }
+                if (seconds == 0) {
+                    seconds = 59
+                    minutes -= 1
+                }
+                Log.e("DASHBOARD THREAD: ", "ONGOING....")
+                mainHandler.postDelayed(this, 1000)
+            }
+        })
 
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.show()

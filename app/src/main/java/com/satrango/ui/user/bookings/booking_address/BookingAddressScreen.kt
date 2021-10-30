@@ -359,6 +359,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
+            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted")
             finish()
             startActivity(intent)
             dialog.dismiss()
@@ -389,6 +390,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                 if (UserUtils.getProviderAction(this@BookingAddressScreen)
                         .split("|")[0].isNotEmpty()
                 ) {
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
                     dialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
