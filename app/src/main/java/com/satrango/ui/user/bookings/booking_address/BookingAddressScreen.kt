@@ -376,6 +376,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
                     dialog.dismiss()
                     try {
                         weAreSorryDialog()

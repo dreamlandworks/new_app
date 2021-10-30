@@ -44,37 +44,37 @@ class FCMService : FirebaseMessagingService() {
             Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString() )
             if (it.title == "accepted") {
 //                    if (ProviderDashboard.bookingId.isNotEmpty() && ProviderDashboard.bookingId == it.body.toString()) {
-                        notificationManager.cancelAll()
-                        if (ProviderDashboard.bottomSheetDialog != null) {
-                            if (ProviderDashboard.bottomSheetDialog.isShowing) {
-                                ProviderDashboard.bottomSheetDialog.dismiss()
-                                ProviderDashboard.FROM_FCM_SERVICE = false
-                            }
-                        }
+                notificationManager.cancelAll()
+                if (ProviderDashboard.bottomSheetDialog != null) {
+                    if (ProviderDashboard.bottomSheetDialog.isShowing) {
+                        ProviderDashboard.bottomSheetDialog.dismiss()
+                        ProviderDashboard.FROM_FCM_SERVICE = false
+                    }
+                }
 //                    }
             } else
 //                if (it.title == "timeRequired") {
 //                UserUtils.sendFCMtoAllServiceProviders(this, "", "time|${BookingAddressScreen.}")
 //            } else
                 if (it.title == "user") {
-                if (!ProviderDashboard.FROM_FCM_SERVICE) {
-                    addNotification(it.body)
-                }
-            } else {
-                if (!UserUtils.getInstantBooking(this)) {
-                    val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                    intent.putExtra("response", it.title)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+                    if (!ProviderDashboard.FROM_FCM_SERVICE) {
+                        addNotification(it.body)
+                    }
                 } else {
-                    if (it.body!!.split("|")[0] == "accept") {
+                    if (!UserUtils.getInstantBooking(this)) {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", it.title)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
+                    } else {
+                        if (it.body!!.split("|")[0] == "accept") {
+                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                            intent.putExtra("response", it.title)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
                     }
                 }
-            }
         }
     }
 

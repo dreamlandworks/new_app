@@ -55,7 +55,10 @@
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"/>
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.ProviderRejectBookingScreen"
+            android:exported="false" />
+        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen" />
         <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen" />
@@ -322,7 +325,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -332,7 +334,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

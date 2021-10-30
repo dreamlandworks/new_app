@@ -329,41 +329,11 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         rejectBtn.setOnClickListener {
-            val requestBody = ProviderResponseReqModel(
-                this.response.booking_details.amount,
-                bookingId.toInt(),
-                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
-                "",
-                RetrofitBuilder.USER_KEY,
-                this.response.booking_details.sp_id.toInt(),
-                4,
-                userId.toInt()
-            )
-            bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
-                .observe(this@ProviderDashboard, {
-                    when (it) {
-                        is NetworkResponse.Loading -> {
-                            progressDialog.show()
-                        }
-                        is NetworkResponse.Success -> {
-                            progressDialog.dismiss()
-                            UserUtils.sendFCM(
-                                this@ProviderDashboard,
-                                this.response.booking_details.fcm_token,
-                                "reject",
-                                "reject|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id} + |provider"
-                            )
-                            ProviderDashboard.bookingId = ""
-                            bottomSheetDialog.dismiss()
-                            FROM_FCM_SERVICE = false
-//                            IN_PROVIDER_DASHBOARD = false
-                        }
-                        is NetworkResponse.Failure -> {
-                            progressDialog.dismiss()
-                            snackBar(binding.bottomNavigationView, it.message!!)
-                        }
-                    }
-                })
+            val intent = Intent(this, ProviderRejectBookingScreen::class.java)
+            intent.putExtra("response", response.toString())
+            intent.putExtra("bookingId", bookingId)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
         }
 
 //        UserUtils.sendTimeRequestFCM(this, response.booking_details.fcm_token, "timeRequired")

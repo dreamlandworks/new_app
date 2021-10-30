@@ -162,8 +162,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
             onBackPressed()
         }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
     }
@@ -225,19 +224,19 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.addressText.text = UserUtils.addressList[addressIndex].month
     }
 
-    private fun openImagePicker() {
-        val options = resources.getStringArray(R.array.imageSelections)
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select image")
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> getImageFromGallery()
-                    1 -> capturePictureFromCamera()
-                }
-            }
-        val dialog = builder.create()
-        dialog.show()
-    }
+//    private fun openImagePicker() {
+//        val options = resources.getStringArray(R.array.imageSelections)
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle("Select image")
+//            .setItems(options) { dialog, which ->
+//                when (which) {
+//                    0 -> getImageFromGallery()
+//                    1 -> capturePictureFromCamera()
+//                }
+//            }
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: Data) {
@@ -246,11 +245,11 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.costPerHour.text = data.per_hour
     }
 
-    private fun capturePictureFromCamera() {
-        val cameraIntent = Intent()
-        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
-        startActivityForResult(cameraIntent, CAMERA_REQUEST)
-    }
+//    private fun capturePictureFromCamera() {
+//        val cameraIntent = Intent()
+//        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+//        startActivityForResult(cameraIntent, CAMERA_REQUEST)
+//    }
 
     private fun getImageFromGallery() {
         val intent = Intent()
@@ -408,6 +407,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
                     dialog.dismiss()
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, "accepted", "accepted")
                     weAreSorryDialog()
                 }
                 if (seconds == 0) {
@@ -421,43 +421,43 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         dialog.show()
     }
 
-    private fun serviceProviderAcceptDialog(context: Context) {
-        val dialog = BottomSheetDialog(context)
-        dialog.setCancelable(false)
-        val dialogView = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
-        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        Handler().postDelayed({
-            makePayment()
-        }, 3000)
-        dialog.setContentView(dialogView)
-        dialog.show()
-    }
+//    private fun serviceProviderAcceptDialog(context: Context) {
+//        val dialog = BottomSheetDialog(context)
+//        dialog.setCancelable(false)
+//        val dialogView = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
+//        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+//        closeBtn.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        Handler().postDelayed({
+//            makePayment()
+//        }, 3000)
+//        dialog.setContentView(dialogView)
+//        dialog.show()
+//    }
 
-    private fun serviceProviderRejectDialog(context: Context) {
-        val dialog = BottomSheetDialog(context)
-        dialog.setCancelable(false)
-        val dialogView = layoutInflater.inflate(R.layout.rejected_by_service_provider_dialog, null)
-        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
-        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        yesBtn.setOnClickListener {
-            snackBar(yesBtn, "Post the Job")
-            dialog.dismiss()
-            finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-        }
-        noBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.setContentView(dialogView)
-        dialog.show()
-    }
+//    private fun serviceProviderRejectDialog(context: Context) {
+//        val dialog = BottomSheetDialog(context)
+//        dialog.setCancelable(false)
+//        val dialogView = layoutInflater.inflate(R.layout.rejected_by_service_provider_dialog, null)
+//        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+//        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
+//        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+//        closeBtn.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        yesBtn.setOnClickListener {
+//            snackBar(yesBtn, "Post the Job")
+//            dialog.dismiss()
+//            finish()
+//            startActivity(Intent(this, UserDashboardScreen::class.java))
+//        }
+//        noBtn.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        dialog.setContentView(dialogView)
+//        dialog.show()
+//    }
 
     private fun weAreSorryDialog() {
         val dialog = BottomSheetDialog(this)
@@ -482,25 +482,25 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         dialog.show()
     }
 
-    private fun makePayment() {
-        Checkout.preload(applicationContext)
-        val checkout = Checkout()
-        checkout.setKeyID(getString(R.string.razorpay_api_key))
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("currency", "INR")
-            orderRequest.put(
-                "amount",
-                data.per_hour.toInt() * 100
-            ) // 500rs * 100 = 50000 paisa passed
-            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-            orderRequest.put("theme.color", R.color.blue)
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-    }
+//    private fun makePayment() {
+//        Checkout.preload(applicationContext)
+//        val checkout = Checkout()
+//        checkout.setKeyID(getString(R.string.razorpay_api_key))
+//        try {
+//            val orderRequest = JSONObject()
+//            orderRequest.put("currency", "INR")
+//            orderRequest.put(
+//                "amount",
+//                data.per_hour.toInt() * 100
+//            ) // 500rs * 100 = 50000 paisa passed
+//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+//            orderRequest.put("theme.color", R.color.blue)
+//            checkout.open(this, orderRequest)
+//        } catch (e: Exception) {
+//            toast(this, e.message!!)
+//        }
+//    }
 
     override fun onPaymentSuccess(paymentResponse: String?) {
         updateStatusInServer(paymentResponse, "Success")

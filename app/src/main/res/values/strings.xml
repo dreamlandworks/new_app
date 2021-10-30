@@ -596,6 +596,14 @@
     <string name="current_location">Current Location</string>
     <string name="using_gps">Using GPS</string>
     <string name="recent_searches">RECENT SEARCHES</string>
+    <string name="reject_the_booking">Reject the Booking</string>
+    <string name="looks_like_you_are_facing_some_difficulties_please_let_us_help_you_next_time">Looks like you are facing some difficulties. Please let us help you next time</string>
+    <string name="i_rejected_the_booking_because">I rejected the Booking because</string>
+    <string name="location_too_far">Location too far</string>
+    <string name="not_interested">Not Interested</string>
+    <string name="busy_at_that_time">Busy at that time</string>
+    <string name="skillset_not_matching">Skillset not Matching</string>
+    <string name="if_others_please_specify">If Others (Please Specify)</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
