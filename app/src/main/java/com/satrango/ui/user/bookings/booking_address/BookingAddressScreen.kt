@@ -381,8 +381,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     try {
                         weAreSorryDialog()
                     } catch (e: java.lang.Exception) {}
-                    Checkout.preload(applicationContext)
-                    makePayment()
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -521,14 +519,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
     }
 
     private fun makePayment() {
+        Checkout.preload(this)
         val checkout = Checkout()
         checkout.setKeyID(getString(com.satrango.R.string.razorpay_api_key))
+        val amount = data.per_hour.toInt() * 100
+        Log.e("AMOUNT:", amount.toString())
         try {
             val orderRequest = JSONObject()
             orderRequest.put("currency", "INR")
             orderRequest.put(
                 "amount",
-                data.per_hour.toInt() * 100
+                        amount
             ) // 500rs * 100 = 50000 paisa passed
             orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
             orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
@@ -558,7 +559,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             dialog.dismiss()
         }
         Handler().postDelayed({
-            Checkout.preload(applicationContext)
             makePayment()
         }, 3000)
         dialog.setContentView(dialogView)

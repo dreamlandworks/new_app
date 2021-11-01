@@ -46,8 +46,8 @@ class FCMService : FirebaseMessagingService() {
 //                    if (ProviderDashboard.bookingId.isNotEmpty() && ProviderDashboard.bookingId == it.body.toString()) {
                 notificationManager.cancelAll()
                 if (ProviderDashboard.bottomSheetDialog != null) {
-                    if (ProviderDashboard.bottomSheetDialog.isShowing) {
-                        ProviderDashboard.bottomSheetDialog.dismiss()
+                    if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                        ProviderDashboard.bottomSheetDialog!!.dismiss()
                         ProviderDashboard.FROM_FCM_SERVICE = false
                     }
                 }
@@ -132,29 +132,7 @@ class FCMService : FirebaseMessagingService() {
         }
         notificationManager.notify(1234, builder.build())
 
-//        ProviderDashboard.minutes = 2
-//        ProviderDashboard.seconds = 59
-//        ProviderDashboard.progressTime = 180
-//        ProviderDashboard.IN_PROVIDER_DASHBOARD = false
         fcmInstant = Instant.now()
-//        Handler().postDelayed({
-//            notificationManager.cancelAll()
-//        }, 18000)
-
-//        Thread {
-//            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
-//                ProviderDashboard.progressTime -= 1
-//                ProviderDashboard.seconds -= 1
-//                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
-//                    notificationManager.cancelAll()
-//                }
-//                if (ProviderDashboard.seconds == 0) {
-//                    ProviderDashboard.seconds = 59
-//                    ProviderDashboard.minutes -= 1
-//                }
-//                Thread.sleep( 1000)
-//            }
-//    }.start()
 
 //        val threadPool = Executors.newSingleThreadExecutor()
 //        threadPool.submit(Runnable {
@@ -172,29 +150,6 @@ class FCMService : FirebaseMessagingService() {
 //            Log.e("THREAD: ", "ONGOING....")
 //            threadPool.waitMillis(1000)
 //        })
-
-//        val t: Thread = object : Thread() {
-//            override fun run() {
-//                try {
-//                    if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
-//                        ProviderDashboard.progressTime -= 1
-//                        ProviderDashboard.seconds -= 1
-//                        if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
-//                            notificationManager.cancelAll()
-//                        }
-//                        if (ProviderDashboard.seconds == 0) {
-//                            ProviderDashboard.seconds = 59
-//                            ProviderDashboard.minutes -= 1
-//                        }
-//                    }
-//                    Log.e("THREAD: ", "ONGOING....")
-//                    sleep(1000)
-//                } finally {
-//                    Log.e("FINAL THREAD: ", "ONGOING....")
-//                }
-//            }
-//        }
-//        t.start()
 
 //        val mainHandler = Handler(Looper.getMainLooper())
 //        mainHandler.post(object : Runnable {

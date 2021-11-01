@@ -98,7 +98,7 @@ class ProviderDashboard : AppCompatActivity() {
         var seconds = 59
         var progressTime = 180
         var bookingId = ""
-        lateinit var bottomSheetDialog: BottomSheetDialog
+        var bottomSheetDialog: BottomSheetDialog? = null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -263,7 +263,7 @@ class ProviderDashboard : AppCompatActivity() {
 
         bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
-        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog!!.setCancelable(false)
         val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = bottomSheet.findViewById<TextView>(R.id.rejectBtn)
         val time = bottomSheet.findViewById<TextView>(R.id.time)
@@ -282,7 +282,7 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         closeBtn.setOnClickListener {
-            bottomSheetDialog.dismiss()
+            bottomSheetDialog!!.dismiss()
             FROM_FCM_SERVICE = false
 //            IN_PROVIDER_DASHBOARD = false
         }
@@ -296,7 +296,7 @@ class ProviderDashboard : AppCompatActivity() {
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 "",
                 RetrofitBuilder.USER_KEY,
-                this.response.booking_details.sp_id.toInt(),
+                UserUtils.getUserId(this).toInt(),
                 5,
                 userId.toInt()
             )
@@ -308,35 +308,31 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            Log.e("AMOUNT", this.response.booking_details.amount)
                             UserUtils.sendFCM(
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,
                                 "accept",
                                 "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
-                            ProviderDashboard.bookingId = ""
-                            bottomSheetDialog.dismiss()
                             FROM_FCM_SERVICE = false
-//                            IN_PROVIDER_DASHBOARD = false
+                            ProviderDashboard.bookingId = ""
+                            bottomSheetDialog!!.dismiss()
+                            snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
-                            snackBar(binding.bottomNavigationView, it.message!!)
+                            toast(this, it.message!!)
                         }
                     }
                 })
         }
 
         rejectBtn.setOnClickListener {
-            val intent = Intent(this, ProviderRejectBookingScreen::class.java)
-            intent.putExtra("response", response.toString())
-            intent.putExtra("bookingId", bookingId)
-            intent.putExtra("userId", userId)
-            startActivity(intent)
+            ProviderRejectBookingScreen.userId = userId
+            ProviderRejectBookingScreen.bookingId = bookingId
+            ProviderRejectBookingScreen.response = response
+            startActivity(Intent(this, ProviderRejectBookingScreen::class.java))
         }
-
-//        UserUtils.sendTimeRequestFCM(this, response.booking_details.fcm_token, "timeRequired")
 
         val dashboardInstant = Instant.now()
         val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
@@ -356,7 +352,7 @@ class ProviderDashboard : AppCompatActivity() {
                 if (minutes == 0 && seconds == 0) {
                     ProviderDashboard.bookingId = ""
                     FROM_FCM_SERVICE = false
-                    bottomSheetDialog.dismiss()
+                    bottomSheetDialog!!.dismiss()
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -367,8 +363,8 @@ class ProviderDashboard : AppCompatActivity() {
             }
         })
 
-        bottomSheetDialog.setContentView(bottomSheet)
-        bottomSheetDialog.show()
+        bottomSheetDialog!!.setContentView(bottomSheet)
+        bottomSheetDialog!!.show()
     }
 
     @SuppressLint("SetTextI18n")

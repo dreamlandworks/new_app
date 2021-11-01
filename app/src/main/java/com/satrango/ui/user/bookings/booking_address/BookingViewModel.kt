@@ -176,6 +176,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             viewModelScope.launch {
                 providerResponse.value = NetworkResponse.Loading()
                 try {
+                    Log.e("REQUEST:", Gson().toJson(requestBody))
                     val response = async { repository.setProviderResponse(requestBody) }
                     providerResponse.value = NetworkResponse.Success(response.await().string())
                 } catch (e: Exception) {
