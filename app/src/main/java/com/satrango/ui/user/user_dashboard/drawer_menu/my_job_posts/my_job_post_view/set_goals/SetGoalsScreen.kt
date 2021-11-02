@@ -186,7 +186,8 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                         this,
                         it.data!!.installment_det_id.toString()
                     )
-                    makePayment()
+                    startActivity(Intent(this, UserDashboardScreen::class.java))
+//                    makePayment()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

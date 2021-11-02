@@ -308,7 +308,7 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            Log.e("AMOUNT", this.response.booking_details.amount)
+
                             UserUtils.sendFCM(
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,

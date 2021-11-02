@@ -162,7 +162,8 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
         paymentData = data
         if (data.premium_tag == "Yes") {
             Checkout.preload(applicationContext)
-            makePayment()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+//            makePayment()
         } else {
             showSuccessDialog()
         }
