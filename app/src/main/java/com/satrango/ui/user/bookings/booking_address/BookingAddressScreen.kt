@@ -381,9 +381,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     try {
                         weAreSorryDialog()
                     } catch (e: java.lang.Exception) {}
+<<<<<<< HEAD
                     Checkout.preload(applicationContext)
                     startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java))
 //                    makePayment()
+=======
+>>>>>>> 6e1e998df87c4821b4daa0c8542c6e3865e92d65
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -522,14 +525,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
     }
 
     private fun makePayment() {
+        Checkout.preload(this)
         val checkout = Checkout()
         checkout.setKeyID(getString(com.satrango.R.string.razorpay_api_key))
+        val amount = data.per_hour.toInt() * 100
+        Log.e("AMOUNT:", amount.toString())
         try {
             val orderRequest = JSONObject()
             orderRequest.put("currency", "INR")
             orderRequest.put(
                 "amount",
-                data.per_hour.toInt() * 100
+                        amount
             ) // 500rs * 100 = 50000 paisa passed
             orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
             orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
@@ -559,9 +565,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             dialog.dismiss()
         }
         Handler().postDelayed({
+<<<<<<< HEAD
             Checkout.preload(applicationContext)
 //            makePayment()
             startActivity(Intent(this, UserDashboardScreen::class.java))
+=======
+            makePayment()
+>>>>>>> 6e1e998df87c4821b4daa0c8542c6e3865e92d65
         }, 3000)
         dialog.setContentView(dialogView)
         dialog.show()

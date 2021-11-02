@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,13 +29,16 @@ import java.util.*
 
 class ProviderRejectBookingScreen : AppCompatActivity() {
 
-    private var response: BookingDetailsResModel? = null
-    private lateinit var userId: String
-    private lateinit var bookingId: String
     private lateinit var bookingViewModel: BookingViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityProviderRejectBookingScreenBinding
     private var reason = ""
+
+    companion object {
+        var userId: String = ""
+        var bookingId: String = ""
+        var response: BookingDetailsResModel? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +51,10 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
         val bookingFactory = ViewModelFactory(BookingRepository())
         bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
-        bookingId = intent.getStringExtra("bookingId")!!
-        userId = intent.getStringExtra("userId")!!
-        response = Gson().fromJson(intent.getStringExtra("response")!!, BookingDetailsResModel::class.java)
-
         binding.apply {
 
             locationTooFarBtn.setOnClickListener {
-                locationTooFarBtn.setBackgroundResource(R.drawable.provider_bg)
+                locationTooFarBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 locationTooFarBtn.setTextColor(resources.getColor(R.color.white))
                 notInterestedBtn.setBackgroundResource(R.drawable.purple_out_line)
                 notInterestedBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -67,7 +68,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             }
 
             notInterestedBtn.setOnClickListener {
-                notInterestedBtn.setBackgroundResource(R.drawable.provider_bg)
+                notInterestedBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 notInterestedBtn.setTextColor(resources.getColor(R.color.white))
                 locationTooFarBtn.setBackgroundResource(R.drawable.purple_out_line)
                 locationTooFarBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -81,7 +82,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             }
 
             busyAtTimeBtn.setOnClickListener {
-                busyAtTimeBtn.setBackgroundResource(R.drawable.provider_bg)
+                busyAtTimeBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 busyAtTimeBtn.setTextColor(resources.getColor(R.color.white))
                 locationTooFarBtn.setBackgroundResource(R.drawable.purple_out_line)
                 locationTooFarBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -95,7 +96,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             }
 
             skillsNotSetBtn.setOnClickListener {
-                skillsNotSetBtn.setBackgroundResource(R.drawable.provider_bg)
+                skillsNotSetBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 skillsNotSetBtn.setTextColor(resources.getColor(R.color.white))
                 locationTooFarBtn.setBackgroundResource(R.drawable.purple_out_line)
                 locationTooFarBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -109,7 +110,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             }
 
             othersBtn.setOnClickListener {
-                othersBtn.setBackgroundResource(R.drawable.provider_bg)
+                othersBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 othersBtn.setTextColor(resources.getColor(R.color.white))
                 locationTooFarBtn.setBackgroundResource(R.drawable.purple_out_line)
                 locationTooFarBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -149,7 +150,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                     reason,
                     RetrofitBuilder.USER_KEY,
-                    response!!.booking_details.sp_id.toInt(),
+                    UserUtils.getUserId(this@ProviderRejectBookingScreen).toInt(),
                     4,
                     userId.toInt()
                 )
@@ -167,10 +168,14 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                     "reject",
                                     "reject|" + response!!.booking_details.amount + "|${response!!.booking_details.sp_id} + |provider"
                                 )
+                                binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""
-                                ProviderDashboard.bottomSheetDialog.dismiss()
                                 ProviderDashboard.FROM_FCM_SERVICE = false
-                                onBackPressed()
+                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                snackBar(binding.backBtn, "Booking Rejected Successfully")
+                                Handler().postDelayed({
+                                    onBackPressed()
+                                },3000)
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()

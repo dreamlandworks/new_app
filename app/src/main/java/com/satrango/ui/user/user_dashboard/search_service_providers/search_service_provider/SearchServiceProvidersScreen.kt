@@ -281,7 +281,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.getSelectedSPDetails(this),
             SearchServiceProviderResModel::class.java
         )
-//        toast(this, JSONObject(Gson().toJson(data).toString()).toString())
         viewResults.setOnClickListener {
             dialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
