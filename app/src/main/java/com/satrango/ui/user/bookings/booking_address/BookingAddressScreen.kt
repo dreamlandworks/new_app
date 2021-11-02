@@ -381,12 +381,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     try {
                         weAreSorryDialog()
                     } catch (e: java.lang.Exception) {}
-<<<<<<< HEAD
                     Checkout.preload(applicationContext)
                     startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java))
 //                    makePayment()
-=======
->>>>>>> 6e1e998df87c4821b4daa0c8542c6e3865e92d65
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -565,13 +562,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             dialog.dismiss()
         }
         Handler().postDelayed({
-<<<<<<< HEAD
             Checkout.preload(applicationContext)
 //            makePayment()
             startActivity(Intent(this, UserDashboardScreen::class.java))
-=======
             makePayment()
->>>>>>> 6e1e998df87c4821b4daa0c8542c6e3865e92d65
         }, 3000)
         dialog.setContentView(dialogView)
         dialog.show()

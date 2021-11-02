@@ -97,10 +97,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         try {
             val orderRequest = JSONObject()
             orderRequest.put("currency", "INR")
-            orderRequest.put(
-                "amount",
-                paymentData!!.amount.toDouble() * 100
-            ) // 500rs * 100 = 50000 paisa passed
+            orderRequest.put("amount", paymentData!!.amount.toDouble() * 100) // 500rs * 100 = 50000 paisa passed
             orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
             orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
             orderRequest.put("theme.color", R.color.blue)

@@ -308,10 +308,6 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-<<<<<<< HEAD
-
-=======
->>>>>>> 6e1e998df87c4821b4daa0c8542c6e3865e92d65
                             UserUtils.sendFCM(
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,
