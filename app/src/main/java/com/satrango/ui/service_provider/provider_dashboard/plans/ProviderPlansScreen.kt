@@ -24,6 +24,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderPaymentListener
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
+import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
@@ -34,7 +35,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, PaymentResultListener {
+class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
 
     private var paymentData: com.satrango.ui.service_provider.provider_dashboard.plans.models.Data? =
         null
@@ -85,24 +86,24 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
 
     }
 
-    private fun makePayment() {
-        val checkout = Checkout()
-        checkout.setKeyID(getString(R.string.razorpay_api_key))
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("currency", "INR")
-            orderRequest.put(
-                "amount",
-                paymentData!!.amount.toDouble() * 100
-            ) // 500rs * 100 = 50000 paisa passed
-            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-            orderRequest.put("theme.color", R.color.blue)
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-    }
+//    private fun makePayment() {
+//        val checkout = Checkout()
+//        checkout.setKeyID(getString(R.string.razorpay_api_key))
+//        try {
+//            val orderRequest = JSONObject()
+//            orderRequest.put("currency", "INR")
+//            orderRequest.put(
+//                "amount",
+//                paymentData!!.amount.toDouble() * 100
+//            ) // 500rs * 100 = 50000 paisa passed
+//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+//            orderRequest.put("theme.color", R.color.blue)
+//            checkout.open(this, orderRequest)
+//        } catch (e: Exception) {
+//            toast(this, e.message!!)
+//        }
+//    }
 
     private fun showSuccessDialog() {
         val dialog = BottomSheetDialog(this)
@@ -122,48 +123,20 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener, Paymen
         dialog.show()
     }
 
-    @SuppressLint("SimpleDateFormat")
-    override fun onPaymentSuccess(paymentId: String?) {
-        val factory = ViewModelFactory(ProviderPlansRepository())
-        val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
-        val requestBody = ProviderMemberShipPlanPaymentReqModel(
-            paymentData!!.amount.toInt(),
-            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
-            RetrofitBuilder.USER_KEY,
-            "Success",
-            paymentData!!.period.toInt(),
-            paymentData!!.id.toInt(),
-            paymentId!!,
-            UserUtils.getUserId(this).toInt()
-        )
-
-        viewModel.saveMemberShip(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    showSuccessDialog()
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
-                }
-            }
-        })
-    }
-
-    override fun onPaymentError(p0: Int, p1: String?) {
-        snackBar(binding.recyclerView, "Payment Failed")
-    }
-
     override fun loadPayment(data: com.satrango.ui.service_provider.provider_dashboard.plans.models.Data) {
         paymentData = data
         if (data.premium_tag == "Yes") {
-            Checkout.preload(applicationContext)
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-            makePayment()
+//            startActivity(Intent(this, UserDashboardScreen::class.java))
+            PaymentScreen.amount = paymentData!!.amount.toDouble()
+            PaymentScreen.period = paymentData!!.period.toInt()
+            PaymentScreen.id = paymentData!!.id.toInt()
+            PaymentScreen.FROM_PROVIDER_PLANS = true
+            PaymentScreen.FROM_USER_PLANS = false
+            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+            PaymentScreen.FROM_USER_SET_GOALS = false
+            startActivity(Intent(this, PaymentScreen::class.java))
+//            makePayment()
         } else {
             showSuccessDialog()
         }

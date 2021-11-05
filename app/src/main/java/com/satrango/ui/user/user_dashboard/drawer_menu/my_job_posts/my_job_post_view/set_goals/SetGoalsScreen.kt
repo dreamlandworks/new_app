@@ -21,6 +21,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetGoalsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.save_installments.DataX
@@ -186,7 +187,13 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                         this,
                         it.data!!.installment_det_id.toString()
                     )
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                    PaymentScreen.amount = bidPrice * 100
+                    PaymentScreen.FROM_USER_SET_GOALS = true
+                    PaymentScreen.FROM_USER_PLANS = false
+                    PaymentScreen.FROM_PROVIDER_PLANS = false
+                    PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+                    PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+                    startActivity(Intent(this, PaymentScreen::class.java))
 //                    makePayment()
                 }
                 is NetworkResponse.Failure -> {

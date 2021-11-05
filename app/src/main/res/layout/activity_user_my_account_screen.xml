@@ -11,198 +11,133 @@
         android:id="@+id/toolBar"
         layout="@layout/user_tool_bar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/_120sdp"
+        android:background="@color/blue"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
-            android:layout_margin="@dimen/_15sdp"
-            android:background="@drawable/blue_out_line"
-            app:cardCornerRadius="@dimen/_10sdp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/available_balance"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/blue_out_line">
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rs_0_00"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_15sdp"
-                        android:textStyle="bold"
-                        android:text="@string/my_account"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_16sdp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_margin="@dimen/_10sdp"
-                        android:orientation="horizontal">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:layout_centerInParent="true"
-                                android:elevation="@dimen/_1sdp"
-                                android:src="@drawable/wallet"
-                                tools:ignore="ContentDescription" />
-
-                        </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/white_border"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:paddingHorizontal="@dimen/_15sdp"
-                            android:text="0.00"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/_14sdp" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_5sdp"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_25sdp"
-            android:layout_marginTop="@dimen/_70sdp"
-            android:elevation="@dimen/_5sdp"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_weight="1"
-                android:background="@drawable/user_btn_bg"
-                android:elevation="@dimen/_5sdp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/job_posts"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/job_posts"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="-5dp"
-                    android:background="@drawable/blue_circle"
-                    android:padding="@dimen/_3sdp">
-
-                    <TextView
-                        android:id="@+id/jobPosts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/red_circle"
-                        android:gravity="center"
-                        android:text="@string/_0"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@drawable/user_btn_bg"
-                android:elevation="@dimen/_5sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:textStyle="bold"
-                    android:text="@string/referrals"
-                    android:textColor="@color/white" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="-5dp"
-                    android:background="@drawable/blue_circle"
-                    android:padding="@dimen/_3sdp">
-
-                    <TextView
-                        android:id="@+id/referrals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/red_circle"
-                        android:gravity="center"
-                        android:text="@string/_0"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_weight="1"
-                android:background="@drawable/user_btn_bg"
-                android:elevation="@dimen/_5sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:textStyle="bold"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/bookings"
-                    android:textColor="@color/white" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="-5dp"
-                    android:background="@drawable/blue_circle"
-                    android:padding="@dimen/_3sdp">
-
-                    <TextView
-                        android:id="@+id/bookings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/red_circle"
-                        android:gravity="center"
-                        android:text="@string/_0"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/jobPosts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/_0"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/referrals"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/referrals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/_0"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/bookings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bookings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/_0"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/grey_800" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -212,8 +147,7 @@
         android:gravity="center"
         android:text="@string/commission_earned"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12sdp"
-        app:drawableStartCompat="@drawable/commission" />
+        android:textSize="@dimen/_12sdp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -303,77 +237,42 @@
         android:id="@+id/transactionHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:drawablePadding="@dimen/_10sdp"
-        android:gravity="center"
-        android:text="@string/transaction_history"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center|start"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:text="@string/see_all_transactions"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12sdp"
-        app:drawableStartCompat="@drawable/transaction" />
+        android:textSize="@dimen/text" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/changePlan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:padding="@dimen/_10sdp"
         android:layout_marginHorizontal="@dimen/_20sdp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:text="@string/view_change_plan"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:gravity="center"
-            android:text="@string/current_plan"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
-            app:drawableStartCompat="@drawable/current_plan" />
-
-        <TextView
-            android:id="@+id/currentPlan"
-            android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end|center"
-            android:paddingEnd="@dimen/_10sdp"
-            android:text="@string/free"
-            android:textColor="@color/red"
-            android:textSize="@dimen/_10sdp"
-            tools:ignore="RtlSymmetry" />
-
-        <TextView
-            android:id="@+id/changePlan"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_5sdp"
-            android:layout_weight="1"
-            android:background="@drawable/category_bg"
-            android:elevation="@dimen/_5sdp"
-            android:gravity="center"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/change_plan"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:drawablePadding="@dimen/_10sdp"
-        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center|start"
         android:text="@string/add_withdraw_funds"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12sdp"
-        app:drawableStartCompat="@drawable/funds" />
+        android:textSize="@dimen/text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingVertical="@dimen/_20sdp">
 
         <TextView

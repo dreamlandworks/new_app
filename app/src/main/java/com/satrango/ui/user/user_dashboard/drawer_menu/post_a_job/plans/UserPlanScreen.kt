@@ -21,6 +21,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserPlanScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
@@ -83,9 +84,17 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
     override fun loadPayment(data: Data) {
         paymentData = data
         if (data.premium_tag == "Yes") {
-            Checkout.preload(applicationContext)
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-            makePayment()
+//            Checkout.preload(applicationContext)
+            PaymentScreen.FROM_USER_PLANS = true
+            PaymentScreen.FROM_PROVIDER_PLANS = false
+            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+            PaymentScreen.FROM_USER_SET_GOALS = false
+            PaymentScreen.amount = paymentData!!.amount.toDouble() * 100
+            PaymentScreen.period = paymentData!!.period.toInt()
+            PaymentScreen.id = paymentData!!.id.toInt()
+            startActivity(Intent(this, PaymentScreen::class.java))
+//            makePayment()
         } else {
             showSuccessDialog()
         }
