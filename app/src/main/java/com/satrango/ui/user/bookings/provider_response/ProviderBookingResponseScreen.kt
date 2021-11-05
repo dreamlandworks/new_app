@@ -95,10 +95,11 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         checkout.setKeyID(getString(R.string.razorpay_api_key))
         try {
             val orderRequest = JSONObject()
+            orderRequest.put("name", "Satrango")
             orderRequest.put("currency", "INR")
             orderRequest.put("amount", amount.toInt() * 100) // 500rs * 100 = 50000 paisa passed
             orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+            //orderRequest.put("image", "https://dev.satrango.com/public/assets/img/icon256.png")
             orderRequest.put("theme.color", R.color.blue)
             checkout.open(this, orderRequest)
         } catch (e: Exception) {

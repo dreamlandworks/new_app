@@ -1,7 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Satrango</string>
 
-    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>
+<!--    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>-->
+    <string name="razorpay_api_key">rzp_test_wOHvzNqK3lI6pN</string>
     <string name="fcm_server_key">AAAA3pCanB8:APA91bH5QKAcqGEKkcFbIDDpkrMSXEPLpst5MFq1_MXCojm-WFAh-NTU5wHxWao6dSVt7ywQDeMqpzHwnzlAQuNMfaxwp3nmgP4CINYfeAK4mzf6XnPyE_4xthRV6kaj3gVWntOBNCki</string>
     <string name="facebook_app_id">184529536828797</string>
     <string name="fb_login_protocol_scheme">fb184529536828797</string>

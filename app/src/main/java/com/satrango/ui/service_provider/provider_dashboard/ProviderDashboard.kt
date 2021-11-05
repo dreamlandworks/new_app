@@ -565,7 +565,6 @@ class ProviderDashboard : AppCompatActivity() {
                     return
                 }
             }
-            toast(this, "Permission Granted")
             fetchLocation(this)
         } else {
             toast(this, "No permission")

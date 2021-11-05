@@ -85,7 +85,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         if (data.premium_tag == "Yes") {
             Checkout.preload(applicationContext)
             startActivity(Intent(this, UserDashboardScreen::class.java))
-//            makePayment()
+            makePayment()
         } else {
             showSuccessDialog()
         }
