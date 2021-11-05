@@ -604,6 +604,11 @@
     <string name="busy_at_that_time">Busy at that time</string>
     <string name="skillset_not_matching">Skillset not Matching</string>
     <string name="if_others_please_specify">If Others (Please Specify)</string>
+    <string name="select_your_payment_method">Select your payment method</string>
+    <string name="other_payment_types">Other payment types</string>
+    <string name="see_all_transactions">See All Transactions</string>
+    <string name="view_change_plan">View/ Change Plan</string>
+    <string name="available_balance">Available Balance</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

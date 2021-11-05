@@ -34,6 +34,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
@@ -58,7 +59,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResultListener {
+class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
+//    , PaymentResultListener
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallBack: LocationCallback
@@ -383,7 +385,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
                     } catch (e: java.lang.Exception) {}
                     Checkout.preload(applicationContext)
                     startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java))
-//                    makePayment()
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -521,37 +522,37 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         }
     }
 
-    private fun makePayment() {
-        Checkout.preload(this)
-        val checkout = Checkout()
-        checkout.setKeyID(getString(com.satrango.R.string.razorpay_api_key))
-        val amount = data.per_hour.toInt() * 100
-        Log.e("AMOUNT:", amount.toString())
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("currency", "INR")
-            orderRequest.put(
-                "amount",
-                        amount
-            ) // 500rs * 100 = 50000 paisa passed
-            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-            orderRequest.put("theme.color", R.color.blue)
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-    }
+//    private fun makePayment() {
+//        Checkout.preload(this)
+//        val checkout = Checkout()
+//        checkout.setKeyID(getString(com.satrango.R.string.razorpay_api_key))
+//        val amount = data.per_hour.toInt() * 100
+//        Log.e("AMOUNT:", amount.toString())
+//        try {
+//            val orderRequest = JSONObject()
+//            orderRequest.put("currency", "INR")
+//            orderRequest.put(
+//                "amount",
+//                        amount
+//            ) // 500rs * 100 = 50000 paisa passed
+//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+//            orderRequest.put("theme.color", R.color.blue)
+//            checkout.open(this, orderRequest)
+//        } catch (e: Exception) {
+//            toast(this, e.message!!)
+//        }
+//    }
 
-    override fun onPaymentSuccess(paymentResponse: String?) {
-        updateStatusInServer(paymentResponse, "Success")
-
-    }
-
-    override fun onPaymentError(p0: Int, paymentError: String?) {
-        updateStatusInServer("", "Failure")
-        snackBar(binding.nextBtn, "Payment Failed. Please Try Again!")
-    }
+//    override fun onPaymentSuccess(paymentResponse: String?) {
+//        updateStatusInServer(paymentResponse, "Success")
+//
+//    }
+//
+//    override fun onPaymentError(p0: Int, paymentError: String?) {
+//        updateStatusInServer("", "Failure")
+//        snackBar(binding.nextBtn, "Payment Failed. Please Try Again!")
+//    }
 
     private fun serviceProviderAcceptDialog(context: Context) {
         val dialog = BottomSheetDialog(context)
@@ -562,10 +563,15 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
             dialog.dismiss()
         }
         Handler().postDelayed({
-            Checkout.preload(applicationContext)
 //            makePayment()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-            makePayment()
+            PaymentScreen.FROM_USER_BOOKING_ADDRESS = true
+            PaymentScreen.FROM_USER_PLANS = false
+            PaymentScreen.FROM_PROVIDER_PLANS = false
+            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+            PaymentScreen.FROM_USER_SET_GOALS = false
+            PaymentScreen.amount = data.per_hour.toDouble()
+            PaymentScreen.userId = data.users_id.toInt()
+            startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)
         dialog.setContentView(dialogView)
         dialog.show()
@@ -594,35 +600,35 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface, PaymentResult
         dialog.show()
     }
 
-    private fun updateStatusInServer(paymentResponse: String?, status: String) {
-        val requestBody = PaymentConfirmReqModel(
-            data.per_hour,
-            UserUtils.getBookingId(this),
-            UserUtils.scheduled_date,
-            RetrofitBuilder.USER_KEY,
-            status,
-            paymentResponse!!,
-            data.users_id.toInt(),
-            UserUtils.time_slot_from,
-            UserUtils.getUserId(this).toInt()
-        )
-        viewModel.confirmPayment(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    finish()
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
-                }
-            }
-        })
-    }
+//    private fun updateStatusInServer(paymentResponse: String?, status: String) {
+//        val requestBody = PaymentConfirmReqModel(
+//            data.per_hour,
+//            UserUtils.getBookingId(this),
+//            UserUtils.scheduled_date,
+//            RetrofitBuilder.USER_KEY,
+//            status,
+//            paymentResponse!!,
+//            data.users_id.toInt(),
+//            UserUtils.time_slot_from,
+//            UserUtils.getUserId(this).toInt()
+//        )
+//        viewModel.confirmPayment(this, requestBody).observe(this, {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    finish()
+//                    startActivity(Intent(this, UserDashboardScreen::class.java))
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(binding.nextBtn, it.message!!)
+//                }
+//            }
+//        })
+//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun bookMultiMoveServiceProvider() {

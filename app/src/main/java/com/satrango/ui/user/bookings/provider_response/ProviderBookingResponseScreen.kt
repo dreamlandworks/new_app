@@ -17,6 +17,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingResponseScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
@@ -54,8 +55,14 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
             userId = response.split("|")[2]
 
             Handler().postDelayed({
-                Checkout.preload(applicationContext)
-                makePayment()
+                PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
+                PaymentScreen.FROM_USER_PLANS = false
+                PaymentScreen.FROM_PROVIDER_PLANS = false
+                PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+                PaymentScreen.FROM_USER_SET_GOALS = false
+                PaymentScreen.amount = amount.toDouble()
+                startActivity(Intent(this, PaymentScreen::class.java))
+//                makePayment()
             }, 3000)
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         } else {

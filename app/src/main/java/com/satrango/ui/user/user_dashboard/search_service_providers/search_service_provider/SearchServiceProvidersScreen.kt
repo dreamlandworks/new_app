@@ -202,34 +202,35 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String) {
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keywordId.toInt(),
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt()
-//        )
-
         val requestBody = SearchServiceProviderReqModel(
-            "NSM School Road",
-            "Vijayawada",
-            "India",
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
             RetrofitBuilder.USER_KEY,
-            23,
-            "520008",
-            "Andhra Pradesh",
-            "16.491638988116897",
-            "80.65992294142048",
-            46,
-            8,
+            keywordId.toInt(),
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
             offerId
         )
+
+//        val requestBody = SearchServiceProviderReqModel(
+//            "NSM School Road",
+//            "Vijayawada",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            23,
+//            "520008",
+//            "Andhra Pradesh",
+//            "16.491638988116897",
+//            "80.65992294142048",
+//            46,
+//            8,
+//            offerId
+//        )
 //        toast(this, Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {

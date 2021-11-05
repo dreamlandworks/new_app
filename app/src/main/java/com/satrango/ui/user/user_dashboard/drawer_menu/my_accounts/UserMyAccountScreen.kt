@@ -1,7 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,7 +39,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         val factory = ViewModelFactory(MyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
         viewModel.myAccountDetails(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -63,14 +62,19 @@ class UserMyAccountScreen : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.account)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.account)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -85,7 +89,7 @@ class UserMyAccountScreen : AppCompatActivity() {
             thisMonth.text = data.commission_earned.this_month.toString()
             previousMonth.text = data.commission_earned.prev_month.toString()
             change.text = data.commission_earned.change.toString()
-            currentPlan.text = data.activated_plan
+//            currentPlan.text = data.activated_plan
 
             changePlan.setOnClickListener {
                 FROM_MY_ACCOUNT = true
@@ -93,7 +97,12 @@ class UserMyAccountScreen : AppCompatActivity() {
             }
             transactionHistory.setOnClickListener {
                 TransactionHistoryScreen.FROM_PROVIDER = false
-                startActivity(Intent(this@UserMyAccountScreen, TransactionHistoryScreen::class.java))
+                startActivity(
+                    Intent(
+                        this@UserMyAccountScreen,
+                        TransactionHistoryScreen::class.java
+                    )
+                )
             }
         }
 
