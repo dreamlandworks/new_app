@@ -3,37 +3,38 @@ package com.satrango.ui.auth
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
+import android.database.Cursor
+import android.net.Uri
+import android.provider.DocumentsContract
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
 import com.google.firebase.messaging.FirebaseMessaging
-import com.satrango.R
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
+import com.satrango.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant.now
 import java.util.*
 import kotlin.concurrent.thread
+import android.content.ContentUris
+import android.os.*
+import android.webkit.MimeTypeMap
+
+import android.os.Environment
+
+import android.os.Build
+import java.io.File
 
 
 class UserLoginTypeScreen : AppCompatActivity() {
@@ -100,97 +101,277 @@ class UserLoginTypeScreen : AppCompatActivity() {
             }
 
         }
+        // 59, 55
 
-//        val projection = arrayOf(
-//            MediaStore.Files.FileColumns._ID,
-//            MediaStore.Files.FileColumns.MIME_TYPE,
-//            MediaStore.Files.FileColumns.DATE_ADDED,
-//            MediaStore.Files.FileColumns.DATE_MODIFIED,
-//            MediaStore.Files.FileColumns.DISPLAY_NAME,
-//            MediaStore.Files.FileColumns.TITLE,
-//            MediaStore.Files.FileColumns.SIZE
-//        )
-//
-//        val mimeType = "application/pdf"
-//
-//        val whereClause = MediaStore.Files.FileColumns.MIME_TYPE + " IN ('" + mimeType + "')"
-//        val orderBy = MediaStore.Files.FileColumns.SIZE + " DESC"
-//        val cursor: Cursor? = contentResolver.query(
-//            MediaStore.Files.getContentUri("external"),
-//            projection,
-//            whereClause,
-//            null,
-//            null
-//        )
-//
-//        val idCol: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
-//        val mimeCol: Int = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
-//        val addedCol: Int = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
-//        val modifiedCol: Int =
-//            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_MODIFIED)
-//        val nameCol: Int = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
-//        val titleCol: Int = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
-//        val sizeCol: Int = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE)
-//
-//        toast(this, cursor.count.toString())
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                val fileUri: Uri = Uri.withAppendedPath(
-//                    MediaStore.Files.getContentUri("external"),
-//                    cursor.getString(idCol)
-//                )
-//                val mimeType = cursor.getString(mimeCol)
-//                val dateAdded = cursor.getLong(addedCol)
-//                val dateModified = cursor.getLong(modifiedCol)
-//                val name = cursor.getString(nameCol)
-//                Log.e("PDF", name)
-//            } while (cursor.moveToNext())
-//        }
+//        val intent = Intent(Intent.ACTION_PICK)
+//        intent.type = "application/pdf"
+//        startActivityForResult(intent, 1)
 
-//        MaterialFilePicker()
-//            // Pass a source of context. Can be:
-//            //    .withActivity(Activity activity)
-//            //    .withFragment(Fragment fragment)
-//            //    .withSupportFragment(androidx.fragment.app.Fragment fragment)
-//            .withActivity(this)
-//            // With cross icon on the right side of toolbar for closing picker straight away
-//            .withCloseMenu(true)
-//            // Entry point path (user will start from it)
-////            .withPath(alarmsFolder.absolutePath)
-//            // Root path (user won't be able to come higher than it)
-//            .withRootPath(Environment.getExternalStorageDirectory().absolutePath)
-//            // Showing hidden files
-//            .withHiddenFiles(true)
-//            // Want to choose only jpg images
-//            .withFilter(Pattern.compile(".*\\.PDF$"))
-//            // Don't apply filter to directories names
-//            .withFilterDirectories(false)
-//            .withTitle("Sample title")
-//            .withRequestCode(0)
-//            .start()
-
-
-
-
-
-//        val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
-//        val date1 = simpleDateFormat.parse("18:06:50")
-//        val date2 = simpleDateFormat.parse("18:10:15")
-//        val diff: Long = date2!!.time - date1!!.time
-//        val seconds = diff / 1000
-//        val minutes = seconds / 60
-//        val hours = minutes / 60
-//        val days = hours / 24
+//        val intent = Intent()
+//        intent.action = Intent.ACTION_GET_CONTENT
+//        intent.type = "application/pdf"
+//        startActivityForResult(intent,1)
 
     }
-
-
-
 
     override fun onBackPressed() {
         moveTaskToBack(true)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            Log.e("FILE:", getPathFromUri(this, data!!.data!!)!!)
+            toast(this, getPathFromUri(this, data.data!!)!!)
+        }
+    }
+
+//    fun dumpImageMetaData(uri: Uri) {
+//
+//        val contentResolver = applicationContext.contentResolver
+//        val cursor: Cursor? = contentResolver.query(
+//            uri, null, null, null, null, null)
+//
+//        cursor?.use {
+//            if (it.moveToFirst()) {
+//                val displayName: String = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+//                toast(this, displayName)
+//
+//                val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
+//                val size: String = if (!it.isNull(sizeIndex)) {
+//                    it.getString(sizeIndex)
+//                } else {
+//                    "Unknown"
+//                }
+//                toast(this, size)
+//            }
+//        }
+//    }
+
+//    fun getPDFPath(uri: Uri?): String? {
+//        val projection = arrayOf(MediaStore.Images.Media.DATA)
+//        val cursor = contentResolver.query(uri!!, projection, null, null, null)
+//        val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//        cursor.moveToFirst()
+//        return cursor.getString(column_index)
+//    }
+
+//    private fun getRealPathFromURI(contentURI: Uri): String? {
+//        val result: String?
+//        val cursor = contentResolver.query(contentURI, null, null, null, null)
+//        if (cursor == null) { // Source is Dropbox or other similar local file path
+//            result = contentURI.path
+//        } else {
+//            cursor.moveToFirst()
+//            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+//            result = cursor.getString(idx)
+//            cursor.close()
+//        }
+//        return result
+//    }
+//
+//    private fun getRealPath(uri: Uri): String {
+//        val docId = DocumentsContract.getDocumentId(uri)
+//        val split = docId.split(":")
+//        val type = split[0]
+//        var contentUri: Uri? = null
+//        contentUri = when (type) {
+//            "image" -> {
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//            }
+//            "video" -> {
+//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+//            }
+//            "audio" -> {
+//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+//            }
+//            else -> {
+//                MediaStore.Files.getContentUri("external");
+//            }
+//        }
+//        val selection = "_id=?";
+//        val selectionArgs = arrayOf(split[1])
+//        return getDataColumn(this, contentUri, selection, selectionArgs)!!
+//    }
+
+//    private fun getDataColumn(
+//        context: Context,
+//        uri: Uri?,
+//        selection: String?,
+//        selectionArgs: Array<String>
+//    ): String? {
+//        var cursor: Cursor? = null
+//        val column = "_data"
+//        val projection = arrayOf(
+//            column
+//        )
+//        try {
+//            cursor =
+//                context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+//            if (cursor != null && cursor.moveToFirst()) {
+//                val column_index: Int = cursor.getColumnIndexOrThrow(column)
+//                val value: String = cursor.getString(column_index)
+//                return if (value.startsWith("content://") || !value.startsWith("/") && !value.startsWith("file://")) {
+//                    null
+//                } else value
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close()
+//            }
+//        }
+//        return null
+//    }
+
+    private fun getPathFromUri(context: Context?, uri: Uri): String? {
+        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            if (isExternalStorageDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).toTypedArray()
+                val type = split[0]
+                if ("primary".equals(type, ignoreCase = true)) {
+                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+                }
+
+            } else if (isMediaDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).toTypedArray()
+                val type = split[0]
+                var contentUri: Uri? = null
+                if ("image" == type) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else if ("video" == type) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else if ("audio" == type) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                } else if ("document" == type) {
+                    contentUri =
+                        MediaStore.Files.getContentUri("external", java.lang.Long.valueOf(split[1]))
+                }
+
+                val selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")
+                val selectionArgsPdf = arrayOf(mimeType)
+                val contentUri1 = ContentUris.withAppendedId(
+                    Uri.parse(contentUri!!.path), java.lang.Long.valueOf(split[1])
+                )
+                return contentUri.toString()
+            } else if (isDownloadsDocument(uri)) {
+                var id = DocumentsContract.getDocumentId(uri)
+                if (id.startsWith("raw:")) {
+                    id = id.replaceFirst("raw.".toRegex(), "")
+                    val file = File(id)
+                    if (file.exists()) {
+                        return id
+                    }
+                }
+                val contentUri = ContentUris.withAppendedId(
+                    Uri.parse("content://downloads/public_downloads"),
+                    java.lang.Long.valueOf(id)
+                )
+                return getDataColumn(context!!, contentUri, null, null)
+            }
+        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+
+            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
+                context!!,
+                uri,
+                null,
+                null
+            )
+        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+            return uri.path
+        }
+        return null
+    }
+
+//    fun getPathFromUri(context: Context, uri: Uri): String? {
+//        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+//
+//        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+//            if (isExternalStorageDocument(uri)) {
+//                val docId = DocumentsContract.getDocumentId(uri)
+//                val split = docId.split(":".toRegex()).toTypedArray()
+//                val type = split[0]
+//                if ("primary".equals(type, ignoreCase = true)) {
+//                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+//                }
+//
+//            } else if (isDownloadsDocument(uri)) {
+//                val id = DocumentsContract.getDocumentId(uri)
+//                val contentUri = ContentUris.withAppendedId(
+//                    Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
+//                )
+//                return getDataColumn(context, contentUri, null, null)
+//            } else if (isMediaDocument(uri)) {
+//                val docId = DocumentsContract.getDocumentId(uri)
+//                val split = docId.split(":".toRegex()).toTypedArray()
+//                val type = split[0]
+//                var contentUri: Uri? = null
+//                if ("image" == type) {
+//                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//                } else if ("video" == type) {
+//                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+//                } else if ("audio" == type) {
+//                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+//                }
+//                val selection = "_id=?"
+//                val selectionArgs = arrayOf(
+//                    split[1]
+//                )
+//                return getDataColumn(context, contentUri, selection, selectionArgs)
+//            }
+//        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+//
+//            // Return the remote address
+//            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
+//                context,
+//                uri,
+//                null,
+//                null
+//            )
+//        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+//            return uri.path
+//        }
+//        return null
+//    }
+
+    fun getDataColumn(
+        context: Context, uri: Uri?, selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(column)
+        try {
+            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val index = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(index)
+            }
+        } finally {
+            cursor?.close()
+        }
+        return null
+    }
+
+    fun isExternalStorageDocument(uri: Uri): Boolean {
+        return "com.android.externalstorage.documents" == uri.authority
+    }
+
+    fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+    fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
+
+    fun isGooglePhotosUri(uri: Uri): Boolean {
+        return "com.google.android.apps.photos.content" == uri.authority
+    }
 
 }

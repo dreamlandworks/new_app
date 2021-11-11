@@ -34,7 +34,9 @@ import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
@@ -53,6 +55,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.P
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen
 import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScreen
+import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -61,12 +64,15 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -151,6 +157,7 @@ class ProviderDashboard : AppCompatActivity() {
         toolBarBackTVBtn = headerView.findViewById(R.id.toolBarBackTVBtn)
         toolBarBackBtn = headerView.findViewById(R.id.toolBarBackBtn)
         updateHeaderDetails()
+        loadProfileImage(binding.image)
         userProviderSwitch.isEnabled = true
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
@@ -211,14 +218,28 @@ class ProviderDashboard : AppCompatActivity() {
             true
         }
 
+        binding.onlineSwitch.isChecked = UserUtils.getSpStatus(this)
+        if (UserUtils.getSpStatus(this)) {
+            binding.onlineText.text = resources.getString(R.string.online)
+        } else {
+            binding.onlineText.text = resources.getString(R.string.offline)
+        }
+        binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                updateOnlineStatus(1)
+            } else {
+                updateOnlineStatus(0)
+            }
+        }
+
         Log.e("FROM_FCM_SERVICE:", FROM_FCM_SERVICE.toString())
         if (FROM_FCM_SERVICE) {
             bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
-
             val bookingFactory = ViewModelFactory(BookingRepository())
-            val bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
+            val bookingViewModel =
+                ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
             val requestBody = BookingDetailsReqModel(
                 bookingId.toInt(),
                 categoryId.toInt(),
@@ -252,6 +273,37 @@ class ProviderDashboard : AppCompatActivity() {
         }
     }
 
+    private fun updateOnlineStatus(statusId: Int) {
+        val requestBody = ProviderOnlineReqModel(
+            RetrofitBuilder.PROVIDER_KEY,
+            statusId,
+            UserUtils.getUserId(this)
+        )
+        viewModel.onlineStatus(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    toast(this, it.data!!.toString())
+                    progressDialog.dismiss()
+                    if (statusId == 0) {
+                        binding.onlineText.text = resources.getString(R.string.offline)
+                        UserUtils.setOnline(this, false)
+                    } else {
+                        binding.onlineText.text = resources.getString(R.string.online)
+                        UserUtils.setOnline(this, true)
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    binding.onlineSwitch.isChecked = !binding.onlineSwitch.isChecked
+                    toast(this, it.message!!)
+                }
+            }
+        })
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun showBookingAlert(
@@ -278,7 +330,8 @@ class ProviderDashboard : AppCompatActivity() {
         date.text = response.booking_details.scheduled_date
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
-            jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+            jobLocation.text =
+                response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
         }
 
         closeBtn.setOnClickListener {
@@ -529,6 +582,9 @@ class ProviderDashboard : AppCompatActivity() {
                             // Service Provider Banned
                             alertDialog("Your Service Provider Account has been Banned!")
                         }
+                        else -> {
+                            updateSpProfile()
+                        }
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -538,6 +594,62 @@ class ProviderDashboard : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun updateSpProfile() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(this@ProviderDashboard),
+                    RetrofitBuilder.USER_KEY
+                )
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
+                val responseData = response.data
+                if (response.status == 200) {
+                    if (responseData.profile_pic != null) {
+                        val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                        UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
+                        loadProfileImage(binding.image)
+                    } else {
+                        UserUtils.saveUserProfilePic(this@ProviderDashboard, "")
+                    }
+                    UserUtils.saveUserName(
+                        this@ProviderDashboard,
+                        responseData.fname + " " + responseData.lname
+                    )
+                    if (responseData.referral_id != null) {
+                        UserUtils.saveReferralId(this@ProviderDashboard, responseData.referral_id)
+                    }
+
+                    updateHeaderDetails()
+                } else {
+                    Snackbar.make(
+                        binding.navigationView,
+                        "Something went wrong!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                Snackbar.make(
+                    binding.navigationView,
+                    "Server Busy",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            } catch (e: JsonSyntaxException) {
+                Snackbar.make(
+                    binding.navigationView,
+                    "Something Went Wrong",
+                    Snackbar.LENGTH_SHORT
+                )
+                    .show()
+            } catch (e: SocketTimeoutException) {
+                Snackbar.make(
+                    binding.navigationView,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun alertDialog(message: String) {
@@ -667,7 +779,7 @@ class ProviderDashboard : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 

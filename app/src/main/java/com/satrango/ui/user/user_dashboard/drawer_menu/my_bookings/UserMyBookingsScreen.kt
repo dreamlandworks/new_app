@@ -109,6 +109,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
+                    binding.note.visibility = View.VISIBLE
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }

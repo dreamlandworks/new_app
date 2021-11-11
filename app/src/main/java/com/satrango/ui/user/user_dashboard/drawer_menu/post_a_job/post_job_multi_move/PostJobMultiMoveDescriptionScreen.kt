@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -458,7 +459,7 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 

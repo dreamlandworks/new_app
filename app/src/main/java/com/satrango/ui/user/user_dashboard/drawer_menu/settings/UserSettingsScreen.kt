@@ -1,9 +1,12 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.settings
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -56,6 +59,11 @@ class UserSettingsScreen : AppCompatActivity() {
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
         if (FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window: Window = window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            }
         }
     }
 }

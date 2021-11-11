@@ -427,7 +427,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

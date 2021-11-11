@@ -133,12 +133,12 @@
                         android:id="@+id/firstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="50"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:drawableStart="@drawable/ic_person_blue_24"
                         android:drawablePadding="@dimen/_10sdp"
                         android:hint="@string/first_name"
                         android:inputType="textCapWords"
+                        android:maxLength="50"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -257,10 +257,10 @@
                         android:drawableStart="@drawable/ic_calenders"
                         android:drawablePadding="@dimen/_10sdp"
                         android:editable="false"
-                        android:text="@string/yyyy_mm_dd"
                         android:hint="@string/date_of_birth"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:text="@string/yyyy_mm_dd" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
@@ -276,52 +276,54 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginHorizontal="@dimen/_10sdp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text"
+                    android:text="@string/gender"
                     android:textColor="@color/black"
-                    android:text="@string/gender"/>
+                    android:textSize="@dimen/text" />
 
                 <TextView
                     android:id="@+id/male"
+                    style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sub_text"
-                    style="@style/blue_outline_button_style"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:elevation="0dp"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:background="@drawable/blue_out_line"
-                    android:text="@string/male"/>
+                    android:text="@string/male"
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/female"
+                    style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sub_text"
-                    style="@style/blue_outline_button_style"
+                    android:elevation="0dp"
+                    android:background="@drawable/blue_out_line"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:background="@drawable/blue_out_line"
-                    android:text="@string/female"/>
+                    android:text="@string/female"
+                    android:textSize="@dimen/sub_text" />
 
                 <TextView
                     android:id="@+id/notToMentionBtn"
+                    style="@style/blue_outline_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sub_text"
-                    style="@style/blue_outline_button_style"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:background="@drawable/blue_out_line"
-                    android:text="@string/prefer_not_to_mention"/>
-
+                    android:elevation="0dp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/prefer_not_to_mention"
+                    android:textSize="@dimen/sub_text" />
 
 
             </LinearLayout>
@@ -351,12 +353,14 @@
 
                 <TextView
                     android:id="@+id/backBtn"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:background="@drawable/blue_out_line"
                     android:gravity="center"
-                    android:text="@string/back"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/back_sm"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_500"
                     android:textSize="@dimen/_12sdp"
@@ -364,11 +368,12 @@
 
                 <TextView
                     android:id="@+id/applyBtn"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:background="@drawable/category_bg"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingVertical="@dimen/_5sdp"
                     android:text="@string/apply"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

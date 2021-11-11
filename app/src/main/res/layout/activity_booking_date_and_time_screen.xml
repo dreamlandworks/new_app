@@ -271,6 +271,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/morningText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
@@ -286,6 +287,7 @@
                 android:layout_marginHorizontal="@dimen/_5sdp" />
 
             <TextView
+                android:id="@+id/afternoonText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
@@ -302,6 +304,7 @@
 
 
             <TextView
+                android:id="@+id/eveningText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
@@ -317,6 +320,7 @@
                 android:layout_marginHorizontal="@dimen/_5sdp" />
 
             <TextView
+                android:id="@+id/nightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"

@@ -24,15 +24,16 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
             if (ProviderOffersScreen.FROM_PROVIDER) {
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.title.text = "Activate"
-            }
-            binding.image.setOnClickListener {
-                SearchServiceProvidersScreen.offerId = data.id.toInt()
-                binding.image.context.startActivity(
-                    Intent(
-                        binding.title.context,
-                        SearchServiceProvidersScreen::class.java
+            } else {
+                binding.image.setOnClickListener {
+                    SearchServiceProvidersScreen.offerId = data.id.toInt()
+                    binding.image.context.startActivity(
+                        Intent(
+                            binding.title.context,
+                            SearchServiceProvidersScreen::class.java
+                        )
                     )
-                )
+                }
             }
         }
 

@@ -609,6 +609,10 @@
     <string name="see_all_transactions">See All Transactions</string>
     <string name="view_change_plan">View/ Change Plan</string>
     <string name="available_balance">Available Balance</string>
+    <string name="sp_status">SP STATUS</string>
+    <string name="no_bids_found">No Bids Found!</string>
+    <string name="jobs_are_not_available">Jobs are not available</string>
+    <string name="bookings_are_not_available">Bookings are not available</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

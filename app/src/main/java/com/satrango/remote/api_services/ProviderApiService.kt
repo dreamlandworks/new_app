@@ -31,6 +31,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
+import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
@@ -187,6 +188,11 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.UPDATE_ALERTS_TO_READ)
     suspend fun updateAlertsToRead(
         @Body requestBody: UpdateAlertsToReadReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.UPDATE_UPDATE_SP_ONLINE_STATUS)
+    suspend fun updateSpOnlineStatus(
+        @Body requestBody: ProviderOnlineReqModel
     ): ResponseBody
 
 }

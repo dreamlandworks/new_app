@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen">
 
@@ -233,17 +233,29 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@color/grey_800"/>
+
     <TextView
         android:id="@+id/transactionHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
         android:padding="@dimen/_10sdp"
         android:gravity="center|start"
         android:layout_marginHorizontal="@dimen/_20sdp"
         android:text="@string/see_all_transactions"
         android:textColor="@color/black"
         android:textSize="@dimen/text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@color/grey_800"/>
 
     <TextView
         android:id="@+id/changePlan"
@@ -256,6 +268,11 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@color/grey_800"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -266,6 +283,12 @@
         android:text="@string/add_withdraw_funds"
         android:textColor="@color/black"
         android:textSize="@dimen/text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@color/grey_800"/>
 
     <LinearLayout
         android:layout_width="match_parent"

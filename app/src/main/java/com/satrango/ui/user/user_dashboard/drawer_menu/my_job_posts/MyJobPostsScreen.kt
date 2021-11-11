@@ -1,14 +1,14 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
@@ -73,14 +73,19 @@ class MyJobPostsScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_job_posts)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_job_posts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -89,9 +94,10 @@ class MyJobPostsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        val requestBody = MyJobPostReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody =
+            MyJobPostReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.myJobPosts(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -104,10 +110,15 @@ class MyJobPostsScreen : AppCompatActivity() {
                         }
                     }
                     binding.recyclerView.adapter = MyJobPostsAdapter(list, status)
-
+                    if (list.isEmpty()) {
+                        binding.note.visibility = View.VISIBLE
+                    } else {
+                        binding.note.visibility = View.GONE
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
+                    binding.note.visibility = View.VISIBLE
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }

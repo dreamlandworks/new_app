@@ -262,6 +262,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+
             if (data.clipData != null) {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {

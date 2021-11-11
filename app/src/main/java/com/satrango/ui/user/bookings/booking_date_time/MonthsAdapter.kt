@@ -93,6 +93,14 @@ class MonthsAdapter(
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }

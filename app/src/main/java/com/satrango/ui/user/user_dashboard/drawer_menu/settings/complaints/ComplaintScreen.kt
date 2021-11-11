@@ -2,8 +2,12 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +24,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseC
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -116,6 +121,11 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
             binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.complaintBox.boxStrokeColor = resources.getColor(R.color.purple_500)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window: Window = window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            }
         }
     }
 
@@ -194,7 +204,11 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        progressDialog.setImageLocation(resources.getDrawable(R.drawable.circlelogo))
+        if (UserSettingsScreen.FROM_PROVIDER) {
+            progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
+        } else {
+            progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        }
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 }

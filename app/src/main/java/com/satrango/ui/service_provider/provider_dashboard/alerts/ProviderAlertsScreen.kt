@@ -21,8 +21,7 @@ import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
-class ProviderAlertsScreen :
-    BaseFragment<ProviderAlertsViewModel, FragmentProviderAlertsScreenBinding, ProviderAlertRepository>() {
+class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProviderAlertsScreenBinding, ProviderAlertRepository>() {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private val ACTIONABLE: String = "1"
@@ -49,8 +48,7 @@ class ProviderAlertsScreen :
             .setOnClickListener { activity?.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
             .setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.notifications)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.notifications)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -97,11 +95,13 @@ class ProviderAlertsScreen :
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE)
                     binding.regularBadge.text = it.data.size.toString()
+                    binding.note.visibility = View.GONE
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), ACTIONABLE)
-                    toast(requireContext(), it.message!!)
+                    binding.note.visibility = View.VISIBLE
+//                    toast(requireContext(), it.message!!)
                 }
             }
         })
@@ -137,11 +137,13 @@ class ProviderAlertsScreen :
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, NOT_ACTIONABLE)
                     binding.actionNeededBadge.text = it.data.size.toString()
+                    binding.note.visibility = View.VISIBLE
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE)
-                    toast(requireContext(), it.message!!)
+                    binding.note.visibility = View.VISIBLE
+//                    toast(requireContext(), it.message!!)
                 }
             }
         })
@@ -164,7 +166,7 @@ class ProviderAlertsScreen :
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 

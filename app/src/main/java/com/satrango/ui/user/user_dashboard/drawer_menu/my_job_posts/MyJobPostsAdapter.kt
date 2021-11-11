@@ -37,47 +37,51 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
             } else {
                 binding.locationLayout.visibility = View.GONE
             }
-            if (status == "Pending") {
-                binding.editBtn.visibility = View.VISIBLE
-                binding.awardedBtn.visibility = View.GONE
-//                binding.awardedBtn.text = "Award"
-                binding.editBtn.setOnClickListener {
-                    when (jobPostDetail.category_id) {
-                        "1" -> {
-                            UserUtils.setFromJobPostSingleMove(binding.editBtn.context, true)
-                            UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, false)
-                            UserUtils.setFromJobPostMultiMove(binding.editBtn.context, false)
+            when (status) {
+                "Pending" -> {
+                    binding.editBtn.visibility = View.VISIBLE
+                    binding.awardedBtn.visibility = View.GONE
+        //                binding.awardedBtn.text = "Award"
+                    binding.editBtn.setOnClickListener {
+                        when (jobPostDetail.category_id) {
+                            "1" -> {
+                                UserUtils.setFromJobPostSingleMove(binding.editBtn.context, true)
+                                UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, false)
+                                UserUtils.setFromJobPostMultiMove(binding.editBtn.context, false)
+                            }
+                            "2" -> {
+                                UserUtils.setFromJobPostSingleMove(binding.editBtn.context, false)
+                                UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, true)
+                                UserUtils.setFromJobPostMultiMove(binding.editBtn.context, false)
+                            }
+                            "3" -> {
+                                UserUtils.setFromJobPostSingleMove(binding.editBtn.context, false)
+                                UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, false)
+                                UserUtils.setFromJobPostMultiMove(binding.editBtn.context, true)
+                            }
                         }
-                        "2" -> {
-                            UserUtils.setFromJobPostSingleMove(binding.editBtn.context, false)
-                            UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, true)
-                            UserUtils.setFromJobPostMultiMove(binding.editBtn.context, false)
-                        }
-                        "3" -> {
-                            UserUtils.setFromJobPostSingleMove(binding.editBtn.context, false)
-                            UserUtils.setFromJobPostBlueCollar(binding.editBtn.context, false)
-                            UserUtils.setFromJobPostMultiMove(binding.editBtn.context, true)
-                        }
-                    }
-                    UserUtils.EDIT_MY_JOB_POST = true
-                    ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
-                    ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
-                    ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
-                    binding.editBtn.context.startActivity(
-                        Intent(
-                            binding.editBtn.context,
-                            PostJobDateTimeScreen::class.java
+                        UserUtils.EDIT_MY_JOB_POST = true
+                        ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
+                        ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
+                        ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
+                        binding.editBtn.context.startActivity(
+                            Intent(
+                                binding.editBtn.context,
+                                PostJobDateTimeScreen::class.java
+                            )
                         )
-                    )
+                    }
                 }
-            } else if (status == "Awarded") {
-                binding.editBtn.visibility = View.GONE
-                binding.awardedBtn.visibility = View.VISIBLE
-                binding.awardedBtn.text = "My Bookings"
-            } else if (status == "Expired") {
-                binding.editBtn.visibility = View.GONE
-                binding.awardedBtn.visibility = View.VISIBLE
-                binding.awardedBtn.text = "Post Again"
+                "Awarded" -> {
+                    binding.editBtn.visibility = View.GONE
+                    binding.awardedBtn.visibility = View.VISIBLE
+                    binding.awardedBtn.text = "My Bookings"
+                }
+                "Expired" -> {
+                    binding.editBtn.visibility = View.GONE
+                    binding.awardedBtn.visibility = View.VISIBLE
+                    binding.awardedBtn.text = "Post Again"
+                }
             }
             binding.root.setOnClickListener {
                 when (jobPostDetail.category_id) {
@@ -100,7 +104,8 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                 MyJobPostViewScreen.FROM_PROVIDER = false
                 MyJobPostViewScreen.bookingId = jobPostDetail.booking_id.toInt()
                 MyJobPostViewScreen.categoryId = jobPostDetail.category_id.toInt()
-                MyJobPostViewScreen.userId = jobPostDetail.post_job_id.toInt()
+                MyJobPostViewScreen.postJobId = jobPostDetail.post_job_id.toInt()
+                MyJobPostViewScreen.userId = jobPostDetail.sp_id.toInt()
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                 binding.root.context.startActivity(intent)
             }

@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostViewScreenBinding
@@ -217,7 +219,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun loadScreen() {
-        val requestBody = MyJobPostViewReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, postJobId, userId)
+        val requestBody = MyJobPostViewReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, postJobId, UserUtils.getUserId(this).toInt())
+        Log.e("JOB POST:", Gson().toJson(requestBody))
         viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
