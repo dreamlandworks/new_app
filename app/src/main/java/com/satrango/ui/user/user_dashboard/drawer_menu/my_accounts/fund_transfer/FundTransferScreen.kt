@@ -167,7 +167,8 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                 when {
                     depositAmountStr.isNotEmpty() -> {
                         depositAmountInDouble = depositAmountStr.toDouble()
-                        makePayment(depositAmountInDouble)
+                        updateToServerToAddFund("Success", "statusCode!!")
+//                        makePayment(depositAmountInDouble)
                         return@setOnClickListener
                     }
                     else -> {

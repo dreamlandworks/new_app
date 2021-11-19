@@ -80,7 +80,18 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //            }
 
             otherPaymentBtn.setOnClickListener {
-                makePayment()
+                if (FROM_PROVIDER_PLANS) {
+                    saveProviderPlan("paymentId")
+                } else if (FROM_USER_PLANS) {
+                    saveUserPlan("paymentId")
+                } else if (FROM_USER_BOOKING_ADDRESS) {
+                    updateStatusInServer("paymentId", "Success")
+                } else if (FROM_PROVIDER_BOOKING_RESPONSE) {
+                    updateStatusInServer("paymentId", "Success")
+                } else if (FROM_USER_SET_GOALS) {
+                    updateInstallmentPaymentStatus("Success", "paymentId"!!)
+                }
+//                makePayment()
             }
 
         }
