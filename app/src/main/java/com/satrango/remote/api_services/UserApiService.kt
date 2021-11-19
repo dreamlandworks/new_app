@@ -19,6 +19,7 @@ import com.satrango.ui.user.bookings.view_booking_details.installments_request.m
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.models.TransactionHistoryResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
@@ -371,6 +372,26 @@ interface UserApiService {
         @Query("users_id") userId: Int
     ): MyAccountDetailsResModel
 
+    @POST(UserApiEndPoints.FUND_TRANSFER)
+    suspend fun fundTransfer(
+        @Body requestBody: FundTransferReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.WITHDRAW_FUNDS)
+    suspend fun withdrawFunds(
+        @Body requestBody: WithdrawFundsReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.ALL_BANK_ACCOUNTS)
+    suspend fun allBankDetails(
+        @Body requestBody: AllBankDetailsReqModel
+    ): AllBankDetailsResModel
+
+    @POST(UserApiEndPoints.ADD_BANK_ACCOUNT)
+    suspend fun addBankAccount(
+        @Body requestBody: AddBankAccountReqModel
+    ): ResponseBody
+
     @GET(UserApiEndPoints.SP_SLOTS)
     suspend fun getSpSlots(
         @Query("key") key: String,
@@ -417,6 +438,11 @@ interface UserApiService {
     @POST(UserApiEndPoints.UPDATE_ALERTS_TO_READ)
     suspend fun updateAlertToRead(
         @Body requestBody: UserUpdateAlertsToReadReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.UPDATE_RESCHEDULE_REQUEST_STATUS)
+    suspend fun updateRescheduleStatus(
+        @Body requestBody: RescheduleStatusChangeReqModel
     ): ResponseBody
 
 }

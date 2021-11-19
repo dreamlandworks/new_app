@@ -60,6 +60,14 @@ class UserOffersScreen :
 //            ""
 //        )
         ProviderOffersScreen.FROM_PROVIDER = false
+
+        binding.latestOfferRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.expiryOfferRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.referralOfferRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         val requestBody = OffersListReqModel(
             "",
             "",
@@ -77,9 +85,8 @@ class UserOffersScreen :
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.latestOfferRv.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
+                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -98,16 +105,15 @@ class UserOffersScreen :
             UserUtils.getUserId(requireContext()).toInt(),
             "expiry"
         )
-        viewModel.getUserOffers(requireContext(), expiryRequestBody).observe(requireActivity(), {
+        viewModel.getUserOffers(requireActivity(), expiryRequestBody).observe(requireActivity(), {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.expiryOfferRv.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
+                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -133,9 +139,8 @@ class UserOffersScreen :
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.referralOfferRv.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
+                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

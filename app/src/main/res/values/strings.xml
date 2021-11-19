@@ -392,6 +392,7 @@
     <string name="my_problem_is_related_to">My Problem is related to</string>
     <string name="booking_job_posting">Booking/Job Posting</string>
     <string name="fund_transfers">Fund Transfers</string>
+    <string name="fund_transfer">Fund Transfer</string>
     <string name="bugs_in_application">Bugs in Application</string>
     <string name="submit">Submit</string>
     <string name="raise_a_complaint">Raise a complaint</string>
@@ -613,6 +614,23 @@
     <string name="no_bids_found">No Bids Found!</string>
     <string name="jobs_are_not_available">Jobs are not available</string>
     <string name="bookings_are_not_available">Bookings are not available</string>
+    <string name="add_funds">Add Funds</string>
+    <string name="_100_00">100.00</string>
+    <string name="_500_00">500.00</string>
+    <string name="_1000_00">1000.00</string>
+    <string name="_2000_00">2000.00</string>
+    <string name="deposit_amount">Deposit Amount</string>
+    <string name="withdraw_funds">Withdraw Funds</string>
+<!--    <string name="available_balance">Available Balance</string>-->
+    <string name="withdraw_rs">Withdraw Rs</string>
+    <string name="select_account">Select Account</string>
+    <string name="add_another_account">Add Another Account</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="account_holder_name">Account Holder Name</string>
+    <string name="account_no">Account No</string>
+    <string name="confirm_account_no">Confirm Account No</string>
+    <string name="ifsc_code">IFSC Code</string>
+    <string name="service_provider_has_requested_booking_reschedule_request_on">Service Provider has requested Booking Reschedule request on</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

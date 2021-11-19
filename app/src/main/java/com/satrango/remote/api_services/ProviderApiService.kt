@@ -190,7 +190,7 @@ interface ProviderApiService {
         @Body requestBody: UpdateAlertsToReadReqModel
     ): ResponseBody
 
-    @POST(ServiceProviderEndPoints.UPDATE_UPDATE_SP_ONLINE_STATUS)
+    @POST(ServiceProviderEndPoints.UPDATE_SP_ONLINE_STATUS)
     suspend fun updateSpOnlineStatus(
         @Body requestBody: ProviderOnlineReqModel
     ): ResponseBody

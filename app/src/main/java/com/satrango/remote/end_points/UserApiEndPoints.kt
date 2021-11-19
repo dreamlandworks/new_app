@@ -68,5 +68,10 @@ object UserApiEndPoints {
     final const val GET_BOOKING_STATUS_LIST = "user/get_booking_status_list"
     final const val COMPLAINT_REQUESTS = "user/complaints_requests_list"
     final const val UPDATE_ALERTS_TO_READ = "user/alerts/update"
+    final const val FUND_TRANSFER = "user/transfer_funds"
+    final const val WITHDRAW_FUNDS = "user/withdraw_funds"
+    final const val ADD_BANK_ACCOUNT = "user/add_bank_account"
+    final const val ALL_BANK_ACCOUNTS = "user/user_bank_account_details"
+    final const val UPDATE_RESCHEDULE_REQUEST_STATUS = "user/update_reschedule_status_by_sp"
 
 }

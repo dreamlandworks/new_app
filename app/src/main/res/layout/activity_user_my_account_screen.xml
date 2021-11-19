@@ -28,7 +28,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/balance"
+            android:id="@+id/availableBalance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rs_0_00"
@@ -275,6 +275,7 @@
         android:background="@color/grey_800"/>
 
     <TextView
+        android:id="@+id/withDrawBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"

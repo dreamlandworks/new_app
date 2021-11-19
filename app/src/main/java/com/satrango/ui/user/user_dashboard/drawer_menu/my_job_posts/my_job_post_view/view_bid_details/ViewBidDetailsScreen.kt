@@ -38,6 +38,11 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var binding: ActivityViewBidDetailsScreensBinding
     private lateinit var progressDialog: BeautifulProgressDialog
 
+    companion object {
+        var bidId = 0
+        var spId = 0
+    }
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,9 +57,9 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = ViewProposalReqModel(
-            intent.getStringExtra("bidId")!!.toInt(),
+            bidId,
             RetrofitBuilder.USER_KEY,
-            intent.getStringExtra("spId")!!.toInt()
+            spId
         )
         viewModel.viewProposal(this, requestBody).observe(this, {
             when (it) {
@@ -126,12 +131,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                                 ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
                                 ViewBidsScreen.bidId = data.bid_details.bid_id.toInt()
                                 ViewBidsScreen.spId = data.bid_details.sp_id.toInt()
-                                startActivity(
-                                    Intent(
-                                        this@ViewBidDetailsScreen,
-                                        SetGoalsScreen::class.java
-                                    )
-                                )
+                                startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
                             }
                             binding.rejectBtn.setOnClickListener {
                                 rejectBid()

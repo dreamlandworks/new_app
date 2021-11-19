@@ -19,5 +19,6 @@ data class BookingDetails(
     val scheduled_date: String,
     val started_at: String,
     val sp_id: String,
+    val reschedule_status: String,
     val otp: String
 )

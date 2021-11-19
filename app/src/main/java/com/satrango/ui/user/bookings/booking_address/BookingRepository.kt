@@ -74,4 +74,8 @@ class BookingRepository: BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().getBookingStatusList(RetrofitBuilder.USER_KEY, bookingId)
     }
 
+    suspend fun rescheduleChangeStatus(requestBody: RescheduleStatusChangeReqModel): ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+    }
+
 }

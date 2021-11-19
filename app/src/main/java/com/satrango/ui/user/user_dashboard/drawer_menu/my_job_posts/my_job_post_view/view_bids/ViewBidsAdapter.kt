@@ -75,8 +75,8 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
 
             binding.root.setOnClickListener {
                 val intent = Intent(binding.root.context, ViewBidDetailsScreen::class.java)
-                intent.putExtra("bidId", bidDetail.bid_id)
-                intent.putExtra("spId", bidDetail.sp_id)
+                ViewBidDetailsScreen.bidId = bidDetail.bid_id.toInt()
+                ViewBidDetailsScreen.spId = bidDetail.sp_id.toInt()
                 binding.root.context.startActivity(intent)
             }
 

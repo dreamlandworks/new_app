@@ -14,6 +14,8 @@ import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserMyAccountScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
@@ -54,6 +56,11 @@ class UserMyAccountScreen : AppCompatActivity() {
             }
         })
 
+        binding.withDrawBtn.setOnClickListener {
+            FundTransferScreen.FROM_PROVIDER = false
+            startActivity(Intent(this, FundTransferScreen::class.java))
+        }
+
     }
 
     private fun initializeToolBar() {
@@ -79,6 +86,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI(data: MyAccountDetailsResModel) {
 
         binding.apply {
@@ -89,7 +97,8 @@ class UserMyAccountScreen : AppCompatActivity() {
             thisMonth.text = data.commission_earned.this_month.toString()
             previousMonth.text = data.commission_earned.prev_month.toString()
             change.text = data.commission_earned.change.toString()
-//            currentPlan.text = data.activated_plan
+            availableBalance.text = "Rs ${data.wallet_balance}"
+            FundTransferScreen.availableBalance = data.wallet_balance
 
             changePlan.setOnClickListener {
                 FROM_MY_ACCOUNT = true
@@ -106,5 +115,9 @@ class UserMyAccountScreen : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, UserDashboardScreen::class.java))
     }
 }

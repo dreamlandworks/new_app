@@ -43,6 +43,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val getInstallmentsList = MutableLiveData<NetworkResponse<GoalsInstallmentsResModel>>()
     val postApproveReject = MutableLiveData<NetworkResponse<PostApproveRejectResModel>>()
     val getBookingStatusList = MutableLiveData<NetworkResponse<GetBookingStatusListResModel>>()
+    val rescheduleStatusChange = MutableLiveData<NetworkResponse<String>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -330,6 +331,28 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             getBookingStatusList.value = NetworkResponse.Failure("No Internet Connection")
         }
         return getBookingStatusList
+    }
+
+    fun rescheduleStatusChange(context: Context, requestBody: RescheduleStatusChangeReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                rescheduleStatusChange.value = NetworkResponse.Loading()
+                try {
+                    val response = async { repository.rescheduleChangeStatus(requestBody) }
+                    val jsonResponse = JSONObject(response.await().string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        rescheduleStatusChange.value = NetworkResponse.Success(jsonResponse.getInt("status").toString())
+                    } else {
+                        rescheduleStatusChange.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    rescheduleStatusChange.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            rescheduleStatusChange.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return rescheduleStatusChange
     }
 
 }
