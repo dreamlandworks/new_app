@@ -84,10 +84,13 @@ class ProviderMyBidsScreen : AppCompatActivity() {
             }
 
             if (filter.lowToHigh) {
+                binding.note.visibility = View.GONE
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedBy { data: JobPostDetail -> data.amount })
             } else if (filter.highToLow) {
+                binding.note.visibility = View.GONE
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedByDescending { data: JobPostDetail -> data.amount })
             } else {
+                binding.note.visibility = View.GONE
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(list)
             }
         }
@@ -142,6 +145,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     val data = it.data!!
                     binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
+                    binding.note.visibility = View.GONE
                     if (it.data.isNotEmpty()) {
                         binding.sortFilterBtn.visibility = View.VISIBLE
                     } else {
@@ -150,7 +154,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
+                    binding.note.visibility = View.VISIBLE
+//                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
         })
@@ -182,10 +187,12 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                         }
                     }
                     binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
+                    binding.note.visibility = View.GONE
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
+                    binding.note.visibility = View.VISIBLE
+//                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
         })
@@ -199,7 +206,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

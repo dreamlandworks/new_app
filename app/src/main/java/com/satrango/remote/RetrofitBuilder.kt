@@ -11,8 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitBuilder {
 
     const val BASE_URL = "http://dev.satrango.com/"
-    const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
     const val FCM_URL = "https://fcm.googleapis.com/"
+    const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
     const val PROVIDER_KEY = "Dld0F54x99UeL8nZkByWC0BwUEi4aF4O"
 
     fun getUserRetrofitInstance(): UserApiService {
@@ -35,7 +35,6 @@ object RetrofitBuilder {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build().create(UserApiService::class.java)
-
     }
 
     fun getServiceProviderRetrofitInstance(): ProviderApiService {

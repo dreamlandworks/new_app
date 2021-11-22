@@ -490,7 +490,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
                 if (response.booking_details.extra_demand_total_amount != 0.0) {
                     if (response.booking_details.extra_demand_status == "0") {
-                        showExtraDemandAcceptDialog()
+                        showExtraDemandAcceptDialog(bookingId.toInt(), response.booking_details.material_advance.toString(), response.booking_details.technician_charges.toString(), response.booking_details.extra_demand_total_amount.toString(), progressDialog)
                     }
                 }
             }
@@ -512,7 +512,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     }
 
-    private fun showExtraDemandAcceptDialog() {
+    private fun showExtraDemandAcceptDialog(bookingId: Int, materialAdvance: String, technicalCharges: String, extraDemandTotalAmount: String, progressDialog: BeautifulProgressDialog) {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
         val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
@@ -522,18 +522,22 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
 
-        materialCharges.text = response.booking_details.material_advance.toString()
-        technicianCharges.text = response.booking_details.technician_charges.toString()
-        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
+//        materialCharges.text = response.booking_details.material_advance.toString()
+//        technicianCharges.text = response.booking_details.technician_charges.toString()
+//        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
+
+        materialCharges.text = materialAdvance
+        technicianCharges.text = technicalCharges
+        totalCost.text = extraDemandTotalAmount
 
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(2, dialog)
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(1, dialog)
+            changeExtraDemandStatus(bookingId,1, dialog, progressDialog)
         }
 
         dialog.setCancelable(false)
@@ -541,12 +545,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun changeExtraDemandStatus(status: Int, dialog: BottomSheetDialog) {
+    private fun changeExtraDemandStatus(bookingId: Int, status: Int, dialog: BottomSheetDialog, progressDialog: BeautifulProgressDialog) {
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody =
-            ChangeExtraDemandStatusReqModel(bookingId.toInt(), RetrofitBuilder.USER_KEY, status)
+            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

@@ -1,29 +1,16 @@
 package com.satrango.utils
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.location.Address
-import android.location.Geocoder
 import android.os.Build
-import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.satrango.R
-import com.satrango.remote.Notification
+import com.satrango.remote.Data
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMMessageReqModel
-import com.satrango.ui.auth.user_signup.UserSignUpScreenTwo
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
@@ -33,6 +20,8 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -79,6 +68,27 @@ object UserUtils {
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
+
+    fun setOffline(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.sp_status), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSpStatus(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.sp_status), false)
+    }
+
+    fun setOnline(context: Context, spStatus: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.sp_status), spStatus)
+        editor.apply()
+        editor.commit()
     }
 
     fun saveInstallmentDetId(context: Context, fromJobPost: String) {
@@ -635,7 +645,7 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Notification("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
+        val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE:", token)
@@ -653,7 +663,7 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Notification(bookingId, "accepted", from), "high", token)
+        val requestBody = FCMMessageReqModel(Data(bookingId, "accepted", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE CANCEL:", Gson().toJson(response))
@@ -670,7 +680,7 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Notification("timeRequired", "timeRequired", from), "high", token)
+        val requestBody = FCMMessageReqModel(Data("timeRequired", "timeRequired", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE TIME REQ:", Gson().toJson(response))
@@ -828,6 +838,19 @@ object UserUtils {
         val now: LocalTime = LocalTime.parse(compareTime.split(":")[0] + ":" + compareTime.split(":")[1])
         if (start.isBefore(end)) return now.isAfter(start) && now.isBefore(end)
         return if (now.isBefore(start)) now.isBefore(start) && now.isBefore(end) else now.isAfter(start) && now.isAfter(end)
+    }
+
+    fun checktimings(time: String, endtime: String): Boolean {
+        val pattern = "HH:mm"
+        val sdf = SimpleDateFormat(pattern)
+        try {
+            val date1: Date = sdf.parse(time)
+            val date2: Date = sdf.parse(endtime)
+            return date1.after(date2)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return false
     }
 
 }

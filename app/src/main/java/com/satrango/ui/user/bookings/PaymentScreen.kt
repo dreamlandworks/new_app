@@ -80,7 +80,18 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //            }
 
             otherPaymentBtn.setOnClickListener {
-                makePayment()
+                if (FROM_PROVIDER_PLANS) {
+                    saveProviderPlan("paymentId")
+                } else if (FROM_USER_PLANS) {
+                    saveUserPlan("paymentId")
+                } else if (FROM_USER_BOOKING_ADDRESS) {
+                    updateStatusInServer("paymentId", "Success")
+                } else if (FROM_PROVIDER_BOOKING_RESPONSE) {
+                    updateStatusInServer("paymentId", "Success")
+                } else if (FROM_USER_SET_GOALS) {
+                    updateInstallmentPaymentStatus("Success", "paymentId"!!)
+                }
+//                makePayment()
             }
 
         }
@@ -225,11 +236,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
 
     val userProfile = MutableLiveData<NetworkResponse<Data>>()
     val saveLocation = MutableLiveData<NetworkResponse<String>>()
+    val onlineStatus = MutableLiveData<NetworkResponse<String>>()
 
     fun userProfile(context: Context): MutableLiveData<NetworkResponse<Data>> {
         if (hasInternetConnection(context)) {
@@ -60,6 +62,27 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
             }
         }
         return saveLocation
+    }
+
+    fun onlineStatus(context: Context, requestBody: ProviderOnlineReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            onlineStatus.value = NetworkResponse.Loading()
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val response = repository.updateProviderOnlineStatus(requestBody)
+                    val jsonResponse = JSONObject(response.string())
+                    Log.e("LOCATION", jsonResponse.toString())
+                    if (jsonResponse.getInt("status") == 200) {
+                        onlineStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        onlineStatus.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    onlineStatus.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        }
+        return onlineStatus
     }
 
 }

@@ -58,7 +58,9 @@ class FCMService : FirebaseMessagingService() {
 //            } else
                 if (it.title == "user") {
                     if (!ProviderDashboard.FROM_FCM_SERVICE) {
-                        addNotification(it.body)
+                        if (UserUtils.getSpStatus(this)) {
+                            addNotification(it.body)
+                        }
                     }
                 } else {
                     if (!UserUtils.getInstantBooking(this)) {

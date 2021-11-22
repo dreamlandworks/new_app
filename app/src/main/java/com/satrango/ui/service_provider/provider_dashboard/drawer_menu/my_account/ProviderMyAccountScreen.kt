@@ -1,26 +1,27 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyAccountScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -42,7 +43,7 @@ class ProviderMyAccountScreen : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderMyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyAccountViewModel::class.java]
         viewModel.myAccount(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -61,6 +62,12 @@ class ProviderMyAccountScreen : AppCompatActivity() {
         binding.changePlan.setOnClickListener {
             startActivity(Intent(this, ProviderPlansScreen::class.java))
         }
+
+        binding.withDrawBtn.setOnClickListener {
+            FundTransferScreen.FROM_PROVIDER = true
+            startActivity(Intent(this, FundTransferScreen::class.java))
+        }
+
     }
 
     private fun initializeToolBar() {
@@ -75,7 +82,8 @@ class ProviderMyAccountScreen : AppCompatActivity() {
             .setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
             .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_account)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -87,12 +95,14 @@ class ProviderMyAccountScreen : AppCompatActivity() {
             tasksCount.text = "${data.total_completed_bookings}/${data.total_bookings}"
             bidsCount.text = "${data.total_completed_bids}/${data.total_bids}"
             referralsCount.text = data.total_referrals
-            earningsCount.text = data.commission_earned.this_month.toString()
-            thisMonth.text = data.commission_earned.this_month.toString()
-            previousMonth.text = data.commission_earned.prev_month.toString()
-            change.text = data.commission_earned.change.toString()
+            earningsCount.text = "Rs ${data.commission_earned.this_month}"
+            thisMonth.text = "Rs ${data.commission_earned.this_month}"
+            previousMonth.text = "Rs ${data.commission_earned.prev_month}"
+            change.text = "Rs ${data.commission_earned.change}"
             reviewsCount.text = data.total_reviews
             currentPlan.text = data.activated_plan
+            earningsCount.text = "Rs ${data.wallet_balance}"
+            FundTransferScreen.availableBalance = data.wallet_balance
 
             transactionHistory.setOnClickListener {
                 TransactionHistoryScreen.FROM_PROVIDER = true
@@ -105,10 +115,14 @@ class ProviderMyAccountScreen : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        startActivity(Intent(this, ProviderDashboard::class.java))
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }

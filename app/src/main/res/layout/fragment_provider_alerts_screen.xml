@@ -82,6 +82,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_alerts_found"
+        android:gravity="center"
+        android:textSize="@dimen/sub_text"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alertsRV"
         android:layout_width="match_parent"

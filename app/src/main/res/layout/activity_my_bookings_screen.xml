@@ -69,7 +69,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/no_booking_found"/>
+        android:textSize="@dimen/sub_text"
+        android:text="@string/bookings_are_not_available"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

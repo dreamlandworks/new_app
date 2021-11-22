@@ -63,7 +63,19 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             return
         }
         FROM_PROVIDER = true
+        binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
+        loadLatestOffers()
+
+        loadExpiryOffers()
+
+        loadReferralOffers()
+
+    }
+
+    private fun loadLatestOffers() {
         val requestBody = OffersListReqModel(
             "",
             "",
@@ -77,12 +89,19 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
         viewModel.getOffers(requireContext(), requestBody).observe(requireActivity(), {
             when(it) {
                 is NetworkResponse.Loading -> {
+                    binding.latestTitle.visibility = View.GONE
+                    binding.expiryTitle.visibility = View.GONE
+                    binding.referralTitle.visibility = View.GONE
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
+                    binding.latestTitle.visibility = View.VISIBLE
+                    val latestOffers = it.data!!
+                    binding.latestOfferRv.adapter = UserLatestOffersAdapter(latestOffers)
+                    if (latestOffers.isEmpty()) {
+                        loadLatestOffers()
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -90,7 +109,9 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
             }
         })
+    }
 
+    private fun loadExpiryOffers() {
         val expiryRequestBody = OffersListReqModel(
             "",
             "",
@@ -108,8 +129,12 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
+                    binding.expiryTitle.visibility = View.VISIBLE
+                    val expiryOffers = it.data!!
+                    binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(expiryOffers)
+                    if (expiryOffers.isEmpty()) {
+                        loadExpiryOffers()
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -117,7 +142,9 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
             }
         })
+    }
 
+    private fun loadReferralOffers() {
         val referralRequestBody = OffersListReqModel(
             "",
             "",
@@ -135,8 +162,12 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
+                    binding.referralTitle.visibility = View.VISIBLE
+                    val referralOffer = it.data!!
+                    binding.referralOfferRv.adapter = UserReferralOffersAdapter(referralOffer)
+                    if (referralOffer.isEmpty()) {
+                        loadReferralOffers()
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -144,14 +175,12 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                 }
             }
         })
-
-
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 

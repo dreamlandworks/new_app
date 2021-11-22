@@ -359,8 +359,8 @@ class SkillsProfileScreen :
                     ProviderProfileScreen.progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    ProviderProfileScreen.progressDialog.dismiss()
                     snackBar(binding.qualification, it.message!!)
+                    ProviderProfileScreen.progressDialog.dismiss()
                     snackBar(binding.profession, "Click Reset to get language values")
                 }
             }

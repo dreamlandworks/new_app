@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -147,20 +148,16 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
-
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
+                    Log.e("KEYWORDS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
-                    val adapter =
-                        ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
+                    val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->
                         keyword = keywordsList[position].keywords_id
                         subCategoryId = keywordsList[position].subcategory_id
-                        UserUtils.saveSelectedKeywordCategoryId(
-                            this,
-                            keywordsList[position].category_id
-                        )
+                        UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
                     }
                     progressDialog.dismiss()
                 }
@@ -202,36 +199,38 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String) {
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keywordId.toInt(),
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
-
 //        val requestBody = SearchServiceProviderReqModel(
-//            "NSM School Road",
-//            "Vijayawada",
-//            "India",
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
 //            RetrofitBuilder.USER_KEY,
-//            23,
-//            "520008",
-//            "Andhra Pradesh",
-//            "16.491638988116897",
-//            "80.65992294142048",
-//            46,
-//            8,
+//            keywordId.toInt(),
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
 //            offerId
 //        )
+//        Log.e("SEARCH OBJECT:", requestBody.toString())
+
+        val requestBody = SearchServiceProviderReqModel(
+            "NSM School Road",
+            "Vijayawada",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            23,
+            "520008",
+            "Andhra Pradesh",
+            "16.491638988116897",
+            "80.65992294142048",
+            46,
+            8,
+            offerId
+        )
 //        toast(this, Gson().toJson(requestBody))
+
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

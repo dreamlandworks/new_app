@@ -207,15 +207,14 @@ class ProviderProfileScreen : AppCompatActivity() {
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path =
-            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 }
