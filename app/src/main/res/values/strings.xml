@@ -631,6 +631,7 @@
     <string name="confirm_account_no">Confirm Account No</string>
     <string name="ifsc_code">IFSC Code</string>
     <string name="service_provider_has_requested_booking_reschedule_request_on">Service Provider has requested Booking Reschedule request on</string>
+    <string name="mod_balance">Mod. Balance</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

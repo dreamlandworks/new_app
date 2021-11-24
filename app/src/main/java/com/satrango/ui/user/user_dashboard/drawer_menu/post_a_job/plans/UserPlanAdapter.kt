@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.ChoosePlanRowBinding
-import com.satrango.databinding.ProviderChoosePlanRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
-import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
 
-class UserPlanAdapter(private val list: List<Data>, private val activatedPlan: Int, private val userPlanListener: UserPlanListener) :
+class UserPlanAdapter(
+    private val response: PostJobPlansResModel,
+    private val list: List<Data>,
+    private val activatedPlan: Int,
+    private val userPlanListener: UserPlanListener
+) :
     RecyclerView.Adapter<UserPlanAdapter.ViewHolder>() {
 
     class ViewHolder(binding: ChoosePlanRowBinding): RecyclerView.ViewHolder(binding.root) {
@@ -61,6 +65,8 @@ class UserPlanAdapter(private val list: List<Data>, private val activatedPlan: I
         holder.bind(list[position], userPlanListener)
         if (activatedPlan == 2) {
             holder.binding.premiumText.text = "Activated"
+            holder.binding.premiumAmount.visibility = View.GONE
+            holder.binding.premiumAmountPeriod.text = "Valid till ${response.valid_till_date}"
         }
     }
 

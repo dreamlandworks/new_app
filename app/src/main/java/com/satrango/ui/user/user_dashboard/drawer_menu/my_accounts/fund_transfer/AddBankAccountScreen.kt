@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -13,6 +14,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityAddBankAccountScreenBinding
@@ -80,10 +84,11 @@ class AddBankAccountScreen : AppCompatActivity() {
         val requestBody = AddBankAccountReqModel(
             binding.accountHolder.text.toString().trim(),
             binding.accountNo.text.toString().trim(),
-            binding.confirmAccountNo.text.toString().trim(),
+            binding.ifscCode.text.toString().trim(),
             RetrofitBuilder.USER_KEY,
             UserUtils.getUserId(this).toInt()
         )
+        toast(this, Gson().toJson(requestBody))
         viewModel.addBankAccount(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
@@ -91,7 +96,7 @@ class AddBankAccountScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    startActivity(Intent(this, FundTransferScreen::class.java))
+                    successDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -99,6 +104,24 @@ class AddBankAccountScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun successDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
+        val text = dialogView.findViewById<TextView>(R.id.text)
+        val backBtn = dialogView.findViewById<TextView>(R.id.closBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        text.text = "Bank details added successfully"
+        backBtn.setOnClickListener {
+            startActivity(Intent(this, FundTransferScreen::class.java))
+        }
+        closeBtn.setOnClickListener {
+            startActivity(Intent(this, FundTransferScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

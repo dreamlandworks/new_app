@@ -16,8 +16,8 @@ class AllBankDetailsAdapter(
     class ViewHolder(binding: AllBanksDetailsRowBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(userBankAccount: UserBankAccount) {
-            binding.title.text = "A/c No. ${userBankAccount.account_no}"
-            binding.description.text = "IFSC:${userBankAccount.ifsc_code}"
+            binding.title.text = "A/c No: ${userBankAccount.account_no}"
+            binding.description.text = "IFSC: ${userBankAccount.ifsc_code}"
             if (FundTransferScreen.FROM_PROVIDER) {
                 binding.rowLayout.setBackgroundResource(R.drawable.purple_out_line)
                 binding.title.setTextColor(binding.title.context.resources.getColor(R.color.purple_500))

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.satrango.R
@@ -648,12 +649,13 @@ object UserUtils {
         val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Toast.makeText(context, "Alert Sent to ${response.string()}", Toast.LENGTH_SHORT).show()
             Log.e("FCM RESPONSE:", token)
         }
 
     }
 
-    fun sendCancelFCM(
+    private fun sendCancelFCM(
         context: Context,
         token: String,
         bookingId: String,
@@ -671,22 +673,22 @@ object UserUtils {
 
     }
 
-    fun sendTimeRequestFCM(
-        context: Context,
-        token: String,
-        from: String
-    ) {
-        saveProviderAction(context, "")
-        val map = mutableMapOf<String, String>()
-        map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Data("timeRequired", "timeRequired", from), "high", token)
-        CoroutineScope(Dispatchers.Main).launch {
-            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-            Log.e("FCM RESPONSE TIME REQ:", Gson().toJson(response))
-        }
-
-    }
+//    fun sendTimeRequestFCM(
+//        context: Context,
+//        token: String,
+//        from: String
+//    ) {
+//        saveProviderAction(context, "")
+//        val map = mutableMapOf<String, String>()
+//        map["Content-Type"] = "application/json"
+//        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+//        val requestBody = FCMMessageReqModel(Data("timeRequired", "timeRequired", from), "high", token)
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+//            Log.e("FCM RESPONSE TIME REQ:", Gson().toJson(response))
+//        }
+//
+//    }
 
     fun sendFCMtoSelectedServiceProvider(
         context: Context,
