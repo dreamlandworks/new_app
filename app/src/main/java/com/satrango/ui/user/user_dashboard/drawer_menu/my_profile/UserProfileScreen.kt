@@ -292,8 +292,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     val layoutManager = LinearLayoutManager(this@UserProfileScreen)
                     layoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     binding.addressRv.layoutManager = layoutManager
-                    binding.addressRv.adapter =
-                        UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
+                    binding.addressRv.adapter = UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
                     binding.addressRv.visibility = View.VISIBLE
                     progressDialog.dismiss()
                 }

@@ -183,8 +183,7 @@ class UserAlertScreen :
                         binding.note.visibility = View.GONE
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
-                        binding.alertsRV.adapter =
-                            UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
+                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Actionable Alerts are empty"
                     }

@@ -6,6 +6,8 @@ data class Data(
     val description: String,
     val created_on: String,
     val booking_id: String,
+    val reschedule_user_id: String,
+    val reschedule_id: String,
     val alert_id: String,
     val action: String,
     val category_id: String,

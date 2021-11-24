@@ -60,23 +60,23 @@ class UserAlertsAdapter(
                 alertsInterface.divertToInstallmentsScreen(data.booking_id, data.post_job_id.toInt())
             }
             if (data.alert_id == "7" && data.action == "2") {
-                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.booking_id.toInt())
+                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt())
             }
             if (data.alert_id == "8" && data.action == "2") {
                 alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_sp_id.toInt(), data.bid_id.toInt())
             }
             if (data.alert_id == "9" && data.action == "2") {
                 if (UserAlertScreen.FROM_PROVIDER) {
-                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.booking_id.toInt(), data.booking_id.toInt())
+                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
                 } else {
-                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.booking_id.toInt(), data.booking_id.toInt())
+                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
                 }
             }
             if (data.alert_id == "10" && data.action == "2") {
                 if (UserAlertScreen.FROM_PROVIDER) {
-                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.booking_id.toInt(), data.booking_id.toInt())
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
                 } else {
-                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.booking_id.toInt(), data.booking_id.toInt())
+                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
                 }
             }
             if (data.alert_id == "3") {

@@ -1,8 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -28,7 +26,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
-import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -59,7 +56,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!.data,  it.data.activated_plan.toInt(),this)
+                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!, it.data.data,  it.data.activated_plan.toInt(),this)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

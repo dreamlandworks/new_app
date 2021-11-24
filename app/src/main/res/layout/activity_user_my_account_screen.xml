@@ -36,6 +36,33 @@
             android:textSize="@dimen/_20sdp"
             android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_20sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mod_balance"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sub_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/modBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rs_0_00"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textColor="@color/yellow"
+                android:textSize="@dimen/text"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
