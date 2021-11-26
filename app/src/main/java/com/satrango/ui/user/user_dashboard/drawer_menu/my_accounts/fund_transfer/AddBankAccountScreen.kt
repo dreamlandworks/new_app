@@ -122,6 +122,7 @@ class AddBankAccountScreen : AppCompatActivity() {
         }
         dialog.setContentView(dialogView)
         dialog.setCancelable(false)
+        dialog.show()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

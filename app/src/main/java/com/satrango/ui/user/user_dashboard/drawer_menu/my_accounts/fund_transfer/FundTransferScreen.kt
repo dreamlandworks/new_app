@@ -69,6 +69,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         loadExistingBankAccounts()
 
         binding.apply {
+            accountRv.layoutManager = LinearLayoutManager(this@FundTransferScreen, LinearLayoutManager.HORIZONTAL, false)
 
             hundredBtn.setOnClickListener {
                 if (FROM_PROVIDER) {
@@ -212,7 +213,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                     progressDialog.dismiss()
                     binding.availableBalance.text = availableBalance.toString()
                     allBankDetails = it.data!!
-                    binding.accountRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                    Log.e("BANK DETAILS:", allBankDetails.toString())
                     binding.accountRv.adapter = AllBankDetailsAdapter(allBankDetails, this)
                 }
                 is NetworkResponse.Failure -> {

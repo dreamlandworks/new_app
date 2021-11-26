@@ -175,11 +175,11 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingHorizontal="@dimen/_20sdp"
-                    android:paddingVertical="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@drawable/category_bg"
+                    android:paddingHorizontal="@dimen/_20sdp"
+                    android:paddingVertical="@dimen/_5sdp"
                     android:text="@string/submit" />
 
 

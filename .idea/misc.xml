@@ -3,10 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_green_track.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_grey_thumb.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_grey_track.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/switch_state.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/switch_thumb_state.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_add_bank_account_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_booking_attachments_screen.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_complaint_screen.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.1" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_o_t_p_verification_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_dashboard.xml" value="0.2" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_search_view_profile.xml" value="0.4" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_provider_home_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_user_home_screen.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/no_service_provider_found.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.23645833333333333" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/blue_account_balance_24.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/blue_bg_sm.xml" value="0.169140625" />

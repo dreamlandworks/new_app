@@ -21,7 +21,8 @@ class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>
                 .into(binding.rowImage)
             binding.rowTitle.text = model.sub_name
             binding.root.setOnClickListener {
-                SearchServiceProvidersScreen.subCategoryId = model.category_id
+                SearchServiceProvidersScreen.subCategoryId = model.id
+                SearchServiceProvidersScreen.keyword = "0"
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
                 binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
             }

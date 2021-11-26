@@ -59,8 +59,9 @@ dependencies {
 
     // Firebase Dependencies
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.firebase:firebase-dynamic-links:20.1.1'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Google Material
     implementation 'com.google.android.material:material:1.4.0'
@@ -91,7 +92,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
 
     // Coroutines
@@ -105,4 +106,7 @@ dependencies {
 
     // Razorpay
     implementation 'com.razorpay:checkout:1.6.15'
+
+    // Add the following line:
+    apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 }

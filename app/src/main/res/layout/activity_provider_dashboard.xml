@@ -122,9 +122,9 @@
                             android:textOff="@string/o"
                             android:textOn="@string/o"
                             android:textSize="@dimen/_5sdp"
-                            android:thumb="@drawable/custom_green_thumb"
                             app:showText="true"
-                            app:track="@drawable/custom_green_track" />
+                            android:thumb="@drawable/custom_grey_thumb"
+                            app:track="@drawable/switch_state" />
                     </LinearLayout>
                 </RelativeLayout>
 

@@ -43,33 +43,37 @@ class OTPVerificationScreen : AppCompatActivity() {
 
             otpTextWatchers()
 
-            nextBtn.setOnClickListener {
-                val numOne = firstNo.text.toString().trim()
-                val numTwo = secondNo.text.toString().trim()
-                val numThree = thirdNo.text.toString().trim()
-                val numFourth = fourthNo.text.toString().trim()
-                if (numOne.isEmpty() || numTwo.isEmpty() || numThree.isEmpty() || numFourth.isEmpty()) {
-                    snackBar(firstNo, "Please Enter valid OTP")
-                } else {
-                    val userOTP = numOne + numTwo + numThree + numFourth
-                    if (otp.toString() == userOTP) {
-                        startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
-                        finish()
-                    } else {
-                        firstNo.setBackgroundResource(R.drawable.wrongpricebackground)
-                        secondNo.setBackgroundResource(R.drawable.wrongpricebackground)
-                        thirdNo.setBackgroundResource(R.drawable.wrongpricebackground)
-                        fourthNo.setBackgroundResource(R.drawable.wrongpricebackground)
-                        snackBar(nextBtn, "Please Enter valid OTP")
-                    }
-                }
-            }
+//            nextBtn.setOnClickListener {
+//                validateOTP()
+//            }
 
             binding.reSendOTP.setOnClickListener {
                 requestOTP()
             }
         }
 
+    }
+
+    private fun validateOTP() {
+        val numOne = binding.firstNo.text.toString().trim()
+        val numTwo = binding.secondNo.text.toString().trim()
+        val numThree = binding.thirdNo.text.toString().trim()
+        val numFourth = binding.fourthNo.text.toString().trim()
+        if (numOne.isEmpty() || numTwo.isEmpty() || numThree.isEmpty() || numFourth.isEmpty()) {
+            snackBar(binding.firstNo, "Please Enter valid OTP")
+        } else {
+            val userOTP = numOne + numTwo + numThree + numFourth
+            if (otp.toString() == userOTP) {
+                startActivity(Intent(this@OTPVerificationScreen, SetPasswordScreen::class.java))
+                finish()
+            } else {
+                binding.firstNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                binding.secondNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                binding.thirdNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                binding.fourthNo.setBackgroundResource(R.drawable.wrongpricebackground)
+                snackBar(binding.nextBtn, "Please Enter valid OTP")
+            }
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -201,6 +205,7 @@ class OTPVerificationScreen : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s!!.length == 1) {
                     binding.fourthNo.clearFocus()
+                    validateOTP()
                 }
             }
 

@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,14 +15,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityComplaintScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
@@ -157,7 +162,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.complaint.setText("")
-                    snackBar(binding.submitBtn, it.data!!.message)
+                    successDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -210,5 +215,24 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         }
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun successDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
+        val text = dialogView.findViewById<TextView>(R.id.text)
+        val backBtn = dialogView.findViewById<TextView>(R.id.closBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        text.text = "Complaint Raised Successfully"
+        backBtn.setOnClickListener {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        closeBtn.setOnClickListener {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -38,6 +39,9 @@ import com.satrango.utils.snackBar
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
 
+//    private lateinit var showBookingTypeBottomSheetDialog: BottomSheetDialog
+//    private lateinit var waitingForSpBottomSheetDialog: BottomSheetDialog
+//    private lateinit var weAreSorryBottomSheetDialog: BottomSheetDialog
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
     private lateinit var viewModel: SearchServiceProviderViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -149,7 +153,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
-                    Log.e("KEYWORDS:", keywordsList.toString())
+//                    Log.e("KEYWORDS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
@@ -199,38 +203,38 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(keywordId: String, subCategory: String) {
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keywordId.toInt(),
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
-//        Log.e("SEARCH OBJECT:", requestBody.toString())
-
         val requestBody = SearchServiceProviderReqModel(
-            "NSM School Road",
-            "Vijayawada",
-            "India",
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
             RetrofitBuilder.USER_KEY,
-            23,
-            "520008",
-            "Andhra Pradesh",
-            "16.491638988116897",
-            "80.65992294142048",
-            46,
-            8,
+            keywordId.toInt(),
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
             offerId
         )
-//        toast(this, Gson().toJson(requestBody))
+//        Log.e("SEARCH OBJECT:", requestBody.toString())
 
+//        val requestBody = SearchServiceProviderReqModel(
+//            "NSM School Road",
+//            "Vijayawada",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            23,
+//            "520008",
+//            "Andhra Pradesh",
+//            "16.491638988116897",
+//            "80.65992294142048",
+//            46,
+//            8,
+//            offerId
+//        )
+//        toast(this, Gson().toJson(requestBody))
+        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -239,9 +243,19 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
+//                    if (waitingForSpBottomSheetDialog != null) {
+//                        waitingForSpBottomSheetDialog.dismiss()
+//                    }
+                    Log.e("RESULTS:", Gson().toJson(it.data))
                     if (it.data.data.isEmpty()) {
+//                        if (weAreSorryBottomSheetDialog != null) {
+//                            weAreSorryBottomSheetDialog.dismiss()
+//                        }
                         weAreSorryDialog()
                     } else {
+//                        if (showBookingTypeBottomSheetDialog != null) {
+//                            showBookingTypeBottomSheetDialog.dismiss()
+//                        }
                         showBookingTypeDialog(it.data)
                     }
                 }
@@ -256,6 +270,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     override fun onBackPressed() {
         if (offerId == 0) {
             finish()
+            UserUtils.saveSearchFilter(this, "")
+            UserUtils.saveSelectedSPDetails(this, "")
             startActivity(Intent(this, UserDashboardScreen::class.java))
         }else {
             super.onBackPressed()
@@ -265,8 +281,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showBookingTypeDialog(data: SearchServiceProviderResModel) {
-        val dialog = BottomSheetDialog(this)
-        val dialogView = layoutInflater.inflate(com.satrango.R.layout.search_type_dialog, null)
+        val showBookingTypeBottomSheetDialog = BottomSheetDialog(this)
+        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.search_type_dialog, null)
         val viewResults = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
         val bookInstantly = dialogView.findViewById<TextView>(com.satrango.R.id.bookInstantly)
         val providerCount = dialogView.findViewById<TextView>(com.satrango.R.id.providerCount)
@@ -282,7 +298,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             SearchServiceProviderResModel::class.java
         )
         viewResults.setOnClickListener {
-            dialog.dismiss()
+            showBookingTypeBottomSheetDialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
@@ -293,7 +309,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            }
         }
         bookInstantly.setOnClickListener {
-            dialog.dismiss()
+            showBookingTypeBottomSheetDialog.dismiss()
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             UserUtils.saveFromInstantBooking(this, true)
             binding.listCount.visibility = View.GONE
@@ -301,25 +317,25 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, BookingAttachmentsScreen::class.java))
         }
         closeBtn.setOnClickListener {
-            dialog.dismiss()
+            showBookingTypeBottomSheetDialog.dismiss()
         }
-        dialog.setContentView(dialogView)
-        dialog.setCancelable(false)
-        dialog.show()
+        showBookingTypeBottomSheetDialog.setContentView(dialogView)
+        showBookingTypeBottomSheetDialog.setCancelable(false)
+        showBookingTypeBottomSheetDialog.show()
     }
 
     @SuppressLint("SetTextI18n")
     private fun showWaitingForSPConfirmationDialog() {
-        val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
+        val waitingForSpBottomSheetDialog = BottomSheetDialog(this)
+        waitingForSpBottomSheetDialog.setCancelable(false)
         val dialogView =
-            layoutInflater.inflate(com.satrango.R.layout.waiting_for_sp_confirmation_dialog, null)
+            LayoutInflater.from(this).inflate(com.satrango.R.layout.waiting_for_sp_confirmation_dialog, null)
         val progressBar =
             dialogView.findViewById<CircularProgressIndicator>(com.satrango.R.id.progressBar)
         val time = dialogView.findViewById<TextView>(com.satrango.R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
         closeBtn.setOnClickListener {
-            dialog.dismiss()
+            waitingForSpBottomSheetDialog.dismiss()
         }
         var minutes = 2
         var seconds = 59
@@ -333,7 +349,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    dialog.dismiss()
+                    waitingForSpBottomSheetDialog.dismiss()
                     weAreSorryDialog()
                 }
                 if (seconds == 0) {
@@ -343,33 +359,32 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 mainHandler.postDelayed(this, 1000)
             }
         })
-        dialog.setContentView(dialogView)
-        dialog.show()
+        waitingForSpBottomSheetDialog.setContentView(dialogView)
+        waitingForSpBottomSheetDialog.show()
     }
 
     private fun weAreSorryDialog() {
-        val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
-        val dialogView =
-            layoutInflater.inflate(com.satrango.R.layout.no_service_provider_found, null)
+        val weAreSorryBottomSheetDialog = BottomSheetDialog(this)
+        weAreSorryBottomSheetDialog.setCancelable(false)
+        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.no_service_provider_found, null)
         val yesBtn = dialogView.findViewById<TextView>(com.satrango.R.id.yesBtn)
         val noBtn = dialogView.findViewById<TextView>(com.satrango.R.id.noBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
         closeBtn.setOnClickListener {
-            dialog.dismiss()
+            weAreSorryBottomSheetDialog.dismiss()
         }
         yesBtn.setOnClickListener {
             snackBar(yesBtn, "Post the Job")
-            dialog.dismiss()
+            weAreSorryBottomSheetDialog.dismiss()
             finish()
             startActivity(Intent(this, PostJobTypeScreen::class.java))
         }
         noBtn.setOnClickListener {
-            dialog.dismiss()
+            weAreSorryBottomSheetDialog.dismiss()
             showWaitingForSPConfirmationDialog()
         }
-        dialog.setContentView(dialogView)
-        dialog.show()
+        weAreSorryBottomSheetDialog.setContentView(dialogView)
+        weAreSorryBottomSheetDialog.show()
     }
 
 }

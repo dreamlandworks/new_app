@@ -169,6 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
+            android:visibility="gone"
             style="@style/filled_button_style"
             android:background="@drawable/user_btn_bg"
             android:layout_gravity="center"
