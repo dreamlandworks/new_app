@@ -49,7 +49,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     companion object {
         var FROM_POPULAR_SERVICES = false
         var userLocationText = ""
-        var subCategoryId = ""
+        var subCategoryId = "0"
         var keyword = "0"
         var offerId = 0
     }
@@ -180,12 +180,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 UserUtils.saveSearchFilter(this, "")
-                loadSearchResults(keyword, subCategoryId)
+                loadSearchResults(subCategoryId)
             }
         }
 
         if (FROM_POPULAR_SERVICES) {
-            loadSearchResults(keyword, subCategoryId)
+            loadSearchResults(subCategoryId)
         }
     }
 
@@ -202,13 +202,16 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadSearchResults(keywordId: String, subCategory: String) {
+    private fun loadSearchResults(subCategory: String) {
+        if (keyword == "0") {
+            keyword = binding.searchBar.text.toString()
+        }
         val requestBody = SearchServiceProviderReqModel(
             UserUtils.getAddress(this),
             UserUtils.getCity(this),
             UserUtils.getCountry(this),
             RetrofitBuilder.USER_KEY,
-            keywordId.toInt(),
+            keyword,
             UserUtils.getPostalCode(this),
             UserUtils.getState(this),
             UserUtils.getLatitude(this),
@@ -217,7 +220,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             subCategory.toInt(),
             offerId
         )
-//        Log.e("SEARCH OBJECT:", requestBody.toString())
+        Log.e("SEARCH OBJECT:", requestBody.toString())
 
 //        val requestBody = SearchServiceProviderReqModel(
 //            "NSM School Road",
@@ -242,6 +245,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
+                    keyword = "0"
+                    if (!FROM_POPULAR_SERVICES) {
+                        subCategoryId = "0"
+                    }
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this)
                     UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
 //                    if (waitingForSpBottomSheetDialog != null) {
 //                        waitingForSpBottomSheetDialog.dismiss()

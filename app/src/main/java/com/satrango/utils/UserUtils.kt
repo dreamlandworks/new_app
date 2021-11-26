@@ -731,7 +731,6 @@ object UserUtils {
                             sendFCM(context, sp.fcm_token, bookingId, from)
                             Log.e("BOOKING FCM", "NOTIFICATION")
                         }
-
                     }
                 } else {
                     Log.e("FCM:", sp.fcm_token)
