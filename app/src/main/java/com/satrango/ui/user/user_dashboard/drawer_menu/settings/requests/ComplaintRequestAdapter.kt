@@ -16,8 +16,17 @@ class ComplaintRequestAdapter(private val list: List<Complaint>) :
         @SuppressLint("SetTextI18n")
         fun bind(complaint: Complaint) {
             binding.description.text = complaint.description
-            binding.status.text = complaint.status
-            binding.requestId.text = "Complaint ID: ${complaint.id}"
+            if (complaint.status == "Pending") {
+                binding.status.text = complaint.status
+                binding.status.setTextColor(binding.status.context.resources.getColor(R.color.blue))
+                binding.statusText.setTextColor(binding.status.context.resources.getColor(R.color.blue))
+            } else if (complaint.status == "Completed") {
+                binding.status.text = complaint.status
+                binding.status.setTextColor(binding.status.context.resources.getColor(R.color.textGreenColor))
+                binding.statusText.setTextColor(binding.status.context.resources.getColor(R.color.textGreenColor))
+            }
+
+            binding.requestId.text = "Request ID: ${complaint.id}"
             binding.repliesRecyclerView.adapter = ComplaintRepliesAdapter(complaint.replies)
         }
 

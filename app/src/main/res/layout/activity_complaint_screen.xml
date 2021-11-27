@@ -36,7 +36,6 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -61,6 +60,7 @@
                 android:gravity="start"
                 android:textSize="@dimen/edit_text"
                 android:lines="5"/>
+
 
         </com.google.android.material.textfield.TextInputLayout>
 

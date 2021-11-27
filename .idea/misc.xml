@@ -3,21 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_green_track.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_grey_thumb.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/custom_grey_track.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/switch_state.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/switch_thumb_state.xml" value="0.2526041666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_add_bank_account_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_booking_attachments_screen.xml" value="0.23645833333333333" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_complaint_screen.xml" value="0.23645833333333333" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.1" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_o_t_p_verification_screen.xml" value="0.23645833333333333" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_dashboard.xml" value="0.2" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_search_view_profile.xml" value="0.4" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_provider_home_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_user_home_screen.xml" value="0.23645833333333333" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/no_service_provider_found.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/raise_complaint_row.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/user_category_row.xml" value="0.23645833333333333" />
@@ -31,6 +19,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_booking_address_screen.xml" value="0.21" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.11372950819672131" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_change_booking_address_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_complaint_request_screen.xml" value="0.1552123552123552" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_complaint_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_feed_back_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.15703125" />
@@ -55,6 +44,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.1326294952161003" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/all_banks_details_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/choose_plan_row.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/complaint_request_row.xml" value="0.1552123552123552" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/fragment_personal_profile_screen.xml" value="0.1" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/fragment_provider_home_screen.xml" value="0.15703125" />
@@ -64,10 +54,12 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/payment_success_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_dialog.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/raise_complaint_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/reschedule_requested_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/reschedule_status_change_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/reschedule_status_display_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/user_booking_address_row.xml" value="0.18" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/user_category_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/user_popular_services_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/provider_dashboard_drawer_menu.xml" value="0.1" />
       </map>

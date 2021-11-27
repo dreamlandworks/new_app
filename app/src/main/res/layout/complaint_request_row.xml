@@ -15,9 +15,9 @@
             android:id="@+id/statusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/status"
+            android:text="@string/status_"
             android:textColor="@color/blue"
-            android:textSize="@dimen/text" />
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/status"
@@ -27,7 +27,7 @@
             android:layout_toEndOf="@id/statusText"
             android:text="@string/status"
             android:textColor="@color/purple_500"
-            android:textSize="@dimen/text" />
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/requestId"
@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:text="@string/status"
             android:textColor="@color/red"
-            android:textSize="@dimen/text" />
+            android:textSize="@dimen/sub_text" />
 
     </RelativeLayout>
 
@@ -65,7 +65,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:background="@color/grey_400"
-        android:layout_marginVertical="@dimen/_5sdp"/>
+        android:background="@color/blue"
+        android:layout_marginTop="@dimen/_5sdp"/>
 
 </LinearLayout>
