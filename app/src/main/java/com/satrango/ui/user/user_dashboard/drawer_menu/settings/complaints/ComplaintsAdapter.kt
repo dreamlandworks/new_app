@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
+import com.satrango.databinding.RaiseComplaintRowBinding
 import com.satrango.databinding.UserCategoryRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
@@ -14,13 +15,13 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.
 class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private val browseCategoriesInterface: BrowseCategoriesInterface) :
     RecyclerView.Adapter<ComplaintsAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: UserCategoryRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: RaiseComplaintRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val binding = binding
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            UserCategoryRowBinding.inflate(
+            RaiseComplaintRowBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

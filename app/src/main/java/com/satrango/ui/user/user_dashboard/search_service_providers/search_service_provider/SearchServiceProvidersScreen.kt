@@ -159,7 +159,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
                     binding.searchBar.setOnItemClickListener { _, _, position, _ ->
-                        keyword = keywordsList[position].keywords_id
+                        keyword = keywordsList[position].id
                         subCategoryId = keywordsList[position].subcategory_id
                         UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
                     }
@@ -205,6 +205,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     private fun loadSearchResults(subCategory: String) {
         if (keyword == "0") {
             keyword = binding.searchBar.text.toString()
+            if (keyword.isEmpty()) keyword = "0"
         }
         val requestBody = SearchServiceProviderReqModel(
             UserUtils.getAddress(this),
