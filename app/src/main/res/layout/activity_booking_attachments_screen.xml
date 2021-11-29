@@ -303,14 +303,18 @@
 
             <TextView
                 android:id="@+id/backBtn"
+                style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@drawable/blue_out_line"
-                style="@style/blue_outline_button_style"
                 android:gravity="center"
-                android:layout_margin="@dimen/_20sdp"
-                android:text="@string/back" />
+                android:text="@string/back_sm" />
 
             <TextView
                 android:id="@+id/nextBtn"
@@ -320,6 +324,7 @@
                 android:layout_alignParentBottom="true"
                 style="@style/filled_button_style"
                 android:background="@drawable/category_bg"
+                android:paddingVertical="@dimen/_5sdp"
                 android:layout_margin="@dimen/_20sdp"
                 android:text="@string/next" />
 

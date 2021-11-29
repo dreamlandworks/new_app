@@ -154,7 +154,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/referralLink"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_40sdp"
                         android:clickable="false"
                         android:focusable="false"
                         android:singleLine="true"
@@ -171,16 +171,16 @@
 
                     <ImageView
                         android:id="@+id/copyLink"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:src="@drawable/copy_white"
                         tools:ignore="contentDescription" />
 
                     <ImageView
                         android:id="@+id/share"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:src="@drawable/share_white"
                         tools:ignore="contentDescription" />
@@ -199,30 +199,33 @@
 
             <TextView
                 android:id="@+id/backBtn"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:background="@drawable/blue_out_line"
-                android:elevation="@dimen/_5sdp"
-                android:gravity="center"
+                android:elevation="0dp"
+                style="@style/blue_outline_button_style"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/Cancel"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:textSize="@dimen/sub_text"
                 android:textAllCaps="false"
-                android:textColor="@color/blue_500"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                android:textColor="@color/blue_500" />
 
             <TextView
                 android:id="@+id/applyBtn"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_35sdp"
+                style="@style/filled_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_20sdp"
                 android:background="@drawable/category_bg"
-                android:elevation="@dimen/_5sdp"
+                android:elevation="0dp"
                 android:text="@string/share_app"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/sub_text"
                 android:textStyle="bold" />
 
         </LinearLayout>

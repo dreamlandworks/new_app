@@ -33,6 +33,7 @@
             android:background="@drawable/blue_out_line"
             android:paddingHorizontal="@dimen/_10sdp"
             android:paddingVertical="@dimen/_5sdp"
+            android:textSize="@dimen/sub_text"
             android:text="@string/_100_00" />
 
         <TextView
@@ -40,6 +41,7 @@
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/sub_text"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/blue_out_line"
             android:paddingHorizontal="@dimen/_10sdp"
@@ -50,6 +52,7 @@
             android:id="@+id/oneThousandBtn"
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
+            android:textSize="@dimen/sub_text"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/blue_out_line"
@@ -61,6 +64,7 @@
             android:id="@+id/twoThousandBtn"
             style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
+            android:textSize="@dimen/sub_text"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/blue_out_line"
@@ -107,7 +111,7 @@
             android:paddingHorizontal="@dimen/_10sdp"
             android:paddingVertical="@dimen/_5sdp"
             android:text="@string/add_funds"
-            android:textSize="@dimen/text" />
+            android:textSize="@dimen/sub_text" />
 
     </LinearLayout>
 

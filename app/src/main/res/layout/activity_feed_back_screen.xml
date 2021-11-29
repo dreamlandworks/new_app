@@ -56,11 +56,14 @@
 
             <TextView
                 android:id="@+id/resetBtn"
+                style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_25sdp"
-                style="@style/blue_outline_button_style"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:background="@drawable/btn_bg_white_blue_border"
                 android:text="@string/reset" />
 
@@ -71,6 +74,7 @@
                 android:layout_alignParentEnd="true"
                 style="@style/filled_button_style"
                 android:layout_margin="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/user_btn_bg"
                 android:text="@string/submit" />
