@@ -14,4 +14,9 @@ open class LoginRepository : BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().login(requestBody)
     }
 
+    suspend fun logout(requestBody: LogoutReqModel): ResponseBody {
+        Log.e("LOGOUT", Gson().toJson(requestBody))
+        return RetrofitBuilder.getUserRetrofitInstance().logout(requestBody)
+    }
+
 }

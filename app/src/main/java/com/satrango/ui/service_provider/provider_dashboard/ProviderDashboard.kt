@@ -44,7 +44,10 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.auth.UserLoginTypeScreen
+import com.satrango.ui.auth.login_screen.LoginRepository
 import com.satrango.ui.auth.login_screen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginViewModel
+import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSeven
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSix
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
@@ -505,10 +508,29 @@ class ProviderDashboard : AppCompatActivity() {
         dialog.setMessage("Are you sure to logout?")
         dialog.setCancelable(false)
         dialog.setPositiveButton("YES") { dialogInterface, _ ->
-            dialogInterface.dismiss()
-            UserUtils.setUserLoggedInVia(this, "", "")
-            UserUtils.deleteUserCredentials(this)
-            startActivity(Intent(this, LoginScreen::class.java))
+
+            val factory = ViewModelFactory(LoginRepository())
+            val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
+            val requestBody = LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
+            viewModel.userLogout(this, requestBody).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        dialogInterface.dismiss()
+                        UserUtils.setUserLoggedInVia(this, "", "")
+                        UserUtils.deleteUserCredentials(this)
+                        startActivity(Intent(this, LoginScreen::class.java))
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        dialogInterface.dismiss()
+                        snackBar(UserDashboardScreen.binding.navigationView, "Something went wrong. Please try again")
+                    }
+                }
+            })
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->
             dialogInterface.dismiss()

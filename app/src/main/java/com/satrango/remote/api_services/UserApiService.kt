@@ -4,6 +4,7 @@ import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
+import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
@@ -443,6 +444,11 @@ interface UserApiService {
     @POST(UserApiEndPoints.UPDATE_RESCHEDULE_REQUEST_STATUS)
     suspend fun updateRescheduleStatus(
         @Body requestBody: RescheduleStatusChangeReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.LOGOUT)
+    suspend fun logout(
+        @Body requestBody: LogoutReqModel
     ): ResponseBody
 
 }

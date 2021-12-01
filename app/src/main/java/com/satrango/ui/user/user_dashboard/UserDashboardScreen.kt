@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -22,14 +23,21 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
+import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.login_screen.LoginRepository
 import com.satrango.ui.auth.login_screen.LoginScreen
+import com.satrango.ui.auth.login_screen.LoginViewModel
+import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
@@ -56,6 +64,7 @@ import java.util.*
 
 class UserDashboardScreen : AppCompatActivity() {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var referralId: TextView
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackTVBtn: TextView
@@ -74,6 +83,8 @@ class UserDashboardScreen : AppCompatActivity() {
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
             Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
         }
+
+        initializeProgressDialog()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -203,9 +214,28 @@ class UserDashboardScreen : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setPositiveButton("YES") { dialogInterface, _ ->
             dialogInterface.dismiss()
-            UserUtils.setUserLoggedInVia(this, "", "")
-            UserUtils.deleteUserCredentials(this)
-            startActivity(Intent(this, LoginScreen::class.java))
+            val factory = ViewModelFactory(LoginRepository())
+            val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
+            val requestBody = LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
+            viewModel.userLogout(this, requestBody).observe(this, {
+                when(it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        UserUtils.setUserLoggedInVia(this, "", "")
+                        UserUtils.deleteUserCredentials(this)
+                        startActivity(Intent(this, LoginScreen::class.java))
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        dialogInterface.dismiss()
+                        snackBar(binding.navigationView, "Something went wrong. Please try again")
+                    }
+                }
+            })
+
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->
             dialogInterface.dismiss()
@@ -361,7 +391,6 @@ class UserDashboardScreen : AppCompatActivity() {
                     if (responseData.referral_id != null) {
                         UserUtils.saveReferralId(this@UserDashboardScreen, responseData.referral_id)
                     }
-
                     updateHeaderDetails()
                 } else {
                     Snackbar.make(
@@ -410,6 +439,13 @@ class UserDashboardScreen : AppCompatActivity() {
         }
         binding.bottomNavigationView.menu.getItem(0).isChecked = true
         return UserHomeScreen()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog.setGifLocation(Uri.parse("android.resource://$packageName/${R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

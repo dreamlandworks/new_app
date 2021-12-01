@@ -172,12 +172,30 @@ class SkillsProfileScreen :
             }
             val professionList = mutableListOf<ProfessionResponse>()
             for (chip in binding.profession.allChips) {
+                var count = 0
+                var profesion: Profession? = null
                 for (profession in professionMList) {
                     if (chip.text.toString() == profession.name) {
-                        professionList.add(ProfessionResponse(profession.name, profession.id))
+                        count++
+                    } else {
+                        profesion = profession
                     }
                 }
+                if (count != 0) {
+                    professionList.add(ProfessionResponse(profesion!!.name, profesion.id))
+                } else {
+                    professionList.add(ProfessionResponse(chip.text.toString(), "0"))
+                }
             }
+
+//            for (chip in binding.profession.allChips) {
+//                for (profession in professionMList) {
+//                    if (chip.text.toString() == profession.name) {
+//                        professionList.add(ProfessionResponse(profession.name, profession.id))
+//                    }
+//                }
+//            }
+
             val qualificationList = mutableListOf<QualificationResponse>()
             for (chip in binding.qualification.allChips) {
                 for (qualification in qualificationMList) {

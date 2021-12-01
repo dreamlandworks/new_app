@@ -21,6 +21,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProfessionResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.QualificationResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Profession
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo
 import com.satrango.utils.ProviderUtils
@@ -135,7 +136,7 @@ class ProviderSignUpOne : AppCompatActivity() {
 
 //        val specialCharactersString = "!@#$%&*()'+,-./:;<=>?[]^_`{|}"
         when {
-            binding.profession.text.toString().isEmpty() -> {
+            binding.profession.allChips.isEmpty() -> {
                 snackBar(binding.nextBtn, "Please Enter Your Profession")
             }
 //            binding.profession.text.toString().contains(specialCharactersString) -> {
@@ -165,14 +166,31 @@ class ProviderSignUpOne : AppCompatActivity() {
                         }
                     }
                 }
+
                 val profList = mutableListOf<ProfessionResponse>()
-                for (pro in response.data.list_profession) {
-                    if (binding.profession.text.toString().trim() == pro.name) {
-                        profList.add(ProfessionResponse(pro.name, pro.id))
+                for (chip in binding.profession.allChips) {
+                    var count = 0
+                    var profesion: Profession? = null
+                    for (profession in response.data.list_profession) {
+                        if (chip.text.toString() == profession.name) {
+                            count++
+                        } else {
+                            profesion = profession
+                        }
+                    }
+                    if (count != 0) {
+                        profList.add(ProfessionResponse(profesion!!.name, profesion.id))
                     } else {
-                        profList.add(ProfessionResponse(binding.profession.text.toString().trim(), "0"))
+                        profList.add(ProfessionResponse(chip.text.toString(), "0"))
                     }
                 }
+//                for (pro in response.data.list_profession) {
+//                    if (binding.profession.text.toString().trim() == pro.name) {
+//                        profList.add(ProfessionResponse(pro.name, pro.id))
+//                    } else {
+//
+//                    }
+//                }
                 val qualList = mutableListOf<QualificationResponse>()
                 for (qual in response.data.qualification) {
                     if (binding.qualification.text.toString().trim() == qual.qualification) {

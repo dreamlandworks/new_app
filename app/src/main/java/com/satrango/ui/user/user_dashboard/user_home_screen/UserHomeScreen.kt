@@ -11,22 +11,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserHomeScreenBinding
 import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesAdapter
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
-import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
-import com.satrango.utils.networkAvailable
-import com.satrango.utils.toast
+import com.satrango.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.File
+import java.net.SocketTimeoutException
 
 class UserHomeScreen :
     BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
@@ -43,10 +49,41 @@ class UserHomeScreen :
 //            UserDashboardScreen.fetchLocation(requireContext())
 //        }
         if (UserUtils.getUserName(requireContext()).isNotEmpty()) {
-            binding.userName.text = "Hiii, ${UserUtils.getUserName(requireContext())}"
+
         }
         loadHomeScreen()
         toast(requireContext(), UserUtils.getUserId(requireContext()))
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = BrowseCategoryReqModel(
+                    UserUtils.getUserId(requireContext()),
+                    RetrofitBuilder.USER_KEY
+                )
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
+                val responseData = response.data
+                if (response.status == 200) {
+                    binding.userName.text = "Hiii, ${responseData.fname} ${responseData.lname}"
+                } else {
+                    Snackbar.make(
+                        UserDashboardScreen.binding.navigationView,
+                        "Something went wrong!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                Snackbar.make(UserDashboardScreen.binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
+            } catch (e: JsonSyntaxException) {
+                Snackbar.make(UserDashboardScreen.binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                    .show()
+            } catch (e: SocketTimeoutException) {
+                Snackbar.make(
+                    UserDashboardScreen.binding.navigationView,
+                    "Please check internet Connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
 
     }
 

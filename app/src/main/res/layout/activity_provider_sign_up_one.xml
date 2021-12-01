@@ -62,7 +62,7 @@
             android:paddingRight="30dp"
             android:paddingBottom="@dimen/_15sdp">
 
-            <AutoCompleteTextView
+            <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/profession"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"

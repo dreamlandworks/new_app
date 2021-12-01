@@ -55,20 +55,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 }
                 val token = task.result
                 CoroutineScope(Dispatchers.Main).launch {
-                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
-                        FCMReqModel(
-                            token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(
-                                this@UserLoginTypeScreen
-                            )
-                        )
-                    )
-                    val responses = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
-                        FCMReqModel(
-                            token,
-                            RetrofitBuilder.USER_KEY,
-                            "2"
-                        )
-                    )
+                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@UserLoginTypeScreen)))
+//                    val responses = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, "2"))
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
                         snackBar(binding.userBtn, "Please check internet connection!")

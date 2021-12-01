@@ -15,6 +15,7 @@ import java.lang.Exception
 class LoginViewModel(private val repository: LoginRepository): ViewModel() {
 
     val userLogin = MutableLiveData<NetworkResponse<String>>()
+    val userLogout = MutableLiveData<NetworkResponse<String>>()
 
     fun userLogin(context: Context, requestBody: UserLoginModel): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
@@ -35,6 +36,27 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
             }
         }
         return userLogin
+    }
+
+    fun userLogout(context: Context, requestBody: LogoutReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            userLogout.value = NetworkResponse.Loading()
+            viewModelScope.launch {
+                try {
+                    val response = async { repository.logout(requestBody) }
+                    val jsonObject = JSONObject(response.await().string())
+                    Log.e("LOGOUT", jsonObject.toString())
+                    if (jsonObject.getInt("status") == 200) {
+                        userLogout.value = NetworkResponse.Success(jsonObject.getString("message"))
+                    } else {
+                        userLogout.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    userLogout.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        }
+        return userLogout
     }
 
 }
