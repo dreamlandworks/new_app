@@ -201,7 +201,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="vertical">
 
                 <TextView
@@ -225,7 +225,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:src="@drawable/ic_chat_blue"
                 tools:ignore="ContentDescription" />
 

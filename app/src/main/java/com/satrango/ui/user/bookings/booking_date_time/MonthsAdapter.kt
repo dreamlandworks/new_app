@@ -70,6 +70,7 @@ class MonthsAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.setIsRecyclable(false)
         holder.bind(list[position])
         if (list[position].isSelected) {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
@@ -84,7 +85,7 @@ class MonthsAdapter(
             holder.binding.title.text = list[position].month
             holder.binding.card.layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
             holder.itemView.setOnClickListener {
-                monthsInterface.selectedMonth(position, list[position].month, listType)
+                monthsInterface.selectedMonth(position, list[holder.adapterPosition].month, listType)
                 notifyItemChanged(position)
             }
         }
@@ -98,7 +99,7 @@ class MonthsAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
+        return getItemId(position)
     }
 
     override fun getItemCount(): Int {

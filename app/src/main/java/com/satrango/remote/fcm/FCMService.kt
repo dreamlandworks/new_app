@@ -34,14 +34,16 @@ class FCMService : FirebaseMessagingService() {
     companion object {
         var fcmInstant: Instant? = null
     }
+
     private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
-            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString() )
+            notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString())
             if (it.title == "accepted") {
 //                    if (ProviderDashboard.bookingId.isNotEmpty() && ProviderDashboard.bookingId == it.body.toString()) {
                 notificationManager.cancelAll()
@@ -52,31 +54,31 @@ class FCMService : FirebaseMessagingService() {
                     }
                 }
 //                    }
-            } else
+            }
 //                if (it.title == "timeRequired") {
 //                UserUtils.sendFCMtoAllServiceProviders(this, "", "time|${BookingAddressScreen.}")
 //            } else
-                if (it.title == "user") {
-                    if (!ProviderDashboard.FROM_FCM_SERVICE) {
-                        if (UserUtils.getSpStatus(this)) {
-                            addNotification(it.body)
-                        }
+            if (it.title == "user") {
+                if (!ProviderDashboard.FROM_FCM_SERVICE) {
+                    if (UserUtils.getSpStatus(this)) {
+                        addNotification(it.body)
                     }
+                }
+            } else {
+                if (!UserUtils.getInstantBooking(this)) {
+                    val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                    intent.putExtra("response", it.title)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 } else {
-                    if (!UserUtils.getInstantBooking(this)) {
+                    if (it.body!!.split("|")[0] == "accept") {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", it.title)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-                    } else {
-                        if (it.body!!.split("|")[0] == "accept") {
-                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                            intent.putExtra("response", it.title)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                        }
                     }
                 }
+            }
         }
     }
 
@@ -84,7 +86,13 @@ class FCMService : FirebaseMessagingService() {
         super.onNewToken(token)
         if (PermissionUtils.isNetworkConnected(this)) {
             CoroutineScope(Dispatchers.Main).launch {
-                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FCMService)))
+                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                    FCMReqModel(
+                        token,
+                        RetrofitBuilder.USER_KEY,
+                        UserUtils.getUserId(this@FCMService)
+                    )
+                )
             }
         }
         Log.e("FCM TOKEN UPDATE", token)
@@ -101,13 +109,17 @@ class FCMService : FirebaseMessagingService() {
         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
         ProviderDashboard.FROM_FCM_SERVICE = true
         val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
-        notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
+        notificationIntent.putExtra(
+            application.getString(R.string.booking_id),
+            body?.split("|")!![0]
+        )
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
 //        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
+            val notificationChannel =
+                NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.GREEN
             notificationChannel.enableVibration(false)

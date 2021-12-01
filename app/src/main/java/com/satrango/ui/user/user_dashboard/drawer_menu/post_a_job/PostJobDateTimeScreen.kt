@@ -234,7 +234,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
     }
 
     private fun loadDates() {
-        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+//        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
         binding.dayRv.layoutManager =
             LinearLayoutManager(this@PostJobDateTimeScreen, LinearLayoutManager.HORIZONTAL, false)
         binding.dayRv.adapter = MonthsAdapter(daysList, this@PostJobDateTimeScreen, "D")

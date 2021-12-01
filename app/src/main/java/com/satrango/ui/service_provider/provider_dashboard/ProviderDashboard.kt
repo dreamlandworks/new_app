@@ -330,8 +330,7 @@ class ProviderDashboard : AppCompatActivity() {
         date.text = response.booking_details.scheduled_date
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
-            jobLocation.text =
-                response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+            jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
         }
 
         closeBtn.setOnClickListener {

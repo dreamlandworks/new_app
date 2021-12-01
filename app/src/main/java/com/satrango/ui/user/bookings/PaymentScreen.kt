@@ -72,7 +72,23 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         binding.apply {
 
             googlePayBtn.setOnClickListener {
-
+                when {
+                    FROM_PROVIDER_PLANS -> {
+                        saveProviderPlan("paymentId")
+                    }
+                    FROM_USER_PLANS -> {
+                        saveUserPlan("paymentId")
+                    }
+                    FROM_USER_BOOKING_ADDRESS -> {
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_PROVIDER_BOOKING_RESPONSE -> {
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_USER_SET_GOALS -> {
+                        updateInstallmentPaymentStatus("Success", "paymentId")
+                    }
+                }
             }
 
 //            phonePeBtn.setOnClickListener {
@@ -80,16 +96,22 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //            }
 
             otherPaymentBtn.setOnClickListener {
-                if (FROM_PROVIDER_PLANS) {
-                    saveProviderPlan("paymentId")
-                } else if (FROM_USER_PLANS) {
-                    saveUserPlan("paymentId")
-                } else if (FROM_USER_BOOKING_ADDRESS) {
-                    updateStatusInServer("paymentId", "Success")
-                } else if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                    updateStatusInServer("paymentId", "Success")
-                } else if (FROM_USER_SET_GOALS) {
-                    updateInstallmentPaymentStatus("Success", "paymentId"!!)
+                when {
+                    FROM_PROVIDER_PLANS -> {
+                        saveProviderPlan("paymentId")
+                    }
+                    FROM_USER_PLANS -> {
+                        saveUserPlan("paymentId")
+                    }
+                    FROM_USER_BOOKING_ADDRESS -> {
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_PROVIDER_BOOKING_RESPONSE -> {
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_USER_SET_GOALS -> {
+                        updateInstallmentPaymentStatus("Success", "paymentId")
+                    }
                 }
 //                makePayment()
             }

@@ -323,11 +323,14 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showSuccessDialog() {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val homeBtn = dialogView.findViewById<TextView>(R.id.closBtn)
+        val text = dialogView.findViewById<TextView>(R.id.text)
+        text.text = "Your Job is successfully Posted"
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))

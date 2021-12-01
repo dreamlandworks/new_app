@@ -56,21 +56,36 @@
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.AddBankAccountScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.PaymentScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.ProviderRejectBookingScreen"
-            android:exported="false" />
-        <activity android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen" />
-        <activity android:name=".ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen"
             android:screenOrientation="portrait" />
@@ -318,7 +333,8 @@
         <!-- <data android:scheme="@string/fb_login_protocol_scheme" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <service android:name=".remote.fcm.FCMService"
+        <service
+            android:name=".remote.fcm.FCMService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

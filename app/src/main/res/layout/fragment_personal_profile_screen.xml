@@ -239,8 +239,10 @@
                 android:layout_marginEnd="@dimen/_15sdp"
                 style="@style/purple_outline_button_style"
                 android:background="@drawable/purple_out_line"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_20sdp"
                 android:gravity="center"
-                android:text="@string/back"
+                android:text="@string/back_sm"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -253,6 +255,8 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:background="@drawable/provider_btn_bg"
                 android:text="@string/apply"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_20sdp"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
