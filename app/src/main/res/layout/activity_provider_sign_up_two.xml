@@ -49,7 +49,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/steps_to_earn"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sub_title"
+                    android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -61,6 +61,19 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:paddingBottom="@dimen/_15sdp">
+
+            <RadioGroup
+                android:id="@+id/professionRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/skillsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_margin="@dimen/_5sdp"
+                android:textSize="@dimen/sub_text" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -122,7 +135,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_corner_border"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"
@@ -139,7 +151,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_btn_bg"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"

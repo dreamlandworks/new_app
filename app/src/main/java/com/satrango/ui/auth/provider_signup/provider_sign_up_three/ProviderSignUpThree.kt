@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -14,22 +15,26 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderSignUpThreeBinding
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.TimeslotResponse
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.PreferredTimeSlot
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProviderSignUpThree : AppCompatActivity() {
 
+    private lateinit var experienceList: ArrayList<String>
     private lateinit var binding: ActivityProviderSignUpThreeBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpThreeBinding.inflate(layoutInflater)
@@ -38,20 +43,138 @@ class ProviderSignUpThree : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
         binding.apply {
 
+            for ((index, profession) in ProviderUtils.profession!!.withIndex()) {
+                val rdbtn = RadioButton(this@ProviderSignUpThree)
+                rdbtn.id = index
+                rdbtn.text = profession.name
+                rdbtn.setOnCheckedChangeListener { _, isChecked ->
+                    if (!isChecked) {
+                        ProviderUtils.profession!![index].tariff_per_hour =
+                            perHour.text.toString().trim()
+                        ProviderUtils.profession!![index].tariff_per_day =
+                            perDay.text.toString().trim()
+                        ProviderUtils.profession!![index].tariff_min_charges =
+                            minCharge.text.toString().trim()
+                        ProviderUtils.profession!![index].tariff_extra_charges =
+                            extraCharge.text.toString().trim()
+                        ProviderUtils.profession!![index].experience =
+                            experience.selectedItem.toString()
+                        Log.e("EXP:", Gson().toJson(ProviderUtils.profession!!))
+                    }
+                    if (isChecked) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            tariffText.text = "My Tariff for ${ProviderUtils.profession!![index].name} is"
+                            if (ProviderUtils.profession!![index].tariff_per_hour.isNotEmpty()) {
+                                perHour.setText(ProviderUtils.profession!![index].tariff_per_hour)
+                            }
+                            if (ProviderUtils.profession!![index].tariff_per_day.isNotEmpty()) {
+                                perDay.setText(ProviderUtils.profession!![index].tariff_per_day)
+                            }
+                            if (ProviderUtils.profession!![index].tariff_min_charges.isNotEmpty()) {
+                                minCharge.setText(ProviderUtils.profession!![index].tariff_min_charges)
+                            }
+                            if (ProviderUtils.profession!![index].tariff_extra_charges.isNotEmpty()) {
+                                extraCharge.setText(ProviderUtils.profession!![index].tariff_extra_charges)
+                            }
+                            if (ProviderUtils.profession!![index].experience.isNotEmpty()) {
+                                experienceList.forEachIndexed { ind, exp ->
+                                    if (ProviderUtils.profession!![index].experience == exp) {
+                                        experience.setSelection(ind)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                rdbtn.setOnClickListener {
+                    if (rdbtn.isChecked) {
+                        clearFields()
+                    }
+                }
+                professionRadioGroup.addView(rdbtn)
+            }
+
             addSlot.setOnClickListener { addView() }
 
             nextBtn.setOnClickListener {
-                validateFields()
+                val btn = findViewById<RadioButton>(professionRadioGroup.checkedRadioButtonId)
+                if (btn != null) {
+                    btn.isChecked = false
+                    btn.clearFocus()
+                }
+
+                for (keyword in ProviderUtils.profession!!) {
+                    if (keyword.tariff_extra_charges.isEmpty()) {
+                        snackBar(
+                            nextBtn,
+                            "Please Enter Tariff Extra Charges for ${keyword.name} profession"
+                        )
+                        return@setOnClickListener
+                    }
+                    if (keyword.tariff_min_charges.isEmpty()) {
+                        snackBar(
+                            nextBtn,
+                            "Please Enter Tariff Minimum Charges for ${keyword.name} profession"
+                        )
+                        return@setOnClickListener
+                    }
+                    if (keyword.tariff_per_day.isEmpty()) {
+                        snackBar(
+                            nextBtn,
+                            "Please Enter Tariff Per Day for ${keyword.name} profession"
+                        )
+                        return@setOnClickListener
+                    }
+                    if (keyword.tariff_per_hour.isEmpty()) {
+                        snackBar(
+                            nextBtn,
+                            "Please Enter Tariff Per Hour for ${keyword.name} profession"
+                        )
+                        return@setOnClickListener
+                    }
+                }
+
+                if (validateSlots().isEmpty()) {
+                    snackBar(nextBtn, "Please select timeslots")
+                    return@setOnClickListener
+                }
+
+                ProviderUtils.slotsList = validateSlots()
+                startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
             }
 
             backBtn.setOnClickListener { onBackPressed() }
+
+            experienceList = ArrayList<String>()
+            experienceList.add("Select Experience")
+            for (data in ProviderUtils.experience!!) {
+                experienceList.add(data.exp)
+            }
+            val experienceAdapter = ArrayAdapter(
+                this@ProviderSignUpThree,
+                android.R.layout.simple_spinner_dropdown_item,
+                experienceList
+            )
+            experience.adapter = experienceAdapter
         }
 
+    }
+
+    private fun clearFields() {
+        binding.apply {
+
+            perHour.setText("")
+            perDay.setText("")
+            minCharge.setText("")
+            extraCharge.setText("")
+            experience.setSelection(0)
+
+        }
     }
 
     private fun validateFields() {
@@ -72,17 +195,17 @@ class ProviderSignUpThree : AppCompatActivity() {
                 snackBar(binding.nextBtn, "Add Slots")
             }
             else -> {
-                ProviderUtils.perDay = binding.perDay.text.toString().trim()
-                ProviderUtils.perHour = binding.perHour.text.toString().trim()
-                ProviderUtils.minCharge = binding.minCharge.text.toString().trim()
-                ProviderUtils.extraCharge = binding.extraCharge.text.toString().trim()
+//                ProviderUtils.perDay = binding.perDay.text.toString().trim()
+//                ProviderUtils.perHour = binding.perHour.text.toString().trim()
+//                ProviderUtils.minCharge = binding.minCharge.text.toString().trim()
+//                ProviderUtils.extraCharge = binding.extraCharge.text.toString().trim()
                 ProviderUtils.slotsList = validateSlots()
                 startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
 
             }
         }
     }
-    
+
     @SuppressLint("SetTextI18n")
     private fun addView() {
         val cricketerView: View = layoutInflater.inflate(R.layout.row_slot_item, null, false)
@@ -99,7 +222,7 @@ class ProviderSignUpThree : AppCompatActivity() {
         val thursday = cricketerView.findViewById<TextView>(R.id.thursday)
         val friday = cricketerView.findViewById<TextView>(R.id.friday)
         val saturday = cricketerView.findViewById<TextView>(R.id.saturday)
-        
+
         val imageClose = cricketerView.findViewById<View>(R.id.image_remove) as ImageView
         imageClose.setOnClickListener { removeView(cricketerView) }
 
@@ -727,7 +850,14 @@ class ProviderSignUpThree : AppCompatActivity() {
 //                    format = "AM"
 //                }
 //                editText.setText("${java.lang.String.format("%02d", hour)}:${java.lang.String.format("%02d", minute)}$format")
-                editText.setText("${java.lang.String.format("%02d", hourOfDay)}:${java.lang.String.format("%02d", minute)}")
+                editText.setText(
+                    "${
+                        java.lang.String.format(
+                            "%02d",
+                            hourOfDay
+                        )
+                    }:${java.lang.String.format("%02d", minute)}"
+                )
             }, calendarHour, calendarMinute, false
         )
         timepickerdialog.show()
@@ -736,10 +866,10 @@ class ProviderSignUpThree : AppCompatActivity() {
     private fun removeView(view: View) {
         binding.layoutList.removeView(view)
     }
-    
+
     private fun validateSlots(): List<TimeslotResponse> {
 
-        val slotList = java.util.ArrayList<TimeslotResponse>()
+        val slotList = ArrayList<TimeslotResponse>()
 
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)

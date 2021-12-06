@@ -248,7 +248,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-        Toast.makeText(this, videoPath, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, videoPath, Toast.LENGTH_SHORT).show()
     }
 
     override fun onPause() {

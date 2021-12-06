@@ -1,32 +1,30 @@
 package com.satrango.ui.auth.provider_signup.provider_sign_up_one
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpOneBinding
 import com.satrango.remote.NetworkResponse
-import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
-import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProfessionResponse
-import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.QualificationResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.*
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Profession
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.snackBar
-import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -71,7 +69,7 @@ class ProviderSignUpOne : AppCompatActivity() {
 
     private fun loadProviderData() {
         viewModel.professionsList(this).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -82,12 +80,28 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.language) {
                         languagesList.add(data.name)
                     }
-                    val languagesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesList)
+                    val languagesAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        languagesList
+                    )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.languages.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.languages.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.languages.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -95,25 +109,27 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.qualification) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, qualificationList)
+                    val qualificationAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        qualificationList
+                    )
                     binding.qualification.setAdapter(qualificationAdapter)
                     binding.qualification.threshold = 1
-
-                    val experienceList = ArrayList<String>()
-                    experienceList.add("Select Experience")
-                    for (data in response.data.experience) {
-                        experienceList.add(data.exp)
-                    }
-                    val experienceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, experienceList)
-                    binding.experience.adapter = experienceAdapter
 
                     val professionsList = ArrayList<String>()
                     for (data in response.data.list_profession) {
                         professionsList.add(data.name)
                     }
-                    val professionsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, professionsList)
+                    val professionsAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        professionsList
+                    )
                     binding.profession.setAdapter(professionsAdapter)
                     binding.profession.threshold = 1
+
+                    ProviderUtils.experience = response.data.experience
 
                     progressDialog.dismiss()
                 }
@@ -148,9 +164,9 @@ class ProviderSignUpOne : AppCompatActivity() {
 //            binding.qualification.text.toString().contains(specialCharactersString) -> {
 //                snackBar(binding.nextBtn, "Please avoid special characters in qualification")
 //            }
-            binding.experience.selectedItemPosition == 0 -> {
-                snackBar(binding.nextBtn, "Please Select Your Experience")
-            }
+//            binding.experience.selectedItemPosition == 0 -> {
+//                snackBar(binding.nextBtn, "Please Select Your Experience")
+//            }
             binding.languages.allChips.isEmpty() -> {
                 snackBar(binding.nextBtn, "Please Enter Your Known Languages")
             }
@@ -167,30 +183,42 @@ class ProviderSignUpOne : AppCompatActivity() {
                     }
                 }
 
-                val profList = mutableListOf<ProfessionResponse>()
+                val profList = mutableListOf<ProfessionResponseX>()
                 for (chip in binding.profession.allChips) {
-                    var count = 0
                     var profesion: Profession? = null
                     for (profession in response.data.list_profession) {
                         if (chip.text.toString() == profession.name) {
-                            count++
-                        } else {
                             profesion = profession
                         }
                     }
-                    if (count != 0) {
-                        profList.add(ProfessionResponse(profesion!!.name, profesion.id))
+                    if (profesion != null) {
+                        profList.add(
+                            ProfessionResponseX(
+                                ArrayList(),
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                profesion.name,
+                                profesion.id
+                            )
+                        )
                     } else {
-                        profList.add(ProfessionResponse(chip.text.toString(), "0"))
+                        profList.add(
+                            ProfessionResponseX(
+                                ArrayList(),
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                chip.text.toString(),
+                                "0"
+                            )
+                        )
                     }
                 }
-//                for (pro in response.data.list_profession) {
-//                    if (binding.profession.text.toString().trim() == pro.name) {
-//                        profList.add(ProfessionResponse(pro.name, pro.id))
-//                    } else {
-//
-//                    }
-//                }
                 val qualList = mutableListOf<QualificationResponse>()
                 for (qual in response.data.qualification) {
                     if (binding.qualification.text.toString().trim() == qual.qualification) {
@@ -198,12 +226,18 @@ class ProviderSignUpOne : AppCompatActivity() {
                     }
                 }
                 if (qualList.isEmpty()) {
-                    qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
+                    qualList.add(
+                        QualificationResponse(
+                            binding.qualification.text.toString().trim(),
+                            "0"
+                        )
+                    )
                 }
                 ProviderUtils.languagesKnown = langList
                 ProviderUtils.profession = profList
                 ProviderUtils.qualification = qualList
-                ProviderUtils.experience = binding.experience.selectedItem.toString()
+                Log.e("PROFESSIONS:", Gson().toJson(profList))
+//                ProviderUtils.experience = binding.experience.selectedItem.toString()
                 val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
                 intent.putExtra("profession_id", profList[0].prof_id)
                 startActivity(intent)
@@ -213,7 +247,11 @@ class ProviderSignUpOne : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

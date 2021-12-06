@@ -75,21 +75,32 @@ class ProviderSignUpFour : AppCompatActivity() {
 
     private fun sendActivationRequestToServer() {
 
+//        val requestBody = ProviderSignUpFourReqModel(
+//            RetrofitBuilder.PROVIDER_KEY,
+//            UserUtils.getUserId(this),
+//            ProviderUtils.experience,
+//            ProviderUtils.aboutMe,
+//            ProviderUtils.perHour,
+//            ProviderUtils.perDay,
+//            ProviderUtils.minCharge,
+//            ProviderUtils.extraCharge,
+//            selectedEncodedImage,
+//            ProviderUtils.profession!!,
+//            ProviderUtils.qualification!!,
+//            ProviderUtils.languagesKnown!!,
+//            ProviderUtils.keywordsSkills!!,
+//            ProviderUtils.slotsList!!,
+//        )
+
         val requestBody = ProviderSignUpFourReqModel(
-            RetrofitBuilder.PROVIDER_KEY,
-            UserUtils.getUserId(this),
-            ProviderUtils.experience,
             ProviderUtils.aboutMe,
-            ProviderUtils.perHour,
-            ProviderUtils.perDay,
-            ProviderUtils.minCharge,
-            ProviderUtils.extraCharge,
             selectedEncodedImage,
+            RetrofitBuilder.PROVIDER_KEY,
+            ProviderUtils.languagesKnown!!,
             ProviderUtils.profession!!,
             ProviderUtils.qualification!!,
-            ProviderUtils.languagesKnown!!,
-            ProviderUtils.keywordsSkills!!,
             ProviderUtils.slotsList!!,
+            UserUtils.getUserId(this)
         )
         Log.e("JSON", Gson().toJson(requestBody))
         viewModel.providerActivation(this, requestBody).observe(this, {
@@ -163,7 +174,7 @@ class ProviderSignUpFour : AppCompatActivity() {
         if (imageStream != null) {
             val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
             selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
-            toast(this, selectedEncodedImage)
+//            toast(this, selectedEncodedImage)
         }
 
 //        if (resultCode == RESULT_OK) {

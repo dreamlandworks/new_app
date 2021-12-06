@@ -34,6 +34,7 @@ import android.webkit.MimeTypeMap
 import android.os.Environment
 
 import android.os.Build
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import java.io.File
 
 
@@ -84,7 +85,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
 
             serviceProviderBtn.setOnClickListener {
                 ProviderDashboard.FROM_FCM_SERVICE = false
-                startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
+                startActivity(Intent(this@UserLoginTypeScreen, ProviderSignUpOne::class.java))
                 finish()
             }
 

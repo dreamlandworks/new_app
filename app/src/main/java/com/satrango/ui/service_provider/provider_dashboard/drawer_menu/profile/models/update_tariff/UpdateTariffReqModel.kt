@@ -4,10 +4,6 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.Timeslo
 
 data class UpdateTariffReqModel(
     val key: String,
-    val tariff_extra_charges: String,
-    val tariff_min_charges: String,
-    val tariff_per_day: String,
-    val tariff_per_hour: String,
     val timeslot_responses: List<TimeslotResponse>,
     val user_id: String
 )

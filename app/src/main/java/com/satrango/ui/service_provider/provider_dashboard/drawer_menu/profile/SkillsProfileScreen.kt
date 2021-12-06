@@ -23,7 +23,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.KeywordsResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.LangResponse
-import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProfessionResponse
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProfessionResponseX
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.QualificationResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOneViewModel
@@ -31,6 +31,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.*
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.Skill
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.KeywordResponse
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
+import com.satrango.utils.ProviderUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -170,31 +171,20 @@ class SkillsProfileScreen :
                     }
                 }
             }
-            val professionList = mutableListOf<ProfessionResponse>()
+            val professionList = mutableListOf<ProfessionResponseX>()
             for (chip in binding.profession.allChips) {
-                var count = 0
                 var profesion: Profession? = null
-                for (profession in professionMList) {
+                for (profession in response.data.list_profession) {
                     if (chip.text.toString() == profession.name) {
-                        count++
-                    } else {
                         profesion = profession
                     }
                 }
-                if (count != 0) {
-                    professionList.add(ProfessionResponse(profesion!!.name, profesion.id))
+                if (profesion != null) {
+                    professionList.add(ProfessionResponseX(ArrayList(),"", "", "", "", "", profesion.name, profesion.id))
                 } else {
-                    professionList.add(ProfessionResponse(chip.text.toString(), "0"))
+                    professionList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", chip.text.toString(), "0"))
                 }
             }
-
-//            for (chip in binding.profession.allChips) {
-//                for (profession in professionMList) {
-//                    if (chip.text.toString() == profession.name) {
-//                        professionList.add(ProfessionResponse(profession.name, profession.id))
-//                    }
-//                }
-//            }
 
             val qualificationList = mutableListOf<QualificationResponse>()
             for (chip in binding.qualification.allChips) {
@@ -202,6 +192,13 @@ class SkillsProfileScreen :
                     if (chip.text.toString() == qualification.qualification) {
                         qualificationList.add(QualificationResponse(qualification.qualification, qualification.id))
                     }
+                }
+            }
+
+            for (keyword in ProviderUtils.profession!!) {
+                if (keyword.keywords_responses.isEmpty()) {
+                    snackBar(binding.backBtn, "Please enter keywords for ${keyword.name} profession")
+                    return
                 }
             }
 
@@ -215,9 +212,6 @@ class SkillsProfileScreen :
                 langList.isEmpty() -> {
                     snackBar(profession, "Enter Languages")
                 }
-                keywordsList.isEmpty() -> {
-                    snackBar(profession, "Enter Skills/Keywords")
-                }
                 experience.selectedItemPosition == 0 -> {
                     snackBar(profession, "Select Experience")
                 }
@@ -228,13 +222,14 @@ class SkillsProfileScreen :
 
                     val requestBody = UpdateSkillsReqModel(
                         description.text.toString().trim(),
-                        experience.selectedItem.toString(),
+                        UserUtils.getUserId(requireContext()),
                         RetrofitBuilder.PROVIDER_KEY,
-                        keywordsList.distinctBy { keywordsResponse -> keywordsResponse.name },
-                        langList.distinctBy { langResponse -> langResponse.name },
-                        professionList.distinctBy { professionResponse -> professionResponse.name },
-                        qualificationList.distinctBy { qualificationResponse -> qualificationResponse.name },
-                        UserUtils.getUserId(requireContext())
+                        professionList,
+                        qualificationList,
+                        langList
+//                                professionList.distinctBy { ProfessionResponseX -> ProfessionResponseX.name },
+//                        qualificationList.distinctBy { qualificationResponse -> qualificationResponse.name },
+//                        langList.distinctBy { langResponse -> langResponse.name }
                     )
                     Log.e("JSON", Gson().toJson(requestBody))
                     viewModel.updateSkills(requireContext(), requestBody).observe(requireActivity(), {

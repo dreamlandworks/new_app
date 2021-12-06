@@ -49,7 +49,7 @@
                     android:letterSpacing=".06"
                     android:text="@string/step_to_earn"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sub_title"
+                    android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
@@ -61,12 +61,28 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
+            <RadioGroup
+                android:id="@+id/professionRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <TextView
+                android:id="@+id/tariffText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/my_tariff_is"
+                android:layout_margin="@dimen/_5sdp"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text" />
+                android:textSize="@dimen/sub_text" />
+
+            <Spinner
+                android:id="@+id/experience"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -264,7 +280,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_corner_border"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"
@@ -281,7 +296,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_btn_bg"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"

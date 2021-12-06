@@ -66,13 +66,12 @@
                 android:id="@+id/profession"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
-                android:background="@drawable/gray_corner"
-                android:drawableStart="@drawable/ic_graduation_cap"
-                android:drawablePadding="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:textSize="@dimen/edit_text"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                android:drawablePadding="@dimen/_10sdp"
+                android:drawableStart="@drawable/ic_graduation_cap"
+                android:background="@drawable/gray_corner"
                 android:hint="@string/profession_best_suits"
-                android:inputType="textPhonetic"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:singleLine="true" />
 
@@ -90,15 +89,6 @@
                 android:inputType="textPhonetic"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:singleLine="true" />
-
-            <Spinner
-                android:id="@+id/experience"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/gray_corner"
-                android:drawableStart="@drawable/ic_bagicon"
-                android:drawablePadding="@dimen/_10sdp"/>
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/languages"
@@ -127,7 +117,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_corner_border"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"
@@ -144,7 +133,6 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_btn_bg"
                 android:clickable="true"
-                android:elevation="@dimen/_5sdp"
                 android:focusable="true"
                 android:paddingHorizontal="@dimen/_30sdp"
                 android:paddingVertical="@dimen/_8sdp"

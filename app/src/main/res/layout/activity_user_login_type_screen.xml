@@ -86,7 +86,6 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/user_btn_bg"
             style="@style/filled_button_style"
-            android:elevation="@dimen/_5sdp"
             android:letterSpacing=".1"
             android:gravity="center_horizontal"
             android:text="@string/service_provider"/>

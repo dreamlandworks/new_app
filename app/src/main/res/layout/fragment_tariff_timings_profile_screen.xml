@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:baselineAligned="false"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_15sdp"
             android:weightSum="2">
@@ -74,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
+            android:visibility="gone"
             android:baselineAligned="false"
             android:paddingHorizontal="@dimen/_15sdp"
             android:orientation="horizontal"
@@ -136,6 +138,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_15sdp"
             android:gravity="center"
+            android:visibility="gone"
             android:lineSpacingExtra="@dimen/_3sdp"
             android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
             android:textColor="@color/red"

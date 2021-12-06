@@ -73,28 +73,24 @@ class TariffTimingsProfileScreen :
 
     private fun validateFields() {
         when {
-            binding.perHour.text.toString().isEmpty() -> {
-                snackBar(binding.addSlot, "Enter Per Hour Charges")
-            }
-            binding.perDay.text.toString().isEmpty() -> {
-                snackBar(binding.addSlot, "Enter Per Day Charges")
-            }
-            binding.minCharge.text.toString().isEmpty() -> {
-                snackBar(binding.addSlot, "Enter Minimum Charges")
-            }
-            binding.extraCharge.text.toString().isEmpty() -> {
-                snackBar(binding.addSlot, "Enter Extra Charges")
-            }
+//            binding.perHour.text.toString().isEmpty() -> {
+//                snackBar(binding.addSlot, "Enter Per Hour Charges")
+//            }
+//            binding.perDay.text.toString().isEmpty() -> {
+//                snackBar(binding.addSlot, "Enter Per Day Charges")
+//            }
+//            binding.minCharge.text.toString().isEmpty() -> {
+//                snackBar(binding.addSlot, "Enter Minimum Charges")
+//            }
+//            binding.extraCharge.text.toString().isEmpty() -> {
+//                snackBar(binding.addSlot, "Enter Extra Charges")
+//            }
             JSONArray(validateSlots()).length() == 0 -> {
                 snackBar(binding.addSlot, "Add Slots")
             }
             else -> {
                 val requestBody = UpdateTariffReqModel(
                     RetrofitBuilder.PROVIDER_KEY,
-                    binding.extraCharge.text.toString().trim(),
-                    binding.minCharge.text.toString().trim(),
-                    binding.perDay.text.toString().trim(),
-                    binding.perHour.text.toString().trim(),
                     validateSlots(),
                     UserUtils.getUserId(requireContext())
                 )
