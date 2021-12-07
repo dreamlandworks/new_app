@@ -66,150 +66,159 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/tariffText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/my_tariff_is"
-                android:layout_margin="@dimen/_5sdp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
-
-            <Spinner
-                android:id="@+id/experience"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/gray_corner"
-                android:drawableStart="@drawable/ic_bagicon"
-                android:drawablePadding="@dimen/_10sdp"/>
-
             <LinearLayout
+                android:id="@+id/tariffLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tariffText"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/purple_500">
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/my_tariff_is"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/perHour"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:hint="@string/per_hour"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:textSize="@dimen/edit_text"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/experience"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/gray_corner"
+                    android:drawableStart="@drawable/ic_bagicon"
+                    android:drawablePadding="@dimen/_10sdp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/purple_500">
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/perDay"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:hint="@string/per_day"
-                        android:inputType="number"
-                        android:textSize="@dimen/edit_text"
-                        android:maxLines="1"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/purple_500">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/perHour"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:hint="@string/per_hour"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/edit_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/purple_500">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/perDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:hint="@string/per_day"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/edit_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/purple_500">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/minCharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:editable="false"
+                            android:hint="@string/min_charges"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/edit_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_weight="1"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/purple_500">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/extraCharge"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:editable="false"
+                            android:hint="@string/extra_charge"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/edit_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_3sdp"
+                    android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_10sdp" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:baselineAligned="false">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/purple_500">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/minCharge"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:editable="false"
-                        android:hint="@string/min_charges"
-                        android:textSize="@dimen/edit_text"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_weight="1"
-                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/purple_500">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/extraCharge"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:editable="false"
-                        android:textSize="@dimen/edit_text"
-                        android:hint="@string/extra_charge"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:gravity="center"
-                android:lineSpacingExtra="@dimen/_3sdp"
-                android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
-                android:textColor="@color/red"
-                android:textSize="@dimen/_10sdp" />
 
             <View
                 android:layout_width="match_parent"
@@ -249,7 +258,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:background="@color/lightGray"/>
+                android:background="@color/lightGray" />
 
             <TextView
                 android:id="@+id/addSlot"

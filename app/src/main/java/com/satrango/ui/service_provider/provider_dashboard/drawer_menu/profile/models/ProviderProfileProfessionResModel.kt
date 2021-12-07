@@ -4,7 +4,8 @@ data class ProviderProfileProfessionResModel(
     val language: List<Language>,
     val message: String,
     val preferred_time_slots: List<PreferredTimeSlot>,
-    val skills: List<Skill>,
-    val sp_details: SpDetail,
+    val profession: List<Profession>,
+    val slot_selection: String,
+    val sp_details: SpDetails,
     val status: Int
 )

@@ -2,5 +2,5 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.
 
 data class Skill(
     val keyword: String,
-    val keywords_id: String
+    val keywords_id: Int
 )

@@ -87,39 +87,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/experience"
-            android:textSize="@dimen/sub_text" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/experience"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_weight="1"
-                android:background="@drawable/gray_corner"
-                android:drawableStart="@drawable/ic_bagicon"
-                android:drawablePadding="@dimen/_10sdp" />
-
-            <ImageView
-                android:id="@+id/emailEdit"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_12sdp"
-                android:src="@drawable/ic_pencils"
-                tools:ignore="contentDescription" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/languages_known"
             android:textSize="@dimen/sub_text" />
 
@@ -150,45 +117,218 @@
                 tools:ignore="contentDescription" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/skills"
-            android:textSize="@dimen/sub_text" />
-
         <RadioGroup
             android:id="@+id/professionRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp" />
 
         <LinearLayout
+            android:id="@+id/skillsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal">
+            android:visibility="gone"
+            android:orientation="vertical">
 
-            <com.hootsuite.nachos.NachoTextView
-                android:id="@+id/skills"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_45sdp"
+            <TextView
+                android:id="@+id/experienceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:layout_weight="1"
-                android:background="@drawable/gray_corner"
-                android:hint="@string/keywords_skills"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:singleLine="true"
-                android:textSize="@dimen/edit_text" />
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/experience"
+                android:textSize="@dimen/sub_text" />
 
-            <ImageView
-                android:id="@+id/keywordSkillsEdit"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_12sdp"
-                android:src="@drawable/ic_pencils"
-                tools:ignore="contentDescription" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
 
+                <Spinner
+                    android:id="@+id/experience"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/gray_corner"
+                    android:drawableStart="@drawable/ic_bagicon"
+                    android:drawablePadding="@dimen/_10sdp" />
+
+                <ImageView
+                    android:id="@+id/emailEdit"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/ic_pencils"
+                    tools:ignore="contentDescription" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/skillsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/skills"
+                android:textSize="@dimen/sub_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <com.hootsuite.nachos.NachoTextView
+                    android:id="@+id/skills"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/gray_corner"
+                    android:hint="@string/keywords_skills"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/edit_text" />
+
+                <ImageView
+                    android:id="@+id/keywordSkillsEdit"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/ic_pencils"
+                    tools:ignore="contentDescription" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tariffText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/my_tariff_is"
+                android:textSize="@dimen/sub_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perHour"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_hour"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_day"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/minCharge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:hint="@string/min_charges"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/extraCharge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:hint="@string/extra_charge"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -256,8 +396,8 @@
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"
-                android:paddingVertical="@dimen/_5sdp"
                 android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/back_sm"
                 android:textColor="@color/purple_500"
                 android:textSize="@dimen/_12sdp" />
@@ -273,8 +413,8 @@
                 android:clickable="true"
                 android:elevation="@dimen/_5sdp"
                 android:focusable="true"
-                android:paddingVertical="@dimen/_5sdp"
                 android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/update"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp" />

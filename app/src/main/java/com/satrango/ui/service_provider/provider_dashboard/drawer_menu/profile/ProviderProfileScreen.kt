@@ -2,7 +2,6 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap

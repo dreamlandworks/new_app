@@ -6,7 +6,6 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 
 class ProviderProfileRepository: BaseRepository() {

@@ -1,10 +1,13 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_profile
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
@@ -50,20 +53,21 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
                 updateProfileInfo.value = NetworkResponse.Loading()
                 try {
                     val response = async { repository.updateProfileInfo(requestBody) }
-                    val jsonObject = JSONObject(response.await().string())
+                    val responseObject = response.await()
+                    val jsonObject = JSONObject(responseObject.string())
+                    Log.e("PROFILE", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
-                        updateProfileInfo.value = NetworkResponse.Success("Profile Updated!")
+                        updateProfileInfo.value = NetworkResponse.Success(jsonObject.getString("message"))
                     } else {
-                        updateProfileInfo.value = NetworkResponse.Failure("Something went wrong!")
+                        updateProfileInfo.value = NetworkResponse.Failure(jsonObject.getString("message"))
                     }
                 } catch (e: Exception) {
-                    updateProfileInfo.value = NetworkResponse.Failure(e.message)
+                    updateProfileInfo.value = NetworkResponse.Failure("Error: " + e.message)
                 }
             }
         } else {
             updateProfileInfo.value = NetworkResponse.Failure("No Internet Connection!")
         }
-
         return updateProfileInfo
     }
 

@@ -1,13 +1,11 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models
 
-data class SpDetail(
-    val about_me: String,
+data class Profession(
     val category_id: String,
     val exp: String,
-    val id: String,
     val profession_name: String,
-    val qualification: String,
-    val sp_det_id: String,
+    val profession_id: String,
+    val skills: List<Skill>,
     val tariff_extra_charges: String,
     val tariff_id: String,
     val tariff_min_charges: String,

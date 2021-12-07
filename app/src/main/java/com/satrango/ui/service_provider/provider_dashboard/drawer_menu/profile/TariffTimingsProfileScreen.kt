@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 class TariffTimingsProfileScreen :
@@ -48,10 +50,6 @@ class TariffTimingsProfileScreen :
         if (ProviderProfileScreen.professionalDetails != null) {
 
             val data = ProviderProfileScreen.professionalDetails
-            binding.perHour.setText(data.sp_details.tariff_per_hour)
-            binding.perDay.setText(data.sp_details.tariff_per_day)
-            binding.minCharge.setText(data.sp_details.tariff_min_charges)
-            binding.extraCharge.setText(data.sp_details.tariff_extra_charges)
 
             if (data.preferred_time_slots.isNotEmpty()) {
                 for (timeSlot in data.preferred_time_slots) {
@@ -73,18 +71,6 @@ class TariffTimingsProfileScreen :
 
     private fun validateFields() {
         when {
-//            binding.perHour.text.toString().isEmpty() -> {
-//                snackBar(binding.addSlot, "Enter Per Hour Charges")
-//            }
-//            binding.perDay.text.toString().isEmpty() -> {
-//                snackBar(binding.addSlot, "Enter Per Day Charges")
-//            }
-//            binding.minCharge.text.toString().isEmpty() -> {
-//                snackBar(binding.addSlot, "Enter Minimum Charges")
-//            }
-//            binding.extraCharge.text.toString().isEmpty() -> {
-//                snackBar(binding.addSlot, "Enter Extra Charges")
-//            }
             JSONArray(validateSlots()).length() == 0 -> {
                 snackBar(binding.addSlot, "Add Slots")
             }
@@ -101,8 +87,11 @@ class TariffTimingsProfileScreen :
                             ProviderProfileScreen.progressDialog.show()
                         }
                         is NetworkResponse.Success -> {
+                            snackBar(binding.addSlot, JSONObject(it.data!!.string()).getString("message"))
+                            Handler().postDelayed({
+                                startActivity(requireActivity().intent)
+                            }, 3000)
                             ProviderProfileScreen.progressDialog.dismiss()
-                            toast(requireContext(), it.message!!)
                         }
                         is NetworkResponse.Failure -> {
                             ProviderProfileScreen.progressDialog.dismiss()

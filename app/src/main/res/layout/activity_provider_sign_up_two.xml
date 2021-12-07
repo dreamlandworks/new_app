@@ -87,6 +87,7 @@
 
                 <com.hootsuite.nachos.NachoTextView
                     android:id="@+id/keywordSkills"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
                     android:hint="@string/keywords_skills"

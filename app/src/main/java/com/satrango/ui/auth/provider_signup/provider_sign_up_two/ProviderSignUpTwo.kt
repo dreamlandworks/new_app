@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -72,10 +73,6 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                 val chipText = chip.text.toString()
                                 if (chipText == key.keyword) {
                                     for (keyword in ProviderUtils.profession!![index].keywords_responses) {
-//                                        if (key.keyword == keyword.name && keyword.keyword_id == "0") {
-//                                            ProviderUtils.profession!![index].keywords_responses.remove(KeywordsResponse("0", key.keyword))
-//                                            ProviderUtils.profession!![index].keywords_responses.add(KeywordsResponse(key.id, key.keyword))
-//                                        }
                                         if (key.keyword == keyword.name && key.id == keyword.keyword_id) {
                                             existed = true
                                         }
@@ -85,10 +82,6 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                     }
                                 } else {
                                     for (keyword in ProviderUtils.profession!![index].keywords_responses) {
-//                                        if (key.keyword == keyword.name && keyword.keyword_id == "0") {
-//                                            ProviderUtils.profession!![index].keywords_responses.remove(KeywordsResponse("0", key.keyword))
-//                                            ProviderUtils.profession!![index].keywords_responses.add(KeywordsResponse(key.id, key.keyword))
-//                                        }
                                         if (key.keyword == keyword.name && key.id == keyword.keyword_id) {
                                             existed = true
                                         }
@@ -104,6 +97,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                     }
                     if (isChecked) {
                         skillsText.text = "Keywords/Skills for ${ProviderUtils.profession!![index].name} are"
+                        keywordSkills.visibility = View.VISIBLE
                         if (ProviderUtils.profession!![index].keywords_responses.isNotEmpty()) {
                             val chips = ArrayList<ChipInfo>()
                             for (key in ProviderUtils.profession!![index].keywords_responses) {

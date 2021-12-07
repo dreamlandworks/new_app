@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.text.method.KeyListener
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.base.ViewModelFactory
@@ -160,7 +162,6 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
 
         }
         showUserProfile()
-
     }
 
     private fun updateUserProfileToServer() {
@@ -174,17 +175,18 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
             UserUtils.getUserId(requireContext()),
             RetrofitBuilder.USER_KEY
         )
-
+        Log.e("PROFILE:", Gson().toJson(requestBody))
         userViewModel.updateProfileInfo(requireContext(), requestBody).observe(requireActivity(), {
             when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    ProviderProfileScreen.progressDialog.dismiss()
                     snackBar(binding.applyBtn, it.data!!)
                     Handler().postDelayed({
-                        showUserProfile()
-                    }, 1500)
+                        startActivity(requireActivity().intent)
+                    }, 3000)
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.applyBtn, it.message!!)
