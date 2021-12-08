@@ -90,7 +90,7 @@ class TariffTimingsProfileScreen :
                             snackBar(binding.addSlot, JSONObject(it.data!!.string()).getString("message"))
                             Handler().postDelayed({
                                 startActivity(requireActivity().intent)
-                            }, 3000)
+                            }, 1500)
                             ProviderProfileScreen.progressDialog.dismiss()
                         }
                         is NetworkResponse.Failure -> {
@@ -558,7 +558,7 @@ class TariffTimingsProfileScreen :
             { view, hourOfDay, minute ->
 //                editText.setText("${String.format("%02d", hourOfDay)}:${String.format("%02d", minute)}")
                 editText.setText("${hourOfDay}:${minute}")
-            }, calendarHour, calendarMinute, false
+            }, calendarHour, calendarMinute, true
         )
         timepickerdialog.show()
     }

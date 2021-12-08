@@ -186,7 +186,7 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                     snackBar(binding.applyBtn, it.data!!)
                     Handler().postDelayed({
                         startActivity(requireActivity().intent)
-                    }, 3000)
+                    }, 1500)
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.applyBtn, it.message!!)

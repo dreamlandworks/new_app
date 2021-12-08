@@ -216,4 +216,8 @@ class ProviderProfileScreen : AppCompatActivity() {
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, ProviderDashboard::class.java))
+    }
 }

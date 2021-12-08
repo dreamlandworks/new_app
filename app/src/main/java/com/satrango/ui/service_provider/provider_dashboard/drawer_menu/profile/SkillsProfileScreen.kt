@@ -41,17 +41,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkillsProfileScreenBinding, ProviderProfileRepository>() {
+class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkillsProfileScreenBinding, ProviderProfileRepository>() {
 
-    private lateinit var professionFList: ArrayList<ProfessionResponseX>
-    private lateinit var professionMList: List<Profession>
     private lateinit var languagesMList: List<Language>
+    private lateinit var experienceMList: List<Experience>
+    private lateinit var professionMList: List<Profession>
     private lateinit var skillsMList: List<KeywordResponse>
     private lateinit var qualificationMList: List<Qualification>
-    private lateinit var experienceMList: List<Experience>
+    private lateinit var professionFList: ArrayList<ProfessionResponseX>
 
-    private lateinit var experienceList: java.util.ArrayList<String>
     private lateinit var response: ProviderOneModel
+    private lateinit var experienceList: java.util.ArrayList<String>
     private lateinit var professionViewModel: ProviderSignUpOneViewModel
 
     override fun getFragmentViewModel(): Class<ProviderProfileViewModel> =
@@ -69,7 +69,8 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory(ProviderSignUpOneRepository())
-        professionViewModel = ViewModelProvider(this, factory)[ProviderSignUpOneViewModel::class.java]
+        professionViewModel =
+            ViewModelProvider(this, factory)[ProviderSignUpOneViewModel::class.java]
 
         professionFList = ArrayList()
 
@@ -161,7 +162,8 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
 
     private fun validateFields() {
 
-        val btn = binding.root.findViewById<RadioButton>(binding.professionRadioGroup.checkedRadioButtonId)
+        val btn =
+            binding.root.findViewById<RadioButton>(binding.professionRadioGroup.checkedRadioButtonId)
         if (btn != null) {
             btn.isChecked = false
             btn.clearFocus()
@@ -193,14 +195,22 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
             for (chip in binding.qualification.allChips) {
                 for (qualification in qualificationMList) {
                     if (chip.text.toString() == qualification.qualification) {
-                        qualificationList.add(QualificationResponse(qualification.qualification, qualification.id))
+                        qualificationList.add(
+                            QualificationResponse(
+                                qualification.qualification,
+                                qualification.id
+                            )
+                        )
                     }
                 }
             }
 
             for (keyword in professionFList) {
                 if (keyword.keywords_responses.isEmpty()) {
-                    snackBar(binding.backBtn, "Please enter keywords for ${keyword.name} profession")
+                    snackBar(
+                        binding.backBtn,
+                        "Please enter keywords for ${keyword.name} profession"
+                    )
                     return
                 }
             }
@@ -229,24 +239,28 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                         langList
                     )
                     Log.e("JSON", Gson().toJson(requestBody))
-                    viewModel.updateSkills(requireContext(), requestBody).observe(requireActivity(), {
-                        when(it) {
-                            is NetworkResponse.Loading -> {
-                                ProviderProfileScreen.progressDialog.show()
+                    viewModel.updateSkills(requireContext(), requestBody)
+                        .observe(requireActivity(), {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    ProviderProfileScreen.progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    Handler().postDelayed({
+                                        startActivity(requireActivity().intent)
+                                    }, 1500)
+                                    ProviderProfileScreen.progressDialog.dismiss()
+                                    snackBar(
+                                        binding.backBtn,
+                                        JSONObject(it.data!!.string()).getString("message")
+                                    )
+                                }
+                                is NetworkResponse.Failure -> {
+                                    ProviderProfileScreen.progressDialog.dismiss()
+                                    snackBar(languages, it.message!!)
+                                }
                             }
-                            is NetworkResponse.Success -> {
-                                Handler().postDelayed({
-                                    startActivity(requireActivity().intent)
-                                }, 3000)
-                                ProviderProfileScreen.progressDialog.dismiss()
-                                snackBar(binding.backBtn, JSONObject(it.data!!.string()).getString("message"))
-                            }
-                            is NetworkResponse.Failure -> {
-                                ProviderProfileScreen.progressDialog.dismiss()
-                                snackBar(languages, it.message!!)
-                            }
-                        }
-                    })
+                        })
                 }
 
             }
@@ -257,7 +271,7 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
     @SuppressLint("SetTextI18n")
     private fun loadProviderData() {
         professionViewModel.professionsList(requireContext()).observe(requireActivity(), {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()
                 }
@@ -268,12 +282,28 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                     for (data in languagesMList) {
                         languagesList.add(data.name)
                     }
-                    val languagesAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, languagesList)
+                    val languagesAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        languagesList
+                    )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.languages.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.languages.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.languages.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -283,51 +313,106 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                     for (data in professionMList) {
                         professionList.add(data.name)
                     }
-                    val professionAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, professionList)
+                    val professionAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        professionList
+                    )
                     binding.profession.setAdapter(professionAdapter)
-                    binding.profession.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.profession.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.profession.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.profession.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.profession.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.profession.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.profession.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.profession.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.profession.setNachoValidator(ChipifyingNachoValidator())
                     binding.profession.enableEditChipOnTouch(true, true)
 
                     val qualificationList = ArrayList<String>()
-                    qualificationMList = response.data.qualification.distinctBy { qualification -> qualification.qualification }
+                    qualificationMList =
+                        response.data.qualification.distinctBy { qualification -> qualification.qualification }
                     for (data in qualificationMList) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, qualificationList)
+                    val qualificationAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        qualificationList
+                    )
                     binding.qualification.setAdapter(qualificationAdapter)
-                    binding.qualification.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.qualification.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.qualification.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.qualification.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.qualification.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.qualification.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.qualification.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.qualification.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.qualification.setNachoValidator(ChipifyingNachoValidator())
                     binding.qualification.enableEditChipOnTouch(true, true)
 
                     experienceList = ArrayList()
                     experienceList.add("Select Experience")
-                    experienceMList = response.data.experience.distinctBy { experience -> experience.exp }
+                    experienceMList =
+                        response.data.experience.distinctBy { experience -> experience.exp }
                     for (data in experienceMList) {
                         experienceList.add(data.exp)
                     }
-                    val experienceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, experienceList)
+                    val experienceAdapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        experienceList
+                    )
                     binding.experience.adapter = experienceAdapter
 
-                    binding.skills.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.skills.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skills.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skills.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skills.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.skills.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skills.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skills.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.skills.setNachoValidator(ChipifyingNachoValidator())
                     binding.skills.enableEditChipOnTouch(true, true)
 
                     val skillsList = ArrayList<String>()
-                    skillsMList = response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
+                    skillsMList =
+                        response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
                     for (data in skillsMList) {
                         skillsList.add(data.keyword)
                     }
-                    val skillsAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, skillsList)
+                    val skillsAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        skillsList
+                    )
                     binding.skills.setAdapter(skillsAdapter)
 
                     if (ProviderProfileScreen.professionalDetails != null) {
@@ -350,9 +435,25 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                         for (profession in data.profession) {
                             val skills = ArrayList<KeywordsResponse>()
                             for (pro in profession.skills) {
-                                skills.add(KeywordsResponse(pro.keywords_id.toString(), pro.keyword))
+                                skills.add(
+                                    KeywordsResponse(
+                                        pro.keywords_id.toString(),
+                                        pro.keyword
+                                    )
+                                )
                             }
-                            professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id))
+                            professionFList.add(
+                                ProfessionResponseX(
+                                    skills,
+                                    profession.tariff_extra_charges,
+                                    profession.tariff_min_charges,
+                                    profession.tariff_per_day,
+                                    profession.tariff_per_hour,
+                                    profession.exp,
+                                    profession.profession_name,
+                                    profession.profession_id
+                                )
+                            )
                         }
 
                         binding.profession.setOnFocusChangeListener { v, hasFocus ->
@@ -374,7 +475,18 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                                         if (!existed) {
                                             for (prof in professionMList) {
                                                 if (pro.text.toString() == prof.name) {
-                                                    professionFList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", prof.name, prof.id))
+                                                    professionFList.add(
+                                                        ProfessionResponseX(
+                                                            ArrayList(),
+                                                            "",
+                                                            "",
+                                                            "",
+                                                            "",
+                                                            "",
+                                                            prof.name,
+                                                            prof.id
+                                                        )
+                                                    )
                                                 }
                                             }
                                         }
@@ -420,9 +532,13 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                                         }
                                     }
                                     if (existed != null) {
-                                        professionFList[index].keywords_responses.add(KeywordsResponse(existed.id, existed.keyword))
+                                        professionFList[index].keywords_responses.add(
+                                            KeywordsResponse(existed.id, existed.keyword)
+                                        )
                                     } else {
-                                        professionFList[index].keywords_responses.add(KeywordsResponse("0", skill.text.toString()))
+                                        professionFList[index].keywords_responses.add(
+                                            KeywordsResponse("0", skill.text.toString())
+                                        )
                                     }
                                 }
                                 professionFList[index].experience = binding.experience.selectedItem.toString()
@@ -444,6 +560,7 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                                 }
                                 CoroutineScope(Dispatchers.Main).launch {
                                     binding.skills.setTextWithChips(skillsChips)
+                                    binding.skillsLayout.visibility = View.VISIBLE
                                     binding.perDay.setText(professionFList[index].tariff_per_day)
                                     binding.perHour.setText(professionFList[index].tariff_per_hour)
                                     binding.minCharge.setText(professionFList[index].tariff_min_charges)
@@ -452,7 +569,6 @@ class SkillsProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentSkill
                                     binding.skillsText.text = "Skills in ${professionFList[index].name} Profession"
                                     binding.experienceText.text = "Experience in ${professionFList[index].name} Profession"
                                     Log.e("SKILLS:", Gson().toJson(professionFList))
-                                    binding.skillsLayout.visibility = View.VISIBLE
                                 }
                             }
 

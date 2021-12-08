@@ -140,6 +140,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                     }
                 }
 
+                Log.e("TIMESLOTS:", validateSlots().toString())
                 if (validateSlots().isEmpty()) {
                     snackBar(nextBtn, "Please select timeslots")
                     return@setOnClickListener
@@ -859,7 +860,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                         )
                     }:${java.lang.String.format("%02d", minute)}"
                 )
-            }, calendarHour, calendarMinute, false
+            }, calendarHour, calendarMinute, true
         )
         timepickerdialog.show()
     }
@@ -910,7 +911,7 @@ class ProviderSignUpThree : AppCompatActivity() {
             val from = selectedFromTime.split(":")[0].toInt()
             val to = selectedToTime.split(":")[0].toInt()
             for (time in from..to) {
-                val daysList = java.util.ArrayList<String>()
+                val daysList = ArrayList<String>()
 
                 if (everyDay.currentTextColor == Color.WHITE) {
                     dayType = "EveryDay"
@@ -956,7 +957,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                 }
             }
         }
-
+        Log.e("VALIDATE:", slotList.toString())
         return slotList
     }
 

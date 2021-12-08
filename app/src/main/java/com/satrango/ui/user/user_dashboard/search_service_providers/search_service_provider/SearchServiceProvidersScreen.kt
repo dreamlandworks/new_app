@@ -35,13 +35,14 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
-
 
 //    private lateinit var showBookingTypeBottomSheetDialog: BottomSheetDialog
 //    private lateinit var waitingForSpBottomSheetDialog: BottomSheetDialog
 //    private lateinit var weAreSorryBottomSheetDialog: BottomSheetDialog
+
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
     private lateinit var viewModel: SearchServiceProviderViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -56,11 +57,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this, BeautifulProgressDialog.withGIF, resources.getString(
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(
                 com.satrango.R.string.loading
-            )
-        )
+            ))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${com.satrango.R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.progressDialogColor))
     }
@@ -88,9 +87,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this)
-                .isNotEmpty()
-        ) {
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             val spDetails = Gson().fromJson(
                 UserUtils.getSelectedSPDetails(this),
                 SearchServiceProviderResModel::class.java
@@ -153,7 +150,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
-//                    Log.e("KEYWORDS:", keywordsList.toString())
+//                    toast(this, keywordsList.toString())
+                    Log.e("KEYS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
@@ -162,6 +160,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         keyword = keywordsList[position].id
                         subCategoryId = keywordsList[position].subcategory_id
                         UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
+                        toast(this, subCategoryId)
                     }
                     progressDialog.dismiss()
                 }
@@ -207,36 +206,52 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
         }
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
-        Log.e("SEARCH OBJECT:", requestBody.toString())
-
 //        val requestBody = SearchServiceProviderReqModel(
-//            "NSM School Road",
-//            "Vijayawada",
-//            "India",
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
 //            RetrofitBuilder.USER_KEY,
-//            23,
-//            "520008",
-//            "Andhra Pradesh",
-//            "16.491638988116897",
-//            "80.65992294142048",
-//            46,
-//            8,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
 //            offerId
 //        )
+//        toast(this, requestBody.toString())
+//        Log.e("SEARCH OBJECT:", )
+
+//        {
+//            "address": "Vijayawada Bus Stand",
+//            "city": "Ganapavaram",
+//            "country": "India",
+//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
+//            "offer_id": 0,
+//            "postal_code": "520013",
+//            "search_phrase_id": "Kotlin Developer",
+//            "state": "Andhra Pradesh",
+//            "subcat_id": 5,
+//            "user_lat": "16.5092483",
+//            "user_long": "80.6175017",
+//            "users_id": 56
+//        }
+
+        val requestBody = SearchServiceProviderReqModel(
+            "Vijayawada Bus Stand",
+            "Ganapavaram",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            "Kotlin Developer",
+            "520013",
+            "Andhra Pradesh",
+            "16.5092483",
+            "80.6175017",
+            56,
+            5,
+            offerId
+        )
 //        toast(this, Gson().toJson(requestBody))
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
