@@ -91,10 +91,6 @@ class ProviderSignUpOne : AppCompatActivity() {
                         ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
                     )
                     binding.languages.addChipTerminator(
-                        ' ',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.languages.addChipTerminator(
                         ',',
                         ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
                     )
@@ -121,11 +117,7 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.list_profession) {
                         professionsList.add(data.name)
                     }
-                    val professionsAdapter = ArrayAdapter(
-                        this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        professionsList
-                    )
+                    val professionsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, professionsList)
                     binding.profession.setAdapter(professionsAdapter)
                     binding.profession.threshold = 1
 
@@ -150,29 +142,19 @@ class ProviderSignUpOne : AppCompatActivity() {
 
     private fun validateFields() {
 
-//        val specialCharactersString = "!@#$%&*()'+,-./:;<=>?[]^_`{|}"
         when {
             binding.profession.allChips.isEmpty() -> {
                 snackBar(binding.nextBtn, "Please Enter Your Profession")
             }
-//            binding.profession.text.toString().contains(specialCharactersString) -> {
-//                snackBar(binding.nextBtn, "Please avoid special characters in profession")
-//            }
+            binding.profession.allChips.size > 3 -> {
+                snackBar(binding.nextBtn, "Please Select Maximum of 3 Professions")
+            }
             binding.qualification.text.toString().isEmpty() -> {
                 snackBar(binding.nextBtn, "Please Enter Your Qualification")
             }
-//            binding.qualification.text.toString().contains(specialCharactersString) -> {
-//                snackBar(binding.nextBtn, "Please avoid special characters in qualification")
-//            }
-//            binding.experience.selectedItemPosition == 0 -> {
-//                snackBar(binding.nextBtn, "Please Select Your Experience")
-//            }
             binding.languages.allChips.isEmpty() -> {
                 snackBar(binding.nextBtn, "Please Enter Your Known Languages")
             }
-//            binding.languages.text.toString().contains(specialCharactersString) -> {
-//                snackBar(binding.nextBtn, "Please avoid special characters in languages")
-//            }
             else -> {
                 val langList = mutableListOf<LangResponse>()
                 for (chip in binding.languages.allChips) {
@@ -192,31 +174,9 @@ class ProviderSignUpOne : AppCompatActivity() {
                         }
                     }
                     if (profesion != null) {
-                        profList.add(
-                            ProfessionResponseX(
-                                ArrayList(),
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                profesion.name,
-                                profesion.id
-                            )
-                        )
+                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", profesion.name, profesion.id))
                     } else {
-                        profList.add(
-                            ProfessionResponseX(
-                                ArrayList(),
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                chip.text.toString(),
-                                "0"
-                            )
-                        )
+                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", chip.text.toString(), "0"))
                     }
                 }
                 val qualList = mutableListOf<QualificationResponse>()
@@ -226,18 +186,12 @@ class ProviderSignUpOne : AppCompatActivity() {
                     }
                 }
                 if (qualList.isEmpty()) {
-                    qualList.add(
-                        QualificationResponse(
-                            binding.qualification.text.toString().trim(),
-                            "0"
-                        )
-                    )
+                    qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
                 }
                 ProviderUtils.languagesKnown = langList
                 ProviderUtils.profession = profList
                 ProviderUtils.qualification = qualList
                 Log.e("PROFESSIONS:", Gson().toJson(profList))
-//                ProviderUtils.experience = binding.experience.selectedItem.toString()
                 val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
                 intent.putExtra("profession_id", profList[0].prof_id)
                 startActivity(intent)
@@ -247,11 +201,7 @@ class ProviderSignUpOne : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

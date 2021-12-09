@@ -65,37 +65,117 @@
             <RadioGroup
                 android:id="@+id/professionRadioGroup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/skillsText"
+            <LinearLayout
+                android:id="@+id/layoutOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:layout_margin="@dimen/_5sdp"
-                android:textSize="@dimen/sub_text" />
+                android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/purple_500">
-
-                <com.hootsuite.nachos.NachoTextView
-                    android:id="@+id/keywordSkills"
-                    android:visibility="gone"
+                <TextView
+                    android:id="@+id/profOneSkillsText"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:hint="@string/keywords_skills"
-                    android:paddingHorizontal="@dimen/_15sdp"
-                    android:inputType="text"
-                    android:textSize="@dimen/edit_text"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.hootsuite.nachos.NachoTextView
+                        android:id="@+id/profOnekeywordSkills"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_45sdp"
+                        android:hint="@string/keywords_skills"
+                        android:inputType="text"
+                        android:paddingHorizontal="@dimen/_15sdp"
+                        android:singleLine="true"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profTwoSkillsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.hootsuite.nachos.NachoTextView
+                        android:id="@+id/profTwokeywordSkills"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_45sdp"
+                        android:hint="@string/keywords_skills"
+                        android:inputType="text"
+                        android:paddingHorizontal="@dimen/_15sdp"
+                        android:singleLine="true"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profThreeSkillsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.hootsuite.nachos.NachoTextView
+                        android:id="@+id/profThreekeywordSkills"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_45sdp"
+                        android:hint="@string/keywords_skills"
+                        android:inputType="text"
+                        android:paddingHorizontal="@dimen/_15sdp"
+                        android:singleLine="true"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -113,10 +193,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:textSize="@dimen/edit_text"
                     android:hint="@string/about_me_min_250_words"
                     android:inputType="textMultiLine"
-                    android:lines="10" />
+                    android:lines="10"
+                    android:textSize="@dimen/edit_text" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
