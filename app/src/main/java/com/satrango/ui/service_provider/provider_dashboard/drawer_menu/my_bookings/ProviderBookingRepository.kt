@@ -11,6 +11,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.UserRatingReqModel
 import okhttp3.ResponseBody
 
@@ -30,6 +31,10 @@ class ProviderBookingRepository: BaseRepository() {
 
     suspend fun userReview(requestBody: UserRatingReqModel): ResponseBody {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().userReview(requestBody)
+    }
+
+    suspend fun providerReview(requestBody: ProviderRatingReqModel): ResponseBody {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().providerReview(requestBody)
     }
 
     suspend fun getInvoice(requestBody: ProviderInvoiceReqModel): ProviderInvoiceResModel {

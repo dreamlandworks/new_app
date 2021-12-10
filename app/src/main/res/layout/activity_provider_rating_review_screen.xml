@@ -12,6 +12,7 @@
         layout="@layout/provider_tool_bar" />
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_15sdp"
@@ -37,6 +38,7 @@
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/overAllRatingText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -75,6 +77,7 @@
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/customerRatingText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -113,6 +116,7 @@
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/bookingQualityRatingText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -151,6 +155,7 @@
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/appReviewText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -190,6 +195,7 @@
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/jobSatisfactionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

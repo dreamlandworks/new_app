@@ -26,6 +26,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.p
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.UserRatingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
@@ -83,6 +84,11 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.USER_REVIEW)
     suspend fun userReview(
         @Body requestBody: UserRatingReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.PROVIDER_REVIEW)
+    suspend fun providerReview(
+        @Body requestBody: ProviderRatingReqModel
     ): ResponseBody
 
     @POST(ServiceProviderEndPoints.INVOICE)

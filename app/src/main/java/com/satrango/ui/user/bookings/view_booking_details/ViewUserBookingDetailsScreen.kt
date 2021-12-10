@@ -26,12 +26,14 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewUserBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
@@ -413,11 +415,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                     progressDialog.dismiss()
                                     dialog.dismiss()
                                     finish()
-                                    startActivity(intent)
-                                    snackBar(
-                                        binding.inProgressViewStatusBtn,
-                                        "OTP Verification Success"
-                                    )
+                                    if (FROM_PENDING && !FROM_PROVIDER) {
+                                        ProviderRatingReviewScreen.FROM_PROVIDER = false
+                                        ProviderRatingReviewScreen.userId = userId
+                                        ProviderRatingReviewScreen.bookingId = bookingId
+                                        ProviderRatingReviewScreen.categoryId = categoryId
+                                        startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
+                                    }
+                                    snackBar(binding.inProgressViewStatusBtn, "OTP Verification Success")
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()

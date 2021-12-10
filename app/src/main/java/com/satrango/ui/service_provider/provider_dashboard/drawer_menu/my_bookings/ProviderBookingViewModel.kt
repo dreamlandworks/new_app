@@ -14,6 +14,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.UserRatingReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
@@ -27,6 +28,7 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
     val extraDemand = MutableLiveData<NetworkResponse<String>>()
     val expenditureIncurred = MutableLiveData<NetworkResponse<String>>()
     val userRating = MutableLiveData<NetworkResponse<String>>()
+    val providerRating = MutableLiveData<NetworkResponse<String>>()
     val invoice = MutableLiveData<NetworkResponse<ProviderInvoiceResModel>>()
     val installmentsList = MutableLiveData<NetworkResponse<ProviderGoalsInstallmentsListResModel>>()
     val postRequestInstallment = MutableLiveData<NetworkResponse<ProviderPostRequestInstallmentResModel>>()
@@ -105,6 +107,29 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                 try {
                     userRating.value = NetworkResponse.Loading()
                     val request = async { repository.userReview(requestBody) }
+                    val response = request.await()
+                    val jsonResponse = JSONObject(response.string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        userRating.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        userRating.value = NetworkResponse.Failure(jsonResponse.getString("message"))
+                    }
+                } catch (e: Exception) {
+                    userRating.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            userRating.value = NetworkResponse.Failure("No Internet Connection")
+        }
+        return userRating
+    }
+
+    fun providerRating(context: Context, requestBody: ProviderRatingReqModel): MutableLiveData<NetworkResponse<String>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    userRating.value = NetworkResponse.Loading()
+                    val request = async { repository.providerReview(requestBody) }
                     val response = request.await()
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") == 200) {

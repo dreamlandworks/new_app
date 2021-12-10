@@ -35,6 +35,7 @@ import android.os.Environment
 
 import android.os.Build
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
+import com.satrango.ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree
 import java.io.File
 
 
@@ -57,7 +58,6 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 val token = task.result
                 CoroutineScope(Dispatchers.Main).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@UserLoginTypeScreen)))
-//                    val responses = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, "2"))
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
                         snackBar(binding.userBtn, "Please check internet connection!")
@@ -92,15 +92,6 @@ class UserLoginTypeScreen : AppCompatActivity() {
         }
         // 59, 55
 
-//        val intent = Intent(Intent.ACTION_PICK)
-//        intent.type = "application/pdf"
-//        startActivityForResult(intent, 1)
-
-//        val intent = Intent()
-//        intent.action = Intent.ACTION_GET_CONTENT
-//        intent.type = "application/pdf"
-//        startActivityForResult(intent,1)
-
     }
 
     override fun onBackPressed() {
@@ -114,105 +105,6 @@ class UserLoginTypeScreen : AppCompatActivity() {
             toast(this, getPathFromUri(this, data.data!!)!!)
         }
     }
-
-//    fun dumpImageMetaData(uri: Uri) {
-//
-//        val contentResolver = applicationContext.contentResolver
-//        val cursor: Cursor? = contentResolver.query(
-//            uri, null, null, null, null, null)
-//
-//        cursor?.use {
-//            if (it.moveToFirst()) {
-//                val displayName: String = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-//                toast(this, displayName)
-//
-//                val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
-//                val size: String = if (!it.isNull(sizeIndex)) {
-//                    it.getString(sizeIndex)
-//                } else {
-//                    "Unknown"
-//                }
-//                toast(this, size)
-//            }
-//        }
-//    }
-
-//    fun getPDFPath(uri: Uri?): String? {
-//        val projection = arrayOf(MediaStore.Images.Media.DATA)
-//        val cursor = contentResolver.query(uri!!, projection, null, null, null)
-//        val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//        cursor.moveToFirst()
-//        return cursor.getString(column_index)
-//    }
-
-//    private fun getRealPathFromURI(contentURI: Uri): String? {
-//        val result: String?
-//        val cursor = contentResolver.query(contentURI, null, null, null, null)
-//        if (cursor == null) { // Source is Dropbox or other similar local file path
-//            result = contentURI.path
-//        } else {
-//            cursor.moveToFirst()
-//            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-//            result = cursor.getString(idx)
-//            cursor.close()
-//        }
-//        return result
-//    }
-//
-//    private fun getRealPath(uri: Uri): String {
-//        val docId = DocumentsContract.getDocumentId(uri)
-//        val split = docId.split(":")
-//        val type = split[0]
-//        var contentUri: Uri? = null
-//        contentUri = when (type) {
-//            "image" -> {
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//            }
-//            "video" -> {
-//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-//            }
-//            "audio" -> {
-//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-//            }
-//            else -> {
-//                MediaStore.Files.getContentUri("external");
-//            }
-//        }
-//        val selection = "_id=?";
-//        val selectionArgs = arrayOf(split[1])
-//        return getDataColumn(this, contentUri, selection, selectionArgs)!!
-//    }
-
-//    private fun getDataColumn(
-//        context: Context,
-//        uri: Uri?,
-//        selection: String?,
-//        selectionArgs: Array<String>
-//    ): String? {
-//        var cursor: Cursor? = null
-//        val column = "_data"
-//        val projection = arrayOf(
-//            column
-//        )
-//        try {
-//            cursor =
-//                context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
-//            if (cursor != null && cursor.moveToFirst()) {
-//                val column_index: Int = cursor.getColumnIndexOrThrow(column)
-//                val value: String = cursor.getString(column_index)
-//                return if (value.startsWith("content://") || !value.startsWith("/") && !value.startsWith("file://")) {
-//                    null
-//                } else value
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        } finally {
-//            if (cursor != null) {
-//                cursor.close()
-//            }
-//        }
-//        return null
-//    }
 
     private fun getPathFromUri(context: Context?, uri: Uri): String? {
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -276,57 +168,6 @@ class UserLoginTypeScreen : AppCompatActivity() {
         }
         return null
     }
-
-//    fun getPathFromUri(context: Context, uri: Uri): String? {
-//        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-//
-//        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-//            if (isExternalStorageDocument(uri)) {
-//                val docId = DocumentsContract.getDocumentId(uri)
-//                val split = docId.split(":".toRegex()).toTypedArray()
-//                val type = split[0]
-//                if ("primary".equals(type, ignoreCase = true)) {
-//                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
-//                }
-//
-//            } else if (isDownloadsDocument(uri)) {
-//                val id = DocumentsContract.getDocumentId(uri)
-//                val contentUri = ContentUris.withAppendedId(
-//                    Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
-//                )
-//                return getDataColumn(context, contentUri, null, null)
-//            } else if (isMediaDocument(uri)) {
-//                val docId = DocumentsContract.getDocumentId(uri)
-//                val split = docId.split(":".toRegex()).toTypedArray()
-//                val type = split[0]
-//                var contentUri: Uri? = null
-//                if ("image" == type) {
-//                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//                } else if ("video" == type) {
-//                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-//                } else if ("audio" == type) {
-//                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-//                }
-//                val selection = "_id=?"
-//                val selectionArgs = arrayOf(
-//                    split[1]
-//                )
-//                return getDataColumn(context, contentUri, selection, selectionArgs)
-//            }
-//        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
-//
-//            // Return the remote address
-//            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
-//                context,
-//                uri,
-//                null,
-//                null
-//            )
-//        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
-//            return uri.path
-//        }
-//        return null
-//    }
 
     fun getDataColumn(
         context: Context, uri: Uri?, selection: String?,

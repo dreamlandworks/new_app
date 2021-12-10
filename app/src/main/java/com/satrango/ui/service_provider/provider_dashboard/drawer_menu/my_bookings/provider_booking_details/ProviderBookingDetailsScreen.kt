@@ -139,8 +139,8 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.requestInstallmentBtn.setOnClickListener {
-            ProviderReleaseGoalsScreen.postJobId = response.booking_details.post_job_id
             ProviderReleaseGoalsScreen.userId = userId
+            ProviderReleaseGoalsScreen.postJobId = response.booking_details.post_job_id
             startActivity(Intent(this, ProviderReleaseGoalsScreen::class.java))
         }
 

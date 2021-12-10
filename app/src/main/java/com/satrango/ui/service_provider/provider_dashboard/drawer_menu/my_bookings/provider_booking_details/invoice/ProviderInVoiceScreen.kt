@@ -100,8 +100,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text =
-            response.booking_details.fname + " " + response.booking_details.lname
+        binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
