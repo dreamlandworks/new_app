@@ -853,15 +853,8 @@ class ProviderSignUpThree : AppCompatActivity() {
 //                    format = "AM"
 //                }
 //                editText.setText("${java.lang.String.format("%02d", hour)}:${java.lang.String.format("%02d", minute)}$format")
-                editText.setText(
-                    "${
-                        java.lang.String.format(
-                            "%02d",
-                            hourOfDay
-                        )
-                    }:${java.lang.String.format("%02d", minute)}"
-                )
-            }, calendarHour, calendarMinute, true
+                editText.setText("${java.lang.String.format("%02d", hourOfDay)}:${java.lang.String.format("%02d", minute)}")
+            }, calendarHour, calendarMinute, false
         )
         timepickerdialog.show()
     }

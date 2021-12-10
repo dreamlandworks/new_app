@@ -206,52 +206,37 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
         }
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keyword,
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
+        val requestBody = SearchServiceProviderReqModel(
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            RetrofitBuilder.USER_KEY,
+            keyword,
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
+            offerId
+        )
 //        toast(this, requestBody.toString())
 //        Log.e("SEARCH OBJECT:", )
 
-//        {
-//            "address": "Vijayawada Bus Stand",
-//            "city": "Ganapavaram",
-//            "country": "India",
-//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
-//            "offer_id": 0,
-//            "postal_code": "520013",
-//            "search_phrase_id": "Kotlin Developer",
-//            "state": "Andhra Pradesh",
-//            "subcat_id": 5,
-//            "user_lat": "16.5092483",
-//            "user_long": "80.6175017",
-//            "users_id": 56
-//        }
-
-        val requestBody = SearchServiceProviderReqModel(
-            "Vijayawada Bus Stand",
-            "Ganapavaram",
-            "India",
-            RetrofitBuilder.USER_KEY,
-            "Kotlin Developer",
-            "520013",
-            "Andhra Pradesh",
-            "16.5092483",
-            "80.6175017",
-            56,
-            5,
-            offerId
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            "Vijayawada Bus Stand",
+//            "Ganapavaram",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            "Kotlin Developer",
+//            "520013",
+//            "Andhra Pradesh",
+//            "16.5092483",
+//            "80.6175017",
+//            56,
+//            5,
+//            offerId
+//        )
 //        toast(this, Gson().toJson(requestBody))
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         viewModel.getSearchResults(this, requestBody).observe(this, {
