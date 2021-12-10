@@ -68,7 +68,8 @@ class ProviderSignUpThree : AppCompatActivity() {
                     }
                     if (isChecked) {
                         CoroutineScope(Dispatchers.Main).launch {
-                            tariffText.text = "My Tariff for ${ProviderUtils.profession!![index].name} is"
+                            tariffText.text =
+                                "My Tariff for ${ProviderUtils.profession!![index].name} is"
                             tariffLayout.visibility = View.VISIBLE
                             if (ProviderUtils.profession!![index].tariff_per_hour.isNotEmpty()) {
                                 perHour.setText(ProviderUtils.profession!![index].tariff_per_hour)

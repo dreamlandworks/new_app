@@ -27,6 +27,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUp
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -116,10 +117,14 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             videoPreviewBtn.setOnClickListener {
-                surfaceView.visibility = View.GONE
-                videoPlayer.setVideoPath(videoPath)
-                videoPlayer.start()
-                videoPlayer.visibility = View.VISIBLE
+                if (videoPath.isNotEmpty()) {
+                    surfaceView.visibility = View.GONE
+                    videoPlayer.setVideoPath(videoPath)
+                    videoPlayer.start()
+                    videoPlayer.visibility = View.VISIBLE
+                } else {
+                    snackBar(videoPlayer, "Please record the video to preview it")
+                }
             }
 
         }

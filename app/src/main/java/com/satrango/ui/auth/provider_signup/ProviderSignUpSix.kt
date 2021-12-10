@@ -132,10 +132,14 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             videoPreviewBtn.setOnClickListener {
-                surfaceView.visibility = View.GONE
-                videoPlayer.setVideoPath(videoPath)
-                videoPlayer.start()
-                videoPlayer.visibility = View.VISIBLE
+                if (videoPath.isNotEmpty()) {
+                    surfaceView.visibility = View.GONE
+                    videoPlayer.setVideoPath(videoPath)
+                    videoPlayer.start()
+                    videoPlayer.visibility = View.VISIBLE
+                } else {
+                    snackBar(videoPreviewBtn, "Please record video to preview it")
+                }
             }
 
         }
