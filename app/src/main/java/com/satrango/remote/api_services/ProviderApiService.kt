@@ -31,6 +31,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
@@ -199,5 +200,12 @@ interface ProviderApiService {
     suspend fun updateSpOnlineStatus(
         @Body requestBody: ProviderOnlineReqModel
     ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.PROVIDER_TRAINING_LIST)
+    suspend fun providerTrainingList(
+        @Query("key") key: String,
+        @Query("subcategory_id") subCategoryId: String,
+        @Query("sp_id") spId: String,
+    ): ProviderMyTrainingResModel
 
 }

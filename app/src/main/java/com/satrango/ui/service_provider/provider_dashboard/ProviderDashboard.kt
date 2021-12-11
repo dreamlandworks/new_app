@@ -57,7 +57,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_accoun
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTraining
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingScreen
 import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScreen
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
@@ -212,7 +212,7 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderProfileScreen::class.java))
                 }
                 R.id.providerOptTraining -> {
-                    startActivity(Intent(this, ProviderMyTraining::class.java))
+                    startActivity(Intent(this, ProviderMyTrainingScreen::class.java))
                 }
                 R.id.providerOptSettings -> {
                     UserSettingsScreen.FROM_PROVIDER = true
@@ -345,7 +345,8 @@ class ProviderDashboard : AppCompatActivity() {
         date.text = response.booking_details.scheduled_date
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
-            jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+            jobLocation.text =
+                response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
         }
 
         closeBtn.setOnClickListener {
@@ -523,9 +524,10 @@ class ProviderDashboard : AppCompatActivity() {
 
             val factory = ViewModelFactory(LoginRepository())
             val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
-            val requestBody = LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
+            val requestBody =
+                LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
             viewModel.userLogout(this, requestBody).observe(this, {
-                when(it) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -539,7 +541,10 @@ class ProviderDashboard : AppCompatActivity() {
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
                         dialogInterface.dismiss()
-                        snackBar(UserDashboardScreen.binding.navigationView, "Something went wrong. Please try again")
+                        snackBar(
+                            UserDashboardScreen.binding.navigationView,
+                            "Something went wrong. Please try again"
+                        )
                     }
                 }
             })
@@ -810,7 +815,11 @@ class ProviderDashboard : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

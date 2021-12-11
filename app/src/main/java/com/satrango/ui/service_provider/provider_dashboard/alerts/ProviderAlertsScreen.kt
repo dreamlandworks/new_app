@@ -43,14 +43,12 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
     private val NOT_ACTIONABLE: String = "2"
     private lateinit var progressDialog: BeautifulProgressDialog
 
-    override fun getFragmentViewModel(): Class<ProviderAlertsViewModel> =
-        ProviderAlertsViewModel::class.java
+    override fun getFragmentViewModel(): Class<ProviderAlertsViewModel> = ProviderAlertsViewModel::class.java
 
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentProviderAlertsScreenBinding =
-        FragmentProviderAlertsScreenBinding.inflate(layoutInflater, container, false)
+    ): FragmentProviderAlertsScreenBinding = FragmentProviderAlertsScreenBinding.inflate(layoutInflater, container, false)
 
     override fun getFragmentRepository(): ProviderAlertRepository = ProviderAlertRepository()
 
