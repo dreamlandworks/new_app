@@ -22,6 +22,10 @@
         android:icon="@drawable/ic_myprofile_orange"
         android:title="@string/my_profile" />
     <item
+        android:id="@+id/providerOptTraining"
+        android:icon="@drawable/ic_myprofile_orange"
+        android:title="@string/my_training" />
+    <item
         android:id="@+id/providerOptSettings"
         android:icon="@drawable/ic_settings_orange"
         android:title="@string/settings" />

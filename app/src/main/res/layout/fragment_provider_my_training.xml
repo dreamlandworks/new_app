@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTraining">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/purple_500"
+        app:cardCornerRadius="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:text="@string/points_earned"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/pointsEarned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/_0"
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/sub_text" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:background="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:text="@string/videos"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/videosCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/_0"
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/sub_text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recently_added"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sub_text"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_15sdp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recentlyAddedRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recommended_for_you"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sub_text"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_15sdp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recommendedForYouRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/watch_again"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sub_text"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_15sdp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/watchAgainRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

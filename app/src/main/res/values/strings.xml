@@ -634,6 +634,12 @@
     <string name="service_provider_has_requested_booking_reschedule_request_on">Service Provider has requested Booking Reschedule request on</string>
     <string name="mod_balance">Mod. Balance</string>
     <string name="status_">Status:</string>
+    <string name="my_training">My Training</string>
+    <string name="points_earned">Points Earned</string>
+    <string name="videos">Videos</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="watch_again">Watch Again</string>
+    <string name="view_leader_board">View Leader Board</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -81,7 +81,7 @@ object UserUtils {
 
     fun getSpStatus(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.sp_status), false)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.sp_status), true)
     }
 
     fun setOnline(context: Context, spStatus: Boolean) {

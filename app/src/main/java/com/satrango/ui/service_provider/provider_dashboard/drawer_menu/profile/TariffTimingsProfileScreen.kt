@@ -1,6 +1,7 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
@@ -554,7 +555,7 @@ class TariffTimingsProfileScreen :
         val calendarHour = calendar.get(Calendar.HOUR_OF_DAY)
         val calendarMinute = calendar.get(Calendar.MINUTE)
         val timepickerdialog = TimePickerDialog(
-            requireContext(),
+            requireContext(), AlertDialog.THEME_HOLO_LIGHT,
             { view, hourOfDay, minute ->
 //                editText.setText("${String.format("%02d", hourOfDay)}:${String.format("%02d", minute)}")
                 editText.setText("${hourOfDay}:${minute}")

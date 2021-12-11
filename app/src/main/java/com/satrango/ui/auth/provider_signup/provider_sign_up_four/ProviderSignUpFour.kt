@@ -3,11 +3,13 @@ package com.satrango.ui.auth.provider_signup.provider_sign_up_four
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -66,7 +68,7 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (ProviderUtils.imagePath.isEmpty()) {
+        if (selectedEncodedImage.isEmpty()) {
             snackBar(binding.submitBtn, "Please Select Identity Proof")
         } else {
             sendActivationRequestToServer()
@@ -74,23 +76,6 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun sendActivationRequestToServer() {
-
-//        val requestBody = ProviderSignUpFourReqModel(
-//            RetrofitBuilder.PROVIDER_KEY,
-//            UserUtils.getUserId(this),
-//            ProviderUtils.experience,
-//            ProviderUtils.aboutMe,
-//            ProviderUtils.perHour,
-//            ProviderUtils.perDay,
-//            ProviderUtils.minCharge,
-//            ProviderUtils.extraCharge,
-//            selectedEncodedImage,
-//            ProviderUtils.profession!!,
-//            ProviderUtils.qualification!!,
-//            ProviderUtils.languagesKnown!!,
-//            ProviderUtils.keywordsSkills!!,
-//            ProviderUtils.slotsList!!,
-//        )
 
         val requestBody = ProviderSignUpFourReqModel(
             ProviderUtils.aboutMe,
@@ -119,14 +104,13 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun selectImage() {
-        val items = arrayOf<CharSequence>("Choose from Library", "Cancel")
+        val items = arrayOf<CharSequence>("Choose from Library", "Capture with Camera")
         val builder = AlertDialog.Builder(this@ProviderSignUpFour)
         builder.setTitle("Add Photo!")
         builder.setItems(items) { dialog, item ->
-            if (items[item] == "Choose from Library") {
-                galleryIntent()
-            } else if (items[item] == "Cancel") {
-                dialog.dismiss()
+            when (item) {
+                0 -> galleryIntent()
+                1 -> cameraIntent()
             }
         }
         builder.show()
@@ -145,10 +129,12 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun cameraIntent() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, REQUEST_CAMERA)
+        val cameraIntent = Intent()
+        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var imageStream: InputStream? = null
@@ -161,79 +147,27 @@ class ProviderSignUpFour : AppCompatActivity() {
             } catch (e: Exception) {
                 snackBar(binding.submitBtn, e.message!!)
             }
+        } else if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+            val extras: Bundle = data.extras!!
+            val imageBitmap = extras["data"] as Bitmap?
+            try {
+                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
+                binding.imagePath.text = "Captured by Camera"
+            } catch (e: Exception) {
+                snackBar(binding.checkIcon, e.message!!)
+            }
         }
-//        else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-//            val extras: Bundle = data.extras!!
-//            val imageBitmap = extras["data"] as Bitmap?
-//            try {
-//                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
-//            } catch (e: Exception) {
-//                snackBar(binding.submitBtn, e.message!!)
-//            }
-//        }
         if (imageStream != null) {
             val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
             selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
-//            toast(this, selectedEncodedImage)
         }
-
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == SELECT_FILE) {
-//                onSelectFromGalleryResult(data)
-//            } else if (requestCode == REQUEST_CAMERA) onCaptureImageResult(data!!)
-//        }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun onCaptureImageResult(data: Intent) {
-        val thumbnail = data.extras!!["data"] as Bitmap?
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
-        thumbnail!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val destination = File(Environment.getExternalStorageDirectory(), System.currentTimeMillis().toString())
-        val fo: FileOutputStream
-        try {
-            fo = FileOutputStream(destination)
-            if (destination != null) {
-                val filenew1 = destination.absolutePath
-                binding.imagePath.text = destination.absolutePath.toString()
-            } else {
-                Toast.makeText(this@ProviderSignUpFour, "something wrong", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            fo.write(bytes.toByteArray())
-            fo.close()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun onSelectFromGalleryResult(data: Intent?) {
-        if (data != null) {
-            val pickedImage = data.data
-            val filePath = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor: Cursor? = contentResolver.query(pickedImage!!, filePath, null, null, null)
-            cursor!!.moveToFirst()
-            val destination = File(cursor.getString(cursor.getColumnIndex(filePath[0])))
-            cursor.close()
-            var imageStream: InputStream? = null
-            try {
-                imageStream = contentResolver.openInputStream(data.data!!)
-                val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-                selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
-            } catch (e: Exception) {
-                snackBar(binding.submitBtn, e.message!!)
-            }
-            if (destination != null) {
-                ProviderUtils.imagePath = destination.absolutePath.toString()
-                binding.imagePath.text =
-                    ProviderUtils.imagePath.split("/")[ProviderUtils.imagePath.split("/").size - 1]
-            } else {
-                snackBar(binding.submitBtn, "Something went Wrong, Select Image Again")
-            }
-        }
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
     }
 
     override fun onRequestPermissionsResult(
@@ -250,4 +184,5 @@ class ProviderSignUpFour : AppCompatActivity() {
             }
         }
     }
+
 }

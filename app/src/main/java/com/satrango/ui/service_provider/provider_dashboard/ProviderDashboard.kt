@@ -57,6 +57,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_accoun
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTraining
 import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScreen
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
@@ -110,6 +111,7 @@ class ProviderDashboard : AppCompatActivity() {
         var bottomSheetDialog: BottomSheetDialog? = null
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,6 +211,9 @@ class ProviderDashboard : AppCompatActivity() {
                 R.id.providerOptMyProfile -> {
                     startActivity(Intent(this, ProviderProfileScreen::class.java))
                 }
+                R.id.providerOptTraining -> {
+                    startActivity(Intent(this, ProviderMyTraining::class.java))
+                }
                 R.id.providerOptSettings -> {
                     UserSettingsScreen.FROM_PROVIDER = true
                     startActivity(Intent(this, UserSettingsScreen::class.java))
@@ -232,6 +237,13 @@ class ProviderDashboard : AppCompatActivity() {
                 updateOnlineStatus(1)
             } else {
                 updateOnlineStatus(0)
+            }
+        }
+
+        binding.providerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.providerSwitch.text = "User"
+                startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
 

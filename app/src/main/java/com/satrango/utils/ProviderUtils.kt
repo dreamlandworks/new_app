@@ -9,7 +9,6 @@ object ProviderUtils {
     var qualification: List<QualificationResponse>? = null
     var experience: List<Experience>? = null
     var languagesKnown: List<LangResponse>? = null
-    var keywordsSkills: List<KeywordsResponse>? = null
     var aboutMe = ""
     var perHour = ""
     var perDay = ""
