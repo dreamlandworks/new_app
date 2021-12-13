@@ -20,10 +20,12 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpOneBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.*
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Language
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.Profession
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo
 import com.satrango.utils.ProviderUtils
+import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,7 +45,7 @@ class ProviderSignUpOne : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
         initializeProgressDialog()
@@ -86,18 +88,9 @@ class ProviderSignUpOne : AppCompatActivity() {
                         languagesList
                     )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.languages.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.languages.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
+                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -119,6 +112,11 @@ class ProviderSignUpOne : AppCompatActivity() {
                     }
                     val professionsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, professionsList)
                     binding.profession.setAdapter(professionsAdapter)
+                    binding.profession.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.profession.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.profession.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.profession.setNachoValidator(ChipifyingNachoValidator())
+                    binding.profession.enableEditChipOnTouch(true, true)
                     binding.profession.threshold = 1
 
                     ProviderUtils.experience = response.data.experience
@@ -157,14 +155,19 @@ class ProviderSignUpOne : AppCompatActivity() {
             }
             else -> {
                 val langList = mutableListOf<LangResponse>()
+                var existed: Language? = null
                 for (chip in binding.languages.allChips) {
                     for (language in response.data.language) {
                         if (chip.text.toString() == language.name) {
-                            langList.add(LangResponse(language.id, language.name))
+                            existed = language
                         }
                     }
+                    if (existed != null) {
+                        langList.add(LangResponse(existed.id, existed.name))
+                    } else {
+                        langList.add(LangResponse("0", chip.text.toString()))
+                    }
                 }
-
                 val profList = mutableListOf<ProfessionResponseX>()
                 for (chip in binding.profession.allChips) {
                     var profesion: Profession? = null
@@ -188,8 +191,8 @@ class ProviderSignUpOne : AppCompatActivity() {
                 if (qualList.isEmpty()) {
                     qualList.add(QualificationResponse(binding.qualification.text.toString().trim(), "0"))
                 }
-                ProviderUtils.languagesKnown = langList
-                ProviderUtils.profession = profList
+                ProviderUtils.languagesKnown = langList.distinctBy { langResponse: LangResponse -> langResponse.name }
+                ProviderUtils.profession = profList.distinctBy { professionResponseX: ProfessionResponseX -> professionResponseX.name }
                 ProviderUtils.qualification = qualList
                 Log.e("PROFESSIONS:", Gson().toJson(profList))
                 val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)

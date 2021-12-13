@@ -39,10 +39,6 @@ import com.satrango.utils.toast
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
-//    private lateinit var showBookingTypeBottomSheetDialog: BottomSheetDialog
-//    private lateinit var waitingForSpBottomSheetDialog: BottomSheetDialog
-//    private lateinit var weAreSorryBottomSheetDialog: BottomSheetDialog
-
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
     private lateinit var viewModel: SearchServiceProviderViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -84,8 +80,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-        val factory = ViewModelFactory(SearchServiceProviderRepository())
-        viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
+
 
         if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             val spDetails = Gson().fromJson(
@@ -141,6 +136,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
         }
 
+        val factory = ViewModelFactory(SearchServiceProviderRepository())
+        viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
         viewModel.getKeywordsList(this).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -179,12 +176,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 UserUtils.saveSearchFilter(this, "")
-                loadSearchResults(subCategoryId)
+                loadSearchResults()
             }
         }
 
         if (FROM_POPULAR_SERVICES) {
-            loadSearchResults(subCategoryId)
+            loadSearchResults()
         }
     }
 
@@ -201,44 +198,59 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadSearchResults(subCategory: String) {
+    private fun loadSearchResults() {
         if (keyword == "0") {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
         }
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
+//            RetrofitBuilder.USER_KEY,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
+//            offerId
+//        )
 //        toast(this, requestBody.toString())
 //        Log.e("SEARCH OBJECT:", )
 
-//        val requestBody = SearchServiceProviderReqModel(
-//            "Vijayawada Bus Stand",
-//            "Ganapavaram",
-//            "India",
-//            RetrofitBuilder.USER_KEY,
-//            "Kotlin Developer",
-//            "520013",
-//            "Andhra Pradesh",
-//            "16.5092483",
-//            "80.6175017",
-//            56,
-//            5,
-//            offerId
-//        )
-//        toast(this, Gson().toJson(requestBody))
+//        {
+//            "address": "Vijayawada Bus Stand",
+//            "city": "Vijayawada",
+//            "country": "India",
+//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
+//            "offer_id": 0,
+//            "postal_code": "520013",
+//            "search_phrase_id": "Kotlin Developer",
+//            "state": "Andhra Pradesh",
+//            "subcat_id": 5,
+//            "user_lat": "16.5092483",
+//            "user_long": "80.6175017",
+//            "users_id": 56
+//        }
+        val requestBody = SearchServiceProviderReqModel(
+            "Vijayawada Bus Stand",
+            "Vijayawada",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            "Kotlin Developer",
+            "520013",
+            "Andhra Pradesh",
+            "16.5092483",
+            "80.6175017",
+            56,
+            5,
+            offerId
+        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
+        val factory = ViewModelFactory(SearchServiceProviderRepository())
+        viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
         viewModel.getSearchResults(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -291,7 +303,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun showBookingTypeDialog(data: SearchServiceProviderResModel) {
         val showBookingTypeBottomSheetDialog = BottomSheetDialog(this)
-        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.search_type_dialog, null)
+        val dialogView = layoutInflater.inflate(com.satrango.R.layout.search_type_dialog, null)
         val viewResults = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
         val bookInstantly = dialogView.findViewById<TextView>(com.satrango.R.id.bookInstantly)
         val providerCount = dialogView.findViewById<TextView>(com.satrango.R.id.providerCount)

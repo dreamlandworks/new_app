@@ -22,6 +22,7 @@ import com.satrango.databinding.ActivityProviderSignUpThreeBinding
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.TimeslotResponse
 import com.satrango.utils.ProviderUtils
+import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +71,12 @@ class ProviderSignUpThree : AppCompatActivity() {
 
                 if (ProviderUtils.profession!!.isNotEmpty()) {
                     if (experienceOne.selectedItemPosition != 0) {
-                        ProviderUtils.profession!![0].experience = experienceOne.selectedItem.toString()
+                        for (exp in ProviderUtils.experience!!) {
+                            if (exp.exp == experienceOne.selectedItem.toString()) {
+                                ProviderUtils.profession!![0].experience = exp.id
+                            }
+                        }
+
                     }
                     if (perHourOne.text.toString().trim().isNotEmpty()) {
                         ProviderUtils.profession!![0].tariff_per_hour = perHourOne.text.toString().trim()
@@ -88,7 +94,11 @@ class ProviderSignUpThree : AppCompatActivity() {
 
                 if (ProviderUtils.profession!!.size > 1) {
                     if (experienceTwo.selectedItemPosition != 0) {
-                        ProviderUtils.profession!![1].experience = experienceTwo.selectedItem.toString()
+                        for (exp in ProviderUtils.experience!!) {
+                            if (exp.exp == experienceTwo.selectedItem.toString()) {
+                                ProviderUtils.profession!![1].experience = exp.id
+                            }
+                        }
                     }
                     if (perHourTwo.text.toString().trim().isNotEmpty()) {
                         ProviderUtils.profession!![1].tariff_per_hour = perHourTwo.text.toString().trim()
@@ -106,7 +116,11 @@ class ProviderSignUpThree : AppCompatActivity() {
 
                 if (ProviderUtils.profession!!.size > 2) {
                     if (experienceThree.selectedItemPosition != 0) {
-                        ProviderUtils.profession!![2].experience = experienceThree.selectedItem.toString()
+                        for (exp in ProviderUtils.experience!!) {
+                            if (exp.exp == experienceThree.selectedItem.toString()) {
+                                ProviderUtils.profession!![2].experience = exp.id
+                            }
+                        }
                     }
                     if (perHourThree.text.toString().trim().isNotEmpty()) {
                         ProviderUtils.profession!![2].tariff_per_hour = perHourThree.text.toString().trim()
@@ -490,10 +504,8 @@ class ProviderSignUpThree : AppCompatActivity() {
         val timepickerdialog = TimePickerDialog(
             this@ProviderSignUpThree, AlertDialog.THEME_HOLO_LIGHT,
             { view, hourOfDay, minute ->
-                toast(this, hourOfDay.toString())
                 editText.setText("${java.lang.String.format("%02d", hourOfDay)}:${java.lang.String.format("%02d", minute)}")
-            }, calendarHour, calendarMinute, false
-        )
+            }, calendarHour, calendarMinute, false)
         timepickerdialog.show()
     }
 

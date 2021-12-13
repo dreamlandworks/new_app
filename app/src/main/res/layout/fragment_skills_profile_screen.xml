@@ -16,41 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/professional_info"
-            android:textSize="@dimen/sub_text" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal">
-
-            <com.hootsuite.nachos.NachoTextView
-                android:id="@+id/profession"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_weight="1"
-                android:background="@drawable/gray_corner"
-                android:hint="@string/professional_info"
-                android:paddingHorizontal="@dimen/_10sdp"
-                android:singleLine="true"
-                android:textSize="@dimen/edit_text" />
-
-            <ImageView
-                android:id="@+id/firstNameEdit"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_12sdp"
-                android:src="@drawable/ic_pencils"
-                tools:ignore="contentDescription" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/qualification"
             android:textSize="@dimen/sub_text" />
 
@@ -60,7 +25,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
 
-            <com.hootsuite.nachos.NachoTextView
+            <AutoCompleteTextView
                 android:id="@+id/qualification"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_45sdp"
@@ -125,99 +90,86 @@
             android:layout_marginTop="@dimen/_10sdp" />
 
         <LinearLayout
-            android:id="@+id/skillsLayout"
+            android:id="@+id/tariffOneLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/experienceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/experience"
-                android:textSize="@dimen/sub_text" />
-
-            <LinearLayout
+                android:id="@+id/professionOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/first_selected_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
 
-                <Spinner
-                    android:id="@+id/experience"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/gray_corner"
-                    android:drawableStart="@drawable/ic_bagicon"
-                    android:drawablePadding="@dimen/_10sdp" />
-
-                <ImageView
-                    android:id="@+id/emailEdit"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/_12sdp"
-                    android:src="@drawable/ic_pencils"
-                    tools:ignore="contentDescription" />
-            </LinearLayout>
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/professionOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
 
             <TextView
-                android:id="@+id/skillsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/skills"
-                android:textSize="@dimen/sub_text" />
-
-            <LinearLayout
+                android:id="@+id/skillsKeywordsOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/keywords_skills_for_first_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
 
-                <com.hootsuite.nachos.NachoTextView
-                    android:id="@+id/skills"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/gray_corner"
-                    android:hint="@string/keywords_skills"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textSize="@dimen/edit_text" />
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/skillsKeywordsOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/keywordSkillsEdit"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/_12sdp"
-                    android:src="@drawable/ic_pencils"
-                    tools:ignore="contentDescription" />
-
-            </LinearLayout>
 
             <TextView
-                android:id="@+id/tariffText"
-                android:layout_width="wrap_content"
+                android:id="@+id/experienceOneText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/my_tariff_is"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/experience_for_first_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <Spinner
+                android:id="@+id/experienceOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tariffOneText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/tariff_for_first_profession"
+                android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
                 android:weightSum="2">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -233,12 +185,13 @@
                     app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/perHour"
+                        android:id="@+id/perHourOne"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawablePadding="@dimen/_10sdp"
                         android:hint="@string/per_hour"
                         android:inputType="number"
+                        android:drawableStart="@drawable/rupee1"
                         android:maxLines="1"
                         android:textColor="@color/black"
                         android:textSize="@dimen/edit_text" />
@@ -257,11 +210,12 @@
                     app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/perDay"
+                        android:id="@+id/perDayOne"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawablePadding="@dimen/_10sdp"
                         android:hint="@string/per_day"
+                        android:drawableStart="@drawable/rupee1"
                         android:inputType="number"
                         android:maxLines="1"
                         android:textColor="@color/black"
@@ -276,7 +230,6 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_15sdp"
                 android:weightSum="2">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -291,11 +244,12 @@
                     app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/minCharge"
+                        android:id="@+id/minChargeOne"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawablePadding="@dimen/_10sdp"
                         android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
                         android:hint="@string/min_charges"
                         android:inputType="number"
                         android:maxLines="1"
@@ -316,11 +270,12 @@
                     app:boxStrokeColor="@color/purple_500">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/extraCharge"
+                        android:id="@+id/extraChargeOne"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawablePadding="@dimen/_10sdp"
                         android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
                         android:hint="@string/extra_charge"
                         android:inputType="number"
                         android:maxLines="1"
@@ -329,7 +284,453 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/_3sdp"
+                android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
+                android:textColor="@color/red"
+                android:textSize="@dimen/_10sdp" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_15sdp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:id="@+id/tariffTwoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/professionTwoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/second_selected_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/professionTwo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/skillsKeywordsTwoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/keywords_skills_for_second_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/skillsKeywordsTwo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/experienceTwoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/experience_for_second_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <Spinner
+                android:id="@+id/experienceTwo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tariffTwoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/tariff_for_second_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perHourTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_hour"
+                        android:drawableStart="@drawable/rupee1"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perDayTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_day"
+                        android:drawableStart="@drawable/rupee1"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/minChargeTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
+                        android:hint="@string/min_charges"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/extraChargeTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
+                        android:hint="@string/extra_charge"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/_3sdp"
+                android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
+                android:textColor="@color/red"
+                android:textSize="@dimen/_10sdp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_15sdp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:id="@+id/tariffThreeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/professionThreeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/third_selected_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/professionThree"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/skillsKeywordsThreeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/keywords_skills_for_third_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/skillsKeywordsThree"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp"
+                android:paddingStart="@dimen/_10sdp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/experienceThreeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/experience_for_third_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <Spinner
+                android:id="@+id/experienceThree"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/gray_corner"
+                android:drawableStart="@drawable/ic_bagicon"
+                android:drawablePadding="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tariffThreeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="@string/tariff_for_third_profession"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sub_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perHourThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_hour"
+                        android:drawableStart="@drawable/rupee1"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/perDayThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:hint="@string/per_day"
+                        android:drawableStart="@drawable/rupee1"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/minChargeThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
+                        android:hint="@string/min_charges"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_weight="1"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/purple_500">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/extraChargeThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:editable="false"
+                        android:drawableStart="@drawable/rupee1"
+                        android:hint="@string/extra_charge"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/edit_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/_3sdp"
+                android:text="@string/extra_charges_applicable_only_for_single_move_categories_during_night_time_peak_timing_bookings"
+                android:textColor="@color/red"
+                android:textSize="@dimen/_10sdp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_15sdp"
+            android:background="@color/lightGray" />
 
         <TextView
             android:layout_width="wrap_content"

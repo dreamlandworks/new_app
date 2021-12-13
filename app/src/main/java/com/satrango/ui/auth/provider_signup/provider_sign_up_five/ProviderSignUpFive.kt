@@ -37,9 +37,9 @@ import java.util.*
 
 class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
 
-    private var timerApp: CountDownTimer? = null
-    private lateinit var videoPath: String
+    private var videoPath: String = ""
     private var mOutputFile: File? = null
+    private var timerApp: CountDownTimer? = null
     private lateinit var mMediaRecorder: MediaRecorder
     private lateinit var mServiceCamera: Camera
     private lateinit var surfaceHolder: SurfaceHolder
@@ -93,6 +93,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             nextBtn.setOnClickListener {
+                if (videoPath.isNotEmpty()) {
                 stopRecording()
 
                 val videoFile = File(videoPath)
@@ -133,6 +134,10 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
                         }
                     }
                 })
+                } else {
+                    snackBar(binding.surfaceView, "Please Record Video!")
+                }
+
             }
 
             videoPreviewBtn.setOnClickListener {

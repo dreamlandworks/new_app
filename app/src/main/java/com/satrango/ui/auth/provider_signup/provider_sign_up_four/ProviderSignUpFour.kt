@@ -27,11 +27,14 @@ import com.satrango.databinding.ActivityProviderSignUpFourBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
-import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.*
 import com.satrango.utils.*
+import org.intellij.lang.annotations.Language
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.*
 
-class ProviderSignUpFour : AppCompatActivity() {
+class ProviderSignUpFour: AppCompatActivity() {
 
     private var selectedEncodedImage = ""
     private lateinit var viewModel: ProviderSignUpFourViewModel
@@ -77,9 +80,47 @@ class ProviderSignUpFour : AppCompatActivity() {
 
     private fun sendActivationRequestToServer() {
 
+//        val requestBody = ProviderSignUpFourReqModel(
+//            ProviderUtils.aboutMe,
+//            selectedEncodedImage,
+//            RetrofitBuilder.PROVIDER_KEY,
+//            ProviderUtils.languagesKnown!!,
+//            ProviderUtils.profession!!,
+//            ProviderUtils.qualification!!,
+//            ProviderUtils.slotsList!!,
+//            UserUtils.getUserId(this)
+//        )
+
+//        val langList = ArrayList<LangResponse>()
+//        val langArray = JSONArray(UserUtils.getSpLanguages(this))
+//        for (index in 0 until langArray.length()) {
+//            val obj = JSONObject(langArray[index].toString())
+//            langList.add(LangResponse(obj.getString("lang_id"), obj.getString("name")))
+//        }
+//
+//        val profList = ArrayList<ProfessionResponseX>()
+//        val profArray = JSONArray(UserUtils.getSpProfession(this))
+//        for (index in 0 until profArray.length()) {
+//            profList.add(Gson().fromJson(profArray[index].toString(), ProfessionResponseX::class.java))
+//        }
+//
+//        val qualList = ArrayList<QualificationResponse>()
+//        val qualArray = JSONArray(UserUtils.getSpQualification(this))
+//        for (index in 0 until profArray.length()) {
+//            val obj = JSONObject(qualArray[index].toString())
+//            qualList.add(QualificationResponse(obj.getString("name"), obj.getString("qual_id")))
+//        }
+//
+//        val timeSlotsList = ArrayList<TimeslotResponse>()
+//        val timeSlotsArray = JSONArray(UserUtils.getSpTimeSlots(this))
+//        for (index in 0 until timeSlotsArray.length()) {
+//            val obj = JSONObject(timeSlotsArray[index].toString())
+//            timeSlotsList.add(TimeslotResponse(obj.getString("days"), obj.getString("from"), obj.getString("to")))
+//        }
+
         val requestBody = ProviderSignUpFourReqModel(
             ProviderUtils.aboutMe,
-            selectedEncodedImage,
+            "selectedEncodedImage",
             RetrofitBuilder.PROVIDER_KEY,
             ProviderUtils.languagesKnown!!,
             ProviderUtils.profession!!,
@@ -104,7 +145,9 @@ class ProviderSignUpFour : AppCompatActivity() {
     }
 
     private fun selectImage() {
-        val items = arrayOf<CharSequence>("Choose from Library", "Capture with Camera")
+        val items = arrayOf<CharSequence>("Choose from Library"
+//            , "Capture with Camera"
+        )
         val builder = AlertDialog.Builder(this@ProviderSignUpFour)
         builder.setTitle("Add Photo!")
         builder.setItems(items) { dialog, item ->
@@ -118,8 +161,6 @@ class ProviderSignUpFour : AppCompatActivity() {
 
     private fun galleryIntent() {
         ProviderUtils.imagePath = ""
-//        val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//        startActivityForResult(i, SELECT_FILE)
         val intent = Intent()
         val mineType = arrayOf("image/jpeg", "image/jpg", "image/png")
         intent.action = Intent.ACTION_GET_CONTENT

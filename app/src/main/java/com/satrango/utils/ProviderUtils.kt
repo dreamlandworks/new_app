@@ -9,12 +9,8 @@ object ProviderUtils {
     var qualification: List<QualificationResponse>? = null
     var experience: List<Experience>? = null
     var languagesKnown: List<LangResponse>? = null
-    var aboutMe = ""
-    var perHour = ""
-    var perDay = ""
-    var minCharge = ""
-    var extraCharge = ""
     var slotsList: List<TimeslotResponse>? = null
+    var aboutMe = ""
     var imagePath = ""
 
 }

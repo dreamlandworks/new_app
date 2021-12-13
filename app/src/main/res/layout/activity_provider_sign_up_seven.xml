@@ -121,46 +121,46 @@
                         android:layout_height="@dimen/_2sdp"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_2sdp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_2sdp"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_gravity="bottom"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
-                        android:layout_gravity="bottom"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_2sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_gravity="bottom"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_2sdp"
                         android:layout_gravity="end"
-                        android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@color/white"/>
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_2sdp"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_gravity="end"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_gravity="end"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_50sdp"
@@ -168,15 +168,15 @@
                         android:layout_gravity="bottom|end"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                     <View
                         android:layout_width="@dimen/_2sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:layout_marginBottom="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_gravity="end|bottom"
-                        android:background="@color/white"/>
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:background="@color/white" />
 
 
                     <LinearLayout
@@ -207,8 +207,8 @@
                         android:id="@+id/videoPlayer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:rotation="90.0"
                         android:layout_gravity="center_horizontal"
+                        android:rotation="90.0"
                         android:visibility="gone" />
 
                 </FrameLayout>
@@ -223,8 +223,8 @@
                     android:id="@+id/startBtn"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_50sdp"
-                    android:layout_gravity="center"
                     android:layout_centerInParent="true"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_play_svg"
                     tools:ignore="ContentDescription" />
 
@@ -233,11 +233,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:textColor="@color/red"
-                    android:visibility="gone"
-                    android:paddingVertical="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="@string/video_preview"/>
+                    android:background="@drawable/provider_btn_bg"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/video_preview"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sub_text"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -251,10 +255,10 @@
 
             <TextView
                 android:id="@+id/restartBtn"
+                style="@style/purple_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/purple_outline_button_style"
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/green_corner_border"
                 android:clickable="true"
@@ -263,12 +267,12 @@
 
             <TextView
                 android:id="@+id/nextBtn"
+                style="@style/filled_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_10sdp"
-                style="@style/filled_button_style"
                 android:background="@drawable/green_btn_bg"
                 android:clickable="true"
                 android:focusable="true"

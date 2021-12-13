@@ -75,31 +75,31 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
         professionFList = ArrayList()
 
         binding.apply {
-            profession.inputType = InputType.TYPE_CLASS_TEXT
-            profession.tag = profession.keyListener
-            profession.keyListener = null
-            profession.setOnClickListener {
-                profession.setBackgroundColor(Color.parseColor("#ffffff"))
-                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                profession.keyListener = profession.tag as KeyListener
-            }
+//            profession.inputType = InputType.TYPE_CLASS_TEXT
+//            profession.tag = profession.keyListener
+//            profession.keyListener = null
+//            profession.setOnClickListener {
+//                profession.setBackgroundColor(Color.parseColor("#ffffff"))
+//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                profession.keyListener = profession.tag as KeyListener
+//            }
 
-            qualification.inputType = InputType.TYPE_CLASS_TEXT
-            qualification.tag = qualification.keyListener
-            qualification.keyListener = null
-            qualification.setOnClickListener {
-                qualification.setBackgroundColor(Color.parseColor("#ffffff"))
-                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                qualification.keyListener = qualification.tag as KeyListener
-            }
+//            qualification.inputType = InputType.TYPE_CLASS_TEXT
+//            qualification.tag = qualification.keyListener
+//            qualification.keyListener = null
+//            qualification.setOnClickListener {
+//                qualification.setBackgroundColor(Color.parseColor("#ffffff"))
+//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                qualification.keyListener = qualification.tag as KeyListener
+//            }
 
 //            experience.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 //            experience.tag = experience.keyListener
@@ -113,44 +113,44 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 //                experience.keyListener = experience.tag as KeyListener
 //            }
 
-            languages.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            languages.tag = languages.keyListener
-            languages.keyListener = null
-            languages.setOnClickListener {
-                languages.setBackgroundColor(Color.parseColor("#ffffff"))
-                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                languages.keyListener = languages.tag as KeyListener
-            }
+//            languages.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            languages.tag = languages.keyListener
+//            languages.keyListener = null
+//            languages.setOnClickListener {
+//                languages.setBackgroundColor(Color.parseColor("#ffffff"))
+//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                languages.keyListener = languages.tag as KeyListener
+//            }
 
-            skills.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            skills.tag = skills.keyListener
-            skills.keyListener = null
-            skills.setOnClickListener {
-                skills.setBackgroundColor(Color.parseColor("#ffffff"))
-                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                skills.keyListener = skills.tag as KeyListener
-            }
+//            skills.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            skills.tag = skills.keyListener
+//            skills.keyListener = null
+//            skills.setOnClickListener {
+//                skills.setBackgroundColor(Color.parseColor("#ffffff"))
+//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                skills.keyListener = skills.tag as KeyListener
+//            }
 
-            description.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            description.tag = description.keyListener
-            description.keyListener = null
-            description.setOnClickListener {
-                description.setBackgroundColor(Color.parseColor("#ffffff"))
-                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-                description.keyListener = description.tag as KeyListener
-            }
+//            description.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            description.tag = description.keyListener
+//            description.keyListener = null
+//            description.setOnClickListener {
+//                description.setBackgroundColor(Color.parseColor("#ffffff"))
+//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
+//                description.keyListener = description.tag as KeyListener
+//            }
 
             updateBtn.setOnClickListener {
                 validateFields()
@@ -162,17 +162,26 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 
     private fun validateFields() {
 
-        val btn =
-            binding.root.findViewById<RadioButton>(binding.professionRadioGroup.checkedRadioButtonId)
-        if (btn != null) {
-            btn.isChecked = false
-            btn.clearFocus()
-        } else {
-            snackBar(binding.backBtn, "Please Select Profession For Keyword Selection")
-            return
-        }
+//        val btn =
+//            binding.root.findViewById<RadioButton>(binding.professionRadioGroup.checkedRadioButtonId)
+//        if (btn != null) {
+//            btn.isChecked = false
+//            btn.clearFocus()
+//        } else {
+//            snackBar(binding.backBtn, "Please Select Profession For Keyword Selection")
+//            return
+//        }
 
         binding.apply {
+
+            val qualificationList = mutableListOf<QualificationResponse>()
+//            for (chip in binding.qualification.allChips) {
+                for (qualification in qualificationMList) {
+                    if (binding.qualification.text.toString() == qualification.qualification) {
+                        qualificationList.add(QualificationResponse(qualification.qualification, qualification.id))
+//                    }
+                }
+            }
 
             val langList = mutableListOf<LangResponse>()
             for (chip in languages.allChips) {
@@ -182,51 +191,216 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                 }
             }
-            val keywordsList = mutableListOf<KeywordsResponse>()
-            for (chip in binding.skills.allChips) {
-                for (skill in skillsMList) {
-                    if (chip.text.toString() == skill.keyword) {
-                        keywordsList.add(KeywordsResponse(skill.id, skill.keyword))
+            professionFList = ArrayList()
+            if (professionOne.allChips.isNotEmpty()) {
+                when {
+                    extraChargeOne.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Extra Charges For First Profession")
+                    }
+                    minChargeOne.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Minimum Charges For First Profession")
+                    }
+                    perHourOne.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour Charges For First Profession")
+                    }
+                    perDayOne.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Day Charges For First Profession")
+                    }
+                    perDayOne.text.toString().toDouble() < perHourOne.text.toString().toDouble() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour charges less than Per Day Charges For First Profession")
+                    }
+                    experienceOne.selectedItemPosition == 0 -> {
+                        snackBar(extraChargeOne, "Please Select Experience For First Profession")
+                    }
+                    else -> {
+                        val keywordsOneList = ArrayList<KeywordsResponse>()
+                        for (chip in binding.skillsKeywordsOne.allChips) {
+                            var keyword: KeywordResponse? = null
+                            for (skill in skillsMList) {
+                                if (chip.text.toString() == skill.keyword) {
+                                    keyword = skill
+                                }
+                            }
+                            if (keyword != null) {
+                                keywordsOneList.add(KeywordsResponse(keyword.id, keyword.keyword))
+                            } else {
+                                keywordsOneList.add(KeywordsResponse("0", chip.text.toString()))
+                            }
+                        }
+                        if (keywordsOneList.isNotEmpty()) {
+                            val professionOneList = ArrayList<ProfessionResponseX>()
+                            var experience = ""
+                            for (exp in experienceMList) {
+                                if (exp.exp == binding.experienceOne.selectedItem.toString()) {
+                                    experience = exp.id
+                                }
+                            }
+                            for (chip in binding.professionOne.allChips) {
+                                var profession: Profession? = null
+                                for (professions in professionMList) {
+                                    if (chip.text.toString() == professions.name) {
+                                        profession = professions
+                                    }
+                                }
+                                if (profession != null) {
+                                    professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, profession.name, profession.id))
+                                } else {
+                                    professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                }
+                            }
+                            professionFList.add(professionOneList[0])
+                        } else {
+                            snackBar(professionOne, "Please Enter Keywords for First Profession")
+                        }
                     }
                 }
             }
-
-            val qualificationList = mutableListOf<QualificationResponse>()
-            for (chip in binding.qualification.allChips) {
-                for (qualification in qualificationMList) {
-                    if (chip.text.toString() == qualification.qualification) {
-                        qualificationList.add(
-                            QualificationResponse(
-                                qualification.qualification,
-                                qualification.id
-                            )
-                        )
+            if (professionTwo.allChips.isNotEmpty()) {
+                when {
+                    extraChargeTwo.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Extra Charges For Second Profession")
+                    }
+                    minChargeTwo.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Minimum Charges For Second Profession")
+                    }
+                    perHourTwo.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour Charges For Second Profession")
+                    }
+                    perDayTwo.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Day Charges For Second Profession")
+                    }
+                    perDayTwo.text.toString().toDouble() < perHourTwo.text.toString().toDouble() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour charges less than Per Day Charges For Second Profession")
+                    }
+                    experienceTwo.selectedItemPosition == 0 -> {
+                        snackBar(extraChargeOne, "Please Select Experience For Second Profession")
+                    }
+                    else -> {
+                        val keywordsTwoList = ArrayList<KeywordsResponse>()
+                        for (chip in binding.skillsKeywordsTwo.allChips) {
+                            var keyword: KeywordResponse? = null
+                            for (skill in skillsMList) {
+                                if (chip.text.toString() == skill.keyword) {
+                                    keyword = skill
+                                }
+                            }
+                            if (keyword != null) {
+                                keywordsTwoList.add(KeywordsResponse(keyword.id, keyword.keyword))
+                            } else {
+                                keywordsTwoList.add(KeywordsResponse("0", chip.text.toString()))
+                            }
+                        }
+                        if (keywordsTwoList.isNotEmpty()) {
+                            val professionTwoList = ArrayList<ProfessionResponseX>()
+                            var experience = ""
+                            for (exp in experienceMList) {
+                                if (exp.exp == binding.experienceTwo.selectedItem.toString()) {
+                                    experience = exp.id
+                                }
+                            }
+                            for (chip in binding.professionTwo.allChips) {
+                                var profession: Profession? = null
+                                for (professions in professionMList) {
+                                    if (chip.text.toString() == professions.name) {
+                                        profession = professions
+                                    }
+                                }
+                                if (profession != null) {
+                                    professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, profession.name, profession.id))
+                                } else {
+                                    professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                }
+                            }
+                            professionFList.add(professionTwoList[0])
+                        } else {
+                            snackBar(professionOne, "Please Enter Keywords for Second Profession")
+                        }
                     }
                 }
-            }
 
-            for (keyword in professionFList) {
-                if (keyword.keywords_responses.isEmpty()) {
-                    snackBar(
-                        binding.backBtn,
-                        "Please enter keywords for ${keyword.name} profession"
-                    )
-                    return
+            }
+            if (professionThree.allChips.isNotEmpty()) {
+                when {
+                    extraChargeThree.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Extra Charges For Third Profession")
+                    }
+                    minChargeThree.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Minimum Charges For Third Profession")
+                    }
+                    perHourThree.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour Charges For Third Profession")
+                    }
+                    perDayThree.text.toString().isEmpty() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Day Charges For Third Profession")
+                    }
+                    perDayThree.text.toString().toDouble() < perHourThree.text.toString().toDouble() -> {
+                        snackBar(extraChargeOne, "Please Enter Per Hour charges less than Per Day Charges For Third Profession")
+                    }
+                    experienceThree.selectedItemPosition == 0 -> {
+                        snackBar(extraChargeOne, "Please Select Experience For First Profession")
+                    }
+                    else -> {
+                        val keywordsThreeList = ArrayList<KeywordsResponse>()
+                        for (chip in binding.skillsKeywordsThree.allChips) {
+                            var keyword: KeywordResponse? = null
+                            for (skill in skillsMList) {
+                                if (chip.text.toString() == skill.keyword) {
+                                    keyword = skill
+                                }
+                            }
+                            if (keyword != null) {
+                                keywordsThreeList.add(KeywordsResponse(keyword.id, keyword.keyword))
+                            } else {
+                                keywordsThreeList.add(KeywordsResponse("0", chip.text.toString()))
+                            }
+                        }
+                        if (keywordsThreeList.isNotEmpty()) {
+                            val professionThreeList = ArrayList<ProfessionResponseX>()
+                            var experience = ""
+                            for (exp in experienceMList) {
+                                if (exp.exp == binding.experienceThree.selectedItem.toString()) {
+                                    experience = exp.id
+                                }
+                            }
+                            for (chip in binding.professionThree.allChips) {
+                                var profession: Profession? = null
+                                for (professions in professionMList) {
+                                    if (chip.text.toString() == professions.name) {
+                                        profession = professions
+                                    }
+                                }
+                                if (profession != null) {
+                                    professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, profession.name, profession.id))
+                                } else {
+                                    professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                }
+                            }
+                            professionFList.add(professionThreeList[0])
+                        } else {
+                            snackBar(professionOne, "Please Enter Keywords for Third Profession")
+                        }
+                    }
                 }
             }
 
             when {
                 professionFList.isEmpty() -> {
-                    snackBar(profession, "Enter Profession")
+                    snackBar(professionOne, "Enter Profession")
                 }
                 qualificationList.isEmpty() -> {
-                    snackBar(profession, "Enter Qualification")
+                    snackBar(professionOne, "Enter Qualification")
                 }
                 langList.isEmpty() -> {
-                    snackBar(profession, "Enter Languages")
+                    snackBar(professionOne, "Enter Languages")
                 }
                 description.text.toString().trim().isEmpty() -> {
-                    snackBar(profession, "Tell us something About you")
+                    snackBar(professionOne, "Tell us something About you")
                 }
                 else -> {
 
@@ -234,9 +408,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         description.text.toString().trim(),
                         UserUtils.getUserId(requireContext()),
                         RetrofitBuilder.PROVIDER_KEY,
-                        professionFList,
+                        professionFList.distinctBy { professionResponseX: ProfessionResponseX -> professionResponseX.name },
                         qualificationList,
-                        langList
+                        langList.distinctBy { langResponse: LangResponse -> langResponse.name }
                     )
                     Log.e("JSON", Gson().toJson(requestBody))
                     viewModel.updateSkills(requireContext(), requestBody)
@@ -288,22 +462,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         languagesList
                     )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.languages.addChipTerminator(
-                        ' ',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.languages.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.languages.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
+                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.languages.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -313,198 +475,181 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     for (data in professionMList) {
                         professionList.add(data.name)
                     }
-                    val professionAdapter = ArrayAdapter(
-                        requireContext(),
-                        R.layout.simple_spinner_dropdown_item,
-                        professionList
-                    )
-                    binding.profession.setAdapter(professionAdapter)
-                    binding.profession.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.profession.addChipTerminator(
-                        ' ',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.profession.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.profession.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
-                    binding.profession.setNachoValidator(ChipifyingNachoValidator())
-                    binding.profession.enableEditChipOnTouch(true, true)
+                    val professionAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, professionList)
+                    binding.professionOne.setAdapter(professionAdapter)
+                    binding.professionOne.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.professionOne.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionOne.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionOne.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionOne.setNachoValidator(ChipifyingNachoValidator())
+                    binding.professionOne.enableEditChipOnTouch(true, true)
+
+                    binding.professionTwo.setAdapter(professionAdapter)
+                    binding.professionTwo.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.professionTwo.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionTwo.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionTwo.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionTwo.setNachoValidator(ChipifyingNachoValidator())
+                    binding.professionTwo.enableEditChipOnTouch(true, true)
+
+                    binding.professionThree.setAdapter(professionAdapter)
+                    binding.professionThree.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.professionThree.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionThree.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.professionThree.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionThree.setNachoValidator(ChipifyingNachoValidator())
+                    binding.professionThree.enableEditChipOnTouch(true, true)
 
                     val qualificationList = ArrayList<String>()
-                    qualificationMList =
-                        response.data.qualification.distinctBy { qualification -> qualification.qualification }
+                    qualificationMList = response.data.qualification.distinctBy { qualification -> qualification.qualification }
                     for (data in qualificationMList) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(
-                        requireContext(),
-                        R.layout.simple_spinner_dropdown_item,
-                        qualificationList
-                    )
+                    val qualificationAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, qualificationList)
                     binding.qualification.setAdapter(qualificationAdapter)
-                    binding.qualification.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.qualification.addChipTerminator(
-                        ' ',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.qualification.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.qualification.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
-                    binding.qualification.setNachoValidator(ChipifyingNachoValidator())
-                    binding.qualification.enableEditChipOnTouch(true, true)
 
                     experienceList = ArrayList()
                     experienceList.add("Select Experience")
-                    experienceMList =
-                        response.data.experience.distinctBy { experience -> experience.exp }
+                    experienceMList = response.data.experience.distinctBy { experience -> experience.exp }
                     for (data in experienceMList) {
                         experienceList.add(data.exp)
                     }
-                    val experienceAdapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
-                        experienceList
-                    )
-                    binding.experience.adapter = experienceAdapter
+                    val experienceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, experienceList)
+                    binding.experienceOne.adapter = experienceAdapter
+                    binding.experienceTwo.adapter = experienceAdapter
+                    binding.experienceThree.adapter = experienceAdapter
 
-                    binding.skills.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.skills.addChipTerminator(
-                        ' ',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.skills.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.skills.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
-                    binding.skills.setNachoValidator(ChipifyingNachoValidator())
-                    binding.skills.enableEditChipOnTouch(true, true)
+                    binding.skillsKeywordsOne.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.skillsKeywordsOne.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsOne.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsOne.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsOne.setNachoValidator(ChipifyingNachoValidator())
+                    binding.skillsKeywordsOne.enableEditChipOnTouch(true, true)
+
+                    binding.skillsKeywordsTwo.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.skillsKeywordsTwo.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsTwo.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsTwo.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsTwo.setNachoValidator(ChipifyingNachoValidator())
+                    binding.skillsKeywordsTwo.enableEditChipOnTouch(true, true)
+
+                    binding.skillsKeywordsThree.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.skillsKeywordsThree.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsThree.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.skillsKeywordsThree.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsThree.setNachoValidator(ChipifyingNachoValidator())
+                    binding.skillsKeywordsThree.enableEditChipOnTouch(true, true)
 
                     val skillsList = ArrayList<String>()
-                    skillsMList =
-                        response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
+                    skillsMList = response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
                     for (data in skillsMList) {
                         skillsList.add(data.keyword)
                     }
-                    val skillsAdapter = ArrayAdapter(
-                        requireContext(),
-                        R.layout.simple_spinner_dropdown_item,
-                        skillsList
-                    )
-                    binding.skills.setAdapter(skillsAdapter)
+                    val skillsAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, skillsList)
+                    binding.skillsKeywordsOne.setAdapter(skillsAdapter)
+                    binding.skillsKeywordsTwo.setAdapter(skillsAdapter)
+                    binding.skillsKeywordsThree.setAdapter(skillsAdapter)
 
                     if (ProviderProfileScreen.professionalDetails != null) {
                         val data = ProviderProfileScreen.professionalDetails
 
-                        val qualificationChips = ArrayList<ChipInfo>()
-                        for (d in qualificationMList) {
-                            if (d.qualification == data.sp_details.qualification) {
-                                qualificationChips.add(ChipInfo(d.qualification, d.id))
-                            }
+                        val languages = ArrayList<ChipInfo>()
+                        for (language in data.language) {
+                            languages.add(ChipInfo(language.name, language.language_id))
                         }
-                        binding.qualification.setTextWithChips(qualificationChips)
-
-                        val languageschips = ArrayList<ChipInfo>()
-                        for (d in data.language) {
-                            languageschips.add(ChipInfo(d.name, d.language_id))
-                        }
-                        binding.languages.setTextWithChips(languageschips)
+                        binding.languages.setTextWithChips(languages)
+                        binding.qualification.setText(data.sp_details.qualification)
+                        binding.description.setText(data.sp_details.about_me)
 
                         for (profession in data.profession) {
                             val skills = ArrayList<KeywordsResponse>()
                             for (pro in profession.skills) {
-                                skills.add(
-                                    KeywordsResponse(
-                                        pro.keywords_id.toString(),
-                                        pro.keyword
-                                    )
-                                )
+                                skills.add(KeywordsResponse(pro.keywords_id.toString(), pro.keyword))
                             }
-                            professionFList.add(
-                                ProfessionResponseX(
-                                    skills,
-                                    profession.tariff_extra_charges,
-                                    profession.tariff_min_charges,
-                                    profession.tariff_per_day,
-                                    profession.tariff_per_hour,
-                                    profession.exp,
-                                    profession.profession_name,
-                                    profession.profession_id
-                                )
-                            )
+                            professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id))
                         }
 
-                        binding.profession.setOnFocusChangeListener { v, hasFocus ->
-                            if (!hasFocus) {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    for (i in 0 until binding.professionRadioGroup.childCount) {
-                                        binding.professionRadioGroup.removeViewAt(i)
-                                    }
-                                    val professions = professionFList
-                                    professionFList = ArrayList()
-                                    for (pro in binding.profession.allChips) {
-                                        var existed = false
-                                        for (prof in professions) {
-                                            if (prof.name == pro.text.toString()) {
-                                                professionFList.add(prof)
-                                                existed = true
-                                            }
-                                        }
-                                        if (!existed) {
-                                            for (prof in professionMList) {
-                                                if (pro.text.toString() == prof.name) {
-                                                    professionFList.add(
-                                                        ProfessionResponseX(
-                                                            ArrayList(),
-                                                            "",
-                                                            "",
-                                                            "",
-                                                            "",
-                                                            "",
-                                                            prof.name,
-                                                            prof.id
-                                                        )
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
-                                    toast(requireActivity(), "List: $professionFList")
-                                    updateSkillsAndTariff(data)
+                        if (professionFList.isNotEmpty()) {
+                            val chips = ArrayList<ChipInfo>()
+                            chips.add(ChipInfo(professionFList[0].name, professionFList[0].prof_id))
+                            binding.professionOne.setTextWithChips(chips)
+
+                            binding.experienceOneText.text = "Experience in ${professionFList[0].name}"
+                            binding.skillsKeywordsOneText.text = "Keywords for ${professionFList[0].name} Profession"
+                            binding.tariffOneText.text = "Tariff for ${professionFList[0].name} Profession"
+
+                            for (index in experienceMList.indices) {
+                                if (experienceMList[index].exp == professionFList[0].experience) {
+                                    binding.experienceOne.setSelection(index + 1)
                                 }
                             }
+                            val skillsChips = ArrayList<ChipInfo>()
+                            for (keyword in professionFList[0].keywords_responses) {
+                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                            }
+                            binding.skillsKeywordsOne.setTextWithChips(skillsChips)
+                            binding.extraChargeOne.setText(professionFList[0].tariff_extra_charges)
+                            binding.minChargeOne.setText(professionFList[0].tariff_min_charges)
+                            binding.perDayOne.setText(professionFList[0].tariff_per_day)
+                            binding.perHourOne.setText(professionFList[0].tariff_per_hour)
                         }
-                        updateSkillsAndTariff(data)
-                    }
+                        if (professionFList.size > 1) {
+                            val chips = ArrayList<ChipInfo>()
+                            chips.add(ChipInfo(professionFList[1].name, professionFList[1].prof_id))
+                            binding.professionTwo.setTextWithChips(chips)
 
+                            binding.experienceTwoText.text = "Experience in ${professionFList[1].name}"
+                            binding.skillsKeywordsTwoText.text = "Keywords for ${professionFList[1].name} Profession"
+                            binding.tariffTwoText.text = "Tariff for ${professionFList[1].name} Profession"
+
+                            for (index in experienceMList.indices) {
+                                if (experienceMList[index].exp == professionFList[1].experience) {
+                                    binding.experienceTwo.setSelection(index + 1)
+                                }
+                            }
+                            val skillsChips = ArrayList<ChipInfo>()
+                            for (keyword in professionFList[1].keywords_responses) {
+                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                            }
+                            binding.skillsKeywordsTwo.setTextWithChips(skillsChips)
+                            binding.extraChargeTwo.setText(professionFList[1].tariff_extra_charges)
+                            binding.minChargeTwo.setText(professionFList[1].tariff_min_charges)
+                            binding.perDayTwo.setText(professionFList[1].tariff_per_day)
+                            binding.perHourTwo.setText(professionFList[1].tariff_per_hour)
+                        }
+                        if (professionFList.size > 2) {
+                            val chips = ArrayList<ChipInfo>()
+                            chips.add(ChipInfo(professionFList[2].name, professionFList[2].prof_id))
+                            binding.professionThree.setTextWithChips(chips)
+
+                            binding.experienceThreeText.text = "Experience in ${professionFList[2].name}"
+                            binding.skillsKeywordsThreeText.text = "Keywords for ${professionFList[2].name} Profession"
+                            binding.tariffThreeText.text = "Tariff for ${professionFList[2].name} Profession"
+
+                            for (index in experienceMList.indices) {
+                                if (experienceMList[index].exp == professionFList[2].experience) {
+                                    binding.experienceThree.setSelection(index + 1)
+                                }
+                            }
+                            val skillsChips = ArrayList<ChipInfo>()
+                            for (keyword in professionFList[2].keywords_responses) {
+                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                            }
+                            binding.skillsKeywordsThree.setTextWithChips(skillsChips)
+                            binding.extraChargeThree.setText(professionFList[2].tariff_extra_charges)
+                            binding.minChargeThree.setText(professionFList[2].tariff_min_charges)
+                            binding.perDayThree.setText(professionFList[2].tariff_per_day)
+                            binding.perHourThree.setText(professionFList[2].tariff_per_hour)
+                        }
+
+//                        updateSkillsAndTariff(data)
+                    }
                     ProviderProfileScreen.progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    snackBar(binding.qualification, it.message!!)
                     ProviderProfileScreen.progressDialog.dismiss()
-                    snackBar(binding.profession, "Click Reset to get language values")
+                    snackBar(binding.qualification, it.message!!)
+                    snackBar(binding.professionOne, "Click Reset to get language values")
                 }
             }
         })
@@ -525,7 +670,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             if (!isChecked) {
                                 var existed: KeywordResponse? = null
                                 professionFList[index].keywords_responses = ArrayList()
-                                for (skill in binding.skills.allChips) {
+                                for (skill in binding.skillsKeywordsOne.allChips) {
                                     for (keyword in response.data.keywords) {
                                         if (keyword.keyword == skill.text.toString()) {
                                             existed = keyword
@@ -541,17 +686,17 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                         )
                                     }
                                 }
-                                professionFList[index].experience = binding.experience.selectedItem.toString()
-                                professionFList[index].tariff_extra_charges = binding.extraCharge.text.toString().trim()
-                                professionFList[index].tariff_min_charges = binding.minCharge.text.toString().trim()
-                                professionFList[index].tariff_per_day = binding.perDay.text.toString().trim()
-                                professionFList[index].tariff_per_hour = binding.perHour.text.toString().trim()
+                                professionFList[index].experience = binding.experienceOne.selectedItem.toString()
+                                professionFList[index].tariff_extra_charges = binding.extraChargeOne.text.toString().trim()
+                                professionFList[index].tariff_min_charges = binding.minChargeOne.text.toString().trim()
+                                professionFList[index].tariff_per_day = binding.perDayOne.text.toString().trim()
+                                professionFList[index].tariff_per_hour = binding.perHourOne.text.toString().trim()
                             }
 
                             if (isChecked) {
                                 for (ind in experienceList.indices) {
                                     if (experienceList[ind] == professionFList[index].experience) {
-                                        binding.experience.setSelection(ind + 1)
+                                        binding.experienceOne.setSelection(ind + 1)
                                     }
                                 }
                                 val skillsChips = ArrayList<ChipInfo>()
@@ -559,15 +704,15 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     skillsChips.add(ChipInfo(skill.name, skill.keyword_id))
                                 }
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    binding.skills.setTextWithChips(skillsChips)
-                                    binding.skillsLayout.visibility = View.VISIBLE
-                                    binding.perDay.setText(professionFList[index].tariff_per_day)
-                                    binding.perHour.setText(professionFList[index].tariff_per_hour)
-                                    binding.minCharge.setText(professionFList[index].tariff_min_charges)
-                                    binding.extraCharge.setText(professionFList[index].tariff_extra_charges)
-                                    binding.tariffText.text = "My Tariff for ${professionFList[index].name} is"
-                                    binding.skillsText.text = "Skills in ${professionFList[index].name} Profession"
-                                    binding.experienceText.text = "Experience in ${professionFList[index].name} Profession"
+                                    binding.skillsKeywordsOne.setTextWithChips(skillsChips)
+//                                    binding.skillsLayout.visibility = View.VISIBLE
+                                    binding.perDayOne.setText(professionFList[index].tariff_per_day)
+                                    binding.perHourOne.setText(professionFList[index].tariff_per_hour)
+                                    binding.minChargeOne.setText(professionFList[index].tariff_min_charges)
+                                    binding.extraChargeOne.setText(professionFList[index].tariff_extra_charges)
+                                    binding.tariffOneText.text = "My Tariff for ${professionFList[index].name} is"
+                                    binding.skillsKeywordsOneText.text = "Skills in ${professionFList[index].name} Profession"
+//                                    binding.experienceOne.text = "Experience in ${professionFList[index].name} Profession"
                                     Log.e("SKILLS:", Gson().toJson(professionFList))
                                 }
                             }
@@ -580,7 +725,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
             }
         }
         CoroutineScope(Dispatchers.Main).launch {
-            binding.profession.setTextWithChips(professionChips)
+            binding.professionOne.setTextWithChips(professionChips)
             binding.description.setText(data.sp_details.about_me)
         }
     }

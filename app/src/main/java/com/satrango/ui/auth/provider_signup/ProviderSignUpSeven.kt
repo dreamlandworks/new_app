@@ -1,18 +1,17 @@
 package com.satrango.ui.auth.provider_signup
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.hardware.Camera
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -42,7 +41,7 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var binding: ActivityProviderSignUpSevenBinding
 
     private var timerApp: CountDownTimer? = null
-    private lateinit var videoPath: String
+    private var videoPath: String = ""
     private var mOutputFile: File? = null
     private lateinit var mMediaRecorder: MediaRecorder
     private lateinit var mServiceCamera: Camera
@@ -93,27 +92,44 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             nextBtn.setOnClickListener {
-                stopRecording()
+                if (videoPath.isNotEmpty()) {
+                    stopRecording()
 
-                val videoFile = File(videoPath)
-                val userId = RequestBody.create(MultipartBody.FORM, UserUtils.getUserId(this@ProviderSignUpSeven))
-                val videoNo = RequestBody.create(MultipartBody.FORM, "3")
-                val key = RequestBody.create(MultipartBody.FORM, RetrofitBuilder.PROVIDER_KEY)
-                viewModel.uploadVideo(this@ProviderSignUpSeven, userId, videoNo, key, MultipartBody.Part.createFormData("video_record", videoFile.name, videoFile.asRequestBody("video/*".toMediaType()))).observe(this@ProviderSignUpSeven, {
-                    when(it) {
-                        is NetworkResponse.Loading -> {
-                            progressDialog.show()
+                    val videoFile = File(videoPath)
+                    val userId = RequestBody.create(
+                        MultipartBody.FORM,
+                        UserUtils.getUserId(this@ProviderSignUpSeven)
+                    )
+                    val videoNo = RequestBody.create(MultipartBody.FORM, "3")
+                    val key = RequestBody.create(MultipartBody.FORM, RetrofitBuilder.PROVIDER_KEY)
+                    viewModel.uploadVideo(
+                        this@ProviderSignUpSeven,
+                        userId,
+                        videoNo,
+                        key,
+                        MultipartBody.Part.createFormData(
+                            "video_record",
+                            videoFile.name,
+                            videoFile.asRequestBody("video/*".toMediaType())
+                        )
+                    ).observe(this@ProviderSignUpSeven, {
+                        when (it) {
+                            is NetworkResponse.Loading -> {
+                                progressDialog.show()
+                            }
+                            is NetworkResponse.Success -> {
+                                progressDialog.dismiss()
+                                showSuccessDialog()
+                            }
+                            is NetworkResponse.Failure -> {
+                                progressDialog.dismiss()
+                                showFailureDialog()
+                            }
                         }
-                        is NetworkResponse.Success -> {
-                            progressDialog.dismiss()
-                            showSuccessDialog()
-                        }
-                        is NetworkResponse.Failure -> {
-                            progressDialog.dismiss()
-                            showFailureDialog()
-                        }
-                    }
-                })
+                    })
+                } else {
+                    snackBar(binding.surfaceView, "Please Record Video!")
+                }
             }
 
             videoPreviewBtn.setOnClickListener {
@@ -133,7 +149,8 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
 
     private fun showFailureDialog() {
         val dialog = BottomSheetDialog(this)
-        val dialogSheet = LayoutInflater.from(this).inflate(R.layout.service_provider_failure_dialog, null)
+        val dialogSheet =
+            LayoutInflater.from(this).inflate(R.layout.service_provider_failure_dialog, null)
         val closeBtn = dialogSheet.findViewById<MaterialCardView>(R.id.closeBtn)
         val startAgainBtn = dialogSheet.findViewById<TextView>(R.id.startAgainBtn)
         closeBtn.setOnClickListener { dialog.dismiss() }
@@ -147,7 +164,8 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
 
     private fun showSuccessDialog() {
         val dialog = BottomSheetDialog(this)
-        val dialogSheet = LayoutInflater.from(this).inflate(R.layout.service_provider_success_dialog, null)
+        val dialogSheet =
+            LayoutInflater.from(this).inflate(R.layout.service_provider_success_dialog, null)
         val closeBtn = dialogSheet.findViewById<MaterialCardView>(R.id.closeBtn)
         val goToDashboardBtn = dialogSheet.findViewById<TextView>(R.id.goToDashboardBtn)
         closeBtn.setOnClickListener { dialog.dismiss() }
@@ -251,11 +269,13 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
         return File(
             Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOWNLOADS
-            ).toString() + "/Video Recorder/RECORDING_" + dateFormat.format(Date()) + ".mp4")
+            ).toString() + "/Video Recorder/RECORDING_" + dateFormat.format(Date()) + ".mp4"
+        )
     }
 
     fun stopRecording() {
         try {
+            binding.videoPreviewBtn.visibility = View.VISIBLE
             binding.recordImage.visibility = View.GONE
             binding.timerText.visibility = View.GONE
             mMediaRecorder.stop()
@@ -271,7 +291,11 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

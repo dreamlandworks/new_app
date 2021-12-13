@@ -108,6 +108,10 @@
     <string name="from">From</string>
     <string name="from_job_post">From Job Post</string>
     <string name="saveInstallmentDetId">saveInstallmentDetId</string>
+    <string name="sp_languages">sp_languages</string>
+    <string name="sp_professions">sp_professions</string>
+    <string name="sp_qualification">sp_qualification</string>
+    <string name="sp_timeslots">sp_timeslots</string>
     <string name="to">To</string>
     <string name="s">S</string>
     <string name="m">M</string>
@@ -640,6 +644,18 @@
     <string name="recently_added">Recently Added</string>
     <string name="watch_again">Watch Again</string>
     <string name="view_leader_board">View Leader Board</string>
+    <string name="first_selected_profession">First Selected Profession</string>
+    <string name="second_selected_profession">Second selected Profession</string>
+    <string name="third_selected_profession">Third Selected Profession</string>
+    <string name="keywords_skills_for_first_profession">Keywords/Skills for First Profession</string>
+    <string name="experience_for_first_profession">Experience for First Profession</string>
+    <string name="tariff_for_first_profession">Tariff for First Profession</string>
+    <string name="keywords_skills_for_second_profession">Keywords/Skills for Second Profession</string>
+    <string name="experience_for_second_profession">Experience for Second Profession</string>
+    <string name="tariff_for_second_profession">Tariff for Second Profession</string>
+    <string name="experience_for_third_profession">Experience for Third Profession</string>
+    <string name="tariff_for_third_profession">Tariff for Third Profession</string>
+    <string name="keywords_skills_for_third_profession">Keywords/Skills for Third Profession</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
