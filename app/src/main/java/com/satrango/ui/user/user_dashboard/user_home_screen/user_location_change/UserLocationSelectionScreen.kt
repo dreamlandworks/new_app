@@ -130,12 +130,16 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.addBtn.setOnClickListener {
-            fetchLocationDetails(this, latitude, longitude)
-            finish()
-            if (FROM_USER_DASHBOARD) {
-                startActivity(Intent(this, UserDashboardScreen::class.java))
+            if (latitude != 0.0 && longitude != 0.0) {
+                fetchLocationDetails(this, latitude, longitude)
+                finish()
+                if (FROM_USER_DASHBOARD) {
+                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                } else {
+                    startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                }
             } else {
-                startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                snackBar(binding.addBtn, "Please select the location to Add")
             }
         }
 

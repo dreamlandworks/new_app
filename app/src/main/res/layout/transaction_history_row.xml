@@ -29,7 +29,7 @@
         android:gravity="center"
         android:layout_height="wrap_content"
         android:text="@string/scheduled_date"
-        android:textSize="@dimen/text"
+        android:textSize="@dimen/sub_text"
         android:textColor="@color/black"/>
 
     <TextView
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:layout_height="wrap_content"
         android:text="@string/scheduled_date"
-        android:textSize="@dimen/text"
+        android:textSize="@dimen/sub_text"
         android:textColor="@color/black"/>
     </LinearLayout>
     <View

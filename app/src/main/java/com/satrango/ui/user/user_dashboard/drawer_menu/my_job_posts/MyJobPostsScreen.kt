@@ -94,8 +94,7 @@ class MyJobPostsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        val requestBody =
-            MyJobPostReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody = MyJobPostReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.myJobPosts(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

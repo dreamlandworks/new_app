@@ -38,11 +38,10 @@
             android:text="@string/congratulations"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="@dimen/_16sdp" />
-
+            android:textSize="@dimen/text" />
 
         <ImageView
-            android:layout_width="@dimen/_90sdp"
+            android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_90sdp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_20sdp"
@@ -58,24 +57,25 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/blue"
-            android:textSize="@dimen/_14sdp" />
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/closBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
             android:paddingHorizontal="@dimen/_20sdp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/user_btn_bg"
             android:gravity="center"
-            android:elevation="@dimen/_5sdp"
             android:text="@string/close"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
+            android:textSize="@dimen/sub_text"
             android:textStyle="bold" />
+
     </LinearLayout>
+
 </RelativeLayout>

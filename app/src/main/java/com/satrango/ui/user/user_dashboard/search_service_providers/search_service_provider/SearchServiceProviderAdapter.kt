@@ -24,7 +24,8 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Charg
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.UserUtils
-
+import kotlin.math.ceil
+import kotlin.math.round
 
 class SearchServiceProviderAdapter(
     private val list: List<Data>,
@@ -48,9 +49,11 @@ class SearchServiceProviderAdapter(
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
-            binding.costPerHour.text = UserUtils.roundOffDecimal(data.final_amount.toDouble()).toString()
+//            binding.costPerHour.text = UserUtils.roundOffDecimal(ceil(data.final_amount.toDouble())).toString()
+            binding.costPerHour.text = "Rs ${round(data.final_amount.toDouble())}"
             if (SearchServiceProvidersScreen.offerId != 0) {
-                binding.actualCost.text = UserUtils.roundOffDecimal(data.actual_amount.toDouble()).toString()
+//                binding.actualCost.text = UserUtils.roundOffDecimal(ceil(data.actual_amount.toDouble())).toString()
+                binding.actualCost.text = "Rs ${round(data.actual_amount.toDouble())}"
                 binding.actualCost.showStrikeThrough(true)
             } else {
                 binding.actualCost.visibility = View.GONE
@@ -69,15 +72,13 @@ class SearchServiceProviderAdapter(
             }
 
             binding.root.setOnClickListener {
-                val intent =
-                    Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
+                val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
-                val intent =
-                    Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
+                val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
             }
@@ -100,13 +101,7 @@ class SearchServiceProviderAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(
-            SearchServiceProviderRowBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return ViewHolder(SearchServiceProviderRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

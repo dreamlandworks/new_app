@@ -2,7 +2,6 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -48,7 +47,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import java.io.File
@@ -126,8 +124,16 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                         snackBar(nextBtn, "Select Accept Bid Per")
                     }
                     else -> {
-                        if (UserUtils.getFromJobPostMultiMove(this@PostJobAttachmentsScreen) || UserUtils.getFromJobPostSingleMove(this@PostJobAttachmentsScreen)) {
-                            startActivity(Intent(this@PostJobAttachmentsScreen, PostJobAddressScreen::class.java))
+                        if (UserUtils.getFromJobPostMultiMove(this@PostJobAttachmentsScreen) || UserUtils.getFromJobPostSingleMove(
+                                this@PostJobAttachmentsScreen
+                            )
+                        ) {
+                            startActivity(
+                                Intent(
+                                    this@PostJobAttachmentsScreen,
+                                    PostJobAddressScreen::class.java
+                                )
+                            )
                         } else if (UserUtils.getFromJobPostBlueCollar(this@PostJobAttachmentsScreen)) {
                             if (UserUtils.EDIT_MY_JOB_POST) {
                                 updatePostJobBlueCollar()
@@ -192,12 +198,17 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.post_a_job)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -226,7 +237,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt()
         )
         viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -246,7 +257,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun updateUI() {
-        data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        data =
+            Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
         val chips = ArrayList<ChipInfo>()
         for (language in data.languages) {
             chips.add(ChipInfo(language, language))
@@ -258,7 +270,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         }
         binding.keywordSkills.setTextWithChips(keywords)
 
-        when(data.job_post_details.bids_period) {
+        when (data.job_post_details.bids_period) {
             "1" -> {
                 binding.oneDay.setBackgroundResource(R.drawable.user_btn_bg)
                 binding.threeDays.setBackgroundResource(R.drawable.blue_out_line)
@@ -288,8 +300,10 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-        imagePathList = data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
-        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        imagePathList =
+            data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
+        binding.attachmentsRV.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
     }
 
@@ -324,12 +338,12 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (it.data!!.user_plan_id != "0") {
+//                    if (it.data!!.user_plan_id != "0") {
                         showSuccessDialog()
-                    } else {
+//                    } else {
                         UserMyAccountScreen.FROM_MY_ACCOUNT = false
-                        startActivity(Intent(this, UserPlanScreen::class.java))
-                    }
+//                        startActivity(Intent(this, UserPlanScreen::class.java))
+//                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -470,12 +484,26 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), "",""))
+                    imagePathList.add(
+                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                            "",
+                            getImageFilePath(imageUri),
+                            "",
+                            ""
+                        )
+                    )
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "",""))
+                imagePathList.add(
+                    com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                        "",
+                        getImageFilePath(imageUri!!),
+                        "",
+                        ""
+                    )
+                )
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
             binding.attachmentsRV.layoutManager =
@@ -516,12 +544,18 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         return ""
     }
 
-    override fun deleteAttachment(position: Int, imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment) {
+    override fun deleteAttachment(
+        position: Int,
+        imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
+    ) {
         if (imagePath.id.isNotEmpty()) {
             val factory = ViewModelFactory(PostJobRepository())
             val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-            viewModel.deleteAttachment(this, AttachmentDeleteReqModel(imagePath.id.toInt(), RetrofitBuilder.USER_KEY)).observe(this, {
-                when(it) {
+            viewModel.deleteAttachment(
+                this,
+                AttachmentDeleteReqModel(imagePath.id.toInt(), RetrofitBuilder.USER_KEY)
+            ).observe(this, {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }

@@ -21,13 +21,13 @@ class TransactionHistoryAdapter(private val list: List<Data>): RecyclerView.Adap
             binding.amount.text = "Rs ${data.amount}"
 
             if (data.payment_status == "Success") {
-                binding.date.setTextColor(Color.parseColor("#00cf0b"))
-                binding.note.setTextColor(Color.parseColor("#00cf0b"))
-                binding.amount.setTextColor(Color.parseColor("#00cf0b"))
+                binding.date.setTextColor(Color.parseColor("#00AE48"))
+                binding.note.setTextColor(Color.parseColor("#00AE48"))
+                binding.amount.setTextColor(Color.parseColor("#00AE48"))
             } else {
-                binding.date.setTextColor(Color.parseColor("#ff3300"))
-                binding.note.setTextColor(Color.parseColor("#ff3300"))
-                binding.amount.setTextColor(Color.parseColor("#ff3300"))
+                binding.date.setTextColor(Color.parseColor("#D82B00"))
+                binding.note.setTextColor(Color.parseColor("#D82B00"))
+                binding.amount.setTextColor(Color.parseColor("#D82B00"))
             }
         }
     }

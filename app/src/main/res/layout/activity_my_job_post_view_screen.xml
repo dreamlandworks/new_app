@@ -170,7 +170,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="@string/expires_in"
                         android:textSize="@dimen/text" />
 
                 </LinearLayout>
@@ -194,7 +193,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="@string/expires_in"
                         android:textSize="@dimen/text" />
 
                 </LinearLayout>
@@ -204,7 +202,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:orientation="vertical">
 
                 <TextView
@@ -220,7 +219,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:singleLine="true"
-                    android:text="@string/expires_in"
                     android:textSize="@dimen/text" />
             </LinearLayout>
 
@@ -245,7 +243,6 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/expires_in"
                     android:textSize="@dimen/text"
 
                     app:drawableStartCompat="@drawable/ic_location_icon" />
@@ -269,8 +266,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center"
-                    android:text="@string/expires_in"
+                    android:gravity="center|start"
                     android:textSize="@dimen/text" />
             </LinearLayout>
 

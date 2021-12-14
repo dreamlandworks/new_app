@@ -36,6 +36,9 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
@@ -49,15 +52,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         var subCategoryId = "0"
         var keyword = "0"
         var offerId = 0
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(
-                com.satrango.R.string.loading
-            ))
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${com.satrango.R.drawable.blue_loading}"))
-        progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.progressDialogColor))
     }
 
     @SuppressLint("SetTextI18n")
@@ -80,18 +74,38 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-
-
         if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            val spDetails = Gson().fromJson(
-                UserUtils.getSelectedSPDetails(this),
-                SearchServiceProviderResModel::class.java
-            )
-            val filter =
-                Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
-            val list =
-                ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+            Log.e("FILTER:", Gson().toJson(filter))
+            val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetails.data) {
+
+//                if (filter.any) {
+//
+//                }
+//                if (filter.experience) {
+//
+//                }
+//                if (filter.fresher) {
+//
+//                }
+//                if (filter.highToLow) {
+//
+//                }
+//                if (filter.lowToHigh) {
+//
+//                }
+//                if (filter.nearMe) {
+//
+//                }
+//                if (filter.ranking) {
+//
+//                }
+//                if (filter.rating) {
+//
+//                }
+
                 if (filter.priceRangeFrom.toDouble() <= sp.per_hour.toDouble() && filter.priceRangeTo.toDouble() >= sp.per_hour.toDouble()) {
                     if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
                         if (filter.experience) {
@@ -116,15 +130,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
                 }
                 filter.highToLow -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter =
-                        SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.per_hour }, this)
                 }
                 else -> {
                     binding.listCount.visibility = View.VISIBLE
@@ -133,7 +145,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
                 }
             }
-
         }
 
         val factory = ViewModelFactory(SearchServiceProviderRepository())
@@ -147,7 +158,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
-//                    toast(this, keywordsList.toString())
                     Log.e("KEYS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
@@ -157,7 +167,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         keyword = keywordsList[position].id
                         subCategoryId = keywordsList[position].subcategory_id
                         UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
-                        toast(this, subCategoryId)
                     }
                     progressDialog.dismiss()
                 }
@@ -176,12 +185,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 UserUtils.saveSearchFilter(this, "")
-                loadSearchResults()
+                loadSearchResults(subCategoryId)
             }
         }
 
         if (FROM_POPULAR_SERVICES) {
-            loadSearchResults()
+            loadSearchResults(subCategoryId)
         }
     }
 
@@ -198,94 +207,67 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadSearchResults() {
+    private fun loadSearchResults(subCategory: String) {
         if (keyword == "0") {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
         }
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keyword,
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
-//        toast(this, requestBody.toString())
-//        Log.e("SEARCH OBJECT:", )
-
-//        {
-//            "address": "Vijayawada Bus Stand",
-//            "city": "Vijayawada",
-//            "country": "India",
-//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
-//            "offer_id": 0,
-//            "postal_code": "520013",
-//            "search_phrase_id": "Kotlin Developer",
-//            "state": "Andhra Pradesh",
-//            "subcat_id": 5,
-//            "user_lat": "16.5092483",
-//            "user_long": "80.6175017",
-//            "users_id": 56
-//        }
+//        toast(this, subCategory)
         val requestBody = SearchServiceProviderReqModel(
-            "Vijayawada Bus Stand",
-            "Vijayawada",
-            "India",
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
             RetrofitBuilder.USER_KEY,
-            "Kotlin Developer",
-            "520013",
-            "Andhra Pradesh",
-            "16.5092483",
-            "80.6175017",
-            56,
-            5,
+            keyword,
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
             offerId
         )
+//        toast(this, requestBody.toString())
+
+//        val requestBody = SearchServiceProviderReqModel(
+//            "Vijayawada Bus Stand",
+//            "Vijayawada",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            "Kotlin Developer",
+//            "520013",
+//            "Andhra Pradesh",
+//            "16.5092483",
+//            "80.6175017",
+//            56,
+//            5,
+//            offerId
+//        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
-        val factory = ViewModelFactory(SearchServiceProviderRepository())
-        viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
-        viewModel.getSearchResults(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
+            val jsonResponse = response
+            if (jsonResponse.status == 200) {
+                keyword = "0"
+                if (!FROM_POPULAR_SERVICES) {
+                    subCategoryId = "0"
                 }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    keyword = "0"
-                    if (!FROM_POPULAR_SERVICES) {
-                        subCategoryId = "0"
-                    }
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this)
-                    UserUtils.saveSelectedSPDetails(this, Gson().toJson(it.data!!))
-//                    if (waitingForSpBottomSheetDialog != null) {
-//                        waitingForSpBottomSheetDialog.dismiss()
-//                    }
-                    Log.e("RESULTS:", Gson().toJson(it.data))
-                    if (it.data.data.isEmpty()) {
-//                        if (weAreSorryBottomSheetDialog != null) {
-//                            weAreSorryBottomSheetDialog.dismiss()
-//                        }
-                        weAreSorryDialog()
-                    } else {
-//                        if (showBookingTypeBottomSheetDialog != null) {
-//                            showBookingTypeBottomSheetDialog.dismiss()
-//                        }
-                        showBookingTypeDialog(it.data)
-                    }
+                progressDialog.dismiss()
+                binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
+                binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this@SearchServiceProvidersScreen)
+                if (jsonResponse.data.isEmpty()) {
+                    weAreSorryDialog()
+                } else {
+                    UserUtils.saveSelectedSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(jsonResponse))
+                    showBookingTypeDialog(jsonResponse)
                 }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
-                }
+            } else {
+                progressDialog.dismiss()
+                snackBar(binding.recyclerView, jsonResponse.message)
             }
-        })
+        }
     }
 
     override fun onBackPressed() {
@@ -294,10 +276,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.saveSearchFilter(this, "")
             UserUtils.saveSelectedSPDetails(this, "")
             startActivity(Intent(this, UserDashboardScreen::class.java))
-        }else {
+        } else {
             super.onBackPressed()
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -314,20 +295,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         if (FROM_POPULAR_SERVICES) {
             keyword = "0"
         }
-        val data = Gson().fromJson(
-            UserUtils.getSelectedSPDetails(this),
-            SearchServiceProviderResModel::class.java
-        )
         viewResults.setOnClickListener {
             showBookingTypeBottomSheetDialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
-//            if (data.data.isNotEmpty()) {
-//                binding.sortFilterBtn.visibility = View.VISIBLE
-//            } else {
-//                binding.sortFilterBtn.visibility = View.GONE
-//            }
         }
         bookInstantly.setOnClickListener {
             showBookingTypeBottomSheetDialog.dismiss()
@@ -407,5 +379,14 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         weAreSorryBottomSheetDialog.setContentView(dialogView)
         weAreSorryBottomSheetDialog.show()
     }
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(
+                com.satrango.R.string.loading
+            ))
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${com.satrango.R.drawable.blue_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.progressDialogColor))
+    }
+
 
 }

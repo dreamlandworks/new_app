@@ -88,11 +88,11 @@ class TariffTimingsProfileScreen :
                             ProviderProfileScreen.progressDialog.show()
                         }
                         is NetworkResponse.Success -> {
-                            snackBar(binding.addSlot, JSONObject(it.data!!.string()).getString("message"))
                             Handler().postDelayed({
                                 startActivity(requireActivity().intent)
                             }, 1500)
                             ProviderProfileScreen.progressDialog.dismiss()
+                            snackBar(binding.addSlot, "Timeslots Updated Successfully!")
                         }
                         is NetworkResponse.Failure -> {
                             ProviderProfileScreen.progressDialog.dismiss()
@@ -126,32 +126,33 @@ class TariffTimingsProfileScreen :
             fromDate.setText(timeSlot.time_slot_from)
             toDate.setText(timeSlot.time_slot_to)
 
-            when (timeSlot.day_slot) {
-                "1" -> {
+            val daySlots = timeSlot.day_slots.split(",")
+            for (slot in daySlots) {
+                if (slot == "1") {
                     sunday.setBackgroundResource(R.drawable.provider_btn_bg)
                     sunday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "2" -> {
+                if (slot == "2") {
                     monday.setBackgroundResource(R.drawable.provider_btn_bg)
                     monday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "3" -> {
+                if (slot == "3") {
                     tuesday.setBackgroundResource(R.drawable.provider_btn_bg)
                     tuesday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "4" -> {
+                if (slot == "4") {
                     wednesday.setBackgroundResource(R.drawable.provider_btn_bg)
                     wednesday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "5" -> {
+                if (slot == "5") {
                     thursday.setBackgroundResource(R.drawable.provider_btn_bg)
                     thursday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "6" -> {
+                if (slot == "6") {
                     friday.setBackgroundResource(R.drawable.provider_btn_bg)
                     friday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }
-                "7" -> {
+                if (slot == "7") {
                     saturday.setBackgroundResource(R.drawable.provider_btn_bg)
                     saturday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 }

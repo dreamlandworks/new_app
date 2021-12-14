@@ -24,11 +24,11 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
             Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + data.image).into(binding.image)
             binding.title.text = data.sub_name
             binding.root.setOnClickListener {
-                UserUtils.keywordId = data.id.toInt()
+                SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
+                SearchServiceProvidersScreen.subCategoryId = data.id
                 binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
             }
         }
-
     }
 
     override fun onCreateViewHolder(
