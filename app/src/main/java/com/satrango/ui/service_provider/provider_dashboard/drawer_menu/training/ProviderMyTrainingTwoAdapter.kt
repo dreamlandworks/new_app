@@ -1,6 +1,7 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,12 @@ class ProviderMyTrainingTwoAdapter(val list: List<RecommendedVideo>): RecyclerVi
         @SuppressLint("SetTextI18n")
         fun bind(data: RecommendedVideo) {
             binding.pointText.text = "${data.points} Points"
+            binding.root.setOnClickListener {
+                YoutubePlayerScreen.recommendedVideoDetails = data
+                YoutubePlayerScreen.recentVideoDetails = null
+                YoutubePlayerScreen.watchedVideoDetails = null
+                binding.root.context.startActivity(Intent(binding.root.context, YoutubePlayerScreen::class.java))
+            }
         }
         val binding = binding
     }

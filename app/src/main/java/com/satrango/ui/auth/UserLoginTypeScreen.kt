@@ -1,14 +1,16 @@
 package com.satrango.ui.auth
 
 import android.annotation.SuppressLint
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.*
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -21,22 +23,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.Instant.now
-import java.util.*
-import kotlin.concurrent.thread
-import android.content.ContentUris
-import android.os.*
-import android.webkit.MimeTypeMap
-
-import android.os.Environment
-
-import android.os.Build
-import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
-import com.satrango.ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree
 import java.io.File
+import java.util.*
 
 
 class UserLoginTypeScreen : AppCompatActivity() {
@@ -57,7 +45,13 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 }
                 val token = task.result
                 CoroutineScope(Dispatchers.Main).launch {
-                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@UserLoginTypeScreen)))
+                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                        FCMReqModel(
+                            token,
+                            RetrofitBuilder.USER_KEY,
+                            UserUtils.getUserId(this@UserLoginTypeScreen)
+                        )
+                    )
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
                         snackBar(binding.userBtn, "Please check internet connection!")
@@ -176,7 +170,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
         val column = "_data"
         val projection = arrayOf(column)
         try {
-            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            cursor =
+                context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
             if (cursor != null && cursor.moveToFirst()) {
                 val index = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(index)

@@ -3,15 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/_120sdp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/_5sdp"
     android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
 
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtubePlayer"
+        android:visibility="gone"
+        app:autoPlay="false"
+        app:showFullScreenButton="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_120sdp" />
+
     <ImageView
         android:id="@+id/videoImage"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_120sdp"
-        android:src="@drawable/ic_person_blue_24"
+        android:layout_height="wrap_content"
+        android:src="@drawable/youtube"
         tools:ignore="ContentDescription" />
 
     <TextView

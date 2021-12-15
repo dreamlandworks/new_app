@@ -201,11 +201,18 @@ interface ProviderApiService {
         @Body requestBody: ProviderOnlineReqModel
     ): ResponseBody
 
-    @POST(ServiceProviderEndPoints.PROVIDER_TRAINING_LIST)
+    @GET(ServiceProviderEndPoints.PROVIDER_TRAINING_LIST)
     suspend fun providerTrainingList(
         @Query("key") key: String,
-        @Query("subcategory_id") subCategoryId: String,
         @Query("sp_id") spId: String,
     ): ProviderMyTrainingResModel
+
+    @GET(ServiceProviderEndPoints.SUBMIT_YOUTUBE_POINTS)
+    suspend fun submitYoutubePoints(
+        @Query("key") key: String,
+        @Query("sp_id") spId: String,
+        @Query("video_id") videoId: String,
+        @Query("points") points: String
+    ): ResponseBody
 
 }

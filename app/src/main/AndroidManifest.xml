@@ -55,6 +55,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.training.YoutubePlayerScreen"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
+        <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.AddBankAccountScreen"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -230,6 +234,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpSeven"

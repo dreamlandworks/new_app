@@ -237,8 +237,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                     KeywordsResponse("0", chip.text.toString())
                                 )
                             }
-                            ProviderUtils.profession!![2].keywords_responses =
-                                ProviderUtils.profession!![2].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                            ProviderUtils.profession!![2].keywords_responses = ProviderUtils.profession!![2].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
                         }
                     }
                 }

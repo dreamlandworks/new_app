@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Satrango</string>
 
-<!--    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>-->
+    <!--    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>-->
     <string name="razorpay_api_key">rzp_test_wOHvzNqK3lI6pN</string>
     <string name="fcm_server_key">AAAA3pCanB8:APA91bH5QKAcqGEKkcFbIDDpkrMSXEPLpst5MFq1_MXCojm-WFAh-NTU5wHxWao6dSVt7ywQDeMqpzHwnzlAQuNMfaxwp3nmgP4CINYfeAK4mzf6XnPyE_4xthRV6kaj3gVWntOBNCki</string>
     <string name="facebook_app_id">184529536828797</string>
@@ -626,7 +626,7 @@
     <string name="_2000_00">2000.00</string>
     <string name="deposit_amount">Deposit Amount</string>
     <string name="withdraw_funds">Withdraw Funds</string>
-<!--    <string name="available_balance">Available Balance</string>-->
+    <!--    <string name="available_balance">Available Balance</string>-->
     <string name="withdraw_rs">Withdraw Rs</string>
     <string name="select_account">Select Account</string>
     <string name="add_another_account">Add Another Account</string>
@@ -639,6 +639,7 @@
     <string name="mod_balance">Mod. Balance</string>
     <string name="status_">Status:</string>
     <string name="my_training">My Training</string>
+    <string name="training_videos">Training Videos</string>
     <string name="points_earned">Points Earned</string>
     <string name="videos">Videos</string>
     <string name="recently_added">Recently Added</string>

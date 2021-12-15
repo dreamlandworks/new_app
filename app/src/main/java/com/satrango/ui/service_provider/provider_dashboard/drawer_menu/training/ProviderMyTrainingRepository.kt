@@ -6,11 +6,16 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.api_services.ProviderApiService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.utils.UserUtils
+import okhttp3.ResponseBody
 
 class ProviderMyTrainingRepository : BaseRepository() {
 
-    suspend fun getTrainingVideos(context: Context, subCategoryId: String): ProviderMyTrainingResModel {
-        return RetrofitBuilder.getServiceProviderRetrofitInstance().providerTrainingList(RetrofitBuilder.PROVIDER_KEY, subCategoryId, UserUtils.getUserId(context))
+    suspend fun getTrainingVideos(context: Context): ProviderMyTrainingResModel {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().providerTrainingList(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(context))
+    }
+
+    suspend fun submitYoutubePoints(context: Context, videoId: String, points: String): ResponseBody {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().submitYoutubePoints(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(context), videoId, points)
     }
 
 }

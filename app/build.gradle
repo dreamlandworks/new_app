@@ -108,5 +108,8 @@ dependencies {
     implementation 'com.razorpay:checkout:1.6.15'
 
     // Add the following line:
-    apply plugin: 'com.google.gms.google-services'  // Google Services plugin
+    apply plugin: 'com.google.gms.google-services'
+
+    // Youtube
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.23'
 }

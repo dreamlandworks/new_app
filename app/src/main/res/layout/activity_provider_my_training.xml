@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingScreen">
 
+    <include
+        android:id="@+id/toolBar"
+        layout="@layout/provider_tool_bar" />
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +53,7 @@
             <View
                 android:layout_width="@dimen/_1sdp"
                 android:layout_height="match_parent"
-                android:background="@color/white"/>
+                android:background="@color/white" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -84,43 +88,46 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:text="@string/recently_added"
         android:textColor="@color/black"
-        android:textSize="@dimen/sub_text"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_marginStart="@dimen/_15sdp"/>
+        android:textSize="@dimen/sub_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recentlyAddedRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_15sdp"
         android:text="@string/recommended_for_you"
         android:textColor="@color/black"
-        android:textSize="@dimen/sub_text"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:layout_marginStart="@dimen/_15sdp"/>
+        android:textSize="@dimen/sub_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommendedForYouRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_15sdp"
         android:text="@string/watch_again"
         android:textColor="@color/black"
-        android:textSize="@dimen/sub_text"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:layout_marginStart="@dimen/_15sdp"/>
+        android:textSize="@dimen/sub_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/watchAgainRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp" />
 
 </LinearLayout>
