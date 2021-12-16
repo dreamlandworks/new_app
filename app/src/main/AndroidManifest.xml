@@ -55,6 +55,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".ui.service_provider.provider_dashboard.dashboard.leaderboard.LeaderBoardScreen"
+            android:exported="false" />
+        <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.training.YoutubePlayerScreen"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
@@ -264,7 +267,7 @@
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.service_provider.provider_dashboard.ProviderDashboard"
+            android:name=".ui.service_provider.provider_dashboard.dashboard.ProviderDashboard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.UserDashboardScreen"

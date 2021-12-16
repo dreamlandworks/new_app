@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard
+package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -52,6 +52,8 @@ import com.satrango.ui.auth.provider_signup.ProviderSignUpSeven
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSix
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
+import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
+import com.satrango.ui.service_provider.provider_dashboard.ProviderRejectBookingScreen
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen
@@ -383,7 +385,7 @@ class ProviderDashboard : AppCompatActivity() {
                                 "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
                             FROM_FCM_SERVICE = false
-                            ProviderDashboard.bookingId = ""
+                            Companion.bookingId = ""
                             bottomSheetDialog!!.dismiss()
                             snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         }
@@ -418,7 +420,7 @@ class ProviderDashboard : AppCompatActivity() {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    ProviderDashboard.bookingId = ""
+                    Companion.bookingId = ""
                     FROM_FCM_SERVICE = false
                     bottomSheetDialog!!.dismiss()
                 }

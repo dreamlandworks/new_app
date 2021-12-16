@@ -24,7 +24,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveRepository
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFiveViewModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import okhttp3.MediaType.Companion.toMediaType

@@ -35,7 +35,6 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -213,43 +212,42 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
-//        toast(this, requestBody.toString())
-
 //        val requestBody = SearchServiceProviderReqModel(
-//            "Vijayawada Bus Stand",
-//            "Vijayawada",
-//            "India",
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
 //            RetrofitBuilder.USER_KEY,
-//            "Kotlin Developer",
-//            "520013",
-//            "Andhra Pradesh",
-//            "16.5092483",
-//            "80.6175017",
-//            56,
-//            5,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
 //            offerId
 //        )
+//        toast(this, requestBody.toString())
+
+        val requestBody = SearchServiceProviderReqModel(
+            "Vijayawada Bus Stand",
+            "Vijayawada",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            "Kotlin Developer",
+            "520013",
+            "Andhra Pradesh",
+            "16.5092483",
+            "80.6175017",
+            56,
+            5,
+            offerId
+        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
-            val jsonResponse = response
-            if (jsonResponse.status == 200) {
+            if (response.status == 200) {
                 keyword = "0"
                 if (!FROM_POPULAR_SERVICES) {
                     subCategoryId = "0"
@@ -257,15 +255,15 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 progressDialog.dismiss()
                 binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
                 binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this@SearchServiceProvidersScreen)
-                if (jsonResponse.data.isEmpty()) {
+                if (response.data.isEmpty()) {
                     weAreSorryDialog()
                 } else {
-                    UserUtils.saveSelectedSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(jsonResponse))
-                    showBookingTypeDialog(jsonResponse)
+                    UserUtils.saveSelectedSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
+                    showBookingTypeDialog(response)
                 }
             } else {
                 progressDialog.dismiss()
-                snackBar(binding.recyclerView, jsonResponse.message)
+                snackBar(binding.recyclerView, response.message)
             }
         }
     }

@@ -7,6 +7,7 @@ import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.CitiesResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
@@ -450,5 +451,10 @@ interface UserApiService {
     suspend fun logout(
         @Body requestBody: LogoutReqModel
     ): ResponseBody
+
+    @GET(UserApiEndPoints.CITIES)
+    suspend fun getCities(
+        @Query("key") key: String
+    ): CitiesResModel
 
 }

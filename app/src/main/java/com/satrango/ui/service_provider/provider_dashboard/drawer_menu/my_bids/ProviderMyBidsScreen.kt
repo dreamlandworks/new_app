@@ -1,7 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -21,7 +20,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyBidsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.JobPostDetail
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.ProviderMyBidsResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
@@ -29,7 +28,6 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilte
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
-import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderMyBidsScreen : AppCompatActivity() {

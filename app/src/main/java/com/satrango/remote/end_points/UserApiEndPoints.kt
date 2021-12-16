@@ -74,5 +74,6 @@ object UserApiEndPoints {
     final const val ALL_BANK_ACCOUNTS = "user/user_bank_account_details"
     final const val UPDATE_RESCHEDULE_REQUEST_STATUS = "user/update_reschedule_status_by_sp"
     final const val LOGOUT = "user/logout"
+    final const val CITIES = "user/get_cities_list"
 
 }

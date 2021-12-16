@@ -18,8 +18,8 @@ import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationReposito
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationViewModel
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordRepository
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordViewModel
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardRepository
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboardViewModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardRepository
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboardViewModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertRepository
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountRepository

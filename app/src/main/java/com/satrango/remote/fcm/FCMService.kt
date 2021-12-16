@@ -18,7 +18,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.FCMReqModel
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.provider_response.ProviderBookingResponseScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.utils.PermissionUtils
@@ -41,11 +41,9 @@ class FCMService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
-            notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString())
             if (it.title == "accepted") {
-//                    if (ProviderDashboard.bookingId.isNotEmpty() && ProviderDashboard.bookingId == it.body.toString()) {
                 notificationManager.cancelAll()
                 if (ProviderDashboard.bottomSheetDialog != null) {
                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
@@ -53,11 +51,8 @@ class FCMService : FirebaseMessagingService() {
                         ProviderDashboard.FROM_FCM_SERVICE = false
                     }
                 }
-//                    }
             }
-//                if (it.title == "timeRequired") {
-//                UserUtils.sendFCMtoAllServiceProviders(this, "", "time|${BookingAddressScreen.}")
-//            } else
+
             if (it.title == "user") {
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
@@ -86,13 +81,7 @@ class FCMService : FirebaseMessagingService() {
         super.onNewToken(token)
         if (PermissionUtils.isNetworkConnected(this)) {
             CoroutineScope(Dispatchers.Main).launch {
-                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
-                    FCMReqModel(
-                        token,
-                        RetrofitBuilder.USER_KEY,
-                        UserUtils.getUserId(this@FCMService)
-                    )
-                )
+                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FCMService)))
             }
         }
         Log.e("FCM TOKEN UPDATE", token)

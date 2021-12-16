@@ -18,7 +18,7 @@ import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyTrainingBinding
 import com.satrango.remote.NetworkResponse
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.utils.snackBar
 
@@ -41,8 +41,7 @@ class ProviderMyTrainingScreen : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recommendedForYouRV.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.watchAgainRV.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.watchAgainRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]

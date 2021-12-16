@@ -1,4 +1,4 @@
-package com.satrango.ui.service_provider.provider_dashboard
+package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
 import com.satrango.utils.hasInternetConnection

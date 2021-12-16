@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.*
 import kotlinx.coroutines.CoroutineScope

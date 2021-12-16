@@ -640,6 +640,7 @@
     <string name="status_">Status:</string>
     <string name="my_training">My Training</string>
     <string name="training_videos">Training Videos</string>
+    <string name="leaderboard">Leaderboard</string>
     <string name="points_earned">Points Earned</string>
     <string name="videos">Videos</string>
     <string name="recently_added">Recently Added</string>
@@ -657,6 +658,11 @@
     <string name="experience_for_third_profession">Experience for Third Profession</string>
     <string name="tariff_for_third_profession">Tariff for Third Profession</string>
     <string name="keywords_skills_for_third_profession">Keywords/Skills for Third Profession</string>
+    <string name="leader_board">Leader board</string>
+    <string name="your_rank">Your Rank</string>
+    <string name="top_performers">Top Performers</string>
+    <string name="improve_your_rank_for_better_visibility_respect_and_hiring_rate_which_means_high_income_and_repeated_clients_and_even_system_will_give_preference_in_automatic_bookings">Improve your rank for better visibility, respect and hiring rate which means high income and repeated clients and even system will give preference in automatic bookings</string>
+    <string name="points_distribution">Points Distribution</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

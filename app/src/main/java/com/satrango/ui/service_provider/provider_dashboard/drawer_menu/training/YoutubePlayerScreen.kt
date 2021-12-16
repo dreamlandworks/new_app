@@ -73,10 +73,10 @@ class YoutubePlayerScreen : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     toast(this, it.message!!)
                 }
-
             }
         })
     }
+
 
     private fun extractYouTubeId(youTubeUrl: String): String {
         val pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*"
