@@ -75,82 +75,6 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
         professionFList = ArrayList()
 
         binding.apply {
-//            profession.inputType = InputType.TYPE_CLASS_TEXT
-//            profession.tag = profession.keyListener
-//            profession.keyListener = null
-//            profession.setOnClickListener {
-//                profession.setBackgroundColor(Color.parseColor("#ffffff"))
-//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                profession.keyListener = profession.tag as KeyListener
-//            }
-
-//            qualification.inputType = InputType.TYPE_CLASS_TEXT
-//            qualification.tag = qualification.keyListener
-//            qualification.keyListener = null
-//            qualification.setOnClickListener {
-//                qualification.setBackgroundColor(Color.parseColor("#ffffff"))
-//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.keyListener = qualification.tag as KeyListener
-//            }
-
-//            experience.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-//            experience.tag = experience.keyListener
-//            experience.keyListener = null
-//            experienceLayout.setOnClickListener {
-//                experienceLayout.boxBackgroundColor = Color.parseColor("#ffffff")
-//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.keyListener = experience.tag as KeyListener
-//            }
-
-//            languages.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-//            languages.tag = languages.keyListener
-//            languages.keyListener = null
-//            languages.setOnClickListener {
-//                languages.setBackgroundColor(Color.parseColor("#ffffff"))
-//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.keyListener = languages.tag as KeyListener
-//            }
-
-//            skills.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-//            skills.tag = skills.keyListener
-//            skills.keyListener = null
-//            skills.setOnClickListener {
-//                skills.setBackgroundColor(Color.parseColor("#ffffff"))
-//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                skills.keyListener = skills.tag as KeyListener
-//            }
-
-//            description.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-//            description.tag = description.keyListener
-//            description.keyListener = null
-//            description.setOnClickListener {
-//                description.setBackgroundColor(Color.parseColor("#ffffff"))
-//                profession.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                qualification.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                experience.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                languages.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                skills.setBackgroundColor(Color.parseColor("#E7F0FF"))
-//                description.keyListener = description.tag as KeyListener
-//            }
 
             updateBtn.setOnClickListener {
                 validateFields()
@@ -162,24 +86,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 
     private fun validateFields() {
 
-//        val btn =
-//            binding.root.findViewById<RadioButton>(binding.professionRadioGroup.checkedRadioButtonId)
-//        if (btn != null) {
-//            btn.isChecked = false
-//            btn.clearFocus()
-//        } else {
-//            snackBar(binding.backBtn, "Please Select Profession For Keyword Selection")
-//            return
-//        }
-
         binding.apply {
 
             val qualificationList = mutableListOf<QualificationResponse>()
-//            for (chip in binding.qualification.allChips) {
                 for (qualification in qualificationMList) {
                     if (binding.qualification.text.toString() == qualification.qualification) {
                         qualificationList.add(QualificationResponse(qualification.qualification, qualification.id))
-//                    }
                 }
             }
 
@@ -569,6 +481,13 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id))
                         }
 
+                        binding.professionTwoCloseBtn.setOnClickListener {
+                            binding.professionTwo.setTextWithChips(ArrayList<ChipInfo>())
+                        }
+                        binding.professionThreeCloseBtn.setOnClickListener {
+                            binding.professionThree.setTextWithChips(ArrayList<ChipInfo>())
+                        }
+
                         if (professionFList.isNotEmpty()) {
                             val chips = ArrayList<ChipInfo>()
                             chips.add(ChipInfo(professionFList[0].name, professionFList[0].prof_id))
@@ -616,6 +535,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             binding.minChargeTwo.setText(professionFList[1].tariff_min_charges)
                             binding.perDayTwo.setText(professionFList[1].tariff_per_day)
                             binding.perHourTwo.setText(professionFList[1].tariff_per_hour)
+                            binding.tariffTwoLayout.visibility = View.VISIBLE
+                        } else {
+                            binding.tariffTwoLayout.visibility = View.GONE
                         }
                         if (professionFList.size > 2) {
                             val chips = ArrayList<ChipInfo>()
@@ -640,6 +562,17 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             binding.minChargeThree.setText(professionFList[2].tariff_min_charges)
                             binding.perDayThree.setText(professionFList[2].tariff_per_day)
                             binding.perHourThree.setText(professionFList[2].tariff_per_hour)
+                            binding.tariffThreeLayout.visibility = View.VISIBLE
+                        } else {
+                            binding.tariffThreeLayout.visibility = View.GONE
+                        }
+                        binding.addProfessionBtn.setOnClickListener {
+                            if (binding.tariffTwoLayout.visibility != View.VISIBLE) {
+                                binding.tariffTwoLayout.visibility = View.VISIBLE
+                                binding.tariffThreeLayout.visibility = View.GONE
+                            } else {
+                                binding.tariffThreeLayout.visibility = View.VISIBLE
+                            }
                         }
 
 //                        updateSkillsAndTariff(data)

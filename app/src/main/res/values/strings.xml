@@ -663,6 +663,11 @@
     <string name="top_performers">Top Performers</string>
     <string name="improve_your_rank_for_better_visibility_respect_and_hiring_rate_which_means_high_income_and_repeated_clients_and_even_system_will_give_preference_in_automatic_bookings">Improve your rank for better visibility, respect and hiring rate which means high income and repeated clients and even system will give preference in automatic bookings</string>
     <string name="points_distribution">Points Distribution</string>
+    <string name="tip_use_comma_for_multiple_selections">Tip: Use comma for multiple selections</string>
+    <string name="add_new_profession">Add New Profession</string>
+    <string name="profession">Profession</string>
+    <string name="skills_amp_tariff"><![CDATA[Skills & Tariff]]></string>
+    <string name="timings">Timings</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

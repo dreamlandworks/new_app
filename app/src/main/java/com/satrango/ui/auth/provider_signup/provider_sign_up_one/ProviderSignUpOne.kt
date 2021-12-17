@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -94,6 +95,13 @@ class ProviderSignUpOne : AppCompatActivity() {
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
+                    binding.languages.setOnFocusChangeListener { v, hasFocus ->
+                        if (hasFocus) {
+                            binding.languageToolTip.visibility = View.VISIBLE
+                            binding.professionToolTip.visibility = View.GONE
+                        }
+                    }
+
                     val qualificationList = ArrayList<String>()
                     for (data in response.data.qualification) {
                         qualificationList.add(data.qualification)
@@ -114,6 +122,13 @@ class ProviderSignUpOne : AppCompatActivity() {
                     binding.profession.setNachoValidator(ChipifyingNachoValidator())
                     binding.profession.enableEditChipOnTouch(true, true)
                     binding.profession.threshold = 1
+
+                    binding.profession.setOnFocusChangeListener { v, hasFocus ->
+                        if (hasFocus) {
+                            binding.professionToolTip.visibility = View.VISIBLE
+                            binding.languageToolTip.visibility = View.GONE
+                        }
+                    }
 
                     ProviderUtils.experience = response.data.experience
 

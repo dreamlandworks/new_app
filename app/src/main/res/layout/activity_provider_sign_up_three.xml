@@ -81,14 +81,17 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gray_corner">
                 <Spinner
                     android:id="@+id/experienceOne"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/gray_corner"
-                    android:drawableStart="@drawable/ic_bagicon"
-                    android:drawablePadding="@dimen/_10sdp" />
+                    android:layout_marginHorizontal="@dimen/_10sdp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

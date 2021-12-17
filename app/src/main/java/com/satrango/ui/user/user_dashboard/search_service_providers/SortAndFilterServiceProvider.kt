@@ -339,6 +339,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 if (FROM_PROVIDER) {
                     startActivity(Intent(this@SortAndFilterServiceProvider, ProviderMyBidsScreen::class.java))
                 } else {
+                    SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = false
                     startActivity(Intent(this@SortAndFilterServiceProvider, SearchServiceProvidersScreen::class.java))
                 }
 

@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:orientation="horizontal">
 
             <AutoCompleteTextView
@@ -58,7 +58,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:orientation="horizontal">
 
             <com.hootsuite.nachos.NachoTextView
@@ -100,8 +100,8 @@
                 android:id="@+id/professionOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/first_selected_profession"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:text="@string/profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
@@ -120,7 +120,8 @@
                 android:id="@+id/skillsKeywordsOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/keywords_skills_for_first_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -141,7 +142,8 @@
                 android:id="@+id/experienceOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/experience_for_first_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -159,15 +161,15 @@
                 android:id="@+id/tariffOneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/tariff_for_first_profession"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -308,17 +310,36 @@
             android:id="@+id/tariffTwoLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/professionTwoText"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/second_selected_profession"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/professionTwoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/profession"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/professionTwoCloseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/Cancel"
+                    android:textColor="@color/purple_500"
+                    android:textSize="@dimen/sub_text" />
+
+            </RelativeLayout>
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/professionTwo"
@@ -335,7 +356,8 @@
                 android:id="@+id/skillsKeywordsTwoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/keywords_skills_for_second_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -355,7 +377,8 @@
                 android:id="@+id/experienceTwoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/experience_for_second_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -364,7 +387,7 @@
                 android:id="@+id/experienceTwo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
                 android:drawablePadding="@dimen/_10sdp" />
@@ -373,7 +396,8 @@
                 android:id="@+id/tariffTwoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/tariff_for_second_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -381,7 +405,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -522,17 +545,36 @@
             android:id="@+id/tariffThreeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/professionThreeText"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/third_selected_profession"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sub_text" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/professionThreeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/third_selected_profession"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text" />
+
+                <TextView
+                    android:id="@+id/professionThreeCloseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/Cancel"
+                    android:textColor="@color/purple_500"
+                    android:textSize="@dimen/sub_text" />
+
+            </RelativeLayout>
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/professionThree"
@@ -549,7 +591,8 @@
                 android:id="@+id/skillsKeywordsThreeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/keywords_skills_for_third_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -569,7 +612,8 @@
                 android:id="@+id/experienceThreeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/experience_for_third_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -578,7 +622,7 @@
                 android:id="@+id/experienceThree"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
                 android:drawablePadding="@dimen/_10sdp" />
@@ -587,7 +631,8 @@
                 android:id="@+id/tariffThreeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/tariff_for_third_profession"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
@@ -595,7 +640,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -724,6 +768,20 @@
                 android:textSize="@dimen/_10sdp" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/addProfessionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/_20sdp"
+            style="@style/purple_outline_button_style"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:background="@drawable/purple_out_line"
+            android:text="@string/add_new_profession"
+            android:textSize="@dimen/sub_text"
+            android:textColor="@color/purple_500"/>
 
         <View
             android:layout_width="match_parent"
