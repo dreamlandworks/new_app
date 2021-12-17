@@ -228,12 +228,7 @@ class ProviderDashboard : AppCompatActivity() {
             true
         }
 
-        binding.onlineSwitch.isChecked = UserUtils.getSpStatus(this)
-        if (UserUtils.getSpStatus(this)) {
-            binding.onlineText.text = resources.getString(R.string.online)
-        } else {
-            binding.onlineText.text = resources.getString(R.string.offline)
-        }
+//        binding.onlineSwitch.isChecked = UserUtils.getSpStatus(this)
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 updateOnlineStatus(1)
@@ -777,23 +772,16 @@ class ProviderDashboard : AppCompatActivity() {
 
             val requestBody = ProviderLocationReqModel(
                 UserUtils.getAddress(this),
-                UserUtils.getCity(
-                    this
-                ),
+                UserUtils.getCity(this),
                 UserUtils.getCountry(this),
                 RetrofitBuilder.PROVIDER_KEY,
                 1,
-                UserUtils.getPostalCode(
-                    this
-                ),
+                UserUtils.getPostalCode(this),
                 UserUtils.getState(this),
                 UserUtils.getLatitude(this),
                 UserUtils.getLongitude(this),
-                UserUtils.getUserId(
-                    this
-                ).toInt()
+                UserUtils.getUserId(this).toInt()
             )
-//            toast(this, Gson().toJson(requestBody))
             viewModel.saveLocation(this, requestBody).observe(this, {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -801,6 +789,16 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                     is NetworkResponse.Success -> {
 //                        toast(this, it.data!!)
+                        if (!UserUtils.getSpStatus(this)) {
+                            updateOnlineStatus(1)
+                        }
+                        if (UserUtils.getSpStatus(this)) {
+                            binding.onlineText.text = resources.getString(R.string.online)
+                            binding.onlineSwitch.isChecked = true
+                        } else {
+                            binding.onlineText.text = resources.getString(R.string.offline)
+                            binding.onlineSwitch.isChecked = false
+                        }
                     }
                     is NetworkResponse.Failure -> {
                         if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {

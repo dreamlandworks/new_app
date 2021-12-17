@@ -35,6 +35,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -146,6 +147,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             }
         }
 
+        toast(this, subCategoryId)
+
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
         viewModel.getKeywordsList(this).observe(this, {
@@ -184,12 +187,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 UserUtils.saveSearchFilter(this, "")
-                loadSearchResults(subCategoryId)
+                loadSearchResults()
             }
         }
 
         if (FROM_POPULAR_SERVICES) {
-            loadSearchResults(subCategoryId)
+            loadSearchResults()
         }
     }
 
@@ -206,7 +209,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadSearchResults(subCategory: String) {
+    private fun loadSearchResults() {
         if (keyword == "0") {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"

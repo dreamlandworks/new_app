@@ -129,14 +129,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                             "3" -> {
                                 UserUtils.finalAddressList = ArrayList()
-                                UserUtils.finalAddressList.add(
-                                    Addresses(
-                                        UserUtils.addressList[addressIndex].day.toInt(),
-                                        UserUtils.job_description,
-                                        addressIndex + 1,
-                                        2
-                                    )
-                                )
+                                UserUtils.finalAddressList.add(Addresses(UserUtils.addressList[addressIndex].day.toInt(), UserUtils.job_description, addressIndex + 1, 2))
                                 addressIndex += 1
                                 if (addressIndex != UserUtils.addressList.size) {
                                     loadAddressOnUI()

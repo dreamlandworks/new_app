@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.CitiesResModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.LeaderboardResModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.models.ProviderDashboardResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
@@ -22,6 +23,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
     val submitYoutubePoints = MutableLiveData<NetworkResponse<String>>()
     val leaderboardList = MutableLiveData<NetworkResponse<LeaderboardResModel>>()
     val citiesList = MutableLiveData<NetworkResponse<CitiesResModel>>()
+    val providerDashboardDetails = MutableLiveData<NetworkResponse<ProviderDashboardResModel>>()
 
     fun getTrainingList(
         context: Context
@@ -122,6 +124,27 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
             citiesList.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return citiesList
+    }
+
+    fun providerDashboardDetails(
+        context: Context,
+        cityId: String
+    ): MutableLiveData<NetworkResponse<ProviderDashboardResModel>> {
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                providerDashboardDetails.value = NetworkResponse.Loading()
+                val response = async { repository.getProviderDashboardDetails(context, cityId) }
+                val responseJson = response.await()
+                if (responseJson.status == 200) {
+                    providerDashboardDetails.value = NetworkResponse.Success(responseJson)
+                } else {
+                    providerDashboardDetails.value = NetworkResponse.Failure(responseJson.message)
+                }
+            }
+        } else {
+            providerDashboardDetails.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+        return providerDashboardDetails
     }
 
 }

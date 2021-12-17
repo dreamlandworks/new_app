@@ -21,6 +21,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.search_servi
 import com.satrango.utils.UserUtils
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.round
 
 class UserSearchViewProfileScreen : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             Glide.with(profilePic).load(data.profile_pic).placeholder(R.drawable.images).into(profilePic)
             userName.text = data.fname
             occupation.text = data.profession
-            costPerHour.text = data.per_hour
+            costPerHour.text = "Rs. ${round(data.per_hour.toDouble()).toInt()}"
             val df = DecimalFormat("#.##")
             val distanceInKms = data.distance_miles.toDouble() * 1.609344
             distance.text = "${df.format(distanceInKms)} Kms"

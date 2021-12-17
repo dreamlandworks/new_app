@@ -153,6 +153,10 @@ class ProviderSignUpThree : AppCompatActivity() {
                         snackBar(nextBtn, "Please Enter Tariff Per Hour for ${keyword.name} profession")
                         return@setOnClickListener
                     }
+                    if (keyword.tariff_per_day < keyword.tariff_per_hour) {
+                        snackBar(nextBtn, "Please Enter Per Hour charges less than Per Day Charges For ${keyword.name} Profession")
+                        return@setOnClickListener
+                    }
                     if (keyword.experience.isEmpty()) {
                         snackBar(nextBtn, "Please Enter Tariff Experience for ${keyword.name} profession")
                         return@setOnClickListener

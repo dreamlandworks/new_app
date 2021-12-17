@@ -31,11 +31,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
-class TariffTimingsProfileScreen :
-    BaseFragment<ProviderProfileViewModel, FragmentTariffTimingsProfileScreenBinding, ProviderProfileRepository>() {
+class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentTariffTimingsProfileScreenBinding, ProviderProfileRepository>() {
 
-    override fun getFragmentViewModel(): Class<ProviderProfileViewModel> =
-        ProviderProfileViewModel::class.java
+    override fun getFragmentViewModel(): Class<ProviderProfileViewModel> = ProviderProfileViewModel::class.java
 
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
@@ -100,7 +98,6 @@ class TariffTimingsProfileScreen :
                         }
                     }
                 })
-
             }
         }
     }

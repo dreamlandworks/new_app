@@ -26,6 +26,7 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
             binding.root.setOnClickListener {
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
                 SearchServiceProvidersScreen.subCategoryId = data.id
+                SearchServiceProvidersScreen.keyword = "0"
                 binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
             }
         }

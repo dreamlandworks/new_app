@@ -7,6 +7,7 @@ import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqMo
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.UpdateAlertsToReadReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.LeaderboardResModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.models.ProviderDashboardResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMyAccountResModel
@@ -222,5 +223,12 @@ interface ProviderApiService {
         @Query("sp_id") spId: String,
         @Query("city_id") videoId: String
     ): LeaderboardResModel
+
+    @GET(ServiceProviderEndPoints.SP_DASHBOARD)
+    suspend fun getDashboardDetails(
+        @Query("key") key: String,
+        @Query("sp_id") spId: String,
+        @Query("city_id") videoId: String
+    ): ProviderDashboardResModel
 
 }

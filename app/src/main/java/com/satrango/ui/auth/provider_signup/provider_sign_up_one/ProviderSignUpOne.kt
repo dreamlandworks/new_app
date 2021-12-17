@@ -98,11 +98,7 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.qualification) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(
-                        this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        qualificationList
-                    )
+                    val qualificationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, qualificationList)
                     binding.qualification.setAdapter(qualificationAdapter)
                     binding.qualification.threshold = 1
 

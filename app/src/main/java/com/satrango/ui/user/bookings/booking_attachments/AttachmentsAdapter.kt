@@ -17,7 +17,7 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
         val binding = binding
 
         fun bind(imagePath: Attachment) {
-            if (imagePath.file_name.isNotEmpty()) {
+            if (imagePath.file_name.isEmpty()) {
                 Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
             } else {
                 Glide.with(binding.image).load(imagePath.file_name).into(binding.image)

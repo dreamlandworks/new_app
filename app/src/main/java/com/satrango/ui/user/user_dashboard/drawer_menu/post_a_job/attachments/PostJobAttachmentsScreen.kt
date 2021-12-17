@@ -300,10 +300,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-        imagePathList =
-            data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
-        binding.attachmentsRV.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        imagePathList = data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
+        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
     }
 
@@ -509,6 +507,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             binding.attachmentsRV.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+            Log.e("PATHS:", Gson().toJson(imagePathList))
+
         }
     }
 

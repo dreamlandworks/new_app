@@ -50,10 +50,10 @@ class SearchServiceProviderAdapter(
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
 //            binding.costPerHour.text = UserUtils.roundOffDecimal(ceil(data.final_amount.toDouble())).toString()
-            binding.costPerHour.text = "Rs ${round(data.final_amount.toDouble())}"
+            binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}"
             if (SearchServiceProvidersScreen.offerId != 0) {
 //                binding.actualCost.text = UserUtils.roundOffDecimal(ceil(data.actual_amount.toDouble())).toString()
-                binding.actualCost.text = "Rs ${round(data.actual_amount.toDouble())}"
+                binding.actualCost.text = "Rs. ${round(data.actual_amount.toDouble()).toInt()}"
                 binding.actualCost.showStrikeThrough(true)
             } else {
                 binding.actualCost.visibility = View.GONE

@@ -36,5 +36,6 @@ object ServiceProviderEndPoints {
     final const val PROVIDER_TRAINING_LIST = "provider/get_training_list"
     final const val SUBMIT_YOUTUBE_POINTS = "provider/update_sp_watched_video"
     final const val GET_LEADERBOARD_LIST = "provider/get_leaderboard_list"
+    final const val SP_DASHBOARD = "provider/sp_dashboard"
 
 }

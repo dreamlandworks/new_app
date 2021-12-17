@@ -6,6 +6,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.api_services.ProviderApiService
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.CitiesResModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.LeaderboardResModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.models.ProviderDashboardResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
@@ -26,6 +27,10 @@ class ProviderMyTrainingRepository : BaseRepository() {
 
     suspend fun getCities(): CitiesResModel {
         return RetrofitBuilder.getUserRetrofitInstance().getCities(RetrofitBuilder.USER_KEY)
+    }
+
+    suspend fun getProviderDashboardDetails(context: Context, cityId: String): ProviderDashboardResModel {
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().getDashboardDetails(RetrofitBuilder.PROVIDER_KEY, "2", cityId)
     }
 
 }
