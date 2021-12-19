@@ -23,6 +23,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchVi
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Charges
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen.Companion.FROM_POPULAR_SERVICES
 import com.satrango.utils.UserUtils
 import kotlin.math.ceil
 import kotlin.math.round
@@ -72,6 +73,7 @@ class SearchServiceProviderAdapter(
             }
 
             binding.root.setOnClickListener {
+                FROM_POPULAR_SERVICES = false
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)

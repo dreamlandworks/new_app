@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -15,11 +16,20 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.satrango.R
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderSignUpThreeBinding
+import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFourRepository
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFourViewModel
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.TimeslotResponse
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.UserUtils
@@ -33,6 +43,7 @@ import java.util.*
 
 class ProviderSignUpThree : AppCompatActivity() {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var experienceList: ArrayList<String>
     private lateinit var binding: ActivityProviderSignUpThreeBinding
 
@@ -41,6 +52,8 @@ class ProviderSignUpThree : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpThreeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initializeProgressDialog()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -171,7 +184,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                 }
 
                 ProviderUtils.slotsList = validateSlots()
-                startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
+                submitActivationDetailsToServer()
             }
 
             backBtn.setOnClickListener { onBackPressed() }
@@ -187,6 +200,38 @@ class ProviderSignUpThree : AppCompatActivity() {
             experienceThree.adapter = experienceAdapter
         }
 
+    }
+
+    private fun submitActivationDetailsToServer() {
+        val requestBody = ProviderSignUpFourReqModel(
+            ProviderUtils.aboutMe,
+            RetrofitBuilder.PROVIDER_KEY,
+            ProviderUtils.languagesKnown!!,
+            ProviderUtils.profession!!,
+            ProviderUtils.qualification!!,
+            ProviderUtils.slotsList!!,
+            UserUtils.getUserId(this)
+        )
+        Log.e("JSON", Gson().toJson(requestBody))
+        val factory = ViewModelFactory(ProviderSignUpFourRepository())
+        val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
+        viewModel.providerActivation(this, requestBody).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    toast(this, it.data!!)
+                    startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
+
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.nextBtn, it.message!!)
+                }
+            }
+        })
     }
 
     @SuppressLint("SetTextI18n")
@@ -614,6 +659,17 @@ class ProviderSignUpThree : AppCompatActivity() {
         }
         Log.e("VALIDATE:", slotList.toString())
         return slotList
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

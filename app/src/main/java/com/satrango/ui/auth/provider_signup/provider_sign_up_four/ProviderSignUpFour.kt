@@ -20,6 +20,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -36,6 +37,7 @@ import java.io.*
 
 class ProviderSignUpFour: AppCompatActivity() {
 
+    private lateinit var progressDialog: BeautifulProgressDialog
     private var selectedEncodedImage = ""
     private lateinit var viewModel: ProviderSignUpFourViewModel
     private val REQUEST_CAMERA: Int = 101
@@ -46,6 +48,7 @@ class ProviderSignUpFour: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderSignUpFourBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initializeProgressDialog()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -79,69 +82,23 @@ class ProviderSignUpFour: AppCompatActivity() {
     }
 
     private fun sendActivationRequestToServer() {
-
-//        val requestBody = ProviderSignUpFourReqModel(
-//            ProviderUtils.aboutMe,
-//            selectedEncodedImage,
-//            RetrofitBuilder.PROVIDER_KEY,
-//            ProviderUtils.languagesKnown!!,
-//            ProviderUtils.profession!!,
-//            ProviderUtils.qualification!!,
-//            ProviderUtils.slotsList!!,
-//            UserUtils.getUserId(this)
-//        )
-
-//        val langList = ArrayList<LangResponse>()
-//        val langArray = JSONArray(UserUtils.getSpLanguages(this))
-//        for (index in 0 until langArray.length()) {
-//            val obj = JSONObject(langArray[index].toString())
-//            langList.add(LangResponse(obj.getString("lang_id"), obj.getString("name")))
-//        }
-//
-//        val profList = ArrayList<ProfessionResponseX>()
-//        val profArray = JSONArray(UserUtils.getSpProfession(this))
-//        for (index in 0 until profArray.length()) {
-//            profList.add(Gson().fromJson(profArray[index].toString(), ProfessionResponseX::class.java))
-//        }
-//
-//        val qualList = ArrayList<QualificationResponse>()
-//        val qualArray = JSONArray(UserUtils.getSpQualification(this))
-//        for (index in 0 until profArray.length()) {
-//            val obj = JSONObject(qualArray[index].toString())
-//            qualList.add(QualificationResponse(obj.getString("name"), obj.getString("qual_id")))
-//        }
-//
-//        val timeSlotsList = ArrayList<TimeslotResponse>()
-//        val timeSlotsArray = JSONArray(UserUtils.getSpTimeSlots(this))
-//        for (index in 0 until timeSlotsArray.length()) {
-//            val obj = JSONObject(timeSlotsArray[index].toString())
-//            timeSlotsList.add(TimeslotResponse(obj.getString("days"), obj.getString("from"), obj.getString("to")))
-//        }
-
-        val requestBody = ProviderSignUpFourReqModel(
-            ProviderUtils.aboutMe,
-            "selectedEncodedImage",
-            RetrofitBuilder.PROVIDER_KEY,
-            ProviderUtils.languagesKnown!!,
-            ProviderUtils.profession!!,
-            ProviderUtils.qualification!!,
-            ProviderUtils.slotsList!!,
-            UserUtils.getUserId(this)
-        )
-        Log.e("JSON", Gson().toJson(requestBody))
-        viewModel.providerActivation(this, requestBody).observe(this, {
+        viewModel.uploadIdProof(this, ProviderIdProofReqModel(selectedEncodedImage, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this))).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
-                    toast(this, "Loading...")
+                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    toast(this, it.data!!)
                     startActivity(Intent(this, ProviderSignUpFive::class.java))
                 }
                 is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
                     snackBar(binding.submitBtn, it.message!!)
                 }
             }
         })
+
     }
 
     private fun selectImage() {
@@ -224,6 +181,17 @@ class ProviderSignUpFour: AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun initializeProgressDialog() {
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
+        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
+        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
 }

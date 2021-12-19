@@ -536,9 +536,10 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     override fun onBackPressed() {
-        finish()
+//        finish()
         if (UserUtils.getFromInstantBooking(this)) {
-            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            super.onBackPressed()
+//            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         } else {
             when(data.category_id) {
                 "3" -> {

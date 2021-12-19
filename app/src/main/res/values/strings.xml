@@ -668,6 +668,9 @@
     <string name="profession">Profession</string>
     <string name="skills_amp_tariff"><![CDATA[Skills & Tariff]]></string>
     <string name="timings">Timings</string>
+    <string name="upcoming_bookings">Upcoming Bookings</string>
+    <string name="ignore">Ignore</string>
+    <string name="bid_now">Bid Now</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

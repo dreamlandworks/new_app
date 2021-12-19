@@ -112,8 +112,8 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         imageView.visibility = View.GONE
     }
 
-    override fun onBackPressed() {
-        finish()
-        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-    }
+//    override fun onBackPressed() {
+//        finish()
+//        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+//    }
 }

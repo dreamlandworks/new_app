@@ -1,6 +1,7 @@
 package com.satrango.remote.api_services
 
 import com.satrango.remote.end_points.ServiceProviderEndPoints
+import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderIdProofReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.ProviderSignUpFourReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
@@ -230,5 +231,10 @@ interface ProviderApiService {
         @Query("sp_id") spId: String,
         @Query("city_id") videoId: String
     ): ProviderDashboardResModel
+
+    @POST(ServiceProviderEndPoints.ID_PROOF)
+    suspend fun uploadIdProof(
+        @Body requestBody: ProviderIdProofReqModel
+    ): ResponseBody
 
 }
