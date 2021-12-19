@@ -22,6 +22,14 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
             } else {
                 Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
             }
+            if (binding.image.drawable == null) {
+                if (imagePath.file_name.isNotEmpty()) {
+                    Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+                    if (binding.image.drawable == null) {
+                        Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
+                    }
+                }
+            }
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
             }

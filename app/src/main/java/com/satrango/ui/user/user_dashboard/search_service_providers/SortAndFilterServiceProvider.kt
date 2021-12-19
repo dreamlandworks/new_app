@@ -280,6 +280,44 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 binding.amountTo.text = slider.values[1].toString()
             }
 
+            if (UserUtils.getSearchFilter(this@SortAndFilterServiceProvider).isNotEmpty() && UserUtils.getSelectedSPDetails(this@SortAndFilterServiceProvider).isNotEmpty()) {
+                val filter = Gson().fromJson(UserUtils.getSearchFilter(this@SortAndFilterServiceProvider), SearchFilterModel::class.java)
+                if (filter.rating) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.ranking) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.nearMe) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.lowToHigh) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.highToLow) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.fresher) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.experience) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+                if (filter.any) {
+                    rating.setBackgroundResource(R.drawable.user_btn_bg)
+                    rating.setTextColor(Color.parseColor("#ffffff"))
+                }
+
+
+            }
+
 
             applyBtn.setOnClickListener {
                 var ratingValue = false

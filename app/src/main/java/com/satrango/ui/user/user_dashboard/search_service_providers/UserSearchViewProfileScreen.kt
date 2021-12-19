@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivitySearchViewProfileBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
@@ -55,7 +56,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
         binding.apply {
 
-            Glide.with(profilePic).load(data.profile_pic).placeholder(R.drawable.images).into(profilePic)
+            Glide.with(profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).placeholder(R.drawable.images).into(profilePic)
             userName.text = data.fname
             occupation.text = data.profession
             costPerHour.text = "Rs. ${round(data.per_hour.toDouble()).toInt()}/-"

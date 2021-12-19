@@ -25,7 +25,9 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import de.hdodenhof.circleimageview.CircleImageView
 
 class PostJobDescriptionScreen : AppCompatActivity() {
 
@@ -40,6 +42,9 @@ class PostJobDescriptionScreen : AppCompatActivity() {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        UserUtils.bid_per = 0
+        UserUtils.estimateTypeId = 0
 
         binding.apply {
 
@@ -190,6 +195,8 @@ class PostJobDescriptionScreen : AppCompatActivity() {
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        val image = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(image)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

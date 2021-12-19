@@ -33,7 +33,9 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Data
 import com.satrango.utils.UserUtils
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import de.hdodenhof.circleimageview.CircleImageView
 
 class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
 
@@ -58,6 +60,9 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        UserUtils.bid_per = 0
+        UserUtils.estimateTypeId = 0
 
         val factory = ViewModelFactory(ProviderSignUpOneRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderSignUpOneViewModel::class.java]
@@ -254,6 +259,8 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        val image = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(image)
     }
 
     private fun updateUI() {

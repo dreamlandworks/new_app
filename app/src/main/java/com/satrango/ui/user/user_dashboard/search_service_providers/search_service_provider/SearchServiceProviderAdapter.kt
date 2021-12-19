@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
@@ -45,7 +46,7 @@ class SearchServiceProviderAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bindValues(data: Data) {
-            Glide.with(binding.profilePic).load(data.profile_pic).into(binding.profilePic)
+            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
             binding.userRating.text = data.id
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession

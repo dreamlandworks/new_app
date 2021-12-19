@@ -279,6 +279,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@color/grey_800" />
 
             <TextView

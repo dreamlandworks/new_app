@@ -84,6 +84,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
         initializeToolBar()
         initializeProgressDialog()
+        UserUtils.bids_period = 0
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()
@@ -336,12 +337,12 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-//                    if (it.data!!.user_plan_id != "0") {
+                    if (it.data!!.user_plan_id != "0") {
                         showSuccessDialog()
-//                    } else {
+                    } else {
                         UserMyAccountScreen.FROM_MY_ACCOUNT = false
 //                        startActivity(Intent(this, UserPlanScreen::class.java))
-//                    }
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

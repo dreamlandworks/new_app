@@ -58,6 +58,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 //    , PaymentResultListener
@@ -69,6 +70,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var data: Data
     private lateinit var binding: ActivityBookingAddressScreenBinding
+
+    companion object {
+        var data: Data? = null
+    }
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,10 +87,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
-        if (!UserUtils.getFromInstantBooking(this)) {
-            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+//        if (!UserUtils.getFromInstantBooking(this)) {
+        if (data != null) {
             updateUI(data)
         }
+//            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+
+//        }
 //        else {
 //            binding.spCard.visibility = View.GONE
 //        }
@@ -497,7 +505,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     private fun updateUI(data: Data) {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
-        binding.costPerHour.text = data.per_hour
+        binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
     }
 
     override fun onBackPressed() {

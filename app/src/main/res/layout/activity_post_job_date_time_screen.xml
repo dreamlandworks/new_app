@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/toolBar"
-        layout="@layout/user_tool_bar"/>
+        layout="@layout/user_tool_bar" />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

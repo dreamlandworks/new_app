@@ -31,8 +31,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.Po
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.checktimings
+import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import de.hdodenhof.circleimageview.CircleImageView
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -85,8 +87,9 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.post_a_job)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
+        val image = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(image)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

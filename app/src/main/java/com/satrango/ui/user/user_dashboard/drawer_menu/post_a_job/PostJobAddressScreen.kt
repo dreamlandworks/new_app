@@ -220,9 +220,8 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     progressDialog.dismiss()
                     if (it.data!!.user_plan_id == "0") {
                         UserMyAccountScreen.FROM_MY_ACCOUNT = false
-//                        startActivity(Intent(this@PostJobAddressScreen, UserPlanScreen::class.java))
-                    } else {
                         showSuccessDialog()
+//                        startActivity(Intent(this@PostJobAddressScreen, UserPlanScreen::class.java))
                     }
                 }
                 is NetworkResponse.Failure -> {

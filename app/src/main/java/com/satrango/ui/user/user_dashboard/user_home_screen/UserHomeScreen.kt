@@ -106,6 +106,7 @@ class UserHomeScreen :
         binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 UserUtils.saveSearchFilter(requireContext(), "")
+                UserUtils.saveSelectedSPDetails(requireContext(), "")
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = false
                 SearchServiceProvidersScreen.offerId = 0
                 startActivity(Intent(requireContext(), SearchServiceProvidersScreen::class.java))

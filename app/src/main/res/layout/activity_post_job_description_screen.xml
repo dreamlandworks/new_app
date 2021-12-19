@@ -246,13 +246,21 @@
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/bidRangeSpinner"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line" />
+            android:background="@drawable/blue_out_line">
+
+            <Spinner
+                android:id="@+id/bidRangeSpinner"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_height="@dimen/_42sdp" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

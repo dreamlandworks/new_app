@@ -57,6 +57,7 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, PaymentResultListener {
 
@@ -83,7 +84,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-        if (!UserUtils.getFromInstantBooking(this)) {
+        if (UserUtils.getFromInstantBooking(this)) {
             initializeProgressDialog()
             data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             updateUI(data)
@@ -117,10 +118,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
                         when (data.category_id) {
                             "1" -> {
-                                val intent = Intent(
-                                    this@BookingAttachmentsScreen,
-                                    BookingAddressScreen::class.java
-                                )
+                                BookingAddressScreen.data = data
+                                val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
                                 intent.putExtra(getString(R.string.service_provider), data)
                                 startActivity(intent)
                             }
@@ -139,6 +138,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                         }
                     } else {
+                        BookingAddressScreen.data = data
                         startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
                     }
                 }
@@ -235,7 +235,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private fun updateUI(data: Data) {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
-        binding.costPerHour.text = data.per_hour
+        binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
     }
 
 //    private fun capturePictureFromCamera() {

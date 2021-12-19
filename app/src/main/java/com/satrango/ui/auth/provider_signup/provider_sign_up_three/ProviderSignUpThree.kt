@@ -601,7 +601,8 @@ class ProviderSignUpThree : AppCompatActivity() {
                 return emptyList()
             }
 
-            val from = selectedFromTime.split(":")[0].toInt()
+            var from = selectedFromTime.split(":")[0].toInt()
+            from += from
             val to = selectedToTime.split(":")[0].toInt()
             for (time in from..to) {
                 val daysList = ArrayList<String>()
@@ -642,10 +643,10 @@ class ProviderSignUpThree : AppCompatActivity() {
                 } else {
                     var timeOneText = ""
                     var timeTwoText = ""
-                    if (time < 10) {
-                        timeOneText = "0$time"
+                    timeOneText = if (time < 10) {
+                        "0$time"
                     } else {
-                        timeOneText = "$time"
+                        "$time"
                     }
                     val nextTime = time + 1
                     if (nextTime < 10) {
