@@ -5,6 +5,8 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.*
 import android.provider.DocumentsContract
@@ -13,9 +15,13 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
 import com.satrango.databinding.ActivityUserLoginTypeScreenBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.*
@@ -23,12 +29,23 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.io.File
 import java.util.*
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.os.Environment
+import java.io.*
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import androidx.core.content.FileProvider
+
+import android.widget.Toast
+import java.text.SimpleDateFormat
 
 
 class UserLoginTypeScreen : AppCompatActivity() {
 
+    private lateinit var pictureFile: File
+    private lateinit var token: String
     private lateinit var binding: ActivityUserLoginTypeScreenBinding
 
     @SuppressLint("SimpleDateFormat")
@@ -43,7 +60,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
                     Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
                     return@OnCompleteListener
                 }
-                val token = task.result
+                token = task.result
+                UserUtils.saveFCMToken(this, token)
                 CoroutineScope(Dispatchers.Main).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
                         FCMReqModel(
@@ -61,6 +79,32 @@ class UserLoginTypeScreen : AppCompatActivity() {
                     }
                 }
                 Log.e("FCM TOKEN", token)
+
+
+//                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//                if (cameraIntent.resolveActivity(packageManager) != null) {
+//                    startActivityForResult(cameraIntent, 0)
+//                    try {
+//                        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+//                        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//                        pictureFile = File.createTempFile("ZOFTINO_$timeStamp", ".jpg", storageDir)
+//                    } catch (ex: IOException) {
+//                        Toast.makeText(
+//                            this,
+//                            "Photo file can't be created, please try again",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                    if (pictureFile != null) {
+//                        val photoURI = FileProvider.getUriForFile(
+//                            this,
+//                            "${packageName}.provider",
+//                            pictureFile
+//                        )
+//                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+//                        startActivityForResult(cameraIntent, 0)
+//                    }
+//                }
             })
         } else {
             snackBar(binding.userBtn, "Please check internet connection!")
@@ -79,7 +123,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
 
             serviceProviderBtn.setOnClickListener {
                 ProviderDashboard.FROM_FCM_SERVICE = false
-                startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
+                startActivity(Intent(this@UserLoginTypeScreen, ProviderSignUpOne::class.java))
                 finish()
             }
 
@@ -95,8 +139,44 @@ class UserLoginTypeScreen : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
             Log.e("FILE:", getPathFromUri(this, data!!.data!!)!!)
-            toast(this, getPathFromUri(this, data.data!!)!!)
         }
+        if (requestCode == 0) {
+            val extras: Bundle = data!!.extras!!
+            val imageBitmap = extras["data"] as Bitmap?
+            var imageStream: InputStream? = null
+            try {
+                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
+            } catch (e: Exception) {
+                snackBar(binding.userBtn, e.message!!)
+            }
+            if (imageStream != null) {
+                val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+            }
+            try {
+                val imgFile = File(pictureFile.absolutePath)
+//                if (imgFile.exists()) {
+//                    image.setImageURI(Uri.fromFile(imgFile))
+//                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
+    }
+
+    private fun cameraIntent() {
+        val cameraIntent = Intent()
+        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+        startActivityForResult(cameraIntent, 0)
     }
 
     private fun getPathFromUri(context: Context?, uri: Uri): String? {

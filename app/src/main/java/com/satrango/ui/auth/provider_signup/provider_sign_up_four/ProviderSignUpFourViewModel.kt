@@ -65,7 +65,7 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
         } else {
             uploadIdProof.value = NetworkResponse.Failure("No Internet Connection!")
         }
-        return providerActivation
+        return uploadIdProof
     }
 
 

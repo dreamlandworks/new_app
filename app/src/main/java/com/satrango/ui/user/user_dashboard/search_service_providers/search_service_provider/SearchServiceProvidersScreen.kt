@@ -131,7 +131,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            binding.recyclerView.layoutManager = LinearLayoutManager(this)
 //            binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
 
-            var list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
+            val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetailsList) {
 //                list.add(sp)
                 if (filter.priceRangeFrom.toDouble() <= sp.per_hour.toDouble() && filter.priceRangeTo.toDouble() >= sp.per_hour.toDouble()) {
@@ -217,9 +217,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
+        } else if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            binding.listCount.text = "${spDetails.data.size} out of ${spDetails.data.size}"
+            binding.recyclerView.layoutManager = LinearLayoutManager(this)
+            binding.recyclerView.adapter = SearchServiceProviderAdapter(spDetails.data, this)
         }
-
-        toast(this, subCategoryId)
 
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
@@ -287,36 +290,36 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
-//        toast(this, requestBody.toString())
-
 //        val requestBody = SearchServiceProviderReqModel(
-//            "Vijayawada Bus Stand",
-//            "Vijayawada",
-//            "India",
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
 //            RetrofitBuilder.USER_KEY,
-//            "Kotlin Developer",
-//            "520013",
-//            "Andhra Pradesh",
-//            "16.5092483",
-//            "80.6175017",
-//            56,
-//            5,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
 //            offerId
 //        )
+//        toast(this, requestBody.toString())
+
+        val requestBody = SearchServiceProviderReqModel(
+            "Vijayawada Bus Stand",
+            "Vijayawada",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            "Kotlin Developer",
+            "520013",
+            "Andhra Pradesh",
+            "16.5092483",
+            "80.6175017",
+            56,
+            5,
+            offerId
+        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -375,11 +378,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
         }
         bookInstantly.setOnClickListener {
-            showBookingTypeBottomSheetDialog.dismiss()
-            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            UserUtils.saveFromInstantBooking(this, true)
+            UserUtils.data = null
             binding.listCount.visibility = View.GONE
+            showBookingTypeBottomSheetDialog.dismiss()
             binding.recyclerView.visibility = View.GONE
+            UserUtils.saveFromInstantBooking(this, true)
+            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             startActivity(Intent(this, BookingAttachmentsScreen::class.java))
         }
         closeBtn.setOnClickListener {

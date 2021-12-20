@@ -210,7 +210,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.booking_attachments.BookingAttachmentsScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
             android:screenOrientation="portrait" />

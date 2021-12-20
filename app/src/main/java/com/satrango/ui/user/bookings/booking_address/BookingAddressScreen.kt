@@ -71,9 +71,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var data: Data
     private lateinit var binding: ActivityBookingAddressScreenBinding
 
-    companion object {
-        var data: Data? = null
-    }
+//    companion object {
+//        var data: Data? = null
+//    }
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,12 +87,18 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
-//        if (!UserUtils.getFromInstantBooking(this)) {
-        if (data != null) {
+        if (UserUtils.data != null) {
+            data = UserUtils.data!!
             updateUI(data)
+        } else {
+            binding.spCard.visibility = View.GONE
         }
+//        if (!UserUtils.getFromInstantBooking(this)) {
 //            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+//        }
 
+//        if (data != null) {
+//            updateUI(data)
 //        }
 //        else {
 //            binding.spCard.visibility = View.GONE

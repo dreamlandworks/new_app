@@ -20,6 +20,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderProfileScreenBinding
@@ -31,9 +35,12 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.ProviderProfileProfessionResModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ProviderProfileScreen : AppCompatActivity() {
 
@@ -68,7 +75,8 @@ class ProviderProfileScreen : AppCompatActivity() {
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_profile)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_profile)
 
         initializeProgressDialog()
         loadFragment(PersonalProfileScreen())
@@ -180,11 +188,30 @@ class ProviderProfileScreen : AppCompatActivity() {
                 snackBar(binding.changePwd, e.message!!)
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            progressDialog.show()
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
-            binding.profilePic.setImageBitmap(imageBitmap)
+            val storageRef = FirebaseStorage.getInstance().reference
+            val profilePicStorageRef =
+                storageRef.child("images/profile_pic_with_user_id_${UserUtils.getUserId(this)}.jpg")
+            profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                toast(this, it.message!!)
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+
+                }
+            }.addOnSuccessListener {
+                profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val url = uri.toString()
+                    val database = Firebase.database
+                    val myRef = database.getReference(UserUtils.getFCMToken(this))
+                    myRef.child("profile_pic_path").setValue(url)
+                    Glide.with(this).load(url).into(binding.profilePic)
+                    progressDialog.dismiss()
+                }
+            }
             try {
-                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
+                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap)!!)
             } catch (e: Exception) {
                 snackBar(binding.changePwd, e.message!!)
             }
@@ -203,16 +230,23 @@ class ProviderProfileScreen : AppCompatActivity() {
             .commit()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

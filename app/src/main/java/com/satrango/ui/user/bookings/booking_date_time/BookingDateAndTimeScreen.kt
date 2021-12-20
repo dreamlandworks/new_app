@@ -46,6 +46,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
@@ -87,19 +88,19 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             "User"
         }
 
+        if (UserUtils.data != null) {
+            data = UserUtils.data!!
+            updateUI(data)
+        }
+
         calendar = Calendar.getInstance()
 
         binding.selectedMonth.text = LocalDate.now().month.name
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
-            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-            spDetails = Gson().fromJson(
-                UserUtils.getSelectedSPDetails(this),
-                SearchServiceProviderResModel::class.java
-            )
+            spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
             loadDates()
             loadTimings(0)
-            updateUI(data)
         } else {
             val factory = ViewModelFactory(BookingRepository())
             val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -150,7 +151,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
     private fun updateUI(data: Data) {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
-        binding.costPerHour.text = data.per_hour
+        binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
     }
 
     private fun validateFields() {
@@ -182,12 +184,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 if (data.category_id == "3") {
                     val intent =
                         Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
-                    intent.putExtra(getString(R.string.service_provider), data)
+//                    intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)
                 } else {
                     val intent =
                         Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
-                    intent.putExtra(getString(R.string.service_provider), data)
+//                    intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)
                 }
             }
@@ -787,7 +789,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             super.onBackPressed()
         } else {
             val intent = Intent(this, UserSearchViewProfileScreen::class.java)
-            intent.putExtra(getString(R.string.service_provider), data)
+//            intent.putExtra(getString(R.string.service_provider), data)
             startActivity(intent)
         }
 

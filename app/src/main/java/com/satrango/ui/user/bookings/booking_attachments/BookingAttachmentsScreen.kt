@@ -15,6 +15,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,10 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
@@ -42,6 +47,7 @@ import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
@@ -50,7 +56,11 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -59,13 +69,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
 
+
 class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, PaymentResultListener {
 
+    private lateinit var firebaseDatabaseRef: DatabaseReference
     private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityBookingAttachmentsScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
     private val GALLERY_REQUEST = 100
-    private val CAMERA_REQUEST: Int = 100
+    private val CAMERA_REQUEST: Int = 101
     private lateinit var data: Data
     private var addressIndex = 0
 
@@ -81,20 +93,26 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
         initializeToolBar()
 
+        val database = Firebase.database
+        firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
+
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        initializeProgressDialog()
 
-        if (UserUtils.getFromInstantBooking(this)) {
+        if (!UserUtils.getFromInstantBooking(this)) {
             initializeProgressDialog()
-            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-            updateUI(data)
+//            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             if (UserUtils.addressList.isNotEmpty()) {
                 loadAddressOnUI()
             }
         }
-//        else {
-//            binding.spCard.visibility = View.GONE
-//        }
+        if (UserUtils.data != null) {
+            data = UserUtils.data!!
+            updateUI(data)
+        } else {
+            binding.spCard.visibility = View.GONE
+        }
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()
@@ -102,7 +120,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.apply {
 
             attachments.setOnClickListener {
-                getImageFromGallery()
+                openImagePicker()
             }
 
             backBtn.setOnClickListener {
@@ -118,9 +136,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
                         when (data.category_id) {
                             "1" -> {
-                                BookingAddressScreen.data = data
                                 val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
-                                intent.putExtra(getString(R.string.service_provider), data)
+//                                intent.putExtra(getString(R.string.service_provider), data)
                                 startActivity(intent)
                             }
                             "2" -> {
@@ -138,7 +155,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                         }
                     } else {
-                        BookingAddressScreen.data = data
                         startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
                     }
                 }
@@ -217,19 +233,19 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.addressText.text = UserUtils.addressList[addressIndex].month
     }
 
-//    private fun openImagePicker() {
-//        val options = resources.getStringArray(R.array.imageSelections)
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle("Select image")
-//            .setItems(options) { dialog, which ->
-//                when (which) {
-//                    0 -> getImageFromGallery()
-//                    1 -> capturePictureFromCamera()
-//                }
-//            }
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
+    private fun openImagePicker() {
+        val options = resources.getStringArray(R.array.imageSelections)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Select image")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> getImageFromGallery()
+                    1 -> capturePictureFromCamera()
+                }
+            }
+        val dialog = builder.create()
+        dialog.show()
+    }
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: Data) {
@@ -239,11 +255,11 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
     }
 
-//    private fun capturePictureFromCamera() {
-//        val cameraIntent = Intent()
-//        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
-//        startActivityForResult(cameraIntent, CAMERA_REQUEST)
-//    }
+    private fun capturePictureFromCamera() {
+        val cameraIntent = Intent()
+        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
+    }
 
     private fun getImageFromGallery() {
         val intent = Intent()
@@ -253,6 +269,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         startActivityForResult(intent, GALLERY_REQUEST)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -272,9 +289,37 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            getImageFilePath(data.data!!)
-            val bitmap = data.extras!!["data"] as Bitmap?
-            binding.profilePic.setImageBitmap(bitmap)
+            val extras: Bundle = data.extras!!
+            val imageBitmap = extras["data"] as Bitmap?
+            val storageRef = FirebaseStorage.getInstance().reference
+            val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+            val profilePicStorageRef = storageRef.child("images/$timeStamp.jpg")
+            profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                toast(this, it.message!!)
+            }.addOnSuccessListener {
+                profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val url = uri.toString()
+                    firebaseDatabaseRef.child(timeStamp).setValue(url)
+                    progressDialog.dismiss()
+                    val menuListener = object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            dataSnapshot.children.forEach { data ->
+                                val image_url = data.value.toString()
+                                val image_key = data.key.toString()
+                                Log.e("SNAPSHOT:", image_url)
+                                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                encodedImages.add(Attachment(image_url))
+                            }
+                            binding.attachmentsRV.layoutManager = LinearLayoutManager(this@BookingAttachmentsScreen, LinearLayoutManager.HORIZONTAL,false)
+                            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@BookingAttachmentsScreen)
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {
+                        }
+                    }
+                    firebaseDatabaseRef.addListenerForSingleValueEvent(menuListener)
+                }
+            }
+//            Log.e("FIREBASE:", Gson().toJson(imagePathList))
         }
 
     }
@@ -299,8 +344,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             null,
             MediaStore.Images.Media._ID + " = ? ",
             arrayOf(image_id),
-            null
-        )
+            null)
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
@@ -312,11 +356,14 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     override fun deleteAttachment(position: Int, imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment) {
+        firebaseDatabaseRef.child(imagePath.id).removeValue()
         imagePathList.remove(imagePath)
         binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
         Handler().postDelayed({
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-            encodedImages.remove(encodedImages[position])
+            if (encodedImages.isNotEmpty()) {
+                encodedImages.remove(encodedImages[position])
+            }
         }, 500)
     }
 
@@ -416,44 +463,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         dialog.show()
     }
 
-//    private fun serviceProviderAcceptDialog(context: Context) {
-//        val dialog = BottomSheetDialog(context)
-//        dialog.setCancelable(false)
-//        val dialogView = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
-//        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-//        closeBtn.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        Handler().postDelayed({
-//            makePayment()
-//        }, 3000)
-//        dialog.setContentView(dialogView)
-//        dialog.show()
-//    }
-
-//    private fun serviceProviderRejectDialog(context: Context) {
-//        val dialog = BottomSheetDialog(context)
-//        dialog.setCancelable(false)
-//        val dialogView = layoutInflater.inflate(R.layout.rejected_by_service_provider_dialog, null)
-//        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-//        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
-//        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
-//        closeBtn.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        yesBtn.setOnClickListener {
-//            snackBar(yesBtn, "Post the Job")
-//            dialog.dismiss()
-//            finish()
-//            startActivity(Intent(this, UserDashboardScreen::class.java))
-//        }
-//        noBtn.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        dialog.setContentView(dialogView)
-//        dialog.show()
-//    }
-
     private fun weAreSorryDialog() {
         val dialog = BottomSheetDialog(this)
         dialog.setCancelable(false)
@@ -476,26 +485,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         dialog.setContentView(dialogView)
         dialog.show()
     }
-
-//    private fun makePayment() {
-//        Checkout.preload(applicationContext)
-//        val checkout = Checkout()
-//        checkout.setKeyID(getString(R.string.razorpay_api_key))
-//        try {
-//            val orderRequest = JSONObject()
-//            orderRequest.put("currency", "INR")
-//            orderRequest.put(
-//                "amount",
-//                data.per_hour.toInt() * 100
-//            ) // 500rs * 100 = 50000 paisa passed
-//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-//            orderRequest.put("theme.color", R.color.blue)
-//            checkout.open(this, orderRequest)
-//        } catch (e: Exception) {
-//            toast(this, e.message!!)
-//        }
-//    }
 
     override fun onPaymentSuccess(paymentResponse: String?) {
         updateStatusInServer(paymentResponse, "Success")
@@ -537,10 +526,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     override fun onBackPressed() {
-//        finish()
         if (UserUtils.getFromInstantBooking(this)) {
-            super.onBackPressed()
-//            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         } else {
             when(data.category_id) {
                 "3" -> {
@@ -551,12 +538,20 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     finish()
                     BookingDateAndTimeScreen.FROM_PROVIDER = false
                     val intent = Intent(this, BookingDateAndTimeScreen::class.java)
-                    intent.putExtra(getString(R.string.service_provider), data)
+//                    intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)
                 }
             }
         }
+    }
 
+    @SuppressLint("SimpleDateFormat")
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
+        return Uri.parse(path)
     }
 
 }

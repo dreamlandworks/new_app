@@ -13,6 +13,8 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
@@ -51,10 +53,8 @@ class SearchServiceProviderAdapter(
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
-//            binding.costPerHour.text = UserUtils.roundOffDecimal(ceil(data.final_amount.toDouble())).toString()
             binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
             if (SearchServiceProvidersScreen.offerId != 0) {
-//                binding.actualCost.text = UserUtils.roundOffDecimal(ceil(data.actual_amount.toDouble())).toString()
                 binding.actualCost.text = "Rs. ${round(data.actual_amount.toDouble()).toInt()}/-"
                 binding.actualCost.showStrikeThrough(true)
             } else {
@@ -75,25 +75,31 @@ class SearchServiceProviderAdapter(
 
             binding.root.setOnClickListener {
                 FROM_POPULAR_SERVICES = false
+                UserUtils.data = data
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
-                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
+//                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
             }
             binding.bookLaterBtn.setOnClickListener {
+                UserUtils.data = data
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
-                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                 binding.root.context.startActivity(intent)
+//                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
             }
             binding.bookNowBtn.setOnClickListener {
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
+                    UserUtils.data = data
                     val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
-                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
+//                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                     binding.root.context.startActivity(intent)
                 } else {
+                    UserUtils.data = data
+                    val database = Firebase.database
+                    database.getReference(UserUtils.getFCMToken(binding.root.context)).removeValue()
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)
-                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
+//                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                     binding.root.context.startActivity(intent)
                 }
             }

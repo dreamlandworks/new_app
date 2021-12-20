@@ -2,13 +2,16 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.Base64.DEFAULT
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -18,8 +21,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.hootsuite.nachos.chip.ChipInfo
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
@@ -36,6 +47,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpO
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
+import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
@@ -49,9 +61,15 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.mo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_blue_collar.PostJobBlueCollarReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
+import java.lang.Byte.decode
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -62,6 +80,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var binding: ActivityPostJobAttachmentsScreenBinding
     private lateinit var viewModel: ProviderSignUpOneViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
+    private lateinit var firebaseDatabaseRef: DatabaseReference
 
     private lateinit var responseLanguages: ProviderOneModel
     private lateinit var keywordsMList: List<Data>
@@ -72,6 +91,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     companion object {
         lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
         lateinit var encodedImages: ArrayList<Attachment>
+        lateinit var firebaseImageUrls: ArrayList<Attachment>
 
         lateinit var finalKeywords: java.util.ArrayList<KeywordsResponse>
         lateinit var finalLanguages: java.util.ArrayList<LangResponse>
@@ -82,12 +102,16 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityPostJobAttachmentsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val database = Firebase.database
+        firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
+
         initializeToolBar()
         initializeProgressDialog()
         UserUtils.bids_period = 0
 
         imagePathList = ArrayList()
         encodedImages = ArrayList()
+        firebaseImageUrls = ArrayList()
 
         binding.apply {
 
@@ -476,6 +500,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         startActivityForResult(intent, GALLERY_REQUEST)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -510,6 +535,39 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
             Log.e("PATHS:", Gson().toJson(imagePathList))
 
+        }
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            val extras: Bundle = data.extras!!
+            val imageBitmap = extras["data"] as Bitmap?
+            val storageRef = FirebaseStorage.getInstance().reference
+            val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+            val profilePicStorageRef = storageRef.child("images/$timeStamp.jpg")
+            profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                toast(this, it.message!!)
+            }.addOnSuccessListener {
+                profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val url = uri.toString()
+                    firebaseDatabaseRef.child(timeStamp).setValue(url)
+                    progressDialog.dismiss()
+                    val menuListener = object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            dataSnapshot.children.forEach { data ->
+                                val image_url = data.value.toString()
+                                val image_key = data.key.toString()
+                                Log.e("SNAPSHOT:", image_url)
+                                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                encodedImages.add(Attachment(image_url))
+                            }
+                            binding.attachmentsRV.layoutManager = LinearLayoutManager(this@PostJobAttachmentsScreen, LinearLayoutManager.HORIZONTAL,false)
+                            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
+                            Log.e("URLS", Gson().toJson(encodedImages))
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {
+                        }
+                    }
+                    firebaseDatabaseRef.addListenerForSingleValueEvent(menuListener)
+                }
+            }
         }
     }
 
@@ -582,6 +640,15 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }, 500)
         }
 
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
+        return Uri.parse(path)
     }
 
 }

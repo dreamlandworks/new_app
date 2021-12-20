@@ -281,6 +281,7 @@
     <string name="add_new_address">Add New Address</string>
     <string name="add_new">Add New</string>
     <string name="address">Address</string>
+    <string name="fcm_token">FCM TOKEN</string>
     <string name="flat_no_building_no">Flat No / Building No</string>
     <string name="flat_name">Flat Name</string>
     <string name="street_name">Street Name</string>
@@ -696,5 +697,32 @@
         <item>80%</item>
         <item>90%</item>
         <item>100%</item>
+    </string-array>
+
+    <string-array name="timingsList">
+        <item>12:00 AM</item>
+        <item>01:00 AM</item>
+        <item>02:00 AM</item>
+        <item>03:00 AM</item>
+        <item>04:00 AM</item>
+        <item>05:00 AM</item>
+        <item>06:00 AM</item>
+        <item>07:00 AM</item>
+        <item>08:00 AM</item>
+        <item>09:00 AM</item>
+        <item>10:00 AM</item>
+        <item>11:00 AM</item>
+        <item>12:00 PM</item>
+        <item>01:00 PM</item>
+        <item>02:00 PM</item>
+        <item>03:00 PM</item>
+        <item>04:00 PM</item>
+        <item>05:00 PM</item>
+        <item>06:00 PM</item>
+        <item>07:00 PM</item>
+        <item>08:00 PM</item>
+        <item>09:00 PM</item>
+        <item>10:00 PM</item>
+        <item>11:00 PM</item>
     </string-array>
 </resources>

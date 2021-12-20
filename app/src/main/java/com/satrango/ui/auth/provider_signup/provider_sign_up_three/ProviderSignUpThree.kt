@@ -40,6 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ProviderSignUpThree : AppCompatActivity() {
 
@@ -176,7 +177,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                     }
                 }
 
-                Log.e("TIMESLOTS:", validateSlots().toString())
+                Log.e("TIMESLOTS:", Gson().toJson(validateSlots()))
                 Log.e("PROFESSION:", Gson().toJson(ProviderUtils.profession!!))
                 if (validateSlots().isEmpty()) {
                     snackBar(nextBtn, "Please select timeslots")
@@ -238,8 +239,8 @@ class ProviderSignUpThree : AppCompatActivity() {
     private fun addView() {
         val cricketerView: View = layoutInflater.inflate(R.layout.row_slot_item, null, false)
 
-        val fromDate = cricketerView.findViewById<TextInputEditText>(R.id.fromTime)
-        val toDate = cricketerView.findViewById<TextInputEditText>(R.id.toTime)
+        val fromDate = cricketerView.findViewById<Spinner>(R.id.fromTime)
+        val toDate = cricketerView.findViewById<Spinner>(R.id.toTime)
         val everyDay = cricketerView.findViewById<TextView>(R.id.everyDay)
         val weekDays = cricketerView.findViewById<TextView>(R.id.weekDays)
         val weekEnds = cricketerView.findViewById<TextView>(R.id.weekEnd)
@@ -254,16 +255,31 @@ class ProviderSignUpThree : AppCompatActivity() {
         val imageClose = cricketerView.findViewById<View>(R.id.image_remove) as ImageView
         imageClose.setOnClickListener { removeView(cricketerView) }
 
-        fromDate.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                openDatePickerDialog(fromDate)
-            }
+        val fromTime = resources.getStringArray(R.array.timingsList)
+        val fromTimeList = ArrayList<String>()
+        fromTimeList.add("From Date")
+        for (time in fromTime) {
+            fromTimeList.add(time)
         }
-        toDate.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                openDatePickerDialog(toDate)
-            }
+        fromDate.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, fromTimeList)
+        val toTime = resources.getStringArray(R.array.timingsList)
+        val toTimeList = ArrayList<String>()
+        toTimeList.add("To Date")
+        for (time in toTime) {
+            toTimeList.add(time)
         }
+        toDate.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, toTimeList)
+
+//        fromDate.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                openDatePickerDialog(fromDate)
+//            }
+//        }
+//        toDate.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                openDatePickerDialog(toDate)
+//            }
+//        }
 
         everyDay.setOnClickListener {
             everyDay.setBackgroundResource(R.drawable.provider_btn_bg)
@@ -569,8 +585,8 @@ class ProviderSignUpThree : AppCompatActivity() {
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)
 
-            val fromTime = slotView.findViewById<TextInputEditText>(R.id.fromTime)
-            val toTime = slotView.findViewById<TextInputEditText>(R.id.toTime)
+            val fromTime = slotView.findViewById<Spinner>(R.id.fromTime)
+            val toTime = slotView.findViewById<Spinner>(R.id.toTime)
 
             val everyDay = slotView.findViewById<TextView>(R.id.everyDay)
             val weekDays = slotView.findViewById<TextView>(R.id.weekDays)
@@ -588,18 +604,34 @@ class ProviderSignUpThree : AppCompatActivity() {
             var selectedFromTime = ""
             var selectedToTime = ""
 
-            if (fromTime.text.toString().isNotEmpty()) {
-                selectedFromTime = fromTime.text.toString().trim()
+            if (fromTime.selectedItemPosition == 0) {
+                toast(this, "Please select From Time")
+                return emptyList()
             } else {
-                toast(this, "Select From Time")
+                selectedFromTime = "${fromTime.selectedItemPosition - 1}:00:00"
+            }
+            if (toTime.selectedItemPosition == 0) {
+                toast(this, "Please select To Time")
+                return emptyList()
+            } else {
+                selectedToTime = "${toTime.selectedItemPosition - 1}:00:00"
+            }
+            if (fromTime.selectedItemPosition >= toTime.selectedItemPosition) {
+                toast(this, "Please select To Time is Greater Than From Time")
                 return emptyList()
             }
-            if (toTime.text.toString().isNotEmpty()) {
-                selectedToTime = toTime.text.toString().trim()
-            } else {
-                toast(this, "Select To Time")
-                return emptyList()
-            }
+//            if (fromTime.text.toString().isNotEmpty()) {
+//                selectedFromTime = fromTime.text.toString().trim()
+//            } else {
+//                toast(this, "Select From Time")
+//                return emptyList()
+//            }
+//            if (toTime.text.toString().isNotEmpty()) {
+//                selectedToTime = toTime.text.toString().trim()
+//            } else {
+//                toast(this, "Select To Time")
+//                return emptyList()
+//            }
 
             var from = selectedFromTime.split(":")[0].toInt()
             from += from
@@ -648,7 +680,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                     } else {
                         "$time"
                     }
-                    val nextTime = time + 1
+                    val nextTime = time
                     if (nextTime < 10) {
                         timeTwoText = "0$nextTime"
                     } else {

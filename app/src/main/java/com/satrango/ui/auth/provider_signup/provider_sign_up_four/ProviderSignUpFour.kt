@@ -39,7 +39,6 @@ class ProviderSignUpFour: AppCompatActivity() {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private var selectedEncodedImage = ""
-    private lateinit var viewModel: ProviderSignUpFourViewModel
     private val REQUEST_CAMERA: Int = 101
     private val SELECT_FILE: Int = 100
     private lateinit var binding: ActivityProviderSignUpFourBinding
@@ -53,11 +52,8 @@ class ProviderSignUpFour: AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
-
-        val factory = ViewModelFactory(ProviderSignUpFourRepository())
-        viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
 
         PermissionUtils.checkAndRequestPermissions(this)
 
@@ -82,7 +78,11 @@ class ProviderSignUpFour: AppCompatActivity() {
     }
 
     private fun sendActivationRequestToServer() {
-        viewModel.uploadIdProof(this, ProviderIdProofReqModel(selectedEncodedImage, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this))).observe(this, {
+        val requestBody = ProviderIdProofReqModel(selectedEncodedImage, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this))
+//        toast(this, requestBody.toString())
+        val factory = ViewModelFactory(ProviderSignUpFourRepository())
+        val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
+        viewModel.uploadIdProof(this, requestBody).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -103,7 +103,7 @@ class ProviderSignUpFour: AppCompatActivity() {
 
     private fun selectImage() {
         val items = arrayOf<CharSequence>("Choose from Library"
-//            , "Capture with Camera"
+            , "Capture with Camera"
         )
         val builder = AlertDialog.Builder(this@ProviderSignUpFour)
         builder.setTitle("Add Photo!")
@@ -137,7 +137,6 @@ class ProviderSignUpFour: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         var imageStream: InputStream? = null
         if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImage = data.data
             try {
                 imageStream = contentResolver.openInputStream(data.data!!)
                 binding.imagePath.text = data.data!!.path

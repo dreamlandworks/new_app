@@ -56,6 +56,7 @@ object UserUtils {
     var job_description = ""
     var addressList = ArrayList<MonthsModel>()
     var finalAddressList = ArrayList<Addresses>()
+    var data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data? = null
 
 
     fun setFromJobPost(context: Context, fromJobPost: Boolean) {
@@ -285,6 +286,19 @@ object UserUtils {
     fun getAddress(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.address), "")!!
+    }
+
+    fun saveFCMToken(context: Context, token: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.fcm_token), token)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFCMToken(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.fcm_token), "")!!
     }
 
     fun setPostalCode(context: Context, password: String) {

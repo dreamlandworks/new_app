@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivitySearchViewProfileBinding
@@ -20,12 +22,14 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.snackBar
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.round
 
 class UserSearchViewProfileScreen : AppCompatActivity() {
 
+    private lateinit var data: Data
     private lateinit var binding: ActivitySearchViewProfileBinding
 
     @SuppressLint("SetTextI18n")
@@ -36,23 +40,28 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
         initializeToolBar()
 
-        val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-        val spDetails = Gson().fromJson(
-            UserUtils.getSelectedSPDetails(this),
-            SearchServiceProviderResModel::class.java
-        )
-        Log.e("JSON", Gson().toJson(spDetails))
-        for (sp in spDetails.slots_data) {
-            if (data.users_id == sp.user_id) {
-                for (booking in sp.blocked_time_slots) {
-                    val calender = Calendar.getInstance()
-                    val comingHour = calender.get(Calendar.HOUR_OF_DAY)
-                    if (comingHour + 1 == booking.time_slot_from.split(":")[0].toInt()) {
-                        binding.bookNowBtn.visibility = View.GONE
+        if (UserUtils.data != null) {
+            data = UserUtils.data!!
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            Log.e("JSON", Gson().toJson(spDetails))
+            for (sp in spDetails.slots_data) {
+                if (data.users_id == sp.user_id) {
+                    for (booking in sp.blocked_time_slots) {
+                        val calender = Calendar.getInstance()
+                        val comingHour = calender.get(Calendar.HOUR_OF_DAY)
+                        if (comingHour + 1 == booking.time_slot_from.split(":")[0].toInt()) {
+                            binding.bookNowBtn.visibility = View.GONE
+                        }
                     }
                 }
             }
+        } else {
+            snackBar(binding.aboutMe, "Please select Service provider")
+            onBackPressed()
+            return
         }
+//        val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+
 
         binding.apply {
 
@@ -83,20 +92,16 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             bookLaterBtn.setOnClickListener {
                 BookingDateAndTimeScreen.FROM_PROVIDER = false
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
-                val intent = Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java)
-                intent.putExtra(getString(R.string.service_provider), data)
-                startActivity(intent)
+                startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))
             }
             bookNowBtn.setOnClickListener {
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
-                    val intent = Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java)
-                    intent.putExtra(getString(R.string.service_provider), data)
-                    startActivity(intent)
+                    startActivity(Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java))
                 } else {
-                    val intent = Intent(this@UserSearchViewProfileScreen, BookingAttachmentsScreen::class.java)
-                    intent.putExtra(getString(R.string.service_provider), data)
-                    startActivity(intent)
+                    val database = Firebase.database
+                    database.getReference(UserUtils.getFCMToken(binding.root.context)).removeValue()
+                    startActivity(Intent(this@UserSearchViewProfileScreen, BookingAttachmentsScreen::class.java))
                 }
             }
         }
@@ -113,8 +118,4 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         imageView.visibility = View.GONE
     }
 
-//    override fun onBackPressed() {
-//        finish()
-//        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-//    }
 }

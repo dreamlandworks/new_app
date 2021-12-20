@@ -52,9 +52,12 @@ class AddBookingAddressScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (!UserUtils.getFromInstantBooking(this)) {
-            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+        if (UserUtils.data != null) {
+            data = UserUtils.data!!
         }
+//        if (!UserUtils.getFromInstantBooking(this)) {
+//            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
+//        }
         initializeProgressDialog()
 
         binding.apply { 
@@ -184,7 +187,7 @@ class AddBookingAddressScreen : AppCompatActivity() {
                             startActivity(Intent(this, PostJobDescriptionScreen::class.java))
                         } else {
                             val intent = Intent(this, BookingAddressScreen::class.java)
-                            intent.putExtra(getString(R.string.service_provider), data)
+//                            intent.putExtra(getString(R.string.service_provider), data)
                             startActivity(intent)
                         }
                     }

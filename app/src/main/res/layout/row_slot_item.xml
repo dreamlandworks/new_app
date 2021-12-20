@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="@dimen/_10sdp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_10sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:text="@string/time_slot"
             android:textColor="@color/black"
-            android:textSize="@dimen/text"/>
+            android:textSize="@dimen/text" />
 
         <ImageView
             android:id="@+id/image_remove"
@@ -39,58 +39,94 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_weight="1"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
-            app:boxStrokeColor="@color/purple_500">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/_10sdp"-->
+<!--            android:layout_marginEnd="@dimen/_5sdp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusBottomStart="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusTopEnd="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusTopStart="@dimen/_10sdp"-->
+<!--            app:boxStrokeColor="@color/purple_500">-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fromTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableStart="@drawable/ic_timer"
-                android:editable="false"
-                android:gravity="center"
-                android:hint="@string/from"
-                android:textSize="@dimen/edit_text"
-                android:maxLines="1"
-                android:textColor="@color/black" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gray_corner">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_weight="1"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp"
-            app:boxStrokeColor="@color/purple_500">
+                <Spinner
+                    android:id="@+id/fromTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:entries="@array/timingsList" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/toTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:drawableStart="@drawable/ic_timer"
-                android:editable="false"
-                android:gravity="center"
-                android:textSize="@dimen/edit_text"
-                android:hint="@string/to"
-                android:maxLines="1"
-                android:textColor="@color/black"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+
+            <!--            <com.google.android.material.textfield.TextInputEditText-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:drawableStart="@drawable/ic_timer"-->
+            <!--                android:editable="false"-->
+            <!--                android:gravity="center"-->
+            <!--                android:visibility="gone"-->
+            <!--                android:hint="@string/from"-->
+            <!--                android:textSize="@dimen/edit_text"-->
+            <!--                android:maxLines="1"-->
+            <!--                android:textColor="@color/black" />-->
+
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/_5sdp"-->
+<!--            android:layout_marginEnd="@dimen/_10sdp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusBottomStart="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusTopEnd="@dimen/_10sdp"-->
+<!--            app:boxCornerRadiusTopStart="@dimen/_10sdp"-->
+<!--            app:boxStrokeColor="@color/purple_500">-->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/gray_corner">
+
+                <Spinner
+                    android:id="@+id/toTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:entries="@array/timingsList" />
+
+            </LinearLayout>
+
+            <!--            <com.google.android.material.textfield.TextInputEditText-->
+            <!--                android:id="@+id/toTime"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_marginTop="@dimen/_15sdp"-->
+            <!--                android:drawableStart="@drawable/ic_timer"-->
+            <!--                android:editable="false"-->
+            <!--                android:gravity="center"-->
+            <!--                android:textSize="@dimen/edit_text"-->
+            <!--                android:hint="@string/to"-->
+            <!--                android:maxLines="1"-->
+            <!--                android:textColor="@color/black"/>-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
     </LinearLayout>
 
@@ -105,45 +141,45 @@
 
         <TextView
             android:id="@+id/everyDay"
+            style="@style/purple_outline_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
+            android:background="@drawable/purple_out_line"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:textSize="@dimen/sub_text"
             android:paddingVertical="@dimen/_5sdp"
-            style="@style/purple_outline_button_style"
-            android:background="@drawable/purple_out_line"
-            android:text="@string/everyday" />
+            android:text="@string/everyday"
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/weekDays"
+            style="@style/purple_outline_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:textSize="@dimen/sub_text"
-            style="@style/purple_outline_button_style"
             android:background="@drawable/purple_out_line"
             android:gravity="center"
-            android:text="@string/week_days" />
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/week_days"
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/weekEnd"
+            style="@style/purple_outline_button_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:textSize="@dimen/sub_text"
-            style="@style/purple_outline_button_style"
             android:background="@drawable/purple_out_line"
             android:gravity="center"
-            android:text="@string/week_ends" />
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/week_ends"
+            android:textSize="@dimen/sub_text" />
 
     </LinearLayout>
 

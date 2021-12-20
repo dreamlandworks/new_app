@@ -1,5 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_profile
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -43,6 +44,20 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.*
+import android.R.attr.data
+import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.satrango.utils.toast
+import androidx.annotation.NonNull
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+
+import com.google.firebase.storage.UploadTask
+import com.google.android.gms.tasks.OnSuccessListener
+import java.text.SimpleDateFormat
 
 
 class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
@@ -315,14 +330,33 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 snackBar(binding.applyBtn, e.message!!)
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            progressDialog.show()
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
-            binding.profilePic.setImageBitmap(imageBitmap)
+            val storageRef = FirebaseStorage.getInstance().reference
+            val profilePicStorageRef = storageRef.child("images/profile_pic_with_user_id_${UserUtils.getUserId(this)}.jpg")
+            profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                toast(this, it.message!!)
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+
+                }
+            }.addOnSuccessListener {
+                profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val url = uri.toString()
+                    val database = Firebase.database
+                    val myRef = database.getReference(UserUtils.getFCMToken(this))
+                    myRef.child("profile_pic_path").setValue(url)
+                    Glide.with(this).load(url).into(binding.profilePic)
+                    progressDialog.dismiss()
+                }
+            }
             try {
-                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
+                imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap)!!)
             } catch (e: Exception) {
                 snackBar(binding.applyBtn, e.message!!)
             }
+            binding.profilePic.setImageBitmap(data.extras!!.get("data") as Bitmap?)
         }
         if (imageStream != null) {
             val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
@@ -390,10 +424,12 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         datePickerDialog.show()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val path = Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
     }
 
