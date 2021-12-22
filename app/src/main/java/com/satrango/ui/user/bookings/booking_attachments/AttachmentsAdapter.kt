@@ -3,6 +3,7 @@ package com.satrango.ui.user.bookings.booking_attachments
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.databinding.AttachmentRowBinding
@@ -17,19 +18,27 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
         val binding = binding
 
         fun bind(imagePath: Attachment) {
-            if (imagePath.file_name.isEmpty()) {
-                Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
-            } else {
-                Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
-            }
-            if (binding.image.drawable == null) {
-                if (imagePath.file_name.isNotEmpty()) {
-                    Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
-                    if (binding.image.drawable == null) {
-                        Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
-                    }
-                }
-            }
+            Glide.with(binding.image).load(imagePath.file_name).error(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+//            if (binding.image.drawable == null) {
+//                Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+//                if (binding.image.drawable == null) {
+//                    Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
+//                }
+//            }
+
+//            if (imagePath.file_name.isEmpty()) {
+//                Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+//            } else {
+//                Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
+//            }
+//            if (binding.image.drawable == null) {
+//                if (imagePath.file_name.isNotEmpty()) {
+//                    Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+//                    if (binding.image.drawable == null) {
+//                        Glide.with(binding.image).load(imagePath.file_name).into(binding.image)
+//                    }
+//                }
+//            }
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
             }
@@ -49,6 +58,9 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
+        holder.itemView.setOnClickListener {
+            Toast.makeText(holder.binding.closeBtn.context, "Selected", Toast.LENGTH_SHORT).show()
+        }
         holder.binding.closeBtn.setOnClickListener {
             attachmentsListener.deleteAttachment(position, list[position])
         }

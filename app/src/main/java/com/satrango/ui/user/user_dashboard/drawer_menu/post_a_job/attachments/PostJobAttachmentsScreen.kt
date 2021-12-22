@@ -17,6 +17,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +25,7 @@ import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -76,6 +74,7 @@ import kotlin.collections.ArrayList
 
 class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
+    private lateinit var database: FirebaseDatabase
     private lateinit var data: MyJobPostViewResModel
     private lateinit var binding: ActivityPostJobAttachmentsScreenBinding
     private lateinit var viewModel: ProviderSignUpOneViewModel
@@ -86,7 +85,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var keywordsMList: List<Data>
 
     private val CAMERA_REQUEST: Int = 100
-    private val GALLERY_REQUEST = 100
+    private val GALLERY_REQUEST = 101
 
     companion object {
         lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
@@ -102,7 +101,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityPostJobAttachmentsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val database = Firebase.database
+        database = Firebase.database
         firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
 
         initializeToolBar()
@@ -203,7 +202,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
 
             attachments.setOnClickListener {
-                getImageFromGallery()
+                openImagePicker()
             }
 
         }
@@ -217,6 +216,26 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         if (UserUtils.EDIT_MY_JOB_POST) {
             updateUI()
         }
+    }
+
+    private fun openImagePicker() {
+        val options = resources.getStringArray(R.array.imageSelections)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Select image")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> getImageFromGallery()
+                    1 -> capturePictureFromCamera()
+                }
+            }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun capturePictureFromCamera() {
+        val cameraIntent = Intent()
+        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 
     private fun initializeToolBar() {
@@ -530,8 +549,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 )
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
-            binding.attachmentsRV.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
             Log.e("PATHS:", Gson().toJson(imagePathList))
 
@@ -555,8 +573,16 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                                 val image_url = data.value.toString()
                                 val image_key = data.key.toString()
                                 Log.e("SNAPSHOT:", image_url)
-                                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
-                                encodedImages.add(Attachment(image_url))
+                                var existed = false
+                                for (image in imagePathList) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
+                                        existed = true
+                                    }
+                                }
+                                if (!existed) {
+                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                    encodedImages.add(Attachment(image_url))
+                                }
                             }
                             binding.attachmentsRV.layoutManager = LinearLayoutManager(this@PostJobAttachmentsScreen, LinearLayoutManager.HORIZONTAL,false)
                             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
@@ -565,6 +591,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                         override fun onCancelled(databaseError: DatabaseError) {
                         }
                     }
+                    firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
                     firebaseDatabaseRef.addListenerForSingleValueEvent(menuListener)
                 }
             }

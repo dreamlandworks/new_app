@@ -36,6 +36,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
@@ -140,10 +141,11 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         }
         if (images.isEmpty()) {
             binding.attachmentsLayout.visibility = View.GONE
+        } else {
+            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
+            toast(this, images.size.toString())
         }
-        binding.attachmentsRV.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
 
         binding.bidCount.text = data.job_post_details.total_bids.toString()
         binding.avgAmount.text = data.job_post_details.average_bids_amount

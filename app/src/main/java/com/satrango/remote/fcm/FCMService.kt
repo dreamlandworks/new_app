@@ -4,15 +4,19 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.media.RingtoneManager.getDefaultUri
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
@@ -43,6 +47,7 @@ class FCMService : FirebaseMessagingService() {
         remoteMessage.notification?.let {
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString())
+
             if (it.title == "accepted") {
                 notificationManager.cancelAll()
                 if (ProviderDashboard.bottomSheetDialog != null) {
@@ -56,9 +61,11 @@ class FCMService : FirebaseMessagingService() {
             if (it.title == "user") {
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
+//                        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, IntentFilter(it.body))
                         addNotification(it.body)
                     }
                 }
+//                addNotification(it.body)
             } else {
                 if (!UserUtils.getInstantBooking(this)) {
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
@@ -90,21 +97,14 @@ class FCMService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongConstant")
     private fun addNotification(body: String?) {
-
         val requestID = System.currentTimeMillis().toInt()
-
         val alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
         ProviderDashboard.FROM_FCM_SERVICE = true
         val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
-        notificationIntent.putExtra(
-            application.getString(R.string.booking_id),
-            body?.split("|")!![0]
-        )
+        notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
-//        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel =
@@ -137,42 +137,15 @@ class FCMService : FirebaseMessagingService() {
 
         fcmInstant = Instant.now()
 
-//        val threadPool = Executors.newSingleThreadExecutor()
-//        threadPool.submit(Runnable {
-//            if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
-//                ProviderDashboard.progressTime -= 1
-//                ProviderDashboard.seconds -= 1
-//                if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
-//                    notificationManager.cancelAll()
-//                }
-//                if (ProviderDashboard.seconds == 0) {
-//                    ProviderDashboard.seconds = 59
-//                    ProviderDashboard.minutes -= 1
-//                }
-//            }
-//            Log.e("THREAD: ", "ONGOING....")
-//            threadPool.waitMillis(1000)
-//        })
+    }
 
-//        val mainHandler = Handler(Looper.getMainLooper())
-//        mainHandler.post(object : Runnable {
-//            override fun run() {
-//                mainHandler.postDelayed(this, 1000)
-//
-//                if (!ProviderDashboard.IN_PROVIDER_DASHBOARD) {
-//                    ProviderDashboard.progressTime -= 1
-//                    ProviderDashboard.seconds -= 1
-//                    if (ProviderDashboard.minutes == 0 && ProviderDashboard.seconds == 0) {
-//                        notificationManager.cancelAll()
-//                    }
-//                    if (ProviderDashboard.seconds == 0) {
-//                        ProviderDashboard.seconds = 59
-//                        ProviderDashboard.minutes -= 1
-//                    }
-//                    Log.e("THREAD: ", "ONGOING....")
-//                }
-//            }
-//        })
+    private val messageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context?, intent: Intent) {
+            val body = intent.extras?.getString("body")
+            addNotification(body!!)
+        }
 
     }
 }
+

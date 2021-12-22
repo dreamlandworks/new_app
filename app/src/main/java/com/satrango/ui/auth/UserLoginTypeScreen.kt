@@ -80,31 +80,6 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 }
                 Log.e("FCM TOKEN", token)
 
-
-//                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//                if (cameraIntent.resolveActivity(packageManager) != null) {
-//                    startActivityForResult(cameraIntent, 0)
-//                    try {
-//                        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-//                        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-//                        pictureFile = File.createTempFile("ZOFTINO_$timeStamp", ".jpg", storageDir)
-//                    } catch (ex: IOException) {
-//                        Toast.makeText(
-//                            this,
-//                            "Photo file can't be created, please try again",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                    if (pictureFile != null) {
-//                        val photoURI = FileProvider.getUriForFile(
-//                            this,
-//                            "${packageName}.provider",
-//                            pictureFile
-//                        )
-//                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-//                        startActivityForResult(cameraIntent, 0)
-//                    }
-//                }
             })
         } else {
             snackBar(binding.userBtn, "Please check internet connection!")
@@ -123,7 +98,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
 
             serviceProviderBtn.setOnClickListener {
                 ProviderDashboard.FROM_FCM_SERVICE = false
-                startActivity(Intent(this@UserLoginTypeScreen, ProviderSignUpOne::class.java))
+                startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
                 finish()
             }
 
