@@ -301,8 +301,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun updateUI() {
-        data =
-            Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
         val chips = ArrayList<ChipInfo>()
         for (language in data.languages) {
             chips.add(ChipInfo(language, language))

@@ -75,132 +75,57 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
 
         if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+
             val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
             val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+
             Log.e("FILTER:", Gson().toJson(filter))
-            Log.e("FILTER:", Gson().toJson(spDetails))
+            Log.e("SPDETAILS:", Gson().toJson(spDetails))
+
             val spDetailsList = spDetails.data
-//            var list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
-//            spDetailsList.forEachIndexed { index, data ->
-//                list.add(data)
-//            }
-//            if (filter.rating) {
-//                    binding.listCount.visibility = View.VISIBLE
-//                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-//                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating }, this)
-//            }
-
-//            if (filter.ranking) {
-//                    binding.listCount.visibility = View.VISIBLE
-//                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-//                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.ranking }, this)
-//            }
-
-//            if (filter.nearMe) {
-//                list = list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.distance_kms } as ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>
-//            }
-//
-//            if (filter.highToLow) {
-//                list = list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount } as ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>
-////                    binding.listCount.visibility = View.VISIBLE
-////                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-////                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
-////                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount }, this)
-//            } else if (filter.lowToHigh) {
-//                list = list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount } as ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>
-////                    binding.listCount.visibility = View.VISIBLE
-////                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-////                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
-////                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount }, this)
-//            }
-//
-//
-//
-//            for (sp in list) {
-//                if (filter.priceRangeFrom.toDouble() <= sp.final_amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.final_amount.toDouble()) {
-//                    if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
-//                        list.add(sp)
-//                    }
-//                }
-//            }
-//
-//            binding.listCount.visibility = View.VISIBLE
-//            binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-//            binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//            binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
-
             val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetailsList) {
-//                list.add(sp)
-                if (filter.priceRangeFrom.toDouble() <= sp.per_hour.toDouble() && filter.priceRangeTo.toDouble() >= sp.per_hour.toDouble()) {
-                    if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
-                        if (filter.experience) {
-                            if (sp.exp != "0-1 Year") {
-                                list.add(sp)
-                            }
-                        } else if (filter.fresher) {
-                            if (sp.exp == "0-1 Year") {
-                                list.add(sp)
-                            }
-                        } else if (filter.any) {
-                            list.add(sp)
-                        } else {
-                            list.add(sp)
+                if (filter.priceRangeFrom.toDouble() <= sp.final_amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.final_amount.toDouble()) {
+                    if (filter.distance != "0") {
+                        if (filter.distance.toDouble() > sp.distance_kms.toDouble()) {
+                            continue
                         }
                     }
+                    if (filter.experience) {
+                        if (sp.exp == "0-1 Year") {
+                            continue
+                        }
+                    }
+                    if (filter.fresher) {
+                        if (sp.exp != "0-1 Year") {
+                            continue
+                        }
+                    }
+                    list.add(sp)
                 }
             }
-
-//            when {
-//                filter.fresher -> {
-//                    val temp = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
-//                    list.forEachIndexed { index, data ->
-//                        if (data.exp == "0-1 Year") {
-//                            temp.add(data)
-//                        }
-//                    }
-//                    list = temp
-//                }
-//                filter.experience -> {
-//                    val temp = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
-//                    list.forEachIndexed { index, data ->
-//                        if (data.exp != "0-1 Year") {
-//                            temp.add(data)
-//                        }
-//                    }
-//                    list = temp
-//                }
-//                filter.any -> {
-//                    val temp = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
-//                    list.forEachIndexed { index, data ->
-//                        temp.add(data)
-//                    }
-//                    list = temp
-//                }
-//            }
-//
-//            if (filter.distance != "0") {
-//                val temp = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
-//                list.forEachIndexed { index, data ->
-//                    if (filter.distance.toDouble() >= data.distance_kms.toDouble()) {
-//                        temp.add(data)
-//                    }
-//                }
-//                list = temp
-//            }
+            Log.e("FILTERED DATA:", Gson().toJson(list))
 
             when {
+                filter.ranking -> {
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.ranking }, this)
+                }
+                filter.rating -> {
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating }, this)
+                }
                 filter.lowToHigh -> {
-//                    list = list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount } as ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount }, this)
                 }
                 filter.highToLow -> {
-//                    list = list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount } as ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -213,10 +138,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
                 }
             }
-            binding.listCount.visibility = View.VISIBLE
-            binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
-            binding.recyclerView.layoutManager = LinearLayoutManager(this)
-            binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
         } else if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
             binding.listCount.text = "${spDetails.data.size} out of ${spDetails.data.size}"
@@ -306,18 +227,33 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //        )
 //        toast(this, requestBody.toString())
 
+//        {
+//            "address": "54-14/7-78",
+//            "city": "Vijayawada",
+//            "country": "India",
+//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
+//            "offer_id": 0,
+//            "postal_code": "520008",
+//            "search_phrase_id": "Android App Developer",
+//            "state": "Andhra Pradesh",
+//            "subcat_id": 0,
+//            "user_lat": "16.5094445",
+//            "user_long": "80.6706229",
+//            "users_id": 76
+//        }
+
         val requestBody = SearchServiceProviderReqModel(
-            "Vijayawada Bus Stand",
+            "54-14/7-78",
             "Vijayawada",
             "India",
             RetrofitBuilder.USER_KEY,
-            "Kotlin Developer",
-            "520013",
+            "Android App Developer",
+            "520008",
             "Andhra Pradesh",
-            "16.5092483",
-            "80.6175017",
-            56,
-            5,
+            "16.5094445",
+            "80.6706229",
+            76,
+            0,
             offerId
         )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))

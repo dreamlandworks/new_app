@@ -174,10 +174,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
                         fresher.setBackgroundResource(R.drawable.purple_out_line)
                         fresher.setTextColor(Color.parseColor("#0A84FF"))
-                        experience.setBackgroundResource(R.drawable.provider_btn_bg)
-                        experience.setTextColor(Color.parseColor("#FFFFFF"))
-                        any.setBackgroundResource(R.drawable.provider_btn_bg)
-                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.purple_out_line)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.purple_out_line)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         fresher.setBackgroundResource(R.drawable.provider_btn_bg)
                         fresher.setTextColor(Color.parseColor("#FFFFFF"))
@@ -190,10 +190,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
                         fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         fresher.setTextColor(Color.parseColor("#0A84FF"))
-                        experience.setBackgroundResource(R.drawable.user_btn_bg)
-                        experience.setTextColor(Color.parseColor("#FFFFFF"))
-                        any.setBackgroundResource(R.drawable.user_btn_bg)
-                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         fresher.setBackgroundResource(R.drawable.user_btn_bg)
                         fresher.setTextColor(Color.parseColor("#FFFFFF"))
@@ -209,10 +209,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
                         experience.setBackgroundResource(R.drawable.purple_out_line)
                         experience.setTextColor(Color.parseColor("#0A84FF"))
-                        fresher.setBackgroundResource(R.drawable.provider_btn_bg)
-                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                        any.setBackgroundResource(R.drawable.provider_btn_bg)
-                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.purple_out_line)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.purple_out_line)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         experience.setBackgroundResource(R.drawable.provider_btn_bg)
                         experience.setTextColor(Color.parseColor("#FFFFFF"))
@@ -225,10 +225,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
                         experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         experience.setTextColor(Color.parseColor("#0A84FF"))
-                        fresher.setBackgroundResource(R.drawable.user_btn_bg)
-                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                        any.setBackgroundResource(R.drawable.user_btn_bg)
-                        any.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        any.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         experience.setBackgroundResource(R.drawable.user_btn_bg)
                         experience.setTextColor(Color.parseColor("#FFFFFF"))
@@ -244,10 +244,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
                         any.setBackgroundResource(R.drawable.purple_out_line)
                         any.setTextColor(Color.parseColor("#0A84FF"))
-                        fresher.setBackgroundResource(R.drawable.provider_btn_bg)
-                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                        experience.setBackgroundResource(R.drawable.provider_btn_bg)
-                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.purple_out_line)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.purple_out_line)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         any.setBackgroundResource(R.drawable.provider_btn_bg)
                         any.setTextColor(Color.parseColor("#FFFFFF"))
@@ -260,10 +260,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
                         any.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         any.setTextColor(Color.parseColor("#0A84FF"))
-                        fresher.setBackgroundResource(R.drawable.user_btn_bg)
-                        fresher.setTextColor(Color.parseColor("#FFFFFF"))
-                        experience.setBackgroundResource(R.drawable.user_btn_bg)
-                        experience.setTextColor(Color.parseColor("#FFFFFF"))
+                        fresher.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        fresher.setTextColor(Color.parseColor("#0A84FF"))
+                        experience.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        experience.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         any.setBackgroundResource(R.drawable.user_btn_bg)
                         any.setTextColor(Color.parseColor("#FFFFFF"))
@@ -318,6 +318,9 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
 
             }
 
+            clearAll.setOnClickListener {
+                startActivity(intent)
+            }
 
             applyBtn.setOnClickListener {
                 var ratingValue = false
@@ -415,6 +418,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             binding.applyBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.applyBtn.setTextColor(resources.getColor(R.color.white))
         }
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
     }
 
 }
