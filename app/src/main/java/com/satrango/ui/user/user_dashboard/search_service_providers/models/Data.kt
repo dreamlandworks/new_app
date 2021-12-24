@@ -43,5 +43,7 @@ data class Data(
     val registered_on: String,
     val state: String,
     val subcategory_id: String,
+    val rank: Int,
+    val rating: Int,
     val users_id: String
 ): Serializable

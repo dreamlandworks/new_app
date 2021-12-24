@@ -11,7 +11,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
@@ -106,8 +108,8 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
     private fun addView(timeSlot: PreferredTimeSlot?) {
         val cricketerView: View = layoutInflater.inflate(R.layout.row_slot_item, null, false)
 
-        val fromDate = cricketerView.findViewById<TextInputEditText>(R.id.fromTime)
-        val toDate = cricketerView.findViewById<TextInputEditText>(R.id.toTime)
+        val fromDate = cricketerView.findViewById<Spinner>(R.id.fromTime)
+        val toDate = cricketerView.findViewById<Spinner>(R.id.toTime)
         val everyDay = cricketerView.findViewById<TextView>(R.id.everyDay)
         val weekDays = cricketerView.findViewById<TextView>(R.id.weekDays)
         val weekEnds = cricketerView.findViewById<TextView>(R.id.weekEnd)
@@ -120,8 +122,23 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
         val saturday = cricketerView.findViewById<TextView>(R.id.saturday)
 
         if (timeSlot != null) {
-            fromDate.setText(timeSlot.time_slot_from)
-            toDate.setText(timeSlot.time_slot_to)
+            val fromTime = resources.getStringArray(R.array.timingsList)
+            val fromTimeList = ArrayList<String>()
+            fromTimeList.add("From")
+            for (time in fromTime) {
+                fromTimeList.add(time)
+            }
+            fromDate.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, fromTimeList)
+            val toTime = resources.getStringArray(R.array.timingsList)
+            val toTimeList = ArrayList<String>()
+            toTimeList.add("To")
+            for (time in toTime) {
+                toTimeList.add(time)
+            }
+            toDate.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, toTimeList)
+
+            fromDate.setSelection(timeSlot.time_slot_from.split(":")[0].toInt() + 1)
+            toDate.setSelection(timeSlot.time_slot_to.split(":")[0].toInt() + 1)
 
             val daySlots = timeSlot.day_slots.split(",")
             for (slot in daySlots) {
@@ -160,16 +177,16 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
         val imageClose = cricketerView.findViewById<View>(R.id.image_remove) as ImageView
         imageClose.setOnClickListener { removeView(cricketerView) }
 
-        fromDate.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                openDatePickerDialog(fromDate)
-            }
-        }
-        toDate.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                openDatePickerDialog(toDate)
-            }
-        }
+//        fromDate.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                openDatePickerDialog(fromDate)
+//            }
+//        }
+//        toDate.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                openDatePickerDialog(toDate)
+//            }
+//        }
 
         everyDay.setOnClickListener {
             everyDay.setBackgroundResource(R.drawable.provider_btn_bg)
@@ -458,8 +475,8 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)
 
-            val fromTime = slotView.findViewById<TextInputEditText>(R.id.fromTime)
-            val toTime = slotView.findViewById<TextInputEditText>(R.id.toTime)
+            val fromTime = slotView.findViewById<Spinner>(R.id.fromTime)
+            val toTime = slotView.findViewById<Spinner>(R.id.toTime)
 
             val everyDay = slotView.findViewById<TextView>(R.id.everyDay)
             val weekDays = slotView.findViewById<TextView>(R.id.weekDays)
@@ -477,16 +494,33 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
             var selectedFromTime = ""
             var selectedToTime = ""
 
-            if (fromTime.text.toString().isNotEmpty()) {
-                selectedFromTime = fromTime.text.toString().trim()
-            } else {
-                toast(requireContext(), "Select From Time")
+//            if (fromTime.text.toString().isNotEmpty()) {
+//                selectedFromTime = fromTime.text.toString().trim()
+//            } else {
+//                toast(requireContext(), "Select From Time")
+//                return emptyList()
+//            }
+//            if (toTime.text.toString().isNotEmpty()) {
+//                selectedToTime = toTime.text.toString().trim()
+//            } else {
+//                toast(requireContext(), "Select To Time")
+//                return emptyList()
+//            }
+
+            if (fromTime.selectedItemPosition == 0) {
+                toast(requireContext(), "Please select From Time")
                 return emptyList()
-            }
-            if (toTime.text.toString().isNotEmpty()) {
-                selectedToTime = toTime.text.toString().trim()
             } else {
-                toast(requireContext(), "Select To Time")
+                selectedFromTime = "${fromTime.selectedItemPosition - 1}:00:00"
+            }
+            if (toTime.selectedItemPosition == 0) {
+                toast(requireContext(), "Please select To Time")
+                return emptyList()
+            } else {
+                selectedToTime = "${toTime.selectedItemPosition - 1}:00:00"
+            }
+            if (fromTime.selectedItemPosition >= toTime.selectedItemPosition) {
+                toast(requireContext(), "Please select To Time is Greater Than From Time")
                 return emptyList()
             }
 

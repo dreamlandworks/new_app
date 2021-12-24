@@ -233,11 +233,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text" />
 
-            <TextView
+            <EditText
                 android:id="@+id/amountFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="250.00"
+                android:text="Rs. 250 /-"
+                android:singleLine="true"
+                android:inputType="number"
                 android:textColor="@color/red"
                 android:textSize="@dimen/text"
                 android:textStyle="bold" />
@@ -251,11 +253,13 @@
                 android:textSize="@dimen/text"
                 android:textStyle="bold" />
 
-            <TextView
+            <EditText
                 android:id="@+id/amountTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2500.00"
+                android:text="Rs. 2500 /-"
+                android:inputType="number"
+                android:singleLine="true"
                 android:textColor="@color/red"
                 android:textSize="@dimen/text"
                 android:textStyle="bold" />

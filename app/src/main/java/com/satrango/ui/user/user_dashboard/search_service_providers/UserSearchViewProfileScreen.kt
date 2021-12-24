@@ -77,11 +77,11 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             aboutMe.text = data.about_me
             languages.text = data.languages_known
 
-//            ranking.text = data.points_count
-//            rating.text = data.points_count
-//            reviews.text = data.points_count
-//            jobs.text = data.points_count
-//            overAllReviews.text = data.
+            ranking.text = data.rank.toString()
+            rating.text = data.rating.toString()
+//            reviews.text = data.
+//            jobs.text = data
+//            overAllReviews.text = data.rating.toString()
 
 //            audience.text = data.
 //            professionRating.text = data.

@@ -53,6 +53,8 @@ class SearchServiceProviderAdapter(
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
+            binding.userRating.text = data.rating.toString()
+            binding.userRank.text = data.rank.toString()
             binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
             if (SearchServiceProvidersScreen.offerId != 0) {
                 binding.actualCost.text = "Rs. ${round(data.actual_amount.toDouble()).toInt()}/-"
@@ -60,7 +62,7 @@ class SearchServiceProviderAdapter(
             } else {
                 binding.actualCost.visibility = View.GONE
             }
-            binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms"
+            binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms away"
 
             val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(binding.profilePic.context), SearchServiceProviderResModel::class.java)
             for (sp in spDetails.slots_data) {

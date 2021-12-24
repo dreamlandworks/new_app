@@ -64,7 +64,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         binding.sortFilterBtn.setOnClickListener {
-            UserUtils.saveSearchFilter(this, "")
+//            UserUtils.saveSearchFilter(this, "")
             SortAndFilterServiceProvider.FROM_PROVIDER = false
             startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
         }
@@ -87,7 +87,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             for (sp in spDetailsList) {
                 if (filter.priceRangeFrom.toDouble() <= sp.final_amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.final_amount.toDouble()) {
                     if (filter.distance != "0") {
-                        if (filter.distance.toDouble() > sp.distance_kms.toDouble()) {
+                        if (filter.distance.toDouble() < sp.distance_kms.toDouble()) {
                             continue
                         }
                     }
@@ -111,13 +111,19 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.ranking }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rank }, this)
+                }
+                filter.nearMe -> {
+                    binding.listCount.visibility = View.VISIBLE
+                    binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.distance_kms }, this)
                 }
                 filter.rating -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating }, this)
                 }
                 filter.lowToHigh -> {
                     binding.listCount.visibility = View.VISIBLE
@@ -211,20 +217,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keyword,
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
+        val requestBody = SearchServiceProviderReqModel(
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            RetrofitBuilder.USER_KEY,
+            keyword,
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
+            offerId
+        )
 //        toast(this, requestBody.toString())
 
 //        {
@@ -242,6 +248,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            "users_id": 76
 //        }
 
+/*
         val requestBody = SearchServiceProviderReqModel(
             "54-14/7-78",
             "Vijayawada",
@@ -258,6 +265,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
+*/
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)

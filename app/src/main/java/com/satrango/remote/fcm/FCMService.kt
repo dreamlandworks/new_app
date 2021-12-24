@@ -59,12 +59,12 @@ class FCMService : FirebaseMessagingService() {
             }
 
             if (it.title == "user") {
-                if (!ProviderDashboard.FROM_FCM_SERVICE) {
+//                if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
 //                        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, IntentFilter(it.body))
                         addNotification(it.body)
                     }
-                }
+//                }
 //                addNotification(it.body)
             } else {
                 if (!UserUtils.getInstantBooking(this)) {

@@ -27,6 +27,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
 
     private lateinit var binding: ActivitySortAndFilterServiceProviderBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySortAndFilterServiceProviderBinding.inflate(layoutInflater)
@@ -37,6 +38,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         binding.apply {
 
             resetBtn.setOnClickListener {
+                UserUtils.saveSearchFilter(this@SortAndFilterServiceProvider, "")
                 onBackPressed()
             }
 
@@ -276,50 +278,52 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             }
 
             priceRange.addOnChangeListener { slider, value, fromUser ->
-                binding.amountFrom.text = slider.values[0].toString()
-                binding.amountTo.text = slider.values[1].toString()
+                binding.amountFrom.setText("Rs. ${slider.values[0].toInt()} /-")
+                binding.amountTo.setText("Rs. ${slider.values[1].toInt()} /-")
             }
 
-            if (UserUtils.getSearchFilter(this@SortAndFilterServiceProvider).isNotEmpty() && UserUtils.getSelectedSPDetails(this@SortAndFilterServiceProvider).isNotEmpty()) {
+            if (UserUtils.getSearchFilter(this@SortAndFilterServiceProvider).isNotEmpty()) {
                 val filter = Gson().fromJson(UserUtils.getSearchFilter(this@SortAndFilterServiceProvider), SearchFilterModel::class.java)
                 if (filter.rating) {
                     rating.setBackgroundResource(R.drawable.user_btn_bg)
                     rating.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.ranking) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    ranking.setBackgroundResource(R.drawable.user_btn_bg)
+                    ranking.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.nearMe) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    nearMe.setBackgroundResource(R.drawable.user_btn_bg)
+                    nearMe.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.lowToHigh) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
+                    priceLowToHigh.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.highToLow) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
+                    priceHighToLow.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.fresher) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    fresher.setBackgroundResource(R.drawable.user_btn_bg)
+                    fresher.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.experience) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    experience.setBackgroundResource(R.drawable.user_btn_bg)
+                    experience.setTextColor(Color.parseColor("#ffffff"))
                 }
                 if (filter.any) {
-                    rating.setBackgroundResource(R.drawable.user_btn_bg)
-                    rating.setTextColor(Color.parseColor("#ffffff"))
+                    any.setBackgroundResource(R.drawable.user_btn_bg)
+                    any.setTextColor(Color.parseColor("#ffffff"))
                 }
-
-
+                amountFrom.setText("Rs. ${filter.priceRangeFrom} /-")
+                amountTo.setText("Rs. ${filter.priceRangeTo} /-")
+                kms.text = "${filter.distance} Kms"
             }
 
             clearAll.setOnClickListener {
-                startActivity(intent)
+                UserUtils.saveSearchFilter(this@SortAndFilterServiceProvider, "")
+                onBackPressed()
             }
 
             applyBtn.setOnClickListener {
@@ -360,8 +364,8 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     anyValue = true
                 }
                 distanceValue = binding.kms.text.toString().split(" ")[0]
-                priceRangeFromValue = binding.amountFrom.text.toString()
-                priceRangeToValue = binding.amountTo.text.toString()
+                priceRangeFromValue = binding.amountFrom.text.toString().split(" ")[1]
+                priceRangeToValue = binding.amountTo.text.toString().split(" ")[1]
                 val filter = SearchFilterModel(
                     ratingValue,
                     rankingValue,

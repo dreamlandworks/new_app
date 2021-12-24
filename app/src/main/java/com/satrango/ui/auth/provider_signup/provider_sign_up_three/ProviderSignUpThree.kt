@@ -257,14 +257,14 @@ class ProviderSignUpThree : AppCompatActivity() {
 
         val fromTime = resources.getStringArray(R.array.timingsList)
         val fromTimeList = ArrayList<String>()
-        fromTimeList.add("From Date")
+        fromTimeList.add("From")
         for (time in fromTime) {
             fromTimeList.add(time)
         }
         fromDate.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, fromTimeList)
         val toTime = resources.getStringArray(R.array.timingsList)
         val toTimeList = ArrayList<String>()
-        toTimeList.add("To Date")
+        toTimeList.add("To")
         for (time in toTime) {
             toTimeList.add(time)
         }
