@@ -494,19 +494,6 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
             var selectedFromTime = ""
             var selectedToTime = ""
 
-//            if (fromTime.text.toString().isNotEmpty()) {
-//                selectedFromTime = fromTime.text.toString().trim()
-//            } else {
-//                toast(requireContext(), "Select From Time")
-//                return emptyList()
-//            }
-//            if (toTime.text.toString().isNotEmpty()) {
-//                selectedToTime = toTime.text.toString().trim()
-//            } else {
-//                toast(requireContext(), "Select To Time")
-//                return emptyList()
-//            }
-
             if (fromTime.selectedItemPosition == 0) {
                 toast(requireContext(), "Please select From Time")
                 return emptyList()
@@ -563,13 +550,33 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
                     toast(requireContext(), "Select Days")
                     return emptyList()
                 } else {
-                    slotList.add(
-                        TimeslotResponse(
-                            TextUtils.join(",", daysList),
-                            "$time:00:00",
-                            "${time + 1}:00:00"
+                    if (time < 10) {
+                        if (time + 1 < 10) {
+                            slotList.add(
+                                TimeslotResponse(
+                                    TextUtils.join(",", daysList),
+                                    "0$time:00:00",
+                                    "0${time + 1}:00:00"
+                                )
+                            )
+                        } else {
+                            slotList.add(
+                                TimeslotResponse(
+                                    TextUtils.join(",", daysList),
+                                    "0$time:00:00",
+                                    "${time + 1}:00:00"
+                                )
+                            )
+                        }
+                    } else {
+                        slotList.add(
+                            TimeslotResponse(
+                                TextUtils.join(",", daysList),
+                                "$time:00:00",
+                                "${time + 1}:00:00"
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

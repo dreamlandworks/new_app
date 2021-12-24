@@ -228,6 +228,12 @@ interface UserApiService {
         @Query("key") key: String
     ): PostJobSkillsResModel
 
+    @GET(UserApiEndPoints.AUTOCOMPLETE_BY_CATEGORY)
+    suspend fun getSkillsByCategory(
+        @Query("key") key: String,
+        @Query("category_id") categoryId: String
+    ): PostJobSkillsResModel
+
     @GET(UserApiEndPoints.PLANS)
     suspend fun getUserPlans(
         @Query("key") key: String,

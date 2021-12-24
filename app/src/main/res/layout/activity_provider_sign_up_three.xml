@@ -227,6 +227,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/blankOne"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="@dimen/_15sdp"
@@ -390,6 +391,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/blankTwo"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="@dimen/_15sdp"
@@ -553,6 +555,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/blankThree"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="@dimen/_15sdp"

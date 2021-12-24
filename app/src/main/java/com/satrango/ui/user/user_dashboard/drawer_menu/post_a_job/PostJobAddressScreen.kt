@@ -167,7 +167,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.data!!.message)
+                    showSuccessDialog("Updated")
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -220,7 +220,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     progressDialog.dismiss()
                     if (it.data!!.user_plan_id == "0") {
                         UserMyAccountScreen.FROM_MY_ACCOUNT = false
-                        showSuccessDialog()
+                        showSuccessDialog("Created")
 //                        startActivity(Intent(this@PostJobAddressScreen, UserPlanScreen::class.java))
                     }
                 }
@@ -323,13 +323,13 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showSuccessDialog() {
+    private fun showSuccessDialog(message: String) {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val homeBtn = dialogView.findViewById<TextView>(R.id.closBtn)
         val text = dialogView.findViewById<TextView>(R.id.text)
-        text.text = "Your Job is successfully Posted"
+        text.text = "Your Job is successfully $message"
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))

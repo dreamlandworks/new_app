@@ -75,5 +75,7 @@ object UserApiEndPoints {
     final const val UPDATE_RESCHEDULE_REQUEST_STATUS = "user/update_reschedule_status_by_sp"
     final const val LOGOUT = "user/logout"
     final const val CITIES = "user/get_cities_list"
+    final const val AUTOCOMPLETE_BY_CATEGORY = "user/autocomplete_by_category"
+
 
 }

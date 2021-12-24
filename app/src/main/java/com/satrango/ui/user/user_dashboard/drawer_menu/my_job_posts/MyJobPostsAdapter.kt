@@ -31,7 +31,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
             binding.bidCount.text = jobPostDetail.total_bids.toString()
             binding.avgAmount.text = jobPostDetail.average_bids_amount
             if (!jobPostDetail.details[0].locality.isNullOrBlank()) {
-                binding.jobLocation.text = jobPostDetail.details[0].locality
+                binding.jobLocation.text = "${jobPostDetail.details[0].locality}, ${jobPostDetail.details[0].city}"
             } else if (!jobPostDetail.details[0].city.isNullOrBlank()) {
                 binding.jobLocation.text = jobPostDetail.details[0].city
             } else {

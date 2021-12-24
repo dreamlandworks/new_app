@@ -44,6 +44,10 @@ class PostJobRepository: BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().getSkills(RetrofitBuilder.USER_KEY)
     }
 
+    suspend fun getSkillsByCategory(categoryId: String): PostJobSkillsResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().getSkillsByCategory(RetrofitBuilder.USER_KEY, categoryId)
+    }
+
     suspend fun getUserPlans(context: Context): PostJobPlansResModel {
         return RetrofitBuilder.getUserRetrofitInstance().getUserPlans(RetrofitBuilder.USER_KEY, UserUtils.getUserId(context).toInt())
     }

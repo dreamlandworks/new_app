@@ -46,6 +46,7 @@ import org.json.JSONObject
 class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
     var skills = MutableLiveData<NetworkResponse<List<Data>>>()
+    var skillsByCategory = MutableLiveData<NetworkResponse<List<Data>>>()
     var userPlans = MutableLiveData<NetworkResponse<PostJobPlansResModel>>()
     var planPayment = MutableLiveData<NetworkResponse<UserPlanPaymentResModel>>()
     var bidRanges = MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data>>>()
@@ -582,6 +583,30 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             rejectJobPostStatus.value = NetworkResponse.Failure("No Internet Connection!")
         }
         return rejectJobPostStatus
+    }
+
+    fun skillsByCategoryId(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<Data>>> {
+
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    skillsByCategory.value = NetworkResponse.Loading()
+                    val response = async { repository.getSkillsByCategory(categoryId) }
+                    val data = response.await()
+                    if (data.status == 200) {
+                        skillsByCategory.value = NetworkResponse.Success(data.data)
+                    } else {
+                        skillsByCategory.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    skillsByCategory.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+
+        return skillsByCategory
     }
 
 }

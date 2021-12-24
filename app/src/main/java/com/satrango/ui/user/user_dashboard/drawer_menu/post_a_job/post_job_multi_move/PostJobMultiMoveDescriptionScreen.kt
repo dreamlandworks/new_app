@@ -418,7 +418,21 @@ class PostJobMultiMoveDescriptionScreen : AppCompatActivity() {
     private fun loadKeyWords() {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        viewModel.skills(this).observe(this, {
+        val categoryId = when {
+            UserUtils.getFromJobPostSingleMove(this) -> {
+                "1"
+            }
+            UserUtils.getFromJobPostBlueCollar(this) -> {
+                "2"
+            }
+            UserUtils.getFromJobPostMultiMove(this) -> {
+                "3"
+            }
+            else -> {
+                "0"
+            }
+        }
+        viewModel.skillsByCategoryId(this, categoryId).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

@@ -70,6 +70,8 @@ class ProviderSignUpThree : AppCompatActivity() {
             if (ProviderUtils.profession!!.size > 1) {
                 tariffTwoText.text = "My Tariff for ${ProviderUtils.profession!![1].name} is"
             } else {
+                blankTwo.visibility = View.GONE
+                blankThree.visibility = View.GONE
                 tariffTwoLayout.visibility = View.GONE
                 tariffThreeLayout.visibility = View.GONE
             }
@@ -77,6 +79,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                 tariffThreeText.text = "My Tariff for ${ProviderUtils.profession!![2].name} is"
             } else {
                 tariffThreeLayout.visibility = View.GONE
+                blankThree.visibility = View.GONE
             }
 
             addSlot.setOnClickListener { addView() }
@@ -185,6 +188,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                 }
 
                 ProviderUtils.slotsList = validateSlots()
+                Log.e("SLOTS:", Gson().toJson(ProviderUtils.slotsList))
                 submitActivationDetailsToServer()
             }
 
@@ -213,7 +217,6 @@ class ProviderSignUpThree : AppCompatActivity() {
             ProviderUtils.slotsList!!,
             UserUtils.getUserId(this)
         )
-        Log.e("JSON", Gson().toJson(requestBody))
         val factory = ViewModelFactory(ProviderSignUpFourRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
         viewModel.providerActivation(this, requestBody).observe(this, {
@@ -580,7 +583,7 @@ class ProviderSignUpThree : AppCompatActivity() {
 
     private fun validateSlots(): List<TimeslotResponse> {
 
-        val slotList = ArrayList<TimeslotResponse>()
+        val slotList = java.util.ArrayList<TimeslotResponse>()
 
         for (i in 0 until binding.layoutList.childCount) {
             val slotView = binding.layoutList.getChildAt(i)
@@ -620,24 +623,11 @@ class ProviderSignUpThree : AppCompatActivity() {
                 toast(this, "Please select To Time is Greater Than From Time")
                 return emptyList()
             }
-//            if (fromTime.text.toString().isNotEmpty()) {
-//                selectedFromTime = fromTime.text.toString().trim()
-//            } else {
-//                toast(this, "Select From Time")
-//                return emptyList()
-//            }
-//            if (toTime.text.toString().isNotEmpty()) {
-//                selectedToTime = toTime.text.toString().trim()
-//            } else {
-//                toast(this, "Select To Time")
-//                return emptyList()
-//            }
 
-            var from = selectedFromTime.split(":")[0].toInt()
-            from += from
+            val from = selectedFromTime.split(":")[0].toInt()
             val to = selectedToTime.split(":")[0].toInt()
             for (time in from..to) {
-                val daysList = ArrayList<String>()
+                val daysList = java.util.ArrayList<String>()
 
                 if (everyDay.currentTextColor == Color.WHITE) {
                     dayType = "EveryDay"
@@ -673,24 +663,37 @@ class ProviderSignUpThree : AppCompatActivity() {
                     toast(this, "Select Days")
                     return emptyList()
                 } else {
-                    var timeOneText = ""
-                    var timeTwoText = ""
-                    timeOneText = if (time < 10) {
-                        "0$time"
+                    if (time < 10) {
+                        if (time + 1 < 10) {
+                            slotList.add(
+                                TimeslotResponse(
+                                    TextUtils.join(",", daysList),
+                                    "0$time:00:00",
+                                    "0${time + 1}:00:00"
+                                )
+                            )
+                        } else {
+                            slotList.add(
+                                TimeslotResponse(
+                                    TextUtils.join(",", daysList),
+                                    "0$time:00:00",
+                                    "${time + 1}:00:00"
+                                )
+                            )
+                        }
                     } else {
-                        "$time"
+                        slotList.add(
+                            TimeslotResponse(
+                                TextUtils.join(",", daysList),
+                                "$time:00:00",
+                                "${time + 1}:00:00"
+                            )
+                        )
                     }
-                    val nextTime = time
-                    if (nextTime < 10) {
-                        timeTwoText = "0$nextTime"
-                    } else {
-                        timeTwoText = "$nextTime"
-                    }
-                    slotList.add(TimeslotResponse(TextUtils.join(",", daysList), "$timeOneText:00:00", "$timeTwoText:00:00"))
                 }
             }
         }
-        Log.e("VALIDATE:", slotList.toString())
+
         return slotList
     }
 

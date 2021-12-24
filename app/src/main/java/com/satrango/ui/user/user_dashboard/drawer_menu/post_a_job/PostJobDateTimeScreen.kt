@@ -136,6 +136,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI(data: MyJobPostViewResModel) {
         UserUtils.EDIT_MY_JOB_POST_DETAILS = Gson().toJson(data)
+        Log.e("POSTJOB:", UserUtils.EDIT_MY_JOB_POST_DETAILS)
         for (index in daysList.indices) {
             if (daysList[index].month == data.job_post_details.scheduled_date) {
                 daysList[index] = MonthsModel(daysList[index].month, daysList[index].day, true)
