@@ -663,7 +663,7 @@ object UserUtils {
         val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-            Toast.makeText(context, "Alert Sent to ${response.string()}", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Alert Sent to ${response.string()}", Toast.LENGTH_SHORT).show()
             Log.e("FCM RESPONSE:", token)
         }
 
@@ -726,34 +726,42 @@ object UserUtils {
         from: String
     ) {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
-        Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
-        for (sp in spDetails.data) {
-            for (spSlot in spDetails.slots_data) {
-                if (spSlot.blocked_time_slots.isNotEmpty()) {
-                    var count = 0
-                    for (booking in spSlot.blocked_time_slots) {
-                        if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
-                            count += 1
+
+        if (data != null) {
+            Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
+            for (index in 0 until 5) {
+                sendFCM(context, data!!.fcm_token, bookingId, from)
+            }
+        } else {
+            Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
+            for (sp in spDetails.data) {
+                for (spSlot in spDetails.slots_data) {
+                    if (spSlot.blocked_time_slots.isNotEmpty()) {
+                        var count = 0
+                        for (booking in spSlot.blocked_time_slots) {
+                            if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                                count += 1
+                            }
                         }
-                    }
-                    if (count == 0) {
+                        if (count == 0) {
+                            Log.e("FCM:", sp.fcm_token)
+                            if (from == "accepted") {
+                                Log.e("CANCEL FCM", "NOTIFICATION")
+                                sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                            } else {
+                                sendFCM(context, sp.fcm_token, bookingId, from)
+                                Log.e("BOOKING FCM", "NOTIFICATION")
+                            }
+                        }
+                    } else {
                         Log.e("FCM:", sp.fcm_token)
                         if (from == "accepted") {
-                            Log.e("CANCEL FCM", "NOTIFICATION")
+                            Log.e("CANCEL FCM EMPTY", "NOTIFICATION")
                             sendCancelFCM(context, sp.fcm_token, bookingId, from)
                         } else {
+                            Log.e("BOOKING FCM EMPTY", "NOTIFICATION")
                             sendFCM(context, sp.fcm_token, bookingId, from)
-                            Log.e("BOOKING FCM", "NOTIFICATION")
                         }
-                    }
-                } else {
-                    Log.e("FCM:", sp.fcm_token)
-                    if (from == "accepted") {
-                        Log.e("CANCEL FCM EMPTY", "NOTIFICATION")
-                        sendCancelFCM(context, sp.fcm_token, bookingId, from)
-                    } else {
-                        Log.e("BOOKING FCM EMPTY", "NOTIFICATION")
-                        sendFCM(context, sp.fcm_token, bookingId, from)
                     }
                 }
             }

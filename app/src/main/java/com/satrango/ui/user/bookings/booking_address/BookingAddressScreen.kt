@@ -494,6 +494,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         binding.addressRv.adapter =
             UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
         validateFields()
+        toast(this, "Validating")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

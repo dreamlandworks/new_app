@@ -44,7 +44,7 @@ class FCMService : FirebaseMessagingService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        addNotification(remoteMessage.data["body"])
+//        addNotification(remoteMessage.data["body"])
         remoteMessage.notification?.let {
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString())
@@ -57,8 +57,7 @@ class FCMService : FirebaseMessagingService() {
                         ProviderDashboard.FROM_FCM_SERVICE = false
                     }
                 }
-            }
-            if (it.title == "user") {
+            } else if (it.title == "user") {
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
                         addNotification(it.body)

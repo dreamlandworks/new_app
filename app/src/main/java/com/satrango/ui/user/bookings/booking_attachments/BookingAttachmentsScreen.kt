@@ -129,6 +129,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
                         when (data.category_id) {
                             "1" -> {
+                                UserUtils.data = data
                                 val intent = Intent(
                                     this@BookingAttachmentsScreen,
                                     BookingAddressScreen::class.java
@@ -158,6 +159,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                         }
                     } else {
+                        UserUtils.data = data
                         startActivity(
                             Intent(
                                 this@BookingAttachmentsScreen,
