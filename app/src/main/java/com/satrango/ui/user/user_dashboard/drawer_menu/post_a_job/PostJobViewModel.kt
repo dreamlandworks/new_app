@@ -100,6 +100,30 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
         return skills
     }
 
+    fun skillsByCategoryId(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<Data>>> {
+
+        if (hasInternetConnection(context)) {
+            viewModelScope.launch {
+                try {
+                    skillsByCategory.value = NetworkResponse.Loading()
+                    val response = async { repository.getSkillsByCategory(categoryId) }
+                    val data = response.await()
+                    if (data.status == 200) {
+                        skillsByCategory.value = NetworkResponse.Success(data.data)
+                    } else {
+                        skillsByCategory.value = NetworkResponse.Failure(data.message)
+                    }
+                } catch (e: Exception) {
+                    skillsByCategory.value = NetworkResponse.Failure(e.message)
+                }
+            }
+        } else {
+            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
+        }
+
+        return skillsByCategory
+    }
+
     fun getUserPlans(context: Context): MutableLiveData<NetworkResponse<PostJobPlansResModel>> {
 
         if (hasInternetConnection(context)) {
@@ -585,28 +609,28 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
         return rejectJobPostStatus
     }
 
-    fun skillsByCategoryId(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<Data>>> {
-
-        if (hasInternetConnection(context)) {
-            viewModelScope.launch {
-                try {
-                    skillsByCategory.value = NetworkResponse.Loading()
-                    val response = async { repository.getSkillsByCategory(categoryId) }
-                    val data = response.await()
-                    if (data.status == 200) {
-                        skillsByCategory.value = NetworkResponse.Success(data.data)
-                    } else {
-                        skillsByCategory.value = NetworkResponse.Failure(data.message)
-                    }
-                } catch (e: Exception) {
-                    skillsByCategory.value = NetworkResponse.Failure(e.message)
-                }
-            }
-        } else {
-            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
-        }
-
-        return skillsByCategory
-    }
+//    fun skillsByCategoryId(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<Data>>> {
+//
+//        if (hasInternetConnection(context)) {
+//            viewModelScope.launch {
+//                try {
+//                    skillsByCategory.value = NetworkResponse.Loading()
+//                    val response = async { repository.getSkillsByCategory(categoryId) }
+//                    val data = response.await()
+//                    if (data.status == 200) {
+//                        skillsByCategory.value = NetworkResponse.Success(data.data)
+//                    } else {
+//                        skillsByCategory.value = NetworkResponse.Failure(data.message)
+//                    }
+//                } catch (e: Exception) {
+//                    skillsByCategory.value = NetworkResponse.Failure(e.message)
+//                }
+//            }
+//        } else {
+//            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
+//
+//        return skillsByCategory
+//    }
 
 }

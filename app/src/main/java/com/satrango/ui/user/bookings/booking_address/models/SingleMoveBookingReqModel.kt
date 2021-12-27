@@ -17,5 +17,12 @@ data class SingleMoveBookingReqModel(
     val temp_address_id: Int,
     val time_slot_from: String,
     val time_slot_to: String,
-    val users_id: Int
+    val users_id: Int,
+    val address: String,
+    val city: String,
+    val state: String,
+    val country: String,
+    val postal_code: String,
+    val user_lat: String,
+    val user_long: String
 )

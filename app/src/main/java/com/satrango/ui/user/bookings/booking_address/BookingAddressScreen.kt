@@ -28,7 +28,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
 import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAddressScreenBinding
@@ -43,18 +42,15 @@ import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
-import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
-import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -114,7 +110,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             if (BookingDateAndTimeScreen.FROM_PROVIDER) {
                 binding.recentSearch.setBackgroundResource(R.drawable.purple_bg_sm)
             }
-            addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
+            addressList.add(
+                MonthsModel(
+                    UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(
+                        this
+                    ), "0", true
+                )
+            )
             validateFields()
         }
         binding.rowLayout.setOnClickListener {
@@ -137,11 +139,19 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 is NetworkResponse.Success -> {
                     val responseData = it.data!!
                     for (address in responseData.address) {
-                        addressList.add(MonthsModel(address.locality + ", " + address.city + ", " + address.zipcode, address.id, false))
+                        addressList.add(
+                            MonthsModel(
+                                address.locality + ", " + address.city + ", " + address.zipcode,
+                                address.id,
+                                false
+                            )
+                        )
                     }
                     binding.addressRv.layoutManager = LinearLayoutManager(this@BookingAddressScreen)
                     binding.addressRv.adapter =
-                        UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
+                        UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>,
+                            this@BookingAddressScreen,
+                            "AA")
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -268,6 +278,26 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 spId = UserUtils.data!!.users_id.toInt()
                 finalAmount = UserUtils.data!!.final_amount
             }
+
+            var address = ""
+            var city = ""
+            var state = ""
+            var country = ""
+            var postalCode = ""
+            var latitude = ""
+            var longitude = ""
+
+            if (UserUtils.address_id == "0") {
+                address = UserUtils.getAddress(this)
+                city = UserUtils.getCity(this)
+                state = UserUtils.getState(this)
+                country = UserUtils.getCountry(this)
+                postalCode = UserUtils.getPostalCode(this)
+                latitude = UserUtils.getLatitude(this)
+                longitude = UserUtils.getLongitude(this)
+                toast(this, UserUtils.getAddress(this) + "|" + UserUtils.getCity(this))
+            }
+
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 finalAmount,
@@ -283,7 +313,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.temp_address_id.toInt(),
                 UserUtils.time_slot_from,
                 UserUtils.time_slot_to.replace("\n", ""),
-                UserUtils.getUserId(this).toInt()
+                UserUtils.getUserId(this).toInt(),
+                address,
+                city,
+                state,
+                country,
+                postalCode,
+                latitude,
+                longitude
             )
             toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
@@ -319,6 +356,25 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             })
         } else {
 
+            var address = ""
+            var city = ""
+            var state = ""
+            var country = ""
+            var postalCode = ""
+            var latitude = ""
+            var longitude = ""
+
+            if (UserUtils.address_id == "0") {
+                address = UserUtils.getAddress(this)
+                city = UserUtils.getCity(this)
+                state = UserUtils.getState(this)
+                country = UserUtils.getCountry(this)
+                postalCode = UserUtils.getPostalCode(this)
+                latitude = UserUtils.getLatitude(this)
+                longitude = UserUtils.getLongitude(this)
+                toast(this, UserUtils.getAddress(this) + "|" + UserUtils.getCity(this))
+            }
+
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 data.per_hour,
@@ -334,7 +390,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.temp_address_id.toInt(),
                 UserUtils.time_slot_from,
                 UserUtils.time_slot_to.replace("\n", ""),
-                UserUtils.getUserId(this).toInt()
+                UserUtils.getUserId(this).toInt(),
+                address,
+                city,
+                state,
+                country,
+                postalCode,
+                latitude,
+                longitude
             )
             toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
@@ -401,13 +464,23 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
+                    UserUtils.sendFCMtoAllServiceProviders(
+                        this@BookingAddressScreen,
+                        "accepted",
+                        "accepted"
+                    )
                     dialog.dismiss()
                     try {
                         weAreSorryDialog()
-                    } catch (e: java.lang.Exception) {}
+                    } catch (e: java.lang.Exception) {
+                    }
                     Checkout.preload(applicationContext)
-                    startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java))
+                    startActivity(
+                        Intent(
+                            this@BookingAddressScreen,
+                            UserDashboardScreen::class.java
+                        )
+                    )
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -416,7 +489,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 if (UserUtils.getProviderAction(this@BookingAddressScreen)
                         .split("|")[0].isNotEmpty()
                 ) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
+                    UserUtils.sendFCMtoAllServiceProviders(
+                        this@BookingAddressScreen,
+                        "accepted",
+                        "accepted"
+                    )
                     dialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
@@ -501,7 +578,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             }
         }
         binding.addressRv.adapter =
-            UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
+            UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>,
+                this@BookingAddressScreen,
+                "AA")
         validateFields()
     }
 
@@ -821,7 +900,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.setCountry(context, country)
             UserUtils.setPostalCode(context, postalCode)
             UserUtils.setAddress(context, knownName)
-            addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
+            addressList.add(
+                MonthsModel(
+                    UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(
+                        this
+                    ), "0", true
+                )
+            )
             validateFields()
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
