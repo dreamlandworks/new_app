@@ -144,7 +144,12 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                 confirmBooking.value = NetworkResponse.Loading()
                 try {
                     val response = async { repository.confirmBooking(requestBody) }
-                    confirmBooking.value = NetworkResponse.Success(response.await().string())
+                    val jsonResponse = JSONObject(response.await().string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        confirmBooking.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    } else {
+                        confirmBooking.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                    }
                 } catch (e: Exception) {
                     confirmBooking.value = NetworkResponse.Failure(e.message)
                 }

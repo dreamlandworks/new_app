@@ -4,15 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/arrow_forward_icon.xml" value="0.2484375" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/green_btn_bg.xml" value="0.2484375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/ic_phoneno_purple.xml" value="0.2484375" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_booking_address_screen.xml" value="0.4" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_booking_address_screen.xml" value="0.2" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_booking_attachments_screen.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_payment_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.2" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_description_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_multi_move_description_screen.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_dashboard.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_profile_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_sign_up_one.xml" value="0.264" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_sign_up_three.xml" value="0.264" />
@@ -23,12 +26,14 @@
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_skills_profile_screen.xml" value="0.264" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_tariff_timings_profile_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/fragment_user_home_screen.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/instant_booking_not_available_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/my_job_posts_row.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/payment_success_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/raise_complaint_row.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/row_slot_item.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/search_service_provider_row.xml" value="0.536" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/search_type_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/service_provider_success_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/user_booking_address_row.xml" value="0.536" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/user_category_row.xml" value="0.23645833333333333" />

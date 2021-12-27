@@ -35,7 +35,6 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -328,7 +327,24 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.recyclerView.visibility = View.GONE
             UserUtils.saveFromInstantBooking(this, true)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            startActivity(Intent(this, BookingAttachmentsScreen::class.java))
+
+            var existed = 0
+            data.data.forEachIndexed { index, sp ->
+                for (spSlot in data.slots_data) {
+                    if (sp.users_id == spSlot.user_id) {
+                        for (booking in spSlot.blocked_time_slots) {
+                            if (UserUtils.getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                                existed += 1
+                            }
+                        }
+                    }
+                }
+            }
+            if (existed != data.data.size) {
+                startActivity(Intent(this, BookingAttachmentsScreen::class.java))
+            } else {
+                showBookingInstantNotProceedDialog(data)
+            }
         }
         closeBtn.setOnClickListener {
             showBookingTypeBottomSheetDialog.dismiss()
@@ -336,6 +352,29 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         showBookingTypeBottomSheetDialog.setContentView(dialogView)
         showBookingTypeBottomSheetDialog.setCancelable(false)
         showBookingTypeBottomSheetDialog.show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showBookingInstantNotProceedDialog(data: SearchServiceProviderResModel) {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setCancelable(false)
+        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.instant_booking_not_available_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
+        val showResultsBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.viewResults)
+        val postJobBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.postJob)
+        closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+        showResultsBtn.setOnClickListener {
+            UserUtils.saveFromInstantBooking(this, false)
+            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
+            binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
+        }
+        postJobBtn.setOnClickListener {
+            startActivity(Intent(this, PostJobTypeScreen::class.java))
+        }
+        bottomSheetDialog.setContentView(dialogView)
+        bottomSheetDialog.show()
     }
 
     @SuppressLint("SetTextI18n")

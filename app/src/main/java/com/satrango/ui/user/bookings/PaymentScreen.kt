@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -23,6 +26,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityPaymentScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansRepository
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansViewModel
@@ -43,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.round
 
 class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
@@ -74,26 +79,27 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             googlePayBtn.setOnClickListener {
                 when {
                     FROM_PROVIDER_PLANS -> {
+//                        startActivity(Intent(this@PaymentScreen, ProviderDashboard::class.java))
                         saveProviderPlan("paymentId")
                     }
                     FROM_USER_PLANS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         saveUserPlan("paymentId")
                     }
                     FROM_USER_BOOKING_ADDRESS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateStatusInServer("paymentId", "Success")
                     }
                     FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateStatusInServer("paymentId", "Success")
                     }
                     FROM_USER_SET_GOALS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateInstallmentPaymentStatus("Success", "paymentId")
                     }
                 }
             }
-
-//            phonePeBtn.setOnClickListener {
-//
-//            }
 
             otherPaymentBtn.setOnClickListener {
                 when {
@@ -159,32 +165,38 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
     @SuppressLint("SimpleDateFormat")
     override fun onPaymentSuccess(paymentId: String?) {
-
-        if (FROM_PROVIDER_PLANS) {
-            saveProviderPlan(paymentId)
-        } else if (FROM_USER_PLANS) {
-            saveUserPlan(paymentId)
-        } else if (FROM_USER_BOOKING_ADDRESS) {
-            updateStatusInServer(paymentId, "Success")
-        } else if (FROM_PROVIDER_BOOKING_RESPONSE) {
-            updateStatusInServer(paymentId, "Success")
-        } else if (FROM_USER_SET_GOALS) {
-            updateInstallmentPaymentStatus("Success", paymentId!!)
+        when {
+            FROM_PROVIDER_PLANS -> {
+                saveProviderPlan(paymentId)
+            }
+            FROM_USER_PLANS -> {
+                saveUserPlan(paymentId)
+            }
+            FROM_USER_BOOKING_ADDRESS -> {
+                updateStatusInServer(paymentId, "Success")
+            }
+            FROM_PROVIDER_BOOKING_RESPONSE -> {
+                updateStatusInServer(paymentId, "Success")
+            }
+            FROM_USER_SET_GOALS -> {
+                updateInstallmentPaymentStatus("Success", paymentId!!)
+            }
         }
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan(paymentId: String?) {
         val requestBody = UserPlanPaymentReqModel(
-            amount.toInt(),
+            round(UserUtils.data!!.final_amount.toDouble()).toInt(),
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             "Success",
             period,
             id,
             paymentId!!,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.data!!.users_id.toInt()
         )
+        Log.d("USER PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         viewModel.saveUserPlanPayment(this, requestBody).observe(this, {
@@ -195,10 +207,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showSuccessDialog()
+                    Handler().postDelayed({
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
+                    }, 3000)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, it.message!!)
+                    snackBar(binding.googlePayBtn, "Error01:" + it.message!!)
                 }
             }
         })
@@ -209,16 +224,16 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
         val requestBody = ProviderMemberShipPlanPaymentReqModel(
-            amount.toInt(),
+            round(UserUtils.data!!.final_amount.toDouble()).toInt(),
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             "Success",
             period,
             id,
             paymentId!!,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.data!!.users_id.toInt()
         )
-
+        Log.d("SP PLAN:", Gson().toJson(requestBody))
         viewModel.saveMemberShip(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -227,10 +242,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showSuccessDialog()
+                    Handler().postDelayed({
+                        startActivity(Intent(this, ProviderDashboard::class.java))
+                    }, 3000)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, it.message!!)
+                    snackBar(binding.googlePayBtn, "Error02:" + it.message!!)
                 }
             }
         })
@@ -283,16 +301,17 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
         val requestBody = PaymentConfirmReqModel(
-            amount.toString(),
+            round(UserUtils.data!!.final_amount.toDouble()).toString(),
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
             status,
             paymentResponse!!,
-            userId,
+            UserUtils.data!!.users_id.toInt(),
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt()
         )
+        Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this, {
@@ -302,12 +321,14 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    finish()
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                    showSuccessDialog()
+                    Handler().postDelayed({
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
+                    }, 3000)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, it.message!!)
+                    snackBar(binding.googlePayBtn, "Error03:" +it.message!!)
                 }
             }
         })
@@ -327,6 +348,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             ViewBidsScreen.bidId,
             ViewBidsScreen.spId
         )
+        Log.d("INSTALLMENT PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         viewModel.installmentPayments(this, requestBody).observe(this, {
@@ -344,7 +366,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, it.message!!)
+                    snackBar(binding.googlePayBtn, "Error04:" + it.message!!)
                 }
             }
         })

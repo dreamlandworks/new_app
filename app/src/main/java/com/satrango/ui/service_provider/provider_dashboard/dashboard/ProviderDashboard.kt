@@ -173,6 +173,14 @@ class ProviderDashboard : AppCompatActivity() {
             }
         }
 
+        if (!UserUtils.updateNewFCMToken(this)) {
+            snackBar(binding.bottomNavigationView, "Please check internet connection!")
+            Handler().postDelayed({
+                finish()
+                startActivity(Intent(this, UserLoginTypeScreen::class.java))
+            }, 3000)
+        }
+
         backStack = ArrayDeque(4)
         backStack.push(R.id.navigation_home)
         loadFragment(ProviderHomeScreen())

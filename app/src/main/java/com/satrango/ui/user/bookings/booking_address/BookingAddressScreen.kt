@@ -262,9 +262,15 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     @SuppressLint("SimpleDateFormat")
     private fun bookSingleMoveServiceProvider() {
         if (UserUtils.getFromInstantBooking(this)) {
+            var spId = 0
+            var finalAmount = ""
+            if (UserUtils.data != null) {
+                spId = UserUtils.data!!.users_id.toInt()
+                finalAmount = UserUtils.data!!.final_amount
+            }
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
-                "0",
+                finalAmount,
                 BookingAttachmentsScreen.encodedImages,
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 1,
@@ -272,13 +278,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.job_description,
                 RetrofitBuilder.USER_KEY,
                 UserUtils.scheduled_date,
-                0,
-                UserUtils.started_at,
+                spId,
+                UserUtils.time_slot_from,
                 UserUtils.temp_address_id.toInt(),
                 UserUtils.time_slot_from,
-                UserUtils.time_slot_to,
+                UserUtils.time_slot_to.replace("\n", ""),
                 UserUtils.getUserId(this).toInt()
             )
+            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
@@ -311,6 +318,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 }
             })
         } else {
+
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 data.per_hour,
@@ -322,12 +330,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 RetrofitBuilder.USER_KEY,
                 UserUtils.scheduled_date,
                 data.users_id.toInt(),
-                UserUtils.started_at,
+                UserUtils.time_slot_from,
                 UserUtils.temp_address_id.toInt(),
                 UserUtils.time_slot_from,
-                UserUtils.time_slot_to,
+                UserUtils.time_slot_to.replace("\n", ""),
                 UserUtils.getUserId(this).toInt()
             )
+            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
@@ -494,7 +503,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         binding.addressRv.adapter =
             UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
         validateFields()
-        toast(this, "Validating")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -585,7 +593,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             PaymentScreen.FROM_PROVIDER_PLANS = false
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = data.per_hour.toDouble()
+            PaymentScreen.amount = data.final_amount.toDouble()
             PaymentScreen.userId = data.users_id.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)

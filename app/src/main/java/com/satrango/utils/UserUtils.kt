@@ -3,21 +3,26 @@ package com.satrango.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.os.Handler
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.remote.Data
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMMessageReqModel
+import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -731,6 +736,7 @@ object UserUtils {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
             for (index in 0 until 5) {
                 sendFCM(context, data!!.fcm_token, bookingId, from)
+                Log.d("FCM SENT SINGLE:", data!!.fcm_token)
             }
         } else {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
@@ -750,7 +756,7 @@ object UserUtils {
                                 sendCancelFCM(context, sp.fcm_token, bookingId, from)
                             } else {
                                 sendFCM(context, sp.fcm_token, bookingId, from)
-                                Log.e("BOOKING FCM", "NOTIFICATION")
+                                Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             }
                         }
                     } else {
@@ -759,7 +765,7 @@ object UserUtils {
                             Log.e("CANCEL FCM EMPTY", "NOTIFICATION")
                             sendCancelFCM(context, sp.fcm_token, bookingId, from)
                         } else {
-                            Log.e("BOOKING FCM EMPTY", "NOTIFICATION")
+                            Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             sendFCM(context, sp.fcm_token, bookingId, from)
                         }
                     }
@@ -874,6 +880,37 @@ object UserUtils {
             e.printStackTrace()
         }
         return false
+    }
+
+    fun updateNewFCMToken(context: Context): Boolean {
+        if (PermissionUtils.isNetworkConnected(context)) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+                val token = task.result
+                saveFCMToken(context, token)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                        FCMReqModel(
+                            token,
+                            RetrofitBuilder.USER_KEY,
+                            getUserId(context)
+                        )
+                    )
+                    val jsonResponse = JSONObject(response.string())
+                    if (jsonResponse.getInt("status") != 200) {
+                        return@launch
+                    } else {
+                        Log.e("FCM TOKEN UPDATED:", token)
+                    }
+                }
+                Log.e("FCM TOKEN", token)
+            })
+            return true
+        }
+        return true
     }
 
 }

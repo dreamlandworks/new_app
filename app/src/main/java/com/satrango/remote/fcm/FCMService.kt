@@ -46,24 +46,24 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 //        addNotification(remoteMessage.data["body"])
         remoteMessage.notification?.let {
+            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString() + "|" + ProviderDashboard.FROM_FCM_SERVICE.toString() + "|" + UserUtils.getSpStatus(this).toString())
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString())
-
             if (it.title == "accepted") {
                 notificationManager.cancelAll()
                 if (ProviderDashboard.bottomSheetDialog != null) {
                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
                         ProviderDashboard.bottomSheetDialog!!.dismiss()
                         ProviderDashboard.FROM_FCM_SERVICE = false
+                        Log.e("FCMMESSAGE CLOSED:", it.title!! + "|" + it.body.toString())
                     }
                 }
             } else if (it.title == "user") {
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
                         addNotification(it.body)
+                        Log.e("FCMMESSAGE RECEIVED:", it.title!! + "|" + it.body.toString())
                     }
                 }
-//                addNotification(it.body)
             } else {
                 if (!UserUtils.getInstantBooking(this)) {
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)

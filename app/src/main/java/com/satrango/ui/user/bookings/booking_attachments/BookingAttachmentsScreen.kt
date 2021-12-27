@@ -159,7 +159,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                         }
                     } else {
-                        UserUtils.data = data
+                        if (UserUtils.data != null) {
+                            UserUtils.data = data
+                        }
                         startActivity(
                             Intent(
                                 this@BookingAttachmentsScreen,

@@ -54,40 +54,12 @@ class UserLoginTypeScreen : AppCompatActivity() {
         binding = ActivityUserLoginTypeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (PermissionUtils.isNetworkConnected(this)) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-                token = task.result
-                UserUtils.saveFCMToken(this, token)
-                CoroutineScope(Dispatchers.Main).launch {
-                    val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
-                        FCMReqModel(
-                            token,
-                            RetrofitBuilder.USER_KEY,
-                            UserUtils.getUserId(this@UserLoginTypeScreen)
-                        )
-                    )
-                    val jsonResponse = JSONObject(response.string())
-                    if (jsonResponse.getInt("status") != 200) {
-                        snackBar(binding.userBtn, "Please check internet connection!")
-                        Handler().postDelayed({
-                            finish()
-                        }, 3000)
-                    }
-                }
-                Log.e("FCM TOKEN", token)
-
-            })
-        } else {
+        if (!UserUtils.updateNewFCMToken(this)) {
             snackBar(binding.userBtn, "Please check internet connection!")
             Handler().postDelayed({
                 finish()
             }, 3000)
         }
-
 
         binding.apply {
 
