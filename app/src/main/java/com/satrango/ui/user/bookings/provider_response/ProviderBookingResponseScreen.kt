@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
     private lateinit var viewModel: BookingViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderBookingResponseScreenBinding.inflate(layoutInflater)
@@ -69,6 +71,8 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
             binding.accept.visibility = View.GONE
             binding.paymentSuccessLayout.visibility = View.GONE
             binding.reject.visibility = View.VISIBLE
+            binding.rejectNote.text = Html.fromHtml("Looks like Service Provider <b>${response.split("|")[4]}</b>. Shall we choose the best for your need.")
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         }
 
         binding.successCloseBtn.setOnClickListener {

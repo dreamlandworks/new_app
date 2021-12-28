@@ -107,8 +107,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     private fun updateUI(status: String) {
-//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 12)
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 65)
 
         viewModel.bookingListWithDetails(this, requestBody).observe(this, {
             when (it) {

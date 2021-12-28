@@ -36,7 +36,7 @@ class UserBookingAddressAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (list[position].isSelected) {
+        if (list[holder.adapterPosition].isSelected) {
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
             holder.binding.locationText.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.myLocation.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
@@ -45,15 +45,16 @@ class UserBookingAddressAdapter(
             }
         }
         if (listType == "AA") {
-            holder.binding.myLocation.text = list[position].month.split(", ")[0]
-            holder.binding.locationText.text = list[position].month
+            holder.binding.myLocation.text = list[holder.adapterPosition].month.split(", ")[0]
+            holder.binding.locationText.text = list[holder.adapterPosition].month
             holder.itemView.setOnClickListener {
-                monthsInterface.selectedMonth(position, list[position].month, listType)
-                notifyItemChanged(position)
+                monthsInterface.selectedMonth(holder.adapterPosition, list[holder.adapterPosition].month, listType)
+                notifyItemChanged(holder.adapterPosition)
             }
-        }
-        holder.itemView.setOnClickListener {
-            monthsInterface.selectedMonth(position, list[position].month, listType)
+        } else {
+            holder.itemView.setOnClickListener {
+                monthsInterface.selectedMonth(holder.adapterPosition, list[holder.adapterPosition].month, listType)
+            }
         }
     }
 

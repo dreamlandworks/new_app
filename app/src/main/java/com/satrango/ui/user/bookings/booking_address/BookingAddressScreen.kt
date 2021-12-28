@@ -542,7 +542,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 addressList = tempAddress
             } else {
                 addressList.onEachIndexed { index, month ->
-                    if (index == position) {
+                    if (month.month == dateTime) {
                         tempAddress.add(MonthsModel(month.month, month.day, true))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, false))
@@ -562,7 +562,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 addressList = tempAddress
             } else {
                 addressList.onEachIndexed { index, month ->
-                    if (index == position) {
+                    if (month.month == dateTime) {
                         tempAddress.add(MonthsModel(month.month, month.day, true))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, false))
@@ -571,10 +571,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 addressList = tempAddress
             }
         }
-        binding.addressRv.adapter =
-            UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>,
-                this@BookingAddressScreen,
-                "AA")
+        binding.addressRv.adapter = UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
         validateFields()
     }
 
