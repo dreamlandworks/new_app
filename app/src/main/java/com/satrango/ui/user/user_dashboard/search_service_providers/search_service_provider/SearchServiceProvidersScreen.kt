@@ -10,6 +10,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,12 @@ import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.widget.Toast
+
+import android.widget.AdapterView.OnItemClickListener
+
+
+
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
@@ -50,6 +57,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         var FROM_POPULAR_SERVICES = false
         var userLocationText = ""
         var subCategoryId = "0"
+        var categoryId = "0"
         var keyword = "0"
         var offerId = 0
     }
@@ -167,11 +175,17 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.searchBar.threshold = 3
                     val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
-                    binding.searchBar.setOnItemClickListener { _, _, position, _ ->
-                        keyword = keywordsList[position].id
-                        subCategoryId = keywordsList[position].subcategory_id
-                        UserUtils.saveSelectedKeywordCategoryId(this, keywordsList[position].category_id)
-                    }
+                    binding.searchBar.onItemClickListener = OnItemClickListener { parent, arg1, position, id ->
+                            val value = adapter.getItem(position) ?: ""
+                            for (key in keywordsList) {
+                                if (key.phrase == value) {
+                                    keyword = key.id
+                                    subCategoryId = key.subcategory_id
+                                    UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
+                                }
+                            }
+
+                        }
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -217,20 +231,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
+//            RetrofitBuilder.USER_KEY,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
+//            offerId
+//        )
 //        toast(this, requestBody.toString())
 
 //        {
@@ -249,20 +263,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //        }
 
 
-//        val requestBody = SearchServiceProviderReqModel(
-//            "54-14/7-78",
-//            "Vijayawada",
-//            "India",
-//            RetrofitBuilder.USER_KEY,
-//            "Android App Developer",
-//            "520008",
-//            "Andhra Pradesh",
-//            "16.5094445",
-//            "80.6706229",
-//            76,
-//            0,
-//            offerId
-//        )
+        val requestBody = SearchServiceProviderReqModel(
+            "54-14/7-78",
+            "Vijayawada",
+            "India",
+            RetrofitBuilder.USER_KEY,
+            "Android App Developer",
+            "520008",
+            "Andhra Pradesh",
+            "16.5094445",
+            "80.6706229",
+            76,
+            0,
+            offerId
+        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
 

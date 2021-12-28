@@ -71,7 +71,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private lateinit var progressDialog: BeautifulProgressDialog
     private val GALLERY_REQUEST = 100
     private val CAMERA_REQUEST: Int = 101
-    private lateinit var data: Data
+    private var data: Data? = null
     private var addressIndex = 0
 
     companion object {
@@ -103,7 +103,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         }
         if (UserUtils.data != null) {
             data = UserUtils.data!!
-            updateUI(data)
+            updateUI(data!!)
         } else {
             binding.spCard.visibility = View.GONE
         }
@@ -129,7 +129,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 } else {
                     UserUtils.job_description = description
                     if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
-                        when (data.category_id) {
+                        when (data!!.category_id) {
                             "1" -> {
                                 UserUtils.data = data
                                 val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
@@ -183,7 +183,18 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         if (UserUtils.data != null) {
                             UserUtils.data = data
                         }
-                        if (data.category_id == "2") {
+                        if (data != null) {
+                            if (data!!.category_id == "2") {
+                                UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                                val startedAt = SimpleDateFormat("hh:mm:ss").format(Date())
+                                UserUtils.started_at = "${startedAt.split(":")[0].toInt() + 1}:00:00"
+                                UserUtils.time_slot_from = "${startedAt.split(":")[0].toInt() + 1}:00:00"
+                                UserUtils.time_slot_to = "${startedAt.split(":")[0].toInt() + 2}:00:00"
+                                bookBlueCollarServiceProvider()
+                            } else {
+                                startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
+                            }
+                        } else if (UserUtils.getSelectedKeywordCategoryId(this@BookingAttachmentsScreen) == "2") {
                             UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                             val startedAt = SimpleDateFormat("hh:mm:ss").format(Date())
                             UserUtils.started_at = "${startedAt.split(":")[0].toInt() + 1}:00:00"
@@ -217,14 +228,14 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private fun bookMultiMoveServiceProvider() {
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
-            data.per_hour,
+            data!!.per_hour,
             encodedImages,
             currentDateAndTime(),
             1,
             1,
             RetrofitBuilder.USER_KEY,
             UserUtils.scheduled_date,
-            data.users_id.toInt(),
+            data!!.users_id.toInt(),
             UserUtils.started_at,
             UserUtils.time_slot_from,
             UserUtils.time_slot_to,
@@ -585,13 +596,13 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
         val requestBody = PaymentConfirmReqModel(
-            data.per_hour,
+            data!!.per_hour,
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
             status,
             paymentResponse!!,
-            data.users_id.toInt(),
+            data!!.users_id.toInt(),
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt()
         )
@@ -622,7 +633,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         if (UserUtils.getFromInstantBooking(this)) {
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         } else {
-            when (data.category_id) {
+            when (data!!.category_id) {
                 "3" -> {
                     finish()
                     startActivity(Intent(this, BookingAddressScreen::class.java))
