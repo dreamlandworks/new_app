@@ -206,7 +206,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 val calender = Calendar.getInstance()
                 UserUtils.scheduled_date = currentDateAndTime().split(" ")[0]
-                UserUtils.started_at = currentDateAndTime().toString() + ":00:00"
+                UserUtils.started_at = currentDateAndTime() + ":00:00"
                 UserUtils.time_slot_from =
                     (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
 
@@ -295,7 +295,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 postalCode = UserUtils.getPostalCode(this)
                 latitude = UserUtils.getLatitude(this)
                 longitude = UserUtils.getLongitude(this)
-                toast(this, UserUtils.getAddress(this) + "|" + UserUtils.getCity(this))
             }
 
             val requestBody = SingleMoveBookingReqModel(
@@ -322,7 +321,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 latitude,
                 longitude
             )
-            toast(this, Gson().toJson(requestBody))
+//            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
@@ -334,11 +333,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user"
-                            )
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
                             UserUtils.sendFCMtoSelectedServiceProvider(
@@ -372,7 +367,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 postalCode = UserUtils.getPostalCode(this)
                 latitude = UserUtils.getLatitude(this)
                 longitude = UserUtils.getLongitude(this)
-                toast(this, UserUtils.getAddress(this) + "|" + UserUtils.getCity(this))
             }
 
             val requestBody = SingleMoveBookingReqModel(
@@ -399,7 +393,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 latitude,
                 longitude
             )
-            toast(this, Gson().toJson(requestBody))
+//            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this, {
                 when (it) {
@@ -787,8 +781,16 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("SimpleDateFormat")
     private fun bookBlueCollarServiceProvider() {
+
+        var finalAmount = "0"
+        var spId = "0"
+        if (UserUtils.data != null) {
+            spId = UserUtils.data!!.users_id
+            finalAmount = UserUtils.data!!.final_amount
+        }
+
         val requestBody = BlueCollarBookingReqModel(
-            "0",
+            finalAmount,
             BookingAttachmentsScreen.encodedImages,
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
             1,
@@ -796,13 +798,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.job_description,
             RetrofitBuilder.USER_KEY,
             UserUtils.scheduled_date,
-            0,
-            UserUtils.started_at,
+            spId.toInt(),
             UserUtils.time_slot_from,
-            UserUtils.time_slot_to,
+            UserUtils.time_slot_from,
+            UserUtils.time_slot_to.replace("\n", ""),
             UserUtils.getUserId(this).toInt()
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

@@ -80,28 +80,24 @@ class SearchServiceProviderAdapter(
                 UserUtils.data = data
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 binding.root.context.startActivity(intent)
-//                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
             }
             binding.bookLaterBtn.setOnClickListener {
                 UserUtils.data = data
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
-//                intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
             }
             binding.bookNowBtn.setOnClickListener {
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
                     UserUtils.data = data
                     val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
-//                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                     binding.root.context.startActivity(intent)
                 } else {
                     UserUtils.data = data
                     val database = Firebase.database
                     database.getReference(UserUtils.getFCMToken(binding.root.context)).removeValue()
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)
-//                    intent.putExtra(binding.root.context.getString(R.string.service_provider), data)
                     binding.root.context.startActivity(intent)
                 }
             }

@@ -35,6 +35,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -216,20 +217,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-        val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
+//            RetrofitBuilder.USER_KEY,
+//            keyword,
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
+//            offerId
+//        )
 //        toast(this, requestBody.toString())
 
 //        {
@@ -247,7 +248,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            "users_id": 76
 //        }
 
-/*
+
         val requestBody = SearchServiceProviderReqModel(
             "54-14/7-78",
             "Vijayawada",
@@ -264,7 +265,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
-*/
+
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)

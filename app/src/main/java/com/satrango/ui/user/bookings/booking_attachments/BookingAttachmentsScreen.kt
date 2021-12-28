@@ -79,6 +79,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         lateinit var encodedImages: ArrayList<Attachment>
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookingAttachmentsScreenBinding.inflate(layoutInflater)
@@ -119,6 +120,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             backBtn.setOnClickListener {
                 onBackPressed()
             }
+//            toast(this@BookingAttachmentsScreen, data.category_id)
 
             nextBtn.setOnClickListener {
                 val description = discription.text.toString().trim()
@@ -130,11 +132,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         when (data.category_id) {
                             "1" -> {
                                 UserUtils.data = data
-                                val intent = Intent(
-                                    this@BookingAttachmentsScreen,
-                                    BookingAddressScreen::class.java
-                                )
-//                                intent.putExtra(getString(R.string.service_provider), data)
+                                val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
                                 startActivity(intent)
                             }
                             "2" -> {
@@ -162,12 +160,16 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         if (UserUtils.data != null) {
                             UserUtils.data = data
                         }
-                        startActivity(
-                            Intent(
-                                this@BookingAttachmentsScreen,
-                                BookingAddressScreen::class.java
-                            )
-                        )
+                        if (data.category_id == "2") {
+                            UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                            val startedAt = SimpleDateFormat("hh:mm:ss").format(Date())
+                            UserUtils.started_at = "${startedAt.split(":")[0].toInt() + 1}:00:00"
+                            UserUtils.time_slot_from = "${startedAt.split(":")[0].toInt() + 1}:00:00"
+                            UserUtils.time_slot_to = "${startedAt.split(":")[0].toInt() + 2}:00:00"
+                            bookBlueCollarServiceProvider()
+                        } else {
+                            startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
+                        }
                     }
                 }
             }
@@ -412,8 +414,16 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     @SuppressLint("SimpleDateFormat")
     private fun bookBlueCollarServiceProvider() {
+
+        var finalAmount = "0"
+        var spId = "0"
+        if (UserUtils.data != null) {
+            spId = UserUtils.data!!.users_id
+            finalAmount = UserUtils.data!!.final_amount
+        }
+
         val requestBody = BlueCollarBookingReqModel(
-            data.per_hour,
+            finalAmount,
             encodedImages,
             currentDateAndTime(),
             1,
@@ -421,13 +431,14 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.job_description,
             RetrofitBuilder.USER_KEY,
             UserUtils.scheduled_date,
-            data.users_id.toInt(),
-            UserUtils.started_at,
+            spId.toInt(),
             UserUtils.time_slot_from,
-            UserUtils.time_slot_to,
+            UserUtils.time_slot_from,
+            UserUtils.time_slot_to.replace("\n", ""),
             UserUtils.getUserId(this).toInt()
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
