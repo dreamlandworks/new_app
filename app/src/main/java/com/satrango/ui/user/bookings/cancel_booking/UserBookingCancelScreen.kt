@@ -27,10 +27,12 @@ import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqM
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserBookingCancelScreen : AppCompatActivity() {
@@ -175,7 +177,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
             reason,
             cancel_id // pass 24 if cancelled by user  // pass 25 if cancelled by sp
         )
-
+        toast(this, Gson().toJson(requestBody))
         viewModel.cancelBooking(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -254,7 +256,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
             searchBtn.setOnClickListener {
-                startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                startActivity(Intent(this, UserMyBookingsScreen::class.java))
             }
         }
         dialog.setContentView(dialogView)

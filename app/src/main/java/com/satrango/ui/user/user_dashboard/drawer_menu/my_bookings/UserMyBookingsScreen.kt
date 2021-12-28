@@ -95,9 +95,16 @@ class UserMyBookingsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
-                        if (details.booking_status.equals(status, ignoreCase = true)) {
-                            list.add(details)
+                        if (status == "Completed") {
+                            if (details.booking_status.equals(status, ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true)) {
+                                list.add(details)
+                            }
+                        } else {
+                            if (details.booking_status.equals(status, ignoreCase = true)) {
+                                list.add(details)
+                            }
                         }
+
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = MyBookingsAdapter(list)

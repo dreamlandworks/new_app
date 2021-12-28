@@ -1,7 +1,9 @@
 package com.satrango.utils
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.util.Base64
@@ -911,6 +913,16 @@ object UserUtils {
             return true
         }
         return true
+    }
+
+    fun makePhoneCall(context: Context, phoneNo: String) {
+        context.startActivity(Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+91$phoneNo", null)))
+    }
+
+    fun makeMessage(context: Context, phoneNo: String) {
+        val sendIntent = Intent(Intent.ACTION_VIEW)
+        sendIntent.data = Uri.parse("sms:+91$phoneNo")
+        context.startActivity(sendIntent)
     }
 
 }

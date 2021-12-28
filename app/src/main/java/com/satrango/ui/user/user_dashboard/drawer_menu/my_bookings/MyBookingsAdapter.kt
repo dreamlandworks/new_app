@@ -18,6 +18,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.Bookin
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
+import java.util.*
 
 class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
 
@@ -44,8 +45,8 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                 Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
             }
 
-            when(data.booking_status.toLowerCase()) {
-                "InProgress".toLowerCase() -> {
+            when(data.booking_status.lowercase(Locale.getDefault())) {
+                "InProgress".lowercase(Locale.getDefault()) -> {
                     binding.startBtn.text = "Service Provider started to your location"
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
@@ -72,7 +73,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                     }
 
                 }
-                "Pending".toLowerCase() -> {
+                "Pending".lowercase(Locale.getDefault()) -> {
                     binding.startBtn.visibility = View.GONE
                     binding.cancelBookingBtn.setOnClickListener {
                         val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
@@ -91,14 +92,6 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         BookingDateAndTimeScreen.FROM_PROVIDER = false
                         binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                     }
-//                    binding.startBtn.setOnClickListener {
-//                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-//                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-//                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-//                        binding.root.context.startActivity(intent)
-//                    }
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
@@ -111,19 +104,10 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                     }
 
                 }
-                "Completed".toLowerCase() -> {
+                "Completed".lowercase(Locale.getDefault()) -> {
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.text = "Raise Support Ticket"
                     binding.startBtn.text = "Book Again"
-//                    binding.reScheduleBtn.setOnClickListener {
-//                        ViewBidsScreen.bookingId = data.booking_id.toInt()
-//                        UserUtils.re_scheduled_date = data.scheduled_date
-//                        UserUtils.re_scheduled_time_slot_from = data.time_slot_id
-//                        ViewUserBookingDetailsScreen.RESCHEDULE = true
-//                        UserUtils.spid = data.sp_id
-//                        BookingDateAndTimeScreen.FROM_PROVIDER = false
-//                        binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
-//                    }
                     binding.reScheduleBtn.setOnClickListener {
                         binding.startBtn.setOnClickListener {
                             ComplaintScreen.bookingId = data.booking_id.toInt()
@@ -131,6 +115,14 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                             binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
                         }
                     }
+                }
+
+                "Expired".lowercase(Locale.getDefault()) -> {
+                    binding.cancelBookingBtn.visibility = View.GONE
+                    binding.reScheduleBtn.visibility = View.GONE
+                    binding.startBtn.text = "Expired"
+                    binding.startBtn.setBackgroundResource(R.drawable.user_red_btn_bg)
+                    binding.startBtn.elevation = 0f
                 }
             }
         }

@@ -96,12 +96,35 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(nextBtn, "Enter Description")
                 } else {
                     UserUtils.job_description = description
+                    var address = ""
+                    var city = ""
+                    var state = ""
+                    var country = ""
+                    var postalCode = ""
+                    var latitude = ""
+                    var longitude = ""
+                    if (UserUtils.addressList[addressIndex].day == "0") {
+                        address = UserUtils.getAddress(this@PostJobMultiMoveAddressScreen)
+                        city = UserUtils.getCity(this@PostJobMultiMoveAddressScreen)
+                        state = UserUtils.getState(this@PostJobMultiMoveAddressScreen)
+                        country = UserUtils.getCountry(this@PostJobMultiMoveAddressScreen)
+                        postalCode = UserUtils.getPostalCode(this@PostJobMultiMoveAddressScreen)
+                        latitude = UserUtils.getLatitude(this@PostJobMultiMoveAddressScreen)
+                        longitude = UserUtils.getLongitude(this@PostJobMultiMoveAddressScreen)
+                    }
                     UserUtils.finalAddressList.add(
                         Addresses(
                             UserUtils.addressList[addressIndex].day.toInt(),
                             UserUtils.job_description,
                             addressIndex + 1,
-                            2
+                            2,
+                            address,
+                            city,
+                            state,
+                            country,
+                            postalCode,
+                            latitude,
+                            longitude
                         )
                     )
                     addressIndex += 1

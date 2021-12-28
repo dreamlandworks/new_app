@@ -155,6 +155,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             }
         }
 
+        binding.callBtn.setOnClickListener {
+            UserUtils.makePhoneCall(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
+        }
+
+        binding.messageBtn.setOnClickListener {
+            UserUtils.makeMessage(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
+        }
+
     }
 
     private fun requestOTP(userType: String) {

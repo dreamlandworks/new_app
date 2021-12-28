@@ -217,20 +217,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keyword,
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
+        val requestBody = SearchServiceProviderReqModel(
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            RetrofitBuilder.USER_KEY,
+            keyword,
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
+            offerId
+        )
 //        toast(this, requestBody.toString())
 
 //        {
@@ -249,20 +249,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //        }
 
 
-        val requestBody = SearchServiceProviderReqModel(
-            "54-14/7-78",
-            "Vijayawada",
-            "India",
-            RetrofitBuilder.USER_KEY,
-            "Android App Developer",
-            "520008",
-            "Andhra Pradesh",
-            "16.5094445",
-            "80.6706229",
-            76,
-            0,
-            offerId
-        )
+//        val requestBody = SearchServiceProviderReqModel(
+//            "54-14/7-78",
+//            "Vijayawada",
+//            "India",
+//            RetrofitBuilder.USER_KEY,
+//            "Android App Developer",
+//            "520008",
+//            "Andhra Pradesh",
+//            "16.5094445",
+//            "80.6706229",
+//            76,
+//            0,
+//            offerId
+//        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
 

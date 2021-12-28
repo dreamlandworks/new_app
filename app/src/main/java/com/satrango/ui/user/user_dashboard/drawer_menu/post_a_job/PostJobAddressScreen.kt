@@ -46,6 +46,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlan
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -65,7 +66,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         binding = ActivityPostJobAddressScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        intializeToolBar()
+        initializeToolBar()
 
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
@@ -130,7 +131,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
-    private fun intializeToolBar() {
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
@@ -191,6 +192,23 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("SimpleDateFormat")
     private fun postJobSingleMove(addressId: Int) {
+        var address = ""
+        var city = ""
+        var state = ""
+        var country = ""
+        var postalCode = ""
+        var latitude = ""
+        var longitude = ""
+
+        if (addressId == 0) {
+            address = UserUtils.getAddress(this)
+            city = UserUtils.getCity(this)
+            state = UserUtils.getState(this)
+            country = UserUtils.getCountry(this)
+            postalCode = UserUtils.getPostalCode(this)
+            latitude = UserUtils.getLatitude(this)
+            longitude = UserUtils.getLongitude(this)
+        }
 
         val requestBody = PostJobSingleMoveReqModel(
             addressId,
@@ -208,9 +226,16 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.scheduled_date,
             UserUtils.time_slot_from,
             UserUtils.title,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            address,
+            city,
+            state,
+            country,
+            postalCode,
+            latitude,
+            longitude
         )
-
+        toast(this, Gson().toJson(requestBody))
         viewModel.postJobSingleMove(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

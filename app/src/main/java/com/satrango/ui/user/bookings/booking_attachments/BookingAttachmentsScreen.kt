@@ -140,12 +140,35 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                             "3" -> {
                                 UserUtils.finalAddressList = ArrayList()
+                                var address = ""
+                                var city = ""
+                                var state = ""
+                                var country = ""
+                                var postalCode = ""
+                                var latitude = ""
+                                var longitude = ""
+                                if (UserUtils.addressList[addressIndex].day == "0") {
+                                    address = UserUtils.getAddress(this@BookingAttachmentsScreen)
+                                    city = UserUtils.getCity(this@BookingAttachmentsScreen)
+                                    state = UserUtils.getState(this@BookingAttachmentsScreen)
+                                    country = UserUtils.getCountry(this@BookingAttachmentsScreen)
+                                    postalCode = UserUtils.getPostalCode(this@BookingAttachmentsScreen)
+                                    latitude = UserUtils.getLatitude(this@BookingAttachmentsScreen)
+                                    longitude = UserUtils.getLongitude(this@BookingAttachmentsScreen)
+                                }
                                 UserUtils.finalAddressList.add(
                                     Addresses(
                                         UserUtils.addressList[addressIndex].day.toInt(),
                                         UserUtils.job_description,
                                         addressIndex + 1,
-                                        2
+                                        2,
+                                        address,
+                                        city,
+                                        state,
+                                        country,
+                                        postalCode,
+                                        latitude,
+                                        longitude
                                     )
                                 )
                                 addressIndex += 1
