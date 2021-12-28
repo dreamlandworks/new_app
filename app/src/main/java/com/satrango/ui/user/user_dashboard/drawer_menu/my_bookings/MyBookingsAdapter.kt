@@ -116,11 +116,17 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         }
                     }
                 }
-
                 "Expired".lowercase(Locale.getDefault()) -> {
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.startBtn.text = "Expired"
+                    binding.startBtn.setBackgroundResource(R.drawable.user_red_btn_bg)
+                    binding.startBtn.elevation = 0f
+                }
+                "Cancelled".lowercase(Locale.getDefault()) -> {
+                    binding.cancelBookingBtn.visibility = View.GONE
+                    binding.reScheduleBtn.visibility = View.GONE
+                    binding.startBtn.text = "Cancelled"
                     binding.startBtn.setBackgroundResource(R.drawable.user_red_btn_bg)
                     binding.startBtn.elevation = 0f
                 }

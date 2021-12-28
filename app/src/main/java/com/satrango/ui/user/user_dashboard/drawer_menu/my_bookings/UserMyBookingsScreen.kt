@@ -96,7 +96,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
                         if (status == "Completed") {
-                            if (details.booking_status.equals(status, ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true)) {
+                            if (details.booking_status.equals(status, ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true) || details.booking_status.equals("Cancelled", ignoreCase = true)) {
                                 list.add(details)
                             }
                         } else {
