@@ -279,7 +279,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
-
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)

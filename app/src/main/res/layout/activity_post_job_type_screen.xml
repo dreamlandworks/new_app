@@ -57,16 +57,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/my_job_requires"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:textSize="@dimen/title"
             android:gravity="center"
             android:textColor="@color/blue"/>
 
         <LinearLayout
             android:id="@+id/specifiedLocationBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_30sdp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
@@ -84,7 +86,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/ex_office_home_godowns_shops_etc"
                 android:textSize="@dimen/text"
                 android:textColor="@color/white"/>
@@ -93,10 +95,11 @@
 
         <LinearLayout
             android:id="@+id/multiLocationsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:orientation="vertical"
-            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_30sdp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
@@ -114,7 +117,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/ex_delivering_couriersm_pick_amp_drop_etc"
                 android:textSize="@dimen/text"
                 android:textColor="@color/white"/>
@@ -123,10 +126,11 @@
 
         <LinearLayout
             android:id="@+id/onlineBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="@dimen/_30sdp"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
             android:background="@drawable/user_btn_bg_sm">
@@ -143,7 +147,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/ex_app_developments_data_entry_etc"
                 android:textSize="@dimen/text"
                 android:textColor="@color/white"/>

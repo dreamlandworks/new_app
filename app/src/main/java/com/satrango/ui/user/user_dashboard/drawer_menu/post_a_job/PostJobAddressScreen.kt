@@ -44,6 +44,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.Po
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -73,6 +74,11 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
 
         binding.apply {
 
+            mapsBtn.setOnClickListener {
+                UserLocationSelectionScreen.FROM_USER_POST_JOB_ADDRESS = true
+                startActivity(Intent(this@PostJobAddressScreen, UserLocationSelectionScreen::class.java))
+            }
+
             addNewAddress.setOnClickListener {
                 UserUtils.setFromJobPost(this@PostJobAddressScreen, true)
                 val intent = Intent(this@PostJobAddressScreen, AddBookingAddressScreen::class.java)
@@ -92,11 +98,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             }
 
         }
-
         initializeProgressDialog()
-
-        loadAddress()
-
     }
 
     private fun validateFields() {
@@ -431,6 +433,11 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadAddress()
     }
 
 }

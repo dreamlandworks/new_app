@@ -106,7 +106,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (s.toString().contains("@") || s.toString().contains(".")) {
+                    if (s.toString().contains("@") && s.toString().contains(".")) {
                         email.setCompoundDrawablesWithIntrinsicBounds(
                             R.drawable.ic_email_blue_24,
                             0,

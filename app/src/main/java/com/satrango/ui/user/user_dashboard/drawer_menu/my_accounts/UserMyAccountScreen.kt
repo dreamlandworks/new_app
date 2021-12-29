@@ -96,9 +96,9 @@ class UserMyAccountScreen : AppCompatActivity() {
             bookings.text = data.total_bookings
             thisMonth.text = data.commission_earned.this_month.toString()
             previousMonth.text = data.commission_earned.prev_month.toString()
-            modBalance.text = "Rs ${data.wallet_blocked_amount}"
+            modBalance.text = "Rs " + "%.2f".format(data.wallet_blocked_amount) + " /-"
             change.text = data.commission_earned.change.toString()
-            availableBalance.text = "Rs ${data.wallet_balance}"
+            availableBalance.text = "Rs " + "%.2f".format(data.wallet_balance) + " /-"
             FundTransferScreen.availableBalance = data.wallet_balance
 
             changePlan.setOnClickListener {

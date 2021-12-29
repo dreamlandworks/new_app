@@ -15,10 +15,8 @@
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_description_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_post_job_multi_move_description_screen.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_booking_response_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_dashboard.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_profile_screen.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_reject_booking_screen.xml" value="0.4" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_sign_up_one.xml" value="0.264" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_sign_up_three.xml" value="0.264" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/activity_provider_sign_up_two.xml" value="0.23229166666666667" />
@@ -42,6 +40,7 @@
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/layout/user_tool_bar.xml" value="0.23229166666666667" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/blue_account_balance_24.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/blue_bg_sm.xml" value="0.169140625" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/drawable/blue_out_line_sm.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/gray_corner.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/ic_baseline_people_purple_24.xml" value="0.16666666666666666" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/ic_baseline_people_white_24.xml" value="0.16666666666666666" />
@@ -50,6 +49,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/ic_person_purple_24.xml" value="0.1" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/provider_btn_bg.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/purple_out_line.xml" value="0.169140625" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/drawable/purple_out_line_sm.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/drawable/user_red_btn_bg.xml" value="0.169140625" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_add_bank_account_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_booking_address_screen.xml" value="0.19" />
@@ -59,7 +59,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_complaint_request_screen.xml" value="0.1552123552123552" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_complaint_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_feed_back_screen.xml" value="0.15703125" />
-        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_leader_board_screen.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_login_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.15703125" />
@@ -73,6 +73,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_post_job_multi_move_description_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_post_job_type_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_booking_response_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_dashboard.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_account_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_bids_screen.xml" value="0.1" />
@@ -120,6 +121,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/my_bookings_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/my_job_posts_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/payment_success_dialog.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/popup_content.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_dialog.xml" value="0.15703125" />

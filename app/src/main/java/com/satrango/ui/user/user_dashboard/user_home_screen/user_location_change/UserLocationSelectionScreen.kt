@@ -40,6 +40,7 @@ import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -50,6 +51,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         var FROM_USER_DASHBOARD = false
+        var FROM_USER_POST_JOB_ADDRESS = false
     }
 
     private var latitude: Double = 0.0
@@ -105,7 +107,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
@@ -133,10 +134,15 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             if (latitude != 0.0 && longitude != 0.0) {
                 fetchLocationDetails(this, latitude, longitude)
                 finish()
-                if (FROM_USER_DASHBOARD) {
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
+                if (FROM_USER_POST_JOB_ADDRESS) {
+                    FROM_USER_POST_JOB_ADDRESS = false
+                    onBackPressed()
                 } else {
-                    startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                    if (FROM_USER_DASHBOARD) {
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
+                    } else {
+                        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                    }
                 }
             } else {
                 snackBar(binding.addBtn, "Please select the location to Add")
@@ -269,6 +275,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 //            }
 //            return
 //        }
+
     }
 
 }

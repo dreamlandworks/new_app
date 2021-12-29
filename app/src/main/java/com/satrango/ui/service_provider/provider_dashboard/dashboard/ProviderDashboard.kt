@@ -279,7 +279,7 @@ class ProviderDashboard : AppCompatActivity() {
                         Log.e("Response:", Gson().toJson(response))
                         CoroutineScope(Dispatchers.Main).launch {
                             toast(this@ProviderDashboard, "$bookingId|Userid:$userId")
-                            showBookingAlert(bookingViewModel, bookingId, userId, response)
+                            showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
                         }
                     }
                     is NetworkResponse.Failure -> {
@@ -331,7 +331,8 @@ class ProviderDashboard : AppCompatActivity() {
         bookingViewModel: BookingViewModel,
         bookingId: String,
         userId: String,
-        response: BookingDetailsResModel
+        response: BookingDetailsResModel,
+        categoryId: String
     ) {
 
         bottomSheetDialog = BottomSheetDialog(this)
@@ -342,6 +343,7 @@ class ProviderDashboard : AppCompatActivity() {
         val time = bottomSheet.findViewById<TextView>(R.id.time)
         val jobDescription = bottomSheet.findViewById<TextView>(R.id.jobDescription)
         val jobLocation = bottomSheet.findViewById<TextView>(R.id.jobLocation)
+        val jobLocationText = bottomSheet.findViewById<TextView>(R.id.locationText)
         val timeFrom = bottomSheet.findViewById<TextView>(R.id.timeFrom)
         val date = bottomSheet.findViewById<TextView>(R.id.date)
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
@@ -351,8 +353,13 @@ class ProviderDashboard : AppCompatActivity() {
         date.text = response.booking_details.scheduled_date
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
-            jobLocation.text =
-                response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+            if (categoryId != "2") {
+                jobLocation.text =
+                    response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+            } else {
+                jobLocation.visibility = View.GONE
+                jobLocationText.visibility = View.GONE
+            }
         }
 
         closeBtn.setOnClickListener {

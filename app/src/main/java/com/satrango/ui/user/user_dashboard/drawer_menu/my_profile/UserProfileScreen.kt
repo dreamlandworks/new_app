@@ -45,19 +45,17 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.*
 import android.R.attr.data
+import android.text.Editable
+import android.text.TextWatcher
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.satrango.utils.toast
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-
-import com.google.firebase.storage.UploadTask
-import com.google.android.gms.tasks.OnSuccessListener
 import java.text.SimpleDateFormat
+
+
+
 
 
 class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
@@ -106,13 +104,16 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 }
 
                 when {
-                    fName.isEmpty() -> snackBar(binding.applyBtn, "Enter First Name")
-                    lName.isEmpty() -> snackBar(binding.applyBtn, "Enter Last Name")
-                    mobile.isEmpty() -> snackBar(binding.applyBtn, "Enter mobile number")
-                    email.isEmpty() -> snackBar(binding.applyBtn, "Enter Email Id")
-                    dob.isEmpty() -> snackBar(binding.applyBtn, "Select Date od Birth")
-                    gender.isEmpty() -> snackBar(binding.applyBtn, "Select Gender")
-                    else -> updateUserProfileToServer()
+                    fName.isEmpty() -> snackBar(binding.applyBtn, "Please Enter First Name")
+                    lName.isEmpty() -> snackBar(binding.applyBtn, "Please Enter Last Name")
+                    mobile.isEmpty() -> snackBar(binding.applyBtn, "Please Enter mobile number")
+                    email.isEmpty() -> snackBar(binding.applyBtn, "Please Enter Email Id")
+                    !email.contains("@") || !email.contains(".") -> snackBar(binding.applyBtn, "Please Enter Valid Email Id")
+                    dob.isEmpty() -> snackBar(binding.applyBtn, "Please Select Date of Birth")
+                    gender.isEmpty() -> snackBar(binding.applyBtn, "Please Select Gender")
+                    else -> {
+                        updateUserProfileToServer()
+                    }
                 }
             }
 
@@ -240,12 +241,13 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     }
 
     private fun updateUserProfileToServer() {
+        val reg = "[^A-Za-z0-9 ]".toRegex()
         val requestBody = UserProfileUpdateReqModel(
             binding.dateOfBirth.text.toString().trim(),
             binding.emailId.text.toString().trim(),
-            binding.firstName.text.toString().trim(),
+            reg.replace(binding.firstName.text.toString().trim(), ""),
             selectedEncodedImage,
-            binding.lastName.text.toString().trim(),
+            reg.replace(binding.lastName.text.toString().trim(), ""),
             gender,
             UserUtils.getUserId(this@UserProfileScreen),
             RetrofitBuilder.USER_KEY

@@ -58,7 +58,6 @@ class FCMService : FirebaseMessagingService() {
                     }
                 }
             } else if (it.title == "user") {
-                notificationManager.cancelAll()
                 if (!ProviderDashboard.FROM_FCM_SERVICE) {
                     if (UserUtils.getSpStatus(this)) {
                         addNotification(it.body)
@@ -72,12 +71,12 @@ class FCMService : FirebaseMessagingService() {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 } else {
-//                    if (it.body!!.split("|")[0] == "accept") {
+                    if (it.body!!.split("|")[0] == "accept") {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", it.title)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-//                    }
+                    }
                 }
             }
         }

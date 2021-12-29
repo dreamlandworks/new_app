@@ -128,11 +128,15 @@ class SearchServiceProviderAdapter(
         val sgstCost = layout.findViewById<TextView>(R.id.sgstCost)
         val cpkmsText = layout.findViewById<TextView>(R.id.cpkmText)
         val cpkmsCost = layout.findViewById<TextView>(R.id.cpkmCost)
+        val minChargesText = layout.findViewById<TextView>(R.id.minChargesText)
+        val minChargesCost = layout.findViewById<TextView>(R.id.minChargesCost)
 
         cgstText.text = "CGST(${charges.CGST_percentage}%): "
-        cgstCost.text = "${UserUtils.roundOffDecimal(charges.CGST_amount.toDouble())}"
+        cgstCost.text = "Rs ${UserUtils.roundOffDecimal(charges.CGST_amount.toDouble())}/-"
         sgstText.text = "SGST(${charges.SGST_percentage}%): "
-        sgstCost.text = "${UserUtils.roundOffDecimal(charges.SGST_amount.toDouble())}"
+        sgstCost.text = "Rs ${UserUtils.roundOffDecimal(charges.SGST_amount.toDouble())}/-"
+        minChargesText.text = "Min Charges: "
+        minChargesCost.text = "Rs. ${round(charges.min_charges.toDouble()).toInt()}/-"
         if (charges.category_id == "3") {
             cpkmsText.text = "Distance Per Kms:"
             cpkmsCost.text = "Rs" + UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()

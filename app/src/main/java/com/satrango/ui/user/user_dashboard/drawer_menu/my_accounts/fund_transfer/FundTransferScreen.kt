@@ -73,22 +73,22 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 
             hundredBtn.setOnClickListener {
                 if (FROM_PROVIDER) {
-                    hundredBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                    hundredBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.white))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
                 } else {
-                    hundredBtn.setBackgroundResource(R.drawable.category_bg)
+                    hundredBtn.setBackgroundResource(R.drawable.blue_bg_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.white))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.blue))
-                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.blue))
                 }
                 depositAmount.setText(hundredBtn.text.toString().trim())
@@ -96,22 +96,22 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 
             fiveHundredBtn.setOnClickListener {
                 if (FROM_PROVIDER) {
-                    fiveHundredBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
                 } else {
-                    fiveHundredBtn.setBackgroundResource(R.drawable.category_bg)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_bg_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.blue))
-                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.blue))
                 }
                 depositAmount.setText(fiveHundredBtn.text.toString())
@@ -119,22 +119,22 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 
             oneThousandBtn.setOnClickListener {
                 if (FROM_PROVIDER) {
-                    oneThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                    oneThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
                 } else {
-                    oneThousandBtn.setBackgroundResource(R.drawable.category_bg)
+                    oneThousandBtn.setBackgroundResource(R.drawable.blue_bg_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    twoThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.blue))
                 }
                 depositAmount.setText(oneThousandBtn.text.toString())
@@ -142,22 +142,22 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 
             twoThousandBtn.setOnClickListener {
                 if (FROM_PROVIDER) {
-                    twoThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                    twoThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.purple_500))
-                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.purple_500))
                 } else {
-                    twoThousandBtn.setBackgroundResource(R.drawable.category_bg)
+                    twoThousandBtn.setBackgroundResource(R.drawable.blue_bg_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.white))
-                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    hundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    fiveHundredBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.blue))
-                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    oneThousandBtn.setBackgroundResource(R.drawable.blue_out_line_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.blue))
                 }
                 depositAmount.setText(twoThousandBtn.text.toString())

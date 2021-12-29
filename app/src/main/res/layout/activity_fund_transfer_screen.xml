@@ -1,255 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen">
 
-    <include
-        android:id="@+id/toolBar"
-        layout="@layout/user_tool_bar" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_15sdp"
-        android:text="@string/add_funds"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolBar"
+            layout="@layout/user_tool_bar" />
 
         <TextView
-            android:id="@+id/hundredBtn"
-            style="@style/blue_outline_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:textSize="@dimen/sub_text"
-            android:text="@string/_100_00" />
-
-        <TextView
-            android:id="@+id/fiveHundredBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sub_text"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/_500_00" />
-
-        <TextView
-            android:id="@+id/oneThousandBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:textSize="@dimen/sub_text"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/_1000_00" />
-
-        <TextView
-            android:id="@+id/twoThousandBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:textSize="@dimen/sub_text"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/_2000_00" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-            app:boxCornerRadiusTopStart="@dimen/_10sdp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/depositAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="@string/deposit_amount"
-                android:inputType="numberDecimal"
-                android:textSize="@dimen/text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/addFundsBtn"
-            style="@style/filled_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:background="@drawable/category_bg"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_5sdp"
+            android:layout_margin="@dimen/_15sdp"
             android:text="@string/add_funds"
-            android:textSize="@dimen/sub_text" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:background="@color/grey_800" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:text="@string/withdraw_funds"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:orientation="horizontal">
+            android:textColor="@color/black"
+            android:textSize="@dimen/text"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/hundredBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/blue_out_line_sm"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/_100_00"
+                android:textSize="@dimen/sub_text" />
+
+            <TextView
+                android:id="@+id/fiveHundredBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/blue_out_line_sm"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/_500_00"
+                android:textSize="@dimen/sub_text" />
+
+            <TextView
+                android:id="@+id/oneThousandBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/blue_out_line_sm"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/_1000_00"
+                android:textSize="@dimen/sub_text" />
+
+            <TextView
+                android:id="@+id/twoThousandBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/blue_out_line_sm"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="@string/_2000_00"
+                android:textSize="@dimen/sub_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/depositAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/deposit_amount"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/addFundsBtn"
+                    style="@style/filled_button_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:background="@drawable/blue_bg_sm"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/add_funds"
+                    android:textSize="@dimen/text" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_20sdp"
+            android:background="@color/grey_800" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:text="@string/withdraw_funds"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/availableBalanceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/available_balance"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/text" />
+
+                <TextView
+                    android:id="@+id/availableBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="@string/rs_0_00"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/withdrawAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/withdraw_rs"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15sdp">
 
             <TextView
-                android:id="@+id/availableBalanceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/available_balance"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:id="@+id/availableBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="@string/rs_0_00"
+                android:text="@string/select_account"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="@dimen/_100sdp"
+            <TextView
+                android:id="@+id/addAnotherAmountBtn"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp">
+                android:layout_alignParentEnd="true"
+                android:text="@string/add_another_account"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/withdrawAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/withdraw_rs"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text" />
+        </RelativeLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/accountRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp" />
 
-        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_15sdp">
 
+            <TextView
+                android:id="@+id/resetBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:background="@drawable/blue_out_line"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/reset" />
+
+            <TextView
+                android:id="@+id/withDrawBtn"
+                style="@style/blue_outline_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/category_bg"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/withdraw"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_15sdp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_account"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text" />
-
-        <TextView
-            android:id="@+id/addAnotherAmountBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/add_another_account"
-            android:textColor="@color/red"
-            android:textSize="@dimen/text" />
-
-    </RelativeLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/accountRv"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_height="wrap_content" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15sdp">
-
-        <TextView
-            android:id="@+id/resetBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:background="@drawable/blue_out_line"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/reset" />
-
-        <TextView
-            android:id="@+id/withDrawBtn"
-            style="@style/blue_outline_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/category_bg"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/withdraw"
-            android:textColor="@color/white" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
