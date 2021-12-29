@@ -1,16 +1,17 @@
 package com.satrango.ui.user.bookings.provider_response
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
-import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -28,7 +29,7 @@ import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import org.json.JSONObject
 
-class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener {
+class ProviderBookingResponseScreen : AppCompatActivity() {
 
     private lateinit var userId: String
     private lateinit var amount: String
@@ -49,9 +50,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
 
         if (response.split("|")[0] == "accept") {
             UserUtils.saveInstantBooking(this, true)
-            binding.reject.visibility = View.GONE
-            binding.paymentSuccessLayout.visibility = View.GONE
-            binding.accept.visibility = View.VISIBLE
+            showProviderAcceptDialog()
 
             amount = response.split("|")[1]
             userId = response.split("|")[2]
@@ -68,10 +67,7 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
             }, 3000)
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         } else {
-            binding.accept.visibility = View.GONE
-            binding.paymentSuccessLayout.visibility = View.GONE
-            binding.reject.visibility = View.VISIBLE
-            binding.rejectNote.text = Html.fromHtml("Looks like Service Provider <b>${response.split("|")[4]}</b>. Shall we choose the best for your need.")
+            showProviderRejectedDialog(response.split("|")[4])
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         }
 
@@ -101,6 +97,31 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         }
     }
 
+    private fun showProviderRejectedDialog(messageText: String) {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.rejected_by_service_provider_dialog, null)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        val message = bottomSheet.findViewById<TextView>(R.id.message)
+        val noBtn = bottomSheet.findViewById<TextView>(R.id.noBtn)
+        val yesBtn = bottomSheet.findViewById<TextView>(R.id.yesBtn)
+        message.text = Html.fromHtml("Looks like Service Provider <b>$messageText</b>. Shall we choose the best for your need.")
+        closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        noBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        yesBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.show()
+    }
+
     private fun makePayment() {
         val checkout = Checkout()
         checkout.setKeyID(getString(R.string.razorpay_api_key))
@@ -118,53 +139,19 @@ class ProviderBookingResponseScreen : AppCompatActivity(), PaymentResultListener
         }
     }
 
-    override fun onPaymentSuccess(response: String?) {
-        updateStatusInServer(response, "Success")
-        showPaymentSuccessDialog()
-    }
-
-    override fun onPaymentError(p0: Int, error: String?) {
-        updateStatusInServer("", "Failure")
-        snackBar(binding.accept, "Payment Failed, Please try Again!")
-    }
-
-
-    private fun updateStatusInServer(paymentResponse: String?, status: String) {
-        val requestBody = PaymentConfirmReqModel(
-            amount,
-            UserUtils.getBookingId(this),
-            UserUtils.scheduled_date,
-            RetrofitBuilder.USER_KEY,
-            status,
-            paymentResponse!!,
-            userId.toInt(),
-            UserUtils.time_slot_from,
-            UserUtils.getUserId(this).toInt()
-        )
-        viewModel.confirmPayment(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    finish()
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.accept, it.message!!)
-                }
-            }
-        })
-    }
-
     @SuppressLint("SetTextI18n")
-    private fun showPaymentSuccessDialog() {
-        binding.accept.visibility = View.GONE
-        binding.reject.visibility = View.GONE
-        binding.paymentSuccessLayout.visibility = View.VISIBLE
-        binding.orderRefId.text = "Your order is successfully placed. Booking id: ${UserUtils.getBookingRefId(this)}"
+    private fun showProviderAcceptDialog() {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+
+        closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.show()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

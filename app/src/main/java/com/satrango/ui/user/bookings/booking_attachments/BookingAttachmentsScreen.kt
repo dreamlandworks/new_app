@@ -187,9 +187,19 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             if (data!!.category_id == "2") {
                                 UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                                 val startedAt = SimpleDateFormat("hh:mm:ss").format(Date())
-                                UserUtils.started_at = "${startedAt.split(":")[0].toInt() + 1}:00:00"
-                                UserUtils.time_slot_from = "${startedAt.split(":")[0].toInt() + 1}:00:00"
-                                UserUtils.time_slot_to = "${startedAt.split(":")[0].toInt() + 2}:00:00"
+                                val hour = startedAt.split(":")[0].toInt() + 1
+                                if (hour < 10) {
+                                    UserUtils.started_at = "0$hour:00:00"
+                                    UserUtils.time_slot_from = "0$hour:00:00"
+                                } else {
+                                    UserUtils.started_at = "$hour:00:00"
+                                    UserUtils.time_slot_from = "$hour:00:00"
+                                }
+                                if (hour + 1 < 10) {
+                                    UserUtils.time_slot_to = "0${hour + 1}:00:00"
+                                } else {
+                                    UserUtils.time_slot_to = "${hour + 1}:00:00"
+                                }
                                 bookBlueCollarServiceProvider()
                             } else {
                                 startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))
@@ -197,9 +207,19 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         } else if (UserUtils.getSelectedKeywordCategoryId(this@BookingAttachmentsScreen) == "2") {
                             UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                             val startedAt = SimpleDateFormat("hh:mm:ss").format(Date())
-                            UserUtils.started_at = "${startedAt.split(":")[0].toInt() + 1}:00:00"
-                            UserUtils.time_slot_from = "${startedAt.split(":")[0].toInt() + 1}:00:00"
-                            UserUtils.time_slot_to = "${startedAt.split(":")[0].toInt() + 2}:00:00"
+                            val hour = startedAt.split(":")[0].toInt() + 1
+                            if (hour < 10) {
+                                UserUtils.started_at = "0$hour:00:00"
+                                UserUtils.time_slot_from = "0$hour:00:00"
+                            } else {
+                                UserUtils.started_at = "$hour:00:00"
+                                UserUtils.time_slot_from = "$hour:00:00"
+                            }
+                            if (hour + 1 < 10) {
+                                UserUtils.time_slot_to = "0${hour + 1}:00:00"
+                            } else {
+                                UserUtils.time_slot_to = "${hour + 1}:00:00"
+                            }
                             bookBlueCollarServiceProvider()
                         } else {
                             startActivity(Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java))

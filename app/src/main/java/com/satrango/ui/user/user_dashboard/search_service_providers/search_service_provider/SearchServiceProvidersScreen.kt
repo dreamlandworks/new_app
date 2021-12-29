@@ -184,7 +184,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                                     UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
                                 }
                             }
-
+                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
                         }
                     progressDialog.dismiss()
                 }

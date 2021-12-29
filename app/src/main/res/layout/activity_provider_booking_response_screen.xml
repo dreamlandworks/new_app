@@ -12,6 +12,7 @@
         android:id="@+id/paymentSuccessLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:paddingBottom="@dimen/_30sdp"
         android:background="@drawable/rounded_corner">
 
@@ -75,6 +76,7 @@
         android:id="@+id/accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
@@ -132,6 +134,7 @@
         android:id="@+id/reject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
@@ -245,7 +248,5 @@
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
-
-
 
 </LinearLayout>
