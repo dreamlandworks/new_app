@@ -101,13 +101,22 @@ class FCMService : FirebaseMessagingService() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-//        addNotification(remoteMessage.data["body"])
-        remoteMessage.notification?.let {
-            
-        }
-    }
+//    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+//        super.onMessageReceived(remoteMessage)
+//        remoteMessage.notification?.let {
+//            if (ProviderDashboard.SP_DASHBOARD_OPENED) {
+////                Toast.makeText(applicationContext, "DASHBOARD CALLED", Toast.LENGTH_SHORT).show()
+//                ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
+//                ProviderDashboard.FROM_FCM_SERVICE = true
+//                val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
+//                notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
+//                notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
+//                notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
+//                notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                startActivity(notificationIntent)
+//            }
+//        }
+//    }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)

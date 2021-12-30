@@ -106,6 +106,7 @@ class ProviderDashboard : AppCompatActivity() {
 
     companion object {
         var FROM_FCM_SERVICE = false
+        var SP_DASHBOARD_OPENED = true
         var minutes = 2
         var seconds = 59
         var progressTime = 180
@@ -169,6 +170,7 @@ class ProviderDashboard : AppCompatActivity() {
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
                 finish()
+                SP_DASHBOARD_OPENED = false
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
@@ -177,6 +179,7 @@ class ProviderDashboard : AppCompatActivity() {
             snackBar(binding.bottomNavigationView, "Please check internet connection!")
             Handler().postDelayed({
                 finish()
+                SP_DASHBOARD_OPENED = false
                 startActivity(Intent(this, UserLoginTypeScreen::class.java))
             }, 3000)
         }
@@ -209,22 +212,28 @@ class ProviderDashboard : AppCompatActivity() {
                     loadFragment(ProviderHomeScreen())
                 }
                 R.id.providerOptMyAccount -> {
+                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                 }
                 R.id.providerOptMyBooking -> {
+                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                 }
                 R.id.providerOptMyBids -> {
+                    SP_DASHBOARD_OPENED = false
                     UserUtils.saveSearchFilter(this, "")
                     startActivity(Intent(this, ProviderMyBidsScreen::class.java))
                 }
                 R.id.providerOptMyProfile -> {
+                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderProfileScreen::class.java))
                 }
                 R.id.providerOptTraining -> {
+                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyTrainingScreen::class.java))
                 }
                 R.id.providerOptSettings -> {
+                    SP_DASHBOARD_OPENED = false
                     UserSettingsScreen.FROM_PROVIDER = true
                     startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
@@ -248,6 +257,7 @@ class ProviderDashboard : AppCompatActivity() {
         binding.providerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 binding.providerSwitch.text = "User"
+                SP_DASHBOARD_OPENED = false
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
@@ -425,7 +435,11 @@ class ProviderDashboard : AppCompatActivity() {
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run() {
-                time.text = "$minutes:$seconds"
+                if (seconds < 10) {
+                    time.text = "0$minutes:0$seconds"
+                } else {
+                    time.text = "0$minutes:$seconds"
+                }
                 progressTime -= 1
                 progressBar.progress = progressTime
 
@@ -641,6 +655,7 @@ class ProviderDashboard : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     toast(this, "Error : ${it.data.toString()}")
+                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
             }
@@ -839,5 +854,7 @@ class ProviderDashboard : AppCompatActivity() {
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
+
+
 
 }

@@ -63,18 +63,50 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 if (FROM_PROVIDER) {
                     if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
                         rating.setBackgroundResource(R.drawable.purple_out_line)
-                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     } else {
                         rating.setBackgroundResource(R.drawable.provider_btn_bg)
                         rating.setTextColor(Color.parseColor("#FFFFFF"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     }
                 } else {
                     if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
                         rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         rating.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         rating.setBackgroundResource(R.drawable.user_btn_bg)
                         rating.setTextColor(Color.parseColor("#FFFFFF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     }
                 }
             }
@@ -82,18 +114,50 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 if (FROM_PROVIDER) {
                     if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
                         ranking.setBackgroundResource(R.drawable.purple_out_line)
-                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     } else {
                         ranking.setBackgroundResource(R.drawable.provider_btn_bg)
                         ranking.setTextColor(Color.parseColor("#FFFFFF"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     }
                 } else {
                     if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
                         ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         ranking.setBackgroundResource(R.drawable.user_btn_bg)
                         ranking.setTextColor(Color.parseColor("#FFFFFF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     }
                 }
             }
@@ -101,18 +165,50 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 if (FROM_PROVIDER) {
                     if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
                         nearMe.setBackgroundResource(R.drawable.purple_out_line)
-                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     } else {
                         nearMe.setBackgroundResource(R.drawable.provider_btn_bg)
                         nearMe.setTextColor(Color.parseColor("#FFFFFF"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#8D5FF5"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
                     }
                 } else {
                     if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
                         nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         nearMe.setBackgroundResource(R.drawable.user_btn_bg)
                         nearMe.setTextColor(Color.parseColor("#FFFFFF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
                     }
                 }
             }
@@ -122,13 +218,25 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
                         priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
                         priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
-                        priceHighToLow.setBackgroundResource(R.drawable.provider_btn_bg)
-                        priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
+                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
                     } else {
                         priceLowToHigh.setBackgroundResource(R.drawable.provider_btn_bg)
                         priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
                         priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
-                        priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                        priceHighToLow.setTextColor(Color.parseColor("#8D5FF5"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
                     }
                 } else {
                     if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
@@ -136,11 +244,23 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                         priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
                         priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
                         priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
                         priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
                         priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
                     }
                 }
             }
@@ -149,25 +269,49 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                     if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
                         priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
                         priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
-                        priceLowToHigh.setBackgroundResource(R.drawable.provider_btn_bg)
-                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
                     } else {
                         priceHighToLow.setBackgroundResource(R.drawable.provider_btn_bg)
                         priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
                         priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
                         priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.purple_out_line)
+                        nearMe.setTextColor(Color.parseColor("#8D5FF5"))
+                        ranking.setBackgroundResource(R.drawable.purple_out_line)
+                        ranking.setTextColor(Color.parseColor("#8D5FF5"))
+                        rating.setBackgroundResource(R.drawable.purple_out_line)
+                        rating.setTextColor(Color.parseColor("#8D5FF5"))
                     }
                 } else {
                     if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
                         priceHighToLow.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
-                        priceLowToHigh.setBackgroundResource(R.drawable.user_btn_bg)
-                        priceLowToHigh.setTextColor(Color.parseColor("#FFFFFF"))
+                        priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
                     } else {
                         priceHighToLow.setBackgroundResource(R.drawable.user_btn_bg)
                         priceHighToLow.setTextColor(Color.parseColor("#FFFFFF"))
                         priceLowToHigh.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
                         priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
+                        nearMe.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        nearMe.setTextColor(Color.parseColor("#0A84FF"))
+                        ranking.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        ranking.setTextColor(Color.parseColor("#0A84FF"))
+                        rating.setBackgroundResource(R.drawable.btn_bg_sm_blue_border)
+                        rating.setTextColor(Color.parseColor("#0A84FF"))
                     }
                 }
             }

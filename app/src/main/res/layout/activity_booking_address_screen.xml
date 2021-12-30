@@ -229,6 +229,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/mapsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_another_location"
+                android:textColor="@color/blue"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_gravity="center|end"/>
+
             <LinearLayout
                 android:id="@+id/rowLayout"
                 android:layout_width="match_parent"

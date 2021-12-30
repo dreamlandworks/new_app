@@ -144,56 +144,117 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.dayRv.scrollToPosition(index)
             }
         }
+        binding.dayRv.adapter = MonthsAdapter(daysList, this, "D")
         for (index in timeSlots.indices) {
             if (timeSlots[index].month.split("\n")[0] == data.job_post_details.from) {
                 timeSlots[index] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                when {
-                    UserUtils.isNowTimeBetween("07:00", "12:00", timeSlots[index].month) -> {
-                        for (morning in morningTimings.indices) {
-                            if (morningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
-                                morningTimings[morning] =
-                                    MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                                binding.morningTimeRv.adapter =
-                                    MonthsAdapter(morningTimings, this, "T")
-                                binding.morningTimeRv.scrollToPosition(index)
+                morningTimings = ArrayList()
+                afternoonTimings = ArrayList()
+                eveningTimings = ArrayList()
+                nightTimings = ArrayList()
+            }
+        }
+//                when {
+//                    UserUtils.isNowTimeBetween("07:00", "12:00", timeSlots[index].month) -> {
+////                        for (morning in morningTimings.indices) {
+//////                            Log.e("MORNING:", Gson().toJson(morning) + "|" + morningTimings[morning].month.split("\n")[0])
+//////                            if (morningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+//////                                morningTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+//////                            }
+////                        }
+//                        binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this, "T")
+//                        binding.morningTimeRv.scrollToPosition(index)
+//                    }
+//                    UserUtils.isNowTimeBetween("12:00", "16:00", timeSlots[index].month) -> {
+//                        for (morning in afternoonTimings.indices) {
+//                            if (afternoonTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+//                                afternoonTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+//                            }
+//                        }
+//                        binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this, "T")
+//                        binding.afternoonTimeRv.scrollToPosition(index)
+//                    }
+//                    UserUtils.isNowTimeBetween("16:00", "21:00", timeSlots[index].month) -> {
+//                        for (morning in eveningTimings.indices) {
+//                            if (eveningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+//                                eveningTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+//                            }
+//                        }
+//                        binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
+//                        binding.eveningTimeRv.scrollToPosition(index)
+//                    }
+//                    UserUtils.isNowTimeBetween("21:00", "07:00", timeSlots[index].month) -> {
+//                        for (morning in nightTimings.indices) {
+//                            if (nightTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
+//                                nightTimings[morning] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
+//                            }
+//                        }
+//                        binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
+//                        binding.nightTimeRv.scrollToPosition(index)
+//                    }
+//                }
+//            }
+//        }
+        timeSlots.forEachIndexed { index, monthsModel ->
+            when {
+                UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!morningTimings.contains(timeSlots[index - 1])) {
+                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                morningTimings.add(timeSlots[index - 1])
                             }
                         }
                     }
-                    UserUtils.isNowTimeBetween("12:00", "16:00", timeSlots[index].month) -> {
-                        for (morning in afternoonTimings.indices) {
-                            if (afternoonTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
-                                afternoonTimings[morning] =
-                                    MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                                binding.afternoonTimeRv.adapter =
-                                    MonthsAdapter(afternoonTimings, this, "T")
-                                binding.afternoonTimeRv.scrollToPosition(index)
+                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        morningTimings.add(monthsModel)
+                    }
+                }
+                UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!afternoonTimings.contains(timeSlots[index - 1])) {
+                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                afternoonTimings.add(timeSlots[index - 1])
                             }
                         }
                     }
-                    UserUtils.isNowTimeBetween("16:00", "21:00", timeSlots[index].month) -> {
-                        for (morning in eveningTimings.indices) {
-                            if (eveningTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
-                                eveningTimings[morning] =
-                                    MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                                binding.eveningTimeRv.adapter =
-                                    MonthsAdapter(eveningTimings, this, "T")
-                                binding.eveningTimeRv.scrollToPosition(index)
+                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        afternoonTimings.add(monthsModel)
+                    }
+                }
+                UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!eveningTimings.contains(timeSlots[index - 1])) {
+                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                eveningTimings.add(timeSlots[index - 1])
                             }
                         }
                     }
-                    UserUtils.isNowTimeBetween("21:00", "07:00", timeSlots[index].month) -> {
-                        for (morning in nightTimings.indices) {
-                            if (nightTimings[morning].month.split("\n")[0] == data.job_post_details.from) {
-                                nightTimings[morning] =
-                                    MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                                binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
-                                binding.nightTimeRv.scrollToPosition(index)
+                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        eveningTimings.add(monthsModel)
+                    }
+                }
+                UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                    if (index >= 1) {
+                        if (!nightTimings.contains(timeSlots[index - 1])) {
+                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                nightTimings.add(timeSlots[index - 1])
                             }
                         }
+                    }
+                    if (checktimings(
+                            monthsModel.month,
+                            SimpleDateFormat("HH:mm a").format(Date())
+                        )
+                    ) {
+                        nightTimings.add(monthsModel)
                     }
                 }
             }
         }
+        binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this, "T")
+        binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this, "T")
+        binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this, "T")
+        binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this, "T")
     }
 
     private fun validateFields() {
@@ -533,8 +594,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.morningText.visibility = View.GONE
         } else {
             binding.morningText.visibility = View.VISIBLE
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE

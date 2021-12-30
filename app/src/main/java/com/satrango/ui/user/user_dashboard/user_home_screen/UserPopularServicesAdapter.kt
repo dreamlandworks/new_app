@@ -9,6 +9,7 @@ import com.satrango.databinding.UserPopularServicesRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.utils.UserUtils
 
 class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>) :
     RecyclerView.Adapter<UserPopularServicesAdapter.ViewHolder>() {
@@ -24,6 +25,7 @@ class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>
                 SearchServiceProvidersScreen.subCategoryId = model.id
                 SearchServiceProvidersScreen.keyword = "0"
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
+                UserUtils.saveSearchFilter(binding.root.context, "")
                 binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
             }
         }

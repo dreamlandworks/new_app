@@ -224,6 +224,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
                         UserUtils.setUserLoggedInVia(this, "", "")
+                        UserUtils.saveUserProfilePic(this@UserDashboardScreen, "")
                         UserUtils.deleteUserCredentials(this)
                         startActivity(Intent(this, LoginScreen::class.java))
                     }

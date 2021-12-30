@@ -46,6 +46,8 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -101,8 +103,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 //        }
 
         addressList = arrayListOf()
-        binding.recentLocation.text = UserUtils.getAddress(this)
-        binding.recentLocationText.text = UserUtils.getCity(this)
         binding.recentSearch.setOnClickListener {
             binding.recentSearch.setBackgroundResource(R.drawable.blue_bg_sm)
             binding.recentLocation.setTextColor(resources.getColor(R.color.white))
@@ -162,6 +162,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         })
 
         binding.apply {
+
+            mapsBtn.setOnClickListener {
+                UserLocationSelectionScreen.FROM_USER_BOOKING_ADDRESS = true
+                startActivity(Intent(this@BookingAddressScreen, UserLocationSelectionScreen::class.java))
+            }
 
             addNewAddress.setOnClickListener {
                 UserUtils.setFromJobPost(this@BookingAddressScreen, false)
@@ -452,42 +457,33 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         var progressTime = 180
         mainHandler.post(object : Runnable {
             override fun run() {
-                time.text = "$minutes:$seconds"
+                if (seconds < 10) {
+                    time.text = "0$minutes:0$seconds"
+                } else {
+                    time.text = "0$minutes:$seconds"
+                }
+
                 progressTime -= 1
                 progressBar.progress = progressTime
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(
-                        this@BookingAddressScreen,
-                        "accepted",
-                        "accepted"
-                    )
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
                     dialog.dismiss()
                     try {
                         weAreSorryDialog()
                     } catch (e: java.lang.Exception) {
                     }
                     Checkout.preload(applicationContext)
-                    startActivity(
-                        Intent(
-                            this@BookingAddressScreen,
-                            UserDashboardScreen::class.java
-                        )
-                    )
+                    weAreSorryDialog()
+//                    startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java)
                 }
                 if (seconds == 0) {
                     seconds = 59
                     minutes -= 1
                 }
-                if (UserUtils.getProviderAction(this@BookingAddressScreen)
-                        .split("|")[0].isNotEmpty()
-                ) {
-                    UserUtils.sendFCMtoAllServiceProviders(
-                        this@BookingAddressScreen,
-                        "accepted",
-                        "accepted"
-                    )
+                if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].isNotEmpty()) {
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
                     dialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
@@ -512,6 +508,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
             dialog.dismiss()
         }
         yesBtn.setOnClickListener {
@@ -616,38 +613,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
-//    private fun makePayment() {
-//        Checkout.preload(this)
-//        val checkout = Checkout()
-//        checkout.setKeyID(getString(com.satrango.R.string.razorpay_api_key))
-//        val amount = data.per_hour.toInt() * 100
-//        Log.e("AMOUNT:", amount.toString())
-//        try {
-//            val orderRequest = JSONObject()
-//            orderRequest.put("currency", "INR")
-//            orderRequest.put(
-//                "amount",
-//                        amount
-//            ) // 500rs * 100 = 50000 paisa passed
-//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-//            orderRequest.put("theme.color", R.color.blue)
-//            checkout.open(this, orderRequest)
-//        } catch (e: Exception) {
-//            toast(this, e.message!!)
-//        }
-//    }
-
-//    override fun onPaymentSuccess(paymentResponse: String?) {
-//        updateStatusInServer(paymentResponse, "Success")
-//
-//    }
-//
-//    override fun onPaymentError(p0: Int, paymentError: String?) {
-//        updateStatusInServer("", "Failure")
-//        snackBar(binding.nextBtn, "Payment Failed. Please Try Again!")
-//    }
-
     private fun serviceProviderAcceptDialog(context: Context) {
         val dialog = BottomSheetDialog(context)
         dialog.setCancelable(false)
@@ -693,36 +658,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         dialog.setContentView(dialogView)
         dialog.show()
     }
-
-//    private fun updateStatusInServer(paymentResponse: String?, status: String) {
-//        val requestBody = PaymentConfirmReqModel(
-//            data.per_hour,
-//            UserUtils.getBookingId(this),
-//            UserUtils.scheduled_date,
-//            RetrofitBuilder.USER_KEY,
-//            status,
-//            paymentResponse!!,
-//            data.users_id.toInt(),
-//            UserUtils.time_slot_from,
-//            UserUtils.getUserId(this).toInt()
-//        )
-//        viewModel.confirmPayment(this, requestBody).observe(this, {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    finish()
-//                    startActivity(Intent(this, UserDashboardScreen::class.java))
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    snackBar(binding.nextBtn, it.message!!)
-//                }
-//            }
-//        })
-//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun bookMultiMoveServiceProvider() {
@@ -912,6 +847,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.recentLocation.text = UserUtils.getAddress(this)
+        binding.recentLocationText.text = UserUtils.getCity(this)
     }
 
 }

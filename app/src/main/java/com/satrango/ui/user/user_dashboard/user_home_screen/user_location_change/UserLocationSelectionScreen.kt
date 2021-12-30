@@ -52,6 +52,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         var FROM_USER_DASHBOARD = false
         var FROM_USER_POST_JOB_ADDRESS = false
+        var FROM_USER_BOOKING_ADDRESS = false
     }
 
     private var latitude: Double = 0.0
@@ -73,13 +74,16 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+        val backBtn = toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
+        val backBtnText = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
+        backBtnText.text = resources.getString(R.string.back)
+        backBtnText.setOnClickListener {
             finish()
-            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            onBackPressed()
         }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+        backBtn.setOnClickListener {
             finish()
-            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            onBackPressed()
         }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_location)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
@@ -133,17 +137,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         binding.addBtn.setOnClickListener {
             if (latitude != 0.0 && longitude != 0.0) {
                 fetchLocationDetails(this, latitude, longitude)
-                finish()
-                if (FROM_USER_POST_JOB_ADDRESS) {
-                    FROM_USER_POST_JOB_ADDRESS = false
-                    onBackPressed()
-                } else {
-                    if (FROM_USER_DASHBOARD) {
-                        startActivity(Intent(this, UserDashboardScreen::class.java))
-                    } else {
-                        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-                    }
-                }
             } else {
                 snackBar(binding.addBtn, "Please select the location to Add")
             }
@@ -223,26 +216,48 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         try {
             val geoCoder = Geocoder(context, Locale.getDefault())
             val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-            val addressName: String = address[0].getAddressLine(0)
-            val city: String = address[0].locality
-            val state: String = address[0].adminArea
-            val country: String = address[0].countryName
-            val postalCode: String = address[0].postalCode
-            val knownName: String = address[0].featureName
-            UserUtils.setLatitude(context, latitude.toString())
-            UserUtils.setLongitude(context, longitude.toString())
-            UserUtils.setCity(context, city)
-            UserUtils.setState(context, state)
-            UserUtils.setCountry(context, country)
-            UserUtils.setPostalCode(context, postalCode)
-            UserUtils.setAddress(context, knownName)
+            if (address.isNotEmpty()) {
+                val addressName: String = address[0].getAddressLine(0)
+//                if (address[0].postalCode.isNullOrBlank()) {
+//                    toast(this, "Please select another location")
+//                } else {
+                    val city: String = address[0].locality
+                    val state: String = address[0].adminArea
+                    val country: String = address[0].countryName
+                    val postalCode: String = address[0].postalCode
+                    val knownName: String = address[0].featureName
+                    UserUtils.setLatitude(context, latitude.toString())
+                    UserUtils.setLongitude(context, longitude.toString())
+                    UserUtils.setCity(context, city)
+                    UserUtils.setState(context, state)
+                    UserUtils.setCountry(context, country)
+                    UserUtils.setPostalCode(context, postalCode)
+                    UserUtils.setAddress(context, knownName)
+                    if (FROM_USER_POST_JOB_ADDRESS) {
+                        FROM_USER_POST_JOB_ADDRESS = false
+                        onBackPressed()
+                    } else if(FROM_USER_BOOKING_ADDRESS) {
+                        FROM_USER_BOOKING_ADDRESS = false
+                        onBackPressed()
+                    } else {
+                        if (FROM_USER_DASHBOARD) {
+                            startActivity(Intent(this, UserDashboardScreen::class.java))
+                        } else {
+                            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+                        }
+                    }
+//                }
+            } else {
+                toast(this, "Location Details not found. Please select Another Location")
+            }
+
             try {
                 fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             } catch (e: Exception) {
 
             }
         } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!: ${e.message}", Toast.LENGTH_LONG)
+            Toast.makeText(context, "Please Try with another location. Selected Location Details are not available!", Toast.LENGTH_LONG)
                 .show()
         }
     }
@@ -275,7 +290,10 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 //            }
 //            return
 //        }
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
 }
