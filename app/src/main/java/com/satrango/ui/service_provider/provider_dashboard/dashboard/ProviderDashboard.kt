@@ -2,8 +2,10 @@ package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -29,6 +31,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -87,6 +90,8 @@ import java.util.*
 
 class ProviderDashboard : AppCompatActivity() {
 
+    private var categoryId = ""
+    private var userId = ""
     private lateinit var referralId: TextView
     private lateinit var toolBarTitle: TextView
     private lateinit var toolBarBackBtn: ImageView
@@ -120,6 +125,8 @@ class ProviderDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -265,43 +272,61 @@ class ProviderDashboard : AppCompatActivity() {
         Log.e("FROM_FCM_SERVICE:", FROM_FCM_SERVICE.toString())
         if (FROM_FCM_SERVICE) {
             bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-            val bookingFactory = ViewModelFactory(BookingRepository())
-            val bookingViewModel =
-                ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
-            val requestBody = BookingDetailsReqModel(
-                bookingId.toInt(),
-                categoryId.toInt(),
-                RetrofitBuilder.USER_KEY,
-                userId.toInt()
-            )
-            Log.e("RequestBody:", Gson().toJson(requestBody))
-            bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
-                        Log.e("Loading...:", "Loading...")
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        response = it.data!!
-                        Log.e("Response:", Gson().toJson(response))
-                        CoroutineScope(Dispatchers.Main).launch {
-                            toast(this@ProviderDashboard, "$bookingId|Userid:$userId")
-                            showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
-                        }
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-//                    snackBar(binding.bottomNavigationView, it.message!!)
-                        Log.e("Error:", Gson().toJson(response))
-                    }
-                }
-            })
+            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            userId = intent.getStringExtra(getString(R.string.user_id))!!
+            getInstantBookingDetails()
         } else {
             bookingId = ""
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getInstantBookingDetails() {
+        val bookingFactory = ViewModelFactory(BookingRepository())
+        val bookingViewModel =
+            ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
+        val requestBody = BookingDetailsReqModel(
+            bookingId.toInt(),
+            categoryId.toInt(),
+            RetrofitBuilder.USER_KEY,
+            userId.toInt()
+        )
+        Log.e("RequestBody:", Gson().toJson(requestBody))
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+            if (apiResponse.status == 200) {
+                progressDialog.dismiss()
+                response = apiResponse
+                Log.e("Response:", Gson().toJson(response))
+                showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
+
+            } else {
+                progressDialog.dismiss()
+                snackBar(binding.bottomNavigationView, response.message)
+            }
+        }
+//        bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                    Log.e("Loading...:", "Loading...")
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    response = it.data!!
+//                    Log.e("Response:", Gson().toJson(response))
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        toast(this@ProviderDashboard, "$bookingId|Userid:$userId")
+//                        showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
+//                    }
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    Log.e("Error:", Gson().toJson(response))
+//                }
+//            }
+//        })
     }
 
     private fun updateOnlineStatus(statusId: Int) {
@@ -373,9 +398,8 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         closeBtn.setOnClickListener {
-            bottomSheetDialog!!.dismiss()
             FROM_FCM_SERVICE = false
-//            IN_PROVIDER_DASHBOARD = false
+            bottomSheetDialog!!.dismiss()
         }
 
         Log.e("ResponseDialog:", Gson().toJson(response))
@@ -844,6 +868,16 @@ class ProviderDashboard : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(
@@ -855,6 +889,14 @@ class ProviderDashboard : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            userId = intent.getStringExtra(getString(R.string.user_id))!!
+            getInstantBookingDetails()
+        }
+    }
 
 }

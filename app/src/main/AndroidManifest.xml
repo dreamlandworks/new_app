@@ -51,6 +51,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/circlelogo"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
         android:theme="@style/Theme.Satrango"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
