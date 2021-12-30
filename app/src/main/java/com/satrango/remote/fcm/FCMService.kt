@@ -43,42 +43,69 @@ class FCMService : FirebaseMessagingService() {
     private lateinit var builder: android.app.Notification.Builder
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-//        addNotification(remoteMessage.data["body"])
-        remoteMessage.notification?.let {
-            Log.e("FCMMESSAGE:", it.title!! + "|" + it.body.toString() + "|" + ProviderDashboard.FROM_FCM_SERVICE.toString() + "|" + UserUtils.getSpStatus(this).toString())
-            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (it.title == "accepted") {
-                notificationManager.cancelAll()
-                if (ProviderDashboard.bottomSheetDialog != null) {
-                    if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                        ProviderDashboard.bottomSheetDialog!!.dismiss()
-                        ProviderDashboard.FROM_FCM_SERVICE = false
-                        Log.e("FCMMESSAGE CLOSED:", it.title!! + "|" + it.body.toString())
+    override fun handleIntent(intent: Intent) {
+        val bundle = intent.extras
+        if (bundle != null) {
+            for (key in bundle.keySet()) {
+                val value = bundle[key]
+                Log.e("FCM", "Key: $key Value: $value")
+            }
+        }
+        super.handleIntent(intent)
+        removeFirebaseOriginalNotifications()
+        if (bundle!!.containsKey("gcm.notification.body")) {
+            val body = bundle["gcm.notification.body"] as String?
+            if (bundle.containsKey("gcm.notification.title")) {
+                val title = bundle["gcm.notification.title"] as String?
+                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                Log.e("FCMMESSAGE:", title!! + "|" + body.toString() + "|" + ProviderDashboard.FROM_FCM_SERVICE.toString() + "|" + UserUtils.getSpStatus(this).toString())
+                if (title == "accepted") {
+                    notificationManager.cancelAll()
+                    if (ProviderDashboard.bottomSheetDialog != null) {
+                        if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                            ProviderDashboard.bottomSheetDialog!!.dismiss()
+                            ProviderDashboard.FROM_FCM_SERVICE = false
+                            Log.e("FCMMESSAGE CLOSED:", title + "|" + body.toString())
+                        }
                     }
-                }
-            } else if (it.title == "user") {
-                if (!ProviderDashboard.FROM_FCM_SERVICE) {
-                    if (UserUtils.getSpStatus(this)) {
-                        addNotification(it.body)
-                        Log.e("FCMMESSAGE RECEIVED:", it.title!! + "|" + it.body.toString())
+                } else if (title == "user") {
+                    if (!ProviderDashboard.FROM_FCM_SERVICE) {
+                        if (UserUtils.getSpStatus(this)) {
+                            notificationManager.cancelAll()
+                            addNotification(body)
+                            Log.e("FCMMESSAGE RECEIVED:", title + "|" + body.toString())
+                        }
                     }
-                }
-            } else {
-                if (!UserUtils.getInstantBooking(this)) {
-                    val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                    intent.putExtra("response", it.title)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
                 } else {
-                    if (it.body!!.split("|")[0] == "accept") {
+                    if (body!!.split("|")[0] == "accept") {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                        intent.putExtra("response", it.title)
+                        intent.putExtra("response", title)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     }
+//                    if (!UserUtils.getInstantBooking(this)) {
+//                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+//                        intent.putExtra("response", title)
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        startActivity(intent)
+//                    } else {
+//                        if (body!!.split("|")[0] == "accept") {
+//                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+//                            intent.putExtra("response", title)
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                            startActivity(intent)
+//                        }
+//                    }
                 }
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+//        addNotification(remoteMessage.data["body"])
+        remoteMessage.notification?.let {
+            
         }
     }
 
@@ -137,13 +164,18 @@ class FCMService : FirebaseMessagingService() {
 
     }
 
-    private val messageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context?, intent: Intent) {
-            val body = intent.extras?.getString("body")
-            addNotification(body!!)
+    private fun removeFirebaseOriginalNotifications() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return
         }
-
+        val activeNotifications = notificationManager.activeNotifications ?: return
+        for (tmp in activeNotifications) {
+            Log.d("FCM StatusBarNotificat:", "tag/id: " + tmp.tag + " / " + tmp.id)
+            val tag = tmp.tag
+            val id = tmp.id
+            if (tag != null && tag.contains("FCM-Notification")) notificationManager.cancel(tag, id)
+        }
     }
 }
 
