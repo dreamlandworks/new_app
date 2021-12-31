@@ -312,7 +312,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         messageText.text = message
         closeBtn.setOnClickListener { dialog.dismiss() }
         homeBtn.setOnClickListener {
-            ProviderDashboard.FROM_FCM_SERVICE = false
+            UserUtils.saveFromFCMService(this, false)
+//            ProviderDashboard.FROM_FCM_SERVICE = false
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         myBidsBtn.setOnClickListener { startActivity(Intent(this, ProviderMyBidsScreen::class.java)) }

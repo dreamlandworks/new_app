@@ -111,7 +111,6 @@ class ProviderDashboard : AppCompatActivity() {
 
     companion object {
         var FROM_FCM_SERVICE = false
-        var SP_DASHBOARD_OPENED = true
         var minutes = 2
         var seconds = 59
         var progressTime = 180
@@ -147,13 +146,7 @@ class ProviderDashboard : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderDashboardRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderDashboardViewModel::class.java]
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.toolBar,
-            R.string.app_name,
-            R.string.app_name
-        )
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, R.string.app_name)
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -177,7 +170,7 @@ class ProviderDashboard : AppCompatActivity() {
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
                 finish()
-                SP_DASHBOARD_OPENED = false
+                
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
@@ -186,7 +179,6 @@ class ProviderDashboard : AppCompatActivity() {
             snackBar(binding.bottomNavigationView, "Please check internet connection!")
             Handler().postDelayed({
                 finish()
-                SP_DASHBOARD_OPENED = false
                 startActivity(Intent(this, UserLoginTypeScreen::class.java))
             }, 3000)
         }
@@ -219,28 +211,22 @@ class ProviderDashboard : AppCompatActivity() {
                     loadFragment(ProviderHomeScreen())
                 }
                 R.id.providerOptMyAccount -> {
-                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                 }
                 R.id.providerOptMyBooking -> {
-                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                 }
                 R.id.providerOptMyBids -> {
-                    SP_DASHBOARD_OPENED = false
                     UserUtils.saveSearchFilter(this, "")
                     startActivity(Intent(this, ProviderMyBidsScreen::class.java))
                 }
                 R.id.providerOptMyProfile -> {
-                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderProfileScreen::class.java))
                 }
                 R.id.providerOptTraining -> {
-                    SP_DASHBOARD_OPENED = false
                     startActivity(Intent(this, ProviderMyTrainingScreen::class.java))
                 }
                 R.id.providerOptSettings -> {
-                    SP_DASHBOARD_OPENED = false
                     UserSettingsScreen.FROM_PROVIDER = true
                     startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
@@ -264,12 +250,11 @@ class ProviderDashboard : AppCompatActivity() {
         binding.providerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 binding.providerSwitch.text = "User"
-                SP_DASHBOARD_OPENED = false
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
 
-        Log.e("FROM_FCM_SERVICE:", FROM_FCM_SERVICE.toString())
+        Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
         if (FROM_FCM_SERVICE) {
             bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             categoryId = intent.getStringExtra(getString(R.string.category_id))!!
@@ -277,6 +262,7 @@ class ProviderDashboard : AppCompatActivity() {
             getInstantBookingDetails()
         } else {
             bookingId = ""
+            toast(this, "OPENED")
         }
     }
 
@@ -300,13 +286,13 @@ class ProviderDashboard : AppCompatActivity() {
                 response = apiResponse
                 Log.e("Response:", Gson().toJson(response))
                 showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
-
             } else {
                 progressDialog.dismiss()
                 snackBar(binding.bottomNavigationView, response.message)
             }
         }
-//        bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
+
+    //        bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
 //            when (it) {
 //                is NetworkResponse.Loading -> {
 //                    progressDialog.show()
@@ -327,6 +313,7 @@ class ProviderDashboard : AppCompatActivity() {
 //                }
 //            }
 //        })
+
     }
 
     private fun updateOnlineStatus(statusId: Int) {
@@ -398,7 +385,8 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         closeBtn.setOnClickListener {
-            FROM_FCM_SERVICE = false
+            UserUtils.saveFromFCMService(this, false)
+//            FROM_FCM_SERVICE = false
             bottomSheetDialog!!.dismiss()
         }
 
@@ -429,7 +417,8 @@ class ProviderDashboard : AppCompatActivity() {
                                 "accept",
                                 "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
                             )
-                            FROM_FCM_SERVICE = false
+                            UserUtils.saveFromFCMService(this,false)
+//                            FROM_FCM_SERVICE = false
                             Companion.bookingId = ""
                             bottomSheetDialog!!.dismiss()
                             snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
@@ -470,7 +459,8 @@ class ProviderDashboard : AppCompatActivity() {
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
                     Companion.bookingId = ""
-                    FROM_FCM_SERVICE = false
+                    UserUtils.saveFromFCMService(this@ProviderDashboard, false)
+//                    FROM_FCM_SERVICE = false
                     bottomSheetDialog!!.dismiss()
                 }
                 if (seconds == 0) {
@@ -527,7 +517,8 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderSignUpSeven::class.java))
                 }
                 "4" -> {
-                    FROM_FCM_SERVICE = false
+//                    FROM_FCM_SERVICE = false
+                    UserUtils.saveFromFCMService(this, false)
                     startActivity(Intent(this, ProviderDashboard::class.java))
                 }
             }
@@ -679,7 +670,7 @@ class ProviderDashboard : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     toast(this, "Error : ${it.data.toString()}")
-                    SP_DASHBOARD_OPENED = false
+                    
                     startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
             }

@@ -197,7 +197,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        ProviderDashboard.FROM_FCM_SERVICE = false
+        UserUtils.saveFromFCMService(this, false)
+//        ProviderDashboard.FROM_FCM_SERVICE = false
         startActivity(Intent(this, ProviderDashboard::class.java))
     }
 

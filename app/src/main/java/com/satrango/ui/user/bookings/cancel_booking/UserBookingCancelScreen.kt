@@ -244,11 +244,13 @@ class UserBookingCancelScreen : AppCompatActivity() {
             homeBtn.setTextColor(resources.getColor(R.color.purple_500))
             searchBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             homeBtn.setOnClickListener {
-                ProviderDashboard.FROM_FCM_SERVICE = false
+                UserUtils.saveFromFCMService(this, false)
+//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
             searchBtn.setOnClickListener {
-                ProviderDashboard.FROM_FCM_SERVICE = false
+                UserUtils.saveFromFCMService(this, false)
+//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
         } else {

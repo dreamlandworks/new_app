@@ -168,7 +168,8 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                 )
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""
-                                ProviderDashboard.FROM_FCM_SERVICE = false
+                                UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+//                                ProviderDashboard.FROM_FCM_SERVICE = false
                                 ProviderDashboard.bottomSheetDialog!!.dismiss()
                                 snackBar(binding.backBtn, "Booking Rejected Successfully")
                                 Handler().postDelayed({

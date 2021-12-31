@@ -592,6 +592,19 @@ object UserUtils {
         editor.commit()
     }
 
+    fun getFromFCMService(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_fcm_service), false)
+    }
+
+    fun saveFromFCMService(context: Context, fullName: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.provider_action), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_fcm_service), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
     fun getSearchFilter(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.search_filter), "")!!

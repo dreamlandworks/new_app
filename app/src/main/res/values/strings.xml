@@ -262,6 +262,7 @@
     <string name="booking_id">Booking Id</string>
     <string name="booking_ref_id">Booking Reference Id</string>
     <string name="provider_action">Provider Action</string>
+    <string name="from_fcm_service">From_Fcm_Service</string>
     <string name="category_id">Category Id</string>
     <string name="key">Key</string>
     <string name="user_id">User Id</string>

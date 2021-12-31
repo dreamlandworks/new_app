@@ -38,6 +38,7 @@ class FCMService : FirebaseMessagingService() {
     companion object {
         var fcmInstant: Instant? = null
         val INTENT_FILTER = "INTENT_FILTER"
+        val INTENT_FILTER_ONE = "INTENT_FILTER_ONE"
     }
 
     private var broadcaster: LocalBroadcastManager? = null
@@ -46,6 +47,12 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onCreate() {
         broadcaster = LocalBroadcastManager.getInstance(this)
+        registerReceiver(myReceiver, IntentFilter(INTENT_FILTER_ONE));
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(myReceiver)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -70,15 +77,21 @@ class FCMService : FirebaseMessagingService() {
                     if (ProviderDashboard.bottomSheetDialog != null) {
                         if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
                             ProviderDashboard.bottomSheetDialog!!.dismiss()
-                            ProviderDashboard.FROM_FCM_SERVICE = false
+                            UserUtils.saveFromFCMService(this, false)
+//                            ProviderDashboard.FROM_FCM_SERVICE = false
                             Log.e("FCMMESSAGE CLOSED:", title + "|" + body.toString())
                         }
                     }
                 } else if (title == "user") {
-                    if (!ProviderDashboard.FROM_FCM_SERVICE) {
+                    if (!UserUtils.getFromFCMService(this)) {
                         if (UserUtils.getSpStatus(this)) {
                             notificationManager.cancelAll()
                             addNotification(body)
+                            ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
+                            ProviderDashboard.FROM_FCM_SERVICE = true
+                            UserUtils.saveFromFCMService(this, true)
+//                            val notificationIntent = Intent(INTENT_FILTER_ONE)
+//                            sendBroadcast(notificationIntent)
                             Log.e("FCMMESSAGE RECEIVED:", title + "|" + body.toString())
                         }
                     }
@@ -134,16 +147,14 @@ class FCMService : FirebaseMessagingService() {
     private fun addNotification(body: String?) {
         val requestID = System.currentTimeMillis().toInt()
         val alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
-        ProviderDashboard.FROM_FCM_SERVICE = true
+        Log.e("FROM_FCM_SERVICE01:", UserUtils.getFromFCMService(this).toString())
         val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
         notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
         val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel =
-                NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
+            val notificationChannel = NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.GREEN
             notificationChannel.enableVibration(false)
@@ -187,5 +198,14 @@ class FCMService : FirebaseMessagingService() {
             if (tag != null && tag.contains("FCM-Notification")) notificationManager.cancel(tag, id)
         }
     }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            UserUtils.saveFromFCMService(context, true)
+            Toast.makeText(context, "My Receiver", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
 

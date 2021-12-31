@@ -69,7 +69,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
             }
 
             serviceProviderBtn.setOnClickListener {
-                ProviderDashboard.FROM_FCM_SERVICE = false
+                UserUtils.saveFromFCMService(this@UserLoginTypeScreen, false)
+//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
                 finish()
             }
