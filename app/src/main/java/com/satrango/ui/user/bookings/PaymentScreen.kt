@@ -186,8 +186,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan(paymentId: String?) {
+        val finalAmount = if (UserUtils.data != null) {
+            round(UserUtils.data!!.final_amount.toDouble()).toInt()
+        }else {
+            amount.toInt()
+        }
         val requestBody = UserPlanPaymentReqModel(
-            round(UserUtils.data!!.final_amount.toDouble()).toInt(),
+            finalAmount,
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             "Success",
@@ -223,8 +228,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     private fun saveProviderPlan(paymentId: String?) {
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
+        val finalAmount = if (UserUtils.data != null) {
+            round(UserUtils.data!!.final_amount.toDouble()).toInt()
+        }else {
+            amount.toInt()
+        }
         val requestBody = ProviderMemberShipPlanPaymentReqModel(
-            round(UserUtils.data!!.final_amount.toDouble()).toInt(),
+            finalAmount,
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
             RetrofitBuilder.USER_KEY,
             "Success",
@@ -300,18 +310,29 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     }
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
+        val finalAmount = if (UserUtils.data != null) {
+            round(UserUtils.data!!.final_amount.toDouble()).toInt()
+        }else {
+            amount.toInt()
+        }
+        val finalUserId = if (UserUtils.data != null) {
+            UserUtils.data!!.users_id.toInt()
+        } else {
+            userId
+        }
         val requestBody = PaymentConfirmReqModel(
-            round(UserUtils.data!!.final_amount.toDouble()).toString(),
+            finalAmount.toString(),
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
             status,
             paymentResponse!!,
-            UserUtils.data!!.users_id.toInt(),
+            finalUserId,
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt()
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
+        toast(this, Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this, {

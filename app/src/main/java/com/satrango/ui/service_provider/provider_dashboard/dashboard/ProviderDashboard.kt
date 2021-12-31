@@ -118,7 +118,6 @@ class ProviderDashboard : AppCompatActivity() {
         var FROM_FCM_SERVICE = false
         var minutes = 2
         var seconds = 59
-        var progressTime = 180
         var bookingId = ""
         var bottomSheetDialog: BottomSheetDialog? = null
     }
@@ -260,7 +259,7 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
-        if (FROM_FCM_SERVICE) {
+        if (UserUtils.getFromFCMService(this)) {
             if (bookingId != null) {
                 bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
@@ -286,6 +285,7 @@ class ProviderDashboard : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("RequestBody:", Gson().toJson(requestBody))
+        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
@@ -422,7 +422,7 @@ class ProviderDashboard : AppCompatActivity() {
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,
                                 "accept",
-                                "accept|" + this.response.booking_details.amount + "|${this.response.booking_details.sp_id}|provider"
+                                "accept|" + this.response.booking_details.amount + "|${UserUtils.getUserId(this)}|provider"
                             )
                             UserUtils.saveFromFCMService(this,false)
 //                            FROM_FCM_SERVICE = false

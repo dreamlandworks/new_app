@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -23,6 +24,7 @@ import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -52,7 +54,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
             UserUtils.saveInstantBooking(this, true)
             showProviderAcceptDialog()
 
-            amount = response.split("|")[1]
+//            amount = response.split("|")[1]
             userId = response.split("|")[2]
 
             Handler().postDelayed({
@@ -61,8 +63,14 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
                 PaymentScreen.FROM_PROVIDER_PLANS = false
                 PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
                 PaymentScreen.FROM_USER_SET_GOALS = false
-                PaymentScreen.amount = amount.toDouble()
-                startActivity(Intent(this, PaymentScreen::class.java))
+                val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+                for (sp in spDetails.data) {
+                    if (userId == sp.users_id) {
+                        PaymentScreen.amount = sp.final_amount.toDouble()
+                        PaymentScreen.userId = sp.users_id.toInt()
+                        startActivity(Intent(this, PaymentScreen::class.java))
+                    }
+                }
 //                makePayment()
             }, 3000)
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")

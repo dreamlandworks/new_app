@@ -593,7 +593,7 @@ object UserUtils {
     }
 
     fun getFromFCMService(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.provider_action), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_fcm_service), false)
     }
 
