@@ -81,11 +81,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.lang.NumberFormatException
 import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.util.*
+import android.os.CountDownTimer
+
+
+
 
 
 class ProviderDashboard : AppCompatActivity() {
@@ -256,21 +261,24 @@ class ProviderDashboard : AppCompatActivity() {
 
         Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
         if (FROM_FCM_SERVICE) {
-            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-            userId = intent.getStringExtra(getString(R.string.user_id))!!
-            getInstantBookingDetails()
+            if (bookingId != null) {
+                bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+                categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+                userId = intent.getStringExtra(getString(R.string.user_id))!!
+                try {
+                    getInstantBookingDetails()
+                } catch (e: NumberFormatException) { }
+            }
         } else {
             bookingId = ""
-            toast(this, "OPENED")
+//            toast(this, "OPENED")
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getInstantBookingDetails() {
         val bookingFactory = ViewModelFactory(BookingRepository())
-        val bookingViewModel =
-            ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
+        val bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
             categoryId.toInt(),
@@ -376,8 +384,7 @@ class ProviderDashboard : AppCompatActivity() {
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
             if (categoryId != "2") {
-                jobLocation.text =
-                    response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
             } else {
                 jobLocation.visibility = View.GONE
                 jobLocationText.visibility = View.GONE
@@ -445,32 +452,54 @@ class ProviderDashboard : AppCompatActivity() {
         seconds = (59 - secs).toInt()
         minutes = (2 - mins).toInt()
 
-        val mainHandler = Handler(Looper.getMainLooper())
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                if (seconds < 10) {
-                    time.text = "0$minutes:0$seconds"
-                } else {
-                    time.text = "0$minutes:$seconds"
+        var timerTime = seconds
+        object : CountDownTimer(1800000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                if (timerTime <= 0) {
+                    timerTime = 59
+                    minutes -= 1
                 }
-                progressTime -= 1
-                progressBar.progress = progressTime
-
-                seconds -= 1
-                if (minutes == 0 && seconds == 0) {
+                time.text = "0$minutes:" + checkDigit(timerTime)
+                timerTime--
+                if (minutes <= 0 && timerTime <= 0) {
                     Companion.bookingId = ""
                     UserUtils.saveFromFCMService(this@ProviderDashboard, false)
 //                    FROM_FCM_SERVICE = false
                     bottomSheetDialog!!.dismiss()
                 }
-                if (seconds == 0) {
-                    seconds = 59
-                    minutes -= 1
-                }
-                Log.e("DASHBOARD THREAD: ", "ONGOING....")
-                mainHandler.postDelayed(this, 1000)
             }
-        })
+
+            override fun onFinish() {
+                time.text = "TimeOut"
+            }
+        }.start()
+
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        mainHandler.post(object : Runnable {
+//            override fun run() {
+//                if (seconds < 10) {
+//                    time.text = "0$minutes:0$seconds"
+//                } else {
+//                    time.text = "0$minutes:$seconds"
+//                }
+//                progressTime -= 1
+//                progressBar.progress = progressTime
+//
+//                seconds -= 1
+//                if (minutes == 0 && seconds == 0) {
+//                    Companion.bookingId = ""
+//                    UserUtils.saveFromFCMService(this@ProviderDashboard, false)
+////                    FROM_FCM_SERVICE = false
+//                    bottomSheetDialog!!.dismiss()
+//                }
+//                if (seconds == 0) {
+//                    seconds = 59
+//                    minutes -= 1
+//                }
+//                Log.e("DASHBOARD THREAD: ", "ONGOING....")
+//                mainHandler.postDelayed(this, 1000)
+//            }
+//        })
 
         bottomSheetDialog!!.setContentView(bottomSheet)
         bottomSheetDialog!!.show()
@@ -871,11 +900,7 @@ class ProviderDashboard : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -883,11 +908,18 @@ class ProviderDashboard : AppCompatActivity() {
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
-            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-            userId = intent.getStringExtra(getString(R.string.user_id))!!
-            getInstantBookingDetails()
+                bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+                categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+                userId = intent.getStringExtra(getString(R.string.user_id))!!
+                try {
+                    getInstantBookingDetails()
+                } catch (e: NumberFormatException) {}
+
         }
+    }
+
+    fun checkDigit(number: Int): String? {
+        return if (number <= 9) "0$number" else number.toString()
     }
 
 }

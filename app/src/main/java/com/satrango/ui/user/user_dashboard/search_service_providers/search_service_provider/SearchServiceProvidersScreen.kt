@@ -315,7 +315,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showBookingTypeDialog(data: SearchServiceProviderResModel) {
+    private fun showBookingTypeDialog(spList: SearchServiceProviderResModel) {
+        val data = spList
         val showBookingTypeBottomSheetDialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(com.satrango.R.layout.search_type_dialog, null)
         val viewResults = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
@@ -357,6 +358,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (existed != data.data.size) {
                 startActivity(Intent(this, BookingAttachmentsScreen::class.java))
             } else {
+                showBookingTypeBottomSheetDialog.dismiss()
                 showBookingInstantNotProceedDialog(data)
             }
         }
@@ -369,20 +371,24 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showBookingInstantNotProceedDialog(data: SearchServiceProviderResModel) {
+    private fun showBookingInstantNotProceedDialog(spListData: SearchServiceProviderResModel) {
+        val data = spListData
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setCancelable(false)
         val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.instant_booking_not_available_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
-        val showResultsBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.viewResults)
-        val postJobBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.postJob)
+        val showResultsBtn = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
+        val postJobBtn = dialogView.findViewById<TextView>(com.satrango.R.id.postJob)
         closeBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
         }
         showResultsBtn.setOnClickListener {
-            UserUtils.saveFromInstantBooking(this, false)
-            binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
+            CoroutineScope(Dispatchers.Main).launch {
+                UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
+                binding.listCount.text = "${data.data.size} out of ${data.data.size}"
+                binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this@SearchServiceProvidersScreen)
+            }
+            bottomSheetDialog.dismiss()
         }
         postJobBtn.setOnClickListener {
             startActivity(Intent(this, PostJobTypeScreen::class.java))

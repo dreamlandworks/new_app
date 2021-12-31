@@ -749,10 +749,7 @@ object UserUtils {
 
         if (data != null) {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
-            for (index in 0 until 5) {
-                sendFCM(context, data!!.fcm_token, bookingId, from)
-                Log.d("FCM SENT SINGLE:", data!!.fcm_token)
-            }
+            sendFCM(context, data!!.fcm_token, bookingId, from)
         } else {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
             for (sp in spDetails.data) {

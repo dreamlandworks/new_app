@@ -57,6 +57,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
+import android.app.Activity
+
+
+
 
 class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 //    , PaymentResultListener
@@ -502,7 +506,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     private fun weAreSorryDialog() {
         val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
         val dialogView = layoutInflater.inflate(R.layout.no_service_provider_found, null)
         val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
         val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
@@ -522,7 +525,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             showWaitingForSPConfirmationDialog()
         }
         dialog.setContentView(dialogView)
-        dialog.show()
+        dialog.setCancelable(false)
+        if (!(this as Activity).isFinishing) {
+            dialog.show()
+        }
     }
 
     override fun selectedMonth(position: Int, dateTime: String, listType: String) {

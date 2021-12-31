@@ -30,6 +30,7 @@ import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 import java.time.Instant
 
 
@@ -78,9 +79,11 @@ class FCMService : FirebaseMessagingService() {
                         if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
                             ProviderDashboard.bottomSheetDialog!!.dismiss()
                             UserUtils.saveFromFCMService(this, false)
-//                            ProviderDashboard.FROM_FCM_SERVICE = false
+                            ProviderDashboard.FROM_FCM_SERVICE = false
                             Log.e("FCMMESSAGE CLOSED:", title + "|" + body.toString())
                         }
+                    } else {
+                        startActivity(Intent(this, ProviderDashboard::class.java))
                     }
                 } else if (title == "user") {
                     if (!UserUtils.getFromFCMService(this)) {
@@ -90,18 +93,17 @@ class FCMService : FirebaseMessagingService() {
                             ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
                             ProviderDashboard.FROM_FCM_SERVICE = true
                             UserUtils.saveFromFCMService(this, true)
-//                            val notificationIntent = Intent(INTENT_FILTER_ONE)
-//                            sendBroadcast(notificationIntent)
                             Log.e("FCMMESSAGE RECEIVED:", title + "|" + body.toString())
                         }
                     }
                 } else {
-                    if (body!!.split("|")[0] == "accept") {
-                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                        intent.putExtra("response", title)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                    }
+                    val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                    intent.putExtra("response", title)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+//                    if (body!!.split("|")[0] == "accept") {
+//
+//                    }
 //                    if (!UserUtils.getInstantBooking(this)) {
 //                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
 //                        intent.putExtra("response", title)
@@ -123,11 +125,13 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         remoteMessage.notification?.let {
-            val notificationIntent = Intent(INTENT_FILTER)
-            notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
-            notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
-            notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
-            sendBroadcast(notificationIntent)
+            if (it.title!! == "user") {
+                val notificationIntent = Intent(INTENT_FILTER)
+                notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
+                notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
+                notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
+                sendBroadcast(notificationIntent)
+            }
         }
 
     }
