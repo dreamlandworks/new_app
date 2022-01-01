@@ -45,8 +45,6 @@ import android.widget.Toast
 import android.widget.AdapterView.OnItemClickListener
 
 
-
-
 class SearchServiceProvidersScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchServiceProvidersScreenBinding
@@ -72,7 +70,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         binding.sortFilterBtn.setOnClickListener {
-//            UserUtils.saveSearchFilter(this, "")
             SortAndFilterServiceProvider.FROM_PROVIDER = false
             startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
         }
@@ -184,7 +181,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                                     UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
                                 }
                             }
-                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
+//                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
                         }
                     progressDialog.dismiss()
                 }
@@ -245,8 +242,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             subCategory.toInt(),
             offerId
         )
-//        toast(this, requestBody.toString())
-
+        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 //        {
 //            "address": "54-14/7-78",
 //            "city": "Vijayawada",
@@ -277,7 +273,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            0,
 //            offerId
 //        )
-        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
@@ -355,11 +350,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     }
                 }
             }
-            if (existed != data.data.size) {
-                startActivity(Intent(this, BookingAttachmentsScreen::class.java))
-            } else {
-                showBookingTypeBottomSheetDialog.dismiss()
-                showBookingInstantNotProceedDialog(data)
+            if (data.data.isNotEmpty()) {
+                if (existed == 0) {
+                    showBookingTypeBottomSheetDialog.dismiss()
+                    showBookingInstantNotProceedDialog(data)
+                } else {
+                    startActivity(Intent(this, BookingAttachmentsScreen::class.java))
+                }
             }
         }
         closeBtn.setOnClickListener {

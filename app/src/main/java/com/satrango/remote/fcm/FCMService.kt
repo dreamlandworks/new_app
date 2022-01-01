@@ -82,8 +82,6 @@ class FCMService : FirebaseMessagingService() {
                             ProviderDashboard.FROM_FCM_SERVICE = false
                             Log.e("FCMMESSAGE CLOSED:", title + "|" + body.toString())
                         }
-                    } else {
-                        startActivity(Intent(this, ProviderDashboard::class.java))
                     }
                 } else if (title == "user") {
                     if (!UserUtils.getFromFCMService(this)) {

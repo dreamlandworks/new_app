@@ -56,7 +56,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
 
 //            amount = response.split("|")[1]
             userId = response.split("|")[2]
-
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
             Handler().postDelayed({
                 PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
                 PaymentScreen.FROM_USER_PLANS = false
@@ -73,7 +73,6 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
                 }
 //                makePayment()
             }, 3000)
-            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
         } else {
             showProviderRejectedDialog(response.split("|")[4])
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")

@@ -746,7 +746,6 @@ object UserUtils {
         from: String
     ) {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
-
         if (data != null) {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
             sendFCM(context, data!!.fcm_token, bookingId, from)
@@ -764,8 +763,9 @@ object UserUtils {
                         if (count == 0) {
                             Log.e("FCM:", sp.fcm_token)
                             if (from == "accepted") {
-                                Log.e("CANCEL FCM", "NOTIFICATION")
-                                sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                                for (index in 1 until 5) {
+                                    sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                                }
                             } else {
                                 sendFCM(context, sp.fcm_token, bookingId, from)
                                 Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
@@ -774,8 +774,9 @@ object UserUtils {
                     } else {
                         Log.e("FCM:", sp.fcm_token)
                         if (from == "accepted") {
-                            Log.e("CANCEL FCM EMPTY", "NOTIFICATION")
-                            sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                            for (index in 1 until 5) {
+                                sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                            }
                         } else {
                             Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             sendFCM(context, sp.fcm_token, bookingId, from)

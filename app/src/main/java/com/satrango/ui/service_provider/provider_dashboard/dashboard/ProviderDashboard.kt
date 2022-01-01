@@ -285,7 +285,7 @@ class ProviderDashboard : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("RequestBody:", Gson().toJson(requestBody))
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
@@ -336,7 +336,7 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    toast(this, it.data!!.toString())
+//                    toast(this, it.data!!.toString())
                     progressDialog.dismiss()
                     if (statusId == 0) {
                         binding.onlineText.text = resources.getString(R.string.offline)
