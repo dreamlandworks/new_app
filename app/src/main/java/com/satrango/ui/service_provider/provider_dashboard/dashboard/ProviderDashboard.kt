@@ -459,9 +459,10 @@ class ProviderDashboard : AppCompatActivity() {
                     timerTime = 59
                     minutes -= 1
                 }
+//                progressBar.progress = timerTime
                 time.text = "0$minutes:" + checkDigit(timerTime)
                 timerTime--
-                if (minutes <= 0 && timerTime <= 0) {
+                if (minutes <= 0) {
                     Companion.bookingId = ""
                     UserUtils.saveFromFCMService(this@ProviderDashboard, false)
 //                    FROM_FCM_SERVICE = false
@@ -473,34 +474,6 @@ class ProviderDashboard : AppCompatActivity() {
                 time.text = "TimeOut"
             }
         }.start()
-
-//        val mainHandler = Handler(Looper.getMainLooper())
-//        mainHandler.post(object : Runnable {
-//            override fun run() {
-//                if (seconds < 10) {
-//                    time.text = "0$minutes:0$seconds"
-//                } else {
-//                    time.text = "0$minutes:$seconds"
-//                }
-//                progressTime -= 1
-//                progressBar.progress = progressTime
-//
-//                seconds -= 1
-//                if (minutes == 0 && seconds == 0) {
-//                    Companion.bookingId = ""
-//                    UserUtils.saveFromFCMService(this@ProviderDashboard, false)
-////                    FROM_FCM_SERVICE = false
-//                    bottomSheetDialog!!.dismiss()
-//                }
-//                if (seconds == 0) {
-//                    seconds = 59
-//                    minutes -= 1
-//                }
-//                Log.e("DASHBOARD THREAD: ", "ONGOING....")
-//                mainHandler.postDelayed(this, 1000)
-//            }
-//        })
-
         bottomSheetDialog!!.setContentView(bottomSheet)
         bottomSheetDialog!!.show()
     }

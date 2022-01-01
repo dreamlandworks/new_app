@@ -350,12 +350,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     }
                 }
             }
+
             if (data.data.isNotEmpty()) {
-                if (existed == 0) {
+                if (existed < data.data.size) {
+                    startActivity(Intent(this, BookingAttachmentsScreen::class.java))
+                } else {
                     showBookingTypeBottomSheetDialog.dismiss()
                     showBookingInstantNotProceedDialog(data)
-                } else {
-                    startActivity(Intent(this, BookingAttachmentsScreen::class.java))
                 }
             }
         }
