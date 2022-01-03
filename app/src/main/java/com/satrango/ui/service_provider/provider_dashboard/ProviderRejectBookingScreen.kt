@@ -165,7 +165,8 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                     this@ProviderRejectBookingScreen,
                                     response!!.booking_details.fcm_token,
                                     "reject",
-                                    "reject|" + response!!.booking_details.amount + "|${response!!.booking_details.sp_id} + |provider|$bookingType|$reason", bookingType
+                                    "reject",
+                                    "reject|${response!!.booking_details.amount}|${response!!.booking_details.sp_id}|$bookingType|$reason"
                                 )
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""

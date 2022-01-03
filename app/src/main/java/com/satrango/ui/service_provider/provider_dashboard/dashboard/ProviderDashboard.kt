@@ -423,8 +423,8 @@ class ProviderDashboard : AppCompatActivity() {
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,
                                 "accept",
-                                "accept|" + this.response.booking_details.amount + "|${UserUtils.getUserId(this)}|provider|$bookingType",
-                                bookingType
+                                "accept",
+                                "accept|${this.response.booking_details.amount}|${UserUtils.getUserId(this)}|$bookingType"
                             )
                             UserUtils.saveFromFCMService(this,false)
 //                            FROM_FCM_SERVICE = false
@@ -895,7 +895,7 @@ class ProviderDashboard : AppCompatActivity() {
         }
     }
 
-    fun checkDigit(number: Int): String? {
+    fun checkDigit(number: Int): String {
         return if (number <= 9) "0$number" else number.toString()
     }
 

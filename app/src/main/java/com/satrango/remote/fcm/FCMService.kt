@@ -46,15 +46,15 @@ class FCMService : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
 
-    override fun onCreate() {
-        broadcaster = LocalBroadcastManager.getInstance(this)
-        registerReceiver(myReceiver, IntentFilter(INTENT_FILTER_ONE));
-    }
+//    override fun onCreate() {
+//        broadcaster = LocalBroadcastManager.getInstance(this)
+//        registerReceiver(myReceiver, IntentFilter(INTENT_FILTER_ONE));
+//    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(myReceiver)
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        unregisterReceiver(myReceiver)
+//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun handleIntent(intent: Intent) {
@@ -81,8 +81,12 @@ class FCMService : FirebaseMessagingService() {
                                 ProviderDashboard.bottomSheetDialog!!.dismiss()
                                 UserUtils.saveFromFCMService(this, false)
                                 ProviderDashboard.FROM_FCM_SERVICE = false
-                                Log.e("FCMMESSAGE CLOSED:", "$title|$body")
+                                Log.e("FCM MESSAGE CLOSED:", "$title|$body")
                             }
+                        } else {
+                            val intent = Intent(INTENT_FILTER_ONE)
+                            intent.putExtra(resources.getString(R.string.sp_id), body[2])
+                            sendBroadcast(intent)
                         }
                     }
                 } else if (title == "user") {
@@ -97,7 +101,7 @@ class FCMService : FirebaseMessagingService() {
                         }
                     }
                 } else {
-                    Log.e("FCM ELSE PART:", "$title:::$body")
+                    Log.e("FCM ELSE PART:", "$title::$body")
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                     intent.putExtra("response", body)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -189,12 +193,12 @@ class FCMService : FirebaseMessagingService() {
         }
     }
 
-    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            UserUtils.saveFromFCMService(context, true)
-        }
-    }
+//    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        override fun onReceive(context: Context, intent: Intent) {
+//            UserUtils.saveFromFCMService(context, true)
+//        }
+//    }
 
 }
 

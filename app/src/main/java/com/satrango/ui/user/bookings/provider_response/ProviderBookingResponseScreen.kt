@@ -57,9 +57,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         if (response.split("|")[0] == "accept") {
             UserUtils.saveInstantBooking(this, true)
             showProviderAcceptDialog()
-
-//            amount = response.split("|")[1]
-            UserUtils.sendFCMtoAllServiceProviders(this, "accepted|$bookingType", "accepted|$bookingType", bookingType)
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
             Handler().postDelayed({
                 PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
                 PaymentScreen.FROM_USER_PLANS = false
@@ -77,8 +75,8 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
 //                makePayment()
             }, 3000)
         } else {
-            showProviderRejectedDialog(response.split("|")[5])
-            UserUtils.sendFCMtoAllServiceProviders(this, "accepted|$bookingType", "accepted|$bookingType", bookingType)
+            showProviderRejectedDialog(response.split("|")[4])
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
         }
 
         binding.successCloseBtn.setOnClickListener {

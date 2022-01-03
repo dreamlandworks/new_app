@@ -684,7 +684,6 @@ object UserUtils {
         val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, "Alert Sent to ${response.string()}", Toast.LENGTH_SHORT).show()
             Log.e("FCM RESPONSE:", token)
         }
 

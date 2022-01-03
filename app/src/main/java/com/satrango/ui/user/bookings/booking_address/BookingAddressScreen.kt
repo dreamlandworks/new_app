@@ -58,13 +58,21 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
 import android.app.Activity
-
-
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.satrango.remote.fcm.FCMService
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import java.lang.NumberFormatException
 
 
 class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 //    , PaymentResultListener
 
+    private lateinit var waitingDialog: BottomSheetDialog
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallBack: LocationCallback
     private lateinit var viewModel: BookingViewModel
@@ -72,6 +80,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var data: Data
     private lateinit var binding: ActivityBookingAddressScreenBinding
+    private lateinit var responses: ArrayList<String>
 
 //    companion object {
 //        var data: Data? = null
@@ -85,6 +94,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        responses = ArrayList()
+        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER_ONE));
 
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
@@ -342,7 +354,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "instant")
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|instant")
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
                             UserUtils.sendFCMtoSelectedServiceProvider(
@@ -444,17 +456,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("SetTextI18n")
     private fun showWaitingForSPConfirmationDialog() {
-        val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
+        waitingDialog = BottomSheetDialog(this)
+        waitingDialog.setCancelable(false)
         val dialogView = layoutInflater.inflate(R.layout.waiting_for_sp_confirmation_dialog, null)
         val progressBar = dialogView.findViewById<CircularProgressIndicator>(R.id.progressBar)
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "selected")
+            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accepted|selected")
             finish()
             startActivity(intent)
-            dialog.dismiss()
+            waitingDialog.dismiss()
         }
         var minutes = 2
         var seconds = 59
@@ -473,8 +485,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "selected")
-                    dialog.dismiss()
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|selected")
+                    waitingDialog.dismiss()
                     try {
                         weAreSorryDialog()
                     } catch (e: java.lang.Exception) {
@@ -488,22 +500,22 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     minutes -= 1
                 }
                 if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].isNotEmpty()) {
-                    dialog.dismiss()
+                    waitingDialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
                     ) {
                         serviceProviderAcceptDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "selected")
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|selected")
                     } else {
                         serviceProviderRejectDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "instant")
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|instant")
                     }
                 }
                 mainHandler.postDelayed(this, 1000)
             }
         })
-        dialog.setContentView(dialogView)
-        dialog.show()
+        waitingDialog.setContentView(dialogView)
+        waitingDialog.show()
     }
 
     private fun weAreSorryDialog() {
@@ -863,6 +875,29 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         super.onResume()
         binding.recentLocation.text = UserUtils.getAddress(this)
         binding.recentLocationText.text = UserUtils.getCity(this)
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val spIds = intent.getStringExtra(getString(R.string.sp_id))!!
+            responses.add(spIds)
+            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+            if (responses.size == spDetails.data.size) {
+                waitingDialog.dismiss()
+                weAreSorryDialog()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER_ONE))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
     }
 
 }
