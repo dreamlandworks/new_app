@@ -676,6 +676,7 @@
     <string name="service_providers_not_available_in_your_area_to_accept_instant_bookings">Service Providers not available in your area to accept instant bookings</string>
     <string name="select_from_map">Select From Map</string>
     <string name="add_another_location">Add another Location</string>
+    <string name="booking_type">Booking Type</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

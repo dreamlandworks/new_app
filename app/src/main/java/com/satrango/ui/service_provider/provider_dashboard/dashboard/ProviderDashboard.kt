@@ -95,6 +95,7 @@ import android.os.CountDownTimer
 
 class ProviderDashboard : AppCompatActivity() {
 
+    private var bookingType = ""
     private var categoryId = ""
     private var userId = ""
     private lateinit var referralId: TextView
@@ -380,7 +381,7 @@ class ProviderDashboard : AppCompatActivity() {
         val progressBar = bottomSheet.findViewById<CircularProgressIndicator>(R.id.progressBar)
 
         timeFrom.text = response.booking_details.from
-        date.text = response.booking_details.scheduled_date
+        date.text = "${response.booking_details.scheduled_date.split("-")[2]}-${response.booking_details.scheduled_date.split("-")[1]}-${response.booking_details.scheduled_date.split("-")[0]}"
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
             if (categoryId != "2") {
@@ -422,7 +423,8 @@ class ProviderDashboard : AppCompatActivity() {
                                 this@ProviderDashboard,
                                 this.response.booking_details.fcm_token,
                                 "accept",
-                                "accept|" + this.response.booking_details.amount + "|${UserUtils.getUserId(this)}|provider"
+                                "accept|" + this.response.booking_details.amount + "|${UserUtils.getUserId(this)}|provider|$bookingType",
+                                bookingType
                             )
                             UserUtils.saveFromFCMService(this,false)
 //                            FROM_FCM_SERVICE = false
@@ -442,6 +444,7 @@ class ProviderDashboard : AppCompatActivity() {
             ProviderRejectBookingScreen.userId = userId
             ProviderRejectBookingScreen.bookingId = bookingId
             ProviderRejectBookingScreen.response = response
+            ProviderRejectBookingScreen.bookingType = bookingType
             startActivity(Intent(this, ProviderRejectBookingScreen::class.java))
         }
 
@@ -884,6 +887,7 @@ class ProviderDashboard : AppCompatActivity() {
                 bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
+                bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
                 try {
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) {}

@@ -72,15 +72,17 @@ class FCMService : FirebaseMessagingService() {
             if (bundle.containsKey("gcm.notification.title")) {
                 val title = bundle["gcm.notification.title"] as String?
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                Log.e("FCMMESSAGE:", title!! + "|" + body.toString() + "|" + ProviderDashboard.FROM_FCM_SERVICE.toString() + "|" + UserUtils.getSpStatus(this).toString())
+                Log.e("FCMMESSAGE:", title!! + "|||" + body.toString())
                 if (title == "accepted") {
-                    notificationManager.cancelAll()
-                    if (ProviderDashboard.bottomSheetDialog != null) {
-                        if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                            ProviderDashboard.bottomSheetDialog!!.dismiss()
-                            UserUtils.saveFromFCMService(this, false)
-                            ProviderDashboard.FROM_FCM_SERVICE = false
-                            Log.e("FCMMESSAGE CLOSED:", title + "|" + body.toString())
+                    if (body!!.split("|")[1] != "instant") {
+                        notificationManager.cancelAll()
+                        if (ProviderDashboard.bottomSheetDialog != null) {
+                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                UserUtils.saveFromFCMService(this, false)
+                                ProviderDashboard.FROM_FCM_SERVICE = false
+                                Log.e("FCMMESSAGE CLOSED:", "$title|$body")
+                            }
                         }
                     }
                 } else if (title == "user") {
@@ -95,26 +97,11 @@ class FCMService : FirebaseMessagingService() {
                         }
                     }
                 } else {
+                    Log.e("FCM ELSE PART:", "$title:::$body")
                     val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                    intent.putExtra("response", title)
+                    intent.putExtra("response", body)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
-//                    if (body!!.split("|")[0] == "accept") {
-//
-//                    }
-//                    if (!UserUtils.getInstantBooking(this)) {
-//                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-//                        intent.putExtra("response", title)
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        startActivity(intent)
-//                    } else {
-//                        if (body!!.split("|")[0] == "accept") {
-//                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-//                            intent.putExtra("response", title)
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                            startActivity(intent)
-//                        }
-//                    }
                 }
             }
         }
@@ -128,6 +115,7 @@ class FCMService : FirebaseMessagingService() {
                 notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
                 notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
                 notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
+                notificationIntent.putExtra(application.getString(R.string.booking_type), it.body!!.split("|")[3])
                 sendBroadcast(notificationIntent)
             }
         }
@@ -205,7 +193,6 @@ class FCMService : FirebaseMessagingService() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
             UserUtils.saveFromFCMService(context, true)
-            Toast.makeText(context, "My Receiver", Toast.LENGTH_SHORT).show()
         }
     }
 

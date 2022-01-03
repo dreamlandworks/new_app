@@ -674,13 +674,14 @@ object UserUtils {
         context: Context,
         token: String,
         bookingId: String,
-        from: String
+        from: String,
+        type: String
     ) {
         saveProviderAction(context, "")
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}", from), "high", token)
+        val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
 //            Toast.makeText(context, "Alert Sent to ${response.string()}", Toast.LENGTH_SHORT).show()
@@ -693,13 +694,14 @@ object UserUtils {
         context: Context,
         token: String,
         bookingId: String,
-        from: String
+        from: String,
+        type: String
     ) {
         saveProviderAction(context, "")
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-        val requestBody = FCMMessageReqModel(Data(bookingId, "accepted", from), "high", token)
+        val requestBody = FCMMessageReqModel(Data("${bookingId}|$type", "accepted|$type", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE CANCEL:", Gson().toJson(response))
@@ -707,34 +709,18 @@ object UserUtils {
 
     }
 
-//    fun sendTimeRequestFCM(
-//        context: Context,
-//        token: String,
-//        from: String
-//    ) {
-//        saveProviderAction(context, "")
-//        val map = mutableMapOf<String, String>()
-//        map["Content-Type"] = "application/json"
-//        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
-//        val requestBody = FCMMessageReqModel(Data("timeRequired", "timeRequired", from), "high", token)
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Log.e("FCM RESPONSE TIME REQ:", Gson().toJson(response))
-//        }
-//
-//    }
-
     fun sendFCMtoSelectedServiceProvider(
         context: Context,
         bookingId: String,
         from: String
     ) {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+        Log.e("SELECTED SP:", Gson().toJson(spDetails))
         for (sp in spDetails.data) {
             for (spSlot in spDetails.slots_data) {
                 if (sp.users_id == spSlot.user_id) {
                     Log.e("SEND FCM TO", sp.fcm_token)
-                    sendFCM(context, sp.fcm_token, bookingId, from)
+                    sendFCM(context, sp.fcm_token, bookingId, from, "")
                 }
             }
         }
@@ -743,12 +729,13 @@ object UserUtils {
     fun sendFCMtoAllServiceProviders(
         context: Context,
         bookingId: String,
-        from: String
+        from: String,
+        type: String
     ) {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
         if (data != null) {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
-            sendFCM(context, data!!.fcm_token, bookingId, from)
+            sendFCM(context, data!!.fcm_token, bookingId, from, type)
         } else {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
             for (sp in spDetails.data) {
@@ -764,10 +751,10 @@ object UserUtils {
                             Log.e("FCM:", sp.fcm_token)
                             if (from == "accepted") {
                                 for (index in 1 until 5) {
-                                    sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                                    sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
                                 }
                             } else {
-                                sendFCM(context, sp.fcm_token, bookingId, from)
+                                sendFCM(context, sp.fcm_token, bookingId, from, type)
                                 Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             }
                         }
@@ -775,11 +762,11 @@ object UserUtils {
                         Log.e("FCM:", sp.fcm_token)
                         if (from == "accepted") {
                             for (index in 1 until 5) {
-                                sendCancelFCM(context, sp.fcm_token, bookingId, from)
+                                sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
                             }
                         } else {
                             Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
-                            sendFCM(context, sp.fcm_token, bookingId, from)
+                            sendFCM(context, sp.fcm_token, bookingId, from, type)
                         }
                     }
                 }

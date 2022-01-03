@@ -274,7 +274,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
-                                "user"
+                                "user",
+                                "instant"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -507,7 +508,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
-                                "user"
+                                "user",
+                                "instant"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -572,7 +574,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     UserUtils.sendFCMtoAllServiceProviders(
                         this@BookingAttachmentsScreen,
                         "accepted",
-                        "accepted"
+                        "accepted",
+                        "selected"
                     )
                     weAreSorryDialog()
                 }

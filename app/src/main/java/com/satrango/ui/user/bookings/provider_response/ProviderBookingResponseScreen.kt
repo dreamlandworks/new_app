@@ -35,6 +35,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
 
     private lateinit var userId: String
     private lateinit var amount: String
+    private lateinit var bookingType: String
     private lateinit var binding: ActivityProviderBookingResponseScreenBinding
     private lateinit var viewModel: BookingViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -50,13 +51,15 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         initializeProgressDialog()
 
+        userId = response.split("|")[2]
+        bookingType = response.split("|")[3]
+
         if (response.split("|")[0] == "accept") {
             UserUtils.saveInstantBooking(this, true)
             showProviderAcceptDialog()
 
 //            amount = response.split("|")[1]
-            userId = response.split("|")[2]
-            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted|$bookingType", "accepted|$bookingType", bookingType)
             Handler().postDelayed({
                 PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
                 PaymentScreen.FROM_USER_PLANS = false
@@ -74,8 +77,8 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
 //                makePayment()
             }, 3000)
         } else {
-            showProviderRejectedDialog(response.split("|")[4])
-            UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted")
+            showProviderRejectedDialog(response.split("|")[5])
+            UserUtils.sendFCMtoAllServiceProviders(this, "accepted|$bookingType", "accepted|$bookingType", bookingType)
         }
 
         binding.successCloseBtn.setOnClickListener {

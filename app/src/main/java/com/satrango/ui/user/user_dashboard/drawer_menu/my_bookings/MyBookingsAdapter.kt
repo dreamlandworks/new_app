@@ -25,13 +25,29 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
     class ViewHolder(binding: MyBookingsRowBinding): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(data: BookingDetail) {
             binding.amount.text = "Rs ${data.amount}"
             binding.bookingId.text = "Booking Id: ${data.booking_id}"
-            binding.scheduleDate.text = data.scheduled_date
-            if (!data.details[0].locality.isNullOrBlank()) {
-                binding.myLocation.text = data.details[0].city
+            binding.scheduleDate.text = "${data.scheduled_date} ${data.from}"
+            when (data.category_id) {
+                "1" -> {
+                    binding.bookingType.text = "Single Move"
+                }
+                "2" -> {
+                    binding.bookingType.text = "Blue Collar"
+                }
+                "3" -> {
+                    binding.bookingType.text = "Multi Move"
+                }
+            }
+            if (data.details[0].locality.isNullOrBlank()) {
+                if (data.details[0].locality.isNullOrBlank() && data.details[0].city.isNullOrBlank()) {
+                    binding.myLocationText.visibility = View.GONE
+                    binding.myLocation.visibility = View.GONE
+                } else {
+                    binding.myLocation.text = data.details[0].city
+                }
             } else {
                 binding.myLocation.text = data.details[0].locality + ", " + data.details[0].city
             }
@@ -75,6 +91,8 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                 }
                 "Pending".lowercase(Locale.getDefault()) -> {
                     binding.startBtn.visibility = View.GONE
+                    binding.reScheduleBtn.background = binding.reScheduleBtn.resources.getDrawable(R.drawable.user_btn_bg)
+                    binding.reScheduleBtn.setTextColor(binding.reScheduleBtn.resources.getColor(R.color.white))
                     binding.cancelBookingBtn.setOnClickListener {
                         val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)

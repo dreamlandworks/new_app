@@ -342,7 +342,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "instant")
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
                             UserUtils.sendFCMtoSelectedServiceProvider(
@@ -417,7 +417,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 UserUtils.sendFCMtoAllServiceProviders(
                                     this,
                                     UserUtils.getBookingId(this),
-                                    "user"
+                                    "user",
+                                    "instant"
                                 )
                             } else {
                                 snackBar(binding.nextBtn, "No Internet Connection!")
@@ -450,7 +451,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted")
+            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "selected")
             finish()
             startActivity(intent)
             dialog.dismiss()
@@ -472,7 +473,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "selected")
                     dialog.dismiss()
                     try {
                         weAreSorryDialog()
@@ -487,14 +488,15 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     minutes -= 1
                 }
                 if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].isNotEmpty()) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted")
                     dialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
                     ) {
                         serviceProviderAcceptDialog(this@BookingAddressScreen)
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "selected")
                     } else {
                         serviceProviderRejectDialog(this@BookingAddressScreen)
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "instant")
                     }
                 }
                 mainHandler.postDelayed(this, 1000)
@@ -536,7 +538,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         if (UserUtils.getFromInstantBooking(this)) {
             if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
                 addressList.onEachIndexed { index, month ->
-                    if (index == position || month.isSelected) {
+                    if (month.month == dateTime) {
                         tempAddress.add(MonthsModel(month.month, month.day, true))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, false))
@@ -556,7 +558,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         } else {
             if (data.category_id == "3") {
                 addressList.onEachIndexed { index, month ->
-                    if (index == position || month.isSelected) {
+                    if (month.month == dateTime) {
                         tempAddress.add(MonthsModel(month.month, month.day, true))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, false))
@@ -696,7 +698,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
-                                "user"
+                                "user",
+                                "instant"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -757,7 +760,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
-                                "user"
+                                "user",
+                                "instant"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")

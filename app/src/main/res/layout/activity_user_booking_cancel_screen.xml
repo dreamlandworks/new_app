@@ -346,7 +346,7 @@
             android:background="@drawable/blue_out_line"
             android:paddingHorizontal="@dimen/_10sdp"
             android:paddingVertical="@dimen/_5sdp"
-            android:text="@string/cancel_booking"
+            android:text="@string/Cancel"
             android:textSize="@dimen/sub_text"
             android:textStyle="normal" />
 

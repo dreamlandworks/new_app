@@ -33,6 +33,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
     private var reason = ""
 
     companion object {
+        var bookingType = ""
         var userId: String = ""
         var bookingId: String = ""
         var response: BookingDetailsResModel? = null
@@ -164,12 +165,11 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                     this@ProviderRejectBookingScreen,
                                     response!!.booking_details.fcm_token,
                                     "reject",
-                                    "reject|" + response!!.booking_details.amount + "|${response!!.booking_details.sp_id} + |provider|$reason"
+                                    "reject|" + response!!.booking_details.amount + "|${response!!.booking_details.sp_id} + |provider|$bookingType|$reason", bookingType
                                 )
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""
                                 UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
-//                                ProviderDashboard.FROM_FCM_SERVICE = false
                                 ProviderDashboard.bottomSheetDialog!!.dismiss()
                                 snackBar(binding.backBtn, "Booking Rejected Successfully")
                                 Handler().postDelayed({
