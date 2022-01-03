@@ -406,16 +406,16 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                     dialog.dismiss()
                                     finish()
                                     startActivity(intent)
-                                    snackBar(binding.recyclerView, "OTP Verification Success")
+                                    toast(this, "OTP Verification Success")
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
-                                    snackBar(binding.recyclerView, it.message!!)
+                                    toast(this, it.message!!)
                                 }
                             }
                         })
                 } else {
-                    snackBar(binding.recyclerView, "Invalid OTP")
+                    toast(this, "Invalid OTP")
                 }
             }
         }

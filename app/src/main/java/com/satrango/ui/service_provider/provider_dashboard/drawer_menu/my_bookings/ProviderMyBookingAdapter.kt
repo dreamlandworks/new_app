@@ -114,6 +114,7 @@ class ProviderMyBookingAdapter(
                     }
 
                     binding.startBtn.setOnClickListener {
+                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         providerMyBookingInterface.requestOTP(data.booking_id.toInt())
                     }
 

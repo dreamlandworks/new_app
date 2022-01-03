@@ -719,7 +719,7 @@ object UserUtils {
             for (spSlot in spDetails.slots_data) {
                 if (sp.users_id == spSlot.user_id) {
                     Log.e("SEND FCM TO", sp.fcm_token)
-                    sendFCM(context, sp.fcm_token, bookingId, from, "")
+                    sendFCM(context, sp.fcm_token, bookingId, from, "selected")
                 }
             }
         }

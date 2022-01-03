@@ -74,7 +74,7 @@ class FCMService : FirebaseMessagingService() {
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 Log.e("FCMMESSAGE:", title!! + "|||" + body.toString())
                 if (title == "accepted") {
-                    if (body!!.split("|")[1] != "instant") {
+//                    if (body!!.split("|")[1] != "instant") {
                         notificationManager.cancelAll()
                         if (ProviderDashboard.bottomSheetDialog != null) {
                             if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
@@ -83,12 +83,12 @@ class FCMService : FirebaseMessagingService() {
                                 ProviderDashboard.FROM_FCM_SERVICE = false
                                 Log.e("FCM MESSAGE CLOSED:", "$title|$body")
                             }
-                        } else {
-                            val intent = Intent(INTENT_FILTER_ONE)
-                            intent.putExtra(resources.getString(R.string.sp_id), body[2])
-                            sendBroadcast(intent)
+//                        } else {
+//                            val intent = Intent(INTENT_FILTER_ONE)
+//                            intent.putExtra(resources.getString(R.string.sp_id), body[2])
+//                            sendBroadcast(intent)
                         }
-                    }
+//                    }
                 } else if (title == "user") {
                     if (!UserUtils.getFromFCMService(this)) {
                         if (UserUtils.getSpStatus(this)) {
@@ -119,7 +119,7 @@ class FCMService : FirebaseMessagingService() {
                 notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
                 notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
                 notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
-                notificationIntent.putExtra(application.getString(R.string.booking_type), it.body!!.split("|")[3])
+                notificationIntent.putExtra(application.getString(R.string.booking_type), it.body!!.split("|")[4])
                 sendBroadcast(notificationIntent)
             }
         }
