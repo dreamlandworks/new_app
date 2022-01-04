@@ -325,12 +325,14 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             keyword = "0"
         }
         viewResults.setOnClickListener {
+            UserUtils.bookingType = "selected"
             showBookingTypeBottomSheetDialog.dismiss()
             UserUtils.saveFromInstantBooking(this, false)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
         }
         bookInstantly.setOnClickListener {
+            UserUtils.bookingType = "instant"
             UserUtils.data = null
             binding.listCount.visibility = View.GONE
             showBookingTypeBottomSheetDialog.dismiss()

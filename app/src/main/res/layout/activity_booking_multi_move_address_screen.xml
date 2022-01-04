@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.bookings.booking_address.BookingAddressScreen">
+    tools:context=".ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include
@@ -224,192 +224,81 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/mapsBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="@string/add_another_location"
-                    android:textColor="@color/blue" />
-
-                <LinearLayout
-                    android:id="@+id/rowLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
-                        android:src="@drawable/ic_location_searching"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/currentLocation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/current_location"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/text"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/currentLocationText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:text="@string/using_gps"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/sub_text"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@color/grey_800" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/address_of_service"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/addressRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_5sdp" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/recent_searches"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/recentSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
-                        android:src="@drawable/ic_location_searching"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/recentLocation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/current_location"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/recentLocationText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:text="@string/using_gps"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:text="@string/or"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/addNewAddress"
-                    style="@style/blue_outline_button_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="@dimen/_10sdp"
-                    android:background="@drawable/blue_out_line"
-                    android:text="@string/add_new_address"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <RelativeLayout
-            android:id="@+id/btnsLayout"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:layout_margin="@dimen/_10sdp"
+            android:hint="@string/write_something_about_work">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/discription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/edit_text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:text="@string/at"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text" />
+
+        <TextView
+            android:id="@+id/addressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:background="@drawable/user_btn_bg_sm"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/at"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/attachments"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attachmentsRV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp" />
+
+        <ImageView
+            android:id="@+id/attachments"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/gray_corner"
+            android:src="@drawable/ic_baseline_add_24"
+            tools:ignore="ContentDescription" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/backBtn"
                 style="@style/blue_outline_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
+                android:layout_margin="@dimen/_20sdp"
                 android:background="@drawable/blue_out_line"
                 android:gravity="center"
                 android:text="@string/back" />
@@ -420,7 +309,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/_20sdp"
                 android:background="@drawable/category_bg"
                 android:gravity="center"

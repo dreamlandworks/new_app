@@ -19,12 +19,14 @@ import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.provider_response.ProviderBookingResponseScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +76,7 @@ class FCMService : FirebaseMessagingService() {
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 Log.e("FCMMESSAGE:", title!! + "|||" + body.toString())
                 if (title == "accepted") {
-//                    if (body!!.split("|")[1] != "instant") {
+                    if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
                         notificationManager.cancelAll()
                         if (ProviderDashboard.bottomSheetDialog != null) {
                             if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
@@ -83,12 +85,12 @@ class FCMService : FirebaseMessagingService() {
                                 ProviderDashboard.FROM_FCM_SERVICE = false
                                 Log.e("FCM MESSAGE CLOSED:", "$title|$body")
                             }
-//                        } else {
-//                            val intent = Intent(INTENT_FILTER_ONE)
-//                            intent.putExtra(resources.getString(R.string.sp_id), body[2])
-//                            sendBroadcast(intent)
+                        } else {
+                            val intent = Intent(INTENT_FILTER_ONE)
+                            intent.putExtra(resources.getString(R.string.sp_id), body.split("|")[2])
+                            sendBroadcast(intent)
                         }
-//                    }
+                    }
                 } else if (title == "user") {
                     if (!UserUtils.getFromFCMService(this)) {
                         if (UserUtils.getSpStatus(this)) {
@@ -97,15 +99,28 @@ class FCMService : FirebaseMessagingService() {
                             ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = false
                             ProviderDashboard.FROM_FCM_SERVICE = true
                             UserUtils.saveFromFCMService(this, true)
-                            Log.e("FCMMESSAGE RECEIVED:", title + "|" + body.toString())
+                            Log.e("FCMMESSAGE RECEIVED:", "$title|$body")
                         }
                     }
                 } else {
-                    Log.e("FCM ELSE PART:", "$title::$body")
-                    val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                    intent.putExtra("response", body)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+                    if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
+                        Log.e("FCM ELSE PART:", "$title::$body")
+                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                        intent.putExtra("response", body)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                    } else {
+                        val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+                        val count = UserUtils.getInstantBookingSpCount(this) + 1
+                        UserUtils.setInstantBookingSpCount(this, count)
+                        if (UserUtils.getInstantBookingSpCount(this) == spDetails.data.size) {
+                            Log.e("FCM ELSE PART:", "$title::$body")
+                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                            intent.putExtra("response", body)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
+                    }
                 }
             }
         }

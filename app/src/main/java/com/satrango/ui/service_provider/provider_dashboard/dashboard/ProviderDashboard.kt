@@ -91,8 +91,6 @@ import android.os.CountDownTimer
 
 
 
-
-
 class ProviderDashboard : AppCompatActivity() {
 
     private var bookingType = ""
@@ -888,7 +886,7 @@ class ProviderDashboard : AppCompatActivity() {
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
-                toast(context, bookingType)
+//                toast(context, bookingType)
                 try {
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) {}

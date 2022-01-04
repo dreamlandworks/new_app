@@ -275,7 +275,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
-                                "instant"
+                                UserUtils.bookingType
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -509,7 +509,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
-                                "instant"
+                                UserUtils.bookingType
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -575,7 +575,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         this@BookingAttachmentsScreen,
                         "accepted",
                         "accepted",
-                        "selected"
+                        UserUtils.bookingType
                     )
                     weAreSorryDialog()
                 }

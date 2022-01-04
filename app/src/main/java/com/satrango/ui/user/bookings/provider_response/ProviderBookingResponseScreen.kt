@@ -31,6 +31,7 @@ import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import org.json.JSONObject
 
+
 class ProviderBookingResponseScreen : AppCompatActivity() {
 
     private lateinit var userId: String
@@ -51,10 +52,12 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         initializeProgressDialog()
 
+
         userId = response.split("|")[2]
-        bookingType = response.split("|")[3]
 
         if (response.split("|")[0] == "accept") {
+            bookingType = response.split("|")[6]
+            toast(this, "Booking Type: $bookingType")
             UserUtils.saveInstantBooking(this, true)
             showProviderAcceptDialog()
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
@@ -75,7 +78,9 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
 //                makePayment()
             }, 3000)
         } else {
-            showProviderRejectedDialog(response.split("|")[4])
+            bookingType = response.split("|")[4]
+            toast(this, "Booking Type: $bookingType")
+            showProviderRejectedDialog(response.split("|")[5])
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
         }
 

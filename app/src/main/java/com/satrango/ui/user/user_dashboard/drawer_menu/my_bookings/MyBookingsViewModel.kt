@@ -18,7 +18,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
 
     var myBookings = MutableLiveData<NetworkResponse<List<BookingDetail>>>()
     var otpRequest = MutableLiveData<NetworkResponse<Int>>()
-    var validateOTP = MutableLiveData<NetworkResponse<Int>>()
+    var validateOTP = MutableLiveData<NetworkResponse<String>>()
     var resumeBooking = MutableLiveData<NetworkResponse<String>>()
     var pauseBooking = MutableLiveData<NetworkResponse<String>>()
 
@@ -66,7 +66,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
         return otpRequest
     }
 
-    fun validateOTP(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<Int>> {
+    fun validateOTP(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<String>> {
         if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
@@ -74,7 +74,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     val result = async { repository.validateOTP(bookingId, spId) }
                     val response = JSONObject(result.await().string())
                     if (response.getInt("status") == 200) {
-                        validateOTP.value = NetworkResponse.Success(response.getInt("otp"))
+                        validateOTP.value = NetworkResponse.Success(response.getString("message"))
                     } else {
                         validateOTP.value = NetworkResponse.Failure(response.getString("message"))
                     }

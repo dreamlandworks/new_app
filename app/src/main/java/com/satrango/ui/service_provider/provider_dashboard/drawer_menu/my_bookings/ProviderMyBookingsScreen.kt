@@ -389,28 +389,27 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             } else if (fourthNo.text.toString().trim().isEmpty()) {
                 snackBar(binding.recyclerView, "Invalid OTP")
             } else {
-                val otp = firstNo.text.toString().trim() + secondNo.text.toString()
-                    .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
+                val otp = firstNo.text.toString().trim() + secondNo.text.toString().trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
                     val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel =
-                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-                    viewModel.validateOTP(this, bookingId, UserUtils.spid.toInt())
+                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    viewModel.validateOTP(this, bookingId, UserUtils.getUserId(this).toInt())
                         .observe(this, {
                             when (it) {
                                 is NetworkResponse.Loading -> {
                                     progressDialog.show()
                                 }
                                 is NetworkResponse.Success -> {
+                                    toast(this, "OTP Verification Success")
                                     progressDialog.dismiss()
                                     dialog.dismiss()
                                     finish()
                                     startActivity(intent)
-                                    toast(this, "OTP Verification Success")
+
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
-                                    toast(this, it.message!!)
+                                    toast(this,"Error:${it.message!!}" )
                                 }
                             }
                         })

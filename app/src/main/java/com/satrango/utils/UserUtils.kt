@@ -64,7 +64,7 @@ object UserUtils {
     var addressList = ArrayList<MonthsModel>()
     var finalAddressList = ArrayList<Addresses>()
     var data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data? = null
-
+    var bookingType = ""
 
     fun setFromJobPost(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
@@ -77,6 +77,19 @@ object UserUtils {
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
+
+    fun setInstantBookingSpCount(context: Context, fromJobPost: Int) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt(context.resources.getString(R.string.instant_booking_sp_count), fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getInstantBookingSpCount(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getInt(context.resources.getString(R.string.instant_booking_sp_count), 0)
     }
 
     fun setOffline(context: Context, fromJobPost: Boolean) {
@@ -719,7 +732,7 @@ object UserUtils {
             for (spSlot in spDetails.slots_data) {
                 if (sp.users_id == spSlot.user_id) {
                     Log.e("SEND FCM TO", sp.fcm_token)
-                    sendFCM(context, sp.fcm_token, bookingId, from, "selected")
+                    sendFCM(context, sp.fcm_token, bookingId, from, "accepted|$bookingType")
                 }
             }
         }

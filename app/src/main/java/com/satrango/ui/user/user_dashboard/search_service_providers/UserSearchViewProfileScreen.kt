@@ -17,6 +17,7 @@ import com.satrango.databinding.ActivitySearchViewProfileBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
@@ -60,8 +61,6 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             onBackPressed()
             return
         }
-//        val data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
-
 
         binding.apply {
 
@@ -90,11 +89,13 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 //            skillsRating.text = data.
 
             bookLaterBtn.setOnClickListener {
+//                UserUtils.bookingType = "selected"
                 BookingDateAndTimeScreen.FROM_PROVIDER = false
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))
             }
             bookNowBtn.setOnClickListener {
+//                UserUtils.bookingType = "selected"
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
                 if (data.category_id == "3") {
                     startActivity(Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java))
