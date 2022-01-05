@@ -22,6 +22,7 @@ import com.satrango.ui.user.bookings.view_booking_details.installments_request.m
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsRequestInterface {
@@ -41,6 +42,8 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
 
         initializeToolBar()
         initializeProgressDialog()
+
+        toast(this, postJobId.toString())
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]

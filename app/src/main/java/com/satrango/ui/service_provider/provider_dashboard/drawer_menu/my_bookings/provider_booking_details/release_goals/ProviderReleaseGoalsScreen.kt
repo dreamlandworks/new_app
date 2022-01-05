@@ -23,6 +23,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 
 class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInterface {
 
@@ -43,9 +44,10 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
 
         initializeProgressDialog()
 
+        toast(this, postJobId)
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
-        viewModel.getInstallmentsList(this, 9).observe(this, {
+        viewModel.getInstallmentsList(this, postJobId.toInt()).observe(this, {
             when(it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -69,7 +71,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
+                    snackBar(binding.recyclerView, "Error01:${it.message!!}")
                 }
             }
         })
@@ -124,6 +126,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
+                    startActivity(intent)
                     snackBar(binding.recyclerView, it.data!!.message)
                 }
                 is NetworkResponse.Failure -> {

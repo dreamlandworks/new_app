@@ -80,9 +80,12 @@ class ProviderMyBookingAdapter(
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                        ProviderBookingDetailsScreen.bookingId = data.booking_id
+                        ProviderBookingDetailsScreen.categoryId = data.category_id
+                        ProviderBookingDetailsScreen.userId = data.users_id
+//                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+//                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+//                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         UserUtils.spid = data.sp_id
@@ -115,7 +118,7 @@ class ProviderMyBookingAdapter(
 
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                        providerMyBookingInterface.requestOTP(data.booking_id.toInt())
+                        providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id)
                     }
 
                     binding.card.setOnClickListener {

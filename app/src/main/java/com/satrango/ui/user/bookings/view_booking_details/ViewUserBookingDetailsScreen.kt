@@ -1,15 +1,16 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,7 +27,6 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewUserBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
@@ -41,7 +41,6 @@ import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
@@ -84,9 +83,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
         if (FROM_MY_BOOKINGS_SCREEN) {
-            toolBar.setBackgroundColor(Color.parseColor("#0A84FF"))
+            toolBar.setBackgroundColor(resources.getColor(R.color.blue))
             if (FROM_PROVIDER) {
-                toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
                 binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
                 binding.reScheduleBtn.setBackgroundResource(R.drawable.purple_out_line)
                 binding.reScheduleBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -97,6 +95,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
                 binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
                 binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
+                toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val window: Window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = resources.getColor(R.color.purple_700)
+                }
                 if (FROM_PENDING) {
                     binding.userLayout.visibility = View.VISIBLE
                     binding.spLayout.visibility = View.GONE
@@ -122,6 +126,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.completedBtn.setOnClickListener {
                         finalExpenditureDialog()
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val window: Window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = resources.getColor(R.color.purple_700)
+                    }
+                    binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
                 }
 
             } else {
@@ -147,6 +157,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         } else {
                             requestOTP("User")
                         }
+                    }
+                    binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
+                    if (categoryId == "2") {
+                        binding.viewFilesBtn.visibility = View.VISIBLE
+                    } else {
+                        binding.viewFilesBtn.visibility = View.GONE
                     }
                 }
             }
@@ -189,14 +205,19 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -395,7 +416,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             } else {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
-                if (this.requestedOTP == otp.toInt()) {
+                if (requestedOTP == otp.toInt()) {
                     if (FROM_PROVIDER) {
                         binding.startBtn.visibility = View.GONE
                     } else {
@@ -419,9 +440,17 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                         ProviderRatingReviewScreen.userId = userId
                                         ProviderRatingReviewScreen.bookingId = bookingId
                                         ProviderRatingReviewScreen.categoryId = categoryId
-                                        startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
+                                        startActivity(
+                                            Intent(
+                                                this,
+                                                ProviderRatingReviewScreen::class.java
+                                            )
+                                        )
                                     }
-                                    snackBar(binding.inProgressViewStatusBtn, "OTP Verification Success")
+                                    snackBar(
+                                        binding.inProgressViewStatusBtn,
+                                        "OTP Verification Success"
+                                    )
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
@@ -441,7 +470,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text = "${response.booking_details.fname} ${response.booking_details.lname}"
+        binding.userName.text =
+            "${response.booking_details.fname} ${response.booking_details.lname}"
         binding.mobileNo.text = response.booking_details.mobile
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
@@ -449,8 +479,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.otp.text = response.booking_details.otp
         binding.bookingIdText.text = bookingId
 
-        binding.jobDetailsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.jobDetailsRV.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.attachmentsRV.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         if (response.job_details.isEmpty()) {
             binding.jobDetailsText.visibility = View.GONE
@@ -486,13 +518,24 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         }
 
         if (!FROM_PROVIDER) {
+            binding.requestInstallmentBtn.setBackgroundResource(R.drawable.blue_out_line)
+            binding.requestInstallmentBtn.setTextColor(resources.getColor(R.color.blue))
+            binding.requestInstallmentBtn.visibility = View.VISIBLE
             if (response.booking_details.post_job_id != "0") {
                 binding.requestInstallmentBtn.visibility = View.GONE
+            } else {
+                binding.requestInstallmentBtn.visibility = View.VISIBLE
             }
             if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
                 if (response.booking_details.extra_demand_total_amount != 0.0) {
                     if (response.booking_details.extra_demand_status == "0") {
-                        showExtraDemandAcceptDialog(bookingId.toInt(), response.booking_details.material_advance.toString(), response.booking_details.technician_charges.toString(), response.booking_details.extra_demand_total_amount.toString(), progressDialog)
+                        showExtraDemandAcceptDialog(
+                            bookingId.toInt(),
+                            response.booking_details.material_advance.toString(),
+                            response.booking_details.technician_charges.toString(),
+                            response.booking_details.extra_demand_total_amount.toString(),
+                            progressDialog
+                        )
                     }
                 }
             }
@@ -505,6 +548,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             UserUtils.spid = response.booking_details.sp_id
             ProviderReleaseGoalsScreen.userId = userId
             if (FROM_PROVIDER) {
+                ProviderReleaseGoalsScreen.userId = response.booking_details.post_job_id
                 startActivity(Intent(this, ProviderReleaseGoalsScreen::class.java))
             } else {
                 startActivity(Intent(this, UserInstallmentsRequestScreen::class.java))
@@ -512,9 +556,21 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         }
 
+        if (categoryId == "2") {
+            binding.viewFilesBtn.visibility = View.VISIBLE
+        } else {
+            binding.viewFilesBtn.visibility = View.GONE
+        }
+
     }
 
-    private fun showExtraDemandAcceptDialog(bookingId: Int, materialAdvance: String, technicalCharges: String, extraDemandTotalAmount: String, progressDialog: BeautifulProgressDialog) {
+    private fun showExtraDemandAcceptDialog(
+        bookingId: Int,
+        materialAdvance: String,
+        technicalCharges: String,
+        extraDemandTotalAmount: String,
+        progressDialog: BeautifulProgressDialog
+    ) {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
         val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
@@ -539,7 +595,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId,1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
         }
 
         dialog.setCancelable(false)
@@ -547,7 +603,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun changeExtraDemandStatus(bookingId: Int, status: Int, dialog: BottomSheetDialog, progressDialog: BeautifulProgressDialog) {
+    private fun changeExtraDemandStatus(
+        bookingId: Int,
+        status: Int,
+        dialog: BottomSheetDialog,
+        progressDialog: BeautifulProgressDialog
+    ) {
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -561,6 +622,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     dialog.dismiss()
+                    if (status == 1) {
+                        snackBar(binding.inProgressViewStatusBtn, "Extra Demand Accepted")
+                    } else {
+                        snackBar(binding.inProgressViewStatusBtn, "Extra Demand Rejected")
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -665,11 +731,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
                                 dialog.dismiss()
-                                toast(this, "Extra Demand Raised")
+                                snackBar(binding.inProgressViewStatusBtn, "Extra Demand Raised")
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
-                                toast(this, it.message!!)
+                                snackBar(binding.inProgressViewStatusBtn, it.message!!)
                             }
                         }
                     })

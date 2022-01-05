@@ -2,6 +2,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -29,6 +30,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResumeReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderPauseBookingReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
@@ -185,8 +187,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         dialog.show()
     }
 
-    override fun requestOTP(bookingId: Int) {
-
+    override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String) {
         myBookingViewModel.otpRequest(this, bookingId, "SP")
             .observe(this, {
                 when (it) {
@@ -197,7 +198,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        otpDialog(requestedOTP, bookingId)
+                        otpDialog(requestedOTP, bookingId, categoryId, userId, spId)
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -266,7 +267,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     @SuppressLint("SetTextI18n")
-    private fun otpDialog(requestedOTP: Int, bookingId: Int) {
+    private fun otpDialog(requestedOTP: Int, bookingId: Int, categoryId: String, userId: String, spId: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -393,14 +394,24 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 if (requestedOTP == otp.toInt()) {
                     val factory = ViewModelFactory(MyBookingsRepository())
                     val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-                    viewModel.validateOTP(this, bookingId, UserUtils.getUserId(this).toInt())
-                        .observe(this, {
+                    viewModel.validateOTP(this, bookingId, UserUtils.getUserId(this).toInt()).observe(this, {
                             when (it) {
                                 is NetworkResponse.Loading -> {
                                     progressDialog.show()
                                 }
                                 is NetworkResponse.Success -> {
-                                    toast(this, "OTP Verification Success")
+                                    toast(this, "$bookingId|$categoryId|$userId|$spId")
+                                    val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
+//                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+//                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+//                                    intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                                    ProviderBookingDetailsScreen.bookingId = bookingId.toString()
+                                    ProviderBookingDetailsScreen.categoryId = categoryId
+                                    ProviderBookingDetailsScreen.userId = userId
+                                    ViewUserBookingDetailsScreen.FROM_PROVIDER = true
+                                    ViewUserBookingDetailsScreen.FROM_PENDING = false
+                                    UserUtils.spid = spId
+                                    startActivity(intent)
                                     progressDialog.dismiss()
                                     dialog.dismiss()
                                     finish()
@@ -409,7 +420,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
-                                    toast(this,"Error:${it.message!!}" )
+                                    toast(this,"Error:${it.message!!}")
                                 }
                             }
                         })

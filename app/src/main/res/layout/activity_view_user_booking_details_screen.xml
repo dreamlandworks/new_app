@@ -282,7 +282,8 @@
             android:id="@+id/attachmentsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:text="@string/attachments"
             android:textSize="@dimen/sub_text" />
 
@@ -296,7 +297,9 @@
             android:id="@+id/jobDetailsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:text="@string/job_details"
             android:textSize="@dimen/sub_text" />
 

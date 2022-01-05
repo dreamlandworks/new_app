@@ -1,7 +1,6 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -24,12 +23,14 @@ import com.satrango.databinding.ActivityUserMyBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -124,6 +125,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
+        binding.otp.text = response.booking_details.otp
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -163,6 +165,68 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             UserUtils.makeMessage(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
         }
 
+        if (categoryId == "2") {
+            binding.viewFilesBtn.visibility = View.VISIBLE
+        } else {
+            binding.viewFilesBtn.visibility = View.GONE
+        }
+
+
+        if (response.booking_details.post_job_id != "0") {
+            binding.messageBtn.visibility = View.GONE
+        }
+        if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
+            if (response.booking_details.extra_demand_total_amount != 0.0) {
+                if (response.booking_details.extra_demand_status == "0") {
+                    showExtraDemandAcceptDialog(
+                        bookingId.toInt(),
+                        response.booking_details.material_advance.toString(),
+                        response.booking_details.technician_charges.toString(),
+                        response.booking_details.extra_demand_total_amount.toString(),
+                        progressDialog
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showExtraDemandAcceptDialog(
+        bookingId: Int,
+        materialAdvance: String,
+        technicalCharges: String,
+        extraDemandTotalAmount: String,
+        progressDialog: BeautifulProgressDialog
+    ) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
+        val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
+        val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
+        val totalCost = dialogView.findViewById<TextView>(R.id.totalCost)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+
+//        materialCharges.text = response.booking_details.material_advance.toString()
+//        technicianCharges.text = response.booking_details.technician_charges.toString()
+//        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
+
+        materialCharges.text = materialAdvance
+        technicianCharges.text = technicalCharges
+        totalCost.text = extraDemandTotalAmount
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        acceptBtn.setOnClickListener {
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+        }
+
+        rejectBtn.setOnClickListener {
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
     }
 
     private fun requestOTP(userType: String) {
@@ -178,7 +242,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        otpDialog(requestedOTP, bookingId)
+                        otpDialog(requestedOTP, bookingId, userType)
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -189,7 +253,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun otpDialog(requestedOTP: Int, bookingId: String) {
+    fun otpDialog(requestedOTP: Int, bookingId: String, userType: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -328,12 +392,11 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                                 is NetworkResponse.Success -> {
                                     progressDialog.dismiss()
                                     dialog.dismiss()
-                                    finish()
-                                    startActivity(intent)
-                                    snackBar(
-                                        binding.recyclerView,
-                                        "OTP Verification Success"
-                                    )
+                                    if (userType == "User") {
+                                        startActivity(Intent(this, UserMyBookingsScreen::class.java))
+                                    } else {
+                                        startActivity(intent)
+                                    }
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
@@ -350,4 +413,39 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         dialog.setContentView(dialogView)
         dialog.show()
     }
+
+    private fun changeExtraDemandStatus(
+        bookingId: Int,
+        status: Int,
+        dialog: BottomSheetDialog,
+        progressDialog: BeautifulProgressDialog
+    ) {
+
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody =
+            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    dialog.dismiss()
+                    if (status == 1) {
+                        snackBar(binding.recyclerView, "Extra Demand Accepted")
+                    } else {
+                        snackBar(binding.recyclerView, "Extra Demand Rejected")
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                }
+            }
+        })
+
+    }
+
 }

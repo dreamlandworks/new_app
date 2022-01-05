@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -47,9 +50,12 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
     private lateinit var binding: ActivityProviderBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
     private lateinit var progressDialog: BeautifulProgressDialog
-    private var userId = ""
-    private var categoryId = ""
-    private var bookingId = ""
+
+    companion object {
+        var userId = ""
+        var categoryId = ""
+        var bookingId = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +72,15 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.purple_700)
+        }
 
-        bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-        categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-        userId = intent.getStringExtra(getString(R.string.user_id))!!
+//        bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+//        categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+//        userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
@@ -113,11 +124,11 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text =
-            response.booking_details.fname + " " + response.booking_details.lname
+        binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
+        binding.otp.text = response.booking_details.otp
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -142,6 +153,12 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             ProviderReleaseGoalsScreen.userId = userId
             ProviderReleaseGoalsScreen.postJobId = response.booking_details.post_job_id
             startActivity(Intent(this, ProviderReleaseGoalsScreen::class.java))
+        }
+
+        if (categoryId == "2") {
+            binding.viewFilesBtn.visibility = View.VISIBLE
+        } else {
+            binding.viewFilesBtn.visibility = View.GONE
         }
 
     }
