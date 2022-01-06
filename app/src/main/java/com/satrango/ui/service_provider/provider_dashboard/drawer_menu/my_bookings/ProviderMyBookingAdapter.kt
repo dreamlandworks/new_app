@@ -64,7 +64,7 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.text = "Mark Complete"
 
                     binding.cancelBookingBtn.setOnClickListener {
-                        providerMyBookingInterface.markComplete(data.extra_demand_total_amount.toString(), data.booking_id.toInt())
+                        providerMyBookingInterface.markComplete(data.extra_demand_total_amount.toString(), data.booking_id.toInt(), data.category_id, data.users_id)
                     }
 
                     binding.startBtn.setOnClickListener {

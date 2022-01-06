@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderRatingReviewScreenBinding
@@ -26,6 +27,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderRatingReviewScreen : AppCompatActivity() {
@@ -54,6 +56,13 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
+        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        loadProfileImage(profilePic)
+
         if (!FROM_PROVIDER) {
             binding.text.text =
                 "You have successfully completed a booking. Please help us in rating your experience with service provider."
@@ -63,22 +72,18 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             binding.appReviewText.text = "Behaviour"
             binding.jobSatisfactionText.text = "Satisfaction"
             binding.submitBtn.setBackgroundResource(R.drawable.category_bg)
-        }
-
-        val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_details)
-        val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        loadProfileImage(profilePic)
-
-        if (!FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.blue))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = resources.getColor(R.color.blue)
+            }
+        } else {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window: Window = window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.statusBarColor = resources.getColor(R.color.purple_700)
             }
         }
 
@@ -180,8 +185,9 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             binding.feedBack.text.toString().trim(),
             bookingId.toInt(),
             userId.toInt(),
-            RetrofitBuilder.PROVIDER_KEY
+            RetrofitBuilder.USER_KEY
         )
+        toast(this, Gson().toJson(requestBody))
         viewModel.providerRating(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -216,6 +222,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             userId.toInt(),
             binding.customerRatingBtn.rating
         )
+        toast(this, Gson().toJson(requestBody))
         viewModel.userRating(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

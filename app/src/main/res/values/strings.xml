@@ -679,6 +679,8 @@
     <string name="add_another_location">Add another Location</string>
     <string name="booking_type">Booking Type</string>
     <string name="sp_id">sp_id</string>
+    <string name="confirm_sm">Confirm</string>
+    <string name="proceed">Proceed</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

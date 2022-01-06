@@ -55,6 +55,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/your_order_is_successfully_placed"
             android:textAlignment="center"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/blue"
             android:textSize="@dimen/sub_text" />
@@ -66,7 +67,6 @@
             android:paddingVertical="@dimen/_5sdp"
             android:paddingHorizontal="@dimen/_20sdp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/user_btn_bg"
             android:gravity="center"

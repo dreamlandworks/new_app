@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.marginRight
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -29,6 +30,8 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
@@ -106,18 +109,30 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.spLayout.visibility = View.GONE
                     binding.completedBtn.text = "Start"
                     binding.completedBtn.setOnClickListener {
-                        if (FROM_PROVIDER) {
-                            requestOTP("SP")
-                        } else {
+//                        if (!FROM_PROVIDER) {
+//                            requestOTP("SP")
+//                        } else {
+//                            requestOTP("User")
+//                        }
+                        if (!FROM_PROVIDER) {
                             requestOTP("User")
                         }
+//                        else {
+//                            requestOTP("User")
+//                        }
                     }
                     binding.startBtn.setOnClickListener {
                         if (FROM_PROVIDER) {
                             requestOTP("SP")
-                        } else {
-                            requestOTP("User")
                         }
+//                        else {
+//                            requestOTP("User")
+//                        }
+//                        if (FROM_PROVIDER) {
+//                            requestOTP("SP")
+//                        } else {
+//                            requestOTP("User")
+//                        }
                     }
                 } else {
                     binding.spLayout.visibility = View.VISIBLE
@@ -133,7 +148,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     }
                     binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
                 }
-
             } else {
                 if (FROM_PENDING) {
                     binding.userLayout.visibility = View.VISIBLE
@@ -153,9 +167,21 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.raiseExtraDemandBtn.visibility = View.GONE
                     binding.completedBtn.setOnClickListener {
                         if (FROM_PROVIDER) {
-                            requestOTP("SP")
+                            ProviderInVoiceScreen.FROM_PROVIDER = FROM_PROVIDER
+                            val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                            startActivity(intent)
+//                            requestOTP("SP")
                         } else {
-                            requestOTP("User")
+                            ProviderInVoiceScreen.FROM_PROVIDER = FROM_PROVIDER
+                            val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                            startActivity(intent)
+//                            requestOTP("User")
                         }
                     }
                     binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
@@ -253,6 +279,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
                             dialog.dismiss()
+                            ProviderInVoiceScreen.FROM_PROVIDER = true
+                            val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), ProviderBookingDetailsScreen.bookingId)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), ProviderBookingDetailsScreen.categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), ProviderBookingDetailsScreen.userId)
+                            startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -423,8 +455,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         UserUtils.spid = "0"
                     }
                     val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel =
-                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
                     viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
                         .observe(this, {
                             when (it) {
@@ -434,23 +465,21 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                 is NetworkResponse.Success -> {
                                     progressDialog.dismiss()
                                     dialog.dismiss()
-                                    finish()
-                                    if (FROM_PENDING && !FROM_PROVIDER) {
-                                        ProviderRatingReviewScreen.FROM_PROVIDER = false
-                                        ProviderRatingReviewScreen.userId = userId
-                                        ProviderRatingReviewScreen.bookingId = bookingId
-                                        ProviderRatingReviewScreen.categoryId = categoryId
-                                        startActivity(
-                                            Intent(
-                                                this,
-                                                ProviderRatingReviewScreen::class.java
-                                            )
-                                        )
+                                    if (!FROM_PROVIDER) {
+                                        val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                                        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                                        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                                        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                                        startActivity(intent)
                                     }
-                                    snackBar(
-                                        binding.inProgressViewStatusBtn,
-                                        "OTP Verification Success"
-                                    )
+//                                    if (!FROM_PROVIDER) {
+//                                        ProviderRatingReviewScreen.FROM_PROVIDER = false
+//                                        ProviderRatingReviewScreen.userId = userId
+//                                        ProviderRatingReviewScreen.bookingId = bookingId
+//                                        ProviderRatingReviewScreen.categoryId = categoryId
+//                                        startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
+//                                    }
+                                    snackBar(binding.inProgressViewStatusBtn, "OTP Verification Success")
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
@@ -520,11 +549,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         if (!FROM_PROVIDER) {
             binding.requestInstallmentBtn.setBackgroundResource(R.drawable.blue_out_line)
             binding.requestInstallmentBtn.setTextColor(resources.getColor(R.color.blue))
-            binding.requestInstallmentBtn.visibility = View.VISIBLE
+//            binding.requestInstallmentBtn.visibility = View.VISIBLE
+//            binding.requestInstallmentBtn = 15
             if (response.booking_details.post_job_id != "0") {
-                binding.requestInstallmentBtn.visibility = View.GONE
-            } else {
                 binding.requestInstallmentBtn.visibility = View.VISIBLE
+            } else {
+                binding.requestInstallmentBtn.visibility = View.GONE
             }
             if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
                 if (response.booking_details.extra_demand_total_amount != 0.0) {
@@ -622,7 +652,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     dialog.dismiss()
-                    if (status == 1) {
+                    if (status == 2) {
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Accepted")
                     } else {
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Rejected")

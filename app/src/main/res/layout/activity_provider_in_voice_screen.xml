@@ -73,6 +73,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/priceLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_45sdp"
                         android:layout_margin="@dimen/_5sdp"
@@ -116,6 +117,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/bookingIdLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/purple_out_line"
@@ -146,6 +148,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/dateTimeLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_5sdp"
@@ -215,6 +218,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/timeLapsedLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/purple_out_line"
@@ -485,6 +489,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/totalLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -563,6 +568,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lessAmountLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -594,6 +600,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/totalDueLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -654,7 +661,7 @@
                     android:background="@drawable/provider_btn_bg"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/next_sm" />
+                    android:text="@string/proceed" />
 
             </LinearLayout>
         </LinearLayout>

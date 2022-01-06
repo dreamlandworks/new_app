@@ -1,7 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -31,6 +30,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResumeReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderPauseBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
@@ -142,7 +142,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         })
     }
 
-    private fun finalExpenditureDialog(extraDemandAmount: String, bookingId: Int) {
+    private fun finalExpenditureDialog(
+        extraDemandAmount: String,
+        bookingId: Int,
+        categoryId: String,
+        userId: String
+    ) {
         val dialog = BottomSheetDialog(this)
         val dialogView =
             layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
@@ -158,8 +163,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 toast(this, "Enter Expenditure Incurred")
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
-                val viewModel =
-                    ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+                val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
                 val requestBody = ExpenditureIncurredReqModel(
                     bookingId,
                     finalExpenditure.text.toString().toInt(),
@@ -173,6 +177,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
                             dialog.dismiss()
+                            ProviderInVoiceScreen.FROM_PROVIDER = true
+                            val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId.toString())
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                            startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {
                             progressDialog.dismiss()
@@ -208,8 +218,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             })
     }
 
-    override fun markComplete(extraDemand: String, bookingId: Int) {
-        finalExpenditureDialog(extraDemand, bookingId)
+    override fun markComplete(extraDemand: String, bookingId: Int, categoryId: String, userId: String) {
+        finalExpenditureDialog(extraDemand, bookingId, categoryId, userId)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -400,7 +410,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                     progressDialog.show()
                                 }
                                 is NetworkResponse.Success -> {
-                                    toast(this, "$bookingId|$categoryId|$userId|$spId")
                                     val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
 //                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
 //                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
@@ -414,9 +423,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                     startActivity(intent)
                                     progressDialog.dismiss()
                                     dialog.dismiss()
-                                    finish()
-                                    startActivity(intent)
-
+                                    snackBar(binding.recyclerView, "Booking Started!")
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()

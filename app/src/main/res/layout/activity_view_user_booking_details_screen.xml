@@ -443,6 +443,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/purple_out_line"
                         android:paddingHorizontal="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:paddingVertical="@dimen/_5sdp"
                         android:text="@string/request_installment"
                         android:textSize="@dimen/sub_text" />
@@ -453,7 +454,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_5sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_15sdp"
                         android:background="@drawable/purple_out_line"
                         android:paddingHorizontal="@dimen/_10sdp"

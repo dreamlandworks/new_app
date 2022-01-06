@@ -149,6 +149,12 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             finalExpenditureDialog()
         }
 
+        if (response.booking_details.post_job_id != "0") {
+            binding.requestInstallmentBtn.visibility = View.VISIBLE
+        } else {
+            binding.requestInstallmentBtn.visibility = View.GONE
+        }
+
         binding.requestInstallmentBtn.setOnClickListener {
             ProviderReleaseGoalsScreen.userId = userId
             ProviderReleaseGoalsScreen.postJobId = response.booking_details.post_job_id
@@ -283,6 +289,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
                             dialog.dismiss()
+                            ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
                             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
                             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
