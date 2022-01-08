@@ -1,7 +1,10 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +17,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -25,6 +29,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderInVoiceScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceReqModel
@@ -65,6 +70,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
+
+        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         initializeProgressDialog()
 
@@ -190,33 +197,22 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
+                            requestOTP("User")
 //                            if (FROM_PROVIDER) {
 //                                requestOTP("SP")
 //                            } else {
 //                                requestOTP("User")
 //                            }
-                            if (!FROM_PROVIDER) {
-                                requestOTP("User")
-                            } else {
-                                ProviderRatingReviewScreen.FROM_PROVIDER = true
-                                val intent = Intent(
-                                    this@ProviderInVoiceScreen,
-                                    ProviderRatingReviewScreen::class.java
-                                )
-                                intent.putExtra(
-                                    binding.root.context.getString(R.string.booking_id),
-                                    bookingId
-                                )
-                                intent.putExtra(
-                                    binding.root.context.getString(R.string.category_id),
-                                    categoryId
-                                )
-                                intent.putExtra(
-                                    binding.root.context.getString(R.string.user_id),
-                                    userId
-                                )
-                                startActivity(intent)
-                            }
+//                            if (!FROM_PROVIDER) {
+//                                requestOTP("User")
+//                            } else {
+//                                ProviderRatingReviewScreen.FROM_PROVIDER = true
+//                                val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
+//                                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+//                                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+//                                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+//                                startActivity(intent)
+//                            }
                         }
                     }
                 }
@@ -230,11 +226,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -252,6 +244,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
+                        UserUtils.sendOTPFCM(this, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
+                        toast(this, ViewUserBookingDetailsScreen.FCM_TOKEN)
                         otpDialog(requestedOTP, bookingId, userType)
                     }
                     is NetworkResponse.Failure -> {
@@ -449,6 +443,61 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         }
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            toast(context, "$bookingId|$otp|$userId")
+            if (!FROM_PROVIDER) {
+                requestOTP("User")
+            } else {
+                showotpInDialog(otp)
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showotpInDialog(otp: String) {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
+        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
+        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
+        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
+        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        firstNo.text = otp[0].toString()
+        secondNo.text = otp[1].toString()
+        thirdNo.text = otp[2].toString()
+        fourthNo.text = otp[3].toString()
+        submitBtn.text = "Close"
+        closeBtn.setOnClickListener {
+            ProviderRatingReviewScreen.FROM_PROVIDER = true
+            val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            startActivity(intent)
+        }
+        submitBtn.setOnClickListener {
+            ProviderRatingReviewScreen.FROM_PROVIDER = true
+            val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            startActivity(intent)
+        }
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.show()
     }
 
 }

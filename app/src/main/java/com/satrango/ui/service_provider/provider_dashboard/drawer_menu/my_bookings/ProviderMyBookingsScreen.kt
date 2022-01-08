@@ -110,8 +110,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     private fun updateUI(status: String) {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 65)
-
         viewModel.bookingListWithDetails(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -197,7 +195,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         dialog.show()
     }
 
-    override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String) {
+    override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String, fcmToken: String) {
         myBookingViewModel.otpRequest(this, bookingId, "SP")
             .observe(this, {
                 when (it) {
@@ -208,6 +206,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
+                        UserUtils.sendOTPFCM(this, fcmToken, bookingId.toString(), requestedOTP.toString())
                         otpDialog(requestedOTP, bookingId, categoryId, userId, spId)
                     }
                     is NetworkResponse.Failure -> {

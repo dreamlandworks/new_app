@@ -1,7 +1,10 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +17,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginRight
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +32,10 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewUserBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
@@ -58,7 +64,6 @@ import java.util.*
 class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     private lateinit var toolBar: View
-    private var requestedOTP = 0
     private var userId = ""
     private var categoryId = ""
     private var bookingId = ""
@@ -71,6 +76,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         var FROM_MY_BOOKINGS_SCREEN = false
         var FROM_PROVIDER = false
         var FROM_PENDING = false
+        var FCM_TOKEN = ""
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -81,6 +87,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -109,21 +117,22 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.spLayout.visibility = View.GONE
                     binding.completedBtn.text = "Start"
                     binding.completedBtn.setOnClickListener {
-//                        if (!FROM_PROVIDER) {
-//                            requestOTP("SP")
-//                        } else {
-//                            requestOTP("User")
-//                        }
                         if (!FROM_PROVIDER) {
+                            requestOTP("SP")
+                        } else {
                             requestOTP("User")
                         }
-//                        else {
+//                        if (!FROM_PROVIDER) {
+//                            requestOTP("User")
+//                        } else {
 //                            requestOTP("User")
 //                        }
                     }
                     binding.startBtn.setOnClickListener {
                         if (FROM_PROVIDER) {
                             requestOTP("SP")
+                        } else {
+                            requestOTP("User")
                         }
 //                        else {
 //                            requestOTP("User")
@@ -312,6 +321,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
+                        UserUtils.sendOTPFCM(this, FCM_TOKEN, bookingId, requestedOTP.toString())
                         otpDialog(requestedOTP, bookingId)
                     }
                     is NetworkResponse.Failure -> {
@@ -471,8 +481,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                         intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
                                         intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                                         startActivity(intent)
+                                    } else {
+                                        startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                                     }
-//                                    if (!FROM_PROVIDER) {
+                                    //                                    if (!FROM_PROVIDER)
+//                                    {
 //                                        ProviderRatingReviewScreen.FROM_PROVIDER = false
 //                                        ProviderRatingReviewScreen.userId = userId
 //                                        ProviderRatingReviewScreen.bookingId = bookingId
@@ -483,12 +496,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
+                                    dialog.dismiss()
                                     snackBar(binding.inProgressViewStatusBtn, it.message!!)
                                 }
                             }
                         })
                 } else {
-                    snackBar(binding.startBtn, "Invalid OTP")
+                    toast(this, "Invalid OTP")
                 }
             }
         }
@@ -499,13 +513,22 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text =
-            "${response.booking_details.fname} ${response.booking_details.lname}"
-        binding.mobileNo.text = response.booking_details.mobile
+        binding.userName.text = "${response.booking_details.fname} ${response.booking_details.lname}"
+//        binding.mobileNo.text = response.booking_details.mobile
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
-        binding.otp.text = response.booking_details.otp
+        if (FROM_PROVIDER) {
+//            fcm_token = response.booking_details.
+            if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
+                binding.otp.text = response.booking_details.otp
+            }
+        } else {
+            if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
+                binding.otp.text = response.booking_details.otp
+            }
+        }
+
         binding.bookingIdText.text = bookingId
 
         binding.jobDetailsRV.layoutManager =
@@ -519,6 +542,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         if (response.attachments.isEmpty()) {
             binding.attachmentsText.visibility = View.GONE
         }
+
+        toast(this, response.job_details.size.toString())
         binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details)
         binding.attachmentsRV.adapter = JobDetailsAttachmentsAdapter(response.attachments)
 
@@ -775,6 +800,73 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+//            toast(context, "$bookingId|$otp|$userId")
+            showotpInDialog(otp)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showotpInDialog(otp: String) {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
+        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
+        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
+        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
+        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        if (FROM_PROVIDER) {
+            firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+            secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+            thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+            fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        } else {
+            firstNo.setBackgroundResource(R.drawable.otp_digit_blue_bg)
+            secondNo.setBackgroundResource(R.drawable.otp_digit_blue_bg)
+            thirdNo.setBackgroundResource(R.drawable.otp_digit_blue_bg)
+            fourthNo.setBackgroundResource(R.drawable.otp_digit_blue_bg)
+        }
+        firstNo.text = otp[0].toString()
+        secondNo.text = otp[1].toString()
+        thirdNo.text = otp[2].toString()
+        fourthNo.text = otp[3].toString()
+        submitBtn.text = "Close"
+        closeBtn.setOnClickListener {
+            if (FROM_PROVIDER) {
+                ProviderRatingReviewScreen.FROM_PROVIDER = true
+                val intent = Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
+                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                startActivity(intent)
+            } else {
+                bottomSheetDialog.dismiss()
+            }
+        }
+        submitBtn.setOnClickListener {
+            if (FROM_PROVIDER) {
+                ProviderRatingReviewScreen.FROM_PROVIDER = true
+                val intent = Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
+                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                startActivity(intent)
+            } else {
+                bottomSheetDialog.dismiss()
+            }
+
+        }
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.show()
     }
 
 }

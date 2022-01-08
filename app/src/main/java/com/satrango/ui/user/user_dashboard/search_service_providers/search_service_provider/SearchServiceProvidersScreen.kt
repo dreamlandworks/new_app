@@ -289,7 +289,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     weAreSorryDialog()
                 } else {
                     UserUtils.saveSelectedSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
-                    showBookingTypeDialog(response)
+                    UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
+                    binding.listCount.text = "${response.data.size} out of ${response.data.size}"
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
+//                    showBookingTypeDialog(response)
                 }
             } else {
                 progressDialog.dismiss()

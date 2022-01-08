@@ -11,6 +11,8 @@ data class BookingDetail(
     val fname: String,
     val from: String,
     val lname: String,
+    val sp_fcm_token: String,
+    val user_fcm_token: String,
     val mobile: String,
     val pause_status: String,
     val extra_demand_total_amount: Double,

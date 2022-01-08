@@ -79,6 +79,7 @@ class ProviderMyBookingAdapter(
 
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                        ViewUserBookingDetailsScreen.FCM_TOKEN = data.user_fcm_token
                         val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
                         ProviderBookingDetailsScreen.bookingId = data.booking_id
                         ProviderBookingDetailsScreen.categoryId = data.category_id
@@ -118,7 +119,7 @@ class ProviderMyBookingAdapter(
 
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                        providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id)
+                        providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id, data.user_fcm_token)
                     }
 
                     binding.card.setOnClickListener {

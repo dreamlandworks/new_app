@@ -699,7 +699,22 @@ object UserUtils {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE:", token)
         }
+    }
 
+    fun sendOTPFCM(
+        context: Context,
+        token: String,
+        bookingId: String,
+        otp: String
+    ) {
+        val map = mutableMapOf<String, String>()
+        map["Content-Type"] = "application/json"
+        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        val requestBody = FCMMessageReqModel(Data("$bookingId|$otp|${getUserId(context)}", "$bookingId|$otp|${getUserId(context)}", "otp"), "high", token)
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Log.e("FCM RESPONSE:", token)
+        }
     }
 
     private fun sendCancelFCM(

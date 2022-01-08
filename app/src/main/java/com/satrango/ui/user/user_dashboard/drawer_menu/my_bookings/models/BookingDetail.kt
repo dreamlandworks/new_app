@@ -16,6 +16,8 @@ data class BookingDetail(
     val expenditure_incurred: Double,
     val time_slot_id: String,
     val profile_pic: String,
+    val sp_fcm_token: String,
+    val user_fcm_token: String,
     val lname: String,
     val mobile: String,
     val scheduled_date: String,

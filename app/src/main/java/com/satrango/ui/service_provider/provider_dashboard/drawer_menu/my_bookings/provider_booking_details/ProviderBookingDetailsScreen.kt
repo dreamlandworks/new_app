@@ -2,7 +2,10 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +19,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -27,21 +31,26 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import java.lang.NumberFormatException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +72,9 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeProgressDialog()
+
+        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
@@ -128,7 +140,9 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
-        binding.otp.text = response.booking_details.otp
+        if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
+            binding.otp.text = response.booking_details.otp
+        }
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -147,6 +161,14 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         binding.markCompleteBtn.setOnClickListener {
             finalExpenditureDialog()
+        }
+
+        binding.callBtn.setOnClickListener {
+            UserUtils.makePhoneCall(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
+        }
+
+        binding.messageBtn.setOnClickListener {
+            UserUtils.makeMessage(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
         }
 
         if (response.booking_details.post_job_id != "0") {
@@ -314,5 +336,56 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+//            toast(context, "$bookingId|$otp|$userId")
+            showotpInDialog(otp)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showotpInDialog(otp: String) {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
+        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
+        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
+        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
+        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
+        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        firstNo.text = otp[0].toString()
+        secondNo.text = otp[1].toString()
+        thirdNo.text = otp[2].toString()
+        fourthNo.text = otp[3].toString()
+        submitBtn.text = "Close"
+        closeBtn.setOnClickListener {
+            ProviderRatingReviewScreen.FROM_PROVIDER = true
+            val intent = Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            startActivity(intent)
+        }
+        submitBtn.setOnClickListener {
+            ProviderRatingReviewScreen.FROM_PROVIDER = true
+            val intent = Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            startActivity(intent)
+        }
+        bottomSheetDialog.setContentView(bottomSheet)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.show()
     }
 }

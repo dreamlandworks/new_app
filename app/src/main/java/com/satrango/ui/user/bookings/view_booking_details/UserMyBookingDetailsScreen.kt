@@ -1,9 +1,12 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +15,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,16 +27,18 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserMyBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -55,6 +62,8 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 
         initializeToolBar()
         initializeProgressDialog()
+
+        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -87,13 +96,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             }
         })
         viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
+                    binding.recyclerView.adapter =
+                        GetBookingStatusListAdapter(it.data!!.booking_status_details)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -107,14 +117,19 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -126,7 +141,9 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
-        binding.otp.text = response.booking_details.otp
+        if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
+            binding.otp.text = response.booking_details.otp
+        }
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -146,7 +163,10 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+            intent.putExtra(
+                binding.root.context.getString(R.string.user_id),
+                UserUtils.getUserId(binding.root.context)
+            )
             binding.root.context.startActivity(intent)
         }
 
@@ -159,11 +179,17 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.callBtn.setOnClickListener {
-            UserUtils.makePhoneCall(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
+            UserUtils.makePhoneCall(
+                this,
+                response.booking_details.mobile.replace(" ", "").takeLast(10)
+            )
         }
 
         binding.messageBtn.setOnClickListener {
-            UserUtils.makeMessage(this, response.booking_details.mobile.replace(" ", "").takeLast(10))
+            UserUtils.makeMessage(
+                this,
+                response.booking_details.mobile.replace(" ", "").takeLast(10)
+            )
         }
 
         if (categoryId == "2") {
@@ -262,6 +288,206 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             }
         })
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun otpDialog(requestedOTP: Int, bookingId: String, userType: String) {
+
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val firstNo = dialogView.findViewById<EditText>(R.id.firstNo)
+        val secondNo = dialogView.findViewById<EditText>(R.id.secondNo)
+        val thirdNo = dialogView.findViewById<EditText>(R.id.thirdNo)
+        val fourthNo = dialogView.findViewById<EditText>(R.id.fourthNo)
+        val title = dialogView.findViewById<TextView>(R.id.title)
+        val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+            title.text = "OTP to Start Job"
+            title.setTextColor(resources.getColor(R.color.purple_500))
+            firstNo.setBackgroundResource(R.drawable.purpleborderbutton)
+            secondNo.setBackgroundResource(R.drawable.purpleborderbutton)
+            thirdNo.setBackgroundResource(R.drawable.purpleborderbutton)
+            fourthNo.setBackgroundResource(R.drawable.purpleborderbutton)
+            submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+        }
+
+        firstNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.length == 1) {
+                    firstNo.clearFocus()
+                    secondNo.requestFocus()
+                }
+            }
+
+        })
+        secondNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.length == 1) {
+                    secondNo.clearFocus()
+                    thirdNo.requestFocus()
+                }
+            }
+
+        })
+        thirdNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.length == 1) {
+                    thirdNo.clearFocus()
+                    fourthNo.requestFocus()
+                }
+            }
+
+        })
+        fourthNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.length == 1) {
+                    fourthNo.clearFocus()
+                }
+            }
+
+        })
+
+        submitBtn.setOnClickListener {
+
+            if (firstNo.text.toString().trim().isEmpty()) {
+                snackBar(binding.amount, "Invalid OTP")
+            } else if (secondNo.text.toString().trim().isEmpty()) {
+                snackBar(binding.amount, "Invalid OTP")
+            } else if (thirdNo.text.toString().trim().isEmpty()) {
+                snackBar(binding.amount, "Invalid OTP")
+            } else if (fourthNo.text.toString().trim().isEmpty()) {
+                snackBar(binding.amount, "Invalid OTP")
+            } else {
+                val otp = firstNo.text.toString().trim() + secondNo.text.toString()
+                    .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
+                if (requestedOTP == otp.toInt()) {
+                    UserUtils.spid = "0"
+                    val factory = ViewModelFactory(MyBookingsRepository())
+                    val viewModel =
+                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
+                        .observe(this, {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    progressDialog.dismiss()
+                                    dialog.dismiss()
+                                    ProviderInVoiceScreen.FROM_PROVIDER = false
+                                    dialog.dismiss()
+                                    val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                                    intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                                    startActivity(intent)
+                                }
+                                is NetworkResponse.Failure -> {
+                                    progressDialog.dismiss()
+                                    snackBar(binding.amount, it.message!!)
+                                }
+                            }
+                        })
+                } else {
+                    snackBar(binding.amount, "Invalid OTP")
+                }
+            }
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun requestOTP(userType: String) {
+        val factory = ViewModelFactory(MyBookingsRepository())
+        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+        viewModel.otpRequest(this, bookingId.toInt(), userType)
+            .observe(this, {
+                when (it) {
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        val requestedOTP = it.data!!
+                        toast(this, requestedOTP.toString())
+                        UserUtils.sendOTPFCM(this, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
+//                        toast(this, ViewUserBookingDetailsScreen.FCM_TOKEN)
+                        otpDialog(requestedOTP, bookingId, userType)
+                    }
+                    is NetworkResponse.Failure -> {
+                        progressDialog.dismiss()
+                        snackBar(binding.amount, it.message!!)
+                    }
+                }
+            })
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+//            toast(context, "$bookingId|$otp|$userId")
+            requestOTP("User")
+        }
     }
 
 }

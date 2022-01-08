@@ -19,6 +19,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
+import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
@@ -90,6 +91,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
             bookLaterBtn.setOnClickListener {
 //                UserUtils.bookingType = "selected"
+                ViewUserBookingDetailsScreen.RESCHEDULE = true
                 BookingDateAndTimeScreen.FROM_PROVIDER = false
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))

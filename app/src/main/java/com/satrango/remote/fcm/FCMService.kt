@@ -42,21 +42,11 @@ class FCMService : FirebaseMessagingService() {
         var fcmInstant: Instant? = null
         val INTENT_FILTER = "INTENT_FILTER"
         val INTENT_FILTER_ONE = "INTENT_FILTER_ONE"
+        val OTP_INTENT_FILTER = "OTP_INTENT_FILTER"
     }
 
-    private var broadcaster: LocalBroadcastManager? = null
     private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
-
-//    override fun onCreate() {
-//        broadcaster = LocalBroadcastManager.getInstance(this)
-//        registerReceiver(myReceiver, IntentFilter(INTENT_FILTER_ONE));
-//    }
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        unregisterReceiver(myReceiver)
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun handleIntent(intent: Intent) {
@@ -103,7 +93,14 @@ class FCMService : FirebaseMessagingService() {
                         }
                     }
                 } else {
-                    if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
+                    if (title == "otp") {
+                        Log.e("FCM SERVICE:", body.toString())
+                        val notificationIntent = Intent(OTP_INTENT_FILTER)
+                        notificationIntent.putExtra(application.getString(R.string.booking_id), body!!.split("|")[0])
+                        notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
+                        notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                        sendBroadcast(notificationIntent)
+                    } else if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
                         Log.e("FCM ELSE PART:", "$title::$body")
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", body)
@@ -135,6 +132,14 @@ class FCMService : FirebaseMessagingService() {
                 notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
                 notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
                 notificationIntent.putExtra(application.getString(R.string.booking_type), it.body!!.split("|")[4])
+                sendBroadcast(notificationIntent)
+            }
+            if (it.title!! == "otp") {
+                Log.e("FCM SERVICE:", it.body.toString())
+                val notificationIntent = Intent(OTP_INTENT_FILTER)
+                notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
+                notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
+                notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
                 sendBroadcast(notificationIntent)
             }
         }

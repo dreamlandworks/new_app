@@ -245,7 +245,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
-                        android:text="1234"
                         android:textColor="@color/red"
                         android:textSize="@dimen/text"
                         android:textStyle="bold" />
@@ -262,36 +261,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/mobile_no"
                 android:visibility="gone"
+                android:text="@string/work_at"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
             <TextView
-                android:id="@+id/mobileNo"
+                android:id="@+id/locationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="center_vertical"
                 android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/attachmentsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:text="@string/attachments"
-            android:textSize="@dimen/sub_text" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/attachmentsRV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_5sdp" />
 
         <TextView
             android:id="@+id/jobDetailsText"
@@ -305,6 +290,21 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/jobDetailsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_5sdp" />
+
+        <TextView
+            android:id="@+id/attachmentsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:text="@string/attachments"
+            android:textSize="@dimen/sub_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attachmentsRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp" />
@@ -324,7 +324,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end|center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_10sdp">
 
                     <TextView
                         android:id="@+id/cancelBookingBtn"
@@ -458,7 +459,7 @@
                         android:background="@drawable/purple_out_line"
                         android:paddingHorizontal="@dimen/_10sdp"
                         android:paddingVertical="@dimen/_5sdp"
-                        android:text="@string/raise_extra_demand"
+                        android:text="@string/extra_demand"
                         android:textSize="@dimen/sub_text" />
 
                 </LinearLayout>

@@ -2,7 +2,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 
 interface ProviderMyBookingInterface {
 
-    fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String)
+    fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String, fcmToken: String)
 
     fun markComplete(extraDemand: String, bookingId: Int, categoryId: String, userId: String)
 

@@ -187,7 +187,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             userId.toInt(),
             RetrofitBuilder.USER_KEY
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.providerRating(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -222,7 +222,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             userId.toInt(),
             binding.customerRatingBtn.rating
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.userRating(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {

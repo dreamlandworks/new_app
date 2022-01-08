@@ -241,7 +241,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
-                        android:text="1234"
                         android:textColor="@color/red"
                         android:textSize="@dimen/text"
                         android:textStyle="bold" />
@@ -455,7 +454,7 @@
                 android:background="@drawable/purple_out_line"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:paddingVertical="@dimen/_5sdp"
-                android:text="@string/raise_extra_demand"
+                android:text="@string/extra_demand"
                 android:textSize="@dimen/sub_text" />
 
         </LinearLayout>

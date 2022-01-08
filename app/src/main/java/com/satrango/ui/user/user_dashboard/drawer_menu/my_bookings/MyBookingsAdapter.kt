@@ -79,6 +79,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                        ViewUserBookingDetailsScreen.FCM_TOKEN = data.sp_fcm_token
                         val intent = Intent(binding.root.context, UserMyBookingDetailsScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
