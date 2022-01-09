@@ -363,7 +363,6 @@ class ProviderDashboard : AppCompatActivity() {
         response: BookingDetailsResModel,
         categoryId: String
     ) {
-
         bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog!!.setCancelable(false)
@@ -885,7 +884,6 @@ class ProviderDashboard : AppCompatActivity() {
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
-//                toast(context, bookingType)
                 try {
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) {}

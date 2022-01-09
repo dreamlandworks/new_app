@@ -79,7 +79,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
             }, 3000)
         } else {
             bookingType = response.split("|")[4]
-            toast(this, "Booking Type: $bookingType")
+//            toast(this, "Booking Type: $bookingType")
             showProviderRejectedDialog(response.split("|")[5])
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
         }

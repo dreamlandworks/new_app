@@ -505,21 +505,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.saveInstantBooking(this, false)
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user",
-                                UserUtils.bookingType
-                            )
+                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|${UserUtils.bookingType}")
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
-                            this,
-                            UserUtils.getBookingId(this),
-                            "user"
-                        )
+                        UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                     }
                 }
                 is NetworkResponse.Failure -> {
