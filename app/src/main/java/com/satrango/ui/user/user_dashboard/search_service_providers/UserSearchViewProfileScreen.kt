@@ -42,9 +42,9 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
         initializeToolBar()
 
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
+            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
             Log.e("JSON", Gson().toJson(spDetails))
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
@@ -91,7 +91,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
             bookLaterBtn.setOnClickListener {
 //                UserUtils.bookingType = "selected"
-                ViewUserBookingDetailsScreen.RESCHEDULE = true
+                ViewUserBookingDetailsScreen.RESCHEDULE = false
                 BookingDateAndTimeScreen.FROM_PROVIDER = false
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))

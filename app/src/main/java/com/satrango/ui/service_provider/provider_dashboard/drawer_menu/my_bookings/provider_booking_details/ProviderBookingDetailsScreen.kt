@@ -73,7 +73,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         initializeProgressDialog()
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+//        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -338,16 +338,16 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-//            toast(context, "$bookingId|$otp|$userId")
-            showotpInDialog(otp)
-        }
-    }
+//    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        override fun onReceive(context: Context, intent: Intent) {
+//            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+//            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+//            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+////            toast(context, "$bookingId|$otp|$userId")
+//            showotpInDialog(otp)
+//        }
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun showotpInDialog(otp: String) {

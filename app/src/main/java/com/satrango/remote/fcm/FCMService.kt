@@ -43,10 +43,15 @@ class FCMService : FirebaseMessagingService() {
         val INTENT_FILTER = "INTENT_FILTER"
         val INTENT_FILTER_ONE = "INTENT_FILTER_ONE"
         val OTP_INTENT_FILTER = "OTP_INTENT_FILTER"
+        lateinit var notificationManager: NotificationManager
     }
 
-    private lateinit var notificationManager: NotificationManager
     private lateinit var builder: android.app.Notification.Builder
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun handleIntent(intent: Intent) {
@@ -63,7 +68,6 @@ class FCMService : FirebaseMessagingService() {
             val body = bundle["gcm.notification.body"] as String?
             if (bundle.containsKey("gcm.notification.title")) {
                 val title = bundle["gcm.notification.title"] as String?
-                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 Log.e("FCMMESSAGE:", title!! + "|||" + body.toString())
                 if (title == "accepted") {
                     if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
@@ -107,16 +111,20 @@ class FCMService : FirebaseMessagingService() {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
-                        val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
-                        val count = UserUtils.getInstantBookingSpCount(this) + 1
-                        UserUtils.setInstantBookingSpCount(this, count)
-                        if (UserUtils.getInstantBookingSpCount(this) == spDetails.data.size) {
-                            Log.e("FCM ELSE PART:", "$title::$body")
-                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
-                            intent.putExtra("response", body)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                        }
+                        val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+                        intent.putExtra("response", body)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+//                        val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+//                        val count = UserUtils.getInstantBookingSpCount(this) + 1
+//                        UserUtils.setInstantBookingSpCount(this, count)
+//                        if (UserUtils.getInstantBookingSpCount(this) == spDetails.data.size) {
+//                            Log.e("FCM ELSE PART:", "$title::$body")
+//                            val intent = Intent(this, ProviderBookingResponseScreen::class.java)
+//                            intent.putExtra("response", body)
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                            startActivity(intent)
+//                        }
                     }
                 }
             }

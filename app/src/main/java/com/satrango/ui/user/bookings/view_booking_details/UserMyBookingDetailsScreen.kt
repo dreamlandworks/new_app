@@ -63,7 +63,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+//        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -244,11 +244,11 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
         }
 
         dialog.setCancelable(false)
@@ -479,15 +479,15 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             })
     }
 
-    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-//            toast(context, "$bookingId|$otp|$userId")
-            requestOTP("User")
-        }
-    }
+//    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        override fun onReceive(context: Context, intent: Intent) {
+//            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+//            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+//            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+////            toast(context, "$bookingId|$otp|$userId")
+//            requestOTP("User")
+//        }
+//    }
 
 }

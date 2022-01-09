@@ -52,6 +52,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
@@ -117,26 +118,15 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.spLayout.visibility = View.GONE
                     binding.completedBtn.text = "Start"
                     binding.completedBtn.setOnClickListener {
-                        if (!FROM_PROVIDER) {
-                            requestOTP("SP")
-                        } else {
-                            requestOTP("User")
-                        }
+                        requestOTP("SP")
 //                        if (!FROM_PROVIDER) {
-//                            requestOTP("User")
+//                            requestOTP("SP")
 //                        } else {
 //                            requestOTP("User")
 //                        }
                     }
                     binding.startBtn.setOnClickListener {
-                        if (FROM_PROVIDER) {
-                            requestOTP("SP")
-                        } else {
-                            requestOTP("User")
-                        }
-//                        else {
-//                            requestOTP("User")
-//                        }
+                        requestOTP("SP")
 //                        if (FROM_PROVIDER) {
 //                            requestOTP("SP")
 //                        } else {
@@ -518,6 +508,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
+        FCM_TOKEN = response.booking_details.fcm_token
         if (FROM_PROVIDER) {
 //            fcm_token = response.booking_details.
             if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
@@ -809,7 +800,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             val otp = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
 //            toast(context, "$bookingId|$otp|$userId")
-            showotpInDialog(otp)
+            if (!FROM_PROVIDER) {
+                showotpInDialog(otp)
+            }
         }
     }
 
@@ -817,12 +810,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     private fun showotpInDialog(otp: String) {
         val bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+        val title = bottomSheet.findViewById<TextView>(R.id.title)
         val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
         val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
         val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
         val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
         val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        title.text = "OTP to Start Job"
         if (FROM_PROVIDER) {
             firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
             secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
@@ -848,6 +843,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                 startActivity(intent)
             } else {
+                startActivity(Intent(this, UserMyBookingsScreen::class.java))
                 bottomSheetDialog.dismiss()
             }
         }

@@ -65,7 +65,8 @@
     <string name="login_as">Login As</string>
     <string name="user">User</string>
     <string name="service_provider">Service Provider</string>
-    <string name="selected_service_provider">Selected Service Provider</string>
+    <string name="selected_service_provider">Selected All Service Provider</string>
+    <string name="selected_service_provider_single">Selected Service Provider</string>
     <string name="selected_keyword_id">Selected Keyword Id</string>
     <string name="reset_password">Reset Password</string>
     <string name="please_enter_your_registered_mobile_number_and_we_will_send_you_otp_to_reset_your_password">Please enter your registered mobile number and we will send you OTP to reset your password</string>
@@ -264,6 +265,7 @@
     <string name="booking_ref_id">Booking Reference Id</string>
     <string name="provider_action">Provider Action</string>
     <string name="from_fcm_service">From_Fcm_Service</string>
+    <string name="from_provider">From Provider</string>
     <string name="category_id">Category Id</string>
     <string name="key">Key</string>
     <string name="user_id">User Id</string>

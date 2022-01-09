@@ -62,7 +62,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     val request = async { repository.getBidJobsList(requestBody) }
                     val response = request.await()
                     if (response.status == 200) {
-                        UserUtils.saveSelectedSPDetails(context, Gson().toJson(response))
+                        UserUtils.saveSelectedAllSPDetails(context, Gson().toJson(response))
                         jobsList.value = NetworkResponse.Success(response.job_post_details)
                     } else {
                         jobsList.value = NetworkResponse.Failure(response.message)

@@ -15,6 +15,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderRejectBookingScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -161,13 +162,10 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                             }
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
-                                UserUtils.sendFCM(
-                                    this@ProviderRejectBookingScreen,
-                                    response!!.booking_details.fcm_token,
-                                    "reject",
-                                    "reject",
-                                    "reject|$bookingType|$reason"
-                                )
+                                UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$reason")
+                                if (FCMService.notificationManager != null) {
+                                    FCMService.notificationManager.cancelAll()
+                                }
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""
                                 UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)

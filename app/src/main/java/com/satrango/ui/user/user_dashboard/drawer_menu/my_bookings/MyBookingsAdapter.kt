@@ -63,6 +63,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 
             when(data.booking_status.lowercase(Locale.getDefault())) {
                 "InProgress".lowercase(Locale.getDefault()) -> {
+                    binding.timeRemaining.text = "Started"
                     binding.startBtn.text = "Service Provider started to your location"
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
@@ -92,6 +93,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                 }
                 "Pending".lowercase(Locale.getDefault()) -> {
                     binding.startBtn.visibility = View.GONE
+                    binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
                     binding.reScheduleBtn.background = binding.reScheduleBtn.resources.getDrawable(R.drawable.user_btn_bg)
                     binding.reScheduleBtn.setTextColor(binding.reScheduleBtn.resources.getColor(R.color.white))
                     binding.cancelBookingBtn.setOnClickListener {
@@ -124,6 +126,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 
                 }
                 "Completed".lowercase(Locale.getDefault()) -> {
+                    binding.timeRemaining.text = "Completed"
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.text = "Raise Support Ticket"
                     binding.startBtn.text = "Book Again"

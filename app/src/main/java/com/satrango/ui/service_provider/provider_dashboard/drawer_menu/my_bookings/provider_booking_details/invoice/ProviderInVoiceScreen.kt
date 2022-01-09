@@ -46,6 +46,10 @@ import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 
 class ProviderInVoiceScreen : AppCompatActivity() {
@@ -201,8 +205,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 //                            if (FROM_PROVIDER) {
 //                                requestOTP("SP")
 //                            } else {
-//                                requestOTP("User")
+//
 //                            }
+
 //                            if (!FROM_PROVIDER) {
 //                                requestOTP("User")
 //                            } else {
@@ -234,30 +239,53 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     private fun requestOTP(userType: String) {
         val factory = ViewModelFactory(MyBookingsRepository())
         val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt(), userType)
-            .observe(this, {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId.toInt(), userType)
+                val jsonResponse = JSONObject(response.string())
+                if (jsonResponse.getInt("status") == 200) {
+                    val requestedOTP = jsonResponse.getInt("otp")
+                    toast(this@ProviderInVoiceScreen, requestedOTP.toString())
+                    UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
+                    if (!FROM_PROVIDER) {
+                        otpDialog(requestedOTP, bookingId)
+                    } else {
+                        showotpInDialog(requestedOTP.toString())
                     }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        val requestedOTP = it.data!!
-                        toast(this, requestedOTP.toString())
-                        UserUtils.sendOTPFCM(this, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
-                        toast(this, ViewUserBookingDetailsScreen.FCM_TOKEN)
-                        otpDialog(requestedOTP, bookingId, userType)
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.amount, it.message!!)
-                    }
+                } else {
+                    snackBar(binding.amount, jsonResponse.getString("message"))
                 }
-            })
+            } catch (e: Exception) {
+                snackBar(binding.amount, e.message!!)
+            }
+        }
+//        viewModel.otpRequest(this, bookingId.toInt(), userType)
+//            .observe(this, {
+//                when (it) {
+//                    is NetworkResponse.Loading -> {
+//                        progressDialog.show()
+//                    }
+//                    is NetworkResponse.Success -> {
+//                        progressDialog.dismiss()
+//                        val requestedOTP = it.data!!
+//                        toast(this, requestedOTP.toString())
+//                        UserUtils.sendOTPFCM(this, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
+//                        if (!FROM_PROVIDER) {
+//                            otpDialog(requestedOTP, bookingId)
+//                        } else {
+//                            showotpInDialog(requestedOTP.toString())
+//                        }
+//                    }
+//                    is NetworkResponse.Failure -> {
+//                        progressDialog.dismiss()
+//                        snackBar(binding.amount, it.message!!)
+//                    }
+//                }
+//            })
     }
 
     @SuppressLint("SetTextI18n")
-    fun otpDialog(requestedOTP: Int, bookingId: String, userType: String) {
+    fun otpDialog(requestedOTP: Int, bookingId: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -453,7 +481,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
             toast(context, "$bookingId|$otp|$userId")
             if (!FROM_PROVIDER) {
-                requestOTP("User")
+                otpDialog(otp.toInt(), bookingId)
             } else {
                 showotpInDialog(otp)
             }
@@ -464,16 +492,19 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     private fun showotpInDialog(otp: String) {
         val bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+        val title = bottomSheet.findViewById<TextView>(R.id.title)
         val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
         val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
         val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
         val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
         val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+        title.setTextColor(resources.getColor(R.color.purple_500))
         firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
         secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
         thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
         fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+        submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
         firstNo.text = otp[0].toString()
         secondNo.text = otp[1].toString()
         thirdNo.text = otp[2].toString()

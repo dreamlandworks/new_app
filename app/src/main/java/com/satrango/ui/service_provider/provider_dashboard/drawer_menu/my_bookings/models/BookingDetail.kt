@@ -25,5 +25,8 @@ data class BookingDetail(
     val sp_id: String,
     val users_id: String,
     val started_at: String,
+    val remaining_days_to_start: Int,
+    val remaining_hours_to_start: Int,
+    val remaining_minutes_to_start: Int,
     val time_slot_id: String
 )

@@ -48,7 +48,6 @@ object UserUtils {
     var estimate_time = 0
     var bid_per = 0
 
-    var keywordId = 0
     var estimateTypeId = 0
     var FORGOT_PWD = false
     var USER_ID = ""
@@ -77,6 +76,19 @@ object UserUtils {
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
+
+    fun setFromProvider(context: Context, fromProvider: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_provider), fromProvider)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getFromProvider(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_provider), false)
     }
 
     fun setInstantBookingSpCount(context: Context, fromJobPost: Int) {
@@ -467,12 +479,25 @@ object UserUtils {
     fun saveSelectedSPDetails(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.selected_service_provider), spDetails)
+        editor.putString(context.resources.getString(R.string.selected_service_provider_single), spDetails)
         editor.apply()
         editor.commit()
     }
 
     fun getSelectedSPDetails(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.selected_service_provider_single), "")!!
+    }
+
+    fun saveSelectedAllSPDetails(context: Context, spDetails: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.selected_service_provider), spDetails)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSelectedAllSPDetails(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.selected_service_provider), "")!!
     }
@@ -741,7 +766,7 @@ object UserUtils {
         bookingId: String,
         from: String
     ) {
-        val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+        val spDetails = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
         Log.e("SELECTED SP:", Gson().toJson(spDetails))
         for (sp in spDetails.data) {
             for (spSlot in spDetails.slots_data) {
@@ -759,10 +784,11 @@ object UserUtils {
         from: String,
         type: String
     ) {
-        val spDetails = Gson().fromJson(getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
-        if (data != null) {
+        val spDetails = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
+        if (getSelectedSPDetails(context).isNotEmpty()) {
+            val data = Gson().fromJson(getSelectedSPDetails(context), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
             Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
-            sendFCM(context, data!!.fcm_token, bookingId, from, type)
+            sendFCM(context, data.fcm_token, bookingId, from, type)
         } else {
             Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
             for (sp in spDetails.data) {

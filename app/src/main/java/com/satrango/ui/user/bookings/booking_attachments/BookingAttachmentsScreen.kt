@@ -101,8 +101,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 loadAddressOnUI()
             }
         }
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
             updateUI(data!!)
         } else {
             binding.spCard.visibility = View.GONE
@@ -131,7 +131,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
                         when (data!!.category_id) {
                             "1" -> {
-                                UserUtils.data = data
+                                UserUtils.saveSelectedSPDetails(this@BookingAttachmentsScreen, Gson().toJson(data))
                                 val intent = Intent(this@BookingAttachmentsScreen, BookingAddressScreen::class.java)
                                 startActivity(intent)
                             }
@@ -180,8 +180,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                         }
                     } else {
-                        if (UserUtils.data != null) {
-                            UserUtils.data = data
+                        if (UserUtils.getSelectedSPDetails(this@BookingAttachmentsScreen).isNotEmpty()) {
+                            UserUtils.saveSelectedSPDetails(this@BookingAttachmentsScreen, Gson().toJson(data))
                         }
                         if (data != null) {
                             if (data!!.category_id == "2") {
@@ -472,9 +472,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
         var finalAmount = "0"
         var spId = "0"
-        if (UserUtils.data != null) {
-            spId = UserUtils.data!!.users_id
-            finalAmount = UserUtils.data!!.final_amount
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
+            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(

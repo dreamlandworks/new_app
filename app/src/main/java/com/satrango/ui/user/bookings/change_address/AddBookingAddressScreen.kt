@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityChangeBookingAddressScreenBinding
@@ -52,8 +53,8 @@ class AddBookingAddressScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
         }
 //        if (!UserUtils.getFromInstantBooking(this)) {
 //            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data

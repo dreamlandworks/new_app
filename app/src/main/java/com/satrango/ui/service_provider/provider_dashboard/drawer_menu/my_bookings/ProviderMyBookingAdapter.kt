@@ -55,6 +55,7 @@ class ProviderMyBookingAdapter(
             }
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
+                    binding.timeRemaining.text = "Started"
                     if (data.pause_status.equals("Yes", true)) {
                         binding.startBtn.text = "Resume"
                     } else {
@@ -97,7 +98,7 @@ class ProviderMyBookingAdapter(
                     binding.startBtn.text = "Start"
                     binding.reScheduleBtn.text = "Re-schedule"
                     binding.cancelBookingBtn.text = "Cancel Booking"
-
+                    binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
                     binding.cancelBookingBtn.setOnClickListener {
                         val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
@@ -135,6 +136,7 @@ class ProviderMyBookingAdapter(
                     }
                 }
                 status.equals("Completed", ignoreCase = true) -> {
+                    binding.timeRemaining.text = "Completed"
                     binding.startBtn.text = "Raise Ticket"
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.cancelBookingBtn.visibility = View.GONE

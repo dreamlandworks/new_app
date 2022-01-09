@@ -67,7 +67,7 @@ class SearchServiceProviderAdapter(
             }
             binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms away"
 
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(binding.profilePic.context), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(binding.profilePic.context), SearchServiceProviderResModel::class.java)
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
                     for (booking in sp.blocked_time_slots) {
@@ -80,25 +80,25 @@ class SearchServiceProviderAdapter(
 
             binding.root.setOnClickListener {
                 FROM_POPULAR_SERVICES = false
-                UserUtils.data = data
+                UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
-                ViewUserBookingDetailsScreen.RESCHEDULE = true
-                UserUtils.data = data
+                ViewUserBookingDetailsScreen.RESCHEDULE = false
+                UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookNowBtn.setOnClickListener {
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
+                UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 if (data.category_id == "3") {
-                    UserUtils.data = data
                     val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
                     binding.root.context.startActivity(intent)
                 } else {
-                    UserUtils.data = data
+
                     val database = Firebase.database
                     database.getReference(UserUtils.getFCMToken(binding.root.context)).removeValue()
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)

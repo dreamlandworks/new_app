@@ -28,7 +28,7 @@ class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>
                 SearchServiceProvidersScreen.keyword = "0"
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true
                 UserUtils.saveSearchFilter(binding.root.context, "")
-                UserUtils.saveSelectedSPDetails(binding.root.context, "")
+                UserUtils.saveSelectedAllSPDetails(binding.root.context, "")
                 UserUtils.saveSelectedKeywordCategoryId(binding.root.context, model.category_id)
                 binding.root.context.startActivity(Intent(binding.root.context, SearchServiceProvidersScreen::class.java))
             }

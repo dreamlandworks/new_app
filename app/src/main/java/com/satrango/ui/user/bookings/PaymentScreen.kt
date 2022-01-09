@@ -186,8 +186,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan(paymentId: String?) {
-        val finalAmount = if (UserUtils.data != null) {
-            round(UserUtils.data!!.final_amount.toDouble()).toInt()
+        val finalAmount = if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java).final_amount.toDouble()).toInt()
         }else {
             amount.toInt()
         }

@@ -80,8 +80,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         initializeToolBar()
         initializeProgressDialog()
 
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
         }
 
         val bookingFactory = ViewModelFactory(BookingRepository())

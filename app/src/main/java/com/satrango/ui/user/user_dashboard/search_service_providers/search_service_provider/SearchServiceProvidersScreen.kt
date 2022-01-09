@@ -79,9 +79,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
 
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
             val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
 
             Log.e("FILTER:", Gson().toJson(filter))
@@ -149,8 +149,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
                 }
             }
-        } else if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+        } else if (UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
+            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
             binding.listCount.text = "${spDetails.data.size} out of ${spDetails.data.size}"
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(spDetails.data, this)
@@ -288,7 +288,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 if (response.data.isEmpty()) {
                     weAreSorryDialog()
                 } else {
-                    UserUtils.saveSelectedSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
+                    UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
                     UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
                     binding.listCount.text = "${response.data.size} out of ${response.data.size}"
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
@@ -305,7 +305,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         if (offerId == 0) {
             finish()
             UserUtils.saveSearchFilter(this, "")
-            UserUtils.saveSelectedSPDetails(this, "")
+            UserUtils.saveSelectedAllSPDetails(this, "")
             startActivity(Intent(this, UserDashboardScreen::class.java))
         } else {
             super.onBackPressed()
@@ -336,7 +336,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
         bookInstantly.setOnClickListener {
             UserUtils.bookingType = "instant"
-            UserUtils.data = null
+            UserUtils.saveSelectedSPDetails(binding.root.context, "")
             binding.listCount.visibility = View.GONE
             showBookingTypeBottomSheetDialog.dismiss()
             binding.recyclerView.visibility = View.GONE

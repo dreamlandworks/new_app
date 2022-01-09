@@ -56,8 +56,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            val newJobsList = Gson().fromJson(UserUtils.getSelectedSPDetails(this), ProviderMyBidsResModel::class.java)
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
+            val newJobsList = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), ProviderMyBidsResModel::class.java)
             val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
             val list = ArrayList<JobPostDetail>()
             for (sp in newJobsList.job_post_details) {

@@ -98,8 +98,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
 
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
             updateUI(data)
         } else {
             binding.spCard.visibility = View.GONE
@@ -282,9 +282,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         if (UserUtils.getFromInstantBooking(this)) {
             var spId = 0
             var finalAmount = ""
-            if (UserUtils.data != null) {
-                spId = UserUtils.data!!.users_id.toInt()
-                finalAmount = UserUtils.data!!.final_amount
+            if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+                spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this),Data::class.java).users_id.toInt()
+                finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this),Data::class.java).final_amount
             }
 
             var address = ""
@@ -450,7 +450,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accepted|${UserUtils.bookingType}")
+            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accept|${UserUtils.bookingType}|selected")
             finish()
             startActivity(intent)
             waitingDialog.dismiss()
@@ -472,7 +472,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "accepted", "accept|${UserUtils.bookingType}|selected")
                     waitingDialog.dismiss()
                     try {
                         weAreSorryDialog()
@@ -480,7 +480,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                     Checkout.preload(applicationContext)
                     weAreSorryDialog()
-//                    startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java)
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -677,9 +676,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         var finalAmount = "0"
         var spId = "0"
-        if (UserUtils.data != null) {
-            spId = UserUtils.data!!.users_id
-            finalAmount = UserUtils.data!!.final_amount
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
+            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(
@@ -822,7 +821,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         override fun onReceive(context: Context, intent: Intent) {
             val spIds = intent.getStringExtra(getString(R.string.sp_id))!!
             responses.add(spIds)
-            val spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(context), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
             if (responses.size == spDetails.data.size) {
                 waitingDialog.dismiss()
                 weAreSorryDialog()

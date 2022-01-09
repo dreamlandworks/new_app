@@ -392,8 +392,10 @@ class ProviderDashboard : AppCompatActivity() {
 
         closeBtn.setOnClickListener {
             UserUtils.saveFromFCMService(this, false)
-//            FROM_FCM_SERVICE = false
             bottomSheetDialog!!.dismiss()
+            if (FCMService.notificationManager != null) {
+                FCMService.notificationManager.cancelAll()
+            }
         }
 
         Log.e("ResponseDialog:", Gson().toJson(response))
@@ -417,15 +419,12 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            UserUtils.sendFCM(
-                                this@ProviderDashboard,
-                                this.response.booking_details.fcm_token,
-                                "accept",
-                                "accept",
-                                "accept|${this.response.booking_details.amount}|${UserUtils.getUserId(this)}|$bookingType"
-                            )
+                            UserUtils.sendFCM(this@ProviderDashboard, this.response.booking_details.fcm_token, "accept", "accept", "accept|${this.response.booking_details.amount}|${UserUtils.getUserId(this)}|$bookingType")
                             UserUtils.saveFromFCMService(this,false)
 //                            FROM_FCM_SERVICE = false
+                            if (FCMService.notificationManager != null) {
+                                FCMService.notificationManager.cancelAll()
+                            }
                             Companion.bookingId = ""
                             bottomSheetDialog!!.dismiss()
                             snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")

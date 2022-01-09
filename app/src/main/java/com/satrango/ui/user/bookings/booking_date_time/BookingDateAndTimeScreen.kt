@@ -88,17 +88,16 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             "User"
         }
 
-        if (UserUtils.data != null) {
-            data = UserUtils.data!!
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
             updateUI(data)
         }
 
         calendar = Calendar.getInstance()
-
         binding.selectedMonth.text = LocalDate.now().month.name
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
-            spDetails = Gson().fromJson(UserUtils.getSelectedSPDetails(this), SearchServiceProviderResModel::class.java)
+            spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
             loadDates()
             loadTimings(0)
         } else {

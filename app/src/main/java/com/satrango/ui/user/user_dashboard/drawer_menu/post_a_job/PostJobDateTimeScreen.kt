@@ -191,8 +191,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
     }
 
     private fun loadDates() {
-//        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
-        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
+        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+//        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
         binding.dayRv.layoutManager =
             LinearLayoutManager(this@PostJobDateTimeScreen, LinearLayoutManager.HORIZONTAL, false)
         binding.dayRv.adapter = MonthsAdapter(daysList, this@PostJobDateTimeScreen, "D")
@@ -219,8 +219,17 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 )
             }
         }
-        daysInMonth = getDaysInMonth(year, month + 1)
+        if (month > 12) {
+            daysInMonth = getDaysInMonth(year + 1, month + 1 - 12)
+        } else {
+            daysInMonth = getDaysInMonth(year, month + 1)
+        }
         for (day in 1..daysInMonth) {
+            val months = if (month + 1 > 12) {
+                month + 1 - 12
+            }  else {
+                month + 1
+            }
             daysList.add(
                 MonthsModel(
                     calendar.get(Calendar.YEAR).toString() + "-" + String.format(
@@ -239,7 +248,16 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
     private fun getDaysInMonth(year: Int, month: Int): Int {
         val yearMonthObject: YearMonth =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                YearMonth.of(year, month)
+                var years = 0
+                var months = 0
+                if (month > 12) {
+                    years = year + 1
+                    months = month - 12
+                } else {
+                    years = year
+                    months = month
+                }
+                YearMonth.of(years, months)
             } else {
                 return 30
             }

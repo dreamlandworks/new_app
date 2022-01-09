@@ -245,12 +245,16 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
+    }
+
+    override fun onBackPressed() {
+        if (FROM_PROVIDER) {
+            startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
+        } else {
+            startActivity(Intent(this, UserMyBookingsScreen::class.java))
+        }
     }
 }
