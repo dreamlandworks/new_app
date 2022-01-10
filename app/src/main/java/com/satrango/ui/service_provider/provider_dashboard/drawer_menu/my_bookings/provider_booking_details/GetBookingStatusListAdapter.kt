@@ -1,5 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
 
     class ViewHolder(binding: BookingStatusRowBinding): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+        @SuppressLint("SetTextI18n")
         fun bind(details: BookingStatusDetail, position: Int) {
 
             if (position == 0) {
@@ -27,7 +29,24 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
                 binding.image.setImageResource(R.drawable.mark_blue)
                 binding.view.setBackgroundColor(binding.view.resources.getColor(R.color.blue))
             }
-            binding.description.text = details.name
+            when(details.status_id) {
+                "13" -> {
+                    binding.description.text = "Booking Started and OTP Verified"
+                }
+                "23" -> {
+                    binding.description.text = "OTP Verified and Booking Completed"
+                }
+                "37" -> {
+                    binding.description.text = "Extra Demand Raised"
+                }
+                "38" -> {
+                    binding.description.text = "Extra Demand Accepted"
+                }
+                "39" -> {
+                    binding.description.text = "Extra Demand Rejected"
+                }
+            }
+//            binding.description.text = details.name
         }
 
     }

@@ -14,12 +14,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingResponseScreenBinding
-import com.satrango.remote.NetworkResponse
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -27,7 +24,6 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
-import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import org.json.JSONObject
 
@@ -52,12 +48,10 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         initializeProgressDialog()
 
-
         userId = response.split("|")[2]
 
         if (response.split("|")[0] == "accept") {
             bookingType = response.split("|")[6]
-            toast(this, "Booking Type: $bookingType")
             UserUtils.saveInstantBooking(this, true)
             showProviderAcceptDialog()
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")

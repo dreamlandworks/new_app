@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -56,6 +57,7 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
@@ -82,6 +84,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
+            updateUI(data)
         }
 
         val bookingFactory = ViewModelFactory(BookingRepository())
@@ -210,7 +213,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
-                                UserUtils.bookingType
+                                "accepted|${UserUtils.bookingType}"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -551,6 +554,14 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateUI(data: Data) {
+        binding.userName.text = "${data.fname} ${data.lname}"
+        binding.occupation.text = data.profession
+        binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
     }
 
 }

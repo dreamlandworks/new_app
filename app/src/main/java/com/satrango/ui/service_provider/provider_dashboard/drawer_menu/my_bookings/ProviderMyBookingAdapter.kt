@@ -53,6 +53,11 @@ class ProviderMyBookingAdapter(
                 Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
                     .into(binding.profilePic)
             }
+            if (data.category_id == "2") {
+                binding.locationLayout.visibility = View.GONE
+            } else {
+                binding.locationLayout.visibility = View.VISIBLE
+            }
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
                     binding.timeRemaining.text = "Started"

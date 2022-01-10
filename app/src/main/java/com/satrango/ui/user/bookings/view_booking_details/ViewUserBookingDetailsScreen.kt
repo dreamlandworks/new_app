@@ -534,8 +534,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.attachmentsText.visibility = View.GONE
         }
 
-        toast(this, response.job_details.size.toString())
-        binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details)
+        binding.jobDetailsRV.adapter = JobDetailsAdapter(response.job_details, categoryId)
         binding.attachmentsRV.adapter = JobDetailsAttachmentsAdapter(response.attachments)
 
         binding.cancelBookingBtn.setOnClickListener {
@@ -781,7 +780,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
-                                snackBar(binding.inProgressViewStatusBtn, it.message!!)
+                                toast(this, it.message!!)
                             }
                         }
                     })

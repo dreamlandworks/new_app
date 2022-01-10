@@ -21,9 +21,11 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderRatingReviewScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -222,7 +224,6 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             userId.toInt(),
             binding.customerRatingBtn.rating
         )
-//        toast(this, Gson().toJson(requestBody))
         viewModel.userRating(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -231,6 +232,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     snackBar(binding.overAllRating, "Thank you for Feedback")
+                    binding.feedBack.setText("")
                     Handler().postDelayed({
                         startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                     }, 3000)
@@ -252,9 +254,9 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (FROM_PROVIDER) {
-            startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
+            startActivity(Intent(this, ProviderDashboard::class.java))
         } else {
-            startActivity(Intent(this, UserMyBookingsScreen::class.java))
+            startActivity(Intent(this, UserDashboardScreen::class.java))
         }
     }
 }

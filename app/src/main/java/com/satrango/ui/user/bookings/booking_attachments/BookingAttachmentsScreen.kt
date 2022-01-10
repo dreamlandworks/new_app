@@ -96,7 +96,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
         if (!UserUtils.getFromInstantBooking(this)) {
             initializeProgressDialog()
-//            data = intent.getSerializableExtra(getString(R.string.service_provider)) as Data
             if (UserUtils.addressList.isNotEmpty()) {
                 loadAddressOnUI()
             }
@@ -275,7 +274,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
-                                UserUtils.bookingType
+                                "accepted|${UserUtils.bookingType}"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -301,6 +300,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.addressText.visibility = View.VISIBLE
         binding.discription.setText("")
         binding.addressText.text = UserUtils.addressList[addressIndex].month
+        Log.e("ADDRESSES:", Gson().toJson(UserUtils.addressList))
     }
 
     private fun openImagePicker() {

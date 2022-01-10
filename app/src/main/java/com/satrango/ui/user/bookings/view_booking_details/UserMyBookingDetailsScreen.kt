@@ -102,8 +102,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter =
-                        GetBookingStatusListAdapter(it.data!!.booking_status_details)
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

@@ -197,8 +197,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         for (address in addressList) {
             if (address.isSelected) {
                 if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
-                    UserUtils.temp_address_id =
-                        UserUtils.getTempAddressId(this@BookingAddressScreen)
+                    UserUtils.temp_address_id = UserUtils.getTempAddressId(this@BookingAddressScreen)
                     UserUtils.address_id = "0"
                 } else {
                     UserUtils.temp_address_id = "0"
@@ -227,6 +226,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                     "3" -> {
                         UserUtils.addressList = ArrayList()
+                        addressList = addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                         addressList.forEach {
                             if (it.isSelected) {
                                 UserUtils.addressList.add(it)
@@ -235,6 +235,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
+                            Log.e("ADDRESS:", Gson().toJson(UserUtils.addressList))
                             startActivity(Intent(this, BookingMultiMoveAddressScreen::class.java))
                         }
                     }
@@ -254,11 +255,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            val intent = Intent(
-                                this@BookingAddressScreen,
-                                BookingAttachmentsScreen::class.java
-                            )
-                            intent.putExtra(getString(R.string.service_provider), data)
+                            val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
                             startActivity(intent)
                         }
                     }
@@ -344,11 +341,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|${UserUtils.bookingType}")
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
-                            UserUtils.sendFCMtoSelectedServiceProvider(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user"
-                            )
+                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                         }
                     }
                     is NetworkResponse.Failure -> {
@@ -537,7 +530,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
                 addressList.onEachIndexed { index, month ->
                     if (month.month == dateTime) {
-                        tempAddress.add(MonthsModel(month.month, month.day, true))
+                        tempAddress.add(MonthsModel(month.month, month.day, !month.isSelected))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, month.isSelected))
                     }
@@ -558,7 +551,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             if (data.category_id == "3") {
                 addressList.onEachIndexed { index, month ->
                     if (month.month == dateTime) {
-                        tempAddress.add(MonthsModel(month.month, month.day, true))
+                        tempAddress.add(MonthsModel(month.month, month.day, !month.isSelected))
                     } else {
                         tempAddress.add(MonthsModel(month.month, month.day, month.isSelected))
                     }
