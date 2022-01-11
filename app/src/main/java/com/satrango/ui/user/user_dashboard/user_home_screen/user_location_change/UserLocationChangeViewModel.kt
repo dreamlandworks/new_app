@@ -22,7 +22,7 @@ class UserLocationChangeViewModel(private val repository: UserLocationChangeRepo
     val locations = MutableLiveData<NetworkResponse<List<DataX>>>()
 
     fun allLocations(context: Context): MutableLiveData<NetworkResponse<List<DataX>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     val response = async { repository.getAllLocation() }
@@ -35,9 +35,9 @@ class UserLocationChangeViewModel(private val repository: UserLocationChangeRepo
                     locations.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            locations.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            locations.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return locations
     }
 

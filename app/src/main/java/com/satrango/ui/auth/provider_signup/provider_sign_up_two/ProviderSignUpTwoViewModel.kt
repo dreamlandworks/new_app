@@ -19,10 +19,10 @@ class ProviderSignUpTwoViewModel(private val repository: ProviderSignUpTwoReposi
     val keywords = MutableLiveData<NetworkResponse<List<com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.Data>>>()
 
     fun getKeywords(context: Context, subCatId: String): MutableLiveData<NetworkResponse<List<com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                keywords.value = NetworkResponse.Loading()
                 try {
+                    keywords.value = NetworkResponse.Loading()
                     val response = async { repository.getKeyWords(subCatId) }
                     if (response.await().status == 200) {
                         keywords.value = NetworkResponse.Success(response.await().data)
@@ -33,9 +33,9 @@ class ProviderSignUpTwoViewModel(private val repository: ProviderSignUpTwoReposi
                     keywords.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            keywords.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            keywords.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return keywords
     }
 

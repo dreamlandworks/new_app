@@ -22,10 +22,10 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
     val searchResultsList = MutableLiveData<NetworkResponse<com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel>>()
 
     fun getKeywordsList(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_home_screen.models.Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                keywordsList.value = NetworkResponse.Loading()
                 try {
+                    keywordsList.value = NetworkResponse.Loading()
                     val response = async { repository.getKeyWords() }
                     if (response.await().status == 200) {
                         keywordsList.value = NetworkResponse.Success(response.await().data)
@@ -37,17 +37,17 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                     keywordsList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            keywordsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            keywordsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return keywordsList
     }
 
     fun getSearchResults(context: Context, requestBody: SearchServiceProviderReqModel): MutableLiveData<NetworkResponse<com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                searchResultsList.value = NetworkResponse.Loading()
                 try {
+                    searchResultsList.value = NetworkResponse.Loading()
                     val response = async { repository.getSearchResults(requestBody) }
                     if (response.await().status == 200) {
                         UserUtils.setTempAddressId(context, response.await().temp_address_id.toString())
@@ -61,9 +61,9 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                     searchResultsList.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            searchResultsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            searchResultsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return searchResultsList
     }
 

@@ -22,10 +22,10 @@ class ProviderSignUpFiveViewModel(private val repository: ProviderSignUpFiveRepo
     val videoStatus = MutableLiveData<NetworkResponse<String>>()
 
     fun uploadVideo(context: Context, userId: RequestBody, videoNo: RequestBody, key: RequestBody, videoRecord: MultipartBody.Part): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                videoStatus.value = NetworkResponse.Loading()
                 try {
+                    videoStatus.value = NetworkResponse.Loading()
                     val response = async { repository.uploadVideo(userId, videoNo, key, videoRecord) }
                     val jsonResponse = JSONObject(response.await().string())
                     Log.e("VEDIO: ", jsonResponse.toString())
@@ -38,9 +38,9 @@ class ProviderSignUpFiveViewModel(private val repository: ProviderSignUpFiveRepo
                     videoStatus.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            videoStatus.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            videoStatus.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return videoStatus
     }
 }

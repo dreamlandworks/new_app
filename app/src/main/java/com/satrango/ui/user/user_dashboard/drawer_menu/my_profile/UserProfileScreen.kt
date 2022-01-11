@@ -1,15 +1,16 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_profile
 
-import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.ProgressDialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -26,6 +27,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -40,22 +45,12 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.util.*
-import android.R.attr.data
-import android.text.Editable
-import android.text.TextWatcher
-import com.bumptech.glide.Glide
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.satrango.utils.toast
 import java.text.SimpleDateFormat
-
-
-
+import java.util.*
 
 
 class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
@@ -74,10 +69,43 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initializeToolBar()
         initializeProgressDialog()
+    }
 
+    private var connectionReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val notConnected =
+                intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+            if (notConnected) {
+                disconnected()
+            } else {
+                connected()
+            }
+        }
+    }
+
+    private fun connected() {
+        loadScreen()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun disconnected() {
+        binding.noteText.visibility = View.VISIBLE
+        binding.noteText.text = "Internet Connection Lost"
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(connectionReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(connectionReceiver)
+    }
+
+    private fun loadScreen() {
         val factory = ViewModelFactory(UserProfileRepository())
         viewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
         showUserProfile()
@@ -108,7 +136,10 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     lName.isEmpty() -> snackBar(binding.applyBtn, "Please Enter Last Name")
                     mobile.isEmpty() -> snackBar(binding.applyBtn, "Please Enter mobile number")
                     email.isEmpty() -> snackBar(binding.applyBtn, "Please Enter Email Id")
-                    !email.contains("@") || !email.contains(".") -> snackBar(binding.applyBtn, "Please Enter Valid Email Id")
+                    !email.contains("@") || !email.contains(".") -> snackBar(
+                        binding.applyBtn,
+                        "Please Enter Valid Email Id"
+                    )
                     dob.isEmpty() -> snackBar(binding.applyBtn, "Please Select Date of Birth")
                     gender.isEmpty() -> snackBar(binding.applyBtn, "Please Select Gender")
                     else -> {
@@ -200,7 +231,6 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 emailId.keyListener = emailId.tag as KeyListener
             }
         }
-
     }
 
     private fun initializeToolBar() {
@@ -208,7 +238,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_profile)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_profile)
     }
 
     private fun openImagePicker() {
@@ -309,7 +340,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     val layoutManager = LinearLayoutManager(this@UserProfileScreen)
                     layoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     binding.addressRv.layoutManager = layoutManager
-                    binding.addressRv.adapter = UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
+                    binding.addressRv.adapter =
+                        UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
                     binding.addressRv.visibility = View.VISIBLE
                     progressDialog.dismiss()
                 }
@@ -336,7 +368,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
             val storageRef = FirebaseStorage.getInstance().reference
-            val profilePicStorageRef = storageRef.child("images/profile_pic_with_user_id_${UserUtils.getUserId(this)}.jpg")
+            val profilePicStorageRef =
+                storageRef.child("images/profile_pic_with_user_id_${UserUtils.getUserId(this)}.jpg")
             profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
                 toast(this, it.message!!)
             }.addOnCompleteListener { task ->
@@ -368,7 +401,11 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

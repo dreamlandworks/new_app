@@ -34,7 +34,7 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
     val postRequestInstallment = MutableLiveData<NetworkResponse<ProviderPostRequestInstallmentResModel>>()
 
     fun bookingListWithDetails(context: Context, requestBody: ProviderBookingReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     bookingListWithDetails.value = NetworkResponse.Loading()
@@ -49,14 +49,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     bookingListWithDetails.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            bookingListWithDetails.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            bookingListWithDetails.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return bookingListWithDetails
     }
 
     fun extraDemand(context: Context, requestBody: ExtraDemandReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     extraDemand.value = NetworkResponse.Loading()
@@ -72,14 +72,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     extraDemand.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            extraDemand.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            extraDemand.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return extraDemand
     }
 
     fun expenditureIncurred(context: Context, requestBody: ExpenditureIncurredReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     expenditureIncurred.value = NetworkResponse.Loading()
@@ -95,14 +95,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     expenditureIncurred.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            expenditureIncurred.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            expenditureIncurred.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return expenditureIncurred
     }
 
     fun userRating(context: Context, requestBody: UserRatingReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userRating.value = NetworkResponse.Loading()
@@ -118,14 +118,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     userRating.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            userRating.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            userRating.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return userRating
     }
 
     fun providerRating(context: Context, requestBody: ProviderRatingReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userRating.value = NetworkResponse.Loading()
@@ -141,14 +141,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     userRating.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            userRating.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            userRating.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return userRating
     }
 
     fun getInvoice(context: Context, requestBody: ProviderInvoiceReqModel): MutableLiveData<NetworkResponse<ProviderInvoiceResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     invoice.value = NetworkResponse.Loading()
@@ -163,14 +163,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     invoice.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            invoice.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            invoice.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return invoice
     }
 
     fun getInstallmentsList(context: Context, postJobId: Int): MutableLiveData<NetworkResponse<ProviderGoalsInstallmentsListResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     installmentsList.value = NetworkResponse.Loading()
@@ -185,14 +185,14 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     installmentsList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            installmentsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            installmentsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return installmentsList
     }
 
     fun postRequestInstallment(context: Context, requestBody: ProviderPostRequestInstallmentReqModel): MutableLiveData<NetworkResponse<ProviderPostRequestInstallmentResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     postRequestInstallment.value = NetworkResponse.Loading()
@@ -207,9 +207,9 @@ class ProviderBookingViewModel(private val repository: ProviderBookingRepository
                     postRequestInstallment.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            postRequestInstallment.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            postRequestInstallment.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return postRequestInstallment
     }
 

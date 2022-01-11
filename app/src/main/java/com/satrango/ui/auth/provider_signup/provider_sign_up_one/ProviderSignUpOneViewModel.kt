@@ -18,10 +18,10 @@ class ProviderSignUpOneViewModel(private val repository: ProviderSignUpOneReposi
         MutableLiveData<NetworkResponse<com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel>>()
 
     fun professionsList(context: Context): MutableLiveData<NetworkResponse<com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                providersData.value = NetworkResponse.Loading()
                 try {
+                    providersData.value = NetworkResponse.Loading()
                     val response = async { repository.providerData() }
                     if (response.await().status == 200) {
                         providersData.value = NetworkResponse.Success(response.await())
@@ -33,9 +33,9 @@ class ProviderSignUpOneViewModel(private val repository: ProviderSignUpOneReposi
                 }
 
             }
-        } else {
-            providersData.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            providersData.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return providersData
     }
 

@@ -18,7 +18,7 @@ class ProviderMyAccountViewModel(private val repository: ProviderMyAccountReposi
     val reviews = MutableLiveData<NetworkResponse<ProviderReviewResModel>>()
 
     fun myAccount(context: Context): MutableLiveData<NetworkResponse<ProviderMyAccountResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     myAccount.value = NetworkResponse.Loading()
@@ -33,14 +33,14 @@ class ProviderMyAccountViewModel(private val repository: ProviderMyAccountReposi
                     myAccount.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            myAccount.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            myAccount.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return myAccount
     }
 
     fun reviews(context: Context): MutableLiveData<NetworkResponse<ProviderReviewResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     reviews.value = NetworkResponse.Loading()
@@ -55,9 +55,9 @@ class ProviderMyAccountViewModel(private val repository: ProviderMyAccountReposi
                     reviews.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            reviews.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            reviews.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return reviews
     }
 

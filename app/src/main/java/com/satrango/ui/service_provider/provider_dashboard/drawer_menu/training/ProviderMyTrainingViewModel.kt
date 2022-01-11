@@ -28,7 +28,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
     fun getTrainingList(
         context: Context
     ): MutableLiveData<NetworkResponse<ProviderMyTrainingResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     trainingList.value = NetworkResponse.Loading()
@@ -45,9 +45,9 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                 }
 
             }
-        } else {
-            trainingList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            trainingList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return trainingList
     }
 
@@ -55,7 +55,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
         context: Context,
         cityId: String
     ): MutableLiveData<NetworkResponse<LeaderboardResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     leaderboardList.value = NetworkResponse.Loading()
@@ -71,9 +71,9 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                     leaderboardList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            leaderboardList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            leaderboardList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return leaderboardList
     }
 
@@ -83,7 +83,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
         videoId: String,
         points: String
     ): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     submitYoutubePoints.value = NetworkResponse.Loading()
@@ -97,19 +97,17 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                 } catch (e: Exception) {
                     submitYoutubePoints.value = NetworkResponse.Failure(e.message)
                 }
-
-
             }
-        } else {
-            submitYoutubePoints.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            submitYoutubePoints.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return submitYoutubePoints
     }
 
     fun getCitiesList(
         context: Context
     ): MutableLiveData<NetworkResponse<CitiesResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 citiesList.value = NetworkResponse.Loading()
                 val response = async { repository.getCities() }
@@ -120,9 +118,9 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                     citiesList.value = NetworkResponse.Failure(responseJson.message)
                 }
             }
-        } else {
-            citiesList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            citiesList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return citiesList
     }
 
@@ -130,7 +128,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
         context: Context,
         cityId: String
     ): MutableLiveData<NetworkResponse<ProviderDashboardResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 providerDashboardDetails.value = NetworkResponse.Loading()
                 val response = async { repository.getProviderDashboardDetails(context, cityId) }
@@ -141,9 +139,9 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                     providerDashboardDetails.value = NetworkResponse.Failure(responseJson.message)
                 }
             }
-        } else {
-            providerDashboardDetails.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            providerDashboardDetails.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return providerDashboardDetails
     }
 

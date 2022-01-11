@@ -42,10 +42,10 @@ class MyAccountViewModel(private val repository: MyAccountRepository) : ViewMode
     }
 
     fun myAccountDetails(context: Context): MutableLiveData<NetworkResponse<MyAccountDetailsResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                myAccountDetails.value = NetworkResponse.Loading()
                 try {
+                    myAccountDetails.value = NetworkResponse.Loading()
                     val response = async { repository.getAccountDetails(context) }
                     val jsonResponse = response.await()
                     if (jsonResponse.status == 200) {
@@ -57,7 +57,7 @@ class MyAccountViewModel(private val repository: MyAccountRepository) : ViewMode
                     myAccountDetails.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        }
+//        }
         return myAccountDetails
     }
 

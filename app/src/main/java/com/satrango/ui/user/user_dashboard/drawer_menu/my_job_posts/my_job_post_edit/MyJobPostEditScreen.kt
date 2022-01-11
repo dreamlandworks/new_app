@@ -76,7 +76,7 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
 
     override fun onStart() {
         super.onStart()
-        registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        registerReceiver(connectionReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     private fun connected() {
@@ -87,10 +87,10 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
     override fun onPause() {
         super.onPause()
         MyJobPostViewScreen.myJobPostViewScreen = false
-        unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(connectionReceiver)
     }
 
-    private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private var connectionReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val notConnected = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
             if (notConnected) {
@@ -127,7 +127,6 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
                     disconnected()
                     binding.note.text = it.message!!
                 }
-
             }
         })
     }
@@ -176,13 +175,10 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
         for (image in data.attachments) {
             images.add(image)
         }
-        binding.attachmentsRV.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
         binding.bidCount.text = data.job_post_details.total_bids.toString()
         binding.avgAmount.text = data.job_post_details.average_bids_amount
-
-
     }
 
     override fun deleteAttachment(position: Int, imagePath: Attachment) {

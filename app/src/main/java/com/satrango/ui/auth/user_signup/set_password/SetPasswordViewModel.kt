@@ -20,7 +20,7 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
     val createNewUser = MutableLiveData<NetworkResponse<String>>()
 
     fun resetPassword(context: Context): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     resetPassword.value = NetworkResponse.Loading()
@@ -35,15 +35,15 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
                     resetPassword.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return resetPassword
     }
 
     fun createNewUser(context: Context, requestBody: UserSignUpModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                createNewUser.value = NetworkResponse.Loading()
                 try {
+                    createNewUser.value = NetworkResponse.Loading()
                     val response = async { repository.createNewUser(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -57,9 +57,9 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
                     createNewUser.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            createNewUser.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            createNewUser.value = NetworkResponse.Failure("No Internet Connection")
+//        }
 
         return createNewUser
     }

@@ -19,7 +19,7 @@ class ProviderPlansViewModel(private val repository: ProviderPlansRepository): V
     val saveMemberShip = MutableLiveData<NetworkResponse<ProviderMemberShipPlanPaymentResModel>>()
 
     fun plans(context: Context): MutableLiveData<NetworkResponse<ProviderPlansResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     val request = async { repository.getPlans(context) }
@@ -33,9 +33,9 @@ class ProviderPlansViewModel(private val repository: ProviderPlansRepository): V
                     plans.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            plans.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            plans.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return plans
     }
 

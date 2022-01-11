@@ -24,7 +24,7 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
     val updateTariff = MutableLiveData<NetworkResponse<ResponseBody>>()
 
     fun  professionalDetails(context: Context, requestBody: ProviderBookingReqModel): MutableLiveData<NetworkResponse<ProviderProfileProfessionResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     professionalDetails.value = NetworkResponse.Loading()
@@ -40,14 +40,14 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
                     professionalDetails.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            professionalDetails.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            professionalDetails.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return professionalDetails
     }
 
     fun  updateSkills(context: Context, requestBody: UpdateSkillsReqModel): MutableLiveData<NetworkResponse<ResponseBody>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateSkills.value = NetworkResponse.Loading()
@@ -64,14 +64,14 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
                     updateSkills.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            updateSkills.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            updateSkills.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return updateSkills
     }
 
     fun  updateTariff(context: Context, requestBody: UpdateTariffReqModel): MutableLiveData<NetworkResponse<ResponseBody>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateTariff.value = NetworkResponse.Loading()
@@ -87,9 +87,9 @@ class ProviderProfileViewModel(private val repository: ProviderProfileRepository
                     updateTariff.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            updateTariff.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            updateTariff.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return updateTariff
     }
 

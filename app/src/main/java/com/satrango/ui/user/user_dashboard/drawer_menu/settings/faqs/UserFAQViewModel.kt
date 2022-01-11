@@ -17,7 +17,7 @@ class UserFAQViewModel(private val repository: UserFAQRepository): ViewModel() {
     val faqsList = MutableLiveData<NetworkResponse<List<Data>>>()
 
     fun getFAQSList(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     val response = async { repository.getFAQs() }
@@ -30,9 +30,9 @@ class UserFAQViewModel(private val repository: UserFAQRepository): ViewModel() {
                     faqsList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            faqsList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            faqsList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return faqsList
     }
 

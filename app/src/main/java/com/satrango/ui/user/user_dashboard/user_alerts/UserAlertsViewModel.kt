@@ -23,10 +23,10 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
     val updateAlertsToRead = MutableLiveData<NetworkResponse<String>>()
 
     fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
-            normalAlertsList.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    normalAlertsList.value = NetworkResponse.Loading()
                     val response = async { repository.getUserAlerts(context, "1") }
                     if (response.await().status == 200) {
                         normalAlertsList.value = NetworkResponse.Success(response.await().data)
@@ -38,17 +38,17 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
                 }
 
             }
-        } else {
-            normalAlertsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            normalAlertsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return normalAlertsList
     }
 
     fun getActionableAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
-            actionableAlertsList.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    actionableAlertsList.value = NetworkResponse.Loading()
                     val response = async { repository.getUserAlerts(context, "2") }
                     if (response.await().status == 200) {
                         actionableAlertsList.value = NetworkResponse.Success(response.await().data)
@@ -58,19 +58,18 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
                 } catch (e: Exception) {
                     actionableAlertsList.value = NetworkResponse.Failure(e.message)
                 }
-
             }
-        } else {
-            actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return actionableAlertsList
     }
 
     fun getUserOffers(context: Context, requestBody: OffersListReqModel): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.user_offers.models.Data>>> {
-        if (hasInternetConnection(context)) {
-            userOffers.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    userOffers.value = NetworkResponse.Loading()
                     val response = async { repository.getUserOffers(requestBody) }
                     Log.e("OFFERS", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
@@ -83,17 +82,17 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
                 }
 
             }
-        } else {
-            userOffers.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            userOffers.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return userOffers
     }
 
     fun updateAlertsToRead(context: Context, type: String): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            userOffers.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    userOffers.value = NetworkResponse.Loading()
                     val response = async { repository.updateAlertsToRead(context, type) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("id") == 200) {
@@ -104,11 +103,10 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
                 } catch (e: Exception) {
                     updateAlertsToRead.value = NetworkResponse.Failure(e.message)
                 }
-
             }
-        } else {
-            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return updateAlertsToRead
     }
 

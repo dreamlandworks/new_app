@@ -237,7 +237,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             latitude,
             longitude
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.postJobSingleMove(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -318,7 +318,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         if (UserUtils.getFromJobPostMultiMove(this)) {
             val tempAddress = arrayListOf<MonthsModel>()
             addressList.onEachIndexed { index, month ->
-                if (index == position) {
+                if (dateTime == month.month) {
                     tempAddress.add(MonthsModel(month.month, month.day, !month.isSelected))
                 } else {
                     tempAddress.add(MonthsModel(month.month, month.day, month.isSelected))
@@ -328,7 +328,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         } else {
             val tempAddress = arrayListOf<MonthsModel>()
             addressList.onEachIndexed { index, month ->
-                if (index == position) {
+                if (dateTime == month.month) {
                     tempAddress.add(MonthsModel(month.month, month.day, true))
                 } else {
                     tempAddress.add(MonthsModel(month.month, month.day, false))

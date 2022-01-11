@@ -78,7 +78,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
 
     fun skills(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
 
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     skills.value = NetworkResponse.Loading()
@@ -93,16 +93,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     skills.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            skills.value = NetworkResponse.Failure("No Internet Connection!")
-        }
-
+//        } else {
+//            skills.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return skills
     }
 
     fun skillsByCategoryId(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<Data>>> {
-
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     skillsByCategory.value = NetworkResponse.Loading()
@@ -117,16 +115,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     skillsByCategory.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
-        }
-
+//        } else {
+//            skillsByCategory.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return skillsByCategory
     }
 
     fun getUserPlans(context: Context): MutableLiveData<NetworkResponse<PostJobPlansResModel>> {
-
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userPlans.value = NetworkResponse.Loading()
@@ -141,14 +137,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     userPlans.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            userPlans.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            userPlans.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return userPlans
     }
 
     fun saveUserPlanPayment(context: Context, requestBody: UserPlanPaymentReqModel): MutableLiveData<NetworkResponse<UserPlanPaymentResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     planPayment.value = NetworkResponse.Loading()
@@ -163,14 +159,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     planPayment.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            planPayment.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            planPayment.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return planPayment
     }
 
     fun bidRanges(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.models.Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     bidRanges.value = NetworkResponse.Loading()
@@ -185,14 +181,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     bidRanges.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            bidRanges.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            bidRanges.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return bidRanges
     }
 
     fun postJobSingleMove(context: Context, requestBody: PostJobSingleMoveReqModel): MutableLiveData<NetworkResponse<PostJobSingleMoveResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     postJobSingleMove.value = NetworkResponse.Loading()
@@ -208,14 +204,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobSingleMove.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            postJobSingleMove.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            postJobSingleMove.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return postJobSingleMove
     }
 
     fun postJobBlueCollar(context: Context, requestBody: PostJobBlueCollarReqModel): MutableLiveData<NetworkResponse<PostJobBlueCollarResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     postJobBlueCollar.value = NetworkResponse.Loading()
@@ -231,14 +227,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobBlueCollar.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            postJobBlueCollar.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            postJobBlueCollar.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return postJobBlueCollar
     }
 
     fun postJobMultiMove(context: Context, requestBody: PostJobMultiMoveReqModel): MutableLiveData<NetworkResponse<PostJobMultiMoveResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     postJobMultiMove.value = NetworkResponse.Loading()
@@ -254,14 +250,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobMultiMove.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            postJobMultiMove.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            postJobMultiMove.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return postJobMultiMove
     }
 
     fun myJobPosts(context: Context, requestBody: MyJobPostReqModel): MutableLiveData<NetworkResponse<MyJobPostResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     myJobPosts.value = NetworkResponse.Loading()
@@ -277,14 +273,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     myJobPosts.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            myJobPosts.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            myJobPosts.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return myJobPosts
     }
 
     fun myJobPostsViewDetails(context: Context, requestBody: MyJobPostViewReqModel): MutableLiveData<NetworkResponse<MyJobPostViewResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     myJobPostsViewDetails.value = NetworkResponse.Loading()
@@ -301,14 +297,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     myJobPostsViewDetails.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            myJobPostsViewDetails.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            myJobPostsViewDetails.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return myJobPostsViewDetails
     }
 
     fun viewBids(context: Context, requestBody: ViewBidsReqModel): MutableLiveData<NetworkResponse<ViewBidsResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     viewBids.value = NetworkResponse.Loading()
@@ -324,14 +320,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     viewBids.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            viewBids.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            viewBids.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return viewBids
     }
 
     fun viewProposal(context: Context, requestBody: ViewProposalReqModel): MutableLiveData<NetworkResponse<ViewProposalResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     viewProposal.value = NetworkResponse.Loading()
@@ -347,14 +343,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     viewProposal.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-                viewProposal.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//                viewProposal.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return viewProposal
     }
 
     fun discussionMessage(context: Context, requestBody: DiscussionBoardMessageReqModel): MutableLiveData<NetworkResponse<DiscussionBoardMessageResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     discussionMessage.value = NetworkResponse.Loading()
@@ -371,14 +367,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     discussionMessage.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            discussionMessage.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            discussionMessage.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return discussionMessage
     }
 
     fun discussionList(context: Context, requestBody: DiscussionListReqModel): MutableLiveData<NetworkResponse<List<DiscussionDetail>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     discussionList.value = NetworkResponse.Loading()
@@ -395,14 +391,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     discussionList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            discussionList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            discussionList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return discussionList
     }
 
     fun setGoals(context: Context): MutableLiveData<NetworkResponse<List<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.setgoals.Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     setGoals.value = NetworkResponse.Loading()
@@ -418,14 +414,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     setGoals.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            setGoals.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            setGoals.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return setGoals
     }
 
     fun saveInstallments(context: Context, requestBody: SaveInstallmentReqModel): MutableLiveData<NetworkResponse<SaveInstallmentResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     saveInstallments.value = NetworkResponse.Loading()
@@ -441,14 +437,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     saveInstallments.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            saveInstallments.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            saveInstallments.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return saveInstallments
     }
 
     fun installmentPayments(context: Context, requestBody: InstallmentPaymentReqModel): MutableLiveData<NetworkResponse<InstallmentPaymentResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     installmentsPayment.value = NetworkResponse.Loading()
@@ -464,14 +460,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     installmentsPayment.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            installmentsPayment.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            installmentsPayment.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return installmentsPayment
     }
 
     fun deleteAttachment(context: Context, requestBody: AttachmentDeleteReqModel): MutableLiveData<NetworkResponse<AttachmentDeleteResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     deleteAttachment.value = NetworkResponse.Loading()
@@ -487,14 +483,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     deleteAttachment.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            deleteAttachment.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            deleteAttachment.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return deleteAttachment
     }
 
     fun likeClicked(context: Context, requestBody: LikePostDescussionReqModel): MutableLiveData<NetworkResponse<LikePostDiscussionResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     likeClicked.value = NetworkResponse.Loading()
@@ -510,14 +506,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     likeClicked.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            likeClicked.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            likeClicked.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return likeClicked
     }
 
     fun updateSingleMoveMyJobPost(context: Context, requestBody: MyJobPostSingleMoveEditReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateSingleMoveMyJobPost.value = NetworkResponse.Loading()
@@ -533,14 +529,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateSingleMoveMyJobPost.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            updateSingleMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            updateSingleMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return updateSingleMoveMyJobPost
     }
 
     fun updateBlueCollarMyJobPost(context: Context, requestBody: MyJobPostEditBlueCollarReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateBlueCollarMyJobPost.value = NetworkResponse.Loading()
@@ -556,14 +552,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateBlueCollarMyJobPost.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            updateBlueCollarMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            updateBlueCollarMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return updateBlueCollarMyJobPost
     }
 
     fun updateMultiMoveMyJobPost(context: Context, requestBody: MyJobPostMultiMoveEditReqModel): MutableLiveData<NetworkResponse<MyPostJobEditResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateMultiMoveMyJobPost.value = NetworkResponse.Loading()
@@ -579,14 +575,14 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateMultiMoveMyJobPost.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            updateMultiMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            updateMultiMoveMyJobPost.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return updateMultiMoveMyJobPost
     }
 
     fun rejectPostJobStatus(context: Context, requestBody: RejectJobPostStatusReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     rejectJobPostStatus.value = NetworkResponse.Loading()
@@ -603,9 +599,9 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     rejectJobPostStatus.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            rejectJobPostStatus.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            rejectJobPostStatus.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return rejectJobPostStatus
     }
 

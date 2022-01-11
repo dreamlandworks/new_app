@@ -23,7 +23,7 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
     var pauseBooking = MutableLiveData<NetworkResponse<String>>()
 
     fun getMyBookingDetails(context: Context, requestBody: MyBookingsReqModel): MutableLiveData<NetworkResponse<List<BookingDetail>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     myBookings.value = NetworkResponse.Loading()
@@ -38,14 +38,14 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     myBookings.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            myBookings.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            myBookings.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return myBookings
     }
 
     fun otpRequest(context: Context, bookingId: Int, userType: String): MutableLiveData<NetworkResponse<Int>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     otpRequest.value = NetworkResponse.Loading()
@@ -60,14 +60,14 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     otpRequest.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            otpRequest.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            otpRequest.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return otpRequest
     }
 
     fun validateOTP(context: Context, bookingId: Int, spId: Int): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     validateOTP.value = NetworkResponse.Loading()
@@ -82,14 +82,14 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     validateOTP.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            validateOTP.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            validateOTP.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return validateOTP
     }
 
     fun pauseBooking(context: Context, requestBody: ProviderPauseBookingReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     pauseBooking.value = NetworkResponse.Loading()
@@ -104,14 +104,14 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     pauseBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            pauseBooking.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            pauseBooking.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return pauseBooking
     }
 
     fun resumeBooking(context: Context, requestBody: ProviderBookingResumeReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     resumeBooking.value = NetworkResponse.Loading()
@@ -126,11 +126,10 @@ class MyBookingsViewModel(private val repository: MyBookingsRepository): ViewMod
                     resumeBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            resumeBooking.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            resumeBooking.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return resumeBooking
     }
-
 
 }

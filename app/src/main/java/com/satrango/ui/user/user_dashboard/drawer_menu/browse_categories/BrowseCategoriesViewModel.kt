@@ -21,10 +21,10 @@ class BrowseCategoriesViewModel(private val repository: BrowseCategoriesReposito
     val browseSubCategoriesList = MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>>()
 
     fun getBrowseCategories(context: Context): MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                browseCategoriesList.value = NetworkResponse.Loading()
                 try {
+                    browseCategoriesList.value = NetworkResponse.Loading()
                     val categoriesList = ArrayList<BrowserCategoryModel>()
                     val response = async { repository.getBrowseCategories() }
                     val responseObject = JSONObject(response.await().string())
@@ -46,18 +46,17 @@ class BrowseCategoriesViewModel(private val repository: BrowseCategoriesReposito
                     browseCategoriesList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            browseCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
-        }
-
+//        } else {
+//            browseCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return browseCategoriesList
     }
 
     fun getBrowseSubCategories(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                browseSubCategoriesList.value = NetworkResponse.Loading()
                 try {
+                    browseSubCategoriesList.value = NetworkResponse.Loading()
                     val subCategoriesList = ArrayList<BrowserSubCategoryModel>()
                     val response = async { repository.getBrowseSubCategories(categoryId) }
                     val responseObject = JSONObject(response.await().string())
@@ -82,10 +81,9 @@ class BrowseCategoriesViewModel(private val repository: BrowseCategoriesReposito
                     browseSubCategoriesList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            browseSubCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
-        }
-
+//        } else {
+//            browseSubCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return browseSubCategoriesList
     }
 }

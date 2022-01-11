@@ -23,7 +23,7 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
     val uploadIdProof = MutableLiveData<NetworkResponse<String>>()
 
     fun providerActivation(context: Context, requestBody: ProviderSignUpFourReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     providerActivation.value = NetworkResponse.Loading()
@@ -41,14 +41,14 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
                     providerActivation.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            providerActivation.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            providerActivation.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return providerActivation
     }
 
     fun uploadIdProof(context: Context, requestBody: ProviderIdProofReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     uploadIdProof.value = NetworkResponse.Loading()
@@ -63,9 +63,9 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
                     uploadIdProof.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            uploadIdProof.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            uploadIdProof.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return uploadIdProof
     }
 

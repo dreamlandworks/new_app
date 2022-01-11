@@ -30,7 +30,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
         context: Context,
         requestBody: ProviderBookingReqModel
     ): MutableLiveData<NetworkResponse<List<JobPostDetail>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     bidsList.value = NetworkResponse.Loading()
@@ -45,9 +45,9 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     bidsList.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            bidsList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            bidsList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return bidsList
     }
 
@@ -55,7 +55,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
         context: Context,
         requestBody: ProviderBookingReqModel
     ): MutableLiveData<NetworkResponse<List<JobPostDetail>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     jobsList.value = NetworkResponse.Loading()
@@ -71,9 +71,9 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     jobsList.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            jobsList.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            jobsList.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return jobsList
     }
 
@@ -81,7 +81,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
         context: Context,
         requestBody: ProviderPostBidReqModel
     ): MutableLiveData<NetworkResponse<ProviderPostBidResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     postBid.value = NetworkResponse.Loading()
@@ -96,9 +96,9 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     postBid.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            postBid.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            postBid.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return postBid
     }
 
@@ -106,7 +106,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
         context: Context,
         requestBody: ProviderDeleteBidAttachmentReqModel
     ): MutableLiveData<NetworkResponse<ResponseBody>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     deleteBidAttachment.value = NetworkResponse.Loading()
@@ -117,9 +117,9 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     deleteBidAttachment.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            deleteBidAttachment.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            deleteBidAttachment.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return deleteBidAttachment
     }
 
@@ -127,7 +127,7 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
         context: Context,
         requestBody: ProviderBidEditReqModel
     ): MutableLiveData<NetworkResponse<ResponseBody>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     editBid.value = NetworkResponse.Loading()
@@ -138,9 +138,9 @@ class ProviderMyBidsViewModel(private val repository: ProviderMyBidsRepository) 
                     editBid.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            editBid.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            editBid.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return editBid
     }
 

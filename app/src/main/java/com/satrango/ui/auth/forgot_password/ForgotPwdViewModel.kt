@@ -17,7 +17,7 @@ class ForgotPwdViewModel(private val repository: ForgotPwdRepository) : ViewMode
     val verifyUser = MutableLiveData<NetworkResponse<String>>()
 
     fun verifyUser(context: Context, requestBody: ForgotPwdVerifyReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     verifyUser.value = NetworkResponse.Loading()
@@ -32,9 +32,9 @@ class ForgotPwdViewModel(private val repository: ForgotPwdRepository) : ViewMode
                     verifyUser.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            verifyUser.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            verifyUser.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return verifyUser
     }
 

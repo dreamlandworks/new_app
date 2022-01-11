@@ -12,9 +12,10 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.p
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 
-class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView.Adapter<ProviderMyBidsAdapter.ViewHolder>() {
+class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
+    RecyclerView.Adapter<ProviderMyBidsAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: ProviderMybidsRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: ProviderMybidsRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
         fun bind(data: JobPostDetail) {
@@ -29,7 +30,8 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView
             binding.priceRange.text = "Rs ${data.amount}"
             binding.scheduleDate.text = data.scheduled_date
             if (data.job_post_description.isNotEmpty()) {
-                binding.jobLocation.text = data.job_post_description[0].locality
+                binding.jobLocation.text =
+                    "${data.job_post_description[0].locality}, ${data.job_post_description[0].city}"
                 binding.description.text = data.job_post_description[0].job_description
             }
             binding.bidCount.text = data.total_bids.toString()
@@ -40,7 +42,8 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView
                     MyJobPostViewScreen.FROM_PROVIDER = true
                     ProviderPlaceBidScreen.FROM_EDIT_BID = false
                     ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
-                    val intent = Intent(binding.root.context, ProviderViewPlacedBidScreen::class.java)
+                    val intent =
+                        Intent(binding.root.context, ProviderViewPlacedBidScreen::class.java)
                     intent.putExtra("booking_id", data.booking_id)
                     intent.putExtra("category_id", data.category_id)
                     intent.putExtra("post_job_id", data.post_job_id)
@@ -108,7 +111,13 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>): RecyclerView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ProviderMybidsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ProviderMybidsRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

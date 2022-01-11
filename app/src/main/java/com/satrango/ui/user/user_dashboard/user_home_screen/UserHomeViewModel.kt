@@ -24,11 +24,11 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
     val browseCategoriesList = MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>>()
 
     fun getPopularServicesList(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                val popularServicesList = ArrayList<BrowserSubCategoryModel>()
-                popularServices.value = NetworkResponse.Loading()
                 try {
+                    val popularServicesList = ArrayList<BrowserSubCategoryModel>()
+                    popularServices.value = NetworkResponse.Loading()
                     val response = async { userHomeRepository.getPopularServices(categoryId) }
                     val responseObject = JSONObject(response.await().string())
                     if (responseObject.getInt("status") == 200) {
@@ -50,17 +50,17 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
                     popularServices.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            popularServices.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            popularServices.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return popularServices
     }
 
     fun getBrowseCategories(context: Context): MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                browseCategoriesList.value = NetworkResponse.Loading()
                 try {
+                    browseCategoriesList.value = NetworkResponse.Loading()
                     val categoriesList = ArrayList<BrowserCategoryModel>()
                     val response = async { userHomeRepository.getBrowseCategories() }
                     val responseObject = JSONObject(response.await().string())
@@ -81,10 +81,9 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
                     browseCategoriesList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            browseCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
-        }
-
+//        } else {
+//            browseCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return browseCategoriesList
     }
 

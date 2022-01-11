@@ -1,7 +1,11 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -19,6 +23,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAccountDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.snackBar
 
 class UserMyAccountScreen : AppCompatActivity() {
@@ -38,6 +43,45 @@ class UserMyAccountScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
+        binding.withDrawBtn.setOnClickListener {
+            FundTransferScreen.FROM_PROVIDER = false
+            startActivity(Intent(this, FundTransferScreen::class.java))
+        }
+    }
+
+    private var connectionReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val notConnected = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+            if (notConnected) {
+                disconnected()
+            } else {
+                connected()
+            }
+        }
+    }
+
+    private fun connected() {
+        loadScreen()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun disconnected() {
+        binding.noteText.visibility = View.VISIBLE
+        binding.noteText.text = "Internet Connection Lost"
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(connectionReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(connectionReceiver)
+    }
+
+    private fun loadScreen() {
+        binding.noteText.visibility = View.GONE
         val factory = ViewModelFactory(MyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
         viewModel.myAccountDetails(this).observe(this, {
@@ -55,12 +99,6 @@ class UserMyAccountScreen : AppCompatActivity() {
                 }
             }
         })
-
-        binding.withDrawBtn.setOnClickListener {
-            FundTransferScreen.FROM_PROVIDER = false
-            startActivity(Intent(this, FundTransferScreen::class.java))
-        }
-
     }
 
     private fun initializeToolBar() {
@@ -69,8 +107,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.account)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.account)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
     }

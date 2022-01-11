@@ -18,10 +18,10 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
     val userLogout = MutableLiveData<NetworkResponse<String>>()
 
     fun userLogin(context: Context, requestBody: UserLoginModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            userLogin.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    userLogin.value = NetworkResponse.Loading()
                     val response = async { repository.login(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     Log.e("LOGIN", jsonObject.toString())
@@ -34,15 +34,15 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                     userLogin.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return userLogin
     }
 
     fun userLogout(context: Context, requestBody: LogoutReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            userLogout.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    userLogout.value = NetworkResponse.Loading()
                     val response = async { repository.logout(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     Log.e("LOGOUT", jsonObject.toString())
@@ -55,7 +55,7 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                     userLogout.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return userLogout
     }
 

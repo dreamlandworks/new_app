@@ -46,10 +46,10 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
     val rescheduleStatusChange = MutableLiveData<NetworkResponse<String>>()
 
     fun singleMoveBooking(context: Context, requestBody: SingleMoveBookingReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                singleMoveBooking.value = NetworkResponse.Loading()
                 try {
+                    singleMoveBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookSingleMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     Log.e("SINGLE BOOKING", jsonResponse.toString())
@@ -64,18 +64,18 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     singleMoveBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            singleMoveBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            singleMoveBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
 
         return singleMoveBooking
     }
 
     fun blueCollarBooking(context: Context, requestBody: BlueCollarBookingReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                blueCollarBooking.value = NetworkResponse.Loading()
                 try {
+                    blueCollarBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookBlueCollarServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     Log.e("BLUECOLLAR BOOKING", jsonResponse.toString())
@@ -90,17 +90,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     blueCollarBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            blueCollarBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            blueCollarBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return blueCollarBooking
     }
 
     fun multiMoveBooking(context: Context, requestBody: MultiMoveReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                multiMoveBooking.value = NetworkResponse.Loading()
                 try {
+                    multiMoveBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookMultiMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     Log.e("MULTIMOVE BOOKING", jsonResponse.toString())
@@ -115,34 +115,34 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     multiMoveBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            multiMoveBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            multiMoveBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return multiMoveBooking
     }
 
     fun addBookingAddress(context: Context, requestBody: AddBookingAddressReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                addBookingAddress.value = NetworkResponse.Loading()
                 try {
+                    addBookingAddress.value = NetworkResponse.Loading()
                     val response = async { repository.addBookingAddress(requestBody) }
                     addBookingAddress.value = NetworkResponse.Success(response.await().string())
                 } catch (e: Exception) {
                     addBookingAddress.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            addBookingAddress.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            addBookingAddress.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return addBookingAddress
     }
 
     fun confirmPayment(context: Context, requestBody: PaymentConfirmReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                confirmBooking.value = NetworkResponse.Loading()
                 try {
+                    confirmBooking.value = NetworkResponse.Loading()
                     val response = async { repository.confirmBooking(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("status") == 200) {
@@ -154,34 +154,34 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     confirmBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            confirmBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            confirmBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return confirmBooking
     }
 
     fun viewBookingDetails(context: Context, requestBody: BookingDetailsReqModel): MutableLiveData<NetworkResponse<BookingDetailsResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                viewBookingDetails.value = NetworkResponse.Loading()
                 try {
+                    viewBookingDetails.value = NetworkResponse.Loading()
                     val response = async { repository.viewBookingDetails(requestBody) }
                     viewBookingDetails.value = NetworkResponse.Success(response.await())
                 } catch (e: Exception) {
                     viewBookingDetails.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            viewBookingDetails.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            viewBookingDetails.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return viewBookingDetails
     }
 
     fun setProviderResponse(context: Context, requestBody: ProviderResponseReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                providerResponse.value = NetworkResponse.Loading()
                 try {
+                    providerResponse.value = NetworkResponse.Loading()
                     Log.e("REQUEST:", Gson().toJson(requestBody))
                     val response = async { repository.setProviderResponse(requestBody) }
                     providerResponse.value = NetworkResponse.Success(response.await().string())
@@ -189,34 +189,34 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     providerResponse.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            providerResponse.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            providerResponse.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return providerResponse
     }
 
     fun rescheduleBooking(context: Context, requestBody: RescheduleBookingReqModel): MutableLiveData<NetworkResponse<RescheduleBookingResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                rescheduleBooking.value = NetworkResponse.Loading()
                 try {
+                    rescheduleBooking.value = NetworkResponse.Loading()
                     val response = async { repository.reschedule(requestBody) }
                     rescheduleBooking.value = NetworkResponse.Success(response.await())
                 } catch (e: Exception) {
                     rescheduleBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            rescheduleBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            rescheduleBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return rescheduleBooking
     }
 
     fun spSlots(context: Context, spId: Int): MutableLiveData<NetworkResponse<SlotsData>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                spSlots.value = NetworkResponse.Loading()
                 try {
+                    spSlots.value = NetworkResponse.Loading()
                     val response = async { repository.getSpSlots(spId) }
                     val jsonObject = JSONObject(JSONObject(response.await().string()).getJSONObject("slots_data").toString())
                     jsonObject.put("user_id", UserUtils.getUserId(context))
@@ -225,17 +225,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     spSlots.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            spSlots.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            spSlots.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return spSlots
     }
 
     fun cancelBooking(context: Context, requestBody: UserBookingCancelReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                cancelBooking.value = NetworkResponse.Loading()
                 try {
+                    cancelBooking.value = NetworkResponse.Loading()
                     val response = async { repository.cancelBooking(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -247,17 +247,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     cancelBooking.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            cancelBooking.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            cancelBooking.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return cancelBooking
     }
 
     fun changeExtraDemandStatus(context: Context, requestBody: ChangeExtraDemandStatusReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                changeExtraDemandStatus.value = NetworkResponse.Loading()
                 try {
+                    changeExtraDemandStatus.value = NetworkResponse.Loading()
                     val response = async { repository.changeExtraDemandStatus(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -269,17 +269,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     changeExtraDemandStatus.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            changeExtraDemandStatus.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            changeExtraDemandStatus.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return changeExtraDemandStatus
     }
 
     fun getInstallmentsList(context: Context, postJobId: Int): MutableLiveData<NetworkResponse<GoalsInstallmentsResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                getInstallmentsList.value = NetworkResponse.Loading()
                 try {
+                    getInstallmentsList.value = NetworkResponse.Loading()
                     val response = async { repository.getInstallments(postJobId) }
                     if (response.await().status == 200) {
                         getInstallmentsList.value = NetworkResponse.Success(response.await())
@@ -290,17 +290,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     getInstallmentsList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            getInstallmentsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            getInstallmentsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return getInstallmentsList
     }
 
     fun postApproveReject(context: Context, requestBody: PostApproveRejectReqModel): MutableLiveData<NetworkResponse<PostApproveRejectResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                postApproveReject.value = NetworkResponse.Loading()
                 try {
+                    postApproveReject.value = NetworkResponse.Loading()
                     val response = async { repository.postInstallmentApproveReject(requestBody) }
                     if (response.await().status == 200) {
                         postApproveReject.value = NetworkResponse.Success(response.await())
@@ -311,17 +311,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     postApproveReject.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            postApproveReject.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            postApproveReject.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return postApproveReject
     }
 
     fun getBookingStatusList(context: Context, bookingId: Int): MutableLiveData<NetworkResponse<GetBookingStatusListResModel>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                getBookingStatusList.value = NetworkResponse.Loading()
                 try {
+                    getBookingStatusList.value = NetworkResponse.Loading()
                     val response = async { repository.getBookingStatusList(bookingId) }
                     if (response.await().status == 200) {
                         getBookingStatusList.value = NetworkResponse.Success(response.await())
@@ -332,17 +332,17 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     getBookingStatusList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            getBookingStatusList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            getBookingStatusList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return getBookingStatusList
     }
 
     fun rescheduleStatusChange(context: Context, requestBody: RescheduleStatusChangeReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                rescheduleStatusChange.value = NetworkResponse.Loading()
                 try {
+                    rescheduleStatusChange.value = NetworkResponse.Loading()
                     val response = async { repository.rescheduleChangeStatus(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("status") == 200) {
@@ -354,9 +354,9 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     rescheduleStatusChange.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            rescheduleStatusChange.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            rescheduleStatusChange.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return rescheduleStatusChange
     }
 

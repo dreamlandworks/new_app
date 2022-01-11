@@ -25,10 +25,10 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
     val onlineStatus = MutableLiveData<NetworkResponse<String>>()
 
     fun userProfile(context: Context): MutableLiveData<NetworkResponse<Data>> {
-        if (hasInternetConnection(context)) {
-            userProfile.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    userProfile.value = NetworkResponse.Loading()
                     val response = async { repository.userProfile(context) }
                     Log.e("PROFILE: ", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
@@ -40,15 +40,15 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                     userProfile.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return userProfile
     }
 
     fun saveLocation(context: Context, requestBody: ProviderLocationReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            saveLocation.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
+                    saveLocation.value = NetworkResponse.Loading()
                     val response = repository.uploadUserLocation(requestBody)
                     val jsonResponse = JSONObject(response.string())
                     Log.e("LOCATION", jsonResponse.toString())
@@ -61,15 +61,15 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                     saveLocation.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return saveLocation
     }
 
     fun onlineStatus(context: Context, requestBody: ProviderOnlineReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            onlineStatus.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
+                    onlineStatus.value = NetworkResponse.Loading()
                     val response = repository.updateProviderOnlineStatus(requestBody)
                     val jsonResponse = JSONObject(response.string())
                     Log.e("LOCATION", jsonResponse.toString())
@@ -82,7 +82,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                     onlineStatus.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return onlineStatus
     }
 

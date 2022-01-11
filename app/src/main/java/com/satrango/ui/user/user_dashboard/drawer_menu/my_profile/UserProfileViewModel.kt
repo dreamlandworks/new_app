@@ -26,10 +26,10 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
     val deleteUserAddress = MutableLiveData<NetworkResponse<String>>()
 
     fun userProfileInfo(context: Context, userId: String): MutableLiveData<NetworkResponse<Data>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                userProfileInfo.value = NetworkResponse.Loading()
                 try {
+                    userProfileInfo.value = NetworkResponse.Loading()
                     val response = async { repository.userProfileInfo(userId) }
                     if (response.await().status == 200) {
                         userProfileInfo.value = NetworkResponse.Success(response.await().data)
@@ -40,18 +40,17 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
                     userProfileInfo.value = NetworkResponse.Failure(e.message)
                 }
             }
-        } else {
-            userProfileInfo.value = NetworkResponse.Failure("No internet Connection!")
-        }
-
+//        } else {
+//            userProfileInfo.value = NetworkResponse.Failure("No internet Connection!")
+//        }
         return userProfileInfo
     }
 
     fun updateProfileInfo(context: Context, requestBody: UserProfileUpdateReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                updateProfileInfo.value = NetworkResponse.Loading()
                 try {
+                    updateProfileInfo.value = NetworkResponse.Loading()
                     val response = async { repository.updateProfileInfo(requestBody) }
                     val responseObject = response.await()
                     val jsonObject = JSONObject(responseObject.string())
@@ -65,17 +64,17 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
                     updateProfileInfo.value = NetworkResponse.Failure("Error: " + e.message)
                 }
             }
-        } else {
-            updateProfileInfo.value = NetworkResponse.Failure("No Internet Connection!")
-        }
+//        } else {
+//            updateProfileInfo.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return updateProfileInfo
     }
 
     fun deleteUserAddress(context: Context, requestBody: BrowseCategoryReqModel): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                deleteUserAddress.value = NetworkResponse.Loading()
                 try {
+                    deleteUserAddress.value = NetworkResponse.Loading()
                     val response = async { repository.deleteUserAddress(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -87,10 +86,9 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
                     deleteUserAddress.value = NetworkResponse.Failure(e.message!!)
                 }
             }
-        } else {
-            deleteUserAddress.value = NetworkResponse.Failure("No Internet Connection!")
-        }
-
+//        } else {
+//            deleteUserAddress.value = NetworkResponse.Failure("No Internet Connection!")
+//        }
         return deleteUserAddress
     }
 

@@ -19,7 +19,7 @@ class ProviderOfferViewModel(private val repository: ProviderOfferRepository): V
     val userOfferRepository = UserAlertsRepository()
 
     fun getOffers(context: Context, requestBody: OffersListReqModel): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     offersList.value = NetworkResponse.Loading()
@@ -34,7 +34,7 @@ class ProviderOfferViewModel(private val repository: ProviderOfferRepository): V
                     offersList.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return offersList
     }
 

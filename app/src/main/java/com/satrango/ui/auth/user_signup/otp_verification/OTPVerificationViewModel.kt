@@ -19,10 +19,10 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
 
 
     fun forgotPwdRequestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                forgotPwdRequestOTP.value = NetworkResponse.Loading()
                 try {
+                    forgotPwdRequestOTP.value = NetworkResponse.Loading()
                     val response = async { repository.forgotPwdRequestOTP(context) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -35,15 +35,15 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                 }
 
             }
-        }
+//        }
         return forgotPwdRequestOTP
     }
 
     fun requestOTP(context: Context): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
-                requestOTP.value = NetworkResponse.Loading()
                 try {
+                    requestOTP.value = NetworkResponse.Loading()
                     val response = async { repository.requestOTP(context) }
                     val jsonObject = JSONObject(response.await().string())
                     if (jsonObject.getInt("status") == 200) {
@@ -56,7 +56,7 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                     requestOTP.value = NetworkResponse.Failure(e.message)
                 }
             }
-        }
+//        }
         return requestOTP
     }
 

@@ -19,10 +19,10 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
     val updateAlertsToRead = MutableLiveData<NetworkResponse<String>>()
 
     fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
-            normalAlertsList.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    normalAlertsList.value = NetworkResponse.Loading()
                     val response = async { repository.getProviderAlerts("1") }
                     if (response.await().status == 200) {
                         normalAlertsList.value = NetworkResponse.Success(response.await().data)
@@ -34,17 +34,17 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
                 }
 
             }
-        } else {
-            normalAlertsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            normalAlertsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return normalAlertsList
     }
 
     fun getActionableAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
-        if (hasInternetConnection(context)) {
-            actionableAlertsList.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    actionableAlertsList.value = NetworkResponse.Loading()
                     val response = async { repository.getProviderAlerts("2") }
                     if (response.await().status == 200) {
                         actionableAlertsList.value = NetworkResponse.Success(response.await().data)
@@ -56,17 +56,17 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
                 }
 
             }
-        } else {
-            actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            actionableAlertsList.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return actionableAlertsList
     }
 
     fun updateAlertsToRead(context: Context, alertType: String): MutableLiveData<NetworkResponse<String>> {
-        if (hasInternetConnection(context)) {
-            updateAlertsToRead.value = NetworkResponse.Loading()
+//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
+                    updateAlertsToRead.value = NetworkResponse.Loading()
                     val response = async { repository.updateAlertToRead(context, alertType) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("id") == 200) {
@@ -79,9 +79,9 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
                 }
 
             }
-        } else {
-            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
-        }
+//        } else {
+//            updateAlertsToRead.value = NetworkResponse.Failure("No Internet Connection")
+//        }
         return updateAlertsToRead
     }
 
