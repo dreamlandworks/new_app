@@ -102,9 +102,7 @@ class ProviderSignUpFour: AppCompatActivity() {
     }
 
     private fun selectImage() {
-        val items = arrayOf<CharSequence>("Choose from Library"
-            , "Capture with Camera"
-        )
+        val items = arrayOf<CharSequence>("Choose from Library", "Capture with Camera")
         val builder = AlertDialog.Builder(this@ProviderSignUpFour)
         builder.setTitle("Add Photo!")
         builder.setItems(items) { dialog, item ->
