@@ -742,6 +742,23 @@ object UserUtils {
         }
     }
 
+    fun sendExtraDemandFCM(
+        context: Context,
+        token: String,
+        bookingId: String,
+        categoryId: String,
+        userId: String,
+    ) {
+        val map = mutableMapOf<String, String>()
+        map["Content-Type"] = "application/json"
+        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        val requestBody = FCMMessageReqModel(Data("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId", "extraDemand"), "high", token)
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
+            Log.e("FCM RESPONSE:", token)
+        }
+    }
+
     private fun sendCancelFCM(
         context: Context,
         token: String,

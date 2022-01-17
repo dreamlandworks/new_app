@@ -2,12 +2,15 @@ package com.satrango.ui.user.user_dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -16,6 +19,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,21 +27,31 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.location.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.auth.login_screen.LoginRepository
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.login_screen.LoginViewModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
@@ -79,8 +93,10 @@ class UserDashboardScreen : AppCompatActivity() {
         binding = ActivityUserDashboardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
+
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
         initializeProgressDialog()
@@ -189,8 +205,6 @@ class UserDashboardScreen : AppCompatActivity() {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
-
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -449,4 +463,133 @@ class UserDashboardScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            openBookingDetails(bookingId, categoryId, userId)
+        }
+    }
+
+    fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
+        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    updateUI(it.data!!, bookingId, viewModel)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.navigationView, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun updateUI(
+        response: BookingDetailsResModel,
+        bookingId: String,
+        viewModel: BookingViewModel
+    ) {
+        if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
+            if (response.booking_details.extra_demand_total_amount != 0.0) {
+                if (response.booking_details.extra_demand_status == "0") {
+                    showExtraDemandAcceptDialog(
+                        bookingId.toInt(),
+                        response.booking_details.material_advance.toString(),
+                        response.booking_details.technician_charges.toString(),
+                        response.booking_details.extra_demand_total_amount.toString(),
+                        progressDialog,
+                        viewModel
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showExtraDemandAcceptDialog(
+        bookingId: Int,
+        materialAdvance: String,
+        technicalCharges: String,
+        extraDemandTotalAmount: String,
+        progressDialog: BeautifulProgressDialog,
+        viewModel: BookingViewModel
+    ) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
+        val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
+        val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
+        val totalCost = dialogView.findViewById<TextView>(R.id.totalCost)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+
+        materialCharges.text = materialAdvance
+        technicianCharges.text = technicalCharges
+        totalCost.text = extraDemandTotalAmount
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        acceptBtn.setOnClickListener {
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog, viewModel)
+        }
+
+        rejectBtn.setOnClickListener {
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog, viewModel)
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun changeExtraDemandStatus(
+        bookingId: Int,
+        status: Int,
+        dialog: BottomSheetDialog,
+        progressDialog: BeautifulProgressDialog,
+        viewModel: BookingViewModel
+    ) {
+        val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    dialog.dismiss()
+                    if (status == 2) {
+                        snackBar(binding.navigationView, "Extra Demand Accepted")
+                    } else {
+                        snackBar(binding.navigationView, "Extra Demand Rejected")
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                }
+            }
+        })
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+    }
 }

@@ -774,6 +774,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                 progressDialog.show()
                             }
                             is NetworkResponse.Success -> {
+                                UserUtils.sendExtraDemandFCM(this, response.booking_details.fcm_token, bookingId, categoryId, userId)
                                 progressDialog.dismiss()
                                 dialog.dismiss()
                                 snackBar(binding.inProgressViewStatusBtn, "Extra Demand Raised")
@@ -857,7 +858,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             } else {
                 bottomSheetDialog.dismiss()
             }
-
         }
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)

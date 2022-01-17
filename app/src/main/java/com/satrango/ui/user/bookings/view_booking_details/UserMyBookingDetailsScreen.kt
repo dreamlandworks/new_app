@@ -72,12 +72,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
-        val requestBody = BookingDetailsReqModel(
-            bookingId.toInt(),
-            categoryId.toInt(),
-            RetrofitBuilder.USER_KEY,
-            userId.toInt()
-        )
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this, {
             when (it) {
@@ -162,10 +157,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(
-                binding.root.context.getString(R.string.user_id),
-                UserUtils.getUserId(binding.root.context)
-            )
+            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
             binding.root.context.startActivity(intent)
         }
 

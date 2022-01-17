@@ -43,6 +43,7 @@ class FCMService : FirebaseMessagingService() {
         val INTENT_FILTER = "INTENT_FILTER"
         val INTENT_FILTER_ONE = "INTENT_FILTER_ONE"
         val OTP_INTENT_FILTER = "OTP_INTENT_FILTER"
+        val EXTRA_DEMAND_ACCEPT_REJECT = "EXTRA_DEMAND_ACCEPT_REJECT"
         lateinit var notificationManager: NotificationManager
     }
 
@@ -110,6 +111,12 @@ class FCMService : FirebaseMessagingService() {
                         intent.putExtra("response", body)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
+                    } else if (title == "extraDemand") {
+                        val notificationIntent = Intent(EXTRA_DEMAND_ACCEPT_REJECT)
+                        notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
+                        notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
+                        notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                        sendBroadcast(notificationIntent)
                     } else {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", body)

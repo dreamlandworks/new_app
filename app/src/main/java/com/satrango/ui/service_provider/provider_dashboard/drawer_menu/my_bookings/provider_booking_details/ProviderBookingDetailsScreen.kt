@@ -266,6 +266,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                                 progressDialog.show()
                             }
                             is NetworkResponse.Success -> {
+                                UserUtils.sendExtraDemandFCM(this, response.booking_details.fcm_token, bookingId, categoryId, userId)
                                 progressDialog.dismiss()
                                 dialog.dismiss()
                                 toast(this, "Extra Demand Raised")
