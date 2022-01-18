@@ -111,7 +111,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         val message = bottomSheet.findViewById<TextView>(R.id.message)
         val noBtn = bottomSheet.findViewById<TextView>(R.id.noBtn)
         val yesBtn = bottomSheet.findViewById<TextView>(R.id.yesBtn)
-        message.text = Html.fromHtml("Looks like Service Provider <b>$messageText</b>. Shall we choose the best for your need.")
+        message.text = Html.fromHtml("Looks like Service Provider <b>'$messageText'</b>. Shall we choose the best for your need.")
         closeBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))

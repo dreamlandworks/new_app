@@ -83,8 +83,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
     }
 
     private fun updateUI(status: String) {
-        val requestBody =
-            MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
 
         viewModel.getMyBookingDetails(this, requestBody).observe(this, {
             when (it) {
@@ -104,10 +103,9 @@ class UserMyBookingsScreen : AppCompatActivity() {
                                 list.add(details)
                             }
                         }
-
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = MyBookingsAdapter(list)
+                    binding.recyclerView.adapter = MyBookingsAdapter(list.sortedByDescending { data -> data.booking_id })
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {

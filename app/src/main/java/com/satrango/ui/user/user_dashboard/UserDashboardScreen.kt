@@ -540,11 +540,11 @@ class UserDashboardScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog, viewModel)
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog, viewModel)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog, viewModel)
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog, viewModel)
         }
 
         dialog.setCancelable(false)
@@ -560,15 +560,17 @@ class UserDashboardScreen : AppCompatActivity() {
         viewModel: BookingViewModel
     ) {
         val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        Log.e("STATUS:", Gson().toJson(requestBody))
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    Log.e("STATUS:", Gson().toJson(it.data!!))
                     progressDialog.dismiss()
                     dialog.dismiss()
-                    if (status == 2) {
+                    if (status == 1) {
                         snackBar(binding.navigationView, "Extra Demand Accepted")
                     } else {
                         snackBar(binding.navigationView, "Extra Demand Rejected")

@@ -105,18 +105,18 @@ class FCMService : FirebaseMessagingService() {
                         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
                         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
                         sendBroadcast(notificationIntent)
+                    } else if (title == "extraDemand") {
+                        val notificationIntent = Intent(EXTRA_DEMAND_ACCEPT_REJECT)
+                        notificationIntent.putExtra(application.getString(R.string.booking_id), body!!.split("|")[0])
+                        notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
+                        notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                        sendBroadcast(notificationIntent)
                     } else if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
                         Log.e("FCM ELSE PART:", "$title::$body")
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", body)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-                    } else if (title == "extraDemand") {
-                        val notificationIntent = Intent(EXTRA_DEMAND_ACCEPT_REJECT)
-                        notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
-                        notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                        notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
-                        sendBroadcast(notificationIntent)
                     } else {
                         val intent = Intent(this, ProviderBookingResponseScreen::class.java)
                         intent.putExtra("response", body)

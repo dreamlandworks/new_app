@@ -10,10 +10,12 @@ import com.satrango.databinding.BookingStatusRowBinding
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.BookingStatusDetail
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 
-class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) : RecyclerView.Adapter<GetBookingStatusListAdapter.ViewHolder>() {
+class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
+    RecyclerView.Adapter<GetBookingStatusListAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: BookingStatusRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: BookingStatusRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+
         @SuppressLint("SetTextI18n")
         fun bind(details: BookingStatusDetail, position: Int) {
 
@@ -29,7 +31,7 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
                 binding.image.setImageResource(R.drawable.mark_blue)
                 binding.view.setBackgroundColor(binding.view.resources.getColor(R.color.blue))
             }
-            when(details.status_id) {
+            when (details.status_id) {
                 "13" -> {
                     binding.description.text = "Booking Started and OTP Verified"
                 }
@@ -52,7 +54,13 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(BookingStatusRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            BookingStatusRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

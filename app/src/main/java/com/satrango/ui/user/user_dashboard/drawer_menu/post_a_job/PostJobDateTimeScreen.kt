@@ -554,6 +554,9 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (morningTimings.isEmpty()) {
             binding.morningText.visibility = View.GONE
         } else {
+            if (today) {
+                morningTimings.removeAt(0)
+            }
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.adapter =
                 MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
@@ -561,6 +564,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
         } else {
+            if (today) {
+                if (binding.morningTimeRv.visibility != View.VISIBLE) {
+                    afternoonTimings.removeAt(0)
+                }
+            }
             binding.afternoonText.visibility = View.VISIBLE
             binding.afternoonTimeRv.adapter =
                 MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
@@ -568,6 +576,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
         } else {
+            if (today) {
+                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+                    eveningTimings.removeAt(0)
+                }
+            }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
                 MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
@@ -575,6 +588,9 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
         } else {
+            if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+                nightTimings.removeAt(0)
+            }
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.adapter =
                 MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")

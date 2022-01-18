@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,6 +38,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchVi
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.*
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -221,7 +223,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.getUserId(this).toInt(),
             userType
         )
-
+        Log.e("RESCHEDULE:", Gson().toJson(requestBody))
         viewModel.rescheduleBooking(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -229,10 +231,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
+//                    UserUtils.sendRescheduleFCM(this, data.fcm_token, data.)
                     showRescheduledDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
+                    toast(this, it.message!!)
                     weAreSorryDialog()
                 }
             }
@@ -360,6 +364,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.dayRv.adapter = MonthsAdapter(availableSlots, this@BookingDateAndTimeScreen, "D")
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadTimings(position: Int) {
         availableTimeSlots = ArrayList()
@@ -398,11 +403,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 availableTimeSlots.add(actualTimeSlots[index])
             }
         }
-//        binding.timeRv.layoutManager = LinearLayoutManager(
-//            this@BookingDateAndTimeScreen,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
+
         binding.morningTimeRv.layoutManager = GridLayoutManager(this, 2)
         binding.afternoonTimeRv.layoutManager = GridLayoutManager(this, 2)
         binding.eveningTimeRv.layoutManager = GridLayoutManager(this, 2)
@@ -472,7 +473,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     } else {
                         eveningTimings.add(monthsModel)
                     }
-
                 }
                 UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
                     if (index >= 1) {
@@ -493,7 +493,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     } else {
                         nightTimings.add(monthsModel)
                     }
-
                 }
             }
         }
@@ -504,13 +503,20 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.visibility = View.VISIBLE
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+            if (today) {
+                morningTimings.removeAt(0)
+            }
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
             binding.afternoonTimeRv.visibility = View.GONE
         } else {
+            if (today) {
+                if (binding.morningTimeRv.visibility != View.VISIBLE) {
+                    afternoonTimings.removeAt(0)
+                }
+            }
             binding.afternoonText.visibility = View.VISIBLE
             binding.afternoonTimeRv.visibility = View.VISIBLE
             binding.afternoonTimeRv.adapter =
@@ -520,6 +526,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.eveningText.visibility = View.GONE
             binding.eveningTimeRv.visibility = View.GONE
         } else {
+            if (today) {
+                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+                    eveningTimings.removeAt(0)
+                }
+            }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
@@ -529,6 +540,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.nightText.visibility = View.GONE
             binding.nightTimeRv.visibility = View.GONE
         } else {
+            if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+                nightTimings.removeAt(0)
+            }
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.visibility = View.VISIBLE
             binding.nightTimeRv.adapter =

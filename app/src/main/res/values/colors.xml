@@ -11,7 +11,8 @@
     <color name="purple_700">#6D31F5</color>
     <color name="purple_500">#8D5FF5</color>
 
-    <color name="red">#ff3300</color>
+    <color name="red">#DD2C00</color>
+<!--    <color name="red">#ff3300</color>-->
     <color name="darkRed">#D82B00</color>
     <color name="darkGreen">#00AE48</color>
     <color name="pink">#FF375F</color>

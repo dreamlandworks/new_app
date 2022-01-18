@@ -47,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class UserMyBookingDetailsScreen : AppCompatActivity() {
 
+    private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityUserMyBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
 
@@ -66,7 +67,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 //        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
@@ -87,21 +88,6 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.viewDetailsBtn, it.message!!)
-                }
-            }
-        })
-        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
         })
@@ -235,11 +221,11 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
         }
 
         dialog.setCancelable(false)
@@ -266,7 +252,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     dialog.dismiss()
-                    if (status == 2) {
+                    if (status == 1) {
                         snackBar(binding.recyclerView, "Extra Demand Accepted")
                     } else {
                         snackBar(binding.recyclerView, "Extra Demand Rejected")
@@ -470,15 +456,28 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             })
     }
 
-//    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        @RequiresApi(Build.VERSION_CODES.O)
-//        override fun onReceive(context: Context, intent: Intent) {
-//            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-//            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-//            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-////            toast(context, "$bookingId|$otp|$userId")
-//            requestOTP("User")
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+        updateStatusList()
+    }
+
+    private fun updateStatusList() {
+        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data.booking_status_details)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
+                }
+            }
+        })
+    }
 
 }

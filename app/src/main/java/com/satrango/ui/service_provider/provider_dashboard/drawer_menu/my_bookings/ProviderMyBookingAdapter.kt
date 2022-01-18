@@ -38,6 +38,17 @@ class ProviderMyBookingAdapter(
             binding.amount.text = "Rs ${data.amount}"
             binding.bookingId.text = "Booking Id: ${data.booking_id}"
             binding.scheduleDate.text = data.scheduled_date
+            when (data.category_id) {
+                "1" -> {
+                    binding.bookingType.text = "Single Move"
+                }
+                "2" -> {
+                    binding.bookingType.text = "Blue Collar"
+                }
+                "3" -> {
+                    binding.bookingType.text = "Multi Move"
+                }
+            }
             if (!data.details[0].locality.isNullOrBlank()) {
                 binding.myLocation.text = data.details[0].city
             } else {

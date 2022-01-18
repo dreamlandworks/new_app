@@ -636,11 +636,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
         }
 
         dialog.setCancelable(false)
@@ -667,7 +667,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     dialog.dismiss()
-                    if (status == 2) {
+                    if (status == 1) {
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Accepted")
                     } else {
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Rejected")

@@ -382,7 +382,11 @@ class ProviderDashboard : AppCompatActivity() {
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
             if (categoryId != "2") {
-                jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                if (response.job_details[0].locality.isNullOrBlank()) {
+                    jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                } else {
+                    jobLocation.text = response.job_details[0].locality + ", " + response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                }
             } else {
                 jobLocation.visibility = View.GONE
                 jobLocationText.visibility = View.GONE

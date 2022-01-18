@@ -56,6 +56,7 @@ import java.util.*
 
 class ProviderBookingDetailsScreen : AppCompatActivity() {
 
+    private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityProviderBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -76,7 +77,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 //        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
@@ -117,21 +118,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         })
-        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
-            when(it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
-                }
-            }
-        })
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -388,5 +375,30 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateStatusList()
+    }
+
+    private fun updateStatusList() {
+        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
+            when(it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
+//                    toast(this, Gson().toJson(it.data.booking_status_details))
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data.booking_status_details)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
+                }
+            }
+        })
     }
 }

@@ -128,6 +128,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             }
 
             submitBtn.setOnClickListener {
+
                 validate()
             }
 
@@ -138,7 +139,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     private fun validate() {
         binding.apply {
-
+            reason = feedBack.text.toString().trim()
             if (feedBack.text.toString().isEmpty() && reason == "Others") {
                 snackBar(submitBtn, "Please Enter Reason")
             } else if (reason.isEmpty()) {

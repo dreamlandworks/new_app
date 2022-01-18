@@ -37,7 +37,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/app_name"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/text"
+                    android:textSize="@dimen/sub_text"
                     tools:ignore="RelativeOverlap" />
 
                 <TextView
@@ -59,16 +59,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     app:cardBackgroundColor="@color/red"
-                    app:cardCornerRadius="@dimen/_5sdp">
+                    android:layout_centerVertical="true"
+                    app:cardCornerRadius="@dimen/_10sdp">
 
                     <TextView
                         android:id="@+id/amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_5sdp"
                         android:text="00.00"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text"
+                        android:textSize="@dimen/sub_text"
                         android:textStyle="bold" />
 
                 </com.google.android.material.card.MaterialCardView>

@@ -237,8 +237,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     }
 
     private fun requestOTP(userType: String) {
-        val factory = ViewModelFactory(MyBookingsRepository())
-        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+//        val factory = ViewModelFactory(MyBookingsRepository())
+//        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId.toInt(), userType)
