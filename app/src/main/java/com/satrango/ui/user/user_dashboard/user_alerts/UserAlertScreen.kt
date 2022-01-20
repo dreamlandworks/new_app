@@ -108,11 +108,7 @@ class UserAlertScreen :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            requireActivity(),
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -162,11 +158,9 @@ class UserAlertScreen :
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
         binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
+            Color.parseColor(requireActivity().resources.getString(
                     R.string.white_color
-                )
-            )
+                ))
         )
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)

@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginRight
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -50,6 +51,7 @@ import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
@@ -119,19 +121,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.completedBtn.text = "Start"
                     binding.completedBtn.setOnClickListener {
                         requestOTP("SP")
-//                        if (!FROM_PROVIDER) {
-//                            requestOTP("SP")
-//                        } else {
-//                            requestOTP("User")
-//                        }
                     }
                     binding.startBtn.setOnClickListener {
                         requestOTP("SP")
-//                        if (FROM_PROVIDER) {
-//                            requestOTP("SP")
-//                        } else {
-//                            requestOTP("User")
-//                        }
                     }
                 } else {
                     binding.spLayout.visibility = View.VISIBLE
@@ -152,6 +144,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.userLayout.visibility = View.VISIBLE
                     binding.spLayout.visibility = View.GONE
                     binding.startBtn.visibility = View.GONE
+                    registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
                 } else {
                     binding.spLayout.visibility = View.VISIBLE
                     binding.userLayout.visibility = View.GONE
@@ -793,19 +786,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-//            toast(context, "$bookingId|$otp|$userId")
-            if (!FROM_PROVIDER) {
-                showotpInDialog(otp)
-            }
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun showotpInDialog(otp: String) {
         val bottomSheetDialog = BottomSheetDialog(this)
@@ -857,11 +837,73 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 bottomSheetDialog.dismiss()
+                startActivity(Intent(this, UserMyBookingsScreen::class.java))
             }
         }
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.show()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            openBookingDetails(bookingId, categoryId, userId)
+        }
+    }
+
+    fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
+        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    updateUI(it.data!!, bookingId)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun updateUI(
+        response: BookingDetailsResModel,
+        bookingId: String
+    ) {
+        if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
+            if (response.booking_details.extra_demand_total_amount != 0.0) {
+                if (response.booking_details.extra_demand_status == "0") {
+                    showExtraDemandAcceptDialog(
+                        bookingId.toInt(),
+                        response.booking_details.material_advance.toString(),
+                        response.booking_details.technician_charges.toString(),
+                        response.booking_details.extra_demand_total_amount.toString(),
+                        progressDialog
+                    )
+                }
+            }
+        }
     }
 
 }

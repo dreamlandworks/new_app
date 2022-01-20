@@ -192,8 +192,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
                         technicianCharges.text = response.booking_details.technician_charges
                         materialCharges.text = response.booking_details.material_advance
-                        totalTimeLapsed.text = "$hours:${min}:00 Hrs"
                         totalDues.text = response.booking_details.extra_demand_total_amount
+                        netAmount.text = response.booking_details.extra_demand_total_amount
+                        totalTimeLapsed.text = "$hours:${min}:00 Hrs"
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
                         var lessAmountCount = 0.0
                         for (paid in response.booking_paid_transactions) {

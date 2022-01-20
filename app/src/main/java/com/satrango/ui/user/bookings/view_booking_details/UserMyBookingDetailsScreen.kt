@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -37,6 +38,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.utils.UserUtils
@@ -64,7 +66,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-//        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+        registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -105,11 +107,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -209,10 +207,6 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-
-//        materialCharges.text = response.booking_details.material_advance.toString()
-//        technicianCharges.text = response.booking_details.technician_charges.toString()
-//        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
 
         materialCharges.text = materialAdvance
         technicianCharges.text = technicalCharges
@@ -478,6 +472,67 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            openBookingDetails(bookingId, categoryId, userId)
+        }
+    }
+
+    fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
+        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    updateUI(it.data!!, bookingId)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
+                }
+            }
+        })
+    }
+
+    private fun updateUI(
+        response: BookingDetailsResModel,
+        bookingId: String
+    ) {
+        if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
+            if (response.booking_details.extra_demand_total_amount != 0.0) {
+                if (response.booking_details.extra_demand_status == "0") {
+                    showExtraDemandAcceptDialog(
+                        bookingId.toInt(),
+                        response.booking_details.material_advance.toString(),
+                        response.booking_details.technician_charges.toString(),
+                        response.booking_details.extra_demand_total_amount.toString(),
+                        progressDialog
+                    )
+                }
+            }
+        }
     }
 
 }

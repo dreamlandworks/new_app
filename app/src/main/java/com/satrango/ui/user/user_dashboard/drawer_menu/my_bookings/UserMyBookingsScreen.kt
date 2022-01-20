@@ -43,7 +43,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-        updateUI("InProgress")
+        updateUI("Pending")
         binding.inProgressBtn.setOnClickListener {
             binding.inProgressBtn.setBackgroundResource(R.drawable.user_btn_bg)
             binding.completedBtn.setBackgroundResource(0)

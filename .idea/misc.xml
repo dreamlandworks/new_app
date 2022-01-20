@@ -74,7 +74,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_leader_board_screen.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_login_screen.xml" value="0.15703125" />
-        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.25" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_my_job_posts_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_o_t_p_verification_screen.xml" value="0.209375" />
@@ -92,7 +92,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_account_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_bids_screen.xml" value="0.1" />
-        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_bookings_screen.xml" value="0.15703125" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_bookings_screen.xml" value="0.25" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_my_training.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_place_bid_screen.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/activity_provider_rating_review_screen.xml" value="0.16" />

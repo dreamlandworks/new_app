@@ -78,7 +78,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        updateUI("InProgress")
+        updateUI("Pending")
         binding.inProgressBtn.setOnClickListener {
             binding.inProgressBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.completedBtn.setBackgroundResource(0)
