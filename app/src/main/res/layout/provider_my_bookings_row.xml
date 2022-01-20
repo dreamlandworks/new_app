@@ -35,7 +35,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_5sdp"
                     android:text="@string/app_name"
                     android:textColor="@color/red"
                     android:textSize="@dimen/sub_text" />
@@ -94,7 +93,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_25sdp"
                     android:gravity="center_vertical"
                     android:singleLine="true"
                     android:text="@string/scheduled_in"
@@ -151,9 +150,10 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/myLocationText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/location"
+                        android:text="@string/at"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sub_text" />
 
@@ -161,6 +161,8 @@
                         android:id="@+id/myLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:drawableStart="@drawable/ic_location_icon"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:text="@string/location"
                         android:textSize="@dimen/sub_text" />

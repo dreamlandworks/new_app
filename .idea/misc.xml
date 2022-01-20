@@ -137,7 +137,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/instant_booking_not_available_dialog.xml" value="0.1" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/job_details_row.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/leaderboard_row.xml" value="0.16" />
-        <entry key="..\:/satrango/new_app/app/src/main/res/layout/my_bookings_row.xml" value="0.2" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/my_bookings_row.xml" value="0.33" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/my_job_posts_row.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/no_service_provider_found.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/payment_success_dialog.xml" value="0.15703125" />
@@ -146,7 +146,7 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_extra_demand_dialog.xml" value="0.15703125" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_final_extra_expenditure_dialog.xml" value="0.209375" />
-        <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_my_bookings_row.xml" value="0.209375" />
+        <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_my_bookings_row.xml" value="0.33" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_release_goal_confirmation_dialog.xml" value="0.25" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_release_goals_row.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/provider_training_row.xml" value="0.17" />

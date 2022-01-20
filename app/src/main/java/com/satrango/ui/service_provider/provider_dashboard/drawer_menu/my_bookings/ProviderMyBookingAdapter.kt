@@ -49,8 +49,13 @@ class ProviderMyBookingAdapter(
                     binding.bookingType.text = "Multi Move"
                 }
             }
-            if (!data.details[0].locality.isNullOrBlank()) {
-                binding.myLocation.text = data.details[0].city
+            if (data.details[0].locality.isNullOrBlank()) {
+                if (data.details[0].locality.isNullOrBlank() && data.details[0].city.isNullOrBlank()) {
+                    binding.myLocationText.visibility = View.GONE
+                    binding.myLocation.visibility = View.GONE
+                } else {
+                    binding.myLocation.text = data.details[0].city
+                }
             } else {
                 binding.myLocation.text = data.details[0].locality + ", " + data.details[0].city
             }

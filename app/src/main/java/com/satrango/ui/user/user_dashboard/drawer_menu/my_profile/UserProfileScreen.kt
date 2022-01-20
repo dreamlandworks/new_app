@@ -106,6 +106,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     }
 
     private fun loadScreen() {
+        binding.noteText.visibility = View.GONE
+
         val factory = ViewModelFactory(UserProfileRepository())
         viewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
         showUserProfile()

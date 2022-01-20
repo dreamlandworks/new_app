@@ -237,7 +237,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     toast(this, it.message!!)
-                    weAreSorryDialog()
+//                    weAreSorryDialog()
                 }
             }
         })

@@ -79,8 +79,8 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
             ranking.text = data.rank.toString()
             rating.text = data.rating.toString()
-//            reviews.text = data.
-//            jobs.text = data
+            reviews.text = data.total_people.toString()
+            jobs.text = data.jobs_count.toString()
 //            overAllReviews.text = data.rating.toString()
 
 //            audience.text = data.

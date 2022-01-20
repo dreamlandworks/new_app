@@ -141,7 +141,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = resources.getColor(R.color.blue)
             }
-            binding.card.setBackgroundColor(resources.getColor(R.color.blue))
+            binding.card.setCardBackgroundColor(resources.getColor(R.color.blue))
             binding.priceLayout.setBackgroundResource(R.drawable.blue_out_line)
             binding.bookingIdLayout.setBackgroundResource(R.drawable.blue_out_line)
             binding.dateTimeLayout.setBackgroundResource(R.drawable.blue_out_line)
