@@ -431,8 +431,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -440,12 +439,12 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="@string/service_charges"
+                    android:text="@string/cgst"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
 
                 <TextView
-                    android:id="@+id/serviceCharges"
+                    android:id="@+id/cgst"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -461,8 +460,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -470,12 +468,12 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="@string/gst_18"
+                    android:text="@string/sgst"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
 
                 <TextView
-                    android:id="@+id/gstCharges"
+                    android:id="@+id/sgst"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

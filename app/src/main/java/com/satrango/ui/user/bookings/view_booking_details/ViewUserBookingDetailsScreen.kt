@@ -1,6 +1,7 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -91,7 +92,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+        registerReceiver(otpReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -130,7 +131,21 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.userLayout.visibility = View.GONE
                     binding.completedBtn.text = "Mark Complete"
                     binding.completedBtn.setOnClickListener {
-                        finalExpenditureDialog()
+                        if (response.booking_details.extra_demand_total_amount != "0") {
+                            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                            finalExpenditureDialog()
+                        } else {
+                            AlertDialog.Builder(this)
+                                .setMessage("Extra Demand Not Raised, Do you want to Continue?")
+                                .setPositiveButton("YES") { dialogInterface, _ ->
+                                    dialogInterface.dismiss()
+                                    ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                                    finalExpenditureDialog()
+                                }.setNegativeButton("NO") { dialogInterface, _ ->
+                                    dialogInterface.dismiss()
+                                }.show()
+                        }
+
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val window: Window = window
@@ -248,7 +263,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
         val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
-        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount.toString()
+        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {
@@ -565,13 +580,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 binding.requestInstallmentBtn.visibility = View.GONE
             }
             if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-                if (response.booking_details.extra_demand_total_amount != 0.0) {
+                if (response.booking_details.extra_demand_total_amount != "0") {
                     if (response.booking_details.extra_demand_status == "0") {
                         showExtraDemandAcceptDialog(
                             bookingId.toInt(),
-                            response.booking_details.material_advance.toString(),
-                            response.booking_details.technician_charges.toString(),
-                            response.booking_details.extra_demand_total_amount.toString(),
+                            response.booking_details.material_advance,
+                            response.booking_details.technician_charges,
+                            response.booking_details.extra_demand_total_amount,
                             progressDialog
                         )
                     }
@@ -848,11 +863,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+        LocalBroadcastManager.getInstance(this).registerReceiver((otpReceiver), IntentFilter(FCMService.OTP_INTENT_FILTER))
     }
 
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(otpReceiver)
     }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -862,6 +879,16 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
             openBookingDetails(bookingId, categoryId, userId)
+        }
+    }
+
+    private val otpReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            showotpInDialog(otp)
         }
     }
 
@@ -892,13 +919,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         bookingId: String
     ) {
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-            if (response.booking_details.extra_demand_total_amount != 0.0) {
+            if (response.booking_details.extra_demand_total_amount != "0") {
                 if (response.booking_details.extra_demand_status == "0") {
                     showExtraDemandAcceptDialog(
                         bookingId.toInt(),
-                        response.booking_details.material_advance.toString(),
-                        response.booking_details.technician_charges.toString(),
-                        response.booking_details.extra_demand_total_amount.toString(),
+                        response.booking_details.material_advance,
+                        response.booking_details.technician_charges,
+                        response.booking_details.extra_demand_total_amount,
                         progressDialog
                     )
                 }

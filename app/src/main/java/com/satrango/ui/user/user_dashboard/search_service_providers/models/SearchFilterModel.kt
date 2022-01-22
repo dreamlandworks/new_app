@@ -12,4 +12,5 @@ data class SearchFilterModel(
     val distance: String,
     val priceRangeFrom: String,
     val priceRangeTo: String
+
 )

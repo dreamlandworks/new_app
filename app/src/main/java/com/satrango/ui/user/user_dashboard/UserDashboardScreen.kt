@@ -501,13 +501,13 @@ class UserDashboardScreen : AppCompatActivity() {
         viewModel: BookingViewModel
     ) {
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-            if (response.booking_details.extra_demand_total_amount != 0.0) {
+            if (response.booking_details.extra_demand_total_amount.isNotEmpty()) {
                 if (response.booking_details.extra_demand_status == "0") {
                     showExtraDemandAcceptDialog(
                         bookingId.toInt(),
-                        response.booking_details.material_advance.toString(),
-                        response.booking_details.technician_charges.toString(),
-                        response.booking_details.extra_demand_total_amount.toString(),
+                        response.booking_details.material_advance,
+                        response.booking_details.technician_charges,
+                        response.booking_details.extra_demand_total_amount,
                         progressDialog,
                         viewModel
                     )

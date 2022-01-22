@@ -1,6 +1,7 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -146,11 +147,28 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-            val intent = Intent(this, ProviderInVoiceScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
+            if (response.booking_details.extra_demand_total_amount != "0") {
+                ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                startActivity(intent)
+            } else {
+                AlertDialog.Builder(this)
+                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
+                    .setPositiveButton("YES") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        val intent = Intent(this, ProviderInVoiceScreen::class.java)
+                        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                        startActivity(intent)
+                    }.setNegativeButton("NO") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }.show()
+            }
         }
 
         binding.callBtn.setOnClickListener {
@@ -178,13 +196,13 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.messageBtn.visibility = View.GONE
         }
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-            if (response.booking_details.extra_demand_total_amount != 0.0) {
+            if (response.booking_details.extra_demand_total_amount != "0") {
                 if (response.booking_details.extra_demand_status == "0") {
                     showExtraDemandAcceptDialog(
                         bookingId.toInt(),
-                        response.booking_details.material_advance.toString(),
-                        response.booking_details.technician_charges.toString(),
-                        response.booking_details.extra_demand_total_amount.toString(),
+                        response.booking_details.material_advance,
+                        response.booking_details.technician_charges,
+                        response.booking_details.extra_demand_total_amount,
                         progressDialog
                     )
                 }
@@ -521,13 +539,13 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         bookingId: String
     ) {
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-            if (response.booking_details.extra_demand_total_amount != 0.0) {
+            if (response.booking_details.extra_demand_total_amount != "0") {
                 if (response.booking_details.extra_demand_status == "0") {
                     showExtraDemandAcceptDialog(
                         bookingId.toInt(),
-                        response.booking_details.material_advance.toString(),
-                        response.booking_details.technician_charges.toString(),
-                        response.booking_details.extra_demand_total_amount.toString(),
+                        response.booking_details.material_advance,
+                        response.booking_details.technician_charges,
+                        response.booking_details.extra_demand_total_amount,
                         progressDialog
                     )
                 }

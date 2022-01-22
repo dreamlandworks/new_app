@@ -21,7 +21,6 @@ import com.satrango.ui.user.bookings.view_booking_details.installments_request.m
 import com.satrango.ui.user.bookings.view_booking_details.models.*
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SlotsData
 import com.satrango.utils.UserUtils
-import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject

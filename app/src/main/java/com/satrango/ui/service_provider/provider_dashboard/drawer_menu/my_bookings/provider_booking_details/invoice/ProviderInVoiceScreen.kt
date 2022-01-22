@@ -44,13 +44,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsVie
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 
 class ProviderInVoiceScreen : AppCompatActivity() {
 
@@ -64,6 +62,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     companion object {
         var FROM_PROVIDER = false
+        var isExtraDemandRaised = "0"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -162,7 +161,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderBookingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
-        val requestBody = ProviderInvoiceReqModel(bookingId.toInt(), RetrofitBuilder.PROVIDER_KEY)
+        val requestBody = ProviderInvoiceReqModel(bookingId.toInt(), RetrofitBuilder.PROVIDER_KEY, isExtraDemandRaised)
         viewModel.getInvoice(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -172,29 +171,16 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     val response = it.data!!
                     binding.apply {
-
                         workStartedAt.text = response.booking_details.started_at
                         workCompletedAt.text = response.booking_details.completed_at
-
-                        val simpleDateFormat = SimpleDateFormat("yyyy-MM-hh hh:mm:ss")
-
-                        val date1 = simpleDateFormat.parse(response.booking_details.completed_at)
-                        val date2 = simpleDateFormat.parse(response.booking_details.started_at)
-
-                        val difference: Long = date2.time - date1.time
-                        val days = (difference / (1000 * 60 * 60 * 24)).toInt()
-                        var hours =
-                            ((difference - 1000 * 60 * 60 * 24 * days) / (1000 * 60 * 60)).toInt()
-                        val min =
-                            (difference - 1000 * 60 * 60 * 24 * days - 1000 * 60 * 60 * hours).toInt() / (1000 * 60)
-                        hours = if (hours < 0) -hours else hours
-                        timeLapsedMins.text = "${min + (hours * 60)} Minutes"
-
+                        timeLapsedMins.text = response.booking_details.time_lapsed
+                        cgst.text = response.booking_details.cgst_tax
+                        sgst.text = response.booking_details.sgst_tax
                         technicianCharges.text = response.booking_details.technician_charges
                         materialCharges.text = response.booking_details.material_advance
-                        totalDues.text = response.booking_details.extra_demand_total_amount
-                        netAmount.text = response.booking_details.extra_demand_total_amount
-                        totalTimeLapsed.text = "$hours:${min}:00 Hrs"
+                        totalDues.text = response.booking_details.dues
+                        netAmount.text = response.booking_paid_transactions[0].final_dues
+                        totalTimeLapsed.text = response.booking_details.time_lapsed
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
                         var lessAmountCount = 0.0
                         for (paid in response.booking_paid_transactions) {
@@ -203,22 +189,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
                             requestOTP("User")
-//                            if (FROM_PROVIDER) {
-//                                requestOTP("SP")
-//                            } else {
-//
-//                            }
-
-//                            if (!FROM_PROVIDER) {
-//                                requestOTP("User")
-//                            } else {
-//                                ProviderRatingReviewScreen.FROM_PROVIDER = true
-//                                val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
-//                                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-//                                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-//                                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-//                                startActivity(intent)
-//                            }
                         }
                     }
                 }
@@ -246,7 +216,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     val requestedOTP = jsonResponse.getInt("otp")
-                    toast(this@ProviderInVoiceScreen, requestedOTP.toString())
+//                    toast(this@ProviderInVoiceScreen, requestedOTP.toString())
                     UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
                     if (!FROM_PROVIDER) {
                         otpDialog(requestedOTP, bookingId)
@@ -480,7 +450,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val otp = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
-            toast(context, "$bookingId|$otp|$userId")
+//            toast(context, "$bookingId|$otp|$userId")
             if (!FROM_PROVIDER) {
                 otpDialog(otp.toInt(), bookingId)
             } else {

@@ -39,6 +39,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -329,7 +330,9 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             paymentResponse!!,
             finalUserId,
             UserUtils.time_slot_from,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))

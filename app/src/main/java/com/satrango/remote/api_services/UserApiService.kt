@@ -10,12 +10,12 @@ import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.CitiesResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
-import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
@@ -47,7 +47,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.ViewProposalResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.PostJobSkillsResModel
@@ -64,6 +63,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.U
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintModuleResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.models.FeedbackResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.models.ComplaintRequestResModel

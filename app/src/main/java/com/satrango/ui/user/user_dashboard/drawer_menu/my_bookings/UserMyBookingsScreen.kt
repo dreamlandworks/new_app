@@ -116,7 +116,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     binding.note.visibility = View.VISIBLE
                     binding.note.text = it.message!!
-//                    snackBar(binding.recyclerView, it.message!!)
+                    snackBar(binding.recyclerView, it.message)
                 }
             }
         })

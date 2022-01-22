@@ -5,10 +5,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
 import android.util.Base64
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging

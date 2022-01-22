@@ -683,6 +683,8 @@
     <string name="sp_id">sp_id</string>
     <string name="confirm_sm">Confirm</string>
     <string name="proceed">Proceed</string>
+    <string name="cgst">CGST</string>
+    <string name="sgst">SGST</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

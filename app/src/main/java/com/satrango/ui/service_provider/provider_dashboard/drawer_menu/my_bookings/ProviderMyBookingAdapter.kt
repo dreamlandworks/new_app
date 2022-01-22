@@ -1,6 +1,8 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import com.satrango.databinding.ProviderMyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
@@ -86,7 +89,13 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.text = "Mark Complete"
 
                     binding.cancelBookingBtn.setOnClickListener {
-                        providerMyBookingInterface.markComplete(data.extra_demand_total_amount.toString(), data.booking_id.toInt(), data.category_id, data.users_id)
+                        if (data.extra_demand_total_amount.isNotEmpty()) {
+                            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                            providerMyBookingInterface.markComplete(data.extra_demand_total_amount, data.booking_id.toInt(), data.category_id, data.users_id)
+                        } else {
+                            ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                            openExtraDemandNotRaisedDialog(binding.cancelBookingBtn.context, data, providerMyBookingInterface)
+                        }
                     }
 
                     binding.startBtn.setOnClickListener {
@@ -106,9 +115,6 @@ class ProviderMyBookingAdapter(
                         ProviderBookingDetailsScreen.bookingId = data.booking_id
                         ProviderBookingDetailsScreen.categoryId = data.category_id
                         ProviderBookingDetailsScreen.userId = data.users_id
-//                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-//                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         UserUtils.spid = data.sp_id
@@ -169,6 +175,21 @@ class ProviderMyBookingAdapter(
                 }
             }
 
+        }
+
+        private fun openExtraDemandNotRaisedDialog(
+            context: Context,
+            data: BookingDetail,
+            providerMyBookingInterface: ProviderMyBookingInterface
+        ) {
+            AlertDialog.Builder(context)
+                .setMessage("Extra Demand Not Raised, Do you want to Continue?")
+                .setPositiveButton("YES") { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                    providerMyBookingInterface.markComplete(data.extra_demand_total_amount, data.booking_id.toInt(), data.category_id, data.users_id)
+                }.setNegativeButton("NO") { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }.show()
         }
 
     }

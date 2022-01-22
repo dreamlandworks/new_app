@@ -427,7 +427,10 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             }
 
             if (UserUtils.getSearchFilter(this@SortAndFilterServiceProvider).isNotEmpty()) {
-                val filter = Gson().fromJson(UserUtils.getSearchFilter(this@SortAndFilterServiceProvider), SearchFilterModel::class.java)
+                val filter = Gson().fromJson(
+                    UserUtils.getSearchFilter(this@SortAndFilterServiceProvider),
+                    SearchFilterModel::class.java
+                )
                 if (filter.rating) {
                     rating.setBackgroundResource(R.drawable.user_btn_bg)
                     rating.setTextColor(Color.parseColor("#ffffff"))
@@ -526,10 +529,20 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 UserUtils.saveSearchFilter(this@SortAndFilterServiceProvider, Gson().toJson(filter))
                 finish()
                 if (FROM_PROVIDER) {
-                    startActivity(Intent(this@SortAndFilterServiceProvider, ProviderMyBidsScreen::class.java))
+                    startActivity(
+                        Intent(
+                            this@SortAndFilterServiceProvider,
+                            ProviderMyBidsScreen::class.java
+                        )
+                    )
                 } else {
                     SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = false
-                    startActivity(Intent(this@SortAndFilterServiceProvider, SearchServiceProvidersScreen::class.java))
+                    startActivity(
+                        Intent(
+                            this@SortAndFilterServiceProvider,
+                            SearchServiceProvidersScreen::class.java
+                        )
+                    )
                 }
 
             }
@@ -542,7 +555,8 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.sort_filter)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.sort_filter)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
 

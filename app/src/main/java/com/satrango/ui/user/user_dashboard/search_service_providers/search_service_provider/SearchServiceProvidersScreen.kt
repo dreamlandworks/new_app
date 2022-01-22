@@ -10,7 +10,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,20 +28,18 @@ import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScree
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.widget.Toast
 
 import android.widget.AdapterView.OnItemClickListener
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 
 
 class SearchServiceProvidersScreen : AppCompatActivity() {

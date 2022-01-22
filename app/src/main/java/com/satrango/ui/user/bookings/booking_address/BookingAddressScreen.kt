@@ -2,12 +2,16 @@ package com.satrango.ui.user.bookings.booking_address
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,9 +20,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
@@ -33,11 +39,12 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.user.bookings.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
-import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
+import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
@@ -46,28 +53,17 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
-import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.IntentFilter
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.satrango.remote.fcm.FCMService
-import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
-import java.lang.NumberFormatException
 
 
 class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
@@ -168,7 +164,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
             mapsBtn.setOnClickListener {
                 UserLocationSelectionScreen.FROM_USER_BOOKING_ADDRESS = true
-                startActivity(Intent(this@BookingAddressScreen, UserLocationSelectionScreen::class.java))
+                startActivity(
+                    Intent(
+                        this@BookingAddressScreen,
+                        UserLocationSelectionScreen::class.java
+                    )
+                )
             }
 
             addNewAddress.setOnClickListener {
@@ -197,7 +198,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         for (address in addressList) {
             if (address.isSelected) {
                 if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
-                    UserUtils.temp_address_id = UserUtils.getTempAddressId(this@BookingAddressScreen)
+                    UserUtils.temp_address_id =
+                        UserUtils.getTempAddressId(this@BookingAddressScreen)
                     UserUtils.address_id = "0"
                 } else {
                     UserUtils.temp_address_id = "0"
@@ -226,7 +228,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                     "3" -> {
                         UserUtils.addressList = ArrayList()
-                        addressList = addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                        addressList =
+                            addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                         addressList.forEach {
                             if (it.isSelected) {
                                 UserUtils.addressList.add(it)
@@ -255,7 +258,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
+                            val intent = Intent(
+                                this@BookingAddressScreen,
+                                BookingMultiMoveAddressScreen::class.java
+                            )
                             startActivity(intent)
                         }
                     }
@@ -280,8 +286,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             var spId = 0
             var finalAmount = ""
             if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-                spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this),Data::class.java).users_id.toInt()
-                finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this),Data::class.java).final_amount
+                spId = Gson().fromJson(
+                    UserUtils.getSelectedSPDetails(this),
+                    Data::class.java
+                ).users_id.toInt()
+                finalAmount = Gson().fromJson(
+                    UserUtils.getSelectedSPDetails(this),
+                    Data::class.java
+                ).final_amount
             }
 
             var address = ""
@@ -338,10 +350,19 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|${UserUtils.bookingType}")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user",
+                                "accepted|${UserUtils.bookingType}"
+                            )
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
-                            UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                            UserUtils.sendFCMtoSelectedServiceProvider(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user"
+                            )
                         }
                     }
                     is NetworkResponse.Failure -> {
@@ -443,7 +464,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accept|${UserUtils.bookingType}|selected")
+            UserUtils.sendFCMtoAllServiceProviders(
+                this,
+                UserUtils.getBookingId(this),
+                "accepted",
+                "accept|${UserUtils.bookingType}|selected"
+            )
             finish()
             startActivity(intent)
             waitingDialog.dismiss()
@@ -465,7 +491,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "accepted", "accept|${UserUtils.bookingType}|selected")
+                    UserUtils.sendFCMtoAllServiceProviders(
+                        this@BookingAddressScreen,
+                        UserUtils.getBookingId(this@BookingAddressScreen),
+                        "accepted",
+                        "accept|${UserUtils.bookingType}|selected"
+                    )
                     waitingDialog.dismiss()
                     try {
                         weAreSorryDialog()
@@ -478,16 +509,28 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     seconds = 59
                     minutes -= 1
                 }
-                if (UserUtils.getProviderAction(this@BookingAddressScreen).split("|")[0].isNotEmpty()) {
+                if (UserUtils.getProviderAction(this@BookingAddressScreen)
+                        .split("|")[0].isNotEmpty()
+                ) {
                     waitingDialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingAddressScreen)
                             .split("|")[0].trim() == "accept"
                     ) {
                         serviceProviderAcceptDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                        UserUtils.sendFCMtoAllServiceProviders(
+                            this@BookingAddressScreen,
+                            "accepted",
+                            "accepted",
+                            "accepted|${UserUtils.bookingType}"
+                        )
                     } else {
                         serviceProviderRejectDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                        UserUtils.sendFCMtoAllServiceProviders(
+                            this@BookingAddressScreen,
+                            "accepted",
+                            "accepted",
+                            "accepted|${UserUtils.bookingType}"
+                        )
                     }
                 }
                 mainHandler.postDelayed(this, 1000)
@@ -569,7 +612,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 validateFields()
             }
         }
-        binding.addressRv.adapter = UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@BookingAddressScreen, "AA")
+        binding.addressRv.adapter =
+            UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>,
+                this@BookingAddressScreen,
+                "AA")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -671,7 +717,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         var spId = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
-            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            finalAmount =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(
@@ -814,7 +861,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         override fun onReceive(context: Context, intent: Intent) {
             val spIds = intent.getStringExtra(getString(R.string.sp_id))!!
             responses.add(spIds)
-            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedAllSPDetails(context),
+                SearchServiceProviderResModel::class.java
+            )
             if (responses.size == spDetails.data.size) {
                 waitingDialog.dismiss()
                 weAreSorryDialog()
@@ -824,7 +874,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     override fun onStart() {
         super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER_ONE))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER_ONE))
     }
 
     override fun onDestroy() {

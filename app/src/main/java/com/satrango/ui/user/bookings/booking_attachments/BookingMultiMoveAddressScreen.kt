@@ -41,9 +41,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils

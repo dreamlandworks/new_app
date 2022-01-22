@@ -2,7 +2,6 @@ package com.satrango.ui.user.bookings.change_address
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,7 +29,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.description.Po
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import java.util.*
 
 class AddBookingAddressScreen : AppCompatActivity() {

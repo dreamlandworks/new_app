@@ -618,7 +618,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             paymentResponse!!,
             data!!.users_id.toInt(),
             UserUtils.time_slot_from,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         )
         viewModel.confirmPayment(this, requestBody).observe(this, {
             when (it) {

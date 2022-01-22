@@ -1,6 +1,7 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -147,7 +148,21 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-            finalExpenditureDialog()
+            if (response.booking_details.extra_demand_total_amount != "0") {
+                ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                finalExpenditureDialog()
+            } else {
+                AlertDialog.Builder(this)
+                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
+                    .setPositiveButton("YES") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        finalExpenditureDialog()
+                    }.setNegativeButton("NO") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }.show()
+            }
+
         }
 
         binding.callBtn.setOnClickListener {
@@ -281,7 +296,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
         val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
-        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount.toString()
+        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {

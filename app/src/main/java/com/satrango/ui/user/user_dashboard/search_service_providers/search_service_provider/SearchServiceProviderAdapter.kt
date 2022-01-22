@@ -21,17 +21,13 @@ import com.satrango.databinding.SearchServiceProviderRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
-import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
-import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.Charges
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen.Companion.FROM_POPULAR_SERVICES
 import com.satrango.utils.UserUtils
-import kotlin.math.ceil
 import kotlin.math.round
 
 class SearchServiceProviderAdapter(
@@ -60,7 +56,7 @@ class SearchServiceProviderAdapter(
             binding.userRank.text = data.rank.toString()
             binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
             if (SearchServiceProvidersScreen.offerId != 0) {
-                binding.actualCost.text = "Rs. ${round(data.actual_amount.toDouble()).toInt()}/-"
+                binding.actualCost.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
                 binding.actualCost.showStrikeThrough(true)
             } else {
                 binding.actualCost.visibility = View.GONE
