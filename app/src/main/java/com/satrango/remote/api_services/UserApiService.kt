@@ -458,6 +458,11 @@ interface UserApiService {
         @Body requestBody: LogoutReqModel
     ): ResponseBody
 
+    @POST(UserApiEndPoints.COMPLETE_BOOKING)
+    suspend fun completeBooking(
+        @Body requestBody: CompleteBookingReqModel
+    ): ResponseBody
+
     @GET(UserApiEndPoints.CITIES)
     suspend fun getCities(
         @Query("key") key: String

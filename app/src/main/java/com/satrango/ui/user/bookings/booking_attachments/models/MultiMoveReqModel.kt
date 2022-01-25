@@ -15,5 +15,7 @@ data class MultiMoveReqModel(
     val started_at: String,
     val time_slot_from: String,
     val time_slot_to: String,
-    val users_id: Int
+    val users_id: Int,
+    val cgst: String,
+    val sgst: String,
 )

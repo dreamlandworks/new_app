@@ -36,6 +36,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
@@ -49,6 +50,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import android.app.Activity
+
+
+
 
 class ProviderInVoiceScreen : AppCompatActivity() {
 
@@ -170,6 +175,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val response = it.data!!
+                    UserUtils.saveInVoiceDetails(this, Gson().toJson(response))
                     binding.apply {
                         workStartedAt.text = response.booking_details.started_at
                         workCompletedAt.text = response.booking_details.completed_at
@@ -397,7 +403,13 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     dialog.dismiss()
                                     FROM_PROVIDER = false
                                     dialog.dismiss()
-                                    showBookingCompletedSuccessDialog()
+                                    PaymentScreen.FROM_USER_PLANS = false
+                                    PaymentScreen.FROM_PROVIDER_PLANS = false
+                                    PaymentScreen.FROM_USER_SET_GOALS = false
+                                    PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+                                    PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+                                    PaymentScreen.FROM_COMPLETE_BOOKING = true
+                                    startActivity(Intent(this, PaymentScreen::class.java))
 //                                    val intent = Intent(this, ProviderInVoiceScreen::class.java)
 //                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
 //                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
@@ -420,30 +432,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun showBookingCompletedSuccessDialog() {
-        val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
-        val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
-        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        val closBtn = dialogView.findViewById<TextView>(R.id.closBtn)
-        closBtn.visibility = View.GONE
-        val text = dialogView.findViewById<TextView>(R.id.text)
-        text.text =
-            "You have successfully completed the booking. You will now be redirected to Rating screen. Please give rating to the service provider."
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-            ProviderRatingReviewScreen.FROM_PROVIDER = false
-            val intent = Intent(this, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
-        }
-        dialog.setContentView(dialogView)
-        dialog.show()
-    }
-
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
@@ -452,7 +440,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
 //            toast(context, "$bookingId|$otp|$userId")
             if (!FROM_PROVIDER) {
-                otpDialog(otp.toInt(), bookingId)
+                if (!(context as Activity).isFinishing) {
+                    otpDialog(otp.toInt(), bookingId)
+                }
             } else {
                 showotpInDialog(otp)
             }

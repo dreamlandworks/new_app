@@ -4,6 +4,7 @@ data class SearchServiceProviderResModel(
     val charges: List<Charge>,
     val data: List<Data>,
     val message: String,
+    val wallet_balance: String,
     val search_results_id: Int,
     val slots_data: List<SlotsData>,
     val status: Int,

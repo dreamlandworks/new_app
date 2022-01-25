@@ -40,7 +40,7 @@ import com.satrango.databinding.ActivityBookingAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
-import com.satrango.ui.user.bookings.PaymentScreen
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
@@ -282,20 +282,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("SimpleDateFormat")
     private fun bookSingleMoveServiceProvider() {
+        var spId = 0
+        var finalAmount = "0"
+        var cgst = "0"
+        var sgst = "0"
+        if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
+            spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
+            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            cgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
+            sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
+        }
         if (UserUtils.getFromInstantBooking(this)) {
-            var spId = 0
-            var finalAmount = ""
-            if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-                spId = Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this),
-                    Data::class.java
-                ).users_id.toInt()
-                finalAmount = Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this),
-                    Data::class.java
-                ).final_amount
-            }
-
             var address = ""
             var city = ""
             var state = ""
@@ -336,7 +333,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 country,
                 postalCode,
                 latitude,
-                longitude
+                longitude,
+                cgst,
+                sgst
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
@@ -413,7 +412,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 country,
                 postalCode,
                 latitude,
-                longitude
+                longitude,
+                cgst,
+                sgst
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
@@ -715,10 +716,13 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         var finalAmount = "0"
         var spId = "0"
+        var cgst = "0"
+        var sgst = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
-            finalAmount =
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            cgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
+            sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(
@@ -734,7 +738,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.time_slot_from,
             UserUtils.time_slot_from,
             UserUtils.time_slot_to.replace("\n", ""),
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            cgst,
+            sgst
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))

@@ -15,25 +15,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderPlansScreensBinding
 import com.satrango.remote.NetworkResponse
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderPaymentListener
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.ProviderMemberShipPlanPaymentReqModel
-import com.satrango.ui.user.bookings.PaymentScreen
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
 

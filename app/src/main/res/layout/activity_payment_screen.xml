@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.user.bookings.PaymentScreen">
+    tools:context=".ui.user.bookings.payment_screen.PaymentScreen">
 
     <include
         android:id="@+id/toolBar"

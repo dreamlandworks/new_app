@@ -24,5 +24,7 @@ data class SingleMoveBookingReqModel(
     val country: String,
     val postal_code: String,
     val user_lat: String,
-    val user_long: String
+    val user_long: String,
+    val cgst: String,
+    val sgst: String
 )

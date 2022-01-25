@@ -1,7 +1,7 @@
 package com.satrango.ui.user.bookings.provider_response
 
 data class PaymentConfirmReqModel(
-    val amount: String,
+    val booking_amount: String,
     val booking_id: String,
     val date: String,
     val key: String,
@@ -11,5 +11,6 @@ data class PaymentConfirmReqModel(
     val time_slot_from: String,
     val users_id: Int,
     val cgst: String,
-    val sgst: String
+    val sgst: String,
+    val w_amount: String,
 )

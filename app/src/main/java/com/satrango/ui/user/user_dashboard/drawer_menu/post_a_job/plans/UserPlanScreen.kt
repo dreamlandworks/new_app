@@ -19,7 +19,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserPlanScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.PaymentScreen
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository

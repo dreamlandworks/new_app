@@ -10,6 +10,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,18 +29,17 @@ import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScree
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-import android.widget.AdapterView.OnItemClickListener
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 
 
 class SearchServiceProvidersScreen : AppCompatActivity() {
@@ -76,16 +76,23 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this)
+                .isNotEmpty()
+        ) {
 
-            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
-            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedAllSPDetails(this),
+                SearchServiceProviderResModel::class.java
+            )
+            val filter =
+                Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
 
             Log.e("FILTER:", Gson().toJson(filter))
             Log.e("SPDETAILS:", Gson().toJson(spDetails))
 
             val spDetailsList = spDetails.data
-            val list = ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
+            val list =
+                ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
             for (sp in spDetailsList) {
                 if (filter.priceRangeFrom.toDouble() <= sp.final_amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.final_amount.toDouble()) {
                     if (filter.distance != "0") {
@@ -113,31 +120,46 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rank }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(
+                        list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rank },
+                        this
+                    )
                 }
                 filter.nearMe -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.distance_kms }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(
+                        list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.distance_kms },
+                        this
+                    )
                 }
                 filter.rating -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(
+                        list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.rating },
+                        this
+                    )
                 }
                 filter.lowToHigh -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(
+                        list.sortedBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount },
+                        this
+                    )
                 }
                 filter.highToLow -> {
                     binding.listCount.visibility = View.VISIBLE
                     binding.listCount.text = "${list.size} out of ${spDetails.data.size}"
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount }, this)
+                    binding.recyclerView.adapter = SearchServiceProviderAdapter(
+                        list.sortedByDescending { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.final_amount },
+                        this
+                    )
                 }
                 else -> {
                     binding.listCount.visibility = View.VISIBLE
@@ -147,7 +169,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 }
             }
         } else if (UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
-            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedAllSPDetails(this),
+                SearchServiceProviderResModel::class.java
+            )
             binding.listCount.text = "${spDetails.data.size} out of ${spDetails.data.size}"
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(spDetails.data, this)
@@ -167,15 +192,20 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     Log.e("KEYS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
-                    val adapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
+                    val adapter =
+                        ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, keywords)
                     binding.searchBar.setAdapter(adapter)
-                    binding.searchBar.onItemClickListener = OnItemClickListener { parent, arg1, position, id ->
+                    binding.searchBar.onItemClickListener =
+                        OnItemClickListener { parent, arg1, position, id ->
                             val value = adapter.getItem(position) ?: ""
                             for (key in keywordsList) {
                                 if (key.phrase == value) {
                                     keyword = key.id
                                     subCategoryId = key.subcategory_id
-                                    UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
+                                    UserUtils.saveSelectedKeywordCategoryId(
+                                        this@SearchServiceProvidersScreen,
+                                        key.category_id
+                                    )
                                 }
                             }
 //                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
@@ -193,7 +223,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         binding.goBtn.setOnClickListener {
             if (binding.searchBar.text.toString().isEmpty()) {
                 snackBar(binding.goBtn, "Please enter keyword to Search Service Providers")
-            } else if (UserUtils.getLatitude(this).isEmpty() && UserUtils.getLongitude(this).isEmpty()) {
+            } else if (UserUtils.getLatitude(this).isEmpty() && UserUtils.getLongitude(this)
+                    .isEmpty()
+            ) {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 UserUtils.saveSearchFilter(this, "")
@@ -273,27 +305,32 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
-            val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
-            if (response.status == 200) {
-                keyword = "0"
-                if (!FROM_POPULAR_SERVICES) {
-                    subCategoryId = "0"
-                }
-                progressDialog.dismiss()
-                binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
-                binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this@SearchServiceProvidersScreen)
-                if (response.data.isEmpty()) {
-                    weAreSorryDialog()
-                } else {
-                    UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
-                    UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
-                    binding.listCount.text = "${response.data.size} out of ${response.data.size}"
-                    binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
+                if (response.status == 200) {
+                    keyword = "0"
+                    if (!FROM_POPULAR_SERVICES) {
+                        subCategoryId = "0"
+                    }
+//                binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this@SearchServiceProvidersScreen)
+                    if (response.data.isEmpty()) {
+                        weAreSorryDialog()
+                    } else {
+//                        toast(this@SearchServiceProvidersScreen, response.data.toString())
+                        binding.listCount.text = "${response.data.size} out of ${response.data.size}"
+                        binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
+                        binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
+                        UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
+                        UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
 //                    showBookingTypeDialog(response)
+                    }
+                    progressDialog.dismiss()
+                } else {
+                    progressDialog.dismiss()
+                    toast(this@SearchServiceProvidersScreen, response.message)
                 }
-            } else {
-                progressDialog.dismiss()
-                snackBar(binding.recyclerView, response.message)
+            } catch (e: Exception) {
+                toast(this@SearchServiceProvidersScreen, e.message!!)
             }
         }
     }
@@ -375,7 +412,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val data = spListData
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setCancelable(false)
-        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.instant_booking_not_available_dialog, null)
+        val dialogView = LayoutInflater.from(this)
+            .inflate(com.satrango.R.layout.instant_booking_not_available_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
         val showResultsBtn = dialogView.findViewById<TextView>(com.satrango.R.id.viewResults)
         val postJobBtn = dialogView.findViewById<TextView>(com.satrango.R.id.postJob)
@@ -386,7 +424,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
                 binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-                binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this@SearchServiceProvidersScreen)
+                binding.recyclerView.adapter =
+                    SearchServiceProviderAdapter(data.data, this@SearchServiceProvidersScreen)
             }
             bottomSheetDialog.dismiss()
         }
@@ -402,7 +441,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val waitingForSpBottomSheetDialog = BottomSheetDialog(this)
         waitingForSpBottomSheetDialog.setCancelable(false)
         val dialogView =
-            LayoutInflater.from(this).inflate(com.satrango.R.layout.waiting_for_sp_confirmation_dialog, null)
+            LayoutInflater.from(this)
+                .inflate(com.satrango.R.layout.waiting_for_sp_confirmation_dialog, null)
         val progressBar =
             dialogView.findViewById<CircularProgressIndicator>(com.satrango.R.id.progressBar)
         val time = dialogView.findViewById<TextView>(com.satrango.R.id.time)
@@ -439,7 +479,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
     private fun weAreSorryDialog() {
         val weAreSorryBottomSheetDialog = BottomSheetDialog(this)
         weAreSorryBottomSheetDialog.setCancelable(false)
-        val dialogView = LayoutInflater.from(this).inflate(com.satrango.R.layout.no_service_provider_found, null)
+        val dialogView =
+            LayoutInflater.from(this).inflate(com.satrango.R.layout.no_service_provider_found, null)
         val yesBtn = dialogView.findViewById<TextView>(com.satrango.R.id.yesBtn)
         val noBtn = dialogView.findViewById<TextView>(com.satrango.R.id.noBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(com.satrango.R.id.closeBtn)
@@ -459,11 +500,14 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         weAreSorryBottomSheetDialog.setContentView(dialogView)
         weAreSorryBottomSheetDialog.show()
     }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(
+        progressDialog = BeautifulProgressDialog(
+            this, BeautifulProgressDialog.withGIF, resources.getString(
                 com.satrango.R.string.loading
-            ))
+            )
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${com.satrango.R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(com.satrango.R.color.progressDialogColor))
     }

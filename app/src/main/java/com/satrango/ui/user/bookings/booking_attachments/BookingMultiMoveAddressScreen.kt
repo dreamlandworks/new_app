@@ -35,7 +35,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingMultiMoveAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.PaymentScreen
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
@@ -176,9 +176,13 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
     private fun bookMultiMoveServiceProvider() {
         var finalAmount = "0"
         var spId = "0"
+        var cgst = "0"
+        var sgst = "0"
         if (data != null) {
             finalAmount = data.final_amount
             spId = data.users_id
+            cgst = data.CGST_amount
+            sgst = data.SGST_amount
         }
 
         val requestBody = MultiMoveReqModel(
@@ -194,7 +198,9 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.time_slot_from,
             UserUtils.time_slot_from,
             UserUtils.time_slot_to,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            sgst,
+            cgst
         )
         Log.e("MULTI MOVE:", Gson().toJson(requestBody))
         viewModel.multiMoveBooking(this, requestBody).observe(this, {

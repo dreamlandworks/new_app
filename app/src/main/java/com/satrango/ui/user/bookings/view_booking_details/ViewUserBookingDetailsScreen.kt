@@ -64,6 +64,10 @@ import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.Activity
+
+
+
 
 class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
@@ -888,7 +892,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val otp = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
-            showotpInDialog(otp)
+            if (!(context as Activity).isFinishing) {
+                showotpInDialog(otp)
+            }
         }
     }
 

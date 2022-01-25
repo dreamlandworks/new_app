@@ -74,7 +74,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.bookings.PaymentScreen"
+            android:name=".ui.user.bookings.payment_screen.PaymentScreen"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

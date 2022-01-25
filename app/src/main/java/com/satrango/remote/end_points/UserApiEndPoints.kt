@@ -76,6 +76,6 @@ object UserApiEndPoints {
     final const val LOGOUT = "user/logout"
     final const val CITIES = "user/get_cities_list"
     final const val AUTOCOMPLETE_BY_CATEGORY = "user/autocomplete_by_category"
-
+    final const val COMPLETE_BOOKING = "user/complete_booking"
 
 }

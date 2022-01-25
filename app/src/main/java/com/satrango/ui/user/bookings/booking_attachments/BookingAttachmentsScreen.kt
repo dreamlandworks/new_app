@@ -47,6 +47,7 @@ import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -247,7 +248,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private fun bookMultiMoveServiceProvider() {
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
-            data!!.per_hour,
+            data!!.final_amount,
             encodedImages,
             currentDateAndTime(),
             1,
@@ -258,7 +259,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.started_at,
             UserUtils.time_slot_from,
             UserUtils.time_slot_to,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            data!!.CGST_amount,
+            data!!.SGST_amount
         )
         viewModel.multiMoveBooking(this, requestBody).observe(this, {
             when (it) {
@@ -472,9 +475,13 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
         var finalAmount = "0"
         var spId = "0"
+        var cgst = "0"
+        var sgst = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
             finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            cgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
+            sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(
@@ -490,7 +497,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.time_slot_from,
             UserUtils.time_slot_from,
             UserUtils.time_slot_to.replace("\n", ""),
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            cgst,
+            sgst
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
@@ -620,7 +629,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt(),
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
+            Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
         )
         viewModel.confirmPayment(this, requestBody).observe(this, {
             when (it) {
