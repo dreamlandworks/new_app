@@ -149,7 +149,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                     dialogInterface.dismiss()
                                 }.show()
                         }
-
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val window: Window = window
@@ -267,7 +266,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
         val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
-        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount
+        raisedExtraDemand.text = response.booking_details.material_advance
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {

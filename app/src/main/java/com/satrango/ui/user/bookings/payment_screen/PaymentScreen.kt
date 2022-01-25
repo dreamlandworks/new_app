@@ -34,7 +34,6 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
@@ -157,15 +156,16 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     referenceId,
                     inVoiceDetails.booking_details.sgst_tax,
                     inVoiceDetails.booking_details.sp_id,
-                    (inVoiceDetails.booking_details.extra_demand_total_amount.toLong() + inVoiceDetails.booking_details.sgst_tax.toLong() + inVoiceDetails.booking_details.cgst_tax.toLong()).toString(),
+                    inVoiceDetails.booking_details.extra_demand_total_amount,
                     UserUtils.getUserId(this@PaymentScreen)
                 )
-                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
+//                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
+                toast(this@PaymentScreen, Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
-                    showBookingCompletedSuccessDialog()
+                    showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id)
                 } else {
-                    toast(this@PaymentScreen,"Error:" + JSONObject(response.string()).getString("status_message"))
+                    toast(this@PaymentScreen,"Error:" + response.string())
                 }
 //                toast(this@PaymentScreen, response.string())
             } catch (e: Exception) {
@@ -465,7 +465,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showBookingCompletedSuccessDialog() {
+    private fun showBookingCompletedSuccessDialog(bookingId: Int) {
         val dialog = BottomSheetDialog(this)
         dialog.setCancelable(false)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
@@ -477,13 +477,12 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             "You have successfully completed the booking. You will now be redirected to Rating screen. Please give rating to the service provider."
         closeBtn.setOnClickListener {
             dialog.dismiss()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
-//            ProviderRatingReviewScreen.FROM_PROVIDER = false
-//            val intent = Intent(this, ProviderRatingReviewScreen::class.java)
-//            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-//            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-//            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-//            startActivity(intent)
+            ProviderRatingReviewScreen.FROM_PROVIDER =  false
+            val intent = Intent(this, ProviderRatingReviewScreen::class.java)
+            intent.putExtra(resources.getString(R.string.booking_id), bookingId.toString())
+            intent.putExtra(resources.getString(R.string.category_id), "0")
+            intent.putExtra(resources.getString(R.string.userId), UserUtils.getUserId(this))
+            startActivity(intent)
         }
         dialog.setContentView(dialogView)
         dialog.show()

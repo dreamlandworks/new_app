@@ -18,6 +18,9 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.Bookin
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
@@ -64,7 +67,33 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
             when(data.booking_status.lowercase(Locale.getDefault())) {
                 "InProgress".lowercase(Locale.getDefault()) -> {
                     binding.timeRemaining.text = "Started"
-                    binding.startBtn.text = "Service Provider started to your location"
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusList(RetrofitBuilder.USER_KEY, data.booking_id.toInt())
+                        if (response.status == 200) {
+                            if (response.booking_status_details.isNotEmpty()) {
+                                val details = response.booking_status_details[response.booking_status_details.size - 1]
+                                when (details.status_id) {
+                                    "13" -> {
+                                        binding.startBtn.text = "Booking Started and OTP Verified"
+                                    }
+                                    "23" -> {
+                                        binding.startBtn.text = "OTP Verified and Booking Completed"
+                                    }
+                                    "37" -> {
+                                        binding.startBtn.text = "Extra Demand Raised"
+                                    }
+                                    "38" -> {
+                                        binding.startBtn.text = "Extra Demand Accepted"
+                                    }
+                                    "39" -> {
+                                        binding.startBtn.text = "Extra Demand Rejected"
+                                    }
+                                }
+                            } else {
+                                binding.startBtn.text = "Service Provider started to your location"
+                            }
+                        }
+                    }
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false

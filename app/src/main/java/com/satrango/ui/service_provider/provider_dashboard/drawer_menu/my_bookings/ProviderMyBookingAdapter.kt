@@ -91,7 +91,7 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.setOnClickListener {
                         if (data.extra_demand_total_amount.isNotEmpty()) {
                             ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                            providerMyBookingInterface.markComplete(data.extra_demand_total_amount, data.booking_id.toInt(), data.category_id, data.users_id)
+                            providerMyBookingInterface.markComplete(data.material_advance, data.booking_id.toInt(), data.category_id, data.users_id)
                         } else {
                             ProviderInVoiceScreen.isExtraDemandRaised = "0"
                             openExtraDemandNotRaisedDialog(binding.cancelBookingBtn.context, data, providerMyBookingInterface)

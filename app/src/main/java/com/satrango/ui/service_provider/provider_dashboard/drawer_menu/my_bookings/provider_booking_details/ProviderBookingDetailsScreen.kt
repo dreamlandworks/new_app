@@ -162,7 +162,6 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                         dialogInterface.dismiss()
                     }.show()
             }
-
         }
 
         binding.callBtn.setOnClickListener {
@@ -296,7 +295,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
         val submitBtn = dialogView.findViewById<TextView>(R.id.submitBtn)
-        raisedExtraDemand.text = response.booking_details.extra_demand_total_amount
+        raisedExtraDemand.text = response.booking_details.material_advance
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {
