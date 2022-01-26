@@ -160,7 +160,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     UserUtils.getUserId(this@PaymentScreen)
                 )
 //                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-                toast(this@PaymentScreen, Gson().toJson(requestBody))
+//                toast(this@PaymentScreen, Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
                     showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id)

@@ -414,6 +414,7 @@ class ProviderDashboard : AppCompatActivity() {
                 5,
                 userId.toInt()
             )
+            toast(this, Gson().toJson(requestBody))
             bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
                 .observe(this@ProviderDashboard, {
                     when (it) {

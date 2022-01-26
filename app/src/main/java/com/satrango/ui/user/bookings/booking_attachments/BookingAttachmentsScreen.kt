@@ -36,6 +36,8 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAttachmentsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.remote.fcm.FCMService
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -44,6 +46,7 @@ import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
@@ -563,6 +566,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         val mainHandler = Handler(Looper.getMainLooper())
         var progressTime = 180
         mainHandler.post(object : Runnable {
+            @SuppressLint("SimpleDateFormat")
             override fun run() {
                 time.text = "$minutes:$seconds"
                 progressTime -= 1
@@ -571,13 +575,41 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
                     dialog.dismiss()
-                    UserUtils.sendFCMtoAllServiceProviders(
-                        this@BookingAttachmentsScreen,
-                        "accepted",
-                        "accepted",
-                        UserUtils.bookingType
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, "accepted", "accepted", UserUtils.bookingType)
+                    val bookingFactory = ViewModelFactory(BookingRepository())
+                    val bookingViewModel = ViewModelProvider(this@BookingAttachmentsScreen, bookingFactory)[BookingViewModel::class.java]
+                    val requestBody = ProviderResponseReqModel(
+                        data!!.final_amount,
+                        UserUtils.getBookingId(this@BookingAttachmentsScreen).toInt(),
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+                        "",
+                        RetrofitBuilder.USER_KEY,
+                        UserUtils.getUserId(this@BookingAttachmentsScreen).toInt(),
+                        6,
+                        data!!.users_id.toInt()
                     )
-                    weAreSorryDialog()
+                    bookingViewModel.setProviderResponse(this@BookingAttachmentsScreen, requestBody)
+                        .observe(this@BookingAttachmentsScreen, {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    progressDialog.dismiss()
+                                    UserUtils.saveFromFCMService(this@BookingAttachmentsScreen,false)
+                                    if (FCMService.notificationManager != null) {
+                                        FCMService.notificationManager.cancelAll()
+                                    }
+                                    ProviderDashboard.bookingId = ""
+                                    ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                    weAreSorryDialog()
+                                }
+                                is NetworkResponse.Failure -> {
+                                    progressDialog.dismiss()
+                                    toast(this@BookingAttachmentsScreen, it.message!!)
+                                }
+                            }
+                        })
                 }
                 if (seconds == 0) {
                     seconds = 59
