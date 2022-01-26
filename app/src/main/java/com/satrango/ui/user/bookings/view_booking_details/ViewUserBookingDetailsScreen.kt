@@ -65,8 +65,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
 import android.app.Activity
-
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class ViewUserBookingDetailsScreen : AppCompatActivity() {
@@ -485,14 +486,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                     } else {
                                         startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                                     }
-                                    //                                    if (!FROM_PROVIDER)
-//                                    {
-//                                        ProviderRatingReviewScreen.FROM_PROVIDER = false
-//                                        ProviderRatingReviewScreen.userId = userId
-//                                        ProviderRatingReviewScreen.bookingId = bookingId
-//                                        ProviderRatingReviewScreen.categoryId = categoryId
-//                                        startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
-//                                    }
                                     snackBar(binding.inProgressViewStatusBtn, "OTP Verification Success")
                                 }
                                 is NetworkResponse.Failure -> {
@@ -521,7 +514,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.time.text = response.booking_details.from
         FCM_TOKEN = response.booking_details.fcm_token
         if (FROM_PROVIDER) {
-//            fcm_token = response.booking_details.
             if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
                 binding.otp.text = response.booking_details.otp
             }
@@ -575,8 +567,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         if (!FROM_PROVIDER) {
             binding.requestInstallmentBtn.setBackgroundResource(R.drawable.blue_out_line)
             binding.requestInstallmentBtn.setTextColor(resources.getColor(R.color.blue))
-//            binding.requestInstallmentBtn.visibility = View.VISIBLE
-//            binding.requestInstallmentBtn = 15
             if (response.booking_details.post_job_id != "0") {
                 binding.requestInstallmentBtn.visibility = View.VISIBLE
             } else {
@@ -627,7 +617,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         extraDemandTotalAmount: String,
         progressDialog: BeautifulProgressDialog
     ) {
-        val dialog = BottomSheetDialog(this)
+        val extraDemandAcceptRejectDialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
         val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
         val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
@@ -635,28 +625,23 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-
-//        materialCharges.text = response.booking_details.material_advance.toString()
-//        technicianCharges.text = response.booking_details.technician_charges.toString()
-//        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
-
         materialCharges.text = materialAdvance
         technicianCharges.text = technicalCharges
         totalCost.text = extraDemandTotalAmount
 
-        closeBtn.setOnClickListener { dialog.dismiss() }
+        closeBtn.setOnClickListener { extraDemandAcceptRejectDialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 2, extraDemandAcceptRejectDialog, progressDialog)
         }
 
-        dialog.setCancelable(false)
-        dialog.setContentView(dialogView)
-        dialog.show()
+        extraDemandAcceptRejectDialog.setCancelable(false)
+        extraDemandAcceptRejectDialog.setContentView(dialogView)
+        extraDemandAcceptRejectDialog.show()
     }
 
     private fun changeExtraDemandStatus(
@@ -679,8 +664,18 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     dialog.dismiss()
                     if (status == 1) {
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                            bookingId.toString(),
+                            categoryId,
+                            "$userId|1"
+                        )
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Accepted")
                     } else {
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                            bookingId.toString(),
+                            categoryId,
+                            "$userId|2"
+                        )
                         snackBar(binding.inProgressViewStatusBtn, "Extra Demand Rejected")
                     }
                 }
@@ -835,11 +830,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener {
             if (FROM_PROVIDER) {
                 ProviderRatingReviewScreen.FROM_PROVIDER = true
-                val intent = Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
-                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-                startActivity(intent)
+                ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
+                ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
+                ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+                startActivity(Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
             } else {
                 startActivity(Intent(this, UserMyBookingsScreen::class.java))
                 bottomSheetDialog.dismiss()
@@ -848,11 +842,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
             if (FROM_PROVIDER) {
                 ProviderRatingReviewScreen.FROM_PROVIDER = true
-                val intent = Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
-                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-                startActivity(intent)
+                ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
+                ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
+                ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+                startActivity(Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
             } else {
                 bottomSheetDialog.dismiss()
                 startActivity(Intent(this, UserMyBookingsScreen::class.java))
@@ -902,21 +895,32 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    updateUI(it.data!!, bookingId)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
-                }
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+            if (response.status == 200) {
+                progressDialog.dismiss()
+                updateUI(response, bookingId)
+            } else {
+                progressDialog.dismiss()
+                snackBar(binding.inProgressViewStatusBtn, response.message)
             }
-        })
+        }
+//        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    updateUI(it.data!!, bookingId)
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
+//                }
+//            }
+//        })
     }
 
     private fun updateUI(

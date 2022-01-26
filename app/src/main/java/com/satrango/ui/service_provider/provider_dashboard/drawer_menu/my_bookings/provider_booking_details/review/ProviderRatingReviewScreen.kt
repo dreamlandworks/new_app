@@ -36,9 +36,6 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityProviderRatingReviewScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
-    private var categoryId = ""
-    private var bookingId = ""
-    private var userId = ""
 
     companion object {
         var FROM_PROVIDER = true
@@ -54,9 +51,6 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeProgressDialog()
-        bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-        categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-        userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }

@@ -478,11 +478,10 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         closeBtn.setOnClickListener {
             dialog.dismiss()
             ProviderRatingReviewScreen.FROM_PROVIDER =  false
-            val intent = Intent(this, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(resources.getString(R.string.booking_id), bookingId.toString())
-            intent.putExtra(resources.getString(R.string.category_id), "0")
-            intent.putExtra(resources.getString(R.string.userId), UserUtils.getUserId(this))
-            startActivity(intent)
+            ProviderRatingReviewScreen.bookingId = bookingId.toString()
+            ProviderRatingReviewScreen.userId = userId.toString()
+            ProviderRatingReviewScreen.categoryId =  "0"
+            startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
         }
         dialog.setContentView(dialogView)
         dialog.show()

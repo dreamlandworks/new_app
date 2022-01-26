@@ -22,6 +22,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -46,11 +47,15 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -75,7 +80,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         initializeProgressDialog()
 
-//        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+        registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -91,11 +96,6 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = resources.getColor(R.color.purple_700)
         }
-
-//        bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-//        categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-//        userId = intent.getStringExtra(getString(R.string.user_id))!!
-
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
             categoryId.toInt(),
@@ -340,17 +340,6 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-//    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        @RequiresApi(Build.VERSION_CODES.O)
-//        override fun onReceive(context: Context, intent: Intent) {
-//            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-//            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-//            val userId = intent.getStringExtra(getString(R.string.user_id))!!
-////            toast(context, "$bookingId|$otp|$userId")
-//            showotpInDialog(otp)
-//        }
-//    }
-
     @SuppressLint("SetTextI18n")
     private fun showotpInDialog(otp: String) {
         val bottomSheetDialog = BottomSheetDialog(this)
@@ -372,19 +361,17 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         submitBtn.text = "Close"
         closeBtn.setOnClickListener {
             ProviderRatingReviewScreen.FROM_PROVIDER = true
-            val intent = Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
+            ProviderRatingReviewScreen.bookingId = bookingId
+            ProviderRatingReviewScreen.categoryId = categoryId
+            ProviderRatingReviewScreen.userId = userId
+            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
         }
         submitBtn.setOnClickListener {
             ProviderRatingReviewScreen.FROM_PROVIDER = true
-            val intent = Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
+            ProviderRatingReviewScreen.bookingId = bookingId
+            ProviderRatingReviewScreen.categoryId = categoryId
+            ProviderRatingReviewScreen.userId = userId
+            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
         }
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)
@@ -414,5 +401,78 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            openBookingDetails(bookingId, categoryId, userId)
+        }
+    }
+
+    fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.split("|")[0].toInt())
+        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+            if (response.status == 200) {
+                progressDialog.dismiss()
+                updateStatusList()
+                showExtraDemandResponseDialog(response)
+            } else {
+                progressDialog.dismiss()
+                snackBar(binding.recyclerView, response.message)
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showExtraDemandResponseDialog(
+        data: BookingDetailsResModel
+    ) {
+        if (!data.booking_details.extra_demand_status.isNullOrBlank()) {
+            if (data.booking_details.extra_demand_total_amount != "0") {
+                if (data.booking_details.extra_demand_status != "0") {
+                    val extraDemandAcceptRejectResponseDialog = BottomSheetDialog(this)
+                    val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
+                    val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
+                    val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
+                    val totalCost = dialogView.findViewById<TextView>(R.id.totalCost)
+                    val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+                    val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+                    val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+                    materialCharges.text = data.booking_details.material_advance
+                    technicianCharges.text = data.booking_details.technician_charges
+                    totalCost.text = data.booking_details.extra_demand_total_amount
+
+                    closeBtn.setOnClickListener { extraDemandAcceptRejectResponseDialog.dismiss() }
+
+                    if (data.booking_details.extra_demand_status == "1") {
+                        acceptBtn.text = "EXTRA DEMAND ACCEPTED"
+                    } else {
+                        acceptBtn.text = "EXTRA DEMAND REJECTED"
+                    }
+                    rejectBtn.visibility = View.GONE
+
+                    extraDemandAcceptRejectResponseDialog.setCancelable(false)
+                    extraDemandAcceptRejectResponseDialog.setContentView(dialogView)
+                    extraDemandAcceptRejectResponseDialog.show()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
     }
 }

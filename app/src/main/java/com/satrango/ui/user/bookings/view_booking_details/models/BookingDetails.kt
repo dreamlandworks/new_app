@@ -5,6 +5,7 @@ data class BookingDetails(
     val estimate_time: String,
     val estimate_type: String,
     val fcm_token: String,
+    val sp_fcm_token: String,
     val fname: String,
     val from: String,
     val time_slot_id: String,

@@ -47,9 +47,13 @@ import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UserMyBookingDetailsScreen : AppCompatActivity() {
 
+    private lateinit var extraDemandAcceptRejectDialog: BottomSheetDialog
     private lateinit var viewModel: BookingViewModel
     private lateinit var binding: ActivityUserMyBookingDetailsScreenBinding
     private lateinit var response: BookingDetailsResModel
@@ -217,7 +221,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         extraDemandTotalAmount: String,
         progressDialog: BeautifulProgressDialog
     ) {
-        val dialog = BottomSheetDialog(this)
+        extraDemandAcceptRejectDialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
         val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
         val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
@@ -230,19 +234,19 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         technicianCharges.text = technicalCharges
         totalCost.text = extraDemandTotalAmount
 
-        closeBtn.setOnClickListener { dialog.dismiss() }
+        closeBtn.setOnClickListener { extraDemandAcceptRejectDialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 2, extraDemandAcceptRejectDialog, progressDialog)
         }
 
-        dialog.setCancelable(false)
-        dialog.setContentView(dialogView)
-        dialog.show()
+        extraDemandAcceptRejectDialog.setCancelable(false)
+        extraDemandAcceptRejectDialog.setContentView(dialogView)
+        extraDemandAcceptRejectDialog.show()
     }
 
     private fun changeExtraDemandStatus(
@@ -265,10 +269,13 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     dialog.dismiss()
                     if (status == 1) {
-                        snackBar(binding.recyclerView, "Extra Demand Accepted")
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token, bookingId.toString(), categoryId, "$userId|1")
+                        toast(this, "Extra Demand Accepted")
                     } else {
-                        snackBar(binding.recyclerView, "Extra Demand Rejected")
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token, bookingId.toString(), categoryId, "$userId|2")
+                        toast(this, "Extra Demand Rejected")
                     }
+                    updateStatusList()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -276,7 +283,6 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         })
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -513,25 +519,19 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
     }
 
     fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    updateUI(it.data!!, bookingId)
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
-                }
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+            if (response.status == 200) {
+                progressDialog.dismiss()
+                updateUI(response)
+            } else {
+                progressDialog.dismiss()
+                snackBar(binding.recyclerView, response.message)
             }
-        })
+        }
     }
 
     private fun updateUI(

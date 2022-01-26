@@ -476,7 +476,7 @@ class UserDashboardScreen : AppCompatActivity() {
     fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.toInt())
+        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.split("|")[0].toInt())
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this, {
             when (it) {
@@ -509,7 +509,8 @@ class UserDashboardScreen : AppCompatActivity() {
                         response.booking_details.technician_charges,
                         response.booking_details.extra_demand_total_amount,
                         progressDialog,
-                        viewModel
+                        viewModel,
+                        response
                     )
                 }
             }
@@ -522,9 +523,10 @@ class UserDashboardScreen : AppCompatActivity() {
         technicalCharges: String,
         extraDemandTotalAmount: String,
         progressDialog: BeautifulProgressDialog,
-        viewModel: BookingViewModel
+        viewModel: BookingViewModel,
+        response: BookingDetailsResModel
     ) {
-        val dialog = BottomSheetDialog(this)
+        val extraDemandAcceptRejectDialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
         val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
         val technicianCharges = dialogView.findViewById<TextView>(R.id.technicianCharges)
@@ -537,19 +539,19 @@ class UserDashboardScreen : AppCompatActivity() {
         technicianCharges.text = technicalCharges
         totalCost.text = extraDemandTotalAmount
 
-        closeBtn.setOnClickListener { dialog.dismiss() }
+        closeBtn.setOnClickListener { extraDemandAcceptRejectDialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, dialog, progressDialog, viewModel)
+            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog, viewModel, response)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, dialog, progressDialog, viewModel)
+            changeExtraDemandStatus(bookingId, 2, extraDemandAcceptRejectDialog, progressDialog, viewModel, response)
         }
 
-        dialog.setCancelable(false)
-        dialog.setContentView(dialogView)
-        dialog.show()
+        extraDemandAcceptRejectDialog.setCancelable(false)
+        extraDemandAcceptRejectDialog.setContentView(dialogView)
+        extraDemandAcceptRejectDialog.show()
     }
 
     private fun changeExtraDemandStatus(
@@ -557,7 +559,8 @@ class UserDashboardScreen : AppCompatActivity() {
         status: Int,
         dialog: BottomSheetDialog,
         progressDialog: BeautifulProgressDialog,
-        viewModel: BookingViewModel
+        viewModel: BookingViewModel,
+        response: BookingDetailsResModel
     ) {
         val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
         Log.e("STATUS:", Gson().toJson(requestBody))
@@ -571,8 +574,18 @@ class UserDashboardScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     dialog.dismiss()
                     if (status == 1) {
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                            bookingId.toString(),
+                            "0",
+                            "${UserUtils.getUserId(this)}|1"
+                        )
                         snackBar(binding.navigationView, "Extra Demand Accepted")
                     } else {
+                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                            bookingId.toString(),
+                            "0",
+                            "${UserUtils.getUserId(this)}|2"
+                        )
                         snackBar(binding.navigationView, "Extra Demand Rejected")
                     }
                 }

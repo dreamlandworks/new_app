@@ -44,6 +44,7 @@
         android:layout_marginTop="@dimen/_15sdp">
 
         <ImageView
+            android:id="@+id/shield"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_90sdp"
             android:layout_centerInParent="true"

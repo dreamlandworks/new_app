@@ -51,8 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import android.app.Activity
-
-
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 
 
 class ProviderInVoiceScreen : AppCompatActivity() {
@@ -472,20 +471,18 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         fourthNo.text = otp[3].toString()
         submitBtn.text = "Close"
         closeBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = true
-            val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
+            ProviderRatingReviewScreen.FROM_PROVIDER = FROM_PROVIDER
+            ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
+            ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
+            ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+            startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
         }
         submitBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = true
-            val intent = Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
+            ProviderRatingReviewScreen.FROM_PROVIDER = FROM_PROVIDER
+            ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
+            ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
+            ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+            startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
         }
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)

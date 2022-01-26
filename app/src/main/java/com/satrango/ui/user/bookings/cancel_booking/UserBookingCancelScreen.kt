@@ -234,11 +234,15 @@ class UserBookingCancelScreen : AppCompatActivity() {
     private fun showSuccessDialog() {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.reschedule_requested_dialog, null)
+        val titleText = dialogView.findViewById<TextView>(R.id.title)
         val message = dialogView.findViewById<TextView>(R.id.message)
         val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
         val searchBtn = dialogView.findViewById<TextView>(R.id.myBookingsBtn)
+        val shield = dialogView.findViewById<ImageView>(R.id.shield)
         message.text = "Your booking is cancelled. Would you like to book again?"
         if (FROM_PROVIDER) {
+            titleText.setTextColor(resources.getColor(R.color.purple_500))
+            shield.setImageResource(R.drawable.purple_shield)
             homeBtn.setBackgroundResource(R.drawable.purple_out_line)
             homeBtn.setTextColor(resources.getColor(R.color.purple_500))
             searchBtn.setBackgroundResource(R.drawable.provider_btn_bg)
