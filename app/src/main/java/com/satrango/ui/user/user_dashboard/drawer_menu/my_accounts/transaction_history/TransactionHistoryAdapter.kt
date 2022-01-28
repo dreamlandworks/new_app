@@ -15,11 +15,15 @@ class TransactionHistoryAdapter(private val list: List<Data>): RecyclerView.Adap
 
         @SuppressLint("SetTextI18n")
         fun bind(data: Data) {
-
             binding.date.text = data.date.split(" ")[0]
             binding.note.text = data.transaction_name
-            binding.amount.text = "Rs ${data.amount}"
-
+            if (data.amount > 0) {
+                binding.amount.text = "Rs +${data.amount}"
+            } else if (data.amount < 0) {
+                binding.amount.text = "Rs -${data.amount}"
+            } else {
+                binding.amount.text = "Rs ${data.amount}"
+            }
             if (data.payment_status == "Success") {
                 binding.date.setTextColor(Color.parseColor("#00AE48"))
                 binding.note.setTextColor(Color.parseColor("#00AE48"))
@@ -43,4 +47,5 @@ class TransactionHistoryAdapter(private val list: List<Data>): RecyclerView.Adap
     override fun getItemCount(): Int {
         return list.size
     }
+
 }

@@ -56,6 +56,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 
 class ProviderInVoiceScreen : AppCompatActivity() {
 
+    private var spFcmToken = ""
     private lateinit var toolBar: View
     private lateinit var binding: ActivityProviderInVoiceScreenBinding
     private lateinit var response: BookingDetailsResModel
@@ -73,6 +74,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProviderInVoiceScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
@@ -129,6 +132,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         binding.bookingIdText.text = bookingId
+        spFcmToken = response.booking_details.sp_fcm_token
 
         if (FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
@@ -193,7 +197,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
-                            requestOTP("User")
+                            requestOTP("User", )
                         }
                     }
                 }
@@ -213,15 +217,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     }
 
     private fun requestOTP(userType: String) {
-//        val factory = ViewModelFactory(MyBookingsRepository())
-//        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId.toInt(), userType)
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     val requestedOTP = jsonResponse.getInt("otp")
-//                    toast(this@ProviderInVoiceScreen, requestedOTP.toString())
                     UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
                     if (!FROM_PROVIDER) {
                         otpDialog(requestedOTP, bookingId)
@@ -402,6 +403,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     dialog.dismiss()
                                     FROM_PROVIDER = false
                                     dialog.dismiss()
+                                    UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|user")
                                     PaymentScreen.FROM_USER_PLANS = false
                                     PaymentScreen.FROM_PROVIDER_PLANS = false
                                     PaymentScreen.FROM_USER_SET_GOALS = false
@@ -409,11 +411,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
                                     PaymentScreen.FROM_COMPLETE_BOOKING = true
                                     startActivity(Intent(this, PaymentScreen::class.java))
-//                                    val intent = Intent(this, ProviderInVoiceScreen::class.java)
-//                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-//                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-//                                    intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-//                                    startActivity(intent)
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()

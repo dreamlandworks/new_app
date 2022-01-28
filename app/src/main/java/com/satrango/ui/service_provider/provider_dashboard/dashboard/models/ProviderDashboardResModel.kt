@@ -6,7 +6,7 @@ data class ProviderDashboardResModel(
     val competitor_name: String,
     val competitor_rank: Int,
     val earnings: String,
-    val commission: String,
+    val commission: Int,
     val message: String,
     val sp_points: Int,
     val sp_rank: Int,

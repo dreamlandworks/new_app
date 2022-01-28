@@ -686,6 +686,7 @@
     <string name="proceed">Proceed</string>
     <string name="cgst">CGST</string>
     <string name="sgst">SGST</string>
+    <string name="expenditure_entered_by_sp">Expenditure entered by SP</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -40,7 +40,7 @@ class ProviderMyBookingAdapter(
         ) {
             binding.amount.text = "Rs ${data.amount}"
             binding.bookingId.text = "Booking Id: ${data.booking_id}"
-            binding.scheduleDate.text = data.scheduled_date
+            binding.scheduleDate.text = "${data.scheduled_date} ${data.from}"
             when (data.category_id) {
                 "1" -> {
                     binding.bookingType.text = "Single Move"
@@ -147,7 +147,7 @@ class ProviderMyBookingAdapter(
 
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                        providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id, data.user_fcm_token)
+                        providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id, data.user_fcm_token, data.sp_fcm_token)
                     }
 
                     binding.card.setOnClickListener {

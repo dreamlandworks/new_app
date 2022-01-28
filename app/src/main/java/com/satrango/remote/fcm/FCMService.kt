@@ -36,6 +36,7 @@ class FCMService : FirebaseMessagingService() {
         val INTENT_FILTER = "INTENT_FILTER"
         val INTENT_FILTER_ONE = "INTENT_FILTER_ONE"
         val OTP_INTENT_FILTER = "OTP_INTENT_FILTER"
+        val OTP_RESPONSE_INTENT_FILTER = "OTP_RESPONSE_INTENT_FILTER"
         val EXTRA_DEMAND_ACCEPT_REJECT = "EXTRA_DEMAND_ACCEPT_REJECT"
         lateinit var notificationManager: NotificationManager
     }
@@ -98,6 +99,22 @@ class FCMService : FirebaseMessagingService() {
                         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
                         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
                         sendBroadcast(notificationIntent)
+                    } else if (title == "otpResponse") {
+                        if (body!!.split("|")[3] == "user") {
+                            val notificationIntent = Intent(OTP_RESPONSE_INTENT_FILTER)
+                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
+                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
+                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                            sendBroadcast(notificationIntent)
+                        } else {
+                            val notificationIntent = Intent(OTP_RESPONSE_INTENT_FILTER)
+                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
+                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
+                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                            sendBroadcast(notificationIntent)
+                        }
+
+
                     } else if (title == "extraDemand") {
                         val notificationIntent = Intent(EXTRA_DEMAND_ACCEPT_REJECT)
                         if (body!!.split("|").size == 3) {

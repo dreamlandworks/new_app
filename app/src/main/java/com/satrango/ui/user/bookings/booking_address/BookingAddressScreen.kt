@@ -261,10 +261,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            val intent = Intent(
-                                this@BookingAddressScreen,
-                                BookingMultiMoveAddressScreen::class.java
-                            )
+                            val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
                             startActivity(intent)
                         }
                     }

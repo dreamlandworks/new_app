@@ -130,7 +130,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list.sortedByDescending { data -> data.booking_id }, status, this)
+                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status, this)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -200,7 +200,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         dialog.show()
     }
 
-    override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String, fcmToken: String) {
+    override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String, userFcmToken: String, spFcmToken: String) {
         myBookingViewModel.otpRequest(this, bookingId, "SP")
             .observe(this, {
                 when (it) {
@@ -211,8 +211,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        UserUtils.sendOTPFCM(this, fcmToken, bookingId.toString(), requestedOTP.toString())
-                        otpDialog(requestedOTP, bookingId, categoryId, userId, spId)
+                        UserUtils.sendOTPFCM(this, userFcmToken, bookingId.toString(), requestedOTP.toString())
+                        otpDialog(requestedOTP, bookingId, categoryId, userId, spId, userFcmToken)
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
@@ -281,7 +281,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     }
 
     @SuppressLint("SetTextI18n")
-    private fun otpDialog(requestedOTP: Int, bookingId: Int, categoryId: String, userId: String, spId: String) {
+    private fun otpDialog(requestedOTP: Int, bookingId: Int, categoryId: String, userId: String, spId: String, userFcmToken: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -415,9 +415,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 }
                                 is NetworkResponse.Success -> {
                                     val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-//                                    intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-//                                    intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-//                                    intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                                     ProviderBookingDetailsScreen.bookingId = bookingId.toString()
                                     ProviderBookingDetailsScreen.categoryId = categoryId
                                     ProviderBookingDetailsScreen.userId = userId
@@ -427,6 +424,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                     startActivity(intent)
                                     progressDialog.dismiss()
                                     dialog.dismiss()
+                                    UserUtils.sendOTPResponseFCM(this, userFcmToken, "$bookingId|$categoryId|$userId|sp")
                                     snackBar(binding.recyclerView, "Booking Started!")
                                 }
                                 is NetworkResponse.Failure -> {

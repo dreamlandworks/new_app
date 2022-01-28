@@ -105,7 +105,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = MyBookingsAdapter(list.sortedByDescending { data -> data.booking_id })
+                    binding.recyclerView.adapter = MyBookingsAdapter(list)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {

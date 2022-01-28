@@ -42,6 +42,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -551,6 +552,10 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, UserMyBookingsScreen::class.java))
     }
 
 }

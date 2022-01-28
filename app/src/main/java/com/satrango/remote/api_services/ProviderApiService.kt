@@ -228,8 +228,8 @@ interface ProviderApiService {
     @GET(ServiceProviderEndPoints.SP_DASHBOARD)
     suspend fun getDashboardDetails(
         @Query("key") key: String,
-        @Query("sp_id") spId: String,
-        @Query("city_id") videoId: String
+        @Query("sp_id") spId: Int,
+        @Query("city_id") cityId: Int
     ): ProviderDashboardResModel
 
     @POST(ServiceProviderEndPoints.ID_PROOF)

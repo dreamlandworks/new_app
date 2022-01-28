@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.FragmentProviderHomeScreenBinding
@@ -21,6 +22,8 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingViewModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
+import java.util.*
 
 class ProviderHomeScreen : Fragment() {
 
@@ -56,7 +59,9 @@ class ProviderHomeScreen : Fragment() {
                     progressDialog.dismiss()
                     val cities = it.data!!.data
                     for (city in cities) {
-                        if (UserUtils.getCity(requireContext()) == city.city) {
+                        if (UserUtils.getCity(requireContext())
+                                .lowercase(Locale.getDefault()) == city.city.lowercase(Locale.getDefault())
+                        ) {
                             loadProviderDashboardDetails(city.id)
                         }
                     }
@@ -77,15 +82,16 @@ class ProviderHomeScreen : Fragment() {
         viewModel.providerDashboardDetails(requireContext(), cityId).observe(requireActivity(), {
             when(it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val data = it.data!!
+                    toast(requireContext(), Gson().toJson(data))
                     binding.bookingCount.text = "${data.bookings_completed}/${data.total_bookings}"
                     binding.bidCount.text = "${data.bids_awarded}/${data.total_bids}"
                     binding.earningText.text = data.earnings
-                    binding.commissionCount.text = data.commission
+                    binding.commissionCount.text = data.commission.toString()
                     binding.myRank.text = "#${data.sp_rank}"
                     binding.ratingCount.text = data.sp_rating.toString()
                     binding.pointsCount.text = data.sp_points.toString()

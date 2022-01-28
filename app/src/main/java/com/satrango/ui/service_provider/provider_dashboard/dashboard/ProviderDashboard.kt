@@ -173,7 +173,6 @@ class ProviderDashboard : AppCompatActivity() {
         userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
                 finish()
-                
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
@@ -241,7 +240,6 @@ class ProviderDashboard : AppCompatActivity() {
             true
         }
 
-//        binding.onlineSwitch.isChecked = UserUtils.getSpStatus(this)
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 updateOnlineStatus(1)
@@ -269,7 +267,6 @@ class ProviderDashboard : AppCompatActivity() {
             }
         } else {
             bookingId = ""
-//            toast(this, "OPENED")
         }
     }
 
@@ -298,29 +295,6 @@ class ProviderDashboard : AppCompatActivity() {
                 snackBar(binding.bottomNavigationView, response.message)
             }
         }
-
-    //        bookingViewModel.viewBookingDetails(this, requestBody).observe(this, {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                    Log.e("Loading...:", "Loading...")
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    response = it.data!!
-//                    Log.e("Response:", Gson().toJson(response))
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        toast(this@ProviderDashboard, "$bookingId|Userid:$userId")
-//                        showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
-//                    }
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    Log.e("Error:", Gson().toJson(response))
-//                }
-//            }
-//        })
-
     }
 
     private fun updateOnlineStatus(statusId: Int) {
@@ -332,7 +306,7 @@ class ProviderDashboard : AppCompatActivity() {
         viewModel.onlineStatus(this, requestBody).observe(this, {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
 //                    toast(this, it.data!!.toString())
@@ -414,7 +388,7 @@ class ProviderDashboard : AppCompatActivity() {
                 5,
                 userId.toInt()
             )
-            toast(this, Gson().toJson(requestBody))
+//            toast(this, Gson().toJson(requestBody))
             bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
                 .observe(this@ProviderDashboard, {
                     when (it) {
@@ -463,13 +437,11 @@ class ProviderDashboard : AppCompatActivity() {
                     timerTime = 59
                     minutes -= 1
                 }
-//                progressBar.progress = timerTime
                 time.text = "0$minutes:" + checkDigit(timerTime)
                 timerTime--
                 if (minutes <= 0) {
                     Companion.bookingId = ""
                     UserUtils.saveFromFCMService(this@ProviderDashboard, false)
-//                    FROM_FCM_SERVICE = false
                     bottomSheetDialog!!.dismiss()
                 }
             }
@@ -523,7 +495,6 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderSignUpSeven::class.java))
                 }
                 "4" -> {
-//                    FROM_FCM_SERVICE = false
                     UserUtils.saveFromFCMService(this, false)
                     startActivity(Intent(this, ProviderDashboard::class.java))
                 }
@@ -700,41 +671,20 @@ class ProviderDashboard : AppCompatActivity() {
                     } else {
                         UserUtils.saveUserProfilePic(this@ProviderDashboard, "")
                     }
-                    UserUtils.saveUserName(
-                        this@ProviderDashboard,
-                        responseData.fname + " " + responseData.lname
-                    )
+                    UserUtils.saveUserName(this@ProviderDashboard, responseData.fname + " " + responseData.lname)
                     if (responseData.referral_id != null) {
                         UserUtils.saveReferralId(this@ProviderDashboard, responseData.referral_id)
                     }
-
                     updateHeaderDetails()
                 } else {
-                    Snackbar.make(
-                        binding.navigationView,
-                        "Something went wrong!",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
                 }
             } catch (e: HttpException) {
-                Snackbar.make(
-                    binding.navigationView,
-                    "Server Busy",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(
-                    binding.navigationView,
-                    "Something Went Wrong",
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(
-                    binding.navigationView,
-                    "Please check internet Connection",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

@@ -143,11 +143,16 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
             } else if (reason.isEmpty()) {
                 snackBar(submitBtn, "Please Select or Enter Reason")
             } else {
+                val finalReason = if (reason == "Others") {
+                    feedBack.text.toString().trim()
+                } else {
+                    reason
+                }
                 val requestBody = ProviderResponseReqModel(
                     response!!.booking_details.amount,
                     bookingId.toInt(),
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
-                    reason,
+                    finalReason,
                     RetrofitBuilder.USER_KEY,
                     UserUtils.getUserId(this@ProviderRejectBookingScreen).toInt(),
                     4,
@@ -161,7 +166,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                             }
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
-                                UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$reason")
+                                UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$finalReason")
                                 if (FCMService.notificationManager != null) {
                                     FCMService.notificationManager.cancelAll()
                                 }

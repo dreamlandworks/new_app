@@ -340,43 +340,43 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun showotpInDialog(otp: String) {
-        val bottomSheetDialog = BottomSheetDialog(this)
-        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
-        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
-        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
-        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
-        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
-        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
-        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
-        firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-        secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-        thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-        fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-        firstNo.text = otp[0].toString()
-        secondNo.text = otp[1].toString()
-        thirdNo.text = otp[2].toString()
-        fourthNo.text = otp[3].toString()
-        submitBtn.text = "Close"
-        closeBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = true
-            ProviderRatingReviewScreen.bookingId = bookingId
-            ProviderRatingReviewScreen.categoryId = categoryId
-            ProviderRatingReviewScreen.userId = userId
-            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
-        }
-        submitBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = true
-            ProviderRatingReviewScreen.bookingId = bookingId
-            ProviderRatingReviewScreen.categoryId = categoryId
-            ProviderRatingReviewScreen.userId = userId
-            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
-        }
-        bottomSheetDialog.setContentView(bottomSheet)
-        bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.show()
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun showotpInDialog(otp: String) {
+//        val bottomSheetDialog = BottomSheetDialog(this)
+//        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
+//        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
+//        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
+//        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
+//        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
+//        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
+//        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
+//        firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+//        secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+//        thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+//        fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
+//        firstNo.text = otp[0].toString()
+//        secondNo.text = otp[1].toString()
+//        thirdNo.text = otp[2].toString()
+//        fourthNo.text = otp[3].toString()
+//        submitBtn.text = "Close"
+//        closeBtn.setOnClickListener {
+//            ProviderRatingReviewScreen.FROM_PROVIDER = true
+//            ProviderRatingReviewScreen.bookingId = bookingId
+//            ProviderRatingReviewScreen.categoryId = categoryId
+//            ProviderRatingReviewScreen.userId = userId
+//            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
+//        }
+//        submitBtn.setOnClickListener {
+//            ProviderRatingReviewScreen.FROM_PROVIDER = true
+//            ProviderRatingReviewScreen.bookingId = bookingId
+//            ProviderRatingReviewScreen.categoryId = categoryId
+//            ProviderRatingReviewScreen.userId = userId
+//            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
+//        }
+//        bottomSheetDialog.setContentView(bottomSheet)
+//        bottomSheetDialog.setCancelable(false)
+//        bottomSheetDialog.show()
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -449,7 +449,10 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                     technicianCharges.text = data.booking_details.technician_charges
                     totalCost.text = data.booking_details.extra_demand_total_amount
 
-                    closeBtn.setOnClickListener { extraDemandAcceptRejectResponseDialog.dismiss() }
+                    closeBtn.setOnClickListener {
+                        extraDemandAcceptRejectResponseDialog.dismiss()
+                        startActivity(intent)
+                    }
 
                     if (data.booking_details.extra_demand_status == "1") {
                         acceptBtn.text = "EXTRA DEMAND ACCEPTED"

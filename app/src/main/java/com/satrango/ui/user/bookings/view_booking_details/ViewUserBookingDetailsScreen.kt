@@ -98,6 +98,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         registerReceiver(otpReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+        registerReceiver(otpResponseReceiver, IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER));
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -163,7 +164,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.userLayout.visibility = View.VISIBLE
                     binding.spLayout.visibility = View.GONE
                     binding.startBtn.visibility = View.GONE
-                    registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
+                    registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
                 } else {
                     binding.spLayout.visibility = View.VISIBLE
                     binding.userLayout.visibility = View.GONE
@@ -484,6 +485,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                         intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                                         startActivity(intent)
                                     } else {
+                                        UserUtils.sendOTPResponseFCM(this, FCM_TOKEN, "$bookingId|$categoryId|$userId|sp")
                                         startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                                     }
                                     snackBar(binding.inProgressViewStatusBtn, "OTP Verification Success")
@@ -860,12 +862,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         super.onStart()
         LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
         LocalBroadcastManager.getInstance(this).registerReceiver((otpReceiver), IntentFilter(FCMService.OTP_INTENT_FILTER))
+        LocalBroadcastManager.getInstance(this).registerReceiver((otpResponseReceiver), IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER))
     }
 
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(otpReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(otpResponseReceiver)
     }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -887,6 +891,17 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             if (!(context as Activity).isFinishing) {
                 showotpInDialog(otp)
             }
+        }
+    }
+
+    private val otpResponseReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val intentService = Intent(context, UserMyBookingDetailsScreen::class.java)
+            intentService.putExtra(getString(R.string.booking_id), intent.getStringExtra(getString(R.string.booking_id))!!)
+            intentService.putExtra(getString(R.string.category_id), intent.getStringExtra(getString(R.string.category_id))!!)
+            intentService.putExtra(getString(R.string.user_id), intent.getStringExtra(getString(R.string.user_id))!!)
+            startActivity(intentService)
         }
     }
 

@@ -1,6 +1,8 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training
 
 import android.content.Context
+import android.util.Log
+import com.google.gson.Gson
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.api_services.ProviderApiService
@@ -30,7 +32,8 @@ class ProviderMyTrainingRepository : BaseRepository() {
     }
 
     suspend fun getProviderDashboardDetails(context: Context, cityId: String): ProviderDashboardResModel {
-        return RetrofitBuilder.getServiceProviderRetrofitInstance().getDashboardDetails(RetrofitBuilder.PROVIDER_KEY, "2", cityId)
+        Log.e("SPDASHBOARD:", UserUtils.getUserId(context) + "|" + cityId)
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().getDashboardDetails(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(context).toInt(), cityId.toInt())
     }
 
 }

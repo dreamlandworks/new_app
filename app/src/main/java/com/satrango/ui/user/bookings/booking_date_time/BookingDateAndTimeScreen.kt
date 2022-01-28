@@ -534,7 +534,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+                MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
         }
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
@@ -548,17 +548,14 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.nightTimeRv.adapter =
                 MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
         }
-//        binding.morningTimeRv.adapter = MonthsAdapter(availableTimeSlots.distinctBy { data -> data.month } as ArrayList<MonthsModel>,
-//            this@BookingDateAndTimeScreen,
-//            "T")
-        binding.morningTimeRv.adapter =
-            MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
-        binding.afternoonTimeRv.adapter =
-            MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
-        binding.eveningTimeRv.adapter =
-            MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
-        binding.nightTimeRv.adapter =
-            MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+//        binding.morningTimeRv.adapter =
+//            MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+//        binding.afternoonTimeRv.adapter =
+//            MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+//        binding.eveningTimeRv.adapter =
+//            MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+//        binding.nightTimeRv.adapter =
+//            MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
     }
 
     private fun loadDays(
@@ -654,148 +651,198 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.dayRv.adapter = MonthsAdapter(availableSlots, this, "D")
             binding.dayRv.scrollToPosition(position)
             loadTimings(position)
-        }
-
-        tempMonths = ArrayList()
-        availableTimeSlots.onEachIndexed { index, month ->
-            if (dateTime == month.month) {
-                tempMonths.add(MonthsModel(month.month, month.day, true))
-            } else {
-                tempMonths.add(MonthsModel(month.month, month.day, false))
+        } else {
+            tempMonths = ArrayList()
+            availableTimeSlots.onEachIndexed { index, month ->
+                if (dateTime == month.month) {
+                    tempMonths.add(MonthsModel(month.month, month.day, true))
+                } else {
+                    tempMonths.add(MonthsModel(month.month, month.day, false))
+                }
             }
-        }
 
-        availableTimeSlots = tempMonths
+            availableTimeSlots = tempMonths
 
-        morningTimings = ArrayList()
-        afternoonTimings = ArrayList()
-        eveningTimings = ArrayList()
-        nightTimings = ArrayList()
+            morningTimings = ArrayList()
+            afternoonTimings = ArrayList()
+            eveningTimings = ArrayList()
+            nightTimings = ArrayList()
 
-        availableTimeSlots.onEachIndexed { index, monthsModel ->
-            when {
-                UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
-                    if (index >= 1) {
-                        if (!morningTimings.contains(availableTimeSlots[index - 1])) {
-                            if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+            availableTimeSlots.onEachIndexed { index, monthsModel ->
+                when {
+                    UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!morningTimings.contains(availableTimeSlots[index - 1])) {
+                                if (today) {
+                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                        morningTimings.add(availableTimeSlots[index - 1])
+                                    }
+                                } else {
                                     morningTimings.add(availableTimeSlots[index - 1])
                                 }
-                            } else {
-                                morningTimings.add(availableTimeSlots[index - 1])
                             }
                         }
-                    }
-                    if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (today) {
+                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                morningTimings.add(monthsModel)
+                            }
+                        } else {
                             morningTimings.add(monthsModel)
                         }
-                    } else {
-                        morningTimings.add(monthsModel)
                     }
-                }
-                UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
-                    if (index >= 1) {
-                        if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
-                            if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                    UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
+                                if (today) {
+                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                        afternoonTimings.add(availableTimeSlots[index - 1])
+                                    }
+                                } else {
                                     afternoonTimings.add(availableTimeSlots[index - 1])
                                 }
-                            } else {
-                                afternoonTimings.add(availableTimeSlots[index - 1])
                             }
                         }
-                    }
-                    if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (today) {
+                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                afternoonTimings.add(monthsModel)
+                            }
+                        } else {
                             afternoonTimings.add(monthsModel)
                         }
-                    } else {
-                        afternoonTimings.add(monthsModel)
                     }
-                }
-                UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
-                    if (index >= 1) {
-                        if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
-                            if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                    UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
+                                if (today) {
+                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                        eveningTimings.add(availableTimeSlots[index - 1])
+                                    }
+                                } else {
                                     eveningTimings.add(availableTimeSlots[index - 1])
                                 }
-                            } else {
-                                eveningTimings.add(availableTimeSlots[index - 1])
                             }
                         }
-                    }
-                    if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (today) {
+                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                eveningTimings.add(monthsModel)
+                            }
+                        } else {
                             eveningTimings.add(monthsModel)
                         }
-                    } else {
-                        eveningTimings.add(monthsModel)
-                    }
 
-                }
-                UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
-                    if (index >= 1) {
-                        if (!nightTimings.contains(availableTimeSlots[index - 1])) {
-                            if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                    }
+                    UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
+                        if (index >= 1) {
+                            if (!nightTimings.contains(availableTimeSlots[index - 1])) {
+                                if (today) {
+                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                        nightTimings.add(availableTimeSlots[index - 1])
+                                    }
+                                } else {
                                     nightTimings.add(availableTimeSlots[index - 1])
                                 }
-                            } else {
-                                nightTimings.add(availableTimeSlots[index - 1])
                             }
                         }
-                    }
-                    if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (today) {
+                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                nightTimings.add(monthsModel)
+                            }
+                        } else {
                             nightTimings.add(monthsModel)
                         }
-                    } else {
-                        nightTimings.add(monthsModel)
-                    }
 
+                    }
                 }
             }
-        }
-
-        if (morningTimings.isEmpty()) {
-            binding.morningText.visibility = View.GONE
-            binding.morningTimeRv.visibility = View.GONE
-        } else {
-            binding.morningText.visibility = View.VISIBLE
-            binding.morningTimeRv.visibility = View.VISIBLE
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
-        }
-        if (afternoonTimings.isEmpty()) {
-            binding.afternoonText.visibility = View.GONE
-            binding.afternoonTimeRv.visibility = View.GONE
-        } else {
-            binding.afternoonText.visibility = View.VISIBLE
-            binding.afternoonTimeRv.visibility = View.VISIBLE
-            binding.afternoonTimeRv.adapter =
-                MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
-        }
-        if (eveningTimings.isEmpty()) {
-            binding.eveningText.visibility = View.GONE
-            binding.eveningTimeRv.visibility = View.GONE
-        } else {
-            binding.eveningText.visibility = View.VISIBLE
-            binding.eveningTimeRv.visibility = View.VISIBLE
-            binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
-        }
-        if (nightTimings.isEmpty()) {
-            binding.nightText.visibility = View.GONE
-            binding.nightTimeRv.visibility = View.GONE
-        } else {
-            binding.nightText.visibility = View.VISIBLE
-            binding.nightTimeRv.visibility = View.VISIBLE
-            binding.nightTimeRv.adapter =
-                MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+            if (morningTimings.isEmpty()) {
+                binding.morningText.visibility = View.GONE
+                binding.morningTimeRv.visibility = View.GONE
+            } else {
+                binding.morningText.visibility = View.VISIBLE
+                binding.morningTimeRv.visibility = View.VISIBLE
+                if (today) {
+                    morningTimings.removeAt(0)
+                }
+                binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+            }
+            if (afternoonTimings.isEmpty()) {
+                binding.afternoonText.visibility = View.GONE
+                binding.afternoonTimeRv.visibility = View.GONE
+            } else {
+                if (today) {
+                    if (binding.morningTimeRv.visibility != View.VISIBLE) {
+                        afternoonTimings.removeAt(0)
+                    }
+                }
+                binding.afternoonText.visibility = View.VISIBLE
+                binding.afternoonTimeRv.visibility = View.VISIBLE
+                binding.afternoonTimeRv.adapter =
+                    MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+            }
+            if (eveningTimings.isEmpty()) {
+                binding.eveningText.visibility = View.GONE
+                binding.eveningTimeRv.visibility = View.GONE
+            } else {
+                if (today) {
+                    if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+                        eveningTimings.removeAt(0)
+                    }
+                }
+                binding.eveningText.visibility = View.VISIBLE
+                binding.eveningTimeRv.visibility = View.VISIBLE
+                binding.eveningTimeRv.adapter =
+                    MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+            }
+            if (nightTimings.isEmpty()) {
+                binding.nightText.visibility = View.GONE
+                binding.nightTimeRv.visibility = View.GONE
+            } else {
+                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+                    nightTimings.removeAt(0)
+                }
+                binding.nightText.visibility = View.VISIBLE
+                binding.nightTimeRv.visibility = View.VISIBLE
+                binding.nightTimeRv.adapter =
+                    MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+            }
         }
         validateFields()
+
+//        if (morningTimings.isEmpty()) {
+//            binding.morningText.visibility = View.GONE
+//            binding.morningTimeRv.visibility = View.GONE
+//        } else {
+//            binding.morningText.visibility = View.VISIBLE
+//            binding.morningTimeRv.visibility = View.VISIBLE
+//            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+//        }
+//        if (afternoonTimings.isEmpty()) {
+//            binding.afternoonText.visibility = View.GONE
+//            binding.afternoonTimeRv.visibility = View.GONE
+//        } else {
+//            binding.afternoonText.visibility = View.VISIBLE
+//            binding.afternoonTimeRv.visibility = View.VISIBLE
+//            binding.afternoonTimeRv.adapter =
+//                MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+//        }
+//        if (eveningTimings.isEmpty()) {
+//            binding.eveningText.visibility = View.GONE
+//            binding.eveningTimeRv.visibility = View.GONE
+//        } else {
+//            binding.eveningText.visibility = View.VISIBLE
+//            binding.eveningTimeRv.visibility = View.VISIBLE
+//            binding.eveningTimeRv.adapter =
+//                MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+//        }
+//        if (nightTimings.isEmpty()) {
+//            binding.nightText.visibility = View.GONE
+//            binding.nightTimeRv.visibility = View.GONE
+//        } else {
+//            binding.nightText.visibility = View.VISIBLE
+//            binding.nightTimeRv.visibility = View.VISIBLE
+//            binding.nightTimeRv.adapter =
+//                MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+//        }
     }
 
     override fun onBackPressed() {
