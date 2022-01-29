@@ -166,6 +166,15 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                             binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
                         }
                     }
+                    binding.card.setOnClickListener {
+                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                        ViewUserBookingDetailsScreen.FROM_PENDING = false
+                        ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+                        binding.root.context.startActivity(intent)
+                    }
                 }
                 "Expired".lowercase(Locale.getDefault()) -> {
                     binding.cancelBookingBtn.visibility = View.GONE
