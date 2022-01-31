@@ -85,7 +85,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
     private fun updateUI(status: String) {
         val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
 
-        viewModel.getMyBookingDetails(this, requestBody).observe(this, {
+        viewModel.getMyBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -95,7 +95,14 @@ class UserMyBookingsScreen : AppCompatActivity() {
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
                         if (status == "Completed") {
-                            if (details.booking_status.equals(status, ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true) || details.booking_status.equals("Cancelled", ignoreCase = true)) {
+                            if (details.booking_status.equals(
+                                    status,
+                                    ignoreCase = true
+                                ) || details.booking_status.equals(
+                                    "Expired",
+                                    ignoreCase = true
+                                ) || details.booking_status.equals("Cancelled", ignoreCase = true)
+                            ) {
                                 list.add(details)
                             }
                         } else {
@@ -119,7 +126,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                     snackBar(binding.recyclerView, it.message)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

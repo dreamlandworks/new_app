@@ -554,9 +554,9 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (morningTimings.isEmpty()) {
             binding.morningText.visibility = View.GONE
         } else {
-            if (today) {
-                morningTimings.removeAt(0)
-            }
+//            if (today) {
+//                morningTimings.removeAt(0)
+//            }
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.adapter =
                 MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
@@ -569,6 +569,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                     afternoonTimings.removeAt(0)
                 }
             }
+//            for (index in afternoonTimings.indices) {
+//                if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
+//                    afternoonTimings.removeAt(index)
+//                }
+//            }
             binding.afternoonText.visibility = View.VISIBLE
             binding.afternoonTimeRv.adapter =
                 MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
@@ -576,11 +581,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
         } else {
-            if (today) {
-                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
-                    eveningTimings.removeAt(0)
-                }
-            }
+//            if (today) {
+//                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+//                    eveningTimings.removeAt(0)
+//                }
+//            }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
                 MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
@@ -588,9 +593,9 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
         } else {
-            if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
-                nightTimings.removeAt(0)
-            }
+//            if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+//                nightTimings.removeAt(0)
+//            }
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.adapter =
                 MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
@@ -604,4 +609,11 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             timeSlots.add(MonthsModel(timingsList[index], "", false))
         }
     }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getHourInDay(): Int {
+        val simpleDateFormat = SimpleDateFormat("HH:mm aa")
+        return simpleDateFormat.format(Date()).split(":")[0].toInt()
+    }
+
 }

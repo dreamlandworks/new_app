@@ -44,8 +44,8 @@ class TransactionHistoryScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(MyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
-        viewModel.transactionHistory(this).observe(this, {
-            when(it) {
+        viewModel.transactionHistory(this).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -64,7 +64,7 @@ class TransactionHistoryScreen : AppCompatActivity() {
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

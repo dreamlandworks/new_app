@@ -56,6 +56,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         var FROM_PROVIDER = false
     }
 
+    private lateinit var rightNow: Calendar
     private lateinit var morningTimings: java.util.ArrayList<MonthsModel>
     private lateinit var afternoonTimings: java.util.ArrayList<MonthsModel>
     private lateinit var eveningTimings: java.util.ArrayList<MonthsModel>
@@ -83,6 +84,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
         initializeToolBar()
         initializeProgressDialog()
+        rightNow = Calendar.getInstance()
 
         userType = if (FROM_PROVIDER) {
             "SP"
@@ -99,13 +101,16 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.selectedMonth.text = LocalDate.now().month.name
 
         if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
-            spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
+            spDetails = Gson().fromJson(
+                UserUtils.getSelectedAllSPDetails(this),
+                SearchServiceProviderResModel::class.java
+            )
             loadDates()
             loadTimings(0)
         } else {
             val factory = ViewModelFactory(BookingRepository())
             val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-            viewModel.spSlots(this, UserUtils.spid.toInt()).observe(this, {
+            viewModel.spSlots(this, UserUtils.spid.toInt()).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -123,7 +128,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }
-            })
+            }
 
         }
 
@@ -224,7 +229,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             userType
         )
         Log.e("RESCHEDULE:", Gson().toJson(requestBody))
-        viewModel.rescheduleBooking(this, requestBody).observe(this, {
+        viewModel.rescheduleBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -240,7 +245,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 //                    weAreSorryDialog()
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -418,7 +423,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     if (index >= 1) {
                         if (!morningTimings.contains(availableTimeSlots[index - 1])) {
                             if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                if (UserUtils.checktimings(
+                                        monthsModel.month,
+                                        SimpleDateFormat("HH:mm a").format(Date())
+                                    )
+                                ) {
                                     morningTimings.add(availableTimeSlots[index - 1])
                                 }
                             } else {
@@ -427,7 +436,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                     }
                     if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (UserUtils.checktimings(
+                                monthsModel.month,
+                                SimpleDateFormat("HH:mm a").format(Date())
+                            )
+                        ) {
                             morningTimings.add(monthsModel)
                         }
                     } else {
@@ -438,7 +451,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     if (index >= 1) {
                         if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
                             if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                if (UserUtils.checktimings(
+                                        monthsModel.month,
+                                        SimpleDateFormat("HH:mm a").format(Date())
+                                    )
+                                ) {
                                     afternoonTimings.add(availableTimeSlots[index - 1])
                                 }
                             } else {
@@ -447,7 +464,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                     }
                     if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (UserUtils.checktimings(
+                                monthsModel.month,
+                                SimpleDateFormat("HH:mm a").format(Date())
+                            )
+                        ) {
                             afternoonTimings.add(monthsModel)
                         }
                     } else {
@@ -458,7 +479,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     if (index >= 1) {
                         if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
                             if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                if (UserUtils.checktimings(
+                                        monthsModel.month,
+                                        SimpleDateFormat("HH:mm a").format(Date())
+                                    )
+                                ) {
                                     eveningTimings.add(availableTimeSlots[index - 1])
                                 }
                             } else {
@@ -467,7 +492,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                     }
                     if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (UserUtils.checktimings(
+                                monthsModel.month,
+                                SimpleDateFormat("HH:mm a").format(Date())
+                            )
+                        ) {
                             eveningTimings.add(monthsModel)
                         }
                     } else {
@@ -478,7 +507,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     if (index >= 1) {
                         if (!nightTimings.contains(availableTimeSlots[index - 1])) {
                             if (today) {
-                                if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                if (UserUtils.checktimings(
+                                        monthsModel.month,
+                                        SimpleDateFormat("HH:mm a").format(Date())
+                                    )
+                                ) {
                                     nightTimings.add(availableTimeSlots[index - 1])
                                 }
                             } else {
@@ -487,7 +520,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         }
                     }
                     if (today) {
-                        if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                        if (UserUtils.checktimings(
+                                monthsModel.month,
+                                SimpleDateFormat("HH:mm a").format(Date())
+                            )
+                        ) {
                             nightTimings.add(monthsModel)
                         }
                     } else {
@@ -503,10 +540,17 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.visibility = View.VISIBLE
+//            toast(this, morningTimings[0].month.split(":")[0])
             if (today) {
+//                for (index in morningTimings.indices) {
+//                    if (getHourInDay() <= morningTimings[index].month.split(":")[0].toInt()) {
+//                        morningTimings.removeAt(index)
+//                    }
+//                }
                 morningTimings.removeAt(0)
             }
-            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+            binding.morningTimeRv.adapter =
+                MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
@@ -515,6 +559,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             if (today) {
                 if (binding.morningTimeRv.visibility != View.VISIBLE) {
                     afternoonTimings.removeAt(0)
+//                    toast(this, afternoonTimings.size.toString())
+//                    for (index in afternoonTimings.indices) {
+//                        if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
+//                            afternoonTimings.removeAt(index)
+//                        }
+//                    }
                 }
             }
             binding.afternoonText.visibility = View.VISIBLE
@@ -528,19 +578,31 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             if (today) {
                 if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+//                    for (index in eveningTimings.indices) {
+//                        if (getHourInDay() <= eveningTimings[index].month.split(":")[0].toInt()) {
+//                            eveningTimings.removeAt(index)
+//                        }
+//                    }
                     eveningTimings.removeAt(0)
                 }
             }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
+                MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>,
+                    this@BookingDateAndTimeScreen,
+                    "T")
         }
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
             binding.nightTimeRv.visibility = View.GONE
         } else {
             if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+//                for (index in nightTimings.indices) {
+//                    if (getHourInDay() <= nightTimings[index].month.split(":")[0].toInt()) {
+//                        nightTimings.removeAt(index)
+//                    }
+//                }
                 nightTimings.removeAt(0)
             }
             binding.nightText.visibility = View.VISIBLE
@@ -548,14 +610,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.nightTimeRv.adapter =
                 MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
         }
-//        binding.morningTimeRv.adapter =
-//            MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
-//        binding.afternoonTimeRv.adapter =
-//            MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
-//        binding.eveningTimeRv.adapter =
-//            MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
-//        binding.nightTimeRv.adapter =
-//            MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getHourInDay(): Int {
+        val simpleDateFormat = SimpleDateFormat("HH:mm aa")
+        return simpleDateFormat.format(Date()).split(":")[0].toInt()
     }
 
     private fun loadDays(
@@ -588,7 +648,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         for (day in 1..daysInMonth) {
             val months = if (month + 1 > 12) {
                 month + 1 - 12
-            }  else {
+            } else {
                 month + 1
             }
             daysList.add(
@@ -674,7 +734,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         if (index >= 1) {
                             if (!morningTimings.contains(availableTimeSlots[index - 1])) {
                                 if (today) {
-                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                    if (UserUtils.checktimings(
+                                            monthsModel.month,
+                                            SimpleDateFormat("HH:mm a").format(Date())
+                                        )
+                                    ) {
                                         morningTimings.add(availableTimeSlots[index - 1])
                                     }
                                 } else {
@@ -683,7 +747,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             }
                         }
                         if (today) {
-                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                            if (UserUtils.checktimings(
+                                    monthsModel.month,
+                                    SimpleDateFormat("HH:mm a").format(Date())
+                                )
+                            ) {
                                 morningTimings.add(monthsModel)
                             }
                         } else {
@@ -694,7 +762,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         if (index >= 1) {
                             if (!afternoonTimings.contains(availableTimeSlots[index - 1])) {
                                 if (today) {
-                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                    if (UserUtils.checktimings(
+                                            monthsModel.month,
+                                            SimpleDateFormat("HH:mm a").format(Date())
+                                        )
+                                    ) {
                                         afternoonTimings.add(availableTimeSlots[index - 1])
                                     }
                                 } else {
@@ -703,7 +775,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             }
                         }
                         if (today) {
-                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                            if (UserUtils.checktimings(
+                                    monthsModel.month,
+                                    SimpleDateFormat("HH:mm a").format(Date())
+                                )
+                            ) {
                                 afternoonTimings.add(monthsModel)
                             }
                         } else {
@@ -714,7 +790,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         if (index >= 1) {
                             if (!eveningTimings.contains(availableTimeSlots[index - 1])) {
                                 if (today) {
-                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                    if (UserUtils.checktimings(
+                                            monthsModel.month,
+                                            SimpleDateFormat("HH:mm a").format(Date())
+                                        )
+                                    ) {
                                         eveningTimings.add(availableTimeSlots[index - 1])
                                     }
                                 } else {
@@ -723,7 +803,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             }
                         }
                         if (today) {
-                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                            if (UserUtils.checktimings(
+                                    monthsModel.month,
+                                    SimpleDateFormat("HH:mm a").format(Date())
+                                )
+                            ) {
                                 eveningTimings.add(monthsModel)
                             }
                         } else {
@@ -735,7 +819,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                         if (index >= 1) {
                             if (!nightTimings.contains(availableTimeSlots[index - 1])) {
                                 if (today) {
-                                    if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                                    if (UserUtils.checktimings(
+                                            monthsModel.month,
+                                            SimpleDateFormat("HH:mm a").format(Date())
+                                        )
+                                    ) {
                                         nightTimings.add(availableTimeSlots[index - 1])
                                     }
                                 } else {
@@ -744,7 +832,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             }
                         }
                         if (today) {
-                            if (UserUtils.checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
+                            if (UserUtils.checktimings(
+                                    monthsModel.month,
+                                    SimpleDateFormat("HH:mm a").format(Date())
+                                )
+                            ) {
                                 nightTimings.add(monthsModel)
                             }
                         } else {
@@ -761,9 +853,14 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.morningText.visibility = View.VISIBLE
                 binding.morningTimeRv.visibility = View.VISIBLE
                 if (today) {
-                    morningTimings.removeAt(0)
+                    for (index in morningTimings.indices) {
+                        if (getHourInDay() <= morningTimings[index].month.split(":")[0].toInt()) {
+                            morningTimings.removeAt(index)
+                        }
+                    }
                 }
-                binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+                binding.morningTimeRv.adapter =
+                    MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
             }
             if (afternoonTimings.isEmpty()) {
                 binding.afternoonText.visibility = View.GONE
@@ -771,11 +868,16 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE) {
-                        afternoonTimings.removeAt(0)
+                        for (index in afternoonTimings.indices) {
+//                            if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
+//                                afternoonTimings.removeAt(index)
+//                            }
+                        }
                     }
                 }
                 binding.afternoonText.visibility = View.VISIBLE
                 binding.afternoonTimeRv.visibility = View.VISIBLE
+                toast(this, afternoonTimings.size.toString())
                 binding.afternoonTimeRv.adapter =
                     MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
             }
@@ -785,7 +887,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
-                        eveningTimings.removeAt(0)
+                        for (index in eveningTimings.indices) {
+                            if (getHourInDay() <= eveningTimings[index].month.split(":")[0].toInt()) {
+                                eveningTimings.removeAt(index)
+                            }
+                        }
                     }
                 }
                 binding.eveningText.visibility = View.VISIBLE
@@ -798,7 +904,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.visibility = View.GONE
             } else {
                 if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
-                    nightTimings.removeAt(0)
+                    for (index in nightTimings.indices) {
+                        if (getHourInDay() <= nightTimings[index].month.split(":")[0].toInt()) {
+                            nightTimings.removeAt(index)
+                        }
+                    }
                 }
                 binding.nightText.visibility = View.VISIBLE
                 binding.nightTimeRv.visibility = View.VISIBLE

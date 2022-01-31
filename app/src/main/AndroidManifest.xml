@@ -57,225 +57,289 @@
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.dashboard.leaderboard.LeaderBoardScreen"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.training.YoutubePlayerScreen"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.AddBankAccountScreen"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.payment_screen.PaymentScreen"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.ProviderRejectBookingScreen"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.plans.ProviderPlansScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.reviews.ProviderReviewScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.profile.ProviderProfileScreen"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.cancel_booking.UserBookingCancelScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.MyJobPostEditScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveDescriptionScreen"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.description.PostJobDescriptionScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.provider_response.ProviderBookingResponseScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.change_address.AddBookingAddressScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.booking_address.BookingAddressScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.booking_date_time.BookingDateAndTimeScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.bookings.booking_attachments.BookingAttachmentsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.UserPrivacyPolicyScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenTwo"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpSeven"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.ProviderSignUpSix"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_four.ProviderSignUpFour"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_three.ProviderSignUpThree"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpTwo"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.auth.forgot_password.ForgotPasswordScreenOne"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.service_provider.provider_dashboard.dashboard.ProviderDashboard"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.user_dashboard.UserDashboardScreen"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -289,31 +353,41 @@
         </activity>
         <activity
             android:name=".ui.auth.UserLoginTypeScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.set_password.SetPasswordScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.otp_verification.OTPVerificationScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.TermsAndConditionScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenThree"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.user_signup.UserSignUpScreenOne"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.splash.IntroScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.login_screen.LoginScreen"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.splash.SplashScreen"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            tools:node="merge">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -323,13 +397,15 @@
 
         <receiver
             android:name=".ui.auth.user_signup.SmsReceiver"
-            android:exported="true">
+            android:exported="true"
+            tools:node="merge">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
 
         <meta-data
+            android:exported="true"
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" /> <!-- <activity -->
         <!-- android:name="com.facebook.FacebookActivity" -->
@@ -349,13 +425,15 @@
         <!-- </activity> -->
         <service
             android:name=".remote.fcm.FCMService"
-            android:exported="false">
+            android:exported="true"
+            tools:node="merge">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <meta-data
+            android:exported="true"
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 

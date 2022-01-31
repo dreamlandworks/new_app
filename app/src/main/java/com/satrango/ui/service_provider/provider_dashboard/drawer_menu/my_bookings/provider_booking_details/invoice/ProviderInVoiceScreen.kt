@@ -103,7 +103,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+        viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -118,7 +118,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     snackBar(binding.amount, it.message!!)
                 }
             }
-        })
+        }
 
         binding.backBtn.setOnClickListener { onBackPressed() }
 
@@ -170,7 +170,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
         val requestBody = ProviderInvoiceReqModel(bookingId.toInt(), RetrofitBuilder.PROVIDER_KEY, isExtraDemandRaised)
-        viewModel.getInvoice(this, requestBody).observe(this, {
+        viewModel.getInvoice(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -186,7 +186,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         cgst.text = response.booking_details.cgst_tax
                         sgst.text = response.booking_details.sgst_tax
                         technicianCharges.text = response.booking_details.technician_charges
-                        materialCharges.text = response.booking_details.material_advance
+                        materialCharges.text = response.booking_details.expenditure_incurred
                         totalDues.text = response.booking_details.dues
                         netAmount.text = response.booking_paid_transactions[0].final_dues
                         totalTimeLapsed.text = response.booking_details.time_lapsed
@@ -197,7 +197,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
-                            requestOTP("User", )
+                            requestOTP("User",)
                         }
                     }
                 }
@@ -206,7 +206,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     snackBar(binding.amount, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -393,7 +393,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     val viewModel =
                         ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
                     viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
-                        .observe(this, {
+                        .observe(this) {
                             when (it) {
                                 is NetworkResponse.Loading -> {
                                     progressDialog.show()
@@ -403,7 +403,11 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     dialog.dismiss()
                                     FROM_PROVIDER = false
                                     dialog.dismiss()
-                                    UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|user")
+                                    UserUtils.sendOTPResponseFCM(
+                                        this,
+                                        spFcmToken,
+                                        "$bookingId|$categoryId|$userId|user"
+                                    )
                                     PaymentScreen.FROM_USER_PLANS = false
                                     PaymentScreen.FROM_PROVIDER_PLANS = false
                                     PaymentScreen.FROM_USER_SET_GOALS = false
@@ -417,7 +421,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     snackBar(binding.amount, it.message!!)
                                 }
                             }
-                        })
+                        }
                 } else {
                     snackBar(binding.amount, "Invalid OTP")
                 }

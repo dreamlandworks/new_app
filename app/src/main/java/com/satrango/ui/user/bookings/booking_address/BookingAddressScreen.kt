@@ -133,7 +133,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this, {
+        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -161,7 +161,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
 
         binding.apply {
 
@@ -339,7 +339,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
-            viewModel.singleMoveBooking(this, requestBody).observe(this, {
+            viewModel.singleMoveBooking(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -349,7 +349,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this)) {
                             Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|${UserUtils.bookingType}")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user",
+                                "accepted|${UserUtils.bookingType}"
+                            )
                         } else {
                             Log.e("SINGLE MOVE SELECTED", it.data!!)
                             UserUtils.sendFCMtoSelectedServiceProvider(
@@ -364,7 +369,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         snackBar(binding.nextBtn, "SINGLE MOVE" + it.message!!)
                     }
                 }
-            })
+            }
         } else {
 
             var address = ""
@@ -413,7 +418,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
-            viewModel.singleMoveBooking(this, requestBody).observe(this, {
+            viewModel.singleMoveBooking(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -445,7 +450,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }
-            })
+            }
 
         }
 
@@ -510,14 +515,17 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         )
                         toast(this@BookingAddressScreen, Gson().toJson(requestBody))
                         bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
-                            .observe(this@BookingAddressScreen, {
+                            .observe(this@BookingAddressScreen) {
                                 when (it) {
                                     is NetworkResponse.Loading -> {
                                         progressDialog.show()
                                     }
                                     is NetworkResponse.Success -> {
                                         progressDialog.dismiss()
-                                        UserUtils.saveFromFCMService(this@BookingAddressScreen,false)
+                                        UserUtils.saveFromFCMService(
+                                            this@BookingAddressScreen,
+                                            false
+                                        )
                                         if (FCMService.notificationManager != null) {
                                             FCMService.notificationManager.cancelAll()
                                         }
@@ -530,7 +538,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                         toast(this@BookingAddressScreen, it.message!!)
                                     }
                                 }
-                            })
+                            }
                     } catch (e: java.lang.Exception) {
                     }
 //                    Checkout.preload(applicationContext)
@@ -774,7 +782,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
-        viewModel.blueCollarBooking(this, requestBody).observe(this, {
+        viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -806,7 +814,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, "BLUE COLLAR" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -917,14 +925,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 )
                 toast(this@BookingAddressScreen, Gson().toJson(requestBody))
                 bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
-                    .observe(this@BookingAddressScreen, {
+                    .observe(this@BookingAddressScreen) {
                         when (it) {
                             is NetworkResponse.Loading -> {
                                 progressDialog.show()
                             }
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
-                                UserUtils.saveFromFCMService(this@BookingAddressScreen,false)
+                                UserUtils.saveFromFCMService(this@BookingAddressScreen, false)
                                 if (FCMService.notificationManager != null) {
                                     FCMService.notificationManager.cancelAll()
                                 }
@@ -937,7 +945,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 toast(this@BookingAddressScreen, it.message!!)
                             }
                         }
-                    })
+                    }
             }
         }
     }

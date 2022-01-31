@@ -52,6 +52,7 @@ class UserAlertsAdapter(
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
         holder.bind(data, alertType)
@@ -66,18 +67,27 @@ class UserAlertsAdapter(
                 alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_sp_id.toInt(), data.bid_id.toInt())
             }
             if (data.alert_id == "9" && data.action == "2") {
-                if (UserAlertScreen.FROM_PROVIDER) {
-                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
-                } else {
-                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-                }
+                holder.binding.rowReviewNowBtn.text = "Accept"
+                holder.binding.rowReviewLaterBtn.text = "Reject"
+//                if (UserAlertScreen.FROM_PROVIDER) {
+//                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
+//                } else {
+//                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
+//                if (!UserAlertScreen.FROM_PROVIDER) {
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                } else {
+//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
             }
             if (data.alert_id == "10" && data.action == "2") {
-                if (UserAlertScreen.FROM_PROVIDER) {
+                holder.binding.rowReviewNowBtn.text = "Accept"
+                holder.binding.rowReviewLaterBtn.text = "Reject"
+//                if (!UserAlertScreen.FROM_PROVIDER) {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-                } else {
-                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-                }
+//                } else {
+//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
             }
             if (data.alert_id == "3") {
                 alertsInterface.divertToOfferScreen()

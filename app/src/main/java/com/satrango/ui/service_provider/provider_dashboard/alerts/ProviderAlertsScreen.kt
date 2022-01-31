@@ -100,7 +100,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     R.string.black_color
                 )))
         binding.actionNeededBtn.setBackgroundResource(R.drawable.purple_out_line)
-        viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
+        viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -118,9 +118,9 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
 //                    toast(requireContext(), it.message!!)
                 }
             }
-        })
-        viewModel.updateAlertsToRead(requireContext(), "1").observe(viewLifecycleOwner, {
-            when(it) {
+        }
+        viewModel.updateAlertsToRead(requireContext(), "1").observe(viewLifecycleOwner) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -132,7 +132,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     snackBar(binding.actionNeededBadge, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun loadActionableAlerts() {
@@ -142,7 +142,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 )))
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.purple_out_line)
-        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
+        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -160,9 +160,9 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
 //                    toast(requireContext(), it.message!!)
                 }
             }
-        })
-        viewModel.updateAlertsToRead(requireContext(), "2").observe(viewLifecycleOwner, {
-            when(it) {
+        }
+        viewModel.updateAlertsToRead(requireContext(), "2").observe(viewLifecycleOwner) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -174,7 +174,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     snackBar(binding.actionNeededBadge, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -245,7 +245,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         )
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this, {
+        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -256,7 +256,13 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     if (taskType == ACCEPT_OR_REJECT) {
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
-                        showRescheduleStatusDialog(bookingId, response, rescheduleId, userId, taskType)
+                        showRescheduleStatusDialog(
+                            bookingId,
+                            response,
+                            rescheduleId,
+                            userId,
+                            taskType
+                        )
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -264,7 +270,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun showRescheduleDialog(
@@ -336,8 +342,8 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
             USER_TYPE,
             userId
         )
-        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this, {
-            when(it) {
+        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -349,7 +355,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun showRescheduleStatusDialog(

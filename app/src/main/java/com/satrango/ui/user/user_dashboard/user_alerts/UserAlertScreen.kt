@@ -91,7 +91,7 @@ class UserAlertScreen :
     }
 
     private fun updateAlertsToRead(type: String) {
-        viewModel.updateAlertsToRead(requireContext(), type).observe(viewLifecycleOwner, {
+        viewModel.updateAlertsToRead(requireContext(), type).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -103,7 +103,7 @@ class UserAlertScreen :
                     progressDialog.dismiss()
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -125,7 +125,7 @@ class UserAlertScreen :
             )
         )
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
-        viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner, {
+        viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.note.visibility = View.GONE
@@ -150,7 +150,7 @@ class UserAlertScreen :
                     binding.note.text = it.message!!
                 }
             }
-        })
+        }
         updateAlertsToRead("1")
     }
 
@@ -164,7 +164,7 @@ class UserAlertScreen :
         )
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
-        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner, {
+        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.note.visibility = View.GONE
@@ -177,7 +177,8 @@ class UserAlertScreen :
                         binding.note.visibility = View.GONE
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
-                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
+                        binding.alertsRV.adapter =
+                            UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Actionable Alerts are empty"
                     }
@@ -189,7 +190,7 @@ class UserAlertScreen :
                     binding.note.text = it.message!!
                 }
             }
-        })
+        }
         updateAlertsToRead("2")
 
     }
@@ -228,7 +229,7 @@ class UserAlertScreen :
         )
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this, {
+        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -239,7 +240,13 @@ class UserAlertScreen :
                     if (taskType == ACCEPT_OR_REJECT) {
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
-                        showRescheduleStatusDialog(bookingId, response, rescheduleId, userId, taskType)
+                        showRescheduleStatusDialog(
+                            bookingId,
+                            response,
+                            rescheduleId,
+                            userId,
+                            taskType
+                        )
                     }
 
                 }
@@ -248,7 +255,7 @@ class UserAlertScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun showRescheduleStatusDialog(
@@ -336,8 +343,8 @@ class UserAlertScreen :
             USER_TYPE,
             userId
         )
-        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this, {
-            when(it) {
+        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -349,7 +356,7 @@ class UserAlertScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
@@ -369,7 +376,7 @@ class UserAlertScreen :
         )
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this, {
+        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -390,7 +397,7 @@ class UserAlertScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun divertToInstallmentsScreen(bookingId: String, postJobId: Int) {
@@ -462,7 +469,7 @@ class UserAlertScreen :
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody =
             ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
-        viewModel.changeExtraDemandStatus(requireContext(), requestBody).observe(this, {
+        viewModel.changeExtraDemandStatus(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -476,7 +483,7 @@ class UserAlertScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
 
     }
 

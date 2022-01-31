@@ -117,7 +117,7 @@ class ProviderDashboard : AppCompatActivity() {
         var FROM_FCM_SERVICE = false
         var minutes = 2
         var seconds = 59
-        var bookingId = ""
+        var bookingId = "0"
         var bottomSheetDialog: BottomSheetDialog? = null
     }
 
@@ -303,7 +303,7 @@ class ProviderDashboard : AppCompatActivity() {
             statusId,
             UserUtils.getUserId(this)
         )
-        viewModel.onlineStatus(this, requestBody).observe(this, {
+        viewModel.onlineStatus(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
 //                    progressDialog.show()
@@ -325,7 +325,7 @@ class ProviderDashboard : AppCompatActivity() {
                     toast(this, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -545,7 +545,7 @@ class ProviderDashboard : AppCompatActivity() {
             val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
             val requestBody =
                 LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
-            viewModel.userLogout(this, requestBody).observe(this, {
+            viewModel.userLogout(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -566,7 +566,7 @@ class ProviderDashboard : AppCompatActivity() {
                         )
                     }
                 }
-            })
+            }
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->
             dialogInterface.dismiss()
@@ -608,7 +608,7 @@ class ProviderDashboard : AppCompatActivity() {
     }
 
     private fun loadUserProfileData() {
-        viewModel.userProfile(this).observe(this, {
+        viewModel.userProfile(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -647,11 +647,11 @@ class ProviderDashboard : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     toast(this, "Error : ${it.data.toString()}")
-                    
+
                     startActivity(Intent(this, UserLoginTypeScreen::class.java))
                 }
             }
-        })
+        }
     }
 
     private fun updateSpProfile() {
@@ -784,7 +784,7 @@ class ProviderDashboard : AppCompatActivity() {
                 UserUtils.getLongitude(this),
                 UserUtils.getUserId(this).toInt()
             )
-            viewModel.saveLocation(this, requestBody).observe(this, {
+            viewModel.saveLocation(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
 
@@ -808,7 +808,7 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                     }
                 }
-            })
+            }
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()

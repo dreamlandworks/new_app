@@ -17,22 +17,19 @@ class TransactionHistoryAdapter(private val list: List<Data>): RecyclerView.Adap
         fun bind(data: Data) {
             binding.date.text = data.date.split(" ")[0]
             binding.note.text = data.transaction_name
-            if (data.amount > 0) {
-                binding.amount.text = "Rs +${data.amount}"
-            } else if (data.amount < 0) {
-                binding.amount.text = "Rs -${data.amount}"
-            } else {
-                binding.amount.text = "Rs ${data.amount}"
-            }
-            if (data.payment_status == "Success") {
+            if (data.transaction_type == "Receipt/Credit") {
+                binding.amount.text = "Rs ${data.amount} Cr"
                 binding.date.setTextColor(Color.parseColor("#00AE48"))
                 binding.note.setTextColor(Color.parseColor("#00AE48"))
                 binding.amount.setTextColor(Color.parseColor("#00AE48"))
-            } else {
+            }
+            if (data.transaction_type == "Payment/Debit") {
+                binding.amount.text = "Rs ${data.amount} Dr"
                 binding.date.setTextColor(Color.parseColor("#D82B00"))
                 binding.note.setTextColor(Color.parseColor("#D82B00"))
                 binding.amount.setTextColor(Color.parseColor("#D82B00"))
             }
+
         }
     }
 
