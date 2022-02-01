@@ -386,9 +386,9 @@ class UserAlertScreen :
                     val response = it.data!!
                     showExtraDemandAcceptDialog(
                         bookingId,
-                        response.booking_details.material_advance.toString(),
-                        response.booking_details.technician_charges.toString(),
-                        response.booking_details.extra_demand_total_amount.toString(),
+                        response.booking_details.material_advance,
+                        response.booking_details.technician_charges,
+                        response.booking_details.extra_demand_total_amount,
                         progressDialog
                     )
                 }
@@ -434,10 +434,6 @@ class UserAlertScreen :
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-
-//        materialCharges.text = response.booking_details.material_advance.toString()
-//        technicianCharges.text = response.booking_details.technician_charges.toString()
-//        totalCost.text = response.booking_details.extra_demand_total_amount.toString()
 
         materialCharges.text = materialAdvance
         technicianCharges.text = technicalCharges

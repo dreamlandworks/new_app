@@ -169,9 +169,15 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/provider_dashboard_drawer_menu.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/user_dashboard_bottom_menu.xml" value="0.15703125" />
+        <entry key="app/src/main/res/drawable/btn_bg_white_blue_border.xml" value="0.1585" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/reschedule_status_change_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/user_alert_row.xml" value="0.23697916666666666" />
       </map>

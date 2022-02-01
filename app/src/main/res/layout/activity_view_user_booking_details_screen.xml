@@ -126,7 +126,7 @@
                     android:background="@drawable/btn_bg_sm_blue_border"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_10sdp">
 
                     <TextView
@@ -165,7 +165,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingVertical="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_15sdp"
+                        android:paddingStart="@dimen/_5sdp"
                         tools:ignore="RtlSymmetry">
 
                         <TextView
@@ -194,7 +194,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/_15sdp"
+                        android:paddingHorizontal="@dimen/_5sdp"
                         android:paddingVertical="@dimen/_10sdp">
 
                         <TextView
@@ -227,14 +227,14 @@
                     android:background="@drawable/btn_bg_sm_blue_border"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_10sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/otp"
+                        android:text="@string/time_lapsed"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sub_text"
                         android:textStyle="bold" />
@@ -386,6 +386,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/firstLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -430,6 +431,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/secondLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"

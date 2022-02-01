@@ -256,8 +256,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         Log.d("USER PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        viewModel.saveUserPlanPayment(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.saveUserPlanPayment(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -273,7 +273,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     snackBar(binding.googlePayBtn, "Error01:" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -296,7 +296,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             UserUtils.data!!.users_id.toInt()
         )
         Log.d("SP PLAN:", Gson().toJson(requestBody))
-        viewModel.saveMemberShip(this, requestBody).observe(this, {
+        viewModel.saveMemberShip(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -313,7 +313,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     snackBar(binding.googlePayBtn, "Error02:" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {
@@ -375,6 +375,10 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         } else {
             userId
         }
+        var finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
+        if (finalWalletBalance.toDoubleOrNull()!! == 0.0) {
+            finalWalletBalance = "0"
+        }
         val requestBody = PaymentConfirmReqModel(
             finalAmount.toString(),
             UserUtils.getBookingId(this),
@@ -387,13 +391,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             UserUtils.getUserId(this).toInt(),
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
-            Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
+            finalWalletBalance
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
-        viewModel.confirmPayment(this, requestBody).observe(this, {
+        viewModel.confirmPayment(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -407,10 +411,10 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, "Error03:" +it.message!!)
+                    snackBar(binding.googlePayBtn, "Error03:" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -430,7 +434,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         Log.d("INSTALLMENT PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        viewModel.installmentPayments(this, requestBody).observe(this, {
+        viewModel.installmentPayments(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -448,7 +452,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     snackBar(binding.googlePayBtn, "Error04:" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun paymentSuccessDialog(context: Context) {

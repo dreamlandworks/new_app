@@ -98,11 +98,10 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = false
-                        val intent = Intent(binding.root.context, UserMyBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        binding.root.context.startActivity(intent)
+                        UserMyBookingDetailsScreen.bookingId = data.booking_id
+                        UserMyBookingDetailsScreen.categoryId = data.category_id
+                        UserMyBookingDetailsScreen.userId = UserUtils.getUserId(binding.root.context)
+                        binding.root.context.startActivity(Intent(binding.root.context, UserMyBookingDetailsScreen::class.java))
                     }
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.visibility = View.GONE
@@ -110,13 +109,12 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                     binding.card.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         ViewUserBookingDetailsScreen.FCM_TOKEN = data.sp_fcm_token
-                        val intent = Intent(binding.root.context, UserMyBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                        UserMyBookingDetailsScreen.bookingId = data.booking_id
+                        UserMyBookingDetailsScreen.categoryId = data.category_id
+                        UserMyBookingDetailsScreen.userId = UserUtils.getUserId(binding.root.context)
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = false
-                        binding.root.context.startActivity(intent)
+                        binding.root.context.startActivity(Intent(binding.root.context, UserMyBookingDetailsScreen::class.java))
                     }
 
                 }
@@ -171,6 +169,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                        ViewUserBookingDetailsScreen.FROM_COMPLETED = true
                         ViewUserBookingDetailsScreen.FROM_PENDING = false
                         ViewUserBookingDetailsScreen.FROM_PROVIDER = false
                         binding.root.context.startActivity(intent)

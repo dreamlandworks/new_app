@@ -18,6 +18,7 @@ data class BookingDetails(
     val technician_charges: String,
     val expenditure_incurred: String,
     val scheduled_date: String,
+    val time_lapsed: String,
     val started_at: String,
     val sp_id: String,
     val reschedule_status: String,

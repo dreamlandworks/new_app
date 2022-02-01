@@ -75,8 +75,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         binding = ActivityProviderInVoiceScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
@@ -91,8 +89,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -236,29 +233,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 snackBar(binding.amount, e.message!!)
             }
         }
-//        viewModel.otpRequest(this, bookingId.toInt(), userType)
-//            .observe(this, {
-//                when (it) {
-//                    is NetworkResponse.Loading -> {
-//                        progressDialog.show()
-//                    }
-//                    is NetworkResponse.Success -> {
-//                        progressDialog.dismiss()
-//                        val requestedOTP = it.data!!
-//                        toast(this, requestedOTP.toString())
-//                        UserUtils.sendOTPFCM(this, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
-//                        if (!FROM_PROVIDER) {
-//                            otpDialog(requestedOTP, bookingId)
-//                        } else {
-//                            showotpInDialog(requestedOTP.toString())
-//                        }
-//                    }
-//                    is NetworkResponse.Failure -> {
-//                        progressDialog.dismiss()
-//                        snackBar(binding.amount, it.message!!)
-//                    }
-//                }
-//            })
     }
 
     @SuppressLint("SetTextI18n")

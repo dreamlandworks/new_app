@@ -901,6 +901,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SimpleDateFormat")
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
             val spIds = intent.getStringExtra(getString(R.string.sp_id))!!

@@ -103,7 +103,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+        viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -118,7 +118,17 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                     snackBar(binding.viewDetailsBtn, it.message!!)
                 }
             }
-        })
+        }
+
+        if (ViewUserBookingDetailsScreen.FROM_COMPLETED) {
+            binding.markCompleteBtn.visibility = View.GONE
+            binding.secondLayout.visibility = View.GONE
+            binding.viewDetailsBtn.setOnClickListener { onBackPressed() }
+            binding.callBtn.setCardBackgroundColor(resources.getColor(R.color.gray))
+            binding.messageBtn.setCardBackgroundColor(resources.getColor(R.color.gray))
+            binding.callBtn.isClickable = false
+            binding.messageBtn.isClickable = false
+        }
 
     }
 
@@ -129,7 +139,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
-            binding.otp.text = response.booking_details.otp
+            binding.otp.text = response.booking_details.time_lapsed
         }
         binding.bookingIdText.text = bookingId
 
@@ -148,20 +158,20 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-            if (response.booking_details.extra_demand_total_amount != "0") {
-                ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                finalExpenditureDialog()
-            } else {
-                AlertDialog.Builder(this)
-                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
-                    .setPositiveButton("YES") { dialogInterface, _ ->
-                        dialogInterface.dismiss()
-                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
-                        finalExpenditureDialog()
-                    }.setNegativeButton("NO") { dialogInterface, _ ->
-                        dialogInterface.dismiss()
-                    }.show()
-            }
+//            if (response.booking_details.extra_demand_total_amount != "0") {
+            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+            finalExpenditureDialog()
+//            } else {
+//                AlertDialog.Builder(this)
+//                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
+//                    .setPositiveButton("YES") { dialogInterface, _ ->
+//                        dialogInterface.dismiss()
+//                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+//                        finalExpenditureDialog()
+//                    }.setNegativeButton("NO") { dialogInterface, _ ->
+//                        dialogInterface.dismiss()
+//                    }.show()
+//            }
         }
 
         binding.callBtn.setOnClickListener {
@@ -261,13 +271,19 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                     val factory = ViewModelFactory(ProviderBookingRepository())
                     val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
                     val requestBody = ExtraDemandReqModel(bookingId, SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format((Date())), totalCost.text.toString().trim(), mCharges, tCharges, RetrofitBuilder.PROVIDER_KEY)
-                    viewModel.extraDemand(this, requestBody).observe(this, {
-                        when(it) {
+                    viewModel.extraDemand(this, requestBody).observe(this) {
+                        when (it) {
                             is NetworkResponse.Loading -> {
                                 progressDialog.show()
                             }
                             is NetworkResponse.Success -> {
-                                UserUtils.sendExtraDemandFCM(this, response.booking_details.fcm_token, bookingId, categoryId, userId)
+                                UserUtils.sendExtraDemandFCM(
+                                    this,
+                                    response.booking_details.fcm_token,
+                                    bookingId,
+                                    categoryId,
+                                    userId
+                                )
                                 progressDialog.dismiss()
                                 dialog.dismiss()
                                 toast(this, "Extra Demand Raised")
@@ -277,7 +293,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                                 toast(this, it.message!!)
                             }
                         }
-                    })
+                    }
 
                 }
             }
@@ -305,8 +321,8 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 val factory = ViewModelFactory(ProviderBookingRepository())
                 val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
                 val requestBody = ExpenditureIncurredReqModel(bookingId.toInt(), finalExpenditure.text.toString().toInt(), RetrofitBuilder.PROVIDER_KEY)
-                viewModel.expenditureIncurred(this, requestBody).observe(this, {
-                    when(it) {
+                viewModel.expenditureIncurred(this, requestBody).observe(this) {
+                    when (it) {
                         is NetworkResponse.Loading -> {
                             progressDialog.show()
                         }
@@ -315,9 +331,18 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                             dialog.dismiss()
                             ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.booking_id),
+                                bookingId
+                            )
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.category_id),
+                                categoryId
+                            )
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.user_id),
+                                userId
+                            )
                             startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {
@@ -325,7 +350,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                             toast(this, it.message!!)
                         }
                     }
-                })
+                }
             }
         }
         dialog.setContentView(dialogView)
@@ -340,52 +365,14 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-//    @SuppressLint("SetTextI18n")
-//    private fun showotpInDialog(otp: String) {
-//        val bottomSheetDialog = BottomSheetDialog(this)
-//        val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
-//        val firstNo = bottomSheet.findViewById<TextView>(R.id.firstNo)
-//        val secondNo = bottomSheet.findViewById<TextView>(R.id.secondNo)
-//        val thirdNo = bottomSheet.findViewById<TextView>(R.id.thirdNo)
-//        val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
-//        val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
-//        val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
-//        firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-//        secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-//        thirdNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-//        fourthNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
-//        firstNo.text = otp[0].toString()
-//        secondNo.text = otp[1].toString()
-//        thirdNo.text = otp[2].toString()
-//        fourthNo.text = otp[3].toString()
-//        submitBtn.text = "Close"
-//        closeBtn.setOnClickListener {
-//            ProviderRatingReviewScreen.FROM_PROVIDER = true
-//            ProviderRatingReviewScreen.bookingId = bookingId
-//            ProviderRatingReviewScreen.categoryId = categoryId
-//            ProviderRatingReviewScreen.userId = userId
-//            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
-//        }
-//        submitBtn.setOnClickListener {
-//            ProviderRatingReviewScreen.FROM_PROVIDER = true
-//            ProviderRatingReviewScreen.bookingId = bookingId
-//            ProviderRatingReviewScreen.categoryId = categoryId
-//            ProviderRatingReviewScreen.userId = userId
-//            startActivity(Intent(this@ProviderBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
-//        }
-//        bottomSheetDialog.setContentView(bottomSheet)
-//        bottomSheetDialog.setCancelable(false)
-//        bottomSheetDialog.show()
-//    }
-
     override fun onResume() {
         super.onResume()
         updateStatusList()
     }
 
     private fun updateStatusList() {
-        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this, {
-            when(it) {
+        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -393,14 +380,15 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
 //                    toast(this, Gson().toJson(it.data.booking_status_details))
-                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data.booking_status_details)
+                    binding.recyclerView.adapter =
+                        GetBookingStatusListAdapter(it.data.booking_status_details)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {

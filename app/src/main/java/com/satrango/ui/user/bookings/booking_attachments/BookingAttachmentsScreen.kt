@@ -266,7 +266,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             data!!.CGST_amount,
             data!!.SGST_amount
         )
-        viewModel.multiMoveBooking(this, requestBody).observe(this, {
+        viewModel.multiMoveBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -298,7 +298,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun loadAddressOnUI() {
@@ -506,7 +506,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
-        viewModel.blueCollarBooking(this, requestBody).observe(this, {
+        viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -517,12 +517,21 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.saveInstantBooking(this, false)
-                            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "user", "accepted|${UserUtils.bookingType}")
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this,
+                                UserUtils.getBookingId(this),
+                                "user",
+                                "accepted|${UserUtils.bookingType}"
+                            )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                        UserUtils.sendFCMtoSelectedServiceProvider(
+                            this,
+                            UserUtils.getBookingId(this),
+                            "user"
+                        )
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -530,7 +539,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -589,14 +598,17 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         data!!.users_id.toInt()
                     )
                     bookingViewModel.setProviderResponse(this@BookingAttachmentsScreen, requestBody)
-                        .observe(this@BookingAttachmentsScreen, {
+                        .observe(this@BookingAttachmentsScreen) {
                             when (it) {
                                 is NetworkResponse.Loading -> {
                                     progressDialog.show()
                                 }
                                 is NetworkResponse.Success -> {
                                     progressDialog.dismiss()
-                                    UserUtils.saveFromFCMService(this@BookingAttachmentsScreen,false)
+                                    UserUtils.saveFromFCMService(
+                                        this@BookingAttachmentsScreen,
+                                        false
+                                    )
                                     if (FCMService.notificationManager != null) {
                                         FCMService.notificationManager.cancelAll()
                                     }
@@ -609,7 +621,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                     toast(this@BookingAttachmentsScreen, it.message!!)
                                 }
                             }
-                        })
+                        }
                 }
                 if (seconds == 0) {
                     seconds = 59
@@ -650,8 +662,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
+        var finalWalletAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
+        if (finalWalletAmount.toDoubleOrNull()!! == 0.0) {
+            finalWalletAmount = "0"
+        }
         val requestBody = PaymentConfirmReqModel(
-            data!!.per_hour,
+            data!!.final_amount,
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
@@ -662,9 +678,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.getUserId(this).toInt(),
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
-            Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
+            finalWalletAmount
         )
-        viewModel.confirmPayment(this, requestBody).observe(this, {
+        viewModel.confirmPayment(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -679,7 +695,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun onPaymentError(p0: Int, paymentError: String?) {

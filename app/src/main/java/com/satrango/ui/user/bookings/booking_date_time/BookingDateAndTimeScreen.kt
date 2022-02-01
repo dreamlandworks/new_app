@@ -40,6 +40,10 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Month
@@ -182,20 +186,15 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 //            snackBar(binding.nextBtn, "Please Select Date")
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             return
-//            snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
             if (ViewUserBookingDetailsScreen.RESCHEDULE) {
                 rescheduleBooking()
             } else {
                 if (data.category_id == "3") {
-                    val intent =
-                        Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
-//                    intent.putExtra(getString(R.string.service_provider), data)
+                    val intent = Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
                     startActivity(intent)
                 } else {
-                    val intent =
-                        Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
-//                    intent.putExtra(getString(R.string.service_provider), data)
+                    val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
                     startActivity(intent)
                 }
             }
@@ -215,9 +214,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
     private fun rescheduleBooking() {
 
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-
         val requestBody = RescheduleBookingReqModel(
             ViewBidsScreen.bookingId,
             RetrofitBuilder.USER_KEY,
@@ -229,21 +225,19 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             userType
         )
         Log.e("RESCHEDULE:", Gson().toJson(requestBody))
-        viewModel.rescheduleBooking(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
+//        toast(this, Gson().toJson(requestBody))
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val responseBody = RetrofitBuilder.getUserRetrofitInstance().rescheduleBooking(requestBody)
+                if (responseBody.status == 200) {
                     progressDialog.dismiss()
-//                    UserUtils.sendRescheduleFCM(this, data.fcm_token, data.)
                     showRescheduledDialog()
-                }
-                is NetworkResponse.Failure -> {
+                } else {
                     progressDialog.dismiss()
-                    toast(this, it.message!!)
-//                    weAreSorryDialog()
+                    toast(this@BookingDateAndTimeScreen, responseBody.message)
                 }
+            } catch (e: Exception) {
+                toast(this@BookingDateAndTimeScreen, e.message!!)
             }
         }
     }
