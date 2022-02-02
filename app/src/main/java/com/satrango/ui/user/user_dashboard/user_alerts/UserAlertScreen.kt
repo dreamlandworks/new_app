@@ -191,8 +191,7 @@ class UserAlertScreen :
                 }
             }
         }
-        updateAlertsToRead("2")
-
+//        updateAlertsToRead("2")
     }
 
     override fun getFragmentViewModel(): Class<UserAlertsViewModel> =

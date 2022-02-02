@@ -67,6 +67,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
             when(data.booking_status.lowercase(Locale.getDefault())) {
                 "InProgress".lowercase(Locale.getDefault()) -> {
                     binding.timeRemaining.text = "Started"
+                    binding.startBtn.visibility = View.GONE
                     CoroutineScope(Dispatchers.Main).launch {
                         val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusList(RetrofitBuilder.USER_KEY, data.booking_id.toInt())
                         if (response.status == 200) {
@@ -89,8 +90,10 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                                         binding.startBtn.text = "Extra Demand Rejected"
                                     }
                                 }
+                                binding.startBtn.visibility = View.VISIBLE
                             } else {
                                 binding.startBtn.text = "Service Provider started to your location"
+                                binding.startBtn.visibility = View.VISIBLE
                             }
                         }
                     }

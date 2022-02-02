@@ -23,7 +23,7 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
             viewModelScope.launch {
                 try {
                     normalAlertsList.value = NetworkResponse.Loading()
-                    val response = async { repository.getProviderAlerts("1") }
+                    val response = async { repository.getProviderAlerts(context,"1") }
                     if (response.await().status == 200) {
                         normalAlertsList.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -45,7 +45,7 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
             viewModelScope.launch {
                 try {
                     actionableAlertsList.value = NetworkResponse.Loading()
-                    val response = async { repository.getProviderAlerts("2") }
+                    val response = async { repository.getProviderAlerts(context, "2") }
                     if (response.await().status == 200) {
                         actionableAlertsList.value = NetworkResponse.Success(response.await().data)
                     } else {

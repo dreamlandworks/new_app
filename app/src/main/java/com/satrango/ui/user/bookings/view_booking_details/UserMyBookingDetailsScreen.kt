@@ -126,7 +126,13 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
-            binding.otp.text = response.booking_details.time_lapsed
+            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
+                binding.otpText.text = resources.getString(R.string.time_lapsed)
+                binding.otp.text = response.booking_details.time_lapsed
+            } else {
+                binding.otpText.text = resources.getString(R.string.otp)
+                binding.otp.text = response.booking_details.otp
+            }
         }
         binding.bookingIdText.text = bookingId
 

@@ -2,6 +2,7 @@ package com.satrango.ui.user.bookings.booking_attachments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -354,30 +355,15 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(
-                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                            "",
-                            getImageFilePath(imageUri),
-                            "",
-                            ""
-                        )
-                    )
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), "", ""))
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
-                imagePathList.add(
-                    com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                        "",
-                        getImageFilePath(imageUri!!),
-                        "",
-                        ""
-                    )
-                )
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "", ""))
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
-            binding.attachmentsRV.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
@@ -385,6 +371,10 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             val storageRef = FirebaseStorage.getInstance().reference
             val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
             val profilePicStorageRef = storageRef.child("images/$timeStamp.jpg")
+            val imageProgressDialog = ProgressDialog(this)
+            imageProgressDialog.setMessage("Uploading Image...")
+            imageProgressDialog.setCancelable(false)
+            imageProgressDialog.show()
             profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
                 toast(this, it.message!!)
             }.addOnSuccessListener {
@@ -411,6 +401,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                             binding.attachmentsRV.layoutManager = LinearLayoutManager(this@BookingAttachmentsScreen, LinearLayoutManager.HORIZONTAL, false)
                             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@BookingAttachmentsScreen)
+                            imageProgressDialog.dismiss()
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -549,11 +540,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -715,9 +702,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 else -> {
                     finish()
                     BookingDateAndTimeScreen.FROM_PROVIDER = false
-                    val intent = Intent(this, BookingDateAndTimeScreen::class.java)
-//                    intent.putExtra(getString(R.string.service_provider), data)
-                    startActivity(intent)
+                    startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
                 }
             }
         }
@@ -730,34 +715,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getByteArrayFromImageURL(url: String): String? {
-        try {
-            val imageUrl = URL(url)
-            val ucon: URLConnection = imageUrl.openConnection()
-            val `is`: InputStream = ucon.getInputStream()
-            val baos = ByteArrayOutputStream()
-            val buffer = ByteArray(1024)
-            var read = 0
-            while (`is`.read(buffer, 0, buffer.size).also { read = it } != -1) {
-                baos.write(buffer, 0, read)
-            }
-            baos.flush()
-//            saveBitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos)
-//            try {
-                val url_ = URL(url)
-                val image = BitmapFactory.decodeStream(url_.openConnection().getInputStream())
-//            } catch (e: IOException) {
-//                System.out.println(e)
-//            }
-            val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-            return MediaStore.Images.Media.insertImage(contentResolver, image, timeStamp, null)
-        } catch (e: Exception) {
-            Log.d("Error", e.toString())
-        }
-        return null
     }
 
 }

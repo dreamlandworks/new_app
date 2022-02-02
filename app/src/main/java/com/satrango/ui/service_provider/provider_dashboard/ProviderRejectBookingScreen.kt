@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderRejectBookingScreenBinding
@@ -23,6 +24,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -158,33 +160,43 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                     4,
                     userId.toInt()
                 )
+                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
                 bookingViewModel.setProviderResponse(this@ProviderRejectBookingScreen, requestBody)
-                    .observe(this@ProviderRejectBookingScreen, {
+                    .observe(this@ProviderRejectBookingScreen) {
                         when (it) {
                             is NetworkResponse.Loading -> {
                                 progressDialog.show()
                             }
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
-                                UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$finalReason")
+                                UserUtils.sendFCM(
+                                    this@ProviderRejectBookingScreen,
+                                    response!!.booking_details.fcm_token,
+                                    "reject",
+                                    "reject",
+                                    "reject|$bookingType|$finalReason"
+                                )
                                 if (FCMService.notificationManager != null) {
                                     FCMService.notificationManager.cancelAll()
                                 }
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = ""
-                                UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+                                UserUtils.saveFromFCMService(
+                                    this@ProviderRejectBookingScreen,
+                                    false
+                                )
                                 ProviderDashboard.bottomSheetDialog!!.dismiss()
                                 snackBar(binding.backBtn, "Booking Rejected Successfully")
                                 Handler().postDelayed({
                                     onBackPressed()
-                                },3000)
+                                }, 3000)
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
                                 snackBar(binding.submitBtn, it.message!!)
                             }
                         }
-                    })
+                    }
             }
 
         }

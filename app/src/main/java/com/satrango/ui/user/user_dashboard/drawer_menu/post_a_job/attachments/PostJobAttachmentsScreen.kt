@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -280,7 +281,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.title,
             UserUtils.getUserId(this).toInt()
         )
-        viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this, {
+        viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -297,7 +298,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun updateUI() {
@@ -372,7 +373,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt()
         )
 
-        viewModel.postJobBlueCollar(this, requestBody).observe(this, {
+        viewModel.postJobBlueCollar(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -391,7 +392,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -414,7 +415,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun loadLanguages() {
-        viewModel.professionsList(this).observe(this, {
+        viewModel.professionsList(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -459,7 +460,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.keywordSkills, "Click Reset to get language values")
                 }
             }
-        })
+        }
     }
 
     private fun loadkeyWords() {
@@ -479,7 +480,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 "0"
             }
         }
-        viewModel.skillsByCategoryId(this, categoryId).observe(this, {
+        viewModel.skillsByCategoryId(this, categoryId).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -521,7 +522,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun getImageFromGallery() {
@@ -573,6 +574,10 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             val storageRef = FirebaseStorage.getInstance().reference
             val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
             val profilePicStorageRef = storageRef.child("images/$timeStamp.jpg")
+            val imageProgressDialog = ProgressDialog(this)
+            imageProgressDialog.setMessage("Uploading Image...")
+            imageProgressDialog.setCancelable(false)
+            imageProgressDialog.show()
             profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
                 toast(this, it.message!!)
             }.addOnSuccessListener {
@@ -599,6 +604,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                             }
                             binding.attachmentsRV.layoutManager = LinearLayoutManager(this@PostJobAttachmentsScreen, LinearLayoutManager.HORIZONTAL,false)
                             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
+                            imageProgressDialog.dismiss()
                             Log.e("URLS", Gson().toJson(encodedImages))
                         }
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -653,7 +659,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             viewModel.deleteAttachment(
                 this,
                 AttachmentDeleteReqModel(imagePath.id.toInt(), RetrofitBuilder.USER_KEY)
-            ).observe(this, {
+            ).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -670,7 +676,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                         progressDialog.dismiss()
                     }
                 }
-            })
+            }
         } else {
             imagePathList.remove(imagePath)
             binding.attachmentsRV.adapter!!.notifyItemRemoved(position)

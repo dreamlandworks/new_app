@@ -180,7 +180,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(SearchServiceProviderRepository())
         viewModel = ViewModelProvider(this, factory)[SearchServiceProviderViewModel::class.java]
-        viewModel.getKeywordsList(this).observe(this, {
+        viewModel.getKeywordsList(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -218,7 +218,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 }
             }
 
-        })
+        }
 
         binding.goBtn.setOnClickListener {
             if (binding.searchBar.text.toString().isEmpty()) {

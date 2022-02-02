@@ -90,19 +90,14 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.post_a_job)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.post_a_job)
         val image = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(image)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withImage,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.white))
     }
@@ -119,7 +114,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             ViewBidsScreen.postJobId,
             UserUtils.getUserId(this).toInt(),
         )
-        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
+        viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -134,7 +129,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
 
             }
-        })
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -177,10 +172,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         }
         if (UserUtils.scheduled_date.isEmpty()) {
             return
-//            snackBar(binding.nextBtn, "Please Select Date")
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             return
-//            snackBar(binding.nextBtn, "Please Select TimeSlot")
         } else {
             if (UserUtils.getFromJobPostMultiMove(this@PostJobDateTimeScreen)) {
                 startActivity(Intent(this@PostJobDateTimeScreen, PostJobMultiMoveDescriptionScreen::class.java))
@@ -192,7 +185,6 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
 
     private fun loadDates() {
         loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
-//        loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
         binding.dayRv.layoutManager =
             LinearLayoutManager(this@PostJobDateTimeScreen, LinearLayoutManager.HORIZONTAL, false)
         binding.dayRv.adapter = MonthsAdapter(daysList, this@PostJobDateTimeScreen, "D")
@@ -206,23 +198,13 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         daysList = arrayListOf()
         for (day in 1..daysInMonth) {
             if (day >= calendar.get(Calendar.DAY_OF_MONTH)) {
-                daysList.add(
-                    MonthsModel(
-                        calendar.get(Calendar.YEAR).toString() + "-" + String.format(
-                            "%02d",
-                            month
-                        ) + "-" + String.format(
-                            "%02d",
-                            day
-                        ), day.toString(), false
-                    )
-                )
+                daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day), day.toString(), false))
             }
         }
-        if (month > 12) {
-            daysInMonth = getDaysInMonth(year + 1, month + 1 - 12)
+        daysInMonth = if (month > 12) {
+            getDaysInMonth(year + 1, month + 1 - 12)
         } else {
-            daysInMonth = getDaysInMonth(year, month + 1)
+            getDaysInMonth(year, month + 1)
         }
         for (day in 1..daysInMonth) {
             val months = if (month + 1 > 12) {
@@ -230,17 +212,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             }  else {
                 month + 1
             }
-            daysList.add(
-                MonthsModel(
-                    calendar.get(Calendar.YEAR).toString() + "-" + String.format(
-                        "%02d",
-                        month + 1
-                    ) + "-" + String.format(
-                        "%02d",
-                        day
-                    ), day.toString(), false
-                )
-            )
+            daysList.add(MonthsModel(calendar.get(Calendar.YEAR).toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day), day.toString(), false))
         }
         return daysList
     }
@@ -483,58 +455,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         eveningTimings = ArrayList()
         nightTimings = ArrayList()
         filterTimings(false)
-//        timeSlots.forEachIndexed { index, monthsModel ->
-//            when {
-//                UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
-//                    if (index >= 1) {
-//                        if (!morningTimings.contains(timeSlots[index - 1])) {
-//                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                                morningTimings.add(timeSlots[index - 1])
-//                            }
-//                        }
-//                    }
-//                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                        morningTimings.add(monthsModel)
-//                    }
-//                }
-//                UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
-//                    if (index >= 1) {
-//                        if (!afternoonTimings.contains(timeSlots[index - 1])) {
-//                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                                afternoonTimings.add(timeSlots[index - 1])
-//                            }
-//                        }
-//                    }
-//                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                        afternoonTimings.add(monthsModel)
-//                    }
-//                }
-//                UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
-//                    if (index >= 1) {
-//                        if (!eveningTimings.contains(timeSlots[index - 1])) {
-//                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                                eveningTimings.add(timeSlots[index - 1])
-//                            }
-//                        }
-//                    }
-//                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                        eveningTimings.add(monthsModel)
-//                    }
-//                }
-//                UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
-//                    if (index >= 1) {
-//                        if (!nightTimings.contains(timeSlots[index - 1])) {
-//                            if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                                nightTimings.add(timeSlots[index - 1])
-//                            }
-//                        }
-//                    }
-//                    if (checktimings(monthsModel.month, SimpleDateFormat("HH:mm a").format(Date()))) {
-//                        nightTimings.add(monthsModel)
-//                    }
-//                }
-//            }
-//        }
+
         for (morning in morningTimings) {
             Log.e("morning:",Gson().toJson(morning))
         }
@@ -554,12 +475,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (morningTimings.isEmpty()) {
             binding.morningText.visibility = View.GONE
         } else {
-//            if (today) {
-//                morningTimings.removeAt(0)
-//            }
             binding.morningText.visibility = View.VISIBLE
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
@@ -569,23 +486,12 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                     afternoonTimings.removeAt(0)
                 }
             }
-//            for (index in afternoonTimings.indices) {
-//                if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
-//                    afternoonTimings.removeAt(index)
-//                }
-//            }
             binding.afternoonText.visibility = View.VISIBLE
-            binding.afternoonTimeRv.adapter =
-                MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
+            binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
         }
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
         } else {
-//            if (today) {
-//                if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
-//                    eveningTimings.removeAt(0)
-//                }
-//            }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.adapter =
                 MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
@@ -593,9 +499,6 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
         } else {
-//            if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
-//                nightTimings.removeAt(0)
-//            }
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.adapter =
                 MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")

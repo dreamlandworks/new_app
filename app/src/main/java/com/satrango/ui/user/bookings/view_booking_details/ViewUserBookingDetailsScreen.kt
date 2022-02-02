@@ -126,14 +126,18 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.completedBtn.setOnClickListener {
                         if (response.booking_details.extra_demand_total_amount != "0") {
                             ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                            finalExpenditureDialog()
+                            if (response.booking_details.extra_demand_status != "2") {
+                                finalExpenditureDialog()
+                            }
                         } else {
                             AlertDialog.Builder(this)
                                 .setMessage("Extra Demand Not Raised, Do you want to Continue?")
                                 .setPositiveButton("YES") { dialogInterface, _ ->
                                     dialogInterface.dismiss()
                                     ProviderInVoiceScreen.isExtraDemandRaised = "0"
-                                    finalExpenditureDialog()
+                                    if (response.booking_details.extra_demand_status != "2") {
+                                        finalExpenditureDialog()
+                                    }
                                 }.setNegativeButton("NO") { dialogInterface, _ ->
                                     dialogInterface.dismiss()
                                 }.show()
@@ -233,6 +237,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -579,12 +584,27 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         FCM_TOKEN = response.booking_details.fcm_token
         if (FROM_PROVIDER) {
             if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
-                binding.otp.text = response.booking_details.time_lapsed
+                if (FROM_COMPLETED && !FROM_PENDING) {
+                    binding.otpText.text = resources.getString(R.string.time_lapsed)
+                    binding.otp.text = response.booking_details.time_lapsed
+                } else {
+                    binding.otpText.text = resources.getString(R.string.otp)
+                    binding.otp.text = response.booking_details.otp
+                }
             }
         } else {
             if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
-                binding.otp.text = response.booking_details.time_lapsed
+                if (FROM_COMPLETED && !FROM_PENDING) {
+                    binding.otpText.text = resources.getString(R.string.time_lapsed)
+                    binding.otp.text = response.booking_details.time_lapsed
+                } else {
+                    binding.otpText.text = resources.getString(R.string.otp)
+                    binding.otp.text = response.booking_details.otp
+                }
             }
+        }
+        if (FROM_COMPLETED) {
+            binding.otp.text = response.booking_details.time_lapsed
         }
 
         binding.bookingIdText.text = bookingId

@@ -12,9 +12,9 @@ import okhttp3.ResponseBody
 
 class ProviderAlertRepository: BaseRepository() {
 
-    suspend fun getProviderAlerts(alertType: String) : UserAlertsResModel {
+    suspend fun getProviderAlerts(context: Context, alertType: String) : UserAlertsResModel {
         return RetrofitBuilder.getServiceProviderRetrofitInstance()
-            .getProviderAlerts(ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,"12",  "0", alertType))
+            .getProviderAlerts(ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,UserUtils.getUserId(context),  "0", alertType))
     }
 
     suspend fun updateAlertToRead(context: Context, alertType: String) : ResponseBody {

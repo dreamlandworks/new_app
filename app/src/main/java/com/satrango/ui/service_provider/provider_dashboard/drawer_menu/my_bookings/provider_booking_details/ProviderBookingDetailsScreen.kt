@@ -139,7 +139,13 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
-            binding.otp.text = response.booking_details.time_lapsed
+            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
+                binding.otpText.text = resources.getString(R.string.time_lapsed)
+                binding.otp.text = response.booking_details.time_lapsed
+            } else {
+                binding.otpText.text = resources.getString(R.string.otp)
+                binding.otp.text = response.booking_details.otp
+            }
         }
         binding.bookingIdText.text = bookingId
 
@@ -160,7 +166,9 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.markCompleteBtn.setOnClickListener {
 //            if (response.booking_details.extra_demand_total_amount != "0") {
             ProviderInVoiceScreen.isExtraDemandRaised = "1"
-            finalExpenditureDialog()
+            if (response.booking_details.extra_demand_status != "2") {
+                finalExpenditureDialog()
+            }
 //            } else {
 //                AlertDialog.Builder(this)
 //                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")

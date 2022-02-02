@@ -172,8 +172,10 @@
         <entry key="app/src/main/res/drawable/btn_bg_white_blue_border.xml" value="0.1585" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_search_view_profile.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />

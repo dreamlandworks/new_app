@@ -29,6 +29,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
@@ -191,7 +192,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 rescheduleBooking()
             } else {
                 if (data.category_id == "3") {
-                    val intent = Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
+                    val intent = Intent(this@BookingDateAndTimeScreen, BookingMultiMoveAddressScreen::class.java)
                     startActivity(intent)
                 } else {
                     val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)
@@ -242,37 +243,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun weAreSorryDialog() {
-        val dialog = BottomSheetDialog(this)
-        dialog.setCancelable(false)
-        val dialogView = layoutInflater.inflate(R.layout.no_service_provider_found, null)
-        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
-        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
-        val title = dialogView.findViewById<TextView>(R.id.title)
-        val headerMessage = dialogView.findViewById<TextView>(R.id.header_message)
-        val message = dialogView.findViewById<TextView>(R.id.message)
-        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        headerMessage.text = "Your request not accepted"
-        message.text =
-            "Looks like Service Provider not accepted the 'Re-schedule' request. You can cancel and Book again"
-        yesBtn.text = "No, Leave it"
-        noBtn.text = "Cancel Booking"
-        closeBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        yesBtn.setOnClickListener {
-            dialog.dismiss()
-            onBackPressed()
-        }
-        noBtn.setOnClickListener {
-            dialog.dismiss()
-            onBackPressed()
-        }
-        dialog.setContentView(dialogView)
-        dialog.show()
-    }
-
     private fun showRescheduledDialog() {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.reschedule_requested_dialog, null)
@@ -286,12 +256,10 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             title.setTextColor(resources.getColor(R.color.purple_500))
             homeBtn.setOnClickListener {
                 UserUtils.saveFromFCMService(this, false)
-//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
             myBookingsBtn.setOnClickListener {
                 UserUtils.saveFromFCMService(this, false)
-//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
         } else {
@@ -534,13 +502,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.visibility = View.VISIBLE
-//            toast(this, morningTimings[0].month.split(":")[0])
             if (today) {
-//                for (index in morningTimings.indices) {
-//                    if (getHourInDay() <= morningTimings[index].month.split(":")[0].toInt()) {
-//                        morningTimings.removeAt(index)
-//                    }
-//                }
                 morningTimings.removeAt(0)
             }
             binding.morningTimeRv.adapter =
@@ -553,12 +515,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             if (today) {
                 if (binding.morningTimeRv.visibility != View.VISIBLE) {
                     afternoonTimings.removeAt(0)
-//                    toast(this, afternoonTimings.size.toString())
-//                    for (index in afternoonTimings.indices) {
-//                        if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
-//                            afternoonTimings.removeAt(index)
-//                        }
-//                    }
                 }
             }
             binding.afternoonText.visibility = View.VISIBLE
@@ -572,11 +528,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             if (today) {
                 if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
-//                    for (index in eveningTimings.indices) {
-//                        if (getHourInDay() <= eveningTimings[index].month.split(":")[0].toInt()) {
-//                            eveningTimings.removeAt(index)
-//                        }
-//                    }
                     eveningTimings.removeAt(0)
                 }
             }
@@ -592,11 +543,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.nightTimeRv.visibility = View.GONE
         } else {
             if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
-//                for (index in nightTimings.indices) {
-//                    if (getHourInDay() <= nightTimings[index].month.split(":")[0].toInt()) {
-//                        nightTimings.removeAt(index)
-//                    }
-//                }
                 nightTimings.removeAt(0)
             }
             binding.nightText.visibility = View.VISIBLE
@@ -684,6 +630,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun selectedMonth(position: Int, dateTime: String, listType: String) {
         var tempMonths = arrayListOf<MonthsModel>()
@@ -847,14 +794,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.morningText.visibility = View.VISIBLE
                 binding.morningTimeRv.visibility = View.VISIBLE
                 if (today) {
-                    for (index in morningTimings.indices) {
-                        if (getHourInDay() <= morningTimings[index].month.split(":")[0].toInt()) {
-                            morningTimings.removeAt(index)
-                        }
-                    }
                 }
                 binding.morningTimeRv.adapter =
-                    MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+                    MonthsAdapter(morningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
             }
             if (afternoonTimings.isEmpty()) {
                 binding.afternoonText.visibility = View.GONE
@@ -862,18 +804,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE) {
-                        for (index in afternoonTimings.indices) {
-//                            if (getHourInDay() <= afternoonTimings[index].month.split(":")[0].toInt()) {
-//                                afternoonTimings.removeAt(index)
-//                            }
-                        }
                     }
                 }
                 binding.afternoonText.visibility = View.VISIBLE
                 binding.afternoonTimeRv.visibility = View.VISIBLE
                 toast(this, afternoonTimings.size.toString())
                 binding.afternoonTimeRv.adapter =
-                    MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+                    MonthsAdapter(afternoonTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
             }
             if (eveningTimings.isEmpty()) {
                 binding.eveningText.visibility = View.GONE
@@ -881,72 +818,26 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
-                        for (index in eveningTimings.indices) {
-                            if (getHourInDay() <= eveningTimings[index].month.split(":")[0].toInt()) {
-                                eveningTimings.removeAt(index)
-                            }
-                        }
                     }
                 }
                 binding.eveningText.visibility = View.VISIBLE
                 binding.eveningTimeRv.visibility = View.VISIBLE
                 binding.eveningTimeRv.adapter =
-                    MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
+                    MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
             }
             if (nightTimings.isEmpty()) {
                 binding.nightText.visibility = View.GONE
                 binding.nightTimeRv.visibility = View.GONE
             } else {
                 if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
-                    for (index in nightTimings.indices) {
-                        if (getHourInDay() <= nightTimings[index].month.split(":")[0].toInt()) {
-                            nightTimings.removeAt(index)
-                        }
-                    }
                 }
                 binding.nightText.visibility = View.VISIBLE
                 binding.nightTimeRv.visibility = View.VISIBLE
                 binding.nightTimeRv.adapter =
-                    MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+                    MonthsAdapter(nightTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
             }
         }
         validateFields()
-
-//        if (morningTimings.isEmpty()) {
-//            binding.morningText.visibility = View.GONE
-//            binding.morningTimeRv.visibility = View.GONE
-//        } else {
-//            binding.morningText.visibility = View.VISIBLE
-//            binding.morningTimeRv.visibility = View.VISIBLE
-//            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
-//        }
-//        if (afternoonTimings.isEmpty()) {
-//            binding.afternoonText.visibility = View.GONE
-//            binding.afternoonTimeRv.visibility = View.GONE
-//        } else {
-//            binding.afternoonText.visibility = View.VISIBLE
-//            binding.afternoonTimeRv.visibility = View.VISIBLE
-//            binding.afternoonTimeRv.adapter =
-//                MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
-//        }
-//        if (eveningTimings.isEmpty()) {
-//            binding.eveningText.visibility = View.GONE
-//            binding.eveningTimeRv.visibility = View.GONE
-//        } else {
-//            binding.eveningText.visibility = View.VISIBLE
-//            binding.eveningTimeRv.visibility = View.VISIBLE
-//            binding.eveningTimeRv.adapter =
-//                MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
-//        }
-//        if (nightTimings.isEmpty()) {
-//            binding.nightText.visibility = View.GONE
-//            binding.nightTimeRv.visibility = View.GONE
-//        } else {
-//            binding.nightText.visibility = View.VISIBLE
-//            binding.nightTimeRv.visibility = View.VISIBLE
-//            binding.nightTimeRv.adapter =
-//                MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
-//        }
     }
 
     override fun onBackPressed() {

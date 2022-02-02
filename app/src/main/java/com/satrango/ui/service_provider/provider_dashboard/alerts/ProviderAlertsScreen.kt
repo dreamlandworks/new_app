@@ -119,7 +119,11 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
             }
         }
-        viewModel.updateAlertsToRead(requireContext(), "1").observe(viewLifecycleOwner) {
+        updateAlertsToRead("1")
+    }
+
+    private fun updateAlertsToRead(alertType: String) {
+        viewModel.updateAlertsToRead(requireContext(), alertType).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -161,20 +165,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
             }
         }
-        viewModel.updateAlertsToRead(requireContext(), "2").observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.actionNeededBadge, it.message!!)
-                }
-            }
-        }
+        updateAlertsToRead("2")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

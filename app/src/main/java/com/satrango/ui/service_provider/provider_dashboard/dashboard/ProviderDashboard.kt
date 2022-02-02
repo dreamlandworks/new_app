@@ -390,15 +390,23 @@ class ProviderDashboard : AppCompatActivity() {
             )
 //            toast(this, Gson().toJson(requestBody))
             bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
-                .observe(this@ProviderDashboard, {
+                .observe(this@ProviderDashboard) {
                     when (it) {
                         is NetworkResponse.Loading -> {
                             progressDialog.show()
                         }
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
-                            UserUtils.sendFCM(this@ProviderDashboard, this.response.booking_details.fcm_token, "accept", "accept", "accept|${this.response.booking_details.amount}|${UserUtils.getUserId(this)}|$bookingType")
-                            UserUtils.saveFromFCMService(this,false)
+                            UserUtils.sendFCM(
+                                this@ProviderDashboard,
+                                this.response.booking_details.fcm_token,
+                                "accept",
+                                "accept",
+                                "accept|${this.response.booking_details.amount}|${
+                                    UserUtils.getUserId(this)
+                                }|$bookingType"
+                            )
+                            UserUtils.saveFromFCMService(this, false)
 //                            FROM_FCM_SERVICE = false
                             if (FCMService.notificationManager != null) {
                                 FCMService.notificationManager.cancelAll()
@@ -412,7 +420,7 @@ class ProviderDashboard : AppCompatActivity() {
                             toast(this, it.message!!)
                         }
                     }
-                })
+                }
         }
 
         rejectBtn.setOnClickListener {

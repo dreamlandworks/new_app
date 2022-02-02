@@ -66,7 +66,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             Glide.with(profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).placeholder(R.drawable.images).into(profilePic)
             userName.text = data.fname
             occupation.text = data.profession
-            costPerHour.text = "Rs. ${round(data.per_hour.toDouble()).toInt()}/-"
+            costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
             val df = DecimalFormat("#.##")
             val distanceInKms = data.distance_miles.toDouble() * 1.609344
             distance.text = "${df.format(distanceInKms)} Kms"
