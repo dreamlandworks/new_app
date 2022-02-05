@@ -580,9 +580,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                         "",
                         RetrofitBuilder.USER_KEY,
-                        UserUtils.getUserId(this@BookingAttachmentsScreen).toInt(),
+                        data!!.users_id.toInt(),
                         6,
-                        data!!.users_id.toInt()
+                        UserUtils.getUserId(this@BookingAttachmentsScreen).toInt()
                     )
                     bookingViewModel.setProviderResponse(this@BookingAttachmentsScreen, requestBody)
                         .observe(this@BookingAttachmentsScreen) {
