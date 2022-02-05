@@ -132,6 +132,7 @@ class UserAlertScreen :
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    toast(requireContext(), "Actionable Alerts")
                     if (it.data!!.isNotEmpty()) {
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE, this)
@@ -172,6 +173,7 @@ class UserAlertScreen :
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
+                        toast(requireContext(), "Actionable Alerts")
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
                         binding.actionNeededBadge.text = it.data.size.toString()
                         binding.note.visibility = View.GONE

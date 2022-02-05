@@ -337,7 +337,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 cgst,
                 sgst
             )
-//            toast(this, Gson().toJson(requestBody))
+            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this) {
                 when (it) {
@@ -509,9 +509,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                             "",
                             RetrofitBuilder.USER_KEY,
-                            UserUtils.getUserId(this@BookingAddressScreen).toInt(),
+                            data.users_id.toInt(),
                             6,
-                            data.users_id.toInt()
+                            UserUtils.getUserId(this@BookingAddressScreen).toInt()
                         )
                         toast(this@BookingAddressScreen, Gson().toJson(requestBody))
                         bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)

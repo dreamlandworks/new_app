@@ -226,7 +226,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             userType
         )
         Log.e("RESCHEDULE:", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
+        toast(this, "RESCHEDULE:" + Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val responseBody = RetrofitBuilder.getUserRetrofitInstance().rescheduleBooking(requestBody)
@@ -808,7 +808,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
                 binding.afternoonText.visibility = View.VISIBLE
                 binding.afternoonTimeRv.visibility = View.VISIBLE
-                toast(this, afternoonTimings.size.toString())
+//                toast(this, afternoonTimings.size.toString())
                 binding.afternoonTimeRv.adapter =
                     MonthsAdapter(afternoonTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
             }
