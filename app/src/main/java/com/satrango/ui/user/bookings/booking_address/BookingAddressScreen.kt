@@ -337,7 +337,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 cgst,
                 sgst
             )
-            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
+//            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             viewModel.singleMoveBooking(this, requestBody).observe(this) {
                 when (it) {
@@ -513,7 +513,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             6,
                             UserUtils.getUserId(this@BookingAddressScreen).toInt()
                         )
-                        toast(this@BookingAddressScreen, Gson().toJson(requestBody))
+//                        toast(this@BookingAddressScreen, Gson().toJson(requestBody))
                         bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
                             .observe(this@BookingAddressScreen) {
                                 when (it) {
@@ -924,7 +924,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     6,
                     UserUtils.getUserId(this@BookingAddressScreen).toInt()
                 )
-                toast(this@BookingAddressScreen, Gson().toJson(requestBody))
+//                toast(this@BookingAddressScreen, Gson().toJson(requestBody))
                 bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
                     .observe(this@BookingAddressScreen) {
                         when (it) {

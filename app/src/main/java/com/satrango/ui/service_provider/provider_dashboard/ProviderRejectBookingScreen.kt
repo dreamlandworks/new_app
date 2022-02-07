@@ -160,7 +160,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                     4,
                     userId.toInt()
                 )
-                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
+//                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
                 bookingViewModel.setProviderResponse(this@ProviderRejectBookingScreen, requestBody)
                     .observe(this@ProviderRejectBookingScreen) {
                         when (it) {

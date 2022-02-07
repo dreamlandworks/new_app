@@ -266,7 +266,7 @@ class ProviderDashboard : AppCompatActivity() {
                 } catch (e: NumberFormatException) { }
             }
         } else {
-            bookingId = ""
+            bookingId = "0"
         }
     }
 

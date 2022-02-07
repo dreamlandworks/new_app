@@ -34,6 +34,11 @@ import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.lang.Exception
 
 class UserAlertScreen :
     BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>(),
@@ -132,7 +137,7 @@ class UserAlertScreen :
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    toast(requireContext(), "Actionable Alerts")
+//                    toast(requireContext(), "Actionable Alerts")
                     if (it.data!!.isNotEmpty()) {
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE, this)
@@ -173,7 +178,7 @@ class UserAlertScreen :
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
-                        toast(requireContext(), "Actionable Alerts")
+//                        toast(requireContext(), "Actionable Alerts")
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
                         binding.actionNeededBadge.text = it.data.size.toString()
                         binding.note.visibility = View.GONE
@@ -230,6 +235,13 @@ class UserAlertScreen :
         )
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
+            }
+        }
         viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -279,6 +291,7 @@ class UserAlertScreen :
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         cancelBtn.setOnClickListener {
+            dialog.dismiss()
             rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 12, userId, taskType)
         }
     }
@@ -327,8 +340,8 @@ class UserAlertScreen :
         userId: Int,
         taskType: String
     ) {
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+//        val factory = ViewModelFactory(BookingRepository())
+//        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
         val finalStatusId = if (taskType == ACCEPT_OR_REJECT) {
             statusId
@@ -344,20 +357,34 @@ class UserAlertScreen :
             USER_TYPE,
             userId
         )
-        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+                val jsonResponse = JSONObject(response.string())
+                if (jsonResponse.getInt("status") == 200) {
+                    toast(requireContext(), jsonResponse.getString("message"))
+                } else {
+                    toast(requireContext(), jsonResponse.getString("message"))
                 }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
-                }
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
             }
         }
+//        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    toast(requireContext(), JSONObject(it.data!!))
+//                    progressDialog.dismiss()
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    toast(requireContext(), it.message!!)
+//                }
+//            }
+//        }
     }
 
     override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {

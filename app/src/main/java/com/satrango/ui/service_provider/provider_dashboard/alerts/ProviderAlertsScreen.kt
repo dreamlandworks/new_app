@@ -153,9 +153,15 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, NOT_ACTIONABLE, this)
+                    val data = it.data!!
                     binding.actionNeededBadge.text = it.data.size.toString()
-                    binding.note.visibility = View.VISIBLE
+                    if (data.isNotEmpty()) {
+                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
+                        binding.note.visibility = View.GONE
+                        binding.alertsRV.visibility = View.VISIBLE
+                    } else {
+                        binding.note.visibility = View.VISIBLE
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

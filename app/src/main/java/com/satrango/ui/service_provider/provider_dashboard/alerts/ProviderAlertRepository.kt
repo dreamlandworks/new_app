@@ -1,6 +1,8 @@
 package com.satrango.ui.service_provider.provider_dashboard.alerts
 
 import android.content.Context
+import android.widget.Toast
+import com.google.gson.Gson
 import com.satrango.base.BaseRepository
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.ProviderAlertsReqModel
@@ -13,8 +15,8 @@ import okhttp3.ResponseBody
 class ProviderAlertRepository: BaseRepository() {
 
     suspend fun getProviderAlerts(context: Context, alertType: String) : UserAlertsResModel {
-        return RetrofitBuilder.getServiceProviderRetrofitInstance()
-            .getProviderAlerts(ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,UserUtils.getUserId(context),  "0", alertType))
+        val requestBody = ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,UserUtils.getUserId(context),  "1", alertType)
+        return RetrofitBuilder.getServiceProviderRetrofitInstance().getProviderAlerts(requestBody)
     }
 
     suspend fun updateAlertToRead(context: Context, alertType: String) : ResponseBody {

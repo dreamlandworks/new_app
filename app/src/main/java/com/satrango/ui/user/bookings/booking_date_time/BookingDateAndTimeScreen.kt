@@ -226,7 +226,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             userType
         )
         Log.e("RESCHEDULE:", Gson().toJson(requestBody))
-        toast(this, "RESCHEDULE:" + Gson().toJson(requestBody))
+//        toast(this, "RESCHEDULE:" + Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val responseBody = RetrofitBuilder.getUserRetrofitInstance().rescheduleBooking(requestBody)
