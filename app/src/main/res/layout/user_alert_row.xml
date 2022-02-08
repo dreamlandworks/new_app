@@ -33,13 +33,13 @@
                 android:maxLines="2"
                 android:text="@string/app_name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_10sdp" />
 
             <TextView
                 android:id="@+id/rowTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="@dimen/_9sdp"
                 android:text="@string/just_now" />
 
         </LinearLayout>
@@ -57,12 +57,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:textColor="@color/blue"
+            android:textColor="@color/pink"
             android:padding="@dimen/_10sdp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="@dimen/_11sdp"
+            android:textSize="@dimen/_9sdp"
             android:text="@string/review_later"/>
 
         <TextView
@@ -70,11 +70,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:textColor="@color/pink"
+            android:textColor="@color/blue"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="@dimen/_11sdp"
+            android:textSize="@dimen/_9sdp"
             android:padding="@dimen/_10sdp"
             android:text="@string/review_now"/>
 

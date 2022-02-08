@@ -71,8 +71,7 @@ class UserAlertScreen :
             .setOnClickListener { activity?.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
             .setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.alerts)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.alerts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -122,13 +121,7 @@ class UserAlertScreen :
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
-        binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
-                    R.string.black_color
-                )
-            )
-        )
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
@@ -137,7 +130,6 @@ class UserAlertScreen :
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-//                    toast(requireContext(), "Actionable Alerts")
                     if (it.data!!.isNotEmpty()) {
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE, this)
@@ -178,7 +170,6 @@ class UserAlertScreen :
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
-//                        toast(requireContext(), "Actionable Alerts")
                         binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
                         binding.actionNeededBadge.text = it.data.size.toString()
                         binding.note.visibility = View.GONE
@@ -198,7 +189,6 @@ class UserAlertScreen :
                 }
             }
         }
-//        updateAlertsToRead("2")
     }
 
     override fun getFragmentViewModel(): Class<UserAlertsViewModel> =
@@ -233,23 +223,12 @@ class UserAlertScreen :
             RetrofitBuilder.USER_KEY,
             userId
         )
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         CoroutineScope(Dispatchers.Main).launch {
             try {
-
-            } catch (e: Exception) {
-                toast(requireContext(), e.message!!)
-            }
-        }
-        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
+                progressDialog.show()
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (response.status == 200) {
                     progressDialog.dismiss()
-                    val response = it.data!!
                     if (taskType == ACCEPT_OR_REJECT) {
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
@@ -261,12 +240,12 @@ class UserAlertScreen :
                             taskType
                         )
                     }
-
-                }
-                is NetworkResponse.Failure -> {
+                } else {
                     progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
+                    toast(requireContext(), response.message)
                 }
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
             }
         }
     }
@@ -320,10 +299,12 @@ class UserAlertScreen :
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
+            dialog.dismiss()
             rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 12, userId, taskType)
         }
 
         rejectBtn.setOnClickListener {
+            dialog.dismiss()
             rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 11, userId, taskType)
         }
 
@@ -340,9 +321,6 @@ class UserAlertScreen :
         userId: Int,
         taskType: String
     ) {
-//        val factory = ViewModelFactory(BookingRepository())
-//        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-
         val finalStatusId = if (taskType == ACCEPT_OR_REJECT) {
             statusId
         } else {
@@ -370,21 +348,6 @@ class UserAlertScreen :
                 toast(requireContext(), e.message!!)
             }
         }
-//        viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    toast(requireContext(), JSONObject(it.data!!))
-//                    progressDialog.dismiss()
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    toast(requireContext(), it.message!!)
-//                }
-//            }
-//        }
     }
 
     override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
@@ -402,16 +365,12 @@ class UserAlertScreen :
             RetrofitBuilder.USER_KEY,
             userId
         )
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.viewBookingDetails(requireContext(), requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    val response = it.data!!
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                progressDialog.show()
+                if (response.status == 200) {
+                     progressDialog.dismiss()
                     showExtraDemandAcceptDialog(
                         bookingId,
                         response.booking_details.material_advance,
@@ -419,11 +378,12 @@ class UserAlertScreen :
                         response.booking_details.extra_demand_total_amount,
                         progressDialog
                     )
-                }
-                is NetworkResponse.Failure -> {
+                } else {
                     progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
+                    toast(requireContext(), response.message)
                 }
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
             }
         }
     }
@@ -470,10 +430,12 @@ class UserAlertScreen :
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         acceptBtn.setOnClickListener {
+            dialog.dismiss()
             changeExtraDemandStatus(bookingId, 2, dialog, progressDialog)
         }
 
         rejectBtn.setOnClickListener {
+            dialog.dismiss()
             changeExtraDemandStatus(bookingId, 1, dialog, progressDialog)
         }
 
@@ -488,27 +450,24 @@ class UserAlertScreen :
         dialog: BottomSheetDialog,
         progressDialog: BeautifulProgressDialog
     ) {
-
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        val requestBody =
-            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
-        viewModel.changeExtraDemandStatus(requireContext(), requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+        val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                progressDialog.show()
+                val response = RetrofitBuilder.getUserRetrofitInstance().changeExtraDemandStatus(requestBody)
+                val jsonResponse = JSONObject(response.string())
+                if (jsonResponse.getInt("status") == 200) {
                     dialog.dismiss()
-                }
-                is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(requireContext(), it.message!!)
+                } else {
+                    dialog.dismiss()
+                    progressDialog.dismiss()
+                    toast(requireContext(), jsonResponse.getString("status_message"))
                 }
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
             }
         }
-
     }
 
 }
