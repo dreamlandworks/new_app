@@ -34,7 +34,6 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
     private lateinit var amount: String
     private lateinit var bookingType: String
     private lateinit var binding: ActivityProviderBookingResponseScreenBinding
-    private lateinit var viewModel: BookingViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
 
     @SuppressLint("SetTextI18n")
@@ -44,8 +43,6 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         val response = intent.getStringExtra("response")!!
-        val factory = ViewModelFactory(BookingRepository())
-        viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         initializeProgressDialog()
 
         userId = response.split("|")[2]

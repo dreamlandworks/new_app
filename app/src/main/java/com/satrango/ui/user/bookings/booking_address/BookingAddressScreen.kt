@@ -63,6 +63,10 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -339,37 +343,60 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             )
 //            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
-            viewModel.singleMoveBooking(this, requestBody).observe(this) {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
+            CoroutineScope(Dispatchers.Main).launch {
+                val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().bookSingleMoveProvider(requestBody)
+                val jsonResponse = JSONObject(bookingResponse.string())
+                progressDialog.show()
+                if (jsonResponse.getInt("status") == 200) {
+                    progressDialog.dismiss()
+                    showWaitingForSPConfirmationDialog()
+                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+                        Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
+                        UserUtils.sendFCMtoAllServiceProviders(
+                            this@BookingAddressScreen,
+                            UserUtils.getBookingId(this@BookingAddressScreen),
+                            "user",
+                            "accepted|${UserUtils.bookingType}"
+                        )
+                    } else {
+                        Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
+                        UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
                     }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        showWaitingForSPConfirmationDialog()
-                        if (UserUtils.getFromInstantBooking(this)) {
-                            Log.e("SINGLE MOVE RESPONSE", it.data!!)
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user",
-                                "accepted|${UserUtils.bookingType}"
-                            )
-                        } else {
-                            Log.e("SINGLE MOVE SELECTED", it.data!!)
-                            UserUtils.sendFCMtoSelectedServiceProvider(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user"
-                            )
-                        }
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.nextBtn, "SINGLE MOVE" + it.message!!)
-                    }
+                } else {
+                    progressDialog.dismiss()
                 }
             }
+//            viewModel.singleMoveBooking(this, requestBody).observe(this) {
+//                when (it) {
+//                    is NetworkResponse.Loading -> {
+//                        progressDialog.show()
+//                    }
+//                    is NetworkResponse.Success -> {
+//                        progressDialog.dismiss()
+//                        showWaitingForSPConfirmationDialog()
+//                        if (UserUtils.getFromInstantBooking(this)) {
+//                            Log.e("SINGLE MOVE RESPONSE", it.data!!)
+//                            UserUtils.sendFCMtoAllServiceProviders(
+//                                this,
+//                                UserUtils.getBookingId(this),
+//                                "user",
+//                                "accepted|${UserUtils.bookingType}"
+//                            )
+//                        } else {
+//                            Log.e("SINGLE MOVE SELECTED", it.data!!)
+//                            UserUtils.sendFCMtoSelectedServiceProvider(
+//                                this,
+//                                UserUtils.getBookingId(this),
+//                                "user"
+//                            )
+//                        }
+//                    }
+//                    is NetworkResponse.Failure -> {
+//                        progressDialog.dismiss()
+//                        snackBar(binding.nextBtn, "SINGLE MOVE" + it.message!!)
+//                    }
+//                }
+//            }
         } else {
 
             var address = ""
@@ -418,39 +445,69 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
-            viewModel.singleMoveBooking(this, requestBody).observe(this) {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        showWaitingForSPConfirmationDialog()
-                        if (UserUtils.getFromInstantBooking(this)) {
-                            if (PermissionUtils.isNetworkConnected(this)) {
-                                UserUtils.sendFCMtoAllServiceProviders(
-                                    this,
-                                    UserUtils.getBookingId(this),
-                                    "user",
-                                    UserUtils.bookingType
-                                )
-                            } else {
-                                snackBar(binding.nextBtn, "No Internet Connection!")
-                            }
-                        } else {
-                            UserUtils.sendFCMtoSelectedServiceProvider(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user"
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().bookSingleMoveProvider(requestBody)
+                val jsonResponse = JSONObject(bookingResponse.string())
+                progressDialog.show()
+                if (jsonResponse.getInt("status") == 200) {
+                    progressDialog.dismiss()
+                    showWaitingForSPConfirmationDialog()
+                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+                        if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this@BookingAddressScreen,
+                                UserUtils.getBookingId(this@BookingAddressScreen),
+                                "user",
+                                UserUtils.bookingType
                             )
+                        } else {
+                            snackBar(binding.nextBtn, "No Internet Connection!")
                         }
+                    } else {
+                        UserUtils.sendFCMtoSelectedServiceProvider(
+                            this@BookingAddressScreen,
+                            UserUtils.getBookingId(this@BookingAddressScreen),
+                            "user"
+                        )
                     }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.nextBtn, it.message!!)
-                    }
+                } else {
+                    progressDialog.dismiss()
                 }
             }
+//            viewModel.singleMoveBooking(this, requestBody).observe(this) {
+//                when (it) {
+//                    is NetworkResponse.Loading -> {
+//                        progressDialog.show()
+//                    }
+//                    is NetworkResponse.Success -> {
+//                        progressDialog.dismiss()
+//                        showWaitingForSPConfirmationDialog()
+//                        if (UserUtils.getFromInstantBooking(this)) {
+//                            if (PermissionUtils.isNetworkConnected(this)) {
+//                                UserUtils.sendFCMtoAllServiceProviders(
+//                                    this,
+//                                    UserUtils.getBookingId(this),
+//                                    "user",
+//                                    UserUtils.bookingType
+//                                )
+//                            } else {
+//                                snackBar(binding.nextBtn, "No Internet Connection!")
+//                            }
+//                        } else {
+//                            UserUtils.sendFCMtoSelectedServiceProvider(
+//                                this,
+//                                UserUtils.getBookingId(this),
+//                                "user"
+//                            )
+//                        }
+//                    }
+//                    is NetworkResponse.Failure -> {
+//                        progressDialog.dismiss()
+//                        snackBar(binding.nextBtn, it.message!!)
+//                    }
+//                }
+//            }
 
         }
 

@@ -296,6 +296,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 userId,
                 taskType
             )
+            dialog.dismiss()
         }
 
         rejectBtn.setOnClickListener {
@@ -307,6 +308,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 userId,
                 taskType
             )
+            dialog.dismiss()
         }
 
         dialog.setCancelable(false)
@@ -345,6 +347,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    snackBar(binding.actionNeededBadge, it.data!!)
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {

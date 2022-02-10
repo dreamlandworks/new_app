@@ -25,6 +25,10 @@ import com.satrango.ui.user.bookings.view_booking_details.models.ProviderRespons
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -161,44 +165,30 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                     userId.toInt()
                 )
 //                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
-                bookingViewModel.setProviderResponse(this@ProviderRejectBookingScreen, requestBody)
-                    .observe(this@ProviderRejectBookingScreen) {
-                        when (it) {
-                            is NetworkResponse.Loading -> {
-                                progressDialog.show()
-                            }
-                            is NetworkResponse.Success -> {
-                                progressDialog.dismiss()
-                                UserUtils.sendFCM(
-                                    this@ProviderRejectBookingScreen,
-                                    response!!.booking_details.fcm_token,
-                                    "reject",
-                                    "reject",
-                                    "reject|$bookingType|$finalReason"
-                                )
-                                if (FCMService.notificationManager != null) {
-                                    FCMService.notificationManager.cancelAll()
-                                }
-                                binding.feedBack.setText("")
-                                ProviderDashboard.bookingId = ""
-                                UserUtils.saveFromFCMService(
-                                    this@ProviderRejectBookingScreen,
-                                    false
-                                )
-                                ProviderDashboard.bottomSheetDialog!!.dismiss()
-                                snackBar(binding.backBtn, "Booking Rejected Successfully")
-                                Handler().postDelayed({
-                                    onBackPressed()
-                                }, 3000)
-                            }
-                            is NetworkResponse.Failure -> {
-                                progressDialog.dismiss()
-                                snackBar(binding.submitBtn, it.message!!)
-                            }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+                    val jsonResponse = JSONObject(bookingResponse.string())
+                    progressDialog.show()
+                    if (jsonResponse.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$finalReason")
+                        if (FCMService.notificationManager != null) {
+                            FCMService.notificationManager.cancelAll()
                         }
+                        binding.feedBack.setText("")
+                        ProviderDashboard.bookingId = "0"
+                        UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+                        ProviderDashboard.bottomSheetDialog!!.dismiss()
+                        snackBar(binding.backBtn, "Booking Rejected Successfully")
+                        Handler().postDelayed({
+                            onBackPressed()
+                        }, 1000)
+                    } else {
+                        progressDialog.dismiss()
+                        snackBar(binding.backBtn, jsonResponse.getString("status_message"))
                     }
+                }
             }
-
         }
     }
 

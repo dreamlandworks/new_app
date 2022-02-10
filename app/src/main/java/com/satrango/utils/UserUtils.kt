@@ -1004,7 +1004,7 @@ object UserUtils {
                 }
                 val token = task.result
                 saveFCMToken(context, token)
-                CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
                         FCMReqModel(
                             token,

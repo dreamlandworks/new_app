@@ -345,7 +345,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     val response = async { repository.rescheduleChangeStatus(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("status") == 200) {
-                        rescheduleStatusChange.value = NetworkResponse.Success(jsonResponse.getInt("status").toString())
+                        rescheduleStatusChange.value = NetworkResponse.Success(jsonResponse.getString("message").toString())
                     } else {
                         rescheduleStatusChange.value = NetworkResponse.Failure(jsonResponse.getString("message"))
                     }

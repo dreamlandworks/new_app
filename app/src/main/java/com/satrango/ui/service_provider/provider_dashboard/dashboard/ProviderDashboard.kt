@@ -88,7 +88,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 import android.os.CountDownTimer
-
+import org.json.JSONObject
 
 
 class ProviderDashboard : AppCompatActivity() {
@@ -389,38 +389,29 @@ class ProviderDashboard : AppCompatActivity() {
                 userId.toInt()
             )
 //            toast(this, Gson().toJson(requestBody))
-            bookingViewModel.setProviderResponse(this@ProviderDashboard, requestBody)
-                .observe(this@ProviderDashboard) {
-                    when (it) {
-                        is NetworkResponse.Loading -> {
-                            progressDialog.show()
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+                    val jsonResponse = JSONObject(bookingResponse.string())
+                    progressDialog.show()
+                    if (jsonResponse.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
+                        UserUtils.saveFromFCMService(this@ProviderDashboard, false)
+                        if (FCMService.notificationManager != null) {
+                            FCMService.notificationManager.cancelAll()
                         }
-                        is NetworkResponse.Success -> {
-                            progressDialog.dismiss()
-                            UserUtils.sendFCM(
-                                this@ProviderDashboard,
-                                this.response.booking_details.fcm_token,
-                                "accept",
-                                "accept",
-                                "accept|${this.response.booking_details.amount}|${
-                                    UserUtils.getUserId(this)
-                                }|$bookingType"
-                            )
-                            UserUtils.saveFromFCMService(this, false)
-//                            FROM_FCM_SERVICE = false
-                            if (FCMService.notificationManager != null) {
-                                FCMService.notificationManager.cancelAll()
-                            }
-                            Companion.bookingId = ""
-                            bottomSheetDialog!!.dismiss()
-                            snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
-                        }
-                        is NetworkResponse.Failure -> {
-                            progressDialog.dismiss()
-                            toast(this, it.message!!)
-                        }
+                        Companion.bookingId = "0"
+                        bottomSheetDialog!!.dismiss()
+                        snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
+                    } else {
+                        progressDialog.dismiss()
+                        snackBar(binding.bottomNavigationView, jsonResponse.getString("status_message"))
                     }
+                } catch (e: java.lang.Exception) {
+                    snackBar(binding.bottomNavigationView, e.message!!)
                 }
+            }
         }
 
         rejectBtn.setOnClickListener {
@@ -446,9 +437,9 @@ class ProviderDashboard : AppCompatActivity() {
                     minutes -= 1
                 }
                 time.text = "0$minutes:" + checkDigit(timerTime)
-                timerTime--
+                timerTime -= 1
                 if (minutes <= 0) {
-                    Companion.bookingId = ""
+                    Companion.bookingId = "0"
                     UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                     bottomSheetDialog!!.dismiss()
                 }

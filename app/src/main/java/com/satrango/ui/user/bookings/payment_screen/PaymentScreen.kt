@@ -394,7 +394,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             finalWalletBalance
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this) {
