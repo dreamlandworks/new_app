@@ -12,6 +12,7 @@ data class Data(
     val category_id: String,
     val city: String,
     val country: String,
+    val profession_id: String,
     val created_dts: String,
     val discount: Int,
     val distance_kms: String,

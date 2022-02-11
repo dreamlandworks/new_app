@@ -18,4 +18,5 @@ data class MultiMoveReqModel(
     val users_id: Int,
     val cgst: String,
     val sgst: String,
+    val profession_id: String
 )

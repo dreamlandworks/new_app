@@ -86,7 +86,6 @@ class UserMyBookingsScreen : AppCompatActivity() {
 
     private fun updateUI(status: String) {
         val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
-        toast(this, "USER BOOKINGS: ${Gson().toJson(requestBody)}")
         viewModel.getMyBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

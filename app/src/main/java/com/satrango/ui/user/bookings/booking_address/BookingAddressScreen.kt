@@ -339,7 +339,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 latitude,
                 longitude,
                 cgst,
-                sgst
+                sgst,
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
             )
 //            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
@@ -352,6 +353,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                         Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
+                        UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
+                        UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
                         UserUtils.sendFCMtoAllServiceProviders(
                             this@BookingAddressScreen,
                             UserUtils.getBookingId(this@BookingAddressScreen),
@@ -366,37 +369,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     progressDialog.dismiss()
                 }
             }
-//            viewModel.singleMoveBooking(this, requestBody).observe(this) {
-//                when (it) {
-//                    is NetworkResponse.Loading -> {
-//                        progressDialog.show()
-//                    }
-//                    is NetworkResponse.Success -> {
-//                        progressDialog.dismiss()
-//                        showWaitingForSPConfirmationDialog()
-//                        if (UserUtils.getFromInstantBooking(this)) {
-//                            Log.e("SINGLE MOVE RESPONSE", it.data!!)
-//                            UserUtils.sendFCMtoAllServiceProviders(
-//                                this,
-//                                UserUtils.getBookingId(this),
-//                                "user",
-//                                "accepted|${UserUtils.bookingType}"
-//                            )
-//                        } else {
-//                            Log.e("SINGLE MOVE SELECTED", it.data!!)
-//                            UserUtils.sendFCMtoSelectedServiceProvider(
-//                                this,
-//                                UserUtils.getBookingId(this),
-//                                "user"
-//                            )
-//                        }
-//                    }
-//                    is NetworkResponse.Failure -> {
-//                        progressDialog.dismiss()
-//                        snackBar(binding.nextBtn, "SINGLE MOVE" + it.message!!)
-//                    }
-//                }
-//            }
         } else {
 
             var address = ""
@@ -419,7 +391,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
-                data.per_hour,
+                data.final_amount,
                 BookingAttachmentsScreen.encodedImages,
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 1,
@@ -441,7 +413,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 latitude,
                 longitude,
                 cgst,
-                sgst
+                sgst,
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
@@ -452,6 +425,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 progressDialog.show()
                 if (jsonResponse.getInt("status") == 200) {
                     progressDialog.dismiss()
+                    UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
+                    UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
                     showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                         if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
@@ -835,7 +810,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.time_slot_to.replace("\n", ""),
             UserUtils.getUserId(this).toInt(),
             cgst,
-            sgst
+            sgst,
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))

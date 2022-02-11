@@ -200,10 +200,11 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.time_slot_to,
             UserUtils.getUserId(this).toInt(),
             sgst,
-            cgst
+            cgst,
+            data!!.profession_id
         )
         Log.e("MULTI MOVE:", Gson().toJson(requestBody))
-        viewModel.multiMoveBooking(this, requestBody).observe(this, {
+        viewModel.multiMoveBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -235,7 +236,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.nextBtn, "MULTI MOVE:" + it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

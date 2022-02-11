@@ -8,6 +8,8 @@ data class BookingDetails(
     val sp_fcm_token: String,
     val fname: String,
     val from: String,
+    val sp_profile_pic: String,
+    val user_profile_pic: String,
     val time_slot_id: String,
     val lname: String,
     val mobile: String,
@@ -23,5 +25,6 @@ data class BookingDetails(
     val sp_id: String,
     val reschedule_status: String,
     val otp: String,
-    val otp_raised_by: String
+    val otp_raised_by: String,
+    val sp_profession: String,
 )

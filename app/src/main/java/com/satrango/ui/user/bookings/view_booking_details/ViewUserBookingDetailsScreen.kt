@@ -65,6 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
 import android.app.Activity
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -583,6 +584,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.time.text = response.booking_details.from
         FCM_TOKEN = response.booking_details.fcm_token
         if (FROM_PROVIDER) {
+            Glide.with(binding.profilePic)
+                .load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images)
+                .into(binding.profilePic)
             if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
                 if (FROM_COMPLETED && !FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
@@ -592,7 +596,15 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.otp.text = response.booking_details.otp
                 }
             }
+//            if (FROM_PENDING) {
+//                binding.otpText.text = resources.getString(R.string.otp)
+//                binding.otp.text = response.booking_details.otp
+//            }
         } else {
+            binding.occupation.text = response.booking_details.sp_profession
+            Glide.with(binding.profilePic)
+                .load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images)
+                .into(binding.profilePic)
             if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
                 if (FROM_COMPLETED && !FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
@@ -605,6 +617,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         }
         if (FROM_COMPLETED) {
             binding.otp.text = response.booking_details.time_lapsed
+        }
+        if (FROM_PENDING) {
+            binding.otpText.text = resources.getString(R.string.otp)
+            binding.otp.text = response.booking_details.otp
         }
 
         binding.bookingIdText.text = bookingId

@@ -17,5 +17,6 @@ data class BlueCollarBookingReqModel(
     val time_slot_to: String,
     val users_id: Int,
     val cgst: String,
-    val sgst: String
+    val sgst: String,
+    val profession_id: String
 )

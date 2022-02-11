@@ -265,7 +265,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.time_slot_to,
             UserUtils.getUserId(this).toInt(),
             data!!.CGST_amount,
-            data!!.SGST_amount
+            data!!.SGST_amount,
+            data!!.profession_id
         )
         viewModel.multiMoveBooking(this, requestBody).observe(this) {
             when (it) {
@@ -493,7 +494,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.time_slot_to.replace("\n", ""),
             UserUtils.getUserId(this).toInt(),
             cgst,
-            sgst
+            sgst,
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
