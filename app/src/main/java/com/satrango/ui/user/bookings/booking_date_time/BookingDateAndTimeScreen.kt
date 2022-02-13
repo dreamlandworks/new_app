@@ -147,14 +147,17 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
         if (FROM_PROVIDER) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
             binding.nextBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+            binding.borderLayout.setBackgroundResource(R.drawable.purple_out_line)
+            binding.bookingLayout.setBackgroundResource(R.drawable.purple_circle)
+            binding.paymentLayout.setBackgroundResource(R.drawable.purple_circle_color)
+            binding.confirmationLayout.setBackgroundResource(R.drawable.purple_circle_color)
         }
     }
 
@@ -164,6 +167,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
         Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+
     }
 
     private fun validateFields() {
@@ -184,7 +188,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         }
         if (UserUtils.scheduled_date.isEmpty()) {
             return
-//            snackBar(binding.nextBtn, "Please Select Date")
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             return
         } else {
@@ -794,6 +797,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.morningText.visibility = View.VISIBLE
                 binding.morningTimeRv.visibility = View.VISIBLE
                 if (today) {
+                    morningTimings.removeAt(0)
                 }
                 binding.morningTimeRv.adapter =
                     MonthsAdapter(morningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
@@ -804,6 +808,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE) {
+                        afternoonTimings.removeAt(0)
                     }
                 }
                 binding.afternoonText.visibility = View.VISIBLE
@@ -818,6 +823,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             } else {
                 if (today) {
                     if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE) {
+                        eveningTimings.removeAt(0)
                     }
                 }
                 binding.eveningText.visibility = View.VISIBLE
@@ -830,6 +836,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.visibility = View.GONE
             } else {
                 if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
+                    nightTimings.removeAt(0)
                 }
                 binding.nightText.visibility = View.VISIBLE
                 binding.nightTimeRv.visibility = View.VISIBLE

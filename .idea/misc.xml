@@ -169,7 +169,12 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/provider_dashboard_drawer_menu.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/user_dashboard_bottom_menu.xml" value="0.15703125" />
+        <entry key="app/src/main/res/drawable/blue_circle.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/blue_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/btn_bg_white_blue_border.xml" value="0.1585" />
+        <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/purple_circle_color.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/purple_out_line.xml" value="0.1645" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />

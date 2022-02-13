@@ -67,10 +67,8 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 startActivity(Intent(this@UserLoginTypeScreen, UserDashboardScreen::class.java))
                 finish()
             }
-
             serviceProviderBtn.setOnClickListener {
                 UserUtils.saveFromFCMService(this@UserLoginTypeScreen, false)
-//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this@UserLoginTypeScreen, ProviderDashboard::class.java))
                 finish()
             }
@@ -143,15 +141,20 @@ class UserLoginTypeScreen : AppCompatActivity() {
                 val split = docId.split(":".toRegex()).toTypedArray()
                 val type = split[0]
                 var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                } else if ("document" == type) {
-                    contentUri =
-                        MediaStore.Files.getContentUri("external", java.lang.Long.valueOf(split[1]))
+                when (type) {
+                    "image" -> {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    }
+                    "video" -> {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    }
+                    "audio" -> {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                    }
+                    "document" -> {
+                        contentUri =
+                            MediaStore.Files.getContentUri("external", java.lang.Long.valueOf(split[1]))
+                    }
                 }
 
                 val selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"

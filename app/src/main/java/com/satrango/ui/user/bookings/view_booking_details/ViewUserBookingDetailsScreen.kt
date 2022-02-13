@@ -577,18 +577,20 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text = "${response.booking_details.fname} ${response.booking_details.lname}"
-//        binding.mobileNo.text = response.booking_details.mobile
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         FCM_TOKEN = response.booking_details.fcm_token
         if (FROM_PROVIDER) {
+            binding.userName.text = "${response.booking_details.fname} ${response.booking_details.lname}"
+            binding.occupation.text = "User"
             Glide.with(binding.profilePic)
-                .load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images)
+                .load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic)
+                .error(R.drawable.images)
                 .into(binding.profilePic)
             if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
-                if (FROM_COMPLETED && !FROM_PENDING) {
+//                if (FROM_COMPLETED && !FROM_PENDING) {
+                if (!FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
                     binding.otp.text = response.booking_details.time_lapsed
                 } else {
@@ -596,17 +598,16 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.otp.text = response.booking_details.otp
                 }
             }
-//            if (FROM_PENDING) {
-//                binding.otpText.text = resources.getString(R.string.otp)
-//                binding.otp.text = response.booking_details.otp
-//            }
         } else {
+            binding.userName.text = "${response.booking_details.sp_fname} ${response.booking_details.sp_lname}"
             binding.occupation.text = response.booking_details.sp_profession
             Glide.with(binding.profilePic)
-                .load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images)
+                .load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic)
+                .error(R.drawable.images)
                 .into(binding.profilePic)
             if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
-                if (FROM_COMPLETED && !FROM_PENDING) {
+//                if (FROM_COMPLETED && !FROM_PENDING) {
+                if (!FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
                     binding.otp.text = response.booking_details.time_lapsed
                 } else {

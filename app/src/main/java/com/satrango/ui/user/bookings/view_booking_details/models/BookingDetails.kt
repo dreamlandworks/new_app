@@ -12,6 +12,8 @@ data class BookingDetails(
     val user_profile_pic: String,
     val time_slot_id: String,
     val lname: String,
+    val sp_lname: String,
+    val sp_fname: String,
     val mobile: String,
     val post_job_id: String,
     val extra_demand_status: String,

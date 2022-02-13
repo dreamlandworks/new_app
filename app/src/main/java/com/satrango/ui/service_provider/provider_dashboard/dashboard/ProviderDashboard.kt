@@ -396,6 +396,7 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
+                        toast(this@ProviderDashboard, response.booking_details.fcm_token)
                         UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         if (FCMService.notificationManager != null) {

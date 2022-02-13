@@ -45,7 +45,6 @@ class UserMyBookingsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-        updateUI("Pending")
         binding.inProgressBtn.setOnClickListener {
             binding.inProgressBtn.setBackgroundResource(R.drawable.user_btn_bg)
             binding.completedBtn.setBackgroundResource(0)
@@ -73,6 +72,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
             updateUI("Completed")
         }
+
     }
 
     private fun initializeToolBar() {
@@ -128,6 +128,11 @@ class UserMyBookingsScreen : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI("Pending")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

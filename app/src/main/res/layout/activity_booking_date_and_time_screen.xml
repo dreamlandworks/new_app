@@ -76,6 +76,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/borderLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_45sdp"
                             android:layout_margin="@dimen/_5sdp"
@@ -158,6 +159,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/bookingLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-15dp"
@@ -177,6 +179,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/paymentLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -199,6 +202,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/confirmationLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_28sdp"

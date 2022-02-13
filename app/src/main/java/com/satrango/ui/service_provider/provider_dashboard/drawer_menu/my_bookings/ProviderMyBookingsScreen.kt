@@ -78,7 +78,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        updateUI("Pending")
         binding.inProgressBtn.setOnClickListener {
             binding.inProgressBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             binding.completedBtn.setBackgroundResource(0)
@@ -110,7 +109,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     private fun updateUI(status: String) {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.bookingListWithDetails(this, requestBody).observe(this, {
+        viewModel.bookingListWithDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -120,7 +119,14 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
                         if (status == "Completed") {
-                            if (details.booking_status.equals(status, ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true) || details.booking_status.equals("Cancelled", ignoreCase = true)) {
+                            if (details.booking_status.equals(
+                                    status,
+                                    ignoreCase = true
+                                ) || details.booking_status.equals(
+                                    "Expired",
+                                    ignoreCase = true
+                                ) || details.booking_status.equals("Cancelled", ignoreCase = true)
+                            ) {
                                 list.add(details)
                             }
                         } else {
@@ -142,7 +148,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun finalExpenditureDialog(
@@ -172,7 +178,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     finalExpenditure.text.toString().toInt(),
                     RetrofitBuilder.PROVIDER_KEY
                 )
-                viewModel.expenditureIncurred(this, requestBody).observe(this, {
+                viewModel.expenditureIncurred(this, requestBody).observe(this) {
                     when (it) {
                         is NetworkResponse.Loading -> {
                             progressDialog.show()
@@ -182,9 +188,18 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                             dialog.dismiss()
                             ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId.toString())
-                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.booking_id),
+                                bookingId.toString()
+                            )
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.category_id),
+                                categoryId
+                            )
+                            intent.putExtra(
+                                binding.root.context.getString(R.string.user_id),
+                                userId
+                            )
                             startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {
@@ -192,7 +207,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                             toast(this, it.message!!)
                         }
                     }
-                })
+                }
             }
         }
         dialog.setContentView(dialogView)
@@ -202,7 +217,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     override fun requestOTP(bookingId: Int, categoryId: String, userId: String, spId: String, userFcmToken: String, spFcmToken: String) {
         myBookingViewModel.otpRequest(this, bookingId, "SP")
-            .observe(this, {
+            .observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -211,7 +226,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
                         toast(this, requestedOTP.toString())
-                        UserUtils.sendOTPFCM(this, userFcmToken, bookingId.toString(), requestedOTP.toString())
+                        UserUtils.sendOTPFCM(
+                            this,
+                            userFcmToken,
+                            bookingId.toString(),
+                            requestedOTP.toString()
+                        )
                         otpDialog(requestedOTP, bookingId, categoryId, userId, spId, userFcmToken)
                     }
                     is NetworkResponse.Failure -> {
@@ -219,7 +239,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         snackBar(binding.recyclerView, it.message!!)
                     }
                 }
-            })
+            }
     }
 
     override fun markComplete(extraDemand: String, bookingId: Int, categoryId: String, userId: String) {
@@ -234,8 +254,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
             UserUtils.getUserId(this).toInt()
         )
-        myBookingViewModel.pauseBooking(this, requestBody).observe(this, {
-            when(it) {
+        myBookingViewModel.pauseBooking(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -250,7 +270,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     startActivity(intent)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -261,8 +281,8 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
             UserUtils.getUserId(this).toInt()
         )
-        myBookingViewModel.resumeBooking(this, requestBody).observe(this, {
-            when(it) {
+        myBookingViewModel.resumeBooking(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -277,7 +297,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     startActivity(intent)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -408,31 +428,38 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 if (requestedOTP == otp.toInt()) {
                     val factory = ViewModelFactory(MyBookingsRepository())
                     val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-                    viewModel.validateOTP(this, bookingId, UserUtils.getUserId(this).toInt()).observe(this, {
-                            when (it) {
-                                is NetworkResponse.Loading -> {
-                                    progressDialog.show()
-                                }
-                                is NetworkResponse.Success -> {
-                                    val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
-                                    ProviderBookingDetailsScreen.bookingId = bookingId.toString()
-                                    ProviderBookingDetailsScreen.categoryId = categoryId
-                                    ProviderBookingDetailsScreen.userId = userId
-                                    ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                                    ViewUserBookingDetailsScreen.FROM_PENDING = false
-                                    UserUtils.spid = spId
-                                    startActivity(intent)
-                                    progressDialog.dismiss()
-                                    dialog.dismiss()
-                                    UserUtils.sendOTPResponseFCM(this, userFcmToken, "$bookingId|$categoryId|$userId|sp")
-                                    snackBar(binding.recyclerView, "Booking Started!")
-                                }
-                                is NetworkResponse.Failure -> {
-                                    progressDialog.dismiss()
-                                    toast(this,"Error:${it.message!!}")
-                                }
+                    viewModel.validateOTP(this, bookingId, UserUtils.getUserId(this).toInt()).observe(this) {
+                        when (it) {
+                            is NetworkResponse.Loading -> {
+                                progressDialog.show()
                             }
-                        })
+                            is NetworkResponse.Success -> {
+                                val intent = Intent(
+                                    binding.root.context,
+                                    ProviderBookingDetailsScreen::class.java
+                                )
+                                ProviderBookingDetailsScreen.bookingId = bookingId.toString()
+                                ProviderBookingDetailsScreen.categoryId = categoryId
+                                ProviderBookingDetailsScreen.userId = userId
+                                ViewUserBookingDetailsScreen.FROM_PROVIDER = true
+                                ViewUserBookingDetailsScreen.FROM_PENDING = false
+                                UserUtils.spid = spId
+                                startActivity(intent)
+                                progressDialog.dismiss()
+                                dialog.dismiss()
+                                UserUtils.sendOTPResponseFCM(
+                                    this,
+                                    userFcmToken,
+                                    "$bookingId|$categoryId|$userId|sp"
+                                )
+                                snackBar(binding.recyclerView, "Booking Started!")
+                            }
+                            is NetworkResponse.Failure -> {
+                                progressDialog.dismiss()
+                                toast(this, "Error:${it.message!!}")
+                            }
+                        }
+                    }
                 } else {
                     toast(this, "Invalid OTP")
                 }
@@ -441,6 +468,11 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI("Pending")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

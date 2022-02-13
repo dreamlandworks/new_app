@@ -54,9 +54,9 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
     private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
-        var userId = ""
-        var categoryId = ""
-        var bookingId = ""
+        var userId = "0"
+        var categoryId = "0"
+        var bookingId = "0"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,19 +101,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -126,7 +121,8 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
-            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
+//            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
+            if (!ViewUserBookingDetailsScreen.FROM_PENDING) {
                 binding.otpText.text = resources.getString(R.string.time_lapsed)
                 binding.otp.text = response.booking_details.time_lapsed
             } else {
@@ -153,36 +149,17 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(
-                binding.root.context.getString(R.string.user_id),
-                UserUtils.getUserId(binding.root.context)
-            )
+            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
             binding.root.context.startActivity(intent)
         }
 
         binding.markCompleteBtn.setOnClickListener {
-//            if (response.booking_details.extra_demand_total_amount != "0") {
                 ProviderInVoiceScreen.isExtraDemandRaised = "1"
                 val intent = Intent(this, ProviderInVoiceScreen::class.java)
                 intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
                 intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
                 intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                 startActivity(intent)
-//            } else {
-//                AlertDialog.Builder(this)
-//                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
-//                    .setPositiveButton("YES") { dialogInterface, _ ->
-//                        dialogInterface.dismiss()
-//                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
-//                        val intent = Intent(this, ProviderInVoiceScreen::class.java)
-//                        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-//                        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-//                        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-//                        startActivity(intent)
-//                    }.setNegativeButton("NO") { dialogInterface, _ ->
-//                        dialogInterface.dismiss()
-//                    }.show()
-//            }
         }
 
         binding.callBtn.setOnClickListener {
@@ -329,8 +306,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
-                    binding.recyclerView.adapter =
-                        GetBookingStatusListAdapter(it.data.booking_status_details)
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data.booking_status_details)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
