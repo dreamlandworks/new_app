@@ -71,6 +71,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserUpdateAlertsToReadReqModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
@@ -134,7 +135,7 @@ interface UserApiService {
     @POST(UserApiEndPoints.USER_GET_ALERTS)
     suspend fun getUserAlerts(
         @Body map: UserAlertsReqModel
-    ): UserAlertsResModel
+    ): UserAlertsResModelX
 
     @GET(UserApiEndPoints.USER_SEARCH_KEYWORDS)
     suspend fun getUserSearchKeywords(

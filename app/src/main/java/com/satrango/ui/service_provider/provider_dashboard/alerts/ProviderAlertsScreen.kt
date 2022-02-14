@@ -27,7 +27,6 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
-import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -39,8 +38,6 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
     private val USER_TYPE: String = "SP"
     private val CANCEL: String = "cancel"
     private val ACCEPT_OR_REJECT: String = "accept/reject"
-    private val ACTIONABLE: String = "1"
-    private val NOT_ACTIONABLE: String = "2"
     private lateinit var progressDialog: BeautifulProgressDialog
 
     override fun getFragmentViewModel(): Class<ProviderAlertsViewModel> = ProviderAlertsViewModel::class.java
@@ -107,13 +104,13 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE, this)
-                    binding.regularBadge.text = it.data.size.toString()
+//                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE, this)
+//                    binding.regularBadge.text = it.data.size.toString()
                     binding.note.visibility = View.GONE
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), ACTIONABLE, this)
+                    binding.alertsRV.adapter = UserAlertsAdapter(emptyList(),  this)
                     binding.note.visibility = View.VISIBLE
 //                    toast(requireContext(), it.message!!)
                 }
@@ -156,7 +153,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     val data = it.data!!
                     binding.actionNeededBadge.text = it.data.size.toString()
                     if (data.isNotEmpty()) {
-                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
+//                        binding.alertsRV.adapter = UserAlertsAdapter(it.data,  this)
                         binding.note.visibility = View.GONE
                         binding.alertsRV.visibility = View.VISIBLE
                     } else {
@@ -165,7 +162,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
+                    binding.alertsRV.adapter = UserAlertsAdapter(emptyList(),  this)
                     binding.note.visibility = View.VISIBLE
 //                    toast(requireContext(), it.message!!)
                 }

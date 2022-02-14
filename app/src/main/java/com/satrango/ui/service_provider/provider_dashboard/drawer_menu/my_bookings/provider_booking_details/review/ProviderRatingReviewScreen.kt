@@ -184,7 +184,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY
         )
 //        toast(this, Gson().toJson(requestBody))
-        viewModel.providerRating(this, requestBody).observe(this, {
+        viewModel.providerRating(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -201,7 +201,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
                     snackBar(binding.overAllRating, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun postUserRating() {
@@ -218,7 +218,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
             userId.toInt(),
             binding.customerRatingBtn.rating
         )
-        viewModel.userRating(this, requestBody).observe(this, {
+        viewModel.userRating(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -236,7 +236,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
                     snackBar(binding.overAllRating, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

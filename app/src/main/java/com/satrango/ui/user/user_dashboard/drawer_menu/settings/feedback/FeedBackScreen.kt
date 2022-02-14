@@ -91,14 +91,20 @@ class FeedBackScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(SettingsRepository())
         val viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
+        val userType = if (UserSettingsScreen.FROM_PROVIDER) {
+            "2"
+        } else {
+            "1"
+        }
         val requestBody = FeedbackReqModel(
             SimpleDateFormat("yyyy-MM-dd").format(Date()),
             binding.feedBack.text.toString().trim(),
             RetrofitBuilder.USER_KEY,
-            UserUtils.getUserId(this)
+            UserUtils.getUserId(this),
+            userType
         )
-        viewModel.postFeedback(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.postFeedback(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -112,6 +118,6 @@ class FeedBackScreen : AppCompatActivity() {
                     snackBar(binding.feedBack, it.message!!)
                 }
             }
-        })
+        }
     }
 }

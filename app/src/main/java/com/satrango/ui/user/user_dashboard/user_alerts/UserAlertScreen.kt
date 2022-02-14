@@ -10,20 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
 import com.satrango.base.BaseFragment
-import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.FragmentUserAlertScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
-import com.satrango.ui.user.bookings.booking_address.BookingRepository
-import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
@@ -38,7 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
 
 class UserAlertScreen :
     BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>(),
@@ -47,8 +41,6 @@ class UserAlertScreen :
     private val USER_TYPE: String = "User"
     private val ACCEPT_OR_REJECT: String = "accept/reject"
     private val CANCEL: String = "cancel"
-    private val ACTIONABLE: String = "1"
-    private val NOT_ACTIONABLE: String = "2"
 
     companion object {
         val FROM_PROVIDER = false
@@ -71,7 +63,8 @@ class UserAlertScreen :
             .setOnClickListener { activity?.onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
             .setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.alerts)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.alerts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -112,7 +105,11 @@ class UserAlertScreen :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            requireActivity(),
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -121,7 +118,13 @@ class UserAlertScreen :
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
-        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
+        binding.actionNeededBtn.setTextColor(
+            Color.parseColor(
+                requireActivity().resources.getString(
+                    R.string.black_color
+                )
+            )
+        )
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
@@ -132,11 +135,11 @@ class UserAlertScreen :
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
                         binding.note.visibility = View.GONE
-                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, ACTIONABLE, this)
+                        binding.alertsRV.adapter = RegularAlertAdapter(it.data)
                         binding.regularBadge.text = it.data.size.toString()
                     } else {
                         binding.regularBadge.visibility = View.GONE
-                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), ACTIONABLE, this)
+                        binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), this)
                         binding.note.text = "Regular Alerts are empty"
                         binding.note.visibility = View.VISIBLE
                     }
@@ -149,16 +152,18 @@ class UserAlertScreen :
                 }
             }
         }
-        updateAlertsToRead("1")
+//        updateAlertsToRead("1")
     }
 
     @SuppressLint("SetTextI18n")
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
         binding.actionNeededBtn.setTextColor(
-            Color.parseColor(requireActivity().resources.getString(
+            Color.parseColor(
+                requireActivity().resources.getString(
                     R.string.white_color
-                ))
+                )
+            )
         )
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
@@ -170,13 +175,13 @@ class UserAlertScreen :
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
-                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, NOT_ACTIONABLE, this)
+                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, this)
                         binding.actionNeededBadge.text = it.data.size.toString()
                         binding.note.visibility = View.GONE
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
                         binding.alertsRV.adapter =
-                            UserAlertsAdapter(emptyList(), NOT_ACTIONABLE, this)
+                            UserAlertsAdapter(emptyList(), this)
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Actionable Alerts are empty"
                     }
@@ -202,11 +207,21 @@ class UserAlertScreen :
 
     override fun getFragmentRepository(): UserAlertsRepository = UserAlertsRepository()
 
-    override fun rescheduleUserStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
+    override fun rescheduleUserStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int
+    ) {
         fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, CANCEL)
     }
 
-    override fun rescheduleUserAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
+    override fun rescheduleUserAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int
+    ) {
         fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, ACCEPT_OR_REJECT)
     }
 
@@ -226,7 +241,8 @@ class UserAlertScreen :
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 progressDialog.show()
-                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                val response =
+                    RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
                 if (response.status == 200) {
                     progressDialog.dismiss()
                     if (taskType == ACCEPT_OR_REJECT) {
@@ -271,7 +287,14 @@ class UserAlertScreen :
 
         cancelBtn.setOnClickListener {
             dialog.dismiss()
-            rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 12, userId, taskType)
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId,
+                response.booking_details.sp_id.toInt(),
+                12,
+                userId,
+                taskType
+            )
         }
     }
 
@@ -300,12 +323,26 @@ class UserAlertScreen :
 
         acceptBtn.setOnClickListener {
             dialog.dismiss()
-            rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 12, userId, taskType)
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId,
+                response.booking_details.sp_id.toInt(),
+                12,
+                userId,
+                taskType
+            )
         }
 
         rejectBtn.setOnClickListener {
             dialog.dismiss()
-            rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 11, userId, taskType)
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId,
+                response.booking_details.sp_id.toInt(),
+                11,
+                userId,
+                taskType
+            )
         }
 
         dialog.setCancelable(false)
@@ -337,7 +374,8 @@ class UserAlertScreen :
         )
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+                val response =
+                    RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     toast(requireContext(), jsonResponse.getString("message"))
@@ -350,11 +388,21 @@ class UserAlertScreen :
         }
     }
 
-    override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
+    override fun rescheduleSPStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int
+    ) {
 
     }
 
-    override fun rescheduleSPAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
+    override fun rescheduleSPAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int
+    ) {
 
     }
 
@@ -367,10 +415,11 @@ class UserAlertScreen :
         )
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                val response =
+                    RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
                 progressDialog.show()
                 if (response.status == 200) {
-                     progressDialog.dismiss()
+                    progressDialog.dismiss()
                     showExtraDemandAcceptDialog(
                         bookingId,
                         response.booking_details.material_advance,
@@ -450,11 +499,13 @@ class UserAlertScreen :
         dialog: BottomSheetDialog,
         progressDialog: BeautifulProgressDialog
     ) {
-        val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        val requestBody =
+            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 progressDialog.show()
-                val response = RetrofitBuilder.getUserRetrofitInstance().changeExtraDemandStatus(requestBody)
+                val response =
+                    RetrofitBuilder.getUserRetrofitInstance().changeExtraDemandStatus(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     dialog.dismiss()

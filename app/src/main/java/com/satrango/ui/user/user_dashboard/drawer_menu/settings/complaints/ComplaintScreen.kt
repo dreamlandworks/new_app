@@ -60,7 +60,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
 
         val factory = ViewModelFactory(SettingsRepository())
         viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
-        viewModel.complaintModules(this).observe(this, {
+        viewModel.complaintModules(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -70,7 +70,14 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
                     val modules = it.data!!
                     moduleNames = ArrayList()
                     for (module in modules) {
-                        moduleNames.add(BrowserCategoryModel(module.module_name, module.id, "", false))
+                        moduleNames.add(
+                            BrowserCategoryModel(
+                                module.module_name,
+                                module.id,
+                                "",
+                                false
+                            )
+                        )
                     }
                     binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
                     binding.recyclerView.adapter = ComplaintsAdapter(moduleNames, this)
@@ -81,7 +88,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
                 }
 
             }
-        })
+        }
 
         binding.resetBtn.setOnClickListener {
             finish()
@@ -138,6 +145,11 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private fun submitComplaintToServer() {
 
         var moduleId = 0
+        var userType = if (FROM_PROVIDER) {
+            "2"
+        } else {
+            "1"
+        }
         moduleNames.forEach { browserCategoryModel ->
             if (browserCategoryModel.selected) {
                 moduleId = browserCategoryModel.id.toInt()
@@ -150,12 +162,13 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             RetrofitBuilder.USER_KEY,
             moduleId,
             UserUtils.getUserId(this),
-            0
+            0,
+            userType
         )
 
-        viewModel.postComplaint(this, requestBody).observe(this, {
+        viewModel.postComplaint(this, requestBody).observe(this) {
 
-            when(it) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -172,7 +185,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             }
 
 
-        })
+        }
 
     }
 
