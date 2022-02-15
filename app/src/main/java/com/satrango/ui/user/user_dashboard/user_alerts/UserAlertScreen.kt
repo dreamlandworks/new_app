@@ -59,12 +59,9 @@ class UserAlertScreen :
 
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
-            .setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-            .setOnClickListener { activity?.onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.alerts)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { activity?.onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { activity?.onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.alerts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -152,7 +149,7 @@ class UserAlertScreen :
                 }
             }
         }
-//        updateAlertsToRead("1")
+        updateAlertsToRead("1")
     }
 
     @SuppressLint("SetTextI18n")
@@ -196,8 +193,7 @@ class UserAlertScreen :
         }
     }
 
-    override fun getFragmentViewModel(): Class<UserAlertsViewModel> =
-        UserAlertsViewModel::class.java
+    override fun getFragmentViewModel(): Class<UserAlertsViewModel> = UserAlertsViewModel::class.java
 
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
@@ -275,7 +271,7 @@ class UserAlertScreen :
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
         val title = dialogView.findViewById<TextView>(R.id.title)
         val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
@@ -308,7 +304,7 @@ class UserAlertScreen :
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
         val noteText = dialogView.findViewById<TextView>(R.id.noteText)
-        val title = dialogView.findViewById<TextView>(R.id.title)
+//        val title = dialogView.findViewById<TextView>(R.id.title)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)

@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -14,18 +16,18 @@ import java.lang.Exception
 
 class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): ViewModel() {
 
-    val normalAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
-    val actionableAlertsList = MutableLiveData<NetworkResponse<List<Data>>>()
+    val normalAlertsList = MutableLiveData<NetworkResponse<List<Regular>>>()
+    val actionableAlertsList = MutableLiveData<NetworkResponse<List<Action>>>()
     val updateAlertsToRead = MutableLiveData<NetworkResponse<String>>()
 
-    fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
+    fun getNormalAlerts(context: Context): MutableLiveData<NetworkResponse<List<Regular>>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     normalAlertsList.value = NetworkResponse.Loading()
-                    val response = async { repository.getProviderAlerts(context,"1") }
+                    val response = async { repository.getProviderAlerts(context) }
                     if (response.await().status == 200) {
-                        normalAlertsList.value = NetworkResponse.Success(response.await().data)
+                        normalAlertsList.value = NetworkResponse.Success(response.await().regular)
                     } else {
                         normalAlertsList.value = NetworkResponse.Failure(response.await().message)
                     }
@@ -40,14 +42,14 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
         return normalAlertsList
     }
 
-    fun getActionableAlerts(context: Context): MutableLiveData<NetworkResponse<List<Data>>> {
+    fun getActionableAlerts(context: Context): MutableLiveData<NetworkResponse<List<Action>>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     actionableAlertsList.value = NetworkResponse.Loading()
-                    val response = async { repository.getProviderAlerts(context, "2") }
+                    val response = async { repository.getProviderAlerts(context) }
                     if (response.await().status == 200) {
-                        actionableAlertsList.value = NetworkResponse.Success(response.await().data)
+                        actionableAlertsList.value = NetworkResponse.Success(response.await().action)
                     } else {
                         actionableAlertsList.value = NetworkResponse.Failure(response.await().message)
                     }

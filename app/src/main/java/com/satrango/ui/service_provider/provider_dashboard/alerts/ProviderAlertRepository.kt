@@ -9,13 +9,14 @@ import com.satrango.ui.service_provider.provider_dashboard.alerts.models.Provide
 import com.satrango.ui.service_provider.provider_dashboard.alerts.models.UpdateAlertsToReadReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
 import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
 
 class ProviderAlertRepository: BaseRepository() {
 
-    suspend fun getProviderAlerts(context: Context, alertType: String) : UserAlertsResModel {
-        val requestBody = ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,UserUtils.getUserId(context),  "1", alertType)
+    suspend fun getProviderAlerts(context: Context) : UserAlertsResModelX {
+        val requestBody = ProviderAlertsReqModel(RetrofitBuilder.PROVIDER_KEY,UserUtils.getUserId(context))
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getProviderAlerts(requestBody)
     }
 

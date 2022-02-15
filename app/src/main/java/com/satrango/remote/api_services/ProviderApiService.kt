@@ -39,6 +39,7 @@ import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnline
 import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlansResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -149,7 +150,7 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.SP_ALERTS)
     suspend fun getProviderAlerts(
         @Body requestBody: ProviderAlertsReqModel
-    ): UserAlertsResModel
+    ): UserAlertsResModelX
 
     @POST(ServiceProviderEndPoints.PROFESSIONAL_DETAILS)
     suspend fun getProfessionalDetails(

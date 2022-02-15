@@ -26,6 +26,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
+import com.satrango.ui.user.user_dashboard.user_alerts.RegularAlertAdapter
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
@@ -62,9 +63,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.notifications)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-
         loadProviderAlertsScreen()
-
     }
 
     private fun loadProviderAlertsScreen() {
@@ -90,6 +89,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.provider_btn_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
@@ -104,9 +104,14 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-//                    binding.alertsRV.adapter = UserAlertsAdapter(it.data!!, ACTIONABLE, this)
-//                    binding.regularBadge.text = it.data.size.toString()
-                    binding.note.visibility = View.GONE
+                    binding.alertsRV.adapter = RegularAlertAdapter(it.data!!)
+                    if (it.data.isEmpty()) {
+                        binding.note.visibility = View.VISIBLE
+                        binding.note.text = "Alerts not found"
+                    } else {
+                        binding.regularBadge.text = it.data.size.toString()
+                        binding.note.visibility = View.GONE
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -136,6 +141,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.provider_btn_bg)
         binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
@@ -153,9 +159,14 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     val data = it.data!!
                     binding.actionNeededBadge.text = it.data.size.toString()
                     if (data.isNotEmpty()) {
-//                        binding.alertsRV.adapter = UserAlertsAdapter(it.data,  this)
-                        binding.note.visibility = View.GONE
-                        binding.alertsRV.visibility = View.VISIBLE
+                        binding.alertsRV.adapter = UserAlertsAdapter(it.data,  this)
+                        if (it.data.isEmpty()) {
+                            binding.note.visibility = View.VISIBLE
+                            binding.note.text = "Alerts not found"
+                        } else {
+                            binding.note.visibility = View.GONE
+                            binding.alertsRV.visibility = View.VISIBLE
+                        }
                     } else {
                         binding.note.visibility = View.VISIBLE
                     }
@@ -164,7 +175,6 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(),  this)
                     binding.note.visibility = View.VISIBLE
-//                    toast(requireContext(), it.message!!)
                 }
             }
         }
@@ -276,8 +286,8 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
-        val title = dialogView.findViewById<TextView>(R.id.title)
+//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+//        val title = dialogView.findViewById<TextView>(R.id.title)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
@@ -364,8 +374,8 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
-        val title = dialogView.findViewById<TextView>(R.id.title)
+//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+//        val title = dialogView.findViewById<TextView>(R.id.title)
         val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
 
