@@ -155,13 +155,9 @@ class UserAlertScreen :
     @SuppressLint("SetTextI18n")
     private fun loadActionableAlerts() {
         binding.actionNeededBtn.setBackgroundResource(R.drawable.category_bg)
-        binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
                     R.string.white_color
-                )
-            )
-        )
+                )))
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.black_color)))
         binding.regularBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {

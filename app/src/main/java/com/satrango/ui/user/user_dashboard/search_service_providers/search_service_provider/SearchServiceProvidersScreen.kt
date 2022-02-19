@@ -287,7 +287,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 //            "users_id": 76
 //        }
 
-
 //        val requestBody = SearchServiceProviderReqModel(
 //            "54-14/7-78",
 //            "Vijayawada",

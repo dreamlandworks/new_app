@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
-import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
-import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject

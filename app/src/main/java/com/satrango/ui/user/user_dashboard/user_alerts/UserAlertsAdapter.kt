@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.UserAlertRowBinding
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
-import com.satrango.ui.user.user_dashboard.user_alerts.models.Data
 import java.text.SimpleDateFormat
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -22,7 +21,7 @@ class UserAlertsAdapter(
 
         @SuppressLint("SimpleDateFormat", "SetTextI18n")
         fun bind(data: Action) {
-            binding.rowTitle.text = data.text.trim()
+            binding.rowTitle.text = data.description.trim()
             val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val formatter = SimpleDateFormat("dd/MM/yyyy")
             val outputTime: String = formatter.format(parser.parse(data.created_on))
