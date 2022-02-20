@@ -46,37 +46,37 @@ class UserAlertsAdapter(
 
         @SuppressLint("SetTextI18n")
         fun onClickAction(data: Action) {
-//            if (data.alert_id == "2" && data.action == "2") {
-//                alertsInterface.divertToInstallmentsScreen(data.booking_id, data.post_job_id.toInt())
-//            }
-//            if (data.alert_id == "7" && data.action == "2") {
-//                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt())
-//            }
-//            if (data.alert_id == "8" && data.action == "2") {
-//                alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_sp_id.toInt(), data.bid_id.toInt())
-//            }
-//            if (data.alert_id == "9" && data.action == "2") {
-//                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-////                if (UserAlertScreen.FROM_PROVIDER) {
-////                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
-////                } else {
-////                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-////                }
-////                if (!UserAlertScreen.FROM_PROVIDER) {
-////                } else {
-////                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-////                }
-//            }
-//            if (data.alert_id == "10" && data.action == "2") {
-//                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-////                if (!UserAlertScreen.FROM_PROVIDER) {
-////                } else {
-////                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-////                }
-//            }
-//            if (data.alert_id == "3") {
-//                alertsInterface.divertToOfferScreen()
-//            }
+            if (data.type_id == "2") {
+                alertsInterface.divertToInstallmentsScreen(data.booking_id, data.post_id.toInt())
+            }
+            if (data.type_id == "7") {
+                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt())
+            }
+            if (data.type_id == "8") {
+                alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_user_id.toInt(), data.bid_id.toInt())
+            }
+            if (data.type_id == "9") {
+                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
+//                if (UserAlertScreen.FROM_PROVIDER) {
+//                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
+//                } else {
+//                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
+//                if (!UserAlertScreen.FROM_PROVIDER) {
+//                } else {
+//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
+            }
+            if (data.type_id == "10") {
+                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
+//                if (!UserAlertScreen.FROM_PROVIDER) {
+//                } else {
+//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
+//                }
+            }
+            if (data.type_id == "3") {
+                alertsInterface.divertToOfferScreen()
+            }
         }
     }
 

@@ -50,8 +50,8 @@ class ProviderHomeScreen : Fragment() {
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
 
-        viewModel.getCitiesList(requireContext()).observe(requireActivity(), {
-            when(it) {
+        viewModel.getCitiesList(requireContext()).observe(requireActivity()) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -59,9 +59,7 @@ class ProviderHomeScreen : Fragment() {
                     progressDialog.dismiss()
                     val cities = it.data!!.data
                     for (city in cities) {
-                        if (UserUtils.getCity(requireContext())
-                                .lowercase(Locale.getDefault()) == city.city.lowercase(Locale.getDefault())
-                        ) {
+                        if (UserUtils.getCity(requireContext()).lowercase(Locale.getDefault()) == city.city.trim().lowercase(Locale.getDefault())) {
                             loadProviderDashboardDetails(city.id)
                         }
                     }
@@ -71,16 +69,14 @@ class ProviderHomeScreen : Fragment() {
                     snackBar(binding.bidCount, it.message!!)
                 }
             }
-        })
-
-
+        }
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
     private fun loadProviderDashboardDetails(cityId: String) {
-        viewModel.providerDashboardDetails(requireContext(), cityId).observe(requireActivity(), {
-            when(it) {
+        viewModel.providerDashboardDetails(requireContext(), cityId).observe(requireActivity()) {
+            when (it) {
                 is NetworkResponse.Loading -> {
 //                    progressDialog.show()
                 }
@@ -91,12 +87,12 @@ class ProviderHomeScreen : Fragment() {
                     binding.bookingCount.text = "${data.bookings_completed}/${data.total_bookings}"
                     binding.bidCount.text = "${data.bids_awarded}/${data.total_bids}"
                     binding.earningText.text = data.earnings
-                    binding.commissionCount.text = data.commission.toString()
+                    binding.commissionCount.text = data.commission
                     binding.myRank.text = "#${data.sp_rank}"
-                    binding.ratingCount.text = data.sp_rating.toString()
-                    binding.pointsCount.text = data.sp_points.toString()
+                    binding.ratingCount.text = data.sp_rating
+                    binding.pointsCount.text = data.sp_points
                     binding.cName.text = data.competitor_name
-                    binding.cRank.text = data.competitor_rank.toString()
+                    binding.cRank.text = data.competitor_rank
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -104,7 +100,7 @@ class ProviderHomeScreen : Fragment() {
                 }
 
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

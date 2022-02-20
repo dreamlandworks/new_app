@@ -1,16 +1,16 @@
 package com.satrango.ui.service_provider.provider_dashboard.dashboard.models
 
 data class ProviderDashboardResModel(
-    val bids_awarded: Int,
+    val bids_awarded: String,
     val bookings_completed: String,
     val competitor_name: String,
-    val competitor_rank: Int,
+    val competitor_rank: String,
     val earnings: String,
-    val commission: Int,
+    val commission: String,
     val message: String,
-    val sp_points: Int,
-    val sp_rank: Int,
-    val sp_rating: Int,
+    val sp_points: String,
+    val sp_rank: String,
+    val sp_rating: String,
     val status: Int,
     val total_bids: String,
     val total_bookings: String
