@@ -67,6 +67,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -608,7 +609,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             }
         })
         waitingDialog.setContentView(dialogView)
-        waitingDialog.show()
+        if (!(this as Activity).isFinishing) {
+            waitingDialog.show()
+        }
     }
 
     private fun weAreSorryDialog() {

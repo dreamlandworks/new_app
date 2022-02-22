@@ -242,8 +242,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:textColor="@color/red"
-                        android:textSize="@dimen/text"
+                        android:textSize="@dimen/sub_text"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>

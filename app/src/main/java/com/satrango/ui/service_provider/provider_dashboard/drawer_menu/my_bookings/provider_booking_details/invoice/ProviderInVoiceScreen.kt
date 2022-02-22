@@ -51,6 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import android.app.Activity
+import com.bumptech.glide.Glide
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 
 
@@ -123,8 +124,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text =
-            response.booking_details.fname + " " + response.booking_details.lname
+        binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
+        if (FROM_PROVIDER) {
+            Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
+        } else {
+            Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
+        }
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from

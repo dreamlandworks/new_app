@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
@@ -138,15 +139,16 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
-        if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
-            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
+//        if (response.booking_details.otp_raised_by == response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
+            if (!ViewUserBookingDetailsScreen.FROM_PENDING) {
                 binding.otpText.text = resources.getString(R.string.time_lapsed)
                 binding.otp.text = response.booking_details.time_lapsed
             } else {
                 binding.otpText.text = resources.getString(R.string.otp)
                 binding.otp.text = response.booking_details.otp
             }
-        }
+//        }
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -164,22 +166,18 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-//            if (response.booking_details.extra_demand_total_amount != "0") {
-            ProviderInVoiceScreen.isExtraDemandRaised = "1"
-            if (response.booking_details.extra_demand_status != "2") {
-                finalExpenditureDialog()
+            if (response.booking_details.extra_demand_total_amount != "0") {
+                ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                if (response.booking_details.extra_demand_status == "2") {
+                    finalExpenditureDialog()
+                } else {
+                    divertToInvoiceScreen()
+                }
+            } else {
+                ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                divertToInvoiceScreen()
             }
-//            } else {
-//                AlertDialog.Builder(this)
-//                    .setMessage("Extra Demand Not Raised, Do you want to Continue?")
-//                    .setPositiveButton("YES") { dialogInterface, _ ->
-//                        dialogInterface.dismiss()
-//                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
-//                        finalExpenditureDialog()
-//                    }.setNegativeButton("NO") { dialogInterface, _ ->
-//                        dialogInterface.dismiss()
-//                    }.show()
-//            }
+
         }
 
         binding.callBtn.setOnClickListener {
@@ -208,6 +206,15 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             binding.viewFilesBtn.visibility = View.GONE
         }
 
+    }
+
+    private fun divertToInvoiceScreen() {
+        ProviderInVoiceScreen.FROM_PROVIDER = true
+        val intent = Intent(this, ProviderInVoiceScreen::class.java)
+        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+        startActivity(intent)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -339,18 +346,9 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                             dialog.dismiss()
                             ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.booking_id),
-                                bookingId
-                            )
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.category_id),
-                                categoryId
-                            )
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.user_id),
-                                userId
-                            )
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                             startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {

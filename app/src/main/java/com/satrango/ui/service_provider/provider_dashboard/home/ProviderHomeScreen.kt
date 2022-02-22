@@ -83,7 +83,7 @@ class ProviderHomeScreen : Fragment() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val data = it.data!!
-                    toast(requireContext(), Gson().toJson(data))
+//                    toast(requireContext(), Gson().toJson(data))
                     binding.bookingCount.text = "${data.bookings_completed}/${data.total_bookings}"
                     binding.bidCount.text = "${data.bids_awarded}/${data.total_bids}"
                     binding.earningText.text = data.earnings

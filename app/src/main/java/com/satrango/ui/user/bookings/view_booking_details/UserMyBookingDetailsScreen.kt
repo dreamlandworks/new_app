@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
@@ -115,11 +116,11 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
-        binding.userName.text =
-            response.booking_details.fname + " " + response.booking_details.lname
+        binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
         if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
 //            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
             if (!ViewUserBookingDetailsScreen.FROM_PENDING) {

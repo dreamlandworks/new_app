@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.base.ViewModelFactory
@@ -348,6 +349,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
             USER_TYPE,
             userId
         )
+        toast(requireContext(), Gson().toJson(requestBody))
         viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

@@ -508,8 +508,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             if (today) {
                 morningTimings.removeAt(0)
             }
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
+            morningTimings = morningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
@@ -522,8 +522,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
             binding.afternoonText.visibility = View.VISIBLE
             binding.afternoonTimeRv.visibility = View.VISIBLE
-            binding.afternoonTimeRv.adapter =
-                MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
+            afternoonTimings = afternoonTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
         }
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
@@ -536,10 +536,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.visibility = View.VISIBLE
-            binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>,
-                    this@BookingDateAndTimeScreen,
-                    "T")
+            eveningTimings = eveningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
         }
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
@@ -550,15 +548,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.visibility = View.VISIBLE
-            binding.nightTimeRv.adapter =
-                MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
+            nightTimings = nightTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getHourInDay(): Int {
-        val simpleDateFormat = SimpleDateFormat("HH:mm aa")
-        return simpleDateFormat.format(Date()).split(":")[0].toInt()
     }
 
     private fun loadDays(
@@ -799,8 +791,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 if (today) {
                     morningTimings.removeAt(0)
                 }
-                binding.morningTimeRv.adapter =
-                    MonthsAdapter(morningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
+                morningTimings = morningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+                binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
             }
             if (afternoonTimings.isEmpty()) {
                 binding.afternoonText.visibility = View.GONE
@@ -814,8 +806,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.afternoonText.visibility = View.VISIBLE
                 binding.afternoonTimeRv.visibility = View.VISIBLE
 //                toast(this, afternoonTimings.size.toString())
-                binding.afternoonTimeRv.adapter =
-                    MonthsAdapter(afternoonTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
+                afternoonTimings = afternoonTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+                binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
             }
             if (eveningTimings.isEmpty()) {
                 binding.eveningText.visibility = View.GONE
@@ -828,8 +820,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
                 binding.eveningText.visibility = View.VISIBLE
                 binding.eveningTimeRv.visibility = View.VISIBLE
-                binding.eveningTimeRv.adapter =
-                    MonthsAdapter(eveningTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
+                eveningTimings = eveningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+                binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
             }
             if (nightTimings.isEmpty()) {
                 binding.nightText.visibility = View.GONE
@@ -840,8 +832,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
                 binding.nightText.visibility = View.VISIBLE
                 binding.nightTimeRv.visibility = View.VISIBLE
-                binding.nightTimeRv.adapter =
-                    MonthsAdapter(nightTimings.distinctBy { it.month } as java.util.ArrayList<MonthsModel>, this@BookingDateAndTimeScreen, "T")
+                nightTimings = nightTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+                binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
         validateFields()

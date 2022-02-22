@@ -88,12 +88,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             updateUI("InProgress")
         }
         binding.pendingBtn.setOnClickListener {
-            binding.pendingBtn.setBackgroundResource(R.drawable.provider_btn_bg)
-            binding.completedBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
-            binding.completedBtn.setTextColor(Color.parseColor("#000000"))
-            binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
+            updatePendingBtnUI()
             updateUI("Pending")
         }
         binding.completedBtn.setOnClickListener {
@@ -105,6 +100,15 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
             updateUI("Completed")
         }
+    }
+
+    private fun updatePendingBtnUI() {
+        binding.pendingBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+        binding.completedBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
+        binding.completedBtn.setTextColor(Color.parseColor("#000000"))
+        binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
     }
 
     private fun updateUI(status: String) {
@@ -472,6 +476,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     override fun onResume() {
         super.onResume()
+        updatePendingBtnUI()
         updateUI("Pending")
     }
 

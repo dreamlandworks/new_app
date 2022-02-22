@@ -64,6 +64,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
                         PaymentScreen.amount = sp.final_amount.toDouble()
                         PaymentScreen.userId = sp.users_id.toInt()
                         startActivity(Intent(this, PaymentScreen::class.java))
+                        finish()
                     }
                 }
 //                makePayment()

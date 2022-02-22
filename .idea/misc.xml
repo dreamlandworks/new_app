@@ -183,6 +183,7 @@
         <entry key="app/src/main/res/layout/activity_search_view_profile.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/booking_status_row.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/reschedule_status_change_dialog.xml" value="0.25" />

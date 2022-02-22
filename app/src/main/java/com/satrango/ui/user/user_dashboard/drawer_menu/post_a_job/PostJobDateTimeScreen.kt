@@ -66,12 +66,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         initializeToolBar()
         initializeProgressDialog()
 
-        binding.apply {
-
-            nextBtn.setOnClickListener {
-                validateFields()
-            }
-
+        binding.nextBtn.setOnClickListener {
+            validateFields()
         }
 
         calendar = Calendar.getInstance()
@@ -279,8 +275,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.morningText.visibility = View.VISIBLE
             binding.morningTimeRv.visibility = View.VISIBLE
-            binding.morningTimeRv.adapter =
-                MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
+            morningTimings = morningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
@@ -288,8 +284,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.afternoonText.visibility = View.VISIBLE
             binding.afternoonTimeRv.visibility = View.VISIBLE
-            binding.afternoonTimeRv.adapter =
-                MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
+            afternoonTimings = afternoonTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
         }
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
@@ -297,8 +293,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.eveningText.visibility = View.VISIBLE
             binding.eveningTimeRv.visibility = View.VISIBLE
-            binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
+            eveningTimings = eveningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
@@ -306,8 +302,8 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         } else {
             binding.nightText.visibility = View.VISIBLE
             binding.nightTimeRv.visibility = View.VISIBLE
-            binding.nightTimeRv.adapter =
-                MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
+            nightTimings = nightTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
         }
 //        }
         validateFields()
@@ -476,6 +472,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
             binding.morningText.visibility = View.GONE
         } else {
             binding.morningText.visibility = View.VISIBLE
+            morningTimings = morningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
             binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (afternoonTimings.isEmpty()) {
@@ -487,21 +484,22 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
             }
             binding.afternoonText.visibility = View.VISIBLE
+            afternoonTimings = afternoonTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
             binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@PostJobDateTimeScreen, "T")
         }
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
         } else {
             binding.eveningText.visibility = View.VISIBLE
-            binding.eveningTimeRv.adapter =
-                MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
+            eveningTimings = eveningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@PostJobDateTimeScreen, "T")
         }
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
         } else {
             binding.nightText.visibility = View.VISIBLE
-            binding.nightTimeRv.adapter =
-                MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
+            nightTimings = nightTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+            binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@PostJobDateTimeScreen, "T")
         }
     }
 

@@ -127,21 +127,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.completedBtn.setOnClickListener {
                         if (response.booking_details.extra_demand_total_amount != "0") {
                             ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                            if (response.booking_details.extra_demand_status != "2") {
+                            if (response.booking_details.extra_demand_status == "2") {
                                 finalExpenditureDialog()
+                            } else {
+                                divertToInvoiceScreen()
                             }
                         } else {
-                            AlertDialog.Builder(this)
-                                .setMessage("Extra Demand Not Raised, Do you want to Continue?")
-                                .setPositiveButton("YES") { dialogInterface, _ ->
-                                    dialogInterface.dismiss()
-                                    ProviderInVoiceScreen.isExtraDemandRaised = "0"
-                                    if (response.booking_details.extra_demand_status != "2") {
-                                        finalExpenditureDialog()
-                                    }
-                                }.setNegativeButton("NO") { dialogInterface, _ ->
-                                    dialogInterface.dismiss()
-                                }.show()
+                            ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                            divertToInvoiceScreen()
                         }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -258,6 +251,15 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     }
 
+    private fun divertToInvoiceScreen() {
+        ProviderInVoiceScreen.FROM_PROVIDER = true
+        val intent = Intent(this, ProviderInVoiceScreen::class.java)
+        intent.putExtra(binding.root.context.getString(R.string.booking_id), ProviderBookingDetailsScreen.bookingId)
+        intent.putExtra(binding.root.context.getString(R.string.category_id), ProviderBookingDetailsScreen.categoryId)
+        intent.putExtra(binding.root.context.getString(R.string.user_id), ProviderBookingDetailsScreen.userId)
+        startActivity(intent)
+    }
+
     private fun updateSPUI() {
         binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
         binding.reScheduleBtn.setBackgroundResource(R.drawable.purple_out_line)
@@ -331,18 +333,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             dialog.dismiss()
                             ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.booking_id),
-                                ProviderBookingDetailsScreen.bookingId
-                            )
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.category_id),
-                                ProviderBookingDetailsScreen.categoryId
-                            )
-                            intent.putExtra(
-                                binding.root.context.getString(R.string.user_id),
-                                ProviderBookingDetailsScreen.userId
-                            )
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), ProviderBookingDetailsScreen.bookingId)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), ProviderBookingDetailsScreen.categoryId)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), ProviderBookingDetailsScreen.userId)
                             startActivity(intent)
                         }
                         is NetworkResponse.Failure -> {
@@ -588,7 +581,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 .load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic)
                 .error(R.drawable.images)
                 .into(binding.profilePic)
-            if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
+//            if (response.booking_details.otp_raised_by != response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
 //                if (FROM_COMPLETED && !FROM_PENDING) {
                 if (!FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
@@ -597,7 +590,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.otpText.text = resources.getString(R.string.otp)
                     binding.otp.text = response.booking_details.otp
                 }
-            }
+//            }
         } else {
             binding.userName.text = "${response.booking_details.sp_fname} ${response.booking_details.sp_lname}"
             binding.occupation.text = response.booking_details.sp_profession
@@ -605,7 +598,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 .load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic)
                 .error(R.drawable.images)
                 .into(binding.profilePic)
-            if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
+//            if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
 //                if (FROM_COMPLETED && !FROM_PENDING) {
                 if (!FROM_PENDING) {
                     binding.otpText.text = resources.getString(R.string.time_lapsed)
@@ -614,7 +607,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.otpText.text = resources.getString(R.string.otp)
                     binding.otp.text = response.booking_details.otp
                 }
-            }
+//            }
         }
         if (FROM_COMPLETED) {
             binding.otp.text = response.booking_details.time_lapsed
