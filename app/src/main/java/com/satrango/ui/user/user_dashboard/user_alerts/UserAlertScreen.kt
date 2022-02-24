@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserAlertScreenBinding
@@ -366,11 +367,11 @@ class UserAlertScreen :
         )
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response =
-                    RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+                val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     toast(requireContext(), jsonResponse.getString("message"))
+                    loadActionableAlerts()
                 } else {
                     toast(requireContext(), jsonResponse.getString("message"))
                 }
