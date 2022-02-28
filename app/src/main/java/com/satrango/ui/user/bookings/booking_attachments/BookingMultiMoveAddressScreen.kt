@@ -174,7 +174,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
     @SuppressLint("SimpleDateFormat")
     private fun bookMultiMoveServiceProvider() {
-        var finalAmount = "0"
+        var finalAmount = 0
         var spId = "0"
         var cgst = "0"
         var sgst = "0"
@@ -187,7 +187,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
-            finalAmount,
+            finalAmount.toString(),
             encodedImages,
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
             1,
@@ -347,7 +347,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val finalAmount = if (data != null) {
             data.final_amount           
         } else {
-            "0"  
+            0
         }
         val finalUserId = if (data != null) {
             data.users_id
@@ -361,7 +361,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             PaymentScreen.FROM_PROVIDER_PLANS = false
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = finalAmount.toDouble()
+            PaymentScreen.amount = finalAmount
             PaymentScreen.userId = finalUserId.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)

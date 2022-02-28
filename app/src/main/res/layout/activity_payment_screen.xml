@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,18 +20,78 @@
         android:textColor="@color/black"
         android:textSize="@dimen/sub_text" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/lightGray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="@dimen/_20sdp"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wallet"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:drawablePadding="@dimen/_20sdp"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:text="@string/wallet_balance"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/currentBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:text="@string/wallet_balance"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/walletBalanceCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/lightGray" />
 
         <ImageView
             android:id="@+id/googlePayBtn"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@drawable/googlepay"
+            android:layout_marginTop="@dimen/_20sdp"
             tools:ignore="ContentDescription" />
 
         <ImageView

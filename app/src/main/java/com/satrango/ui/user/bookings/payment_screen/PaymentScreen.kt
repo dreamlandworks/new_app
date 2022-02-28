@@ -62,7 +62,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     companion object {
         var id = 0
         var period = 0
-        var amount = 0.0
+        var amount = 0
         var userId = 0
         var FROM_USER_PLANS = false
         var FROM_PROVIDER_PLANS = false
@@ -72,6 +72,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         var FROM_PROVIDER_BOOKING_RESPONSE = false
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentScreenBinding.inflate(layoutInflater)
@@ -81,6 +82,10 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         initializeToolbar()
 
         binding.apply {
+
+            val walletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
+            currentBalance.text = "Total Balance: $walletBalance"
+            walletBalanceCheck.isClickable = walletBalance.toInt() != 0
 
             googlePayBtn.setOnClickListener {
                 when {
@@ -160,7 +165,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     UserUtils.getUserId(this@PaymentScreen)
                 )
 //                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-                toast(this@PaymentScreen, Gson().toJson(requestBody))
+//                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
                     showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id)
@@ -182,12 +187,9 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //        }
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_account)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -239,8 +241,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan(paymentId: String?) {
         val finalAmount = if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java).final_amount.toDouble()).toInt()
-        }else {
+            round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toDouble()).toInt()
+        } else {
             amount.toInt()
         }
         val requestBody = UserPlanPaymentReqModel(
@@ -251,7 +253,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             period,
             id,
             paymentId!!,
-            UserUtils.data!!.users_id.toInt()
+            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
         )
         Log.d("USER PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
@@ -280,21 +282,13 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     private fun saveProviderPlan(paymentId: String?) {
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
-        val finalAmount = if (UserUtils.data != null) {
-            round(UserUtils.data!!.final_amount.toDouble()).toInt()
-        }else {
-            amount.toInt()
-        }
-        val requestBody = ProviderMemberShipPlanPaymentReqModel(
-            finalAmount,
-            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
-            RetrofitBuilder.USER_KEY,
-            "Success",
-            period,
-            id,
-            paymentId!!,
-            UserUtils.data!!.users_id.toInt()
-        )
+        val finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
+//        val finalAmount = if (UserUtils.data != null) {
+//            round(round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toDouble())).toInt()
+//        } else {
+//            amount.toInt()
+//        }
+        val requestBody = ProviderMemberShipPlanPaymentReqModel(finalAmount, SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()), RetrofitBuilder.USER_KEY, "Success", period, id, paymentId!!, Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt())
         Log.d("SP PLAN:", Gson().toJson(requestBody))
         viewModel.saveMemberShip(this, requestBody).observe(this) {
             when (it) {
@@ -365,20 +359,25 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     }
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
-        val finalAmount = if (UserUtils.data != null) {
-            round(UserUtils.data!!.final_amount.toDouble()).toInt()
-        } else {
-            amount.toInt()
-        }
-        val finalUserId = if (UserUtils.data != null) {
-            UserUtils.data!!.users_id.toInt()
-        } else {
-            userId
-        }
+        var finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
+        val finalUserId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
         var finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
-        if (finalWalletBalance.toDoubleOrNull()!! == 0.0) {
+        if (finalWalletBalance.toInt() <= 0) {
             finalWalletBalance = "0"
+        } else {
+            if (binding.walletBalanceCheck.isChecked) {
+                finalWalletBalance = if (finalWalletBalance.toInt() >= finalAmount) {
+                    finalWalletBalance = finalAmount.toString()
+                    finalAmount = 0
+                    finalWalletBalance
+                } else {
+                    finalWalletBalance = (finalWalletBalance.toInt() - finalAmount).toString()
+                    finalAmount -= finalWalletBalance.toInt()
+                    finalWalletBalance
+                }
+            }
         }
+
         val requestBody = PaymentConfirmReqModel(
             finalAmount.toString(),
             UserUtils.getBookingId(this),
@@ -394,7 +393,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             finalWalletBalance
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this) {

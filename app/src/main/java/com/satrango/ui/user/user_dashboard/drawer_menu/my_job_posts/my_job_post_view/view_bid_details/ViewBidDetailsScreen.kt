@@ -61,7 +61,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
             RetrofitBuilder.USER_KEY,
             spId
         )
-        viewModel.viewProposal(this, requestBody).observe(this, {
+        viewModel.viewProposal(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -77,7 +77,8 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             .into(profilePic)
                         spName.text = data.bid_details.sp_fname + " " + data.bid_details.sp_lname
                         spOccupation.text = data.bid_details.profession
-                        completesIn.text = data.bid_details.esimate_time + " " + data.bid_details.estimate_type
+                        completesIn.text =
+                            data.bid_details.esimate_time + " " + data.bid_details.estimate_type
                         bid.text = data.bid_details.amount
                         proposal.text = data.bid_details.proposal
                         gender.text = data.bid_details.sp_gender
@@ -128,10 +129,15 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             }
                         } else {
                             binding.awardBtn.setOnClickListener {
-                                ViewBidsScreen.bidPrice = data.bid_details.amount.toDouble()
+                                ViewBidsScreen.bidPrice = data.bid_details.amount.toInt()
                                 ViewBidsScreen.bidId = data.bid_details.bid_id.toInt()
                                 ViewBidsScreen.spId = data.bid_details.sp_id.toInt()
-                                startActivity(Intent(this@ViewBidDetailsScreen, SetGoalsScreen::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@ViewBidDetailsScreen,
+                                        SetGoalsScreen::class.java
+                                    )
+                                )
                             }
                             binding.rejectBtn.setOnClickListener {
                                 rejectBid()
@@ -146,7 +152,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.aboutMe, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -189,7 +195,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
             ViewBidsScreen.bidId,
             29
         )
-        viewModel.rejectPostJobStatus(this, requestBody).observe(this, {
+        viewModel.rejectPostJobStatus(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -203,7 +209,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.aboutMe, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun deleteAttachment(position: Int, imagePath: Attachment) {

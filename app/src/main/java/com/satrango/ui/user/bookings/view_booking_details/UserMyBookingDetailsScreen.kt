@@ -155,12 +155,16 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
+            if (response.booking_details.extra_demand_status == "0") {
+                ProviderInVoiceScreen.isExtraDemandRaised = "0"
+            } else {
                 ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-                intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-                startActivity(intent)
+            }
+            val intent = Intent(this, ProviderInVoiceScreen::class.java)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+            startActivity(intent)
         }
 
         binding.callBtn.setOnClickListener {

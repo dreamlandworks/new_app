@@ -29,4 +29,7 @@ data class BookingDetails(
     val otp: String,
     val otp_raised_by: String,
     val sp_profession: String,
+    val remaining_days_to_start: String,
+    val remaining_hours_to_start: String,
+    val remaining_minutes_to_start: String,
 )

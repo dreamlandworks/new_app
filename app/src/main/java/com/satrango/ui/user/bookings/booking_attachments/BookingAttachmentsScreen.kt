@@ -252,7 +252,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private fun bookMultiMoveServiceProvider() {
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
-            data!!.final_amount,
+            data!!.final_amount.toString(),
             encodedImages,
             currentDateAndTime(),
             1,
@@ -468,7 +468,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     @SuppressLint("SimpleDateFormat")
     private fun bookBlueCollarServiceProvider() {
 
-        var finalAmount = "0"
+        var finalAmount = 0
         var spId = "0"
         var cgst = "0"
         var sgst = "0"
@@ -480,7 +480,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         }
 
         val requestBody = BlueCollarBookingReqModel(
-            finalAmount,
+            finalAmount.toString(),
             encodedImages,
             currentDateAndTime(),
             1,
@@ -577,7 +577,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     val bookingFactory = ViewModelFactory(BookingRepository())
                     val bookingViewModel = ViewModelProvider(this@BookingAttachmentsScreen, bookingFactory)[BookingViewModel::class.java]
                     val requestBody = ProviderResponseReqModel(
-                        data!!.final_amount,
+                        data!!.final_amount.toString(),
                         UserUtils.getBookingId(this@BookingAttachmentsScreen).toInt(),
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                         "",
@@ -656,7 +656,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             finalWalletAmount = "0"
         }
         val requestBody = PaymentConfirmReqModel(
-            data!!.final_amount,
+            data!!.final_amount.toString(),
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,

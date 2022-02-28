@@ -21,7 +21,7 @@ data class Data(
     val exp: String,
     val extra_charge: String,
     val fcm_token: String,
-    val final_amount: String,
+    val final_amount: Int,
     val fname: String,
     val gender: String,
     val id: String,

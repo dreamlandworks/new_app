@@ -118,7 +118,7 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
         paymentData = data
         if (data.premium_tag == "Yes") {
 //            startActivity(Intent(this, UserDashboardScreen::class.java))
-            PaymentScreen.amount = paymentData!!.amount.toDouble()
+            PaymentScreen.amount = paymentData!!.amount.toInt()
             PaymentScreen.period = paymentData!!.period.toInt()
             PaymentScreen.id = paymentData!!.id.toInt()
             PaymentScreen.FROM_PROVIDER_PLANS = true

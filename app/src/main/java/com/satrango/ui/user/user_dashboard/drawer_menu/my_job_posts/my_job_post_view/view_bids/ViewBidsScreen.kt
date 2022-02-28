@@ -35,7 +35,7 @@ class ViewBidsScreen : AppCompatActivity() {
         var categoryId = 0
         var bookingId = 0
         var postJobId = 0
-        var bidPrice = 0.0
+        var bidPrice = 0
         var FROM_PROVIDER = false
     }
 
@@ -55,8 +55,8 @@ class ViewBidsScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = ViewBidsReqModel(RetrofitBuilder.USER_KEY, postJobId)
-        viewModel.viewBids(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.viewBids(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -66,7 +66,7 @@ class ViewBidsScreen : AppCompatActivity() {
                     val filteredList = ArrayList<BidDetail>()
                     for (bid in list.bid_details) {
                         if (bid.bid_type == "0") {
-                          filteredList.add(bid)
+                            filteredList.add(bid)
                         }
                     }
                     binding.recyclerView.adapter = ViewBidsAdapter(filteredList)
@@ -75,7 +75,7 @@ class ViewBidsScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                 }
             }
-        })
+        }
 
     }
 

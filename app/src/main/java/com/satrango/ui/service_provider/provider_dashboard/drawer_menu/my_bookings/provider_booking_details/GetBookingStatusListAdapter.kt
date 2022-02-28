@@ -35,6 +35,12 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
                 "13" -> {
                     binding.description.text = "Booking Started and OTP Verified"
                 }
+                "15" -> {
+                    binding.description.text = "Booking Paused"
+                }
+                "16" -> {
+                    binding.description.text = "Booking Resume"
+                }
                 "22" -> {
                     binding.description.text = "Mark As Completed"
                 }

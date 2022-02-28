@@ -41,7 +41,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
 
     private lateinit var selectedInstallmentToUpdate: DataX
     private lateinit var viewModel: PostJobViewModel
-    private var bidPrice = 0.0
+    private var bidPrice = 0
     private lateinit var goalsList: List<Data>
     private lateinit var binding: ActivitySetGoalsScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -63,7 +63,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
-        viewModel.setGoals(this).observe(this, {
+        viewModel.setGoals(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -88,7 +88,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     snackBar(binding.addAnotherAddressBtn, it.message!!)
                 }
             }
-        })
+        }
 
         binding.addAnotherAddressBtn.setOnClickListener {
             when {
@@ -146,7 +146,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     }
                 }
             } else {
-                var installments = 0.0
+                var installments = 0
                 for (installment in installmentsList) {
                     installments += installment.amount
                 }
@@ -175,7 +175,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             ViewBidsScreen.postJobId
         )
         toast(this, Gson().toJson(requestBody))
-        viewModel.saveInstallments(this, requestBody).observe(this, {
+        viewModel.saveInstallments(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -200,7 +200,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     snackBar(binding.addAnotherAddressBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun makePayment() {
@@ -249,7 +249,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             ViewBidsScreen.bidId,
             ViewBidsScreen.spId
         )
-        viewModel.installmentPayments(this, requestBody).observe(this, {
+        viewModel.installmentPayments(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -267,7 +267,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     snackBar(binding.addAnotherAddressBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun paymentSuccessDialog(context: Context) {

@@ -44,7 +44,7 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
                 binding.rejectBtn.visibility = View.GONE
             } else {
                 binding.awardBtn.setOnClickListener {
-                    ViewBidsScreen.bidPrice = bidDetail.amount.toDouble()
+                    ViewBidsScreen.bidPrice = bidDetail.amount.toInt()
                     ViewBidsScreen.bidId = bidDetail.bid_id.toInt()
                     ViewBidsScreen.spId = bidDetail.sp_id.toInt()
                     binding.rejectBtn.context.startActivity(Intent(binding.root.context, SetGoalsScreen::class.java))

@@ -49,21 +49,26 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
 
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        viewModel.getUserPlans(this).observe(this, {
+        viewModel.getUserPlans(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!, it.data.data,  it.data.activated_plan.toInt(),this)
+                    binding.recyclerView.adapter = UserPlanAdapter(
+                        it.data!!,
+                        it.data.data,
+                        it.data.activated_plan.toInt(),
+                        this
+                    )
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -87,7 +92,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = paymentData!!.amount.toDouble() * 100
+            PaymentScreen.amount = paymentData!!.amount.toInt() * 100
             PaymentScreen.period = paymentData!!.period.toInt()
             PaymentScreen.id = paymentData!!.id.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
@@ -128,21 +133,21 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             UserUtils.getUserId(this).toInt()
         )
 
-        viewModel.saveUserPlanPayment(this, requestBody).observe(this, {
-                when(it) {
-                   is NetworkResponse.Loading -> {
-                        progressDialog.show()
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        showSuccessDialog()
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.recyclerView, it.message!!)
-                    }
+        viewModel.saveUserPlanPayment(this, requestBody).observe(this) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
                 }
-        })
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    showSuccessDialog()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, it.message!!)
+                }
+            }
+        }
     }
 
     private fun showSuccessDialog() {

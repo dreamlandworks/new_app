@@ -56,7 +56,11 @@ class UserAlertsAdapter(
                 alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_user_id.toInt(), data.bid_id.toInt())
             }
             if (data.type_id == "9") {
-                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
+                if (UserAlertScreen.FROM_PROVIDER) {
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
+                } else {
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
+                }
 //                if (UserAlertScreen.FROM_PROVIDER) {
 //                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
 //                } else {
@@ -68,7 +72,11 @@ class UserAlertsAdapter(
 //                }
             }
             if (data.type_id == "10") {
-                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
+                if (UserAlertScreen.FROM_PROVIDER) {
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
+                } else {
+                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
+                }
 //                if (!UserAlertScreen.FROM_PROVIDER) {
 //                } else {
 //                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())

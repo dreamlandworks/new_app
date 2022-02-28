@@ -61,7 +61,7 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
                 val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
                 for (sp in spDetails.data) {
                     if (userId == sp.users_id) {
-                        PaymentScreen.amount = sp.final_amount.toDouble()
+                        PaymentScreen.amount = sp.final_amount
                         PaymentScreen.userId = sp.users_id.toInt()
                         startActivity(Intent(this, PaymentScreen::class.java))
                         finish()

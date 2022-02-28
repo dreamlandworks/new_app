@@ -44,7 +44,7 @@ class UserAlertScreen :
     private val CANCEL: String = "cancel"
 
     companion object {
-        val FROM_PROVIDER = false
+        var FROM_PROVIDER = false
     }
 
     private lateinit var progressDialog: BeautifulProgressDialog
@@ -225,29 +225,17 @@ class UserAlertScreen :
         rescheduleId: Int,
         taskType: String
     ) {
-        val requestBody = BookingDetailsReqModel(
-            bookingId,
-            categoryId,
-            RetrofitBuilder.USER_KEY,
-            userId
-        )
+        val requestBody = BookingDetailsReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, userId)
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 progressDialog.show()
-                val response =
-                    RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
-                if (response.status == 200) {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (response.status == 200)  {
                     progressDialog.dismiss()
                     if (taskType == ACCEPT_OR_REJECT) {
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
-                        showRescheduleStatusDialog(
-                            bookingId,
-                            response,
-                            rescheduleId,
-                            userId,
-                            taskType
-                        )
+                        showRescheduleStatusDialog(bookingId, response, rescheduleId, userId, taskType)
                     }
                 } else {
                     progressDialog.dismiss()
@@ -512,6 +500,11 @@ class UserAlertScreen :
                 toast(requireContext(), e.message!!)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FROM_PROVIDER = false
     }
 
 }

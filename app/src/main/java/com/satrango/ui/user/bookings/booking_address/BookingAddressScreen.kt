@@ -288,7 +288,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     @SuppressLint("SimpleDateFormat")
     private fun bookSingleMoveServiceProvider() {
         var spId = 0
-        var finalAmount = "0"
+        var finalAmount = 0
         var cgst = "0"
         var sgst = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
@@ -318,7 +318,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
-                finalAmount,
+                finalAmount.toString(),
                 BookingAttachmentsScreen.encodedImages,
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 1,
@@ -392,7 +392,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
-                data.final_amount,
+                data.final_amount.toString(),
                 BookingAttachmentsScreen.encodedImages,
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                 1,
@@ -537,7 +537,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         val bookingFactory = ViewModelFactory(BookingRepository())
                         val bookingViewModel = ViewModelProvider(this@BookingAddressScreen, bookingFactory)[BookingViewModel::class.java]
                         val requestBody = ProviderResponseReqModel(
-                            data.final_amount,
+                            data.final_amount.toString(),
                             UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
                             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                             "",
@@ -753,7 +753,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             PaymentScreen.FROM_PROVIDER_PLANS = false
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = data.final_amount.toDouble()
+            PaymentScreen.amount = data.final_amount
             PaymentScreen.userId = data.users_id.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)
@@ -787,7 +787,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     @SuppressLint("SimpleDateFormat")
     private fun bookBlueCollarServiceProvider() {
 
-        var finalAmount = "0"
+        var finalAmount = 0
         var spId = "0"
         var cgst = "0"
         var sgst = "0"
@@ -799,7 +799,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         }
 
         val requestBody = BlueCollarBookingReqModel(
-            finalAmount,
+            finalAmount.toString(),
             BookingAttachmentsScreen.encodedImages,
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
             1,
@@ -951,7 +951,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 val bookingFactory = ViewModelFactory(BookingRepository())
                 val bookingViewModel = ViewModelProvider(this@BookingAddressScreen, bookingFactory)[BookingViewModel::class.java]
                 val requestBody = ProviderResponseReqModel(
-                    data.final_amount,
+                    data.final_amount.toString(),
                     UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
                     "",

@@ -142,8 +142,13 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
 //        if (response.booking_details.otp_raised_by == response.booking_details.sp_id && response.booking_details.otp_raised_by != "0") {
             if (!ViewUserBookingDetailsScreen.FROM_PENDING) {
-                binding.otpText.text = resources.getString(R.string.time_lapsed)
-                binding.otp.text = response.booking_details.time_lapsed
+                if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+                    binding.otpText.text = resources.getString(R.string.starts_in)
+                    binding.otp.text = response.booking_details.time_lapsed
+                } else {
+                    binding.otpText.text = resources.getString(R.string.time_lapsed)
+                    binding.otp.text = response.booking_details.time_lapsed
+                }
             } else {
                 binding.otpText.text = resources.getString(R.string.otp)
                 binding.otp.text = response.booking_details.otp

@@ -28,6 +28,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.RegularAlertAdapter
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.loadProfileImage
@@ -259,6 +260,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     progressDialog.dismiss()
                     val response = it.data!!
                     if (taskType == ACCEPT_OR_REJECT) {
+                        toast(requireContext(), Gson().toJson(response))
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
                         showRescheduleStatusDialog(
@@ -386,6 +388,11 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         cancelBtn.setOnClickListener {
             rescheduleStatusChangeApiCall(bookingId, rescheduleId, response.booking_details.sp_id.toInt(), 12, userId, taskType)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserAlertScreen.FROM_PROVIDER = true
     }
 
 }

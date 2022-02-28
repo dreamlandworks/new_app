@@ -540,6 +540,7 @@
     <string name="time_lapsed">Time Lapsed</string>
     <string name="release">Release</string>
     <string name="started_on">Started On</string>
+    <string name="starts_in">Starts In</string>
     <string name="total_amount">Total Amount</string>
     <string name="confirm">CONFIRM</string>
     <string name="this_request_can_only_be_processed_if_condition_below_is_met">This request can only be processed if condition below is met</string>
@@ -687,6 +688,7 @@
     <string name="cgst">CGST</string>
     <string name="sgst">SGST</string>
     <string name="expenditure_entered_by_sp">Expenditure entered by SP</string>
+    <string name="wallet_balance">Wallet Balance</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
