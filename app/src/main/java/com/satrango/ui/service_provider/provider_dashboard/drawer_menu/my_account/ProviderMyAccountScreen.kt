@@ -23,6 +23,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_accoun
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.FundTransferScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -42,7 +43,7 @@ class ProviderMyAccountScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(ProviderMyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyAccountViewModel::class.java]
-        viewModel.myAccount(this).observe(this, {
+        viewModel.myAccount(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -57,14 +58,14 @@ class ProviderMyAccountScreen : AppCompatActivity() {
                 }
 
             }
-        })
+        }
 
         binding.changePlan.setOnClickListener {
             startActivity(Intent(this, ProviderPlansScreen::class.java))
         }
 
         binding.withDrawBtn.setOnClickListener {
-            FundTransferScreen.FROM_PROVIDER = true
+            isProvider(this, true)
             startActivity(Intent(this, FundTransferScreen::class.java))
         }
 
@@ -105,7 +106,7 @@ class ProviderMyAccountScreen : AppCompatActivity() {
             FundTransferScreen.availableBalance = data.wallet_balance
 
             transactionHistory.setOnClickListener {
-                TransactionHistoryScreen.FROM_PROVIDER = true
+                isProvider(this@ProviderMyAccountScreen, true)
                 startActivity(Intent(this@ProviderMyAccountScreen, TransactionHistoryScreen::class.java))
             }
             myReviews.setOnClickListener {

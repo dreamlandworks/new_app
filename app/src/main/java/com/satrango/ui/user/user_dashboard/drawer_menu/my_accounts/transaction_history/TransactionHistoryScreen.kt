@@ -20,16 +20,13 @@ import com.satrango.databinding.ActivityTransactionHistoryScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountViewModel
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class TransactionHistoryScreen : AppCompatActivity() {
-
-    companion object {
-        var FROM_PROVIDER = false
-    }
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityTransactionHistoryScreenBinding
@@ -78,7 +75,7 @@ class TransactionHistoryScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window

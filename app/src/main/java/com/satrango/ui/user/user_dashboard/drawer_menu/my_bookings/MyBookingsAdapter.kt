@@ -18,6 +18,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.Bookin
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.UserUtils.isReschedule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -99,8 +103,8 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                     }
                     binding.startBtn.setOnClickListener {
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+                        isProvider(binding.startBtn.context, false)
+                        isPending(binding.startBtn.context, false)
                         UserMyBookingDetailsScreen.bookingId = data.booking_id
                         UserMyBookingDetailsScreen.categoryId = data.category_id
                         UserMyBookingDetailsScreen.userId = UserUtils.getUserId(binding.root.context)
@@ -115,8 +119,8 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         UserMyBookingDetailsScreen.bookingId = data.booking_id
                         UserMyBookingDetailsScreen.categoryId = data.category_id
                         UserMyBookingDetailsScreen.userId = UserUtils.getUserId(binding.root.context)
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+                        isProvider(binding.startBtn.context, false)
+                        isPending(binding.startBtn.context, false)
                         binding.root.context.startActivity(Intent(binding.root.context, UserMyBookingDetailsScreen::class.java))
                     }
 
@@ -131,16 +135,16 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        UserBookingCancelScreen.FROM_PROVIDER = false
+                        isProvider(binding.startBtn.context, false)
                         binding.root.context.startActivity(intent)
                     }
                     binding.reScheduleBtn.setOnClickListener {
                         ViewBidsScreen.bookingId = data.booking_id.toInt()
                         UserUtils.re_scheduled_date = data.scheduled_date
                         UserUtils.re_scheduled_time_slot_from = data.time_slot_id
-                        ViewUserBookingDetailsScreen.RESCHEDULE = true
+                        isReschedule(binding.amount.context, true)
                         UserUtils.spid = data.sp_id
-                        BookingDateAndTimeScreen.FROM_PROVIDER = false
+                        isProvider(binding.startBtn.context, false)
                         binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                     }
                     binding.card.setOnClickListener {
@@ -149,8 +153,8 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        ViewUserBookingDetailsScreen.FROM_PENDING = true
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+                        isProvider(binding.startBtn.context, false)
+                        isPending(binding.startBtn.context, true)
                         binding.root.context.startActivity(intent)
                     }
 
@@ -163,7 +167,7 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                     binding.reScheduleBtn.setOnClickListener {
                         binding.startBtn.setOnClickListener {
                             ComplaintScreen.bookingId = data.booking_id.toInt()
-                            ComplaintScreen.FROM_PROVIDER = false
+                            isProvider(binding.startBtn.context, false)
                             binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
                         }
                     }
@@ -172,9 +176,9 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        ViewUserBookingDetailsScreen.FROM_COMPLETED = true
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+                        isCompleted(binding.amount.context, true)
+                        isProvider(binding.startBtn.context, false)
+                        isPending(binding.startBtn.context, false)
                         binding.root.context.startActivity(intent)
                     }
                 }

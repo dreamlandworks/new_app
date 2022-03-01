@@ -28,6 +28,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -77,7 +78,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
             postJobId,
             UserUtils.getUserId(this).toInt()
         )
-        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
+        viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -91,10 +92,10 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.viewPostBtn, it.message!!)
                 }
             }
-        })
+        }
 
         val requestBody1 = ViewProposalReqModel(bidId, RetrofitBuilder.USER_KEY, 2)
-        viewModel.viewProposal(this, requestBody1).observe(this, {
+        viewModel.viewProposal(this, requestBody1).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -108,7 +109,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.viewPostBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -129,7 +130,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
             )
 
             openBidBtn.setOnClickListener {
-                MyJobPostViewScreen.FROM_PROVIDER = true
+                isProvider(this@ProviderViewPlacedBidScreen, true)
                 ProviderPlaceBidScreen.FROM_EDIT_BID = true
                 MyJobPostViewScreen.bookingId = bookingId
                 MyJobPostViewScreen.categoryId = categoryId

@@ -20,7 +20,7 @@ class UserFAQViewModel(private val repository: UserFAQRepository): ViewModel() {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
-                    val response = async { repository.getFAQs() }
+                    val response = async { repository.getFAQs(context) }
                     if (response.await().status == 200) {
                         faqsList.value = NetworkResponse.Success(response.await().data)
                     } else {

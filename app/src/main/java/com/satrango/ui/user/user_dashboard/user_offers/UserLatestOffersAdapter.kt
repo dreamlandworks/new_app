@@ -12,6 +12,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_offers.models.Data
+import com.satrango.utils.UserUtils.isProvider
 
 class UserLatestOffersAdapter(private val list: List<Data>) :
     RecyclerView.Adapter<UserLatestOffersAdapter.ViewHolder>() {
@@ -21,7 +22,7 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
         fun bind(data: Data) {
             Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image)
                 .into(binding.image)
-            if (ProviderOffersScreen.FROM_PROVIDER) {
+            if (isProvider(binding.image.context)) {
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.title.text = "Activate"
             } else {

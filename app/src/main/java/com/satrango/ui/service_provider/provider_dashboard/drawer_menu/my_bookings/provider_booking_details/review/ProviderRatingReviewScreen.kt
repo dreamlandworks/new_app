@@ -27,6 +27,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -38,7 +39,6 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
     private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
-        var FROM_PROVIDER = true
         var userId = ""
         var bookingId = ""
         var categoryId = ""
@@ -59,7 +59,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (!FROM_PROVIDER) {
+        if (!isProvider(this)) {
             binding.text.text =
                 "You have successfully completed a booking. Please help us in rating your experience with service provider."
             binding.overAllRatingText.text = "Overall Rating"
@@ -113,7 +113,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
 
             submitBtn.setOnClickListener {
 
-                if (FROM_PROVIDER) {
+                if (isProvider(this@ProviderRatingReviewScreen)) {
                     when {
                         feedBack.text.toString().isEmpty() -> {
                             snackBar(overAllRating, "Please Provide Feedback")
@@ -247,7 +247,7 @@ class ProviderRatingReviewScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             startActivity(Intent(this, ProviderDashboard::class.java))
         } else {
             startActivity(Intent(this, UserDashboardScreen::class.java))

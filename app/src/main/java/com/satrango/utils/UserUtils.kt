@@ -89,7 +89,7 @@ object UserUtils {
         return sharedPreferences.getString(context.resources.getString(R.string.invoice_details), "")!!
     }
 
-    fun setFromProvider(context: Context, fromProvider: Boolean) {
+    fun isProvider(context: Context, fromProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean(context.resources.getString(R.string.from_provider), fromProvider)
@@ -97,9 +97,61 @@ object UserUtils {
         editor.commit()
     }
 
-    fun getFromProvider(context: Context): Boolean {
+    fun isProvider(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_provider), false)
+    }
+
+    fun isPending(context: Context, fromProvider: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_pending), fromProvider)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun  isPending(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_pending), false)
+    }
+
+    fun isProgress(context: Context, fromProvider: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_progress), fromProvider)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun  isProgress(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_progress), false)
+    }
+
+    fun isCompleted(context: Context, fromProvider: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.from_completed), fromProvider)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun  isCompleted(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_completed), false)
+    }
+
+    fun isReschedule(context: Context, fromProvider: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(context.resources.getString(R.string.re_schedule), fromProvider)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun  isReschedule(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(context.resources.getString(R.string.re_schedule), false)
     }
 
     fun setInstantBookingSpCount(context: Context, fromJobPost: Int) {

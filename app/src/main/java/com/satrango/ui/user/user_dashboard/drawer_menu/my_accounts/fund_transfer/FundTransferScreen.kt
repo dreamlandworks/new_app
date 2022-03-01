@@ -31,6 +31,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.models.FundTransferReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.models.WithdrawFundsReqModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -50,7 +51,6 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
     private lateinit var binding: ActivityFundTransferScreenBinding
 
     companion object {
-        var FROM_PROVIDER = false
         var ubdId = ""
         var availableBalance = 0.0
     }
@@ -72,7 +72,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             accountRv.layoutManager = LinearLayoutManager(this@FundTransferScreen, LinearLayoutManager.HORIZONTAL, false)
 
             hundredBtn.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@FundTransferScreen)) {
                     hundredBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     hundredBtn.setTextColor(resources.getColor(R.color.white))
                     fiveHundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
@@ -95,7 +95,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             }
 
             fiveHundredBtn.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@FundTransferScreen)) {
                     fiveHundredBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     fiveHundredBtn.setTextColor(resources.getColor(R.color.white))
                     hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
@@ -118,7 +118,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             }
 
             oneThousandBtn.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@FundTransferScreen)) {
                     oneThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     oneThousandBtn.setTextColor(resources.getColor(R.color.white))
                     hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
@@ -141,7 +141,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             }
 
             twoThousandBtn.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@FundTransferScreen)) {
                     twoThousandBtn.setBackgroundResource(R.drawable.provider_btn_bg_sm)
                     twoThousandBtn.setTextColor(resources.getColor(R.color.white))
                     hundredBtn.setBackgroundResource(R.drawable.purple_out_line_sm)
@@ -204,8 +204,8 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 
     private fun loadExistingBankAccounts() {
         val requestBody = AllBankDetailsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.allBankDetails(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.allBankDetails(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -221,7 +221,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                     snackBar(binding.withDrawBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -234,14 +234,14 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             UserUtils.getUserId(this).toInt()
         )
 //        Log.e("WITHDRAW:", Gson().toJson(requestBody))
-        viewModel.withDrawFunds(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.withDrawFunds(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (FROM_PROVIDER) {
+                    if (isProvider(this@FundTransferScreen)) {
                         startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                     } else {
                         startActivity(Intent(this, UserMyAccountScreen::class.java))
@@ -252,7 +252,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                     snackBar(binding.withDrawBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun makePayment(amount: Double) {
@@ -279,14 +279,14 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
     @SuppressLint("SimpleDateFormat")
     private fun updateToServerToAddFund(message: String, statusCode: String) {
         val requestBody = FundTransferReqModel(depositAmountInDouble.toString(), SimpleDateFormat("yyyy-MM-dd").format(Date()).format(Date()), RetrofitBuilder.USER_KEY, message, statusCode, UserUtils.getUserId(this).toInt())
-        viewModel.fundTransfer(this@FundTransferScreen, requestBody).observe(this, {
-            when(it) {
+        viewModel.fundTransfer(this@FundTransferScreen, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (FROM_PROVIDER) {
+                    if (isProvider(this@FundTransferScreen)) {
                         startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                     } else {
                         startActivity(Intent(this, UserMyAccountScreen::class.java))
@@ -294,10 +294,10 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                   snackBar(binding.depositAmount, it.message!!)
+                    snackBar(binding.depositAmount, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun onPaymentError(p0: Int, statusCode: String?) {
@@ -318,7 +318,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.fund_transfer)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-        if (FROM_PROVIDER) {
+        if (isProvider(this@FundTransferScreen)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -359,7 +359,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
     }
 
     override fun onBackPressed() {
-        if (FROM_PROVIDER) {
+        if (isProvider(this@FundTransferScreen)) {
             startActivity(Intent(this, ProviderMyAccountScreen::class.java))
         } else {
             startActivity(Intent(this, UserMyAccountScreen::class.java))

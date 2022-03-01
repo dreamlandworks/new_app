@@ -15,6 +15,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.models.DiscussionDetail
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 
@@ -85,7 +86,7 @@ class DiscussionListAdapter(
             discussionBoardInterface.likeClicked(data.id, position)
         }
 
-        if (MyJobPostViewScreen.FROM_PROVIDER) {
+        if (isProvider(holder.dateTime.context)) {
             holder.layout.setBackgroundResource(R.drawable.purple_out_line)
             holder.profileImage.borderColor = holder.profileImage.context.resources.getColor(R.color.purple_500)
         }

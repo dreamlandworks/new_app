@@ -17,13 +17,10 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.P
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 
 
 class SortAndFilterServiceProvider : AppCompatActivity() {
-
-    companion object {
-        var FROM_PROVIDER = false
-    }
 
     private lateinit var binding: ActivitySortAndFilterServiceProviderBinding
 
@@ -60,7 +57,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             })
 
             rating.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (rating.currentTextColor == Color.parseColor("#FFFFFF")) {
                         rating.setBackgroundResource(R.drawable.purple_out_line)
                         rating.setTextColor(Color.parseColor("#8D5FF5"))
@@ -111,7 +108,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             ranking.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (ranking.currentTextColor == Color.parseColor("#FFFFFF")) {
                         ranking.setBackgroundResource(R.drawable.purple_out_line)
                         ranking.setTextColor(Color.parseColor("#8D5FF5"))
@@ -162,7 +159,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             nearMe.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (nearMe.currentTextColor == Color.parseColor("#FFFFFF")) {
                         nearMe.setBackgroundResource(R.drawable.purple_out_line)
                         nearMe.setTextColor(Color.parseColor("#8D5FF5"))
@@ -214,7 +211,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
             }
 
             priceLowToHigh.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (priceLowToHigh.currentTextColor == Color.parseColor("#FFFFFF")) {
                         priceLowToHigh.setBackgroundResource(R.drawable.purple_out_line)
                         priceLowToHigh.setTextColor(Color.parseColor("#0A84FF"))
@@ -265,7 +262,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             priceHighToLow.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (priceHighToLow.currentTextColor == Color.parseColor("#FFFFFF")) {
                         priceHighToLow.setBackgroundResource(R.drawable.purple_out_line)
                         priceHighToLow.setTextColor(Color.parseColor("#0A84FF"))
@@ -316,7 +313,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             fresher.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (fresher.currentTextColor == Color.parseColor("#FFFFFF")) {
                         fresher.setBackgroundResource(R.drawable.purple_out_line)
                         fresher.setTextColor(Color.parseColor("#0A84FF"))
@@ -351,7 +348,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             experience.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (experience.currentTextColor == Color.parseColor("#FFFFFF")) {
                         experience.setBackgroundResource(R.drawable.purple_out_line)
                         experience.setTextColor(Color.parseColor("#0A84FF"))
@@ -386,7 +383,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 }
             }
             any.setOnClickListener {
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     if (any.currentTextColor == Color.parseColor("#FFFFFF")) {
                         any.setBackgroundResource(R.drawable.purple_out_line)
                         any.setTextColor(Color.parseColor("#0A84FF"))
@@ -528,7 +525,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
                 )
                 UserUtils.saveSearchFilter(this@SortAndFilterServiceProvider, Gson().toJson(filter))
                 finish()
-                if (FROM_PROVIDER) {
+                if (isProvider(this@SortAndFilterServiceProvider)) {
                     startActivity(
                         Intent(
                             this@SortAndFilterServiceProvider,
@@ -560,7 +557,7 @@ class SortAndFilterServiceProvider : AppCompatActivity() {
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this@SortAndFilterServiceProvider)) {
             toolBar.setBackgroundResource(R.color.purple_500)
             binding.rating.setBackgroundResource(R.drawable.purple_out_line)
             binding.rating.setTextColor(resources.getColor(R.color.purple_500))

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.ActivityUserPrivacyPolicyScreenBinding
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserPrivacyPolicyScreen : AppCompatActivity() {
@@ -36,7 +37,7 @@ class UserPrivacyPolicyScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.privacy_policy)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window

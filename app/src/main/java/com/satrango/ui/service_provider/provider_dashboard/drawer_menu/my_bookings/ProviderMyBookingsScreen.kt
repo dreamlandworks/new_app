@@ -25,6 +25,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResumeReqModel
@@ -32,17 +33,19 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
-import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProgress
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface {
 
@@ -59,7 +62,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
         val factory = ViewModelFactory(ProviderBookingRepository())
@@ -73,8 +76,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -85,10 +87,16 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             binding.inProgressBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.completedBtn.setTextColor(Color.parseColor("#000000"))
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
+            isProgress(this, true)
+            isPending(this, false)
+            isCompleted(this, false)
             updateUI("InProgress")
         }
         binding.pendingBtn.setOnClickListener {
             updatePendingBtnUI()
+            isPending(this, true)
+            isProgress(this, false)
+            isCompleted(this, false)
             updateUI("Pending")
         }
         binding.completedBtn.setOnClickListener {
@@ -98,6 +106,9 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
             binding.completedBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
+            isCompleted(this, true)
+            isProgress(this, false)
+            isPending(this, false)
             updateUI("Completed")
         }
     }
@@ -190,7 +201,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         is NetworkResponse.Success -> {
                             progressDialog.dismiss()
                             dialog.dismiss()
-                            ProviderInVoiceScreen.FROM_PROVIDER = true
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
                             intent.putExtra(
                                 binding.root.context.getString(R.string.booking_id),
@@ -319,7 +329,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
         closeBtn.setOnClickListener { dialog.dismiss() }
 
-        if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             title.text = "OTP to Start Job"
             title.setTextColor(resources.getColor(R.color.purple_500))
             firstNo.setBackgroundResource(R.drawable.purpleborderbutton)
@@ -445,8 +455,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 ProviderBookingDetailsScreen.bookingId = bookingId.toString()
                                 ProviderBookingDetailsScreen.categoryId = categoryId
                                 ProviderBookingDetailsScreen.userId = userId
-                                ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                                ViewUserBookingDetailsScreen.FROM_PENDING = false
+                                isPending(this, false)
                                 UserUtils.spid = spId
                                 startActivity(intent)
                                 progressDialog.dismiss()
@@ -477,6 +486,9 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
     override fun onResume() {
         super.onResume()
         updatePendingBtnUI()
+        isPending(this, true)
+        isProgress(this, false)
+        isCompleted(this, false)
         updateUI("Pending")
     }
 
@@ -485,5 +497,9 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, ProviderDashboard::class.java))
     }
 }

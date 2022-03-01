@@ -28,6 +28,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen.Companion.FROM_POPULAR_SERVICES
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isReschedule
 import kotlin.math.round
 
 class SearchServiceProviderAdapter(
@@ -81,7 +82,7 @@ class SearchServiceProviderAdapter(
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
-                ViewUserBookingDetailsScreen.RESCHEDULE = false
+                isReschedule(binding.actualCost.context, false)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))

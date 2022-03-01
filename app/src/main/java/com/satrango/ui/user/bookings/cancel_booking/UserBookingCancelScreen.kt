@@ -30,6 +30,7 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -44,10 +45,6 @@ class UserBookingCancelScreen : AppCompatActivity() {
     private var bookingId = ""
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityUserBookingCancelScreenBinding
-
-    companion object {
-        var FROM_PROVIDER = false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +71,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
             userId.toInt()
         )
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+        viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -89,7 +86,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
                     snackBar(binding.amount, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -101,7 +98,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.apply {
                 card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
@@ -113,6 +110,10 @@ class UserBookingCancelScreen : AppCompatActivity() {
                 cancelBookingBtn.setBackgroundResource(R.drawable.purple_out_line)
                 cancelBookingBtn.setTextColor(resources.getColor(R.color.purple_500))
                 submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
+                layoutOne.setBackgroundResource(R.drawable.purple_out_line_sm)
+                layoutTwo.setBackgroundResource(R.drawable.purple_out_line_sm)
+                layoutThree.setBackgroundResource(R.drawable.purple_out_line_sm)
+                layoutFour.setBackgroundResource(R.drawable.purple_out_line_sm)
                 cancel_id = 25
             }
         }
@@ -177,7 +178,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
             cancel_id // pass 24 if cancelled by user  // pass 25 if cancelled by sp
         )
         toast(this, Gson().toJson(requestBody))
-        viewModel.cancelBooking(this, requestBody).observe(this, {
+        viewModel.cancelBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -191,7 +192,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
                     snackBar(binding.amount, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -205,7 +206,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
         val headerMessage = dialogView.findViewById<TextView>(R.id.header_message)
         val message = dialogView.findViewById<TextView>(R.id.message)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             noBtn.setBackgroundResource(R.drawable.purple_out_line)
             noBtn.setTextColor(resources.getColor(R.color.purple_500))
             yesBtn.setBackgroundResource(R.drawable.provider_btn_bg)
@@ -240,7 +241,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
         val searchBtn = dialogView.findViewById<TextView>(R.id.myBookingsBtn)
         val shield = dialogView.findViewById<ImageView>(R.id.shield)
         message.text = "Your booking is cancelled. Would you like to book again?"
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             titleText.setTextColor(resources.getColor(R.color.purple_500))
             shield.setImageResource(R.drawable.purple_shield)
             homeBtn.setBackgroundResource(R.drawable.purple_out_line)

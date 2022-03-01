@@ -26,6 +26,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountRepo
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.fund_transfer.models.AddBankAccountReqModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -36,10 +37,6 @@ class AddBankAccountScreen : AppCompatActivity() {
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityAddBankAccountScreenBinding
 
-    companion object {
-        var FROM_PROVIDER = false
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBankAccountScreenBinding.inflate(layoutInflater)
@@ -47,7 +44,7 @@ class AddBankAccountScreen : AppCompatActivity() {
 
         initializeProgressDialog()
 
-        if (FundTransferScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             binding.imageView.setImageResource(R.drawable.provider_bg)
             binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
         }
@@ -89,8 +86,8 @@ class AddBankAccountScreen : AppCompatActivity() {
             UserUtils.getUserId(this).toInt()
         )
         toast(this, Gson().toJson(requestBody))
-        viewModel.addBankAccount(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.addBankAccount(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -103,7 +100,7 @@ class AddBankAccountScreen : AppCompatActivity() {
                     snackBar(binding.accountHolder, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")

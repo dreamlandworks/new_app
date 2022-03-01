@@ -267,6 +267,9 @@
     <string name="provider_action">Provider Action</string>
     <string name="from_fcm_service">From_Fcm_Service</string>
     <string name="from_provider">From Provider</string>
+    <string name="from_pending">From Pending</string>
+    <string name="from_progress">From Progress</string>
+    <string name="from_completed">From Completed</string>
     <string name="category_id">Category Id</string>
     <string name="key">Key</string>
     <string name="user_id">User Id</string>
@@ -689,6 +692,8 @@
     <string name="sgst">SGST</string>
     <string name="expenditure_entered_by_sp">Expenditure entered by SP</string>
     <string name="wallet_balance">Wallet Balance</string>
+    <string name="book_again">Book Again</string>
+    <string name="raise_support">Raise Support</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

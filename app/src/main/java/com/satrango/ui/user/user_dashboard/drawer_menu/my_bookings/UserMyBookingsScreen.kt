@@ -23,6 +23,9 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProgress
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -52,16 +55,13 @@ class UserMyBookingsScreen : AppCompatActivity() {
             binding.inProgressBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.completedBtn.setTextColor(Color.parseColor("#000000"))
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
+            isProgress(this, true)
+            isPending(this, false)
+            isCompleted(this, false)
             updateUI("InProgress")
         }
         binding.pendingBtn.setOnClickListener {
-            binding.pendingBtn.setBackgroundResource(R.drawable.user_btn_bg)
-            binding.completedBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
-            binding.completedBtn.setTextColor(Color.parseColor("#000000"))
-            binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
-            updateUI("Pending")
+            updatePendingUI()
         }
         binding.completedBtn.setOnClickListener {
             binding.completedBtn.setBackgroundResource(R.drawable.user_btn_bg)
@@ -70,9 +70,25 @@ class UserMyBookingsScreen : AppCompatActivity() {
             binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
             binding.completedBtn.setTextColor(Color.parseColor("#FFFFFF"))
             binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
+            isCompleted(this, true)
+            isProgress(this, false)
+            isPending(this, false)
             updateUI("Completed")
         }
 
+    }
+
+    private fun updatePendingUI() {
+        binding.pendingBtn.setBackgroundResource(R.drawable.user_btn_bg)
+        binding.completedBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
+        binding.completedBtn.setTextColor(Color.parseColor("#000000"))
+        binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
+        isPending(this, true)
+        isProgress(this, false)
+        isCompleted(this, false)
+        updateUI("Pending")
     }
 
     private fun initializeToolBar() {
@@ -132,7 +148,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateUI("Pending")
+        updatePendingUI()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

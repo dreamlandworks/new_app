@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
 import com.satrango.databinding.AllBanksDetailsRowBinding
+import com.satrango.utils.UserUtils.isProvider
 
 class AllBankDetailsAdapter(
     private val list: List<UserBankAccount>,
@@ -18,13 +19,13 @@ class AllBankDetailsAdapter(
         fun bind(userBankAccount: UserBankAccount) {
             binding.title.text = "A/c No: ${userBankAccount.account_no}"
             binding.description.text = "IFSC: ${userBankAccount.ifsc_code}"
-            if (FundTransferScreen.FROM_PROVIDER) {
+            if (isProvider(binding.description.context)) {
                 binding.rowLayout.setBackgroundResource(R.drawable.purple_out_line)
                 binding.title.setTextColor(binding.title.context.resources.getColor(R.color.purple_500))
                 binding.description.setTextColor(binding.title.context.resources.getColor(R.color.purple_500))
             }
             if (userBankAccount.isSelected) {
-                if (FundTransferScreen.FROM_PROVIDER) {
+                if (isProvider(binding.description.context)) {
                     binding.rowLayout.setBackgroundResource(R.drawable.provider_btn_bg)
                 } else {
                     binding.rowLayout.setBackgroundResource(R.drawable.category_bg)

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ProviderMyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
@@ -21,6 +22,7 @@ import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetails
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isReschedule
 
 class ProviderMyBookingAdapter(
     private val list: List<BookingDetail>,
@@ -115,8 +117,6 @@ class ProviderMyBookingAdapter(
                         ProviderBookingDetailsScreen.bookingId = data.booking_id
                         ProviderBookingDetailsScreen.categoryId = data.category_id
                         ProviderBookingDetailsScreen.userId = data.users_id
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
                         UserUtils.spid = data.sp_id
                         binding.root.context.startActivity(intent)
                     }
@@ -131,7 +131,6 @@ class ProviderMyBookingAdapter(
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
-                        UserBookingCancelScreen.FROM_PROVIDER = true
                         binding.root.context.startActivity(intent)
                     }
 
@@ -139,14 +138,13 @@ class ProviderMyBookingAdapter(
                         ViewBidsScreen.bookingId = data.booking_id.toInt()
                         UserUtils.re_scheduled_date = data.scheduled_date
                         UserUtils.re_scheduled_time_slot_from = data.time_slot_id
-                        ViewUserBookingDetailsScreen.RESCHEDULE = true
+                        isReschedule(binding.amount.context, true)
                         UserUtils.spid = data.sp_id
-                        BookingDateAndTimeScreen.FROM_PROVIDER = true
+                        UserUtils.saveSelectedSPDetails(binding.amount.context, Gson().toJson(data))
                         binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                     }
 
                     binding.startBtn.setOnClickListener {
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         providerMyBookingInterface.requestOTP(data.booking_id.toInt(), data.category_id, data.users_id, data.sp_id, data.user_fcm_token, data.sp_fcm_token)
                     }
 
@@ -156,8 +154,6 @@ class ProviderMyBookingAdapter(
                         intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        ViewUserBookingDetailsScreen.FROM_PENDING = true
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         binding.root.context.startActivity(intent)
                     }
@@ -169,17 +165,13 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.startBtn.setOnClickListener {
                         ComplaintScreen.bookingId = data.booking_id.toInt()
-                        ComplaintScreen.FROM_PROVIDER = true
                         binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
                     }
                     binding.card.setOnClickListener {
                         val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        ViewUserBookingDetailsScreen.FROM_COMPLETED = true
-                        ViewUserBookingDetailsScreen.FROM_PENDING = false
-                        ViewUserBookingDetailsScreen.FROM_PROVIDER = true
+                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                         binding.root.context.startActivity(intent)
                     }
                 }

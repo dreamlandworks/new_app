@@ -21,6 +21,7 @@ import com.satrango.ui.user.user_dashboard.user_offers.*
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -29,9 +30,6 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
 
     private lateinit var progressDialog: BeautifulProgressDialog
 
-    companion object {
-        var FROM_PROVIDER = false
-    }
     override fun getFragmentViewModel(): Class<ProviderOfferViewModel> = ProviderOfferViewModel::class.java
 
     override fun getFragmentBinding(
@@ -62,7 +60,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             PermissionUtils.connectionAlert(requireContext()) { loadProviderOffersScreen() }
             return
         }
-        FROM_PROVIDER = true
+        isProvider(requireContext(), true)
         binding.latestOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.expiryOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.referralOfferRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -86,8 +84,8 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             UserUtils.getUserId(requireContext()).toInt(),
             "latest"
         )
-        viewModel.getOffers(requireContext(), requestBody).observe(requireActivity(), {
-            when(it) {
+        viewModel.getOffers(requireContext(), requestBody).observe(requireActivity()) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     binding.latestTitle.visibility = View.GONE
                     binding.expiryTitle.visibility = View.GONE
@@ -108,7 +106,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun loadExpiryOffers() {
@@ -122,8 +120,8 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             UserUtils.getUserId(requireContext()).toInt(),
             "expiry"
         )
-        viewModel.getOffers(requireContext(), expiryRequestBody).observe(requireActivity(), {
-            when(it) {
+        viewModel.getOffers(requireContext(), expiryRequestBody).observe(requireActivity()) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -141,7 +139,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun loadReferralOffers() {
@@ -155,8 +153,8 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
             UserUtils.getUserId(requireContext()).toInt(),
             ""
         )
-        viewModel.getOffers(requireContext(), referralRequestBody).observe(requireActivity(), {
-            when(it) {
+        viewModel.getOffers(requireContext(), referralRequestBody).observe(requireActivity()) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -174,7 +172,7 @@ class ProviderOffersScreen : BaseFragment<ProviderOfferViewModel, FragmentProvid
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

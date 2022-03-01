@@ -36,6 +36,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobReposit
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -129,23 +130,23 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-        if (MyJobPostViewScreen.FROM_PROVIDER) {
+        sender = if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
             binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
             binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
             binding.layoutThree.setBackgroundResource(R.drawable.provider_chat_edit_text_bg)
             binding.sendBtn.setImageResource(R.drawable.ic_round_send_purple_24)
-            sender = "SP"
+            "SP"
         } else {
-            sender = "User"
+            "User"
         }
     }
 
     private fun loadDiscussionList() {
 
         val requestBody = DiscussionListReqModel(RetrofitBuilder.USER_KEY, postJobId)
-        viewModel.discussionList(this, requestBody).observe(this, {
+        viewModel.discussionList(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
 
@@ -162,7 +163,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -177,7 +178,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             UserUtils.getUserId(this).toInt(),
             sender
         )
-        viewModel.discussionMessage(this, requestBody).observe(this, {
+        viewModel.discussionMessage(this, requestBody).observe(this) {
             when (it) {
                 is com.satrango.remote.NetworkResponse.Loading -> {
                     binding.sendBtn.visibility = View.GONE
@@ -210,7 +211,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun getPdfFromFileStorage() {
@@ -470,7 +471,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
             RetrofitBuilder.USER_KEY,
             UserUtils.getUserId(this).toInt()
         )
-        viewModel.likeClicked(this, requestBody).observe(this, {
+        viewModel.likeClicked(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
 
@@ -483,7 +484,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

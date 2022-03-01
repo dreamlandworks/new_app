@@ -35,6 +35,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTim
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -47,7 +48,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
     companion object {
         var myJobPostViewScreen = false
-        var FROM_PROVIDER = false
         var bookingId: Int = 0
         var categoryId: Int = 0
         var postJobId: Int = 0
@@ -76,7 +76,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setBackgroundResource(R.drawable.provider_btn_bg_sm)
             binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
@@ -150,10 +150,9 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding.bidCount.text = data.job_post_details.total_bids.toString()
         binding.avgAmount.text = data.job_post_details.average_bids_amount
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             binding.viewBidsBtn.setOnClickListener {
                 ViewBidsScreen.bookingId = bookingId
-                ViewBidsScreen.FROM_PROVIDER = FROM_PROVIDER
                 ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
                 val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
                 intent.putExtra("expiresIn", data.job_post_details.expires_in)
@@ -183,7 +182,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         } else {
             binding.viewBidsBtn.setOnClickListener {
-                ViewBidsScreen.FROM_PROVIDER = FROM_PROVIDER
                 ViewBidsScreen.bookingId = bookingId
                 ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
                 val intent = Intent(this@MyJobPostViewScreen, ViewBidsScreen::class.java)
@@ -223,7 +221,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     private fun loadScreen() {
         val requestBody = MyJobPostViewReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, postJobId, UserUtils.getUserId(this).toInt())
         Log.e("JOB POST:", Gson().toJson(requestBody))
-        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
+        viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.dataLayout.visibility = View.GONE
@@ -242,7 +240,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
                 }
 
             }
-        })
+        }
     }
 
     private fun disconnected() {

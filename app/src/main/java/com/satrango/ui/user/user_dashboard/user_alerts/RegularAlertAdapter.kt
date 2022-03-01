@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.satrango.databinding.UserAlertRowBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
+import com.satrango.utils.UserUtils
 import java.text.SimpleDateFormat
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -25,6 +28,7 @@ class RegularAlertAdapter(
             val outputTime: String = formatter.format(parser.parse(data.created_on))
             binding.rowTime.text = outputTime
             binding.rowLayout.visibility = View.GONE
+            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
         }
     }
 

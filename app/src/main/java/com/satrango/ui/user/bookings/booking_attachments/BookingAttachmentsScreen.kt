@@ -55,6 +55,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -703,7 +704,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 else -> {
                     finish()
-                    BookingDateAndTimeScreen.FROM_PROVIDER = false
+                    isProvider(this, false)
                     startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
                 }
             }

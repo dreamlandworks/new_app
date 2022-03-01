@@ -24,6 +24,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.models.MyAcco
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.TransactionHistoryScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
 import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 
 class UserMyAccountScreen : AppCompatActivity() {
@@ -44,7 +45,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         binding.withDrawBtn.setOnClickListener {
-            FundTransferScreen.FROM_PROVIDER = false
+            isProvider(this, false)
             startActivity(Intent(this, FundTransferScreen::class.java))
         }
     }
@@ -84,7 +85,7 @@ class UserMyAccountScreen : AppCompatActivity() {
         binding.noteText.visibility = View.GONE
         val factory = ViewModelFactory(MyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[MyAccountViewModel::class.java]
-        viewModel.myAccountDetails(this).observe(this, {
+        viewModel.myAccountDetails(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -98,7 +99,7 @@ class UserMyAccountScreen : AppCompatActivity() {
                     snackBar(binding.applyBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun initializeToolBar() {
@@ -143,7 +144,7 @@ class UserMyAccountScreen : AppCompatActivity() {
                 startActivity(Intent(this@UserMyAccountScreen, UserPlanScreen::class.java))
             }
             transactionHistory.setOnClickListener {
-                TransactionHistoryScreen.FROM_PROVIDER = false
+                isProvider(this@UserMyAccountScreen, false)
                 startActivity(
                     Intent(
                         this@UserMyAccountScreen,

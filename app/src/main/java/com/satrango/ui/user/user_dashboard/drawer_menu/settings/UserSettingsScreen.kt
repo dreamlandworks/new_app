@@ -18,13 +18,10 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScre
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserSettingsScreen : AppCompatActivity() {
-
-    companion object {
-        var FROM_PROVIDER = false
-    }
 
     private lateinit var binding: ActivityUserSettingsScreenBinding
 
@@ -40,7 +37,6 @@ class UserSettingsScreen : AppCompatActivity() {
             privacyPolicy.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserPrivacyPolicyScreen::class.java)) }
             faqs.setOnClickListener { startActivity(Intent(this@UserSettingsScreen, UserFAQScreen::class.java)) }
             raiseComplaintBtn.setOnClickListener {
-                ComplaintScreen.FROM_PROVIDER = FROM_PROVIDER
                 ComplaintScreen.bookingId = 0
                 startActivity(Intent(this@UserSettingsScreen, ComplaintScreen::class.java))
             }
@@ -57,7 +53,7 @@ class UserSettingsScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.settings)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window

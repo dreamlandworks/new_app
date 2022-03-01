@@ -21,6 +21,7 @@ import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.utils.*
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 
@@ -59,7 +60,7 @@ class UserOffersScreen :
 //            UserUtils.getUserId(requireContext()).toInt(),
 //            ""
 //        )
-        ProviderOffersScreen.FROM_PROVIDER = false
+        isProvider(requireContext(), false)
 
         binding.latestOfferRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -78,7 +79,7 @@ class UserOffersScreen :
             UserUtils.getUserId(requireContext()).toInt(),
             "latest"
         )
-        viewModel.getUserOffers(requireContext(), requestBody).observe(requireActivity(), {
+        viewModel.getUserOffers(requireContext(), requestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -93,7 +94,7 @@ class UserOffersScreen :
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
 
         val expiryRequestBody = OffersListReqModel(
             "",
@@ -105,7 +106,7 @@ class UserOffersScreen :
             UserUtils.getUserId(requireContext()).toInt(),
             "expiry"
         )
-        viewModel.getUserOffers(requireActivity(), expiryRequestBody).observe(requireActivity(), {
+        viewModel.getUserOffers(requireActivity(), expiryRequestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -120,7 +121,7 @@ class UserOffersScreen :
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
 
         val referralRequestBody = OffersListReqModel(
             "",
@@ -132,7 +133,7 @@ class UserOffersScreen :
             UserUtils.getUserId(requireContext()).toInt(),
             ""
         )
-        viewModel.getUserOffers(requireContext(), referralRequestBody).observe(requireActivity(), {
+        viewModel.getUserOffers(requireContext(), referralRequestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -147,7 +148,7 @@ class UserOffersScreen :
                     snackBar(binding.root, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

@@ -40,8 +40,8 @@ class ComplaintRequestScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(SettingsRepository())
         val viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
-        viewModel.complaintRequests(this).observe(this, {
-            when(it) {
+        viewModel.complaintRequests(this).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -54,7 +54,7 @@ class ComplaintRequestScreen : AppCompatActivity() {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -65,7 +65,7 @@ class ComplaintRequestScreen : AppCompatActivity() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_requests)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (UserUtils.isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
@@ -78,7 +78,7 @@ class ComplaintRequestScreen : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (UserUtils.isProvider(this)) {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         } else {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))

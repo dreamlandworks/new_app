@@ -53,6 +53,7 @@ import org.json.JSONObject
 import android.app.Activity
 import com.bumptech.glide.Glide
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
+import com.satrango.utils.UserUtils.isProvider
 
 
 class ProviderInVoiceScreen : AppCompatActivity() {
@@ -67,7 +68,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     private var userId = ""
 
     companion object {
-        var FROM_PROVIDER = false
         var isExtraDemandRaised = "0"
     }
 
@@ -81,6 +81,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
+        registerReceiver(myDoneReceiver, IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER_DONE));
 
         initializeProgressDialog()
 
@@ -125,7 +126,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateUI(response: BookingDetailsResModel) {
         binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
         } else {
             Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
@@ -136,7 +137,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         binding.bookingIdText.text = bookingId
         spFcmToken = response.booking_details.sp_fcm_token
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
@@ -200,7 +201,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
-                            requestOTP("User",)
+                            requestOTP("User")
                         }
                     }
                 }
@@ -227,7 +228,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 if (jsonResponse.getInt("status") == 200) {
                     val requestedOTP = jsonResponse.getInt("otp")
                     UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
-                    if (!FROM_PROVIDER) {
+                    if (!isProvider(this@ProviderInVoiceScreen)) {
                         otpDialog(requestedOTP, bookingId)
                     } else {
                         showotpInDialog(requestedOTP.toString())
@@ -256,7 +257,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
         closeBtn.setOnClickListener { dialog.dismiss() }
 
-        if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             title.text = "OTP to Start Job"
             title.setTextColor(resources.getColor(R.color.purple_500))
             firstNo.setBackgroundResource(R.drawable.purpleborderbutton)
@@ -381,13 +382,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                 is NetworkResponse.Success -> {
                                     progressDialog.dismiss()
                                     dialog.dismiss()
-                                    FROM_PROVIDER = false
+                                    isProvider(this, fromProvider = false)
                                     dialog.dismiss()
-                                    UserUtils.sendOTPResponseFCM(
-                                        this,
-                                        spFcmToken,
-                                        "$bookingId|$categoryId|$userId|user"
-                                    )
+                                    UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
                                     PaymentScreen.FROM_USER_PLANS = false
                                     PaymentScreen.FROM_PROVIDER_PLANS = false
                                     PaymentScreen.FROM_USER_SET_GOALS = false
@@ -419,13 +416,26 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             val otp = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
 //            toast(context, "$bookingId|$otp|$userId")
-            if (!FROM_PROVIDER) {
+            if (!isProvider(this@ProviderInVoiceScreen)) {
                 if (!(context as Activity).isFinishing) {
                     otpDialog(otp.toInt(), bookingId)
                 }
             } else {
                 showotpInDialog(otp)
             }
+        }
+    }
+
+    private val myDoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+            ProviderRatingReviewScreen.bookingId = bookingId.toString()
+            ProviderRatingReviewScreen.userId = userId
+            ProviderRatingReviewScreen.categoryId =  "0"
+            startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
         }
     }
 
@@ -452,14 +462,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         fourthNo.text = otp[3].toString()
         submitBtn.text = "Close"
         closeBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = FROM_PROVIDER
             ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
             ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
             ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
             startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
         }
         submitBtn.setOnClickListener {
-            ProviderRatingReviewScreen.FROM_PROVIDER = FROM_PROVIDER
             ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
             ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
             ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId

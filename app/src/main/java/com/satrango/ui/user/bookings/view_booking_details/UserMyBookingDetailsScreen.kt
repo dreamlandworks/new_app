@@ -37,6 +37,9 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -123,7 +126,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
         if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
 //            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
-            if (!ViewUserBookingDetailsScreen.FROM_PENDING) {
+            if (!isPending(this)) {
                 binding.otpText.text = resources.getString(R.string.time_lapsed)
                 binding.otp.text = response.booking_details.time_lapsed
             } else {
@@ -139,14 +142,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
             intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            ViewUserBookingDetailsScreen.FROM_PROVIDER = true
+            isProvider(this, true)
             binding.root.context.startActivity(intent)
         }
 
         binding.viewDetailsBtn.setOnClickListener {
             ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-            ViewUserBookingDetailsScreen.FROM_PENDING = false
-            ViewUserBookingDetailsScreen.FROM_PROVIDER = false
+            isProvider(this, false)
+            isPending(this, false)
             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
             intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
@@ -204,7 +207,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             }
         }
 
-        if (ViewUserBookingDetailsScreen.FROM_COMPLETED) {
+        if (isCompleted(this)) {
             binding.markCompleteBtn.visibility = View.GONE
             binding.viewDetailsBtn.setOnClickListener { onBackPressed() }
             binding.callBtn.setCardBackgroundColor(resources.getColor(R.color.gray))
@@ -365,7 +368,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (ViewUserBookingDetailsScreen.FROM_COMPLETED) {
+        if (isCompleted(this)) {
             super.onBackPressed()
         } else {
             startActivity(Intent(this, UserMyBookingsScreen::class.java))

@@ -168,7 +168,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
-                    showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id)
+                    showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id, inVoiceDetails.booking_details.sp_id)
                 } else {
                     toast(this@PaymentScreen,"Error:" + response.string())
                 }
@@ -468,7 +468,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showBookingCompletedSuccessDialog(bookingId: Int) {
+    private fun showBookingCompletedSuccessDialog(bookingId: Int, spId: String) {
         val dialog = BottomSheetDialog(this)
         dialog.setCancelable(false)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
@@ -480,9 +480,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             "You have successfully completed the booking. You will now be redirected to Rating screen. Please give rating to the service provider."
         closeBtn.setOnClickListener {
             dialog.dismiss()
-            ProviderRatingReviewScreen.FROM_PROVIDER =  false
             ProviderRatingReviewScreen.bookingId = bookingId.toString()
-            ProviderRatingReviewScreen.userId = userId.toString()
+            ProviderRatingReviewScreen.userId = spId
             ProviderRatingReviewScreen.categoryId =  "0"
             startActivity(Intent(this, ProviderRatingReviewScreen::class.java))
         }

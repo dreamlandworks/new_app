@@ -7,6 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -25,6 +27,8 @@ import com.satrango.databinding.ActivityBookingDateAndTimeScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -38,6 +42,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.*
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.UserUtils.isReschedule
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -57,10 +63,6 @@ import kotlin.math.round
 
 class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
-    companion object {
-        var FROM_PROVIDER = false
-    }
-
     private lateinit var rightNow: Calendar
     private lateinit var morningTimings: java.util.ArrayList<MonthsModel>
     private lateinit var afternoonTimings: java.util.ArrayList<MonthsModel>
@@ -77,6 +79,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var daysList: ArrayList<MonthsModel>
     private lateinit var binding: ActivityBookingDateAndTimeScreenBinding
     private lateinit var data: Data
+    private lateinit var rescheduleData: BookingDetail
     private var userType = ""
     private var today = true
 
@@ -91,21 +94,27 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         initializeProgressDialog()
         rightNow = Calendar.getInstance()
 
-        userType = if (FROM_PROVIDER) {
+        userType = if (isProvider(this)) {
             "SP"
         } else {
             "User"
         }
 
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
-            updateUI(data)
+            if (isReschedule(this) && isProvider(this)) {
+                rescheduleData = Gson().fromJson(UserUtils.getSelectedSPDetails(this), BookingDetail::class.java)
+                updateUI(rescheduleData)
+            } else {
+                data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
+                updateUI(data)
+            }
+
         }
 
         calendar = Calendar.getInstance()
         binding.selectedMonth.text = LocalDate.now().month.name
 
-        if (!ViewUserBookingDetailsScreen.RESCHEDULE) {
+        if (!isReschedule(this)) {
             spDetails = Gson().fromJson(
                 UserUtils.getSelectedAllSPDetails(this),
                 SearchServiceProviderResModel::class.java
@@ -150,7 +159,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
             binding.nextBtn.setBackgroundResource(R.drawable.provider_btn_bg)
@@ -167,7 +176,21 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
         Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+    }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateUI(data: BookingDetail) {
+        binding.userName.text = "${data.fname} ${data.lname}"
+        binding.occupation.text = resources.getString(R.string.user)
+        binding.costPerHour.text = "Rs. ${round(data.amount.toDouble()).toInt()}/-"
+        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+        binding.rating.setBackgroundResource(R.drawable.purple_circle_color)
+        binding.reviews.setBackgroundResource(R.drawable.purple_circle_color)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+        }
     }
 
     private fun validateFields() {
@@ -191,7 +214,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {
             return
         } else {
-            if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+            if (isReschedule(this)) {
                 rescheduleBooking()
             } else {
                 if (data.category_id == "3") {
@@ -252,18 +275,21 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val title = dialogView.findViewById<TextView>(R.id.title)
         val homeBtn = dialogView.findViewById<TextView>(R.id.homeBtn)
         val myBookingsBtn = dialogView.findViewById<TextView>(R.id.myBookingsBtn)
-        if (FROM_PROVIDER) {
+        val shield = dialogView.findViewById<ImageView>(R.id.shield)
+        if (isProvider(this)) {
+            shield.setImageResource(R.drawable.purple_shield)
             homeBtn.setBackgroundResource(R.drawable.purple_out_line)
             myBookingsBtn.setBackgroundResource(R.drawable.provider_btn_bg)
             homeBtn.setTextColor(resources.getColor(R.color.purple_500))
             title.setTextColor(resources.getColor(R.color.purple_500))
+
             homeBtn.setOnClickListener {
                 UserUtils.saveFromFCMService(this, false)
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
             myBookingsBtn.setOnClickListener {
                 UserUtils.saveFromFCMService(this, false)
-                startActivity(Intent(this, ProviderDashboard::class.java))
+                startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
             }
         } else {
             homeBtn.setOnClickListener {
@@ -282,7 +308,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
         availableSlots = ArrayList()
 
-        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+        if (isReschedule(this)) {
             for (day in daysList) {
                 for (slot in preferred_time_slots) {
                     val inFormat = SimpleDateFormat("dd-MM-yyyy")
@@ -341,7 +367,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val bookedSlots = ArrayList<MonthsModel>()
         val actualTimeSlots = ArrayList<MonthsModel>()
 
-        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+        if (isReschedule(this)) {
             for (time in blocked_time_slots) {
                 if (time.date == availableSlots[position].month) {
                     bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
@@ -841,7 +867,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
 
     override fun onBackPressed() {
         finish()
-        if (ViewUserBookingDetailsScreen.RESCHEDULE) {
+        if (isReschedule(this)) {
             super.onBackPressed()
         } else {
             val intent = Intent(this, UserSearchViewProfileScreen::class.java)

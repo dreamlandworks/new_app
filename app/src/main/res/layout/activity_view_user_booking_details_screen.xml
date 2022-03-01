@@ -114,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_alignParentBottom="true"
                 android:elevation="@dimen/_5sdp"
                 android:gravity="center"
@@ -121,7 +122,8 @@
 
                 <LinearLayout
                     android:id="@+id/layoutOne"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_bg_sm_blue_border"
                     android:gravity="center"
@@ -152,15 +154,18 @@
 
                 <LinearLayout
                     android:id="@+id/layoutTwo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_5sdp"
                     android:background="@drawable/btn_bg_sm_blue_border"
                     android:elevation="@dimen/_5sdp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
@@ -190,7 +195,8 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
@@ -222,7 +228,8 @@
 
                 <LinearLayout
                     android:id="@+id/layoutThree"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_bg_sm_blue_border"
                     android:gravity="center"

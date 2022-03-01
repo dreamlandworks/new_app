@@ -11,6 +11,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.m
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderViewPlacedBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
+import com.satrango.utils.UserUtils.isProvider
 
 class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
     RecyclerView.Adapter<ProviderMyBidsAdapter.ViewHolder>() {
@@ -39,7 +40,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
 
             if (data.bid_type == "Open") {
                 binding.card.setOnClickListener {
-                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    isProvider(binding.atText.context, true)
                     ProviderPlaceBidScreen.FROM_EDIT_BID = false
                     ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
                     val intent =
@@ -68,7 +69,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
             } else if (data.bid_type == "Awarded" || data.bid_type == "Expired") {
                 binding.editBidBtn.visibility = View.GONE
                 binding.card.setOnClickListener {
-                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    isProvider(binding.atText.context, true)
                     ProviderPlaceBidScreen.FROM_AWARDED = true
                     ProviderPlaceBidScreen.FROM_EDIT_BID = false
                     MyJobPostViewScreen.bookingId = data.booking_id.toInt()
@@ -92,7 +93,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                     binding.root.context.startActivity(intent)
                 }
                 binding.card.setOnClickListener {
-                    MyJobPostViewScreen.FROM_PROVIDER = true
+                    isProvider(binding.atText.context, true)
                     ProviderPlaceBidScreen.FROM_AWARDED = false
                     ProviderPlaceBidScreen.FROM_EDIT_BID = false
                     MyJobPostViewScreen.bookingId = data.booking_id.toInt()

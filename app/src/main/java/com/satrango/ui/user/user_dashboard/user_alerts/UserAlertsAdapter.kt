@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.satrango.databinding.UserAlertRowBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
+import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import java.text.SimpleDateFormat
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -27,12 +31,12 @@ class UserAlertsAdapter(
             val outputTime: String = formatter.format(parser.parse(data.created_on))
             binding.rowTime.text = outputTime
             binding.rowLayout.visibility = View.VISIBLE
-//            if ((data.alert_id == "9" && data.action == "2") || (data.alert_id == "10" && data.action == "2") || (data.alert_id == "7" && data.action == "2")) {
             binding.rowReviewNowBtn.text = data.accept_text
             binding.rowReviewLaterBtn.text = data.reject_text
             binding.rowReviewLaterBtn.visibility = View.VISIBLE
             binding.rowReviewNowBtn.visibility = View.VISIBLE
-//            }
+            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(
+                UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
             binding.rowReviewNowBtn.setOnClickListener {
                 onClickAction(data)
             }
@@ -56,31 +60,18 @@ class UserAlertsAdapter(
                 alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_user_id.toInt(), data.bid_id.toInt())
             }
             if (data.type_id == "9") {
-                if (UserAlertScreen.FROM_PROVIDER) {
+                if (isProvider(binding.profilePic.context)) {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
                 } else {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
                 }
-//                if (UserAlertScreen.FROM_PROVIDER) {
-//                    alertsInterface.rescheduleUserStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_user_id.toInt())
-//                } else {
-//                    alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-//                }
-//                if (!UserAlertScreen.FROM_PROVIDER) {
-//                } else {
-//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-//                }
             }
             if (data.type_id == "10") {
-                if (UserAlertScreen.FROM_PROVIDER) {
+                if (isProvider(binding.profilePic.context)) {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt())
                 } else {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt())
                 }
-//                if (!UserAlertScreen.FROM_PROVIDER) {
-//                } else {
-//                    alertsInterface.rescheduleSPStatusCancelDialog(data.booking_id.toInt(), data.category_id.toInt(), data.reschedule_user_id.toInt(), data.reschedule_id.toInt())
-//                }
             }
             if (data.type_id == "3") {
                 alertsInterface.divertToOfferScreen()

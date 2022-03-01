@@ -32,6 +32,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.SettingsViewMode
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintReqModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import java.text.SimpleDateFormat
@@ -46,7 +47,6 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private lateinit var progressDialog: BeautifulProgressDialog
 
     companion object {
-        var FROM_PROVIDER = false
         var bookingId = 0
     }
 
@@ -127,7 +127,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.raise_a_complaint)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundResource(R.color.purple_500)
             binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
             binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -145,7 +145,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     private fun submitComplaintToServer() {
 
         var moduleId = 0
-        var userType = if (FROM_PROVIDER) {
+        val userType = if (isProvider(this)) {
             "2"
         } else {
             "1"
@@ -222,7 +222,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         } else {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))

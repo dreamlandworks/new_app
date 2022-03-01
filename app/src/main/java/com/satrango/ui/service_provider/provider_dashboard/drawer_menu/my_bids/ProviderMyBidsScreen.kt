@@ -27,6 +27,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -126,7 +127,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         }
         binding.sortFilterBtn.setOnClickListener {
             UserUtils.saveSearchFilter(this, "")
-            SortAndFilterServiceProvider.FROM_PROVIDER = true
+            isProvider(this, true)
             startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
         }
 
@@ -134,8 +135,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 
     private fun updateUIWithNewJobs() {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.jobsList(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.jobsList(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -156,14 +157,14 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 //                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun updateUI(status: String) {
 //        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 2)
-        viewModel.bidsList(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.bidsList(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -193,7 +194,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 //                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun onBackPressed() {

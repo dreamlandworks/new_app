@@ -67,6 +67,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.*
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -195,7 +196,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserReferAndEarn::class.java))
                 }
                 R.id.userOptSettings -> {
-                    UserSettingsScreen.FROM_PROVIDER = false
+                    isProvider(this, false)
                     startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
                 R.id.userOptLogOut -> {
@@ -231,8 +232,8 @@ class UserDashboardScreen : AppCompatActivity() {
             val factory = ViewModelFactory(LoginRepository())
             val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
             val requestBody = LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
-            viewModel.userLogout(this, requestBody).observe(this, {
-                when(it) {
+            viewModel.userLogout(this, requestBody).observe(this) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -249,7 +250,7 @@ class UserDashboardScreen : AppCompatActivity() {
                         snackBar(binding.navigationView, "Something went wrong. Please try again")
                     }
                 }
-            })
+            }
 
         }
         dialog.setNegativeButton("NO") { dialogInterface, _ ->
@@ -282,6 +283,7 @@ class UserDashboardScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        isProvider(this, false)
         PermissionUtils.checkAndRequestPermissions(this)
         getUserProfilePicture()
     }
@@ -478,7 +480,7 @@ class UserDashboardScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.split("|")[0].toInt())
         Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-        viewModel.viewBookingDetails(this, requestBody).observe(this, {
+        viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -492,7 +494,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     snackBar(binding.navigationView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun updateUI(
@@ -564,7 +566,7 @@ class UserDashboardScreen : AppCompatActivity() {
     ) {
         val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
         Log.e("STATUS:", Gson().toJson(requestBody))
-        viewModel.changeExtraDemandStatus(this, requestBody).observe(this, {
+        viewModel.changeExtraDemandStatus(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -574,14 +576,16 @@ class UserDashboardScreen : AppCompatActivity() {
                     progressDialog.dismiss()
                     dialog.dismiss()
                     if (status == 1) {
-                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                        UserUtils.sendExtraDemandFCM(
+                            this, response.booking_details.sp_fcm_token,
                             bookingId.toString(),
                             "0",
                             "${UserUtils.getUserId(this)}|1"
                         )
                         snackBar(binding.navigationView, "Extra Demand Accepted")
                     } else {
-                        UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token,
+                        UserUtils.sendExtraDemandFCM(
+                            this, response.booking_details.sp_fcm_token,
                             bookingId.toString(),
                             "0",
                             "${UserUtils.getUserId(this)}|2"
@@ -594,7 +598,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     toast(this, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

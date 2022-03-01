@@ -11,6 +11,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
+import com.satrango.utils.UserUtils.isProvider
 
 class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val attachmentsListener: AttachmentsListener): RecyclerView.Adapter<AttachmentsAdapter.ViewHolder>() {
 
@@ -42,7 +43,7 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
             }
-            if (MyJobPostViewScreen.FROM_PROVIDER) {
+            if (isProvider(binding.closeBtn.context)) {
                 if (ProviderPlaceBidScreen.FROM_EDIT_BID) {
                     binding.closeBtn.visibility = View.VISIBLE
                 } else {

@@ -11,6 +11,7 @@ import com.satrango.databinding.UserBookingAddressRowBinding
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
+import com.satrango.utils.UserUtils.isProvider
 import java.util.*
 
 class UserBookingAddressAdapter(
@@ -40,7 +41,7 @@ class UserBookingAddressAdapter(
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
             holder.binding.locationText.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.myLocation.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(holder.binding.locationText.context)) {
                 holder.binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
         }

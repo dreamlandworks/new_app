@@ -27,6 +27,8 @@ import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatu
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -42,10 +44,6 @@ class UserAlertScreen :
     private val USER_TYPE: String = "User"
     private val ACCEPT_OR_REJECT: String = "accept/reject"
     private val CANCEL: String = "cancel"
-
-    companion object {
-        var FROM_PROVIDER = false
-    }
 
     private lateinit var progressDialog: BeautifulProgressDialog
 
@@ -256,7 +254,6 @@ class UserAlertScreen :
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
         val title = dialogView.findViewById<TextView>(R.id.title)
         val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
@@ -289,13 +286,14 @@ class UserAlertScreen :
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
         val noteText = dialogView.findViewById<TextView>(R.id.noteText)
-//        val title = dialogView.findViewById<TextView>(R.id.title)
+        val title = dialogView.findViewById<TextView>(R.id.title)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
 
         noteText.setTextColor(resources.getColor(R.color.blue))
         rejectBtn.setTextColor(resources.getColor(R.color.blue))
+        title.setTextColor(resources.getColor(R.color.blue))
         rejectBtn.setBackgroundResource(R.drawable.blue_out_line)
         acceptBtn.setTextColor(resources.getColor(R.color.white))
         acceptBtn.setBackgroundResource(R.drawable.category_bg)
@@ -504,7 +502,7 @@ class UserAlertScreen :
 
     override fun onResume() {
         super.onResume()
-        FROM_PROVIDER = false
+        isProvider(requireContext(), fromProvider = false)
     }
 
 }

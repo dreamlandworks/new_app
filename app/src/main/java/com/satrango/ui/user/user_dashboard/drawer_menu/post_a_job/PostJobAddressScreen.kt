@@ -46,6 +46,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlan
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import java.text.SimpleDateFormat
@@ -163,8 +164,8 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.getUserId(this).toInt()
         )
 
-        viewModel.updateSingleMoveMyJobPost(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.updateSingleMoveMyJobPost(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -177,7 +178,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -238,7 +239,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             longitude
         )
 //        toast(this, Gson().toJson(requestBody))
-        viewModel.postJobSingleMove(this, requestBody).observe(this, {
+        viewModel.postJobSingleMove(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -256,7 +257,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -268,7 +269,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             binding.recentSearch.setBackgroundResource(R.drawable.blue_bg_sm)
             binding.recentLocation.setTextColor(resources.getColor(R.color.white))
             binding.recentLocationText.setTextColor(resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(this)) {
                 binding.recentSearch.setBackgroundResource(R.drawable.purple_bg_sm)
             }
             addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
@@ -278,14 +279,14 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
             binding.currentLocation.setTextColor(resources.getColor(R.color.white))
             binding.currentLocationText.setTextColor(resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(this)) {
                 binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
             fetchLocation(this)
         }
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this, {
+        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -294,10 +295,19 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     addressList = arrayListOf()
                     val responseData = it.data!!
                     for (address in responseData.address) {
-                        addressList.add(MonthsModel(address.locality + ", " + address.city + ", " + address.zipcode, address.id, false))
+                        addressList.add(
+                            MonthsModel(
+                                address.locality + ", " + address.city + ", " + address.zipcode,
+                                address.id,
+                                false
+                            )
+                        )
                     }
                     binding.addressRv.layoutManager = LinearLayoutManager(this@PostJobAddressScreen)
-                    binding.addressRv.adapter = UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>, this@PostJobAddressScreen, "AA")
+                    binding.addressRv.adapter =
+                        UserBookingAddressAdapter(addressList.distinctBy { data -> data.month } as java.util.ArrayList<MonthsModel>,
+                            this@PostJobAddressScreen,
+                            "AA")
                     progressDialog.dismiss()
 
                     if (UserUtils.EDIT_MY_JOB_POST) {
@@ -310,7 +320,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

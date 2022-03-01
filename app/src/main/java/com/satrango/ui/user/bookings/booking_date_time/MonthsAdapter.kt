@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.satrango.R
 import com.satrango.databinding.MonthsRowBinding
 import com.satrango.databinding.UserBookingAddressRowBinding
+import com.satrango.utils.UserUtils.isProvider
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -76,7 +77,7 @@ class MonthsAdapter(
             holder.binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
             holder.binding.description.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             holder.binding.title.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(holder.binding.card.context)) {
                 holder.binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
         }

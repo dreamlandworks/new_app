@@ -11,6 +11,7 @@ import com.satrango.databinding.RaiseComplaintRowBinding
 import com.satrango.databinding.UserCategoryRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
+import com.satrango.utils.UserUtils.isProvider
 
 class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private val browseCategoriesInterface: BrowseCategoriesInterface) :
     RecyclerView.Adapter<ComplaintsAdapter.ViewHolder>() {
@@ -34,7 +35,7 @@ class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private va
         holder.binding.title.text = list[position].category
 
         if (list[position].selected) {
-            if (ComplaintScreen.FROM_PROVIDER) {
+            if (isProvider(holder.binding.rootLayout.context)) {
                 holder.binding.title.setBackgroundResource(R.drawable.provider_btn_bg)
                 holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.white))
             } else {
@@ -42,7 +43,7 @@ class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private va
                 holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.white))
             }
         } else {
-            if (ComplaintScreen.FROM_PROVIDER) {
+            if (isProvider(holder.binding.rootLayout.context)) {
                 holder.binding.title.setBackgroundResource(R.drawable.purple_out_line)
                 holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.purple_500))
             } else {

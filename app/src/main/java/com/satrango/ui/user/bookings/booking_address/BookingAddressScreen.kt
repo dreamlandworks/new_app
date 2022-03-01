@@ -60,6 +60,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.search_servi
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -114,7 +115,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             binding.recentSearch.setBackgroundResource(R.drawable.blue_bg_sm)
             binding.recentLocation.setTextColor(resources.getColor(R.color.white))
             binding.recentLocationText.setTextColor(resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(this)) {
                 binding.recentSearch.setBackgroundResource(R.drawable.purple_bg_sm)
             }
             addressList.add(
@@ -130,7 +131,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             binding.rowLayout.setBackgroundResource(R.drawable.blue_bg_sm)
             binding.currentLocation.setTextColor(resources.getColor(R.color.white))
             binding.currentLocationText.setTextColor(resources.getColor(R.color.white))
-            if (BookingDateAndTimeScreen.FROM_PROVIDER) {
+            if (isProvider(this)) {
                 binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
             fetchLocation(this)
@@ -729,7 +730,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 }
                 "3" -> {
                     finish()
-                    BookingDateAndTimeScreen.FROM_PROVIDER = false
+                    isProvider(this, false)
                     val intent = Intent(this, BookingDateAndTimeScreen::class.java)
                     intent.putExtra(getString(R.string.service_provider), data)
                     startActivity(intent)

@@ -28,6 +28,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -123,7 +124,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                             attachmentsText.visibility = View.GONE
                         }
 
-                        if (ViewBidsScreen.FROM_PROVIDER) {
+                        if (isProvider(this@ViewBidDetailsScreen)) {
                             binding.awardBtn.setOnClickListener {
                                 onBackPressed()
                             }
@@ -164,7 +165,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
             resources.getString(R.string.view_proposal)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
-        if (ViewBidsScreen.FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
             binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)

@@ -88,6 +88,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 import android.os.CountDownTimer
+import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
 
 
@@ -229,7 +230,7 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderMyTrainingScreen::class.java))
                 }
                 R.id.providerOptSettings -> {
-                    UserSettingsScreen.FROM_PROVIDER = true
+                    isProvider(this, true)
                     startActivity(Intent(this, UserSettingsScreen::class.java))
                 }
                 R.id.providerOptLogOut -> {
@@ -603,6 +604,7 @@ class ProviderDashboard : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        isProvider(this, true)
         PermissionUtils.checkAndRequestPermissions(this)
         loadUserProfileData()
     }

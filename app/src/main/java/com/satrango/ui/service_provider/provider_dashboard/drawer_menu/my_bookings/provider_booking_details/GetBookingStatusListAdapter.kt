@@ -9,6 +9,7 @@ import com.satrango.R
 import com.satrango.databinding.BookingStatusRowBinding
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.BookingStatusDetail
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
+import com.satrango.utils.UserUtils.isProvider
 
 class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
     RecyclerView.Adapter<GetBookingStatusListAdapter.ViewHolder>() {
@@ -24,7 +25,7 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
             } else {
                 binding.view.visibility = View.VISIBLE
             }
-            if (ViewUserBookingDetailsScreen.FROM_PROVIDER) {
+            if (isProvider(binding.description.context)) {
                 binding.image.setImageResource(R.drawable.mark_purple)
                 binding.view.setBackgroundColor(binding.view.resources.getColor(R.color.purple_500))
             } else {

@@ -12,6 +12,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 
 class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val status: String) :
     RecyclerView.Adapter<MyJobPostsAdapter.ViewHolder>() {
@@ -101,7 +102,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                         UserUtils.setFromJobPostMultiMove(binding.editBtn.context, true)
                     }
                 }
-                MyJobPostViewScreen.FROM_PROVIDER = false
+                isProvider(binding.avgAmount.context, false)
                 MyJobPostViewScreen.bookingId = jobPostDetail.booking_id.toInt()
                 MyJobPostViewScreen.categoryId = jobPostDetail.category_id.toInt()
                 MyJobPostViewScreen.postJobId = jobPostDetail.post_job_id.toInt()

@@ -20,6 +20,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.ViewBidsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
+import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -36,7 +38,6 @@ class ViewBidsScreen : AppCompatActivity() {
         var bookingId = 0
         var postJobId = 0
         var bidPrice = 0
-        var FROM_PROVIDER = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +88,7 @@ class ViewBidsScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (FROM_PROVIDER) {
+        if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
             binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)

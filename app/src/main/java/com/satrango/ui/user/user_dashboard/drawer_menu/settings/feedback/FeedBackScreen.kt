@@ -62,7 +62,7 @@ class FeedBackScreen : AppCompatActivity() {
             resources.getString(R.string.suggestions_feed_back)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (UserUtils.isProvider(this)) {
             binding.resetBtn.setBackgroundResource(R.drawable.purple_out_line)
             binding.resetBtn.setTextColor(resources.getColor(R.color.purple_500))
             binding.submitBtn.setBackgroundResource(R.drawable.provider_btn_bg)
@@ -78,7 +78,7 @@ class FeedBackScreen : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
         progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withImage, resources.getString(R.string.loading))
-        if (UserSettingsScreen.FROM_PROVIDER) {
+        if (UserUtils.isProvider(this)) {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         } else {
             progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
@@ -91,7 +91,7 @@ class FeedBackScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(SettingsRepository())
         val viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
-        val userType = if (UserSettingsScreen.FROM_PROVIDER) {
+        val userType = if (UserUtils.isProvider(this)) {
             "2"
         } else {
             "1"

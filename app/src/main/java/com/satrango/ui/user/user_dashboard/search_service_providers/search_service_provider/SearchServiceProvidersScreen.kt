@@ -35,6 +35,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
@@ -67,7 +68,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         binding.sortFilterBtn.setOnClickListener {
-            SortAndFilterServiceProvider.FROM_PROVIDER = false
+            isProvider(this, false)
             startActivity(Intent(this, SortAndFilterServiceProvider::class.java))
         }
 

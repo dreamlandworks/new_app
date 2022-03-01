@@ -16,6 +16,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.models.BidDetail
+import com.satrango.utils.UserUtils.isProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
             binding.jobDescription.text = bidDetail.about_me
             binding.jobsCount.text = bidDetail.jobs_completed.toString()
 
-            if (ViewBidsScreen.FROM_PROVIDER) {
+            if (isProvider(binding.awardBtn.context)) {
                 binding.layout.setBackgroundResource(R.drawable.purple_out_line)
                 binding.awardBtn.visibility = View.GONE
                 binding.rejectBtn.visibility = View.GONE

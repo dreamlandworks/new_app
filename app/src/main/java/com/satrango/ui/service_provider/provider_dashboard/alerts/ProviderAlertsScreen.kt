@@ -31,6 +31,7 @@ import com.satrango.ui.user.user_dashboard.user_alerts.RegularAlertAdapter
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
 import com.satrango.utils.PermissionUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -260,7 +261,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     progressDialog.dismiss()
                     val response = it.data!!
                     if (taskType == ACCEPT_OR_REJECT) {
-                        toast(requireContext(), Gson().toJson(response))
+//                        toast(requireContext(), Gson().toJson(response))
                         showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
                     } else {
                         showRescheduleStatusDialog(
@@ -351,7 +352,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
             USER_TYPE,
             userId
         )
-        toast(requireContext(), Gson().toJson(requestBody))
+//        toast(requireContext(), Gson().toJson(requestBody))
         viewModel.rescheduleStatusChange(requireContext(), requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -359,6 +360,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     snackBar(binding.actionNeededBadge, it.data!!)
+                    loadActionableAlerts()
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -392,7 +394,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
 
     override fun onResume() {
         super.onResume()
-        UserAlertScreen.FROM_PROVIDER = true
+        isProvider(requireContext(), true)
     }
 
 }
