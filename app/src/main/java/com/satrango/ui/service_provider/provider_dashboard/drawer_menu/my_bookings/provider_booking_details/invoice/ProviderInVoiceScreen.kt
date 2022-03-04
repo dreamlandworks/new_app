@@ -202,7 +202,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
-                            requestOTP("User")
+                            if (isProvider(this@ProviderInVoiceScreen)) {
+                                requestOTP("User")
+                            }
                         }
                     }
                 }
@@ -383,7 +385,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                 is NetworkResponse.Success -> {
                                     progressDialog.dismiss()
                                     dialog.dismiss()
-                                    isProvider(this, fromProvider = false)
                                     dialog.dismiss()
                                     UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
                                     PaymentScreen.FROM_USER_PLANS = false
