@@ -62,12 +62,12 @@ class ProviderAlertsViewModel(private val repository: ProviderAlertRepository): 
         return actionableAlertsList
     }
 
-    fun updateAlertsToRead(context: Context, alertType: String): MutableLiveData<NetworkResponse<String>> {
+    fun updateAlertsToRead(context: Context, userType: String, lastAlertId: String): MutableLiveData<NetworkResponse<String>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     updateAlertsToRead.value = NetworkResponse.Loading()
-                    val response = async { repository.updateAlertToRead(context, alertType) }
+                    val response = async { repository.updateAlertToRead(context, userType, lastAlertId) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("id") == 200) {
                         updateAlertsToRead.value = NetworkResponse.Success(jsonResponse.getString("message"))

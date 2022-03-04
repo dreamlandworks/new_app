@@ -78,11 +78,83 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                             if (response.booking_status_details.isNotEmpty()) {
                                 val details = response.booking_status_details[response.booking_status_details.size - 1]
                                 when (details.status_id) {
+                                    "4" -> {
+                                        binding.startBtn.text = "Service Provider Rejected"
+                                    }
+                                    "5" -> {
+                                        binding.startBtn.text = "Service Provider Accepted"
+                                    }
+                                    "6" -> {
+                                        binding.startBtn.text = "Service Provider Not Responded"
+                                    }
+                                    "7" -> {
+                                        binding.startBtn.text = "Payment Pending"
+                                    }
+                                    "8" -> {
+                                        binding.startBtn.text = "Payment Done"
+                                    }
+                                    "9" -> {
+                                        binding.startBtn.text = "Pending"
+                                    }
+                                    "10" -> {
+                                        binding.startBtn.text = "Reschedule Requested"
+                                    }
+                                    "11" -> {
+                                        binding.startBtn.text = "Reschedule Rejected"
+                                    }
+                                    "12" -> {
+                                        binding.startBtn.text = "Reschedule Approved"
+                                    }
                                     "13" -> {
                                         binding.startBtn.text = "Booking Started and OTP Verified"
                                     }
+                                    "14" -> {
+                                        binding.startBtn.text = "Booking Started"
+                                    }
+                                    "15" -> {
+                                        binding.startBtn.text = "Booking Paused"
+                                    }
+                                    "16" -> {
+                                        binding.startBtn.text = "Booking Resumed"
+                                    }
+                                    "17" -> {
+                                        binding.startBtn.text = "Sent for Review"
+                                    }
+                                    "18" -> {
+                                        binding.startBtn.text = "Reviewed and not Accepted"
+                                    }
+                                    "19" -> {
+                                        binding.startBtn.text = "Reviewed and found appropriate"
+                                    }
+                                    "20" -> {
+                                        binding.startBtn.text = "Part PAyment requested"
+                                    }
+                                    "21" -> {
+                                        binding.startBtn.text = "Part Payment Released"
+                                    }
+                                    "22" -> {
+                                        binding.startBtn.text = "Marked as Completed"
+                                    }
                                     "23" -> {
                                         binding.startBtn.text = "OTP Verified and Booking Completed"
+                                    }
+                                    "24" -> {
+                                        binding.startBtn.text = "Cancelled by User"
+                                    }
+                                    "25" -> {
+                                        binding.startBtn.text = "Cancelled by Service Provider"
+                                    }
+                                    "26" -> {
+                                        binding.startBtn.text = "Open"
+                                    }
+                                    "27" -> {
+                                        binding.startBtn.text = "Awarded"
+                                    }
+                                    "28" -> {
+                                        binding.startBtn.text = "Expired"
+                                    }
+                                    "29" -> {
+                                        binding.startBtn.text = "Rejected"
                                     }
                                     "37" -> {
                                         binding.startBtn.text = "Extra Demand Raised"
@@ -92,6 +164,9 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
                                     }
                                     "39" -> {
                                         binding.startBtn.text = "Extra Demand Rejected"
+                                    }
+                                    "40" -> {
+                                        binding.startBtn.text = "Service Provider Placed Bid"
                                     }
                                 }
                                 binding.startBtn.visibility = View.VISIBLE

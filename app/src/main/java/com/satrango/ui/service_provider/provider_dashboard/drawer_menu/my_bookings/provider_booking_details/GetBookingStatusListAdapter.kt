@@ -33,20 +33,83 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
                 binding.view.setBackgroundColor(binding.view.resources.getColor(R.color.blue))
             }
             when (details.status_id) {
+                "4" -> {
+                    binding.description.text = "Service Provider Rejected"
+                }
+                "5" -> {
+                    binding.description.text = "Service Provider Accepted"
+                }
+                "6" -> {
+                    binding.description.text = "Service Provider Not Responded"
+                }
+                "7" -> {
+                    binding.description.text = "Payment Pending"
+                }
+                "8" -> {
+                    binding.description.text = "Payment Done"
+                }
+                "9" -> {
+                    binding.description.text = "Pending"
+                }
+                "10" -> {
+                    binding.description.text = "Reschedule Requested"
+                }
+                "11" -> {
+                    binding.description.text = "Reschedule Rejected"
+                }
+                "12" -> {
+                    binding.description.text = "Reschedule Approved"
+                }
                 "13" -> {
                     binding.description.text = "Booking Started and OTP Verified"
+                }
+                "14" -> {
+                    binding.description.text = "Booking Started"
                 }
                 "15" -> {
                     binding.description.text = "Booking Paused"
                 }
                 "16" -> {
-                    binding.description.text = "Booking Resume"
+                    binding.description.text = "Booking Resumed"
+                }
+                "17" -> {
+                    binding.description.text = "Sent for Review"
+                }
+                "18" -> {
+                    binding.description.text = "Reviewed and not Accepted"
+                }
+                "19" -> {
+                    binding.description.text = "Reviewed and found appropriate"
+                }
+                "20" -> {
+                    binding.description.text = "Part PAyment requested"
+                }
+                "21" -> {
+                    binding.description.text = "Part Payment Released"
                 }
                 "22" -> {
-                    binding.description.text = "Mark As Completed"
+                    binding.description.text = "Marked as Completed"
                 }
                 "23" -> {
                     binding.description.text = "OTP Verified and Booking Completed"
+                }
+                "24" -> {
+                    binding.description.text = "Cancelled by User"
+                }
+                "25" -> {
+                    binding.description.text = "Cancelled by Service Provider"
+                }
+                "26" -> {
+                    binding.description.text = "Open"
+                }
+                "27" -> {
+                    binding.description.text = "Awarded"
+                }
+                "28" -> {
+                    binding.description.text = "Expired"
+                }
+                "29" -> {
+                    binding.description.text = "Rejected"
                 }
                 "37" -> {
                     binding.description.text = "Extra Demand Raised"
@@ -57,8 +120,10 @@ class GetBookingStatusListAdapter(private val list: List<BookingStatusDetail>) :
                 "39" -> {
                     binding.description.text = "Extra Demand Rejected"
                 }
+                "40" -> {
+                    binding.description.text = "Service Provider Placed Bid"
+                }
             }
-//            binding.description.text = details.name
         }
 
     }

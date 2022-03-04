@@ -54,6 +54,7 @@ import android.app.Activity
 import com.bumptech.glide.Glide
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.toast
 
 
 class ProviderInVoiceScreen : AppCompatActivity() {
@@ -358,13 +359,13 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
 
             if (firstNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.amount, "Invalid OTP")
+                toast(this, "Invalid OTP")
             } else if (secondNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.amount, "Invalid OTP")
+                toast(this, "Invalid OTP")
             } else if (thirdNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.amount, "Invalid OTP")
+                toast(this, "Invalid OTP")
             } else if (fourthNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.amount, "Invalid OTP")
+                toast(this, "Invalid OTP")
             } else {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
@@ -400,7 +401,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                             }
                         }
                 } else {
-                    snackBar(binding.amount, "Invalid OTP")
+                    toast(this, "Incorrect OTP")
                 }
             }
         }
@@ -432,7 +433,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val otp = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
-            ProviderRatingReviewScreen.bookingId = bookingId.toString()
+            ProviderRatingReviewScreen.bookingId = bookingId
             ProviderRatingReviewScreen.userId = userId
             ProviderRatingReviewScreen.categoryId =  "0"
             startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))

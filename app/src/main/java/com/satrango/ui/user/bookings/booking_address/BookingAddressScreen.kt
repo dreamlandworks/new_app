@@ -237,8 +237,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                     "3" -> {
                         UserUtils.addressList = ArrayList()
-                        addressList =
-                            addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                        addressList = addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                         addressList.forEach {
                             if (it.isSelected) {
                                 UserUtils.addressList.add(it)
@@ -248,6 +247,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
                             Log.e("ADDRESS:", Gson().toJson(UserUtils.addressList))
+                            UserUtils.addressList = UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                             startActivity(Intent(this, BookingMultiMoveAddressScreen::class.java))
                         }
                     }
@@ -267,6 +267,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
+                            UserUtils.addressList = UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                             val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
                             startActivity(intent)
                         }

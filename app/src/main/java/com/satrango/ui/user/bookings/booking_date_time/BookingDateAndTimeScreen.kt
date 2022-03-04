@@ -218,7 +218,8 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 rescheduleBooking()
             } else {
                 if (data.category_id == "3") {
-                    val intent = Intent(this@BookingDateAndTimeScreen, BookingMultiMoveAddressScreen::class.java)
+                    UserUtils.addressList = ArrayList()
+                    val intent = Intent(this@BookingDateAndTimeScreen, BookingAddressScreen::class.java)
                     startActivity(intent)
                 } else {
                     val intent = Intent(this@BookingDateAndTimeScreen, BookingAttachmentsScreen::class.java)

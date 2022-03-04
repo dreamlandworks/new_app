@@ -83,13 +83,14 @@ class UserAlertScreen :
         }
     }
 
-    private fun updateAlertsToRead(type: String) {
-        viewModel.updateAlertsToRead(requireContext(), type).observe(viewLifecycleOwner) {
+    private fun updateAlertsToRead(userType: String, lastAlertId: String) {
+        viewModel.updateAlertsToRead(requireContext(), userType, lastAlertId).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+//                    toast(requireContext(), it.data!!)
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -114,13 +115,9 @@ class UserAlertScreen :
     private fun loadNotActionableAlerts() {
         binding.regularBtn.setBackgroundResource(R.drawable.category_bg)
         binding.regularBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(R.string.white_color)))
-        binding.actionNeededBtn.setTextColor(
-            Color.parseColor(
-                requireActivity().resources.getString(
+        binding.actionNeededBtn.setTextColor(Color.parseColor(requireActivity().resources.getString(
                     R.string.black_color
-                )
-            )
-        )
+                )))
         binding.actionNeededBtn.setBackgroundResource(R.drawable.blue_out_line)
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
@@ -133,6 +130,7 @@ class UserAlertScreen :
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = RegularAlertAdapter(it.data)
                         binding.regularBadge.text = it.data.size.toString()
+                        updateAlertsToRead("1", it.data.last().id)
                     } else {
                         binding.regularBadge.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), this)
@@ -148,7 +146,6 @@ class UserAlertScreen :
                 }
             }
         }
-        updateAlertsToRead("1")
     }
 
     @SuppressLint("SetTextI18n")
@@ -202,7 +199,8 @@ class UserAlertScreen :
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
         fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, CANCEL)
     }
@@ -211,7 +209,8 @@ class UserAlertScreen :
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
         fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, ACCEPT_OR_REJECT)
     }
@@ -371,7 +370,8 @@ class UserAlertScreen :
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
 
     }
@@ -380,7 +380,8 @@ class UserAlertScreen :
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
 
     }

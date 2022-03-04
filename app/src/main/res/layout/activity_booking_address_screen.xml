@@ -398,7 +398,8 @@
             android:id="@+id/btnsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/_30sdp">
 
             <TextView
                 android:id="@+id/backBtn"

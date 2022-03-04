@@ -92,10 +92,10 @@ class SearchServiceProviderAdapter(
                 UserUtils.saveFromInstantBooking(binding.root.context, true)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 if (data.category_id == "3") {
+                    UserUtils.addressList = ArrayList()
                     val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
                     binding.root.context.startActivity(intent)
                 } else {
-
                     val database = Firebase.database
                     database.getReference(UserUtils.getFCMToken(binding.root.context)).removeValue()
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)

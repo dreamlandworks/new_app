@@ -88,12 +88,12 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
         return userOffers
     }
 
-    fun updateAlertsToRead(context: Context, type: String): MutableLiveData<NetworkResponse<String>> {
+    fun updateAlertsToRead(context: Context, userType: String, lastAlertId: String): MutableLiveData<NetworkResponse<String>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userOffers.value = NetworkResponse.Loading()
-                    val response = async { repository.updateAlertsToRead(context, type) }
+                    val response = async { repository.updateAlertsToRead(context, userType, lastAlertId) }
                     val jsonResponse = JSONObject(response.await().string())
                     if (jsonResponse.getInt("id") == 200) {
                         updateAlertsToRead.value = NetworkResponse.Success(jsonResponse.getString("message"))

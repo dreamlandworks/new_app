@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.base.ViewModelFactory
@@ -28,7 +27,6 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.RegularAlertAdapter
-import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils.isProvider
@@ -108,11 +106,13 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = RegularAlertAdapter(it.data!!)
+                    binding.regularBadge.text = it.data.size.toString()
                     if (it.data.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Alerts not found"
                     } else {
                         binding.regularBadge.text = it.data.size.toString()
+                        updateAlertsToRead("2", it.data.last().id)
                         binding.note.visibility = View.GONE
                     }
                 }
@@ -124,16 +124,16 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
             }
         }
-        updateAlertsToRead("1")
     }
 
-    private fun updateAlertsToRead(alertType: String) {
-        viewModel.updateAlertsToRead(requireContext(), alertType).observe(viewLifecycleOwner) {
+    private fun updateAlertsToRead(userType: String, lastAlertId: String) {
+        viewModel.updateAlertsToRead(requireContext(), userType, lastAlertId).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+//                    toast(requireContext(), it.data!!)
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
@@ -181,7 +181,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
             }
         }
-        updateAlertsToRead("2")
+//        updateAlertsToRead("2")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -191,7 +191,7 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-    override fun rescheduleUserStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
+    override fun rescheduleUserStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String) {
 
     }
 
@@ -199,20 +199,22 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
-        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, ACCEPT_OR_REJECT)
+        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, ACCEPT_OR_REJECT, description)
     }
 
-    override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int) {
-        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, CANCEL)
+    override fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String) {
+        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, CANCEL, description)
     }
 
     override fun rescheduleSPAcceptRejectDialog(
         bookingId: Int,
         categoryId: Int,
         userId: Int,
-        rescheduleId: Int
+        rescheduleId: Int,
+        description: String
     ) {
 
     }
@@ -242,7 +244,8 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         categoryId: Int,
         userId: Int,
         rescheduleId: Int,
-        taskType: String
+        taskType: String,
+        description: String
     ) {
         val requestBody = BookingDetailsReqModel(
             bookingId,
@@ -262,14 +265,15 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     val response = it.data!!
                     if (taskType == ACCEPT_OR_REJECT) {
 //                        toast(requireContext(), Gson().toJson(response))
-                        showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType)
+                        showRescheduleDialog(bookingId, response, rescheduleId, userId, taskType, description)
                     } else {
                         showRescheduleStatusDialog(
                             bookingId,
                             response,
                             rescheduleId,
                             userId,
-                            taskType
+                            taskType,
+                            description
                         )
                     }
                 }
@@ -281,20 +285,23 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showRescheduleDialog(
         bookingId: Int,
         response: BookingDetailsResModel,
         rescheduleId: Int,
         userId: Int,
-        taskType: String
+        taskType: String,
+        description: String
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
 //        val title = dialogView.findViewById<TextView>(R.id.title)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        noteText.text = description
 
         closeBtn.setOnClickListener { dialog.dismiss() }
 
@@ -376,15 +383,16 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         response: BookingDetailsResModel,
         rescheduleId: Int,
         userId: Int,
-        taskType: String
+        taskType: String,
+        description: String
     ) {
         val dialog = BottomSheetDialog(requireContext())
         val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
-//        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
 //        val title = dialogView.findViewById<TextView>(R.id.title)
         val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
-
+        noteText.text = description
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         cancelBtn.setOnClickListener {

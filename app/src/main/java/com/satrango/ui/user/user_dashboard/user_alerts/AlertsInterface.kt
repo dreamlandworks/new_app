@@ -2,13 +2,13 @@ package com.satrango.ui.user.user_dashboard.user_alerts
 
 interface AlertsInterface {
 
-    fun rescheduleUserStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int)
+    fun rescheduleUserStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String)
 
-    fun rescheduleUserAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int)
+    fun rescheduleUserAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String)
 
-    fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int)
+    fun rescheduleSPStatusCancelDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String)
 
-    fun rescheduleSPAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int)
+    fun rescheduleSPAcceptRejectDialog(bookingId: Int, categoryId: Int, userId: Int, rescheduleId: Int, description: String)
 
     fun extraDemandDialog(bookingId: Int, categoryId: Int, userId: Int)
 

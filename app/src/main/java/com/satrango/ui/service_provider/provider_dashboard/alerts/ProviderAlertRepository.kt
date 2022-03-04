@@ -10,6 +10,7 @@ import com.satrango.ui.service_provider.provider_dashboard.alerts.models.UpdateA
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
+import com.satrango.ui.user.user_dashboard.user_alerts.models.UserUpdateAlertsToReadReqModel
 import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
 
@@ -20,9 +21,9 @@ class ProviderAlertRepository: BaseRepository() {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getProviderAlerts(requestBody)
     }
 
-    suspend fun updateAlertToRead(context: Context, alertType: String) : ResponseBody {
-        return RetrofitBuilder.getServiceProviderRetrofitInstance()
-            .updateAlertsToRead(UpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.PROVIDER_KEY, "2", alertType))
+    suspend fun updateAlertToRead(context: Context, userType: String, lastAlertId: String) : ResponseBody {
+        return RetrofitBuilder.getUserRetrofitInstance()
+            .updateAlertToRead(UserUpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY, userType, lastAlertId))
     }
 
 }

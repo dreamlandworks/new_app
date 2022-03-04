@@ -18,9 +18,9 @@ open class UserAlertsRepository: BaseRepository() {
         return RetrofitBuilder.getUserRetrofitInstance().getUserAlerts(UserAlertsReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY))
     }
 
-    suspend fun updateAlertsToRead(context: Context, type: String) : ResponseBody {
+    suspend fun updateAlertsToRead(context: Context, userType: String, lastAlertId: String) : ResponseBody {
         return RetrofitBuilder.getUserRetrofitInstance()
-            .updateAlertToRead(UserUpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY, type))
+            .updateAlertToRead(UserUpdateAlertsToReadReqModel(UserUtils.getUserId(context), RetrofitBuilder.USER_KEY, userType, lastAlertId))
     }
 
     suspend fun getUserOffers(requestBody: OffersListReqModel) : OffersListResModel {
