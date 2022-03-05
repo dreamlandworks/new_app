@@ -173,14 +173,17 @@
         <entry key="app/src/main/res/drawable/blue_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/blue_out_line.xml" value="0.2525" />
         <entry key="app/src/main/res/drawable/btn_bg_white_blue_border.xml" value="0.1585" />
+        <entry key="app/src/main/res/drawable/ic_addmore.xml" value="0.16" />
+        <entry key="app/src/main/res/drawable/ic_addmore_blue.xml" value="0.117" />
         <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_out_line.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/user_btn_bg.xml" value="0.2525" />
         <entry key="app/src/main/res/layout/activity_booking_address_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
-        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.19311676025390626" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.23697916666666666" />

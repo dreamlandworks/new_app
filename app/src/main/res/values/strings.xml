@@ -694,6 +694,11 @@
     <string name="wallet_balance">Wallet Balance</string>
     <string name="book_again">Book Again</string>
     <string name="raise_support">Raise Support</string>
+    <string name="total_amount_payable">Total Amount Payable:</string>
+    <string name="add_new_upi">Add New UPI</string>
+    <string name="saved_payment_options">SAVED PAYMENT OPTIONS</string>
+    <string name="add_new_credit_debit_atm_card">Add new credit / debit / ATM card</string>
+    <string name="net_banking">NET BANKING</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

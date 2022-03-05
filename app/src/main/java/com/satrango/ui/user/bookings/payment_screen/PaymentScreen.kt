@@ -116,7 +116,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
             }
 
-            otherPaymentBtn.setOnClickListener {
+            phonePeBtn.setOnClickListener {
                 when {
                     FROM_PROVIDER_PLANS -> {
                         saveProviderPlan("paymentId")
@@ -134,7 +134,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                         updateInstallmentPaymentStatus("Success", "paymentId")
                     }
                     FROM_COMPLETE_BOOKING -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         completeBooking("Success", "paymentId")
                     }
                 }

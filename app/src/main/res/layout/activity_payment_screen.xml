@@ -12,11 +12,11 @@
         layout="@layout/user_tool_bar" />
 
     <TextView
+        android:id="@+id/payableBalance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_10sdp"
-        android:gravity="center"
-        android:text="@string/select_your_payment_method"
+        android:text="@string/total_amount_payable"
         android:textColor="@color/black"
         android:textSize="@dimen/sub_text" />
 
@@ -51,6 +51,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/walletBalance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center|start"
@@ -86,33 +87,248 @@
             android:layout_height="@dimen/_1sdp"
             android:background="@color/lightGray" />
 
-        <ImageView
-            android:id="@+id/googlePayBtn"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/googlepay"
-            android:layout_marginTop="@dimen/_20sdp"
-            tools:ignore="ContentDescription" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <ImageView
-            android:id="@+id/phonePeBtn"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:visibility="gone"
-            android:layout_marginVertical="@dimen/_20sdp"
-            android:src="@drawable/phonepe"
-            tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/phonePeBtn"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/phone_pe_logo"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/googlePayBtn"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/googlepay"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/paytmBtn"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/paytm_logo"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/amazonBtn"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/amazon_pay"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/wtsappPayBtn"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/whatsapp_logo"
+                android:layout_margin="@dimen/_10sdp"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/lightGray" />
 
         <TextView
-            android:id="@+id/otherPaymentBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/addNewUPI"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
             android:textStyle="bold"
-            android:text="@string/other_payment_types"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/_10sdp"
+            android:drawableStart="@drawable/ic_addmore_blue"
+            android:text="@string/add_new_upi"
             android:textColor="@color/blue"
-            android:textSize="@dimen/sub_text" />
+            android:textSize="@dimen/sub_text"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/_10sdp"
+            android:text="@string/saved_payment_options"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/phonePeBtnOne"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/phone_pe_logo"
+                android:layout_margin="@dimen/_5sdp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/phonePeOne"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/_10sdp"
+                android:text="99895XXXX@ybl"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text"
+                tools:ignore="RtlSymmetry" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/lightGray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/googlePayBtnOne"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/googlepay"
+                android:layout_margin="@dimen/_5sdp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/googlePayOne"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/_10sdp"
+                android:text="99895xxxx@okicici"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text"
+                tools:ignore="RtlSymmetry" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/lightGray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/wtsappBtnOne"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/whatsapp_logo"
+                android:layout_margin="@dimen/_5sdp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/wtsappOne"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/_10sdp"
+                android:text="99895xxxx@okicici"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text"
+                tools:ignore="RtlSymmetry" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/lightGray"/>
+
+        <TextView
+            android:id="@+id/addCreditDebitCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/_10sdp"
+            android:drawableStart="@drawable/ic_addmore_blue"
+            android:text="@string/add_new_credit_debit_atm_card"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/sub_text"
+            tools:ignore="UseCompatTextViewDrawableXml" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/_10sdp"
+        android:text="@string/net_banking"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/_15sdp">
+
+        <TextView
+            android:id="@+id/payableAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/title"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/_10sdp"
+            android:text="Rs. 59.00"/>
+
+        <TextView
+            android:id="@+id/proceedToPayBtn"
+            style="@style/filled_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingVertical="@dimen/_5sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:background="@drawable/user_btn_bg"
+            android:text="@string/proceed_to_pay" />
+
+    </RelativeLayout>
 
 </LinearLayout>
