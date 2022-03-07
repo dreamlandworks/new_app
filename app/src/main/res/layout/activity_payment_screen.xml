@@ -140,13 +140,25 @@
             android:layout_height="@dimen/_1sdp"
             android:background="@color/lightGray" />
 
+        <EditText
+            android:id="@+id/enterUPIid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/text"
+            android:layout_marginHorizontal="@dimen/_30sdp"
+            android:hint="@string/enter_upi_id"
+            android:gravity="center"
+            tools:ignore="Autofill" />
+
         <TextView
             android:id="@+id/addNewUPI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
             android:textStyle="bold"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:drawablePadding="@dimen/_10sdp"
             android:drawableStart="@drawable/ic_addmore_blue"
             android:text="@string/add_new_upi"
@@ -162,7 +174,14 @@
             android:layout_margin="@dimen/_10sdp"
             android:text="@string/saved_payment_options"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upisRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -196,11 +215,13 @@
         </LinearLayout>
 
         <View
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/lightGray"/>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -234,11 +255,13 @@
         </LinearLayout>
 
         <View
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/lightGray"/>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -272,6 +295,7 @@
         </LinearLayout>
 
         <View
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/lightGray"/>
@@ -282,7 +306,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
             android:textStyle="bold"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:drawablePadding="@dimen/_10sdp"
             android:drawableStart="@drawable/ic_addmore_blue"
             android:text="@string/add_new_credit_debit_atm_card"

@@ -408,7 +408,7 @@ class ProviderDashboard : AppCompatActivity() {
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                     } else {
                         progressDialog.dismiss()
-                        snackBar(binding.bottomNavigationView, jsonResponse.getString("status_message"))
+                        snackBar(binding.bottomNavigationView, jsonResponse.getString("message"))
                     }
                 } catch (e: java.lang.Exception) {
                     snackBar(binding.bottomNavigationView, e.message!!)

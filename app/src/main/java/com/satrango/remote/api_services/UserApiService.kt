@@ -15,6 +15,10 @@ import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReq
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
+import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiReqModel
+import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiResModel
+import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiReqModel
+import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiResModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
@@ -468,5 +472,15 @@ interface UserApiService {
     suspend fun getCities(
         @Query("key") key: String
     ): CitiesResModel
+
+    @POST(UserApiEndPoints.SAVE_USER_UPI)
+    suspend fun saveUserUpi(
+        @Body requestBody: SaveUserUpiReqModel
+    ): SaveUserUpiResModel
+
+    @POST(UserApiEndPoints.GET_USER_UPI)
+    suspend fun getUserUpi(
+        @Body requestBody: GetUserUpiReqModel
+    ): GetUserUpiResModel
 
 }

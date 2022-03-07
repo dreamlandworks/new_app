@@ -183,7 +183,7 @@
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
-        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.19311676025390626" />
+        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.23697916666666666" />
@@ -200,6 +200,7 @@
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/reschedule_requested_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/reschedule_status_change_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/upi_row.xml" value="0.335" />
         <entry key="app/src/main/res/layout/user_alert_row.xml" value="0.23697916666666666" />
       </map>
     </option>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+        <ImageView
+            android:id="@+id/upiImage"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:src="@drawable/phone_pe_logo"
+            android:layout_margin="@dimen/_5sdp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/upiId"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/_10sdp"
+            android:text="99895XXXX@ybl"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text"
+            tools:ignore="RtlSymmetry" />
+
+        <RadioButton
+            android:id="@+id/upiRadioBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:checked="false" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/lightGray"/>
+
+</LinearLayout>

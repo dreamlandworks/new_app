@@ -77,5 +77,7 @@ object UserApiEndPoints {
     final const val CITIES = "user/get_cities_list"
     final const val AUTOCOMPLETE_BY_CATEGORY = "user/autocomplete_by_category"
     final const val COMPLETE_BOOKING = "user/complete_booking"
+    final const val SAVE_USER_UPI = "user/save_user_upi"
+    final const val GET_USER_UPI = "user/get_user_upi"
 
 }

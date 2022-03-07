@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -31,6 +32,8 @@ import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansRe
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansViewModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiReqModel
+import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiReqModel
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
@@ -140,6 +143,45 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 //                makePayment()
             }
 
+            addNewUPI.setOnClickListener {
+                if (enterUPIid.visibility == View.VISIBLE) {
+                    if (enterUPIid.text.toString().trim().isNotEmpty()) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val response = RetrofitBuilder.getUserRetrofitInstance()
+                                .saveUserUpi(SaveUserUpiReqModel(RetrofitBuilder.USER_KEY, enterUPIid.text.toString().trim(), UserUtils.getUserId(this@PaymentScreen).toInt()))
+                            if (response.status == 200) {
+                                enterUPIid.visibility = View.GONE
+                                loadSavedUpiList()
+                            } else {
+                                toast(this@PaymentScreen, response.message)
+                            }
+                        }
+                    } else {
+                        toast(this@PaymentScreen, "Enter UPI ID")
+                    }
+                } else {
+                    enterUPIid.visibility = View.VISIBLE
+                    addNewUPI.text = "Add New UPI ID"
+                }
+            }
+
+            loadSavedUpiList()
+        }
+    }
+
+    private fun loadSavedUpiList() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserUpi(GetUserUpiReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt()))
+                if (response.status == 200) {
+                    binding.upisRV.layoutManager = LinearLayoutManager(this@PaymentScreen)
+                    binding.upisRV.adapter = UpiAdapter(response.data)
+                } else {
+                    toast(this@PaymentScreen, response.message)
+                }
+            } catch (e: java.lang.Exception) {
+                toast(this@PaymentScreen, e.message!!)
+            }
         }
     }
 
@@ -163,8 +205,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     inVoiceDetails.booking_details.extra_demand_total_amount,
                     UserUtils.getUserId(this@PaymentScreen)
                 )
-//                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-//                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
+                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
+                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
                     showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id, inVoiceDetails.booking_details.sp_id)
@@ -358,7 +400,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
     }
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
-        var finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
+        var finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
         val finalUserId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
         var finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
         if (finalWalletBalance.toInt() <= 0) {
@@ -376,14 +418,25 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
             }
         }
+        if (finalAmount <= finalWalletBalance.toInt()) {
+            if (binding.walletBalanceCheck.isChecked) {
+                updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance)
+            } else {
+                toast(this, "Please select wallet balance")
+            }
+        } else {
+            updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance)
+        }
+    }
 
+    private fun updateBookingStatusInServer(finalAmount: String, status: String, paymentResponse: String, finalUserId: Int, finalWalletBalance: String) {
         val requestBody = PaymentConfirmReqModel(
-            finalAmount.toString(),
+            finalAmount,
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
             status,
-            paymentResponse!!,
+            paymentResponse,
             finalUserId,
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt(),
@@ -392,7 +445,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             finalWalletBalance
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
-//        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
+        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this) {

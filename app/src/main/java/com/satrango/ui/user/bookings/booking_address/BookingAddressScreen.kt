@@ -33,7 +33,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
-import com.razorpay.Checkout
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingAddressScreenBinding
@@ -41,7 +40,6 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
@@ -50,6 +48,7 @@ import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.booking_date_time.MonthsInterface
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressScreen
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
@@ -68,10 +67,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.round
 
 
@@ -228,7 +225,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.time_slot_from =
                     (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
 
-                when (Gson().fromJson(UserUtils.getSelectedSPDetails(this@BookingAddressScreen), Data::class.java).category_id) {
+                when (Gson().fromJson(
+                    UserUtils.getSelectedSPDetails(this@BookingAddressScreen),
+                    Data::class.java
+                ).category_id) {
                     "1" -> {
                         bookSingleMoveServiceProvider()
                     }
@@ -237,7 +237,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                     "3" -> {
                         UserUtils.addressList = ArrayList()
-                        addressList = addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                        addressList =
+                            addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                         addressList.forEach {
                             if (it.isSelected) {
                                 UserUtils.addressList.add(it)
@@ -247,7 +248,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
                             Log.e("ADDRESS:", Gson().toJson(UserUtils.addressList))
-                            UserUtils.addressList = UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                            UserUtils.addressList =
+                                UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                             startActivity(Intent(this, BookingMultiMoveAddressScreen::class.java))
                         }
                     }
@@ -267,8 +269,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            UserUtils.addressList = UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
-                            val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
+                            UserUtils.addressList =
+                                UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                            val intent = Intent(
+                                this@BookingAddressScreen,
+                                BookingMultiMoveAddressScreen::class.java
+                            )
                             startActivity(intent)
                         }
                     }
@@ -294,10 +300,16 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         var cgst = "0"
         var sgst = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-            spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
-            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
-            cgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
-            sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
+            spId = Gson().fromJson(
+                UserUtils.getSelectedSPDetails(this),
+                Data::class.java
+            ).users_id.toInt()
+            finalAmount =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            cgst =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
+            sgst =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
         if (UserUtils.getFromInstantBooking(this)) {
             var address = ""
@@ -343,33 +355,52 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude,
                 cgst,
                 sgst,
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
+                Gson().fromJson(
+                    UserUtils.getSelectedSPDetails(this),
+                    Data::class.java
+                ).profession_id
             )
 //            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
-                val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().bookSingleMoveProvider(requestBody)
-                val jsonResponse = JSONObject(bookingResponse.string())
-                progressDialog.show()
-                if (jsonResponse.getInt("status") == 200) {
-                    progressDialog.dismiss()
-                    showWaitingForSPConfirmationDialog()
-                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
-                        Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
-                        UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
-                        UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
-                        UserUtils.sendFCMtoAllServiceProviders(
-                            this@BookingAddressScreen,
-                            UserUtils.getBookingId(this@BookingAddressScreen),
-                            "user",
-                            "accepted|${UserUtils.bookingType}"
-                        )
+                try {
+                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()
+                        .bookSingleMoveProvider(requestBody)
+                    val jsonResponse = JSONObject(bookingResponse.string())
+                    progressDialog.show()
+                    if (jsonResponse.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        showWaitingForSPConfirmationDialog()
+                        if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
+                            UserUtils.saveBookingId(
+                                this@BookingAddressScreen,
+                                jsonResponse.getInt("booking_id").toString()
+                            )
+                            UserUtils.saveBookingRefId(
+                                this@BookingAddressScreen,
+                                jsonResponse.getString("booking_ref_id")
+                            )
+                            UserUtils.sendFCMtoAllServiceProviders(
+                                this@BookingAddressScreen,
+                                UserUtils.getBookingId(this@BookingAddressScreen),
+                                "user",
+                                "accepted|${UserUtils.bookingType}"
+                            )
+                        } else {
+                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
+                            UserUtils.sendFCMtoSelectedServiceProvider(
+                                this@BookingAddressScreen,
+                                UserUtils.getBookingId(this@BookingAddressScreen),
+                                "user"
+                            )
+                        }
                     } else {
-                        Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
-                        UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
+                        progressDialog.dismiss()
+                        toast(this@BookingAddressScreen, jsonResponse.getString("status_message"))
                     }
-                } else {
-                    progressDialog.dismiss()
+                } catch (e: java.lang.Exception) {
+                    toast(this@BookingAddressScreen, e.message!!)
                 }
             }
         } else {
@@ -417,40 +448,55 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude,
                 cgst,
                 sgst,
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
+                Gson().fromJson(
+                    UserUtils.getSelectedSPDetails(this),
+                    Data::class.java
+                ).profession_id
             )
 //            toast(this, Gson().toJson(requestBody))
             Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
 
             CoroutineScope(Dispatchers.Main).launch {
-                val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().bookSingleMoveProvider(requestBody)
-                val jsonResponse = JSONObject(bookingResponse.string())
-                progressDialog.show()
-                if (jsonResponse.getInt("status") == 200) {
-                    progressDialog.dismiss()
-                    UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
-                    UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
-                    showWaitingForSPConfirmationDialog()
-                    if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
-                        if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
-                            UserUtils.sendFCMtoAllServiceProviders(
+                try {
+                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()
+                        .bookSingleMoveProvider(requestBody)
+                    val jsonResponse = JSONObject(bookingResponse.string())
+                    progressDialog.show()
+                    if (jsonResponse.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        UserUtils.saveBookingId(
+                            this@BookingAddressScreen,
+                            jsonResponse.getInt("booking_id").toString()
+                        )
+                        UserUtils.saveBookingRefId(
+                            this@BookingAddressScreen,
+                            jsonResponse.getString("booking_ref_id")
+                        )
+                        showWaitingForSPConfirmationDialog()
+                        if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
+                            if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
+                                UserUtils.sendFCMtoAllServiceProviders(
+                                    this@BookingAddressScreen,
+                                    UserUtils.getBookingId(this@BookingAddressScreen),
+                                    "user",
+                                    UserUtils.bookingType
+                                )
+                            } else {
+                                snackBar(binding.nextBtn, "No Internet Connection!")
+                            }
+                        } else {
+                            UserUtils.sendFCMtoSelectedServiceProvider(
                                 this@BookingAddressScreen,
                                 UserUtils.getBookingId(this@BookingAddressScreen),
-                                "user",
-                                UserUtils.bookingType
+                                "user"
                             )
-                        } else {
-                            snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
-                            this@BookingAddressScreen,
-                            UserUtils.getBookingId(this@BookingAddressScreen),
-                            "user"
-                        )
+                        progressDialog.dismiss()
+                        toast(this@BookingAddressScreen, jsonResponse.getString("status_message"))
                     }
-                } else {
-                    progressDialog.dismiss()
+                } catch (e: java.lang.Exception) {
+                    toast(this@BookingAddressScreen, e.message!!)
                 }
             }
 //            viewModel.singleMoveBooking(this, requestBody).observe(this) {
@@ -537,7 +583,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     waitingDialog.dismiss()
                     try {
                         val bookingFactory = ViewModelFactory(BookingRepository())
-                        val bookingViewModel = ViewModelProvider(this@BookingAddressScreen, bookingFactory)[BookingViewModel::class.java]
+                        val bookingViewModel = ViewModelProvider(
+                            this@BookingAddressScreen,
+                            bookingFactory
+                        )[BookingViewModel::class.java]
                         val requestBody = ProviderResponseReqModel(
                             data.final_amount.toString(),
                             UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
@@ -795,9 +844,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         var sgst = "0"
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
-            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
-            cgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
-            sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
+            finalAmount =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+            cgst =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
+            sgst =
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
         val requestBody = BlueCollarBookingReqModel(
@@ -951,7 +1003,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             if (responses.size == spDetails.data.size) {
                 waitingDialog.dismiss()
                 val bookingFactory = ViewModelFactory(BookingRepository())
-                val bookingViewModel = ViewModelProvider(this@BookingAddressScreen, bookingFactory)[BookingViewModel::class.java]
+                val bookingViewModel = ViewModelProvider(
+                    this@BookingAddressScreen,
+                    bookingFactory
+                )[BookingViewModel::class.java]
                 val requestBody = ProviderResponseReqModel(
                     data.final_amount.toString(),
                     UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
