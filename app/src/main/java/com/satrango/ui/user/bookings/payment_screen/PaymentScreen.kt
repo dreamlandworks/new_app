@@ -169,6 +169,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 }
             }
 
+
             googlePayBtn.setOnClickListener {
                 when {
                     FROM_PROVIDER_PLANS -> {
