@@ -52,6 +52,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import android.app.Activity
 import com.bumptech.glide.Glide
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.toast
@@ -208,7 +209,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-                                requestOTP("User")
+                                checkBookingStatusList()
                             } else {
                                 otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString())
                             }
@@ -472,20 +473,51 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         fourthNo.text = otp[3].toString()
         submitBtn.text = "Close"
         closeBtn.setOnClickListener {
-            ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
-            ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
-            ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
-            startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
+            divertToProviderRatingScreen()
         }
         submitBtn.setOnClickListener {
-            ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
-            ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
-            ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
-            startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
+            divertToProviderRatingScreen()
         }
         bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.show()
+    }
+
+    private fun divertToProviderRatingScreen() {
+        ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
+        ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
+        ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+        startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
+    }
+
+    private fun checkBookingStatusList() {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    var isFound = false
+                    for (status in it.data!!.booking_status_details) {
+                        if (status.status_id == "22") {
+                            isFound = !isFound
+                        }
+                    }
+                    if (isFound) {
+                        requestOTP("User")
+                    } else {
+                        divertToProviderRatingScreen()
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.timeLapsedMins, it.message!!)
+                }
+            }
+        }
     }
 
 }
