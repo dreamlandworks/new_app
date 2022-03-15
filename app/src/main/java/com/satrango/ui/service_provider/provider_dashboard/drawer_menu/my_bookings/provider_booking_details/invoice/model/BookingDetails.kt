@@ -11,6 +11,7 @@ data class BookingDetails(
     val estimate_type: String,
     val time_lapsed: String,
     val cgst_tax: String,
+    val finish_OTP: String,
     val sgst_tax: String,
     val extra_demand_total_amount: String,
     val material_advance: String,

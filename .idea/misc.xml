@@ -192,6 +192,8 @@
         <entry key="app/src/main/res/layout/activity_user_booking_cancel_screen.xml" value="0.4272474513438369" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/booking_closing_dialog.xml" value="0.2543822146216332" />
+        <entry key="app/src/main/res/layout/booking_status_change_otp_dialog.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/booking_status_row.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_user_alert_screen.xml" value="0.24427083333333333" />

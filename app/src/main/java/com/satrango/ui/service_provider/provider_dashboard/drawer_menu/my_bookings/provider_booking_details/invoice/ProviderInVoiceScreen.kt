@@ -187,7 +187,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     binding.apply {
                         workStartedAt.text = response.booking_details.started_at
                         workCompletedAt.text = response.booking_details.completed_at
-                        timeLapsedMins.text = response.booking_details.time_lapsed
+                        if (isProvider(this@ProviderInVoiceScreen)) {
+                            timeLapsedText.text = resources.getString(R.string.otp)
+                            timeLapsedMins.text = response.booking_details.finish_OTP
+                        } else {
+                            timeLapsedMins.text = response.booking_details.time_lapsed
+                        }
                         cgst.text = response.booking_details.cgst_tax
                         sgst.text = response.booking_details.sgst_tax
                         technicianCharges.text = response.booking_details.technician_charges
@@ -202,8 +207,10 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         }
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
-                            if (isProvider(this@ProviderInVoiceScreen)) {
+                            if (!isProvider(this@ProviderInVoiceScreen)) {
                                 requestOTP("User")
+                            } else {
+                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString())
                             }
                         }
                     }
@@ -443,6 +450,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showotpInDialog(otp: String) {
+        binding.timeLapsedMins.text = otp
         val bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = layoutInflater.inflate(R.layout.booking_closing_dialog, null)
         val title = bottomSheet.findViewById<TextView>(R.id.title)

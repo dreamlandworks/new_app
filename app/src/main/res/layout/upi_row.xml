@@ -31,6 +31,19 @@
             android:textSize="@dimen/text"
             tools:ignore="RtlSymmetry" />
 
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:padding="@dimen/_10sdp"
+            android:textStyle="bold"
+            android:text="Rs. 0.00"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text"
+            tools:ignore="RtlSymmetry" />
+
         <RadioButton
             android:id="@+id/upiRadioBtn"
             android:layout_width="wrap_content"

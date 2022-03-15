@@ -334,11 +334,14 @@
             android:id="@+id/payableAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/title"
-            android:textStyle="bold"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="Rs. 59.00"
             android:textColor="@color/black"
-            android:layout_margin="@dimen/_10sdp"
-            android:text="Rs. 59.00"/>
+            android:textSize="@dimen/title"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/proceedToPayBtn"

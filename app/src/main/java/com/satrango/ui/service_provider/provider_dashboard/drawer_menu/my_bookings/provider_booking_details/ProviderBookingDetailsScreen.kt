@@ -87,8 +87,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -345,8 +344,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
     private fun finalExpenditureDialog() {
         val dialog = BottomSheetDialog(this)
-        val dialogView =
-            layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
+        val dialogView = layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val raisedExtraDemand = dialogView.findViewById<TextView>(R.id.raiseExtraDemand)
         val finalExpenditure = dialogView.findViewById<EditText>(R.id.finalExpenditure)
@@ -405,11 +403,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -481,8 +475,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             if (data.booking_details.extra_demand_total_amount != "0") {
                 if (data.booking_details.extra_demand_status != "0") {
                     val extraDemandAcceptRejectResponseDialog = BottomSheetDialog(this)
-                    val dialogView =
-                        layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
+                    val dialogView = layoutInflater.inflate(R.layout.provider_extra_demand_accept_dialog, null)
                     val materialCharges = dialogView.findViewById<TextView>(R.id.materialCharges)
                     val technicianCharges =
                         dialogView.findViewById<TextView>(R.id.technicianCharges)

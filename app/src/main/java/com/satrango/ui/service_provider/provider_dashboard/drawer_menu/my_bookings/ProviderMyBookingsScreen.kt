@@ -460,11 +460,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 startActivity(intent)
                                 progressDialog.dismiss()
                                 dialog.dismiss()
-                                UserUtils.sendOTPResponseFCM(
-                                    this,
-                                    userFcmToken,
-                                    "$bookingId|$categoryId|$userId|sp"
-                                )
+                                UserUtils.sendOTPResponseFCM(this, userFcmToken, "$bookingId|$categoryId|$userId|sp")
                                 snackBar(binding.recyclerView, "Booking Started!")
                             }
                             is NetworkResponse.Failure -> {

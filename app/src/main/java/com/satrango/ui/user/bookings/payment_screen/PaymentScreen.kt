@@ -73,6 +73,9 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         var FROM_USER_BOOKING_ADDRESS = false
         var FROM_COMPLETE_BOOKING = false
         var FROM_PROVIDER_BOOKING_RESPONSE = false
+        var finalAmount: Int = 0
+        var finalWalletBalance: String = "0"
+        var walletBalanceChecked = false
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,9 +89,17 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
         binding.apply {
 
-            val walletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
-            currentBalance.text = "Total Balance: $walletBalance"
-            walletBalanceCheck.isClickable = walletBalance.toInt() != 0
+            finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
+            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
+            walletBalance.text = "Wallet Balance - $finalWalletBalance"
+            currentBalance.text = "Deducted from Wallet - $finalAmount"
+            walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
+            payableAmount.text = finalAmount.toString()
+            payableBalance.text = resources.getString(R.string.total_amount_payable) + finalAmount.toString()
+            walletBalanceCheck.setOnCheckedChangeListener { compoundButton, checked ->
+                walletBalanceChecked = checked
+                toast(this@PaymentScreen, walletBalanceChecked.toString())
+            }
 
             googlePayBtn.setOnClickListener {
                 when {
