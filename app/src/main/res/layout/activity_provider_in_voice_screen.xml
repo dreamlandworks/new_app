@@ -274,6 +274,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -281,7 +282,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/work_started_at"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text" />
@@ -293,7 +293,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text" />
@@ -303,6 +302,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -310,7 +310,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/work_completed_at"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text" />
@@ -322,7 +321,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text" />
@@ -332,6 +330,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -339,7 +338,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/total_time_lapsed"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text" />
@@ -351,7 +349,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/_0"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text" />
@@ -372,16 +369,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_20sdp">
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/technician_charges"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -393,7 +388,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -403,6 +397,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -410,7 +405,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/material_cost"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -422,7 +416,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -432,6 +425,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -439,7 +433,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/cgst"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -451,7 +444,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -461,6 +453,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -468,7 +461,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="@string/sgst"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -480,7 +472,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="start"
                     android:text="@string/rs_0_00"
                     android:textColor="@color/grey_400"
                     android:textSize="@dimen/text" />
@@ -503,7 +494,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:gravity="end"
-                    android:text="@string/total_dues"
+                    android:text="@string/total_exp"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text" />
 

@@ -10,6 +10,7 @@ data class BookingDetails(
     val estimate_time: String,
     val estimate_type: String,
     val time_lapsed: String,
+    val paid: String,
     val cgst_tax: String,
     val finish_OTP: String,
     val sgst_tax: String,
@@ -17,5 +18,6 @@ data class BookingDetails(
     val material_advance: String,
     val technician_charges: String,
     val expenditure_incurred: String,
+    val final_dues: String,
     val dues: String
 )

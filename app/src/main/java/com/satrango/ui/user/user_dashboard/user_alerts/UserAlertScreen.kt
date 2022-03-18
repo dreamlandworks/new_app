@@ -25,6 +25,8 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
@@ -103,11 +105,7 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            requireActivity(),
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
+        progressDialog = BeautifulProgressDialog(requireActivity(), BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
         progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -127,11 +125,17 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    if (it.data!!.isNotEmpty()) {
+                    val nonActionable = ArrayList<Regular>()
+                    for (data in it.data!!) {
+                        if (data.status == "2") {
+                            nonActionable.add(data)
+                        }
+                    }
+                    if (it.data.isNotEmpty()) {
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = RegularAlertAdapter(it.data)
-                        binding.regularBadge.text = it.data.size.toString()
-                        updateAlertsToRead("1", it.data.last().id)
+                        binding.regularBadge.text = nonActionable.size.toString()
+                        updateAlertsToRead("1", it.data.reversed().last().id)
                     } else {
                         binding.regularBadge.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), this)
@@ -165,8 +169,14 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
-                        binding.alertsRV.adapter = UserAlertsAdapter(it.data, this)
-                        binding.actionNeededBadge.text = it.data.size.toString()
+                        val actionNeeded = ArrayList<Action>()
+                        for (data in it.data) {
+                            if (data.status == "2") {
+                                actionNeeded.add(data)
+                            }
+                        }
+                        binding.alertsRV.adapter = UserAlertsAdapter(actionNeeded, this)
+                        binding.actionNeededBadge.text = actionNeeded.size.toString()
                         binding.note.visibility = View.GONE
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE

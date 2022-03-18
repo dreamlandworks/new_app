@@ -164,7 +164,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
             binding.markCompleteBtn.setOnClickListener {
                 if (response.booking_details.extra_demand_total_amount != "0") {
                     ProviderInVoiceScreen.isExtraDemandRaised = "1"
-                    if (response.booking_details.extra_demand_status == "2") {
+                    if (response.booking_details.extra_demand_status == "1") {
                         finalExpenditureDialog()
                     } else {
                         divertToInvoiceScreen()

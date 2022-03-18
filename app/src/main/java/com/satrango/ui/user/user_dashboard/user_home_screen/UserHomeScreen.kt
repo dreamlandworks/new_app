@@ -1,6 +1,7 @@
 package com.satrango.ui.user.user_dashboard.user_home_screen
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,16 +9,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.BaseFragment
+import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.FragmentUserHomeScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesAdapter
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesInterface
@@ -26,12 +33,17 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserCategoryModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowserSubCategoryModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
 import com.satrango.utils.*
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.HttpException
-import java.io.File
 import java.net.SocketTimeoutException
 
 class UserHomeScreen :
@@ -122,7 +134,7 @@ class UserHomeScreen :
 
         binding.categoryRV.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        viewModel.getBrowseCategories(requireContext()).observe(viewLifecycleOwner, {
+        viewModel.getBrowseCategories(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -138,7 +150,7 @@ class UserHomeScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
 
         updatePopularServices("1")
 
@@ -147,7 +159,7 @@ class UserHomeScreen :
     private fun updatePopularServices(categoryId: String) {
         binding.userPopularServicesRv.layoutManager =
             GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
-        viewModel.getPopularServicesList(requireContext(), categoryId).observe(viewLifecycleOwner, {
+        viewModel.getPopularServicesList(requireContext(), categoryId).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -166,8 +178,104 @@ class UserHomeScreen :
                     toast(requireContext(), it.message!!)
                 }
             }
-        })
+        }
 
+        showPendingActionableAlerts()
+
+    }
+
+    private fun showPendingActionableAlerts() {
+        val factory = ViewModelFactory(UserAlertsRepository())
+        val viewModel = ViewModelProvider(this, factory)[UserAlertsViewModel::class.java]
+        viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    if (it.data!!.isNotEmpty()) {
+                        for (data in it.data) {
+                            if (data.type_id == "9" && data.status == "2") {
+                                showPendingActionableAlertsDialog(data)
+                            }
+                        }
+                    }
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun showPendingActionableAlertsDialog(data: Action) {
+        val dialog = Dialog(requireContext())
+        val dialogView = layoutInflater.inflate(R.layout.show_pending_actionable_alerts_dialog, null)
+        val profilePic = dialogView.findViewById<CircleImageView>(R.id.profilePic)
+        val description = dialogView.findViewById<TextView>(R.id.description)
+        val skipBtn = dialogView.findViewById<TextView>(R.id.skipBtn)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        Glide.with(requireContext()).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(R.drawable.images).into(profilePic)
+        description.text = data.description
+        skipBtn.setOnClickListener { dialog.dismiss() }
+        acceptBtn.setOnClickListener {
+            dialog.dismiss()
+            rescheduleStatusChangeApiCall(
+                data.booking_id.toInt(),
+                data.reschedule_id.toInt(),
+                data.user_id.toInt(),
+                12,
+                data.user_id.toInt()
+            )
+        }
+        rejectBtn.setOnClickListener {
+            dialog.dismiss()
+            rescheduleStatusChangeApiCall(
+                data.booking_id.toInt(),
+                data.reschedule_id.toInt(),
+                data.sp_id.toInt(),
+                11,
+                data.user_id.toInt()
+            )
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        val window = dialog.window
+        window!!.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        dialog.show()
+    }
+
+    private fun rescheduleStatusChangeApiCall(
+        bookingId: Int,
+        rescheduleId: Int,
+        spId: Int,
+        statusId: Int,
+        userId: Int
+    ) {
+        val requestBody = RescheduleStatusChangeReqModel(
+            bookingId,
+            RetrofitBuilder.USER_KEY,
+            rescheduleId,
+            spId,
+            statusId,
+            UserAlertScreen.USER_TYPE,
+            userId
+        )
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+                val jsonResponse = JSONObject(response.string())
+                if (jsonResponse.getInt("status") == 200) {
+                    toast(requireContext(), jsonResponse.getString("message"))
+                } else {
+                    toast(requireContext(), jsonResponse.getString("message"))
+                }
+            } catch (e: Exception) {
+                toast(requireContext(), e.message!!)
+            }
+        }
     }
 
     override fun onResume() {

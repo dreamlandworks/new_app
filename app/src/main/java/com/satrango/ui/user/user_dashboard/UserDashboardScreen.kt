@@ -76,7 +76,7 @@ import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.util.*
 
-class UserDashboardScreen : AppCompatActivity() {
+class   UserDashboardScreen : AppCompatActivity() {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var referralId: TextView
@@ -394,13 +394,9 @@ class UserDashboardScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
-                    if (responseData.profile_pic != null) {
-                        val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
-                        loadProfileImage(binding.image)
-                    } else {
-                        UserUtils.saveUserProfilePic(this@UserDashboardScreen, "")
-                    }
+                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
+                    loadProfileImage(binding.image)
                     UserUtils.saveUserName(
                         this@UserDashboardScreen,
                         responseData.fname + " " + responseData.lname

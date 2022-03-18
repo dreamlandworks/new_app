@@ -90,13 +90,17 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         initializeToolbar()
 
         binding.apply {
-
             finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
-            finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
-            walletBalance.text = "Wallet Balance - Rs. $finalWalletBalance"
-            walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
+
+            finalAmount = if (FROM_USER_BOOKING_ADDRESS) {
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
+            } else {
+                amount
+            }
             payableAmount.text = "Rs. $finalAmount"
             payableBalance.text = resources.getString(R.string.total_amount_payable)  + " Rs. " + finalAmount.toString()
+            walletBalance.text = "Wallet Balance - Rs. $finalWalletBalance"
+            walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
             walletBalanceCheck.setOnCheckedChangeListener { compoundButton, checked ->
                 walletBalanceChecked = checked
                 if (checked) {
@@ -389,7 +393,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     private fun saveProviderPlan(paymentId: String?) {
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
-        val finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
+        val finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
 //        val finalAmount = if (UserUtils.data != null) {
 //            round(round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toDouble())).toInt()
 //        } else {

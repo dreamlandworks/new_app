@@ -21,7 +21,6 @@ class UpiAdapter(private val list: List<Data>, private val upiInterface: UpiInte
                     val remainingBalance = PaymentScreen.finalAmount - PaymentScreen.finalWalletBalance.toInt()
                     if (remainingBalance > 0) {
                         binding.amount.text = "Rs. $remainingBalance"
-
                     }
                 } else {
                     binding.amount.text = "Rs. ${PaymentScreen.finalAmount}"

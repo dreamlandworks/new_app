@@ -179,7 +179,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         var cgst = "0"
         var sgst = "0"
         if (data != null) {
-            finalAmount = data.final_amount
+            finalAmount = data.minimum_amount.toInt()
             spId = data.users_id
             cgst = data.CGST_amount
             sgst = data.SGST_amount

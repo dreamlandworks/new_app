@@ -37,22 +37,14 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
-import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
 import android.app.Activity
 import com.bumptech.glide.Glide
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.toast
@@ -164,6 +156,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             binding.backBtn.setTextColor(resources.getColor(R.color.blue))
             binding.totalDueLayout.setBackgroundResource(R.drawable.category_bg)
             binding.nextBtn.setBackgroundResource(R.drawable.category_bg)
+            binding.occupation.text = response.booking_details.sp_profession
         }
         updateInvoice()
     }
@@ -199,17 +192,13 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         technicianCharges.text = response.booking_details.technician_charges
                         materialCharges.text = response.booking_details.expenditure_incurred
                         totalDues.text = response.booking_details.dues
-                        netAmount.text = response.booking_paid_transactions[0].final_dues
+                        netAmount.text = "${response.booking_details.final_dues}.00"
                         totalTimeLapsed.text = response.booking_details.time_lapsed
+                        lessAmount.text = response.booking_details.paid
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
-                        var lessAmountCount = 0.0
-                        for (paid in response.booking_paid_transactions) {
-                            lessAmountCount += paid.amount.toDouble()
-                        }
-                        lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString())
+                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues)
                             } else {
                                 showotpInDialog(response.booking_details.finish_OTP)
                             }
@@ -231,30 +220,30 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-    private fun requestOTP(userType: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId.toInt(), userType)
-                val jsonResponse = JSONObject(response.string())
-                if (jsonResponse.getInt("status") == 200) {
-                    val requestedOTP = jsonResponse.getInt("otp")
-                    UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
-                    if (!isProvider(this@ProviderInVoiceScreen)) {
-                        otpDialog(requestedOTP, bookingId)
-                    } else {
-                        showotpInDialog(requestedOTP.toString())
-                    }
-                } else {
-                    snackBar(binding.amount, jsonResponse.getString("message"))
-                }
-            } catch (e: Exception) {
-                snackBar(binding.amount, e.message!!)
-            }
-        }
-    }
+//    private fun requestOTP(userType: String) {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val response = RetrofitBuilder.getUserRetrofitInstance().getBookingStatusOTP(RetrofitBuilder.USER_KEY, bookingId.toInt(), userType)
+//                val jsonResponse = JSONObject(response.string())
+//                if (jsonResponse.getInt("status") == 200) {
+//                    val requestedOTP = jsonResponse.getInt("otp")
+//                    UserUtils.sendOTPFCM(this@ProviderInVoiceScreen, ViewUserBookingDetailsScreen.FCM_TOKEN, bookingId, requestedOTP.toString())
+//                    if (!isProvider(this@ProviderInVoiceScreen)) {
+//                        otpDialog(requestedOTP, bookingId)
+//                    } else {
+//                        showotpInDialog(requestedOTP.toString())
+//                    }
+//                } else {
+//                    snackBar(binding.amount, jsonResponse.getString("message"))
+//                }
+//            } catch (e: Exception) {
+//                snackBar(binding.amount, e.message!!)
+//            }
+//        }
+//    }
 
     @SuppressLint("SetTextI18n")
-    fun otpDialog(requestedOTP: Int, bookingId: String) {
+    fun otpDialog(requestedOTP: Int, bookingId: String, finalDues: String) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -380,34 +369,40 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
-                    UserUtils.spid = "0"
-                    val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
-                        .observe(this) {
-                            when (it) {
-                                is NetworkResponse.Loading -> {
-                                    progressDialog.show()
-                                }
-                                is NetworkResponse.Success -> {
-                                    progressDialog.dismiss()
-                                    dialog.dismiss()
-                                    dialog.dismiss()
-                                    UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
-                                    PaymentScreen.FROM_USER_PLANS = false
-                                    PaymentScreen.FROM_PROVIDER_PLANS = false
-                                    PaymentScreen.FROM_USER_SET_GOALS = false
-                                    PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
-                                    PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-                                    PaymentScreen.FROM_COMPLETE_BOOKING = true
-                                    startActivity(Intent(this, PaymentScreen::class.java))
-                                }
-                                is NetworkResponse.Failure -> {
-                                    progressDialog.dismiss()
-                                    snackBar(binding.amount, it.message!!)
-                                }
-                            }
-                        }
+                    if (finalDues.toInt() > 0) {
+                        UserUtils.spid = "0"
+                        progressDialog.dismiss()
+                        dialog.dismiss()
+                        dialog.dismiss()
+                        UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
+                        PaymentScreen.amount = finalDues.toInt()
+                        PaymentScreen.FROM_USER_PLANS = false
+                        PaymentScreen.FROM_PROVIDER_PLANS = false
+                        PaymentScreen.FROM_USER_SET_GOALS = false
+                        PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+                        PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+                        PaymentScreen.FROM_COMPLETE_BOOKING = true
+                        startActivity(Intent(this, PaymentScreen::class.java))
+                    } else {
+                        divertToProviderRatingScreen()
+                    }
+
+//                    val factory = ViewModelFactory(MyBookingsRepository())
+//                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+//                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
+//                        .observe(this) {
+//                            when (it) {
+//                                is NetworkResponse.Loading -> {
+//                                    progressDialog.show()
+//                                }
+//                                is NetworkResponse.Success -> {
+//                                }
+//                                is NetworkResponse.Failure -> {
+//                                    progressDialog.dismiss()
+//                                    snackBar(binding.amount, it.message!!)
+//                                }
+//                            }
+//                        }
                 } else {
                     toast(this, "Incorrect OTP")
                 }
@@ -421,17 +416,17 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
-            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-            val otp = intent.getStringExtra(getString(R.string.category_id))!!
-            val userId = intent.getStringExtra(getString(R.string.user_id))!!
+//            val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+//            val otp = intent.getStringExtra(getString(R.string.category_id))!!
+//            val userId = intent.getStringExtra(getString(R.string.user_id))!!
 //            toast(context, "$bookingId|$otp|$userId")
-            if (!isProvider(this@ProviderInVoiceScreen)) {
-                if (!(context as Activity).isFinishing) {
-                    otpDialog(otp.toInt(), bookingId)
-                }
-            } else {
-                showotpInDialog(otp)
-            }
+//            if (!isProvider(this@ProviderInVoiceScreen)) {
+//                if (!(context as Activity).isFinishing) {
+//                    otpDialog(otp.toInt(), bookingId, response.booking_details.final_dues)
+//                }
+//            } else {
+//                showotpInDialog(otp)
+//            }
         }
     }
 

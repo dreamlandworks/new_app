@@ -21,5 +21,6 @@ data class Action(
     val status_code_id: String,
     val type_id: String,
     val updated_on: String,
-    val user_id: String
+    val user_id: String,
+    val sp_id: String,
 )

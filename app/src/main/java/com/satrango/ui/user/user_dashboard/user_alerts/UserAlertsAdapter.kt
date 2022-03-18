@@ -53,6 +53,9 @@ class UserAlertsAdapter(
             if (data.type_id == "2") {
                 alertsInterface.divertToInstallmentsScreen(data.booking_id, data.post_id.toInt())
             }
+            if (data.type_id == "3") {
+                alertsInterface.divertToOfferScreen()
+            }
             if (data.type_id == "7") {
                 alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt())
             }
@@ -65,16 +68,6 @@ class UserAlertsAdapter(
                 } else {
                     alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt(), data.description.trim())
                 }
-            }
-            if (data.type_id == "10") {
-                if (isProvider(binding.profilePic.context)) {
-                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt(), data.reschedule_id.toInt(), data.description.trim())
-                } else {
-                    alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt(), data.reschedule_id.toInt(), data.description.trim())
-                }
-            }
-            if (data.type_id == "3") {
-                alertsInterface.divertToOfferScreen()
             }
         }
     }

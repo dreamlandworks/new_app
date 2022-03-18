@@ -305,7 +305,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 Data::class.java
             ).users_id.toInt()
             finalAmount =
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).minimum_amount.toInt()
             cgst =
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
             sgst =
@@ -849,7 +849,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
             finalAmount =
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).minimum_amount.toInt()
             cgst =
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
             sgst =

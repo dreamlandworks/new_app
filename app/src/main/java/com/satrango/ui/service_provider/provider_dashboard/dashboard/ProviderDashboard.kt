@@ -397,11 +397,10 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
-//                        toast(this@ProviderDashboard, response.booking_details.fcm_token)
-                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
-                        UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         bottomSheetDialog!!.dismiss()
                         Companion.bookingId = "0"
+                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
+                        UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         if (FCMService.notificationManager != null) {
                             FCMService.notificationManager.cancelAll()
@@ -607,6 +606,7 @@ class ProviderDashboard : AppCompatActivity() {
         isProvider(this, true)
         PermissionUtils.checkAndRequestPermissions(this)
         loadUserProfileData()
+        updateSpProfile()
     }
 
     private fun loadUserProfileData() {
@@ -641,9 +641,6 @@ class ProviderDashboard : AppCompatActivity() {
                             // Service Provider Banned
                             alertDialog("Your Service Provider Account has been Banned!")
                         }
-                        else -> {
-                            updateSpProfile()
-                        }
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -666,13 +663,9 @@ class ProviderDashboard : AppCompatActivity() {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
-                    if (responseData.profile_pic != null) {
-                        val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
-                        UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
-                        loadProfileImage(binding.image)
-                    } else {
-                        UserUtils.saveUserProfilePic(this@ProviderDashboard, "")
-                    }
+                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
+                    loadProfileImage(binding.image)
                     UserUtils.saveUserName(this@ProviderDashboard, responseData.fname + " " + responseData.lname)
                     if (responseData.referral_id != null) {
                         UserUtils.saveReferralId(this@ProviderDashboard, responseData.referral_id)

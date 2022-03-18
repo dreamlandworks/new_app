@@ -527,9 +527,10 @@
     <string name="distance_charges">Distance Charges</string>
     <string name="service_charges">Service Charges</string>
     <string name="gst_18">GST(18%)</string>
-    <string name="total_dues">TOTAL DUES</string>
+    <string name="total_dues">TOTAL DUES:</string>
+    <string name="total_exp">TOTAL EXP:</string>
     <string name="booking_charges">Booking Charges</string>
-    <string name="less_amount">LESS AMOUNT</string>
+    <string name="less_amount">LESS PAID:</string>
     <string name="you_have_successfully_completed_a_booking_please_help_us_in_rating_your_experience_with_service_provider">You have successfully completed a booking. Please help us in rating your experience with service provider.</string>
     <string name="please_rate_your_experience">Please rate your experience</string>
     <string name="_0_5">0/5</string>
@@ -701,6 +702,7 @@
     <string name="net_banking">NET BANKING</string>
     <string name="enter_upi_id">Enter UPI Id</string>
     <string name="deducted_from_wallet_rs_0">Deducted from Wallet - Rs. 0</string>
+    <string name="alert">Alert</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

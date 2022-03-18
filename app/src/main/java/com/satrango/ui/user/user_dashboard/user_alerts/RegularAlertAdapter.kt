@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.satrango.R
 import com.satrango.databinding.UserAlertRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
@@ -24,11 +25,15 @@ class RegularAlertAdapter(
         fun bind(data: Regular) {
             binding.rowTitle.text = data.description.trim()
             val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            val formatter = SimpleDateFormat("dd/MM/yyyy")
+            val formatter = SimpleDateFormat("hh:mm a dd/MM/yyyy")
             val outputTime: String = formatter.format(parser.parse(data.created_on))
             binding.rowTime.text = outputTime
             binding.rowLayout.visibility = View.GONE
-            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
+            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+                .error(UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
+            if (data.status == "1") {
+                binding.rootLayout.setBackgroundColor(binding.rootLayout.context.resources.getColor(R.color.grey_800))
+            }
         }
     }
 

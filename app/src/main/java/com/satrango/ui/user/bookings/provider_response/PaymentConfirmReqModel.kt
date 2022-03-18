@@ -12,5 +12,5 @@ data class PaymentConfirmReqModel(
     val users_id: Int,
     val cgst: String,
     val sgst: String,
-    val w_amount: String,
+    val w_amount: String
 )

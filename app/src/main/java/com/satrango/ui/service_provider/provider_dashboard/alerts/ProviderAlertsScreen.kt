@@ -28,6 +28,8 @@ import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatu
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.RegularAlertAdapter
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsAdapter
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
+import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
@@ -107,14 +109,20 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.alertsRV.adapter = RegularAlertAdapter(it.data!!)
-                    binding.regularBadge.text = it.data.size.toString()
+                    val nonActionable = ArrayList<Regular>()
+                    for (data in it.data!!) {
+                        if (data.status == "2") {
+                            nonActionable.add(data)
+                        }
+                    }
+                    binding.alertsRV.adapter = RegularAlertAdapter(it.data)
+                    binding.regularBadge.text = nonActionable.size.toString()
                     if (it.data.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Alerts not found"
                     } else {
-                        binding.regularBadge.text = it.data.size.toString()
-                        updateAlertsToRead("2", it.data.last().id)
+                        binding.regularBadge.text = nonActionable.size.toString()
+                        updateAlertsToRead("2", it.data.reversed().last().id)
                         binding.note.visibility = View.GONE
                     }
                 }
@@ -161,10 +169,15 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    val data = it.data!!
-                    binding.actionNeededBadge.text = it.data.size.toString()
-                    if (data.isNotEmpty()) {
-                        binding.alertsRV.adapter = UserAlertsAdapter(it.data,  this)
+                    val actionNeeded = ArrayList<Action>()
+                    for (data in it.data!!) {
+                        if (data.status == "2") {
+                            actionNeeded.add(data)
+                        }
+                    }
+                    binding.actionNeededBadge.text = actionNeeded.size.toString()
+                    if (actionNeeded.isNotEmpty()) {
+                        binding.alertsRV.adapter = UserAlertsAdapter(actionNeeded,  this)
                         if (it.data.isEmpty()) {
                             binding.note.visibility = View.VISIBLE
                             binding.note.text = "Alerts not found"

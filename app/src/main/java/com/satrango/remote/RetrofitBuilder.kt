@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitBuilder {
 
     const val BASE_URL = "http://dev.satrango.com/"
+//    const val BASE_URL = "https://www.squill.in/"
     const val FCM_URL = "https://fcm.googleapis.com/"
     const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
     const val PROVIDER_KEY = "Dld0F54x99UeL8nZkByWC0BwUEi4aF4O"

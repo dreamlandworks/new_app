@@ -4,7 +4,7 @@ data class BookingStatusDetail(
     val booking_id: String,
     val booking_status_id: String,
     val created_on: String,
-    val description: Any,
+    val description: String,
     val id: String,
     val name: String,
     val sp_id: String,

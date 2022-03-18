@@ -198,12 +198,14 @@
         <entry key="app/src/main/res/layout/booking_status_row.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_user_alert_screen.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/invoice_list_view_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/my_bookings_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/reschedule_requested_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/reschedule_status_change_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/show_pending_actionable_alerts_dialog.xml" value="0.20051303976058144" />
         <entry key="app/src/main/res/layout/upi_row.xml" value="0.335" />
         <entry key="app/src/main/res/layout/user_alert_row.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.2543822146216332" />

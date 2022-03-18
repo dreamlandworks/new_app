@@ -286,7 +286,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             RetrofitBuilder.USER_KEY
         )
         Log.e("JSON", Gson().toJson(requestBody))
-        viewModel.updateProfileInfo(this, requestBody).observe(this, {
+        viewModel.updateProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -302,12 +302,12 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     progressDialog.dismiss()
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun showUserProfile() {
-        viewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this, {
+        viewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -351,7 +351,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     snackBar(binding.applyBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -423,7 +423,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
     @SuppressLint("SetTextI18n")
     private fun deleteAddressOnServer(addressId: String) {
         val requestBody = BrowseCategoryReqModel(addressId, RetrofitBuilder.USER_KEY)
-        viewModel.deleteUserAddress(this, requestBody).observe(this, {
+        viewModel.deleteUserAddress(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     snackBar(binding.applyBtn, "Deleting Address...")
@@ -436,7 +436,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     snackBar(binding.applyBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
