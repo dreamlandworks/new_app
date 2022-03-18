@@ -25,6 +25,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
@@ -33,8 +34,14 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExpenditureIncurredReqModel
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
@@ -47,7 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface {
+class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface, AlertsInterface {
 
     private lateinit var myBookingViewModel: MyBookingsViewModel
     private lateinit var binding: ActivityProviderMyBookingsScreenBinding
@@ -151,7 +158,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status, this)
+                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status, this, this)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -497,5 +504,180 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
 
     override fun onBackPressed() {
         startActivity(Intent(this, ProviderDashboard::class.java))
+    }
+
+    override fun rescheduleUserStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun rescheduleUserAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun rescheduleSPStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun rescheduleSPAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId, description)
+    }
+
+    override fun extraDemandDialog(bookingId: Int, categoryId: Int, userId: Int) {
+
+    }
+
+    override fun divertToInstallmentsScreen(bookingId: String, postJobId: Int) {
+
+    }
+
+    override fun divertToViewBidDetailsScreen(bookingId: String, spId: Int, bidId: Int) {
+
+    }
+
+    override fun divertToOfferScreen() {
+
+    }
+
+    private fun fetchBookingDetails(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+        val requestBody = BookingDetailsReqModel(
+            bookingId,
+            categoryId,
+            RetrofitBuilder.USER_KEY,
+            userId
+        )
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        viewModel.viewBookingDetails(this, requestBody).observe(this) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    val response = it.data!!
+                    showRescheduleDialog(bookingId, response, rescheduleId, userId, description)
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showRescheduleDialog(
+        bookingId: Int,
+        response: BookingDetailsResModel,
+        rescheduleId: Int,
+        userId: Int,
+        description: String
+    ) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
+        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+//        val title = dialogView.findViewById<TextView>(R.id.title)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        noteText.text = description
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        acceptBtn.setOnClickListener {
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId,
+                response.booking_details.sp_id.toInt(),
+                12,
+                userId,
+                ProviderAlertsScreen.USER_TYPE
+            )
+            dialog.dismiss()
+        }
+
+        rejectBtn.setOnClickListener {
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId,
+                response.booking_details.sp_id.toInt(),
+                11,
+                userId,
+                ProviderAlertsScreen.USER_TYPE
+            )
+            dialog.dismiss()
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun rescheduleStatusChangeApiCall(
+        bookingId: Int,
+        rescheduleId: Int,
+        spId: Int,
+        statusId: Int,
+        userId: Int,
+        taskType: String
+    ) {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody = RescheduleStatusChangeReqModel(
+            bookingId,
+            RetrofitBuilder.USER_KEY,
+            rescheduleId,
+            spId,
+            statusId,
+            ProviderAlertsScreen.USER_TYPE,
+            userId
+        )
+//        toast(requireContext(), Gson().toJson(requestBody))
+        viewModel.rescheduleStatusChange(this, requestBody).observe(this) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    snackBar(binding.recyclerView, it.data!!)
+                    updateUI("Pending")
+                    progressDialog.dismiss()
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(this, it.message!!)
+                }
+            }
+        }
     }
 }

@@ -1,37 +1,51 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.satrango.R
+import com.satrango.databinding.ActivityAddBankAccountScreenBinding.inflate
 import com.satrango.databinding.MyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
+import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.UserUtils.isReschedule
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.*
 
-class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
+class MyBookingsAdapter(private val list: List<BookingDetail>,
+private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: MyBookingsRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: MyBookingsRowBinding, alertsInterface: AlertsInterface): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
-
+        val alertsInterface = alertsInterface
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(data: BookingDetail) {
             binding.amount.text = "Rs ${data.amount}"
@@ -201,38 +215,47 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
 
                 }
                 "Pending".lowercase(Locale.getDefault()) -> {
-                    binding.startBtn.visibility = View.GONE
-                    binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
-                    binding.reScheduleBtn.background = binding.reScheduleBtn.resources.getDrawable(R.drawable.user_btn_bg)
                     binding.reScheduleBtn.setTextColor(binding.reScheduleBtn.resources.getColor(R.color.white))
-                    binding.cancelBookingBtn.setOnClickListener {
-                        val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        isProvider(binding.startBtn.context, false)
-                        binding.root.context.startActivity(intent)
+                    if (data.reschedule_status == "10") {
+                        binding.startBtn.text = "Reschedule Request Raised"
+                        binding.startBtn.visibility = View.VISIBLE
+                        binding.cancelBookingBtn.visibility = View.GONE
+                        binding.reScheduleBtn.visibility = View.GONE
+                        binding.startBtn.setOnClickListener {
+                            alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), 0, data.reschedule_id.toInt(), data.reschedule_description)
+                        }
+                    } else {
+                        binding.startBtn.visibility = View.GONE
+                        binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
+                        binding.reScheduleBtn.background = binding.reScheduleBtn.resources.getDrawable(R.drawable.user_btn_bg)
+                        binding.cancelBookingBtn.setOnClickListener {
+                            val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                            isProvider(binding.startBtn.context, false)
+                            binding.root.context.startActivity(intent)
+                        }
+                        binding.reScheduleBtn.setOnClickListener {
+                            ViewBidsScreen.bookingId = data.booking_id.toInt()
+                            UserUtils.re_scheduled_date = data.scheduled_date
+                            UserUtils.re_scheduled_time_slot_from = data.time_slot_id
+                            isReschedule(binding.amount.context, true)
+                            UserUtils.spid = data.sp_id
+                            isProvider(binding.startBtn.context, false)
+                            binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
+                        }
+                        binding.card.setOnClickListener {
+                            ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                            val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                            isProvider(binding.startBtn.context, false)
+                            isPending(binding.startBtn.context, true)
+                            binding.root.context.startActivity(intent)
+                        }
                     }
-                    binding.reScheduleBtn.setOnClickListener {
-                        ViewBidsScreen.bookingId = data.booking_id.toInt()
-                        UserUtils.re_scheduled_date = data.scheduled_date
-                        UserUtils.re_scheduled_time_slot_from = data.time_slot_id
-                        isReschedule(binding.amount.context, true)
-                        UserUtils.spid = data.sp_id
-                        isProvider(binding.startBtn.context, false)
-                        binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
-                    }
-                    binding.card.setOnClickListener {
-                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        isProvider(binding.startBtn.context, false)
-                        isPending(binding.startBtn.context, true)
-                        binding.root.context.startActivity(intent)
-                    }
-
                 }
                 "Completed".lowercase(Locale.getDefault()) -> {
                     binding.timeRemaining.text = "Completed"
@@ -274,13 +297,15 @@ class MyBookingsAdapter(private val list: List<BookingDetail>): RecyclerView.Ada
             }
         }
 
+
+
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(MyBookingsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(MyBookingsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false), alertsInterface)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

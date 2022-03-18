@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -178,7 +179,11 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                         binding.feedBack.setText("")
                         ProviderDashboard.bookingId = "0"
                         UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
-                        ProviderDashboard.bottomSheetDialog!!.dismiss()
+                        if (ProviderDashboard.bottomSheetDialog != null) {
+                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                            }
+                        }
                         snackBar(binding.backBtn, "Booking Rejected Successfully")
                         Handler().postDelayed({
                             onBackPressed()

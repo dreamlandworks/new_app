@@ -37,11 +37,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class UserAlertScreen :
-    BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>(),
+class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreenBinding, UserAlertsRepository>(),
     AlertsInterface {
 
-    private val USER_TYPE: String = "User"
+    companion object {
+        val USER_TYPE: String = "User"
+    }
     private val ACCEPT_OR_REJECT: String = "accept/reject"
     private val CANCEL: String = "cancel"
 

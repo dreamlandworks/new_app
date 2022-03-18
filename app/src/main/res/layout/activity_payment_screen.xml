@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|start"
                     android:paddingStart="@dimen/_20sdp"
-                    android:text="@string/wallet_balance"
+                    android:text="@string/deducted_from_wallet_rs_0"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text"
                     tools:ignore="RtlSymmetry" />
@@ -349,11 +349,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:paddingVertical="@dimen/_5sdp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_15sdp"
             android:background="@drawable/user_btn_bg"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
             android:text="@string/proceed_to_pay" />
 
     </RelativeLayout>

@@ -2,26 +2,36 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyBookingsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
+import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
+import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
@@ -30,8 +40,12 @@ import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
-class UserMyBookingsScreen : AppCompatActivity() {
+class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var viewModel: MyBookingsViewModel
@@ -129,7 +143,7 @@ class UserMyBookingsScreen : AppCompatActivity() {
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = MyBookingsAdapter(list)
+                    binding.recyclerView.adapter = MyBookingsAdapter(list, this)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -160,5 +174,156 @@ class UserMyBookingsScreen : AppCompatActivity() {
 
     override fun onBackPressed() {
         startActivity(Intent(this, UserDashboardScreen::class.java))
+    }
+
+    override fun rescheduleUserStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun rescheduleUserAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+        fetchBookingDetails(bookingId, categoryId, rescheduleId.toString(), description)
+    }
+
+    override fun rescheduleSPStatusCancelDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun rescheduleSPAcceptRejectDialog(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: Int,
+        description: String
+    ) {
+
+    }
+
+    override fun extraDemandDialog(bookingId: Int, categoryId: Int, userId: Int) {
+
+    }
+
+    override fun divertToInstallmentsScreen(bookingId: String, postJobId: Int) {
+
+    }
+
+    override fun divertToViewBidDetailsScreen(bookingId: String, spId: Int, bidId: Int) {
+
+    }
+
+    override fun divertToOfferScreen() {
+
+    }
+
+    private fun fetchBookingDetails(bookingId: Int, categoryId: Int, rescheduleId: String, description: String) {
+        val requestBody = BookingDetailsReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                progressDialog.show()
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (response.status == 200)  {
+                    progressDialog.dismiss()
+                    showRescheduleDialog(bookingId, response, rescheduleId, description)
+                } else {
+                    progressDialog.dismiss()
+                    toast(this@UserMyBookingsScreen, response.message)
+                }
+            } catch (e: Exception) {
+                toast(this@UserMyBookingsScreen, e.message!!)
+            }
+        }
+    }
+
+    private fun rescheduleStatusChangeApiCall(
+        bookingId: Int,
+        rescheduleId: Int,
+        spId: Int,
+        statusId: Int
+    ) {
+        val requestBody = RescheduleStatusChangeReqModel(
+            bookingId,
+            RetrofitBuilder.USER_KEY,
+            rescheduleId,
+            spId,
+            statusId,
+            UserAlertScreen.USER_TYPE,
+            UserUtils.getUserId(this).toInt()
+        )
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
+                val jsonResponse = JSONObject(response.string())
+                toast(this@UserMyBookingsScreen, jsonResponse.getString("message"))
+                updatePendingUI()
+            } catch (e: Exception) {
+                toast(this@UserMyBookingsScreen, e.message!!)
+            }
+        }
+    }
+
+    private fun showRescheduleDialog(
+        bookingId: Int,
+        response: BookingDetailsResModel,
+        rescheduleId: String,
+        description: String
+    ) {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.reschedule_status_change_dialog, null)
+        val noteText = dialogView.findViewById<TextView>(R.id.noteText)
+        val title = dialogView.findViewById<TextView>(R.id.title)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+
+        noteText.setTextColor(resources.getColor(R.color.blue))
+        rejectBtn.setTextColor(resources.getColor(R.color.blue))
+        title.setTextColor(resources.getColor(R.color.blue))
+        rejectBtn.setBackgroundResource(R.drawable.blue_out_line)
+        acceptBtn.setTextColor(resources.getColor(R.color.white))
+        acceptBtn.setBackgroundResource(R.drawable.category_bg)
+        noteText.text = description
+
+        closeBtn.setOnClickListener { dialog.dismiss() }
+
+        acceptBtn.setOnClickListener {
+            dialog.dismiss()
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId.toInt(),
+                response.booking_details.sp_id.toInt(),
+                12
+            )
+        }
+
+        rejectBtn.setOnClickListener {
+            dialog.dismiss()
+            rescheduleStatusChangeApiCall(
+                bookingId,
+                rescheduleId.toInt(),
+                response.booking_details.sp_id.toInt(),
+                11
+            )
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        dialog.show()
     }
 }

@@ -55,10 +55,12 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.round
 
-class PaymentScreen : AppCompatActivity(), PaymentResultListener {
+class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
+    private lateinit var upiList: List<com.satrango.ui.user.bookings.payment_screen.models.Data>
     private lateinit var binding: ActivityPaymentScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
 
@@ -91,14 +93,66 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
 
             finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
             finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
-            walletBalance.text = "Wallet Balance - $finalWalletBalance"
-            currentBalance.text = "Deducted from Wallet - $finalAmount"
+            walletBalance.text = "Wallet Balance - Rs. $finalWalletBalance"
             walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
-            payableAmount.text = finalAmount.toString()
-            payableBalance.text = resources.getString(R.string.total_amount_payable) + finalAmount.toString()
+            payableAmount.text = "Rs. $finalAmount"
+            payableBalance.text = resources.getString(R.string.total_amount_payable)  + " Rs. " + finalAmount.toString()
             walletBalanceCheck.setOnCheckedChangeListener { compoundButton, checked ->
                 walletBalanceChecked = checked
-                toast(this@PaymentScreen, walletBalanceChecked.toString())
+                if (checked) {
+                    currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
+                    if (finalWalletBalance.toInt() >= finalAmount) {
+                        phonePeBtn.isEnabled = false
+                        googlePayBtn.isEnabled = false
+                        paytmBtn.isEnabled = false
+                        amazonBtn.isEnabled = false
+                        wtsappPayBtn.isEnabled = false
+                        upisRV.isEnabled = false
+                        payableAmount.text = "Rs. 0.00"
+                    } else {
+                        phonePeBtn.isEnabled = true
+                        googlePayBtn.isEnabled = true
+                        paytmBtn.isEnabled = true
+                        amazonBtn.isClickable = true
+                        wtsappPayBtn.isEnabled = true
+                        upisRV.isEnabled = true
+                        payableAmount.text = "Rs. ${finalAmount - finalWalletBalance.toInt()}"
+                    }
+                } else {
+                    currentBalance.text = "Deducted from Wallet - Rs. 0"
+                    payableAmount.text = "Rs. $finalAmount"
+                }
+                upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
+//                toast(this@PaymentScreen, walletBalanceChecked.toString())
+            }
+
+            proceedToPayBtn.setOnClickListener {
+                when {
+                    FROM_PROVIDER_PLANS -> {
+//                        startActivity(Intent(this@PaymentScreen, ProviderDashboard::class.java))
+                        saveProviderPlan("paymentId")
+                    }
+                    FROM_USER_PLANS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+                        saveUserPlan("paymentId")
+                    }
+                    FROM_USER_BOOKING_ADDRESS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+                        updateStatusInServer("paymentId", "Success")
+                    }
+                    FROM_USER_SET_GOALS -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+                        updateInstallmentPaymentStatus("Success", "paymentId")
+                    }
+                    FROM_COMPLETE_BOOKING -> {
+//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+                        completeBooking("Success", "paymentId")
+                    }
+                }
             }
 
             googlePayBtn.setOnClickListener {
@@ -186,7 +240,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserUpi(GetUserUpiReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt()))
                 if (response.status == 200) {
                     binding.upisRV.layoutManager = LinearLayoutManager(this@PaymentScreen)
-                    binding.upisRV.adapter = UpiAdapter(response.data)
+                    upiList = response.data
+                    binding.upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
                 } else {
                     toast(this@PaymentScreen, response.message)
                 }
@@ -217,7 +272,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                     UserUtils.getUserId(this@PaymentScreen)
                 )
                 Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
+//                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
                     showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id, inVoiceDetails.booking_details.sp_id)
@@ -226,7 +281,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
                 }
 //                toast(this@PaymentScreen, response.string())
             } catch (e: Exception) {
-                toast(this@PaymentScreen, "Error1:" + e.message!!)
+                toast(this@PaymentScreen, "Error:" + e.message!!)
             }
         }
     }
@@ -456,7 +511,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
             finalWalletBalance
         )
         Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
-        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
+//        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
         val bookingFactory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         viewModel.confirmPayment(this, requestBody).observe(this) {
@@ -550,5 +605,18 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener {
         }
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    override fun updateList(position: Int) {
+        val tempList = ArrayList<com.satrango.ui.user.bookings.payment_screen.models.Data>()
+        for (index in upiList.indices) {
+            if (index == position) {
+                tempList.add(com.satrango.ui.user.bookings.payment_screen.models.Data(upiList[index].upi, upiList[index].upiAdded, upiList[index].userId, true))
+            } else {
+                tempList.add(com.satrango.ui.user.bookings.payment_screen.models.Data(upiList[index].upi, upiList[index].upiAdded, upiList[index].userId, false))
+            }
+        }
+        upiList = tempList
+        binding.upisRV.adapter = UpiAdapter(upiList, this)
     }
 }

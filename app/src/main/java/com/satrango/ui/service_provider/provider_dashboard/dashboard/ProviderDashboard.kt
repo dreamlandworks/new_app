@@ -397,15 +397,15 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
-                        toast(this@ProviderDashboard, response.booking_details.fcm_token)
+//                        toast(this@ProviderDashboard, response.booking_details.fcm_token)
                         UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
+                        bottomSheetDialog!!.dismiss()
+                        Companion.bookingId = "0"
+                        snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         if (FCMService.notificationManager != null) {
                             FCMService.notificationManager.cancelAll()
                         }
-                        Companion.bookingId = "0"
-                        bottomSheetDialog!!.dismiss()
-                        snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                     } else {
                         progressDialog.dismiss()
                         snackBar(binding.bottomNavigationView, jsonResponse.getString("message"))
@@ -440,7 +440,7 @@ class ProviderDashboard : AppCompatActivity() {
                 }
                 time.text = "0$minutes:" + checkDigit(timerTime)
                 timerTime -= 1
-                if (minutes <= 0) {
+                if (minutes < 0) {
                     Companion.bookingId = "0"
                     UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                     bottomSheetDialog!!.dismiss()

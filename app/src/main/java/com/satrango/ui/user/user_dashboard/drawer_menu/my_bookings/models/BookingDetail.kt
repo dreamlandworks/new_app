@@ -4,6 +4,9 @@ data class BookingDetail(
     val amount: String,
     val booking_id: String,
     val booking_status: String,
+    val reschedule_status: String, //10 -> raised , 11 -> reject, 12 -> accept
+    val reschedule_date: String,
+    val reschedule_time: String,
     val category_id: String,
     val details: List<Detail>,
     val estimate_time: String,
@@ -17,6 +20,8 @@ data class BookingDetail(
     val time_slot_id: String,
     val profile_pic: String,
     val sp_fcm_token: String,
+    val reschedule_id: String,
+    val reschedule_description: String,
     val user_fcm_token: String,
     val lname: String,
     val mobile: String,

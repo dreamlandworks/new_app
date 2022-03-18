@@ -21,18 +21,21 @@ import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
+import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isReschedule
 
 class ProviderMyBookingAdapter(
     private val list: List<BookingDetail>,
     private val status: String,
-    private val providerMyBookingInterface: ProviderMyBookingInterface
+    private val providerMyBookingInterface: ProviderMyBookingInterface,
+    private val alertsInterface: AlertsInterface
 ) : RecyclerView.Adapter<ProviderMyBookingAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: ProviderMyBookingsRowBinding) :
+    class ViewHolder(binding: ProviderMyBookingsRowBinding, alertsInterface: AlertsInterface) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
+        val alertsInterface = alertsInterface
 
         @SuppressLint("SetTextI18n")
         fun bind(
@@ -122,18 +125,26 @@ class ProviderMyBookingAdapter(
                     }
                 }
                 status.equals("Pending", ignoreCase = true) -> {
-                    binding.startBtn.text = "Start"
-                    binding.reScheduleBtn.text = "Re-schedule"
-                    binding.cancelBookingBtn.text = "Cancel Booking"
-                    binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
-                    binding.cancelBookingBtn.setOnClickListener {
-                        val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
-                        binding.root.context.startActivity(intent)
+                    if (data.reschedule_status == "10") {
+                        binding.startBtn.text = "Reschedule Request Raised"
+                        binding.reScheduleBtn.visibility = View.GONE
+                        binding.cancelBookingBtn.visibility = View.GONE
+                        binding.startBtn.setOnClickListener {
+                            alertsInterface.rescheduleSPAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.users_id.toInt(), data.reschedule_id.toInt(), data.reschedule_description)
+                        }
+                    } else {
+                        binding.startBtn.text = "Start"
+                        binding.reScheduleBtn.text = "Re-schedule"
+                        binding.cancelBookingBtn.text = "Cancel Booking"
+                        binding.timeRemaining.text = "${data.remaining_days_to_start}d, ${data.remaining_hours_to_start}h, ${data.remaining_minutes_to_start}m to start"
+                        binding.cancelBookingBtn.setOnClickListener {
+                            val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                            binding.root.context.startActivity(intent)
+                        }
                     }
-
                     binding.reScheduleBtn.setOnClickListener {
                         ViewBidsScreen.bookingId = data.booking_id.toInt()
                         UserUtils.re_scheduled_date = data.scheduled_date
@@ -205,7 +216,7 @@ class ProviderMyBookingAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), alertsInterface
         )
     }
 

@@ -700,6 +700,7 @@
     <string name="add_new_credit_debit_atm_card">Add new credit / debit / ATM card</string>
     <string name="net_banking">NET BANKING</string>
     <string name="enter_upi_id">Enter UPI Id</string>
+    <string name="deducted_from_wallet_rs_0">Deducted from Wallet - Rs. 0</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

@@ -37,7 +37,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProviderAlertsScreenBinding, ProviderAlertRepository>(), AlertsInterface {
 
-    private val USER_TYPE: String = "SP"
+    companion object {
+        val USER_TYPE: String = "SP"
+    }
     private val CANCEL: String = "cancel"
     private val ACCEPT_OR_REJECT: String = "accept/reject"
     private lateinit var progressDialog: BeautifulProgressDialog

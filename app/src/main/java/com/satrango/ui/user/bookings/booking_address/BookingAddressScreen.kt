@@ -613,8 +613,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                         if (FCMService.notificationManager != null) {
                                             FCMService.notificationManager.cancelAll()
                                         }
-                                        ProviderDashboard.bookingId = ""
-                                        ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                        ProviderDashboard.bookingId = "0"
+                                        if (ProviderDashboard.bottomSheetDialog != null) {
+                                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                            }
+                                        }
                                         weAreSorryDialog()
                                     }
                                     is NetworkResponse.Failure -> {
@@ -1030,8 +1034,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 if (FCMService.notificationManager != null) {
                                     FCMService.notificationManager.cancelAll()
                                 }
-                                ProviderDashboard.bookingId = ""
-                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                ProviderDashboard.bookingId = "0"
+                                if (ProviderDashboard.bottomSheetDialog != null) {
+                                    if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                        ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                    }
+                                }
                                 weAreSorryDialog()
                             }
                             is NetworkResponse.Failure -> {

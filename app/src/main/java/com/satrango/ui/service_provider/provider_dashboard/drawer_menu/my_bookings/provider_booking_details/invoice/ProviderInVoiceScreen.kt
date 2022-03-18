@@ -209,9 +209,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         lessAmount.text = lessAmountCount.toString()
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-                                checkBookingStatusList()
-                            } else {
                                 otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString())
+                            } else {
+                                showotpInDialog(response.booking_details.finish_OTP)
                             }
                         }
                     }
@@ -382,8 +382,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 if (requestedOTP == otp.toInt()) {
                     UserUtils.spid = "0"
                     val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel =
-                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
                     viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
                         .observe(this) {
                             when (it) {
@@ -488,36 +487,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
         ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
         startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
-    }
-
-    private fun checkBookingStatusList() {
-        val factory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.getBookingStatusList(this, bookingId.toInt()).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    var isFound = false
-                    for (status in it.data!!.booking_status_details) {
-                        if (status.status_id == "22") {
-                            isFound = !isFound
-                        }
-                    }
-                    if (isFound) {
-                        requestOTP("User")
-                    } else {
-                        divertToProviderRatingScreen()
-                    }
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.timeLapsedMins, it.message!!)
-                }
-            }
-        }
     }
 
 }
