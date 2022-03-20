@@ -5,6 +5,7 @@ data class BookingDetail(
     val booking_id: String,
     val booking_status: String,
     val reschedule_status: String, //10 -> raised , 11 -> reject, 12 -> accept
+    val req_raised_by: String,
     val reschedule_date: String,
     val reschedule_time: String,
     val category_id: String,

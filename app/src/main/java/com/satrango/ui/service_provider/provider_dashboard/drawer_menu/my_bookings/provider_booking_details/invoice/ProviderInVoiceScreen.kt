@@ -43,11 +43,17 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
-import android.app.Activity
 import com.bumptech.glide.Glide
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
+import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.lang.Exception
 
 
 class ProviderInVoiceScreen : AppCompatActivity() {
@@ -198,7 +204,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues)
+                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
                             } else {
                                 showotpInDialog(response.booking_details.finish_OTP)
                             }
@@ -243,7 +249,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 //    }
 
     @SuppressLint("SetTextI18n")
-    fun otpDialog(requestedOTP: Int, bookingId: String, finalDues: String) {
+    fun otpDialog(
+        requestedOTP: Int,
+        bookingId: String,
+        finalDues: String,
+        response: ProviderInvoiceResModel
+    ) {
 
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.booking_status_change_otp_dialog, null)
@@ -373,7 +384,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         UserUtils.spid = "0"
                         progressDialog.dismiss()
                         dialog.dismiss()
-                        dialog.dismiss()
+                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
                         UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
                         PaymentScreen.amount = finalDues.toInt()
                         PaymentScreen.FROM_USER_PLANS = false
@@ -384,25 +395,35 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         PaymentScreen.FROM_COMPLETE_BOOKING = true
                         startActivity(Intent(this, PaymentScreen::class.java))
                     } else {
-                        divertToProviderRatingScreen()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            try {
+                                val requestBody = CompleteBookingReqModel(
+                                    "0",
+                                    "0",
+                                    bookingId,
+                                    "0",
+                                    response.booking_details.completed_at,
+                                    RetrofitBuilder.USER_KEY,
+                                    "1",
+                                    "",
+                                    "",
+                                    "0",
+                                    response.booking_details.sp_id,
+                                    response.booking_details.dues,
+                                    UserUtils.getUserId(this@ProviderInVoiceScreen)
+                                )
+                                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
+                                val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
+                                if (JSONObject(response.string()).getInt("status") == 200) {
+                                    divertToProviderRatingScreen()
+                                } else {
+                                    toast(this@ProviderInVoiceScreen,"Error:" + response.string())
+                                }
+                            } catch (e: Exception) {
+                                toast(this@ProviderInVoiceScreen, "Error:" + e.message!!)
+                            }
+                        }
                     }
-
-//                    val factory = ViewModelFactory(MyBookingsRepository())
-//                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-//                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
-//                        .observe(this) {
-//                            when (it) {
-//                                is NetworkResponse.Loading -> {
-//                                    progressDialog.show()
-//                                }
-//                                is NetworkResponse.Success -> {
-//                                }
-//                                is NetworkResponse.Failure -> {
-//                                    progressDialog.dismiss()
-//                                    snackBar(binding.amount, it.message!!)
-//                                }
-//                            }
-//                        }
                 } else {
                     toast(this, "Incorrect OTP")
                 }
@@ -478,9 +499,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     }
 
     private fun divertToProviderRatingScreen() {
-        ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
-        ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
-        ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
+        ProviderRatingReviewScreen.bookingId = bookingId
+        ProviderRatingReviewScreen.categoryId = categoryId
+        ProviderRatingReviewScreen.userId = userId
         startActivity(Intent(this@ProviderInVoiceScreen, ProviderRatingReviewScreen::class.java))
     }
 

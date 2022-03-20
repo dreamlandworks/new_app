@@ -27,6 +27,7 @@ data class BookingDetail(
     val started_at: String,
     val reschedule_id: String,
     val reschedule_status: String,
+    val req_raised_by: String,
     val reschedule_date: String,
     val reschedule_time: String,
     val reschedule_description: String,

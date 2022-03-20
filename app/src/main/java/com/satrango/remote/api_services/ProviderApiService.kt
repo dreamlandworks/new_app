@@ -26,6 +26,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderPostBidReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.models.ProviderPostBidResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ChangeBookingStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderPostRequestInstallmentResModel
@@ -236,6 +237,11 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.ID_PROOF)
     suspend fun uploadIdProof(
         @Body requestBody: ProviderIdProofReqModel
+    ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.CHANGE_BOOKING_STATUS)
+    suspend fun changeBookingStatus(
+        @Body requestBody: ChangeBookingStatusReqModel
     ): ResponseBody
 
 }

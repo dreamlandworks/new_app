@@ -12,6 +12,7 @@ data class BookingDetails(
     val time_lapsed: String,
     val paid: String,
     val cgst_tax: String,
+    val wallet_balance: String,
     val finish_OTP: String,
     val sgst_tax: String,
     val extra_demand_total_amount: String,

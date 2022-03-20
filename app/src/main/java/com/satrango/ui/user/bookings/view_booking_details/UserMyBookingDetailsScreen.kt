@@ -75,7 +75,10 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        loadScreen()
+    }
 
+    private fun loadScreen() {
         val requestBody = BookingDetailsReqModel(
             bookingId.toInt(),
             categoryId.toInt(),
@@ -159,16 +162,35 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         }
 
         binding.markCompleteBtn.setOnClickListener {
-            if (response.booking_details.extra_demand_status == "0") {
-                ProviderInVoiceScreen.isExtraDemandRaised = "0"
-            } else {
-                ProviderInVoiceScreen.isExtraDemandRaised = "1"
+            val requestBody = BookingDetailsReqModel(
+                bookingId.toInt(),
+                categoryId.toInt(),
+                RetrofitBuilder.USER_KEY,
+                userId.toInt()
+            )
+            Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+            CoroutineScope(Dispatchers.Main).launch {
+                progressDialog.show()
+                val bookingDetails = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (response.status == 200) {
+                    progressDialog.dismiss()
+                    if (bookingDetails.booking_details.extra_demand_status == "0" && bookingDetails.booking_details.expenditure_incurred.isEmpty()) {
+                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        divertToInvoiceScreen()
+                    } else if (bookingDetails.booking_details.extra_demand_status == "1" && bookingDetails.booking_details.expenditure_incurred.isNotEmpty()) {
+                        ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                        divertToInvoiceScreen()
+                    } else if (bookingDetails.booking_details.extra_demand_status == "2" && bookingDetails.booking_details.expenditure_incurred.isEmpty()) {
+                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        divertToInvoiceScreen()
+                    } else {
+                        toast(this@UserMyBookingDetailsScreen, "Please Ask the Service Provider to click on Mark Complete to get Booking Invoice")
+                    }
+                } else {
+                    progressDialog.dismiss()
+                    snackBar(binding.recyclerView, response.message)
+                }
             }
-            val intent = Intent(this, ProviderInVoiceScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-            intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
-            intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
-            startActivity(intent)
         }
 
         binding.callBtn.setOnClickListener {
@@ -216,6 +238,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.callBtn.isClickable = false
             binding.messageBtn.isClickable = false
         }
+    }
+
+    private fun divertToInvoiceScreen() {
+        val intent = Intent(this@UserMyBookingDetailsScreen, ProviderInVoiceScreen::class.java)
+        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
+        startActivity(intent)
     }
 
     private fun showExtraDemandAcceptDialog(
@@ -281,6 +311,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                             "$userId|1"
                         )
                         toast(this, "Extra Demand Accepted")
+                        loadScreen()
                     } else {
                         UserUtils.sendExtraDemandFCM(
                             this,
@@ -290,6 +321,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                             "$userId|2"
                         )
                         toast(this, "Extra Demand Rejected")
+                        loadScreen()
                     }
                     updateStatusList()
                 }

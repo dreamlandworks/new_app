@@ -2,6 +2,7 @@ package com.satrango.ui.user.bookings.view_booking_details.models
 
 data class CompleteBookingReqModel(
     val amount: String,
+    val w_amount: String,
     val booking_id: String,
     val cgst: String,
     val completed_at: String,

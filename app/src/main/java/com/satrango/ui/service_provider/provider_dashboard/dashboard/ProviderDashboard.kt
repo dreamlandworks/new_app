@@ -88,6 +88,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 import android.os.CountDownTimer
+import android.view.LayoutInflater
 import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
 
@@ -263,6 +264,7 @@ class ProviderDashboard : AppCompatActivity() {
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 try {
+//                    toast(this@ProviderDashboard, bookingId)
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) { }
             }
@@ -339,7 +341,7 @@ class ProviderDashboard : AppCompatActivity() {
         categoryId: String
     ) {
         bottomSheetDialog = BottomSheetDialog(this)
-        val bottomSheet = layoutInflater.inflate(R.layout.provider_booking_alert_dialog, null)
+        val bottomSheet = LayoutInflater.from(this).inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog!!.setCancelable(false)
         val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = bottomSheet.findViewById<TextView>(R.id.rejectBtn)
@@ -379,6 +381,7 @@ class ProviderDashboard : AppCompatActivity() {
         Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
+            bottomSheetDialog!!.dismiss()
             val requestBody = ProviderResponseReqModel(
                 this.response.booking_details.amount,
                 bookingId.toInt(),
@@ -397,7 +400,6 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
-                        bottomSheetDialog!!.dismiss()
                         Companion.bookingId = "0"
                         UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
@@ -407,10 +409,10 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                     } else {
                         progressDialog.dismiss()
-                        snackBar(binding.bottomNavigationView, jsonResponse.getString("message"))
+                        toast(this@ProviderDashboard, jsonResponse.getString("message"))
                     }
                 } catch (e: java.lang.Exception) {
-                    snackBar(binding.bottomNavigationView, e.message!!)
+                    toast(this@ProviderDashboard, e.message!!)
                 }
             }
         }
@@ -834,6 +836,7 @@ class ProviderDashboard : AppCompatActivity() {
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
+//            toast(this@ProviderDashboard, bookingId)
                 try {
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) {}

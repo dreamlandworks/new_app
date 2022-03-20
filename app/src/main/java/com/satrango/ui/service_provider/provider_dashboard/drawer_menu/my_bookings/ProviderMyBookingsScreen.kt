@@ -51,6 +51,10 @@ import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -463,6 +467,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 ProviderBookingDetailsScreen.categoryId = categoryId
                                 ProviderBookingDetailsScreen.userId = userId
                                 isPending(this, false)
+                                isProgress(this, true)
                                 UserUtils.spid = spId
                                 startActivity(intent)
                                 progressDialog.dismiss()
@@ -575,6 +580,14 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             RetrofitBuilder.USER_KEY,
             userId
         )
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+//                if (response.)
+            } catch (e: Exception) {
+                toast(this@ProviderMyBookingsScreen, e.message!!)
+            }
+        }
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
@@ -620,8 +633,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 rescheduleId,
                 response.booking_details.sp_id.toInt(),
                 12,
-                userId,
-                ProviderAlertsScreen.USER_TYPE
+                userId
             )
             dialog.dismiss()
         }
@@ -632,8 +644,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 rescheduleId,
                 response.booking_details.sp_id.toInt(),
                 11,
-                userId,
-                ProviderAlertsScreen.USER_TYPE
+                userId
             )
             dialog.dismiss()
         }
@@ -648,8 +659,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         rescheduleId: Int,
         spId: Int,
         statusId: Int,
-        userId: Int,
-        taskType: String
+        userId: Int
     ) {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -662,7 +672,6 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
             ProviderAlertsScreen.USER_TYPE,
             userId
         )
-//        toast(requireContext(), Gson().toJson(requestBody))
         viewModel.rescheduleStatusChange(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -670,8 +679,9 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 }
                 is NetworkResponse.Success -> {
                     snackBar(binding.recyclerView, it.data!!)
-                    updateUI("Pending")
                     progressDialog.dismiss()
+                    finish()
+                    startActivity(intent)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

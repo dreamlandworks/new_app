@@ -76,7 +76,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         var FROM_COMPLETE_BOOKING = false
         var FROM_PROVIDER_BOOKING_RESPONSE = false
         var finalAmount: Int = 0
-        var finalWalletBalance: String = "0"
+        var finalWalletBalance = "0"
         var walletBalanceChecked = false
     }
 
@@ -90,11 +90,20 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         initializeToolbar()
 
         binding.apply {
-            finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
+//            if (FROM_USER_BOOKING_ADDRESS) {
+            if (!FROM_COMPLETE_BOOKING) {
+                val tempFinalAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
+                if (tempFinalAmount > finalWalletBalance.toInt()) {
+                    finalWalletBalance = tempFinalAmount.toString()
+                }
+            }
 
+//            }
             finalAmount = if (FROM_USER_BOOKING_ADDRESS) {
+                toast(this@PaymentScreen, finalWalletBalance)
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
             } else {
+
                 amount
             }
             payableAmount.text = "Rs. $finalAmount"
@@ -104,7 +113,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             walletBalanceCheck.setOnCheckedChangeListener { compoundButton, checked ->
                 walletBalanceChecked = checked
                 if (checked) {
-                    currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
                     if (finalWalletBalance.toInt() >= finalAmount) {
                         phonePeBtn.isEnabled = false
                         googlePayBtn.isEnabled = false
@@ -113,6 +121,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                         wtsappPayBtn.isEnabled = false
                         upisRV.isEnabled = false
                         payableAmount.text = "Rs. 0.00"
+                        currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
                     } else {
                         phonePeBtn.isEnabled = true
                         googlePayBtn.isEnabled = true
@@ -121,6 +130,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                         wtsappPayBtn.isEnabled = true
                         upisRV.isEnabled = true
                         payableAmount.text = "Rs. ${finalAmount - finalWalletBalance.toInt()}"
+                        currentBalance.text = "Deducted from Wallet - Rs. $finalWalletBalance"
                     }
                 } else {
                     currentBalance.text = "Deducted from Wallet - Rs. 0"
@@ -262,7 +272,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = CompleteBookingReqModel(
-                    inVoiceDetails.booking_details.extra_demand_total_amount,
+                    binding.payableAmount.text.toString().split(" ")[1],
+                    binding.currentBalance.text.toString().split(" ")[5],
                     inVoiceDetails.booking_details.booking_id.toString(),
                     inVoiceDetails.booking_details.cgst_tax,
                     inVoiceDetails.booking_details.completed_at,
@@ -272,7 +283,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                     referenceId,
                     inVoiceDetails.booking_details.sgst_tax,
                     inVoiceDetails.booking_details.sp_id,
-                    inVoiceDetails.booking_details.extra_demand_total_amount,
+                    inVoiceDetails.booking_details.dues,
                     UserUtils.getUserId(this@PaymentScreen)
                 )
                 Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
@@ -474,28 +485,28 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         val finalUserId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
         var finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
         if (finalWalletBalance.toInt() <= 0) {
-            finalWalletBalance = "0"
+            finalWalletBalance = 0
         } else {
             if (binding.walletBalanceCheck.isChecked) {
-                finalWalletBalance = if (finalWalletBalance.toInt() >= finalAmount) {
-                    finalWalletBalance = finalAmount.toString()
+                finalWalletBalance = if (finalWalletBalance >= finalAmount) {
+                    finalWalletBalance = finalAmount
                     finalAmount = 0
                     finalWalletBalance
                 } else {
-                    finalWalletBalance = (finalWalletBalance.toInt() - finalAmount).toString()
-                    finalAmount -= finalWalletBalance.toInt()
+                    finalWalletBalance -= finalAmount
+                    finalAmount -= finalWalletBalance
                     finalWalletBalance
                 }
             }
         }
-        if (finalAmount <= finalWalletBalance.toInt()) {
+        if (finalAmount <= finalWalletBalance) {
             if (binding.walletBalanceCheck.isChecked) {
-                updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance)
+                updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance.toString())
             } else {
                 toast(this, "Please select wallet balance")
             }
         } else {
-            updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance)
+            updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance.toString())
         }
     }
 

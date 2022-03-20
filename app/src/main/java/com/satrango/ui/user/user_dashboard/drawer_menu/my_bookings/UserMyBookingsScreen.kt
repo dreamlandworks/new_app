@@ -128,12 +128,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
                         if (status == "Completed") {
                             if (details.booking_status.equals(
                                     status,
-                                    ignoreCase = true
-                                ) || details.booking_status.equals(
-                                    "Expired",
-                                    ignoreCase = true
-                                ) || details.booking_status.equals("Cancelled", ignoreCase = true)
-                            ) {
+                                    ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true) || details.booking_status.equals("Cancelled", ignoreCase = true)) {
                                 list.add(details)
                             }
                         } else {
@@ -152,9 +147,9 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    binding.note.visibility = View.VISIBLE
-                    binding.note.text = it.message!!
-                    snackBar(binding.recyclerView, it.message)
+//                    binding.note.visibility = View.VISIBLE
+//                    binding.note.text = it.message!!
+                    snackBar(binding.recyclerView, it.message!!)
                 }
             }
         }
@@ -271,7 +266,8 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
                 val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
                 val jsonResponse = JSONObject(response.string())
                 toast(this@UserMyBookingsScreen, jsonResponse.getString("message"))
-                updatePendingUI()
+                finish()
+                startActivity(intent)
             } catch (e: Exception) {
                 toast(this@UserMyBookingsScreen, e.message!!)
             }

@@ -657,8 +657,8 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     private fun updateStatusInServer(paymentResponse: String?, status: String) {
         var finalWalletAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
-        if (finalWalletAmount.toDoubleOrNull()!! == 0.0) {
-            finalWalletAmount = "0"
+        if (finalWalletAmount == 0) {
+            finalWalletAmount = 0
         }
         val requestBody = PaymentConfirmReqModel(
             data!!.final_amount.toString(),
@@ -672,7 +672,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.getUserId(this).toInt(),
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
-            finalWalletAmount
+            finalWalletAmount.toString()
         )
         viewModel.confirmPayment(this, requestBody).observe(this) {
             when (it) {

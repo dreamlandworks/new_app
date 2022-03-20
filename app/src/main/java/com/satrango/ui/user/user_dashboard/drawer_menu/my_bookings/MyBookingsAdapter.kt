@@ -91,98 +91,99 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
                         if (response.status == 200) {
                             if (response.booking_status_details.isNotEmpty()) {
                                 val details = response.booking_status_details[response.booking_status_details.size - 1]
-                                when (details.status_id) {
-                                    "4" -> {
-                                        binding.startBtn.text = "Service Provider Rejected"
-                                    }
-                                    "5" -> {
-                                        binding.startBtn.text = "Service Provider Accepted"
-                                    }
-                                    "6" -> {
-                                        binding.startBtn.text = "Service Provider Not Responded"
-                                    }
-                                    "7" -> {
-                                        binding.startBtn.text = "Payment Pending"
-                                    }
-                                    "8" -> {
-                                        binding.startBtn.text = "Payment Done"
-                                    }
-                                    "9" -> {
-                                        binding.startBtn.text = "Pending"
-                                    }
-                                    "10" -> {
-                                        binding.startBtn.text = "Reschedule Requested"
-                                    }
-                                    "11" -> {
-                                        binding.startBtn.text = "Reschedule Rejected"
-                                    }
-                                    "12" -> {
-                                        binding.startBtn.text = "Reschedule Approved"
-                                    }
-                                    "13" -> {
-                                        binding.startBtn.text = "Booking Started and OTP Verified"
-                                    }
-                                    "14" -> {
-                                        binding.startBtn.text = "Booking Started"
-                                    }
-                                    "15" -> {
-                                        binding.startBtn.text = "Booking Paused"
-                                    }
-                                    "16" -> {
-                                        binding.startBtn.text = "Booking Resumed"
-                                    }
-                                    "17" -> {
-                                        binding.startBtn.text = "Sent for Review"
-                                    }
-                                    "18" -> {
-                                        binding.startBtn.text = "Reviewed and not Accepted"
-                                    }
-                                    "19" -> {
-                                        binding.startBtn.text = "Reviewed and found appropriate"
-                                    }
-                                    "20" -> {
-                                        binding.startBtn.text = "Part PAyment requested"
-                                    }
-                                    "21" -> {
-                                        binding.startBtn.text = "Part Payment Released"
-                                    }
-                                    "22" -> {
-                                        binding.startBtn.text = "Marked as Completed"
-                                    }
-                                    "23" -> {
-                                        binding.startBtn.text = "OTP Verified and Booking Completed"
-                                    }
-                                    "24" -> {
-                                        binding.startBtn.text = "Cancelled by User"
-                                    }
-                                    "25" -> {
-                                        binding.startBtn.text = "Cancelled by Service Provider"
-                                    }
-                                    "26" -> {
-                                        binding.startBtn.text = "Open"
-                                    }
-                                    "27" -> {
-                                        binding.startBtn.text = "Awarded"
-                                    }
-                                    "28" -> {
-                                        binding.startBtn.text = "Expired"
-                                    }
-                                    "29" -> {
-                                        binding.startBtn.text = "Rejected"
-                                    }
-                                    "37" -> {
-                                        binding.startBtn.text = "Extra Demand Raised"
-                                    }
-                                    "38" -> {
-                                        binding.startBtn.text = "Extra Demand Accepted"
-                                    }
-                                    "39" -> {
-                                        binding.startBtn.text = "Extra Demand Rejected"
-                                    }
-                                    "40" -> {
-                                        binding.startBtn.text = "Service Provider Placed Bid"
-                                    }
-                                }
+                                binding.startBtn.text = details.description
+//                                when (details.status_id) {
+//                                    "4" -> {
+//                                        binding.startBtn.text = "Service Provider Rejected"
+//                                    }
+//                                    "5" -> {
+//                                        binding.startBtn.text = "Service Provider Accepted"
+//                                    }
+//                                    "6" -> {
+//                                        binding.startBtn.text = "Service Provider Not Responded"
+//                                    }
+//                                    "7" -> {
+//                                        binding.startBtn.text = "Payment Pending"
+//                                    }
+//                                    "8" -> {
+//                                        binding.startBtn.text = "Payment Done"
+//                                    }
+//                                    "9" -> {
+//                                        binding.startBtn.text = "Pending"
+//                                    }
+//                                    "10" -> {
+//                                        binding.startBtn.text = "Reschedule Requested"
+//                                    }
+//                                    "11" -> {
+//                                        binding.startBtn.text = "Reschedule Rejected"
+//                                    }
+//                                    "12" -> {
+//                                        binding.startBtn.text = "Reschedule Approved"
+//                                    }
+//                                    "13" -> {
+//                                        binding.startBtn.text = "Booking Started and OTP Verified"
+//                                    }
+//                                    "14" -> {
+//                                        binding.startBtn.text = "Booking Started"
+//                                    }
+//                                    "15" -> {
+//                                        binding.startBtn.text = "Booking Paused"
+//                                    }
+//                                    "16" -> {
+//                                        binding.startBtn.text = "Booking Resumed"
+//                                    }
+//                                    "17" -> {
+//                                        binding.startBtn.text = "Sent for Review"
+//                                    }
+//                                    "18" -> {
+//                                        binding.startBtn.text = "Reviewed and not Accepted"
+//                                    }
+//                                    "19" -> {
+//                                        binding.startBtn.text = "Reviewed and found appropriate"
+//                                    }
+//                                    "20" -> {
+//                                        binding.startBtn.text = "Part PAyment requested"
+//                                    }
+//                                    "21" -> {
+//                                        binding.startBtn.text = "Part Payment Released"
+//                                    }
+//                                    "22" -> {
+//                                        binding.startBtn.text = "Marked as Completed"
+//                                    }
+//                                    "23" -> {
+//                                        binding.startBtn.text = "OTP Verified and Booking Completed"
+//                                    }
+//                                    "24" -> {
+//                                        binding.startBtn.text = "Cancelled by User"
+//                                    }
+//                                    "25" -> {
+//                                        binding.startBtn.text = "Cancelled by Service Provider"
+//                                    }
+//                                    "26" -> {
+//                                        binding.startBtn.text = "Open"
+//                                    }
+//                                    "27" -> {
+//                                        binding.startBtn.text = "Awarded"
+//                                    }
+//                                    "28" -> {
+//                                        binding.startBtn.text = "Expired"
+//                                    }
+//                                    "29" -> {
+//                                        binding.startBtn.text = "Rejected"
+//                                    }
+//                                    "37" -> {
+//                                        binding.startBtn.text = "Extra Demand Raised"
+//                                    }
+//                                    "38" -> {
+//                                        binding.startBtn.text = "Extra Demand Accepted"
+//                                    }
+//                                    "39" -> {
+//                                        binding.startBtn.text = "Extra Demand Rejected"
+//                                    }
+//                                    "40" -> {
+//                                        binding.startBtn.text = "Service Provider Placed Bid"
+//                                    }
+//                                }
                                 binding.startBtn.visibility = View.VISIBLE
                             } else {
                                 binding.startBtn.text = "Service Provider started to your location"
@@ -221,8 +222,10 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
                         binding.startBtn.visibility = View.VISIBLE
                         binding.cancelBookingBtn.visibility = View.GONE
                         binding.reScheduleBtn.visibility = View.GONE
-                        binding.startBtn.setOnClickListener {
-                            alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), 0, data.reschedule_id.toInt(), data.reschedule_description)
+                        if (data.req_raised_by != UserUtils.getUserId(binding.amount.context)) {
+                            binding.startBtn.setOnClickListener {
+                                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), 0, data.reschedule_id.toInt(), data.reschedule_description)
+                            }
                         }
                     } else {
                         binding.startBtn.visibility = View.GONE
@@ -245,16 +248,16 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
                             isProvider(binding.startBtn.context, false)
                             binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                         }
-                        binding.card.setOnClickListener {
-                            ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                            val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                            isProvider(binding.startBtn.context, false)
-                            isPending(binding.startBtn.context, true)
-                            binding.root.context.startActivity(intent)
-                        }
+                    }
+                    binding.card.setOnClickListener {
+                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                        isProvider(binding.startBtn.context, false)
+                        isPending(binding.startBtn.context, true)
+                        binding.root.context.startActivity(intent)
                     }
                 }
                 "Completed".lowercase(Locale.getDefault()) -> {
