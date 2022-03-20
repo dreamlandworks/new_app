@@ -360,7 +360,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     Data::class.java
                 ).profession_id
             )
-//            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
+            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
                 try {
@@ -875,7 +875,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
         Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
+        toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

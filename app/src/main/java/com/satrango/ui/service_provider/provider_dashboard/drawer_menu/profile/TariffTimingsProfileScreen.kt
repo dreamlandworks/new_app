@@ -82,7 +82,7 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
                     UserUtils.getUserId(requireContext())
                 )
                 Log.e("JSON", Gson().toJson(requestBody))
-                viewModel.updateTariff(requireContext(), requestBody).observe(requireActivity(), {
+                viewModel.updateTariff(requireContext(), requestBody).observe(requireActivity()) {
                     when (it) {
                         is NetworkResponse.Loading -> {
                             ProviderProfileScreen.progressDialog.show()
@@ -99,7 +99,7 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
                             snackBar(binding.addSlot, it.message!!)
                         }
                     }
-                })
+                }
             }
         }
     }
