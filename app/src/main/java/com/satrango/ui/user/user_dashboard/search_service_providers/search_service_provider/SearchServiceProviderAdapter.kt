@@ -53,8 +53,14 @@ class SearchServiceProviderAdapter(
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession
             binding.userDescription.text = data.about_me
-            binding.userRating.text = data.rating.toString()
+            binding.userRating.text = data.rating
             binding.userRank.text = data.rank.toString()
+            binding.availableText.text = data.present_status
+            if (data.present_status == "Available") {
+                binding.availableText.setBackgroundResource(R.drawable.distance_bg_green)
+            } else {
+                binding.availableText.setBackgroundResource(R.drawable.distance_bg_yellow)
+            }
             binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
             if (SearchServiceProvidersScreen.offerId != 0) {
                 binding.actualCost.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"

@@ -28,7 +28,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
             } else {
                 binding.expiresIn.text = data.expires_in
             }
-            binding.priceRange.text = "Rs ${data.amount}"
+            binding.priceRange.text = "Rs ${data.range_slots}"
             binding.scheduleDate.text = data.scheduled_date
             if (data.job_post_description.isNotEmpty()) {
                 binding.jobLocation.text =
