@@ -12,5 +12,6 @@ data class ProviderPostBidReqModel(
     val key: String,
     val post_job_id: Int,
     val proposal: String,
-    val sp_id: Int
+    val sp_id: Int,
+    val post_title: String
 )

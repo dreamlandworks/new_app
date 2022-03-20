@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -26,9 +27,24 @@ import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertR
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsViewModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.LeaderBoardScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsAdapter
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingAdapter
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingViewModel
+import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsAdapter
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
@@ -88,8 +104,117 @@ class ProviderHomeScreen : Fragment() {
                 }
             }
         }
+        updateUpcomingLayout("Pending")
+        updateNewJobs()
         showPendingActionableAlerts()
         return binding.root
+    }
+
+    private fun updateNewJobs() {
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(requireContext()).toInt())
+        val factory = ViewModelFactory(ProviderMyBidsRepository())
+        val viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
+        viewModel.jobsList(requireContext(), requestBody).observe(requireActivity()) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    val data = it.data!![0]
+                    if (it.data.isNotEmpty()) {
+                        binding.newJobExpiresIn.text = data.expires_in
+                        binding.newJobCostPerHour.text = data.amount
+                        binding.newJobLocation.text = data.job_post_description[0].city
+                        binding.newJobDescription.text = data.job_post_description[0].job_description
+                        binding.newJobCallBtn.setOnClickListener {
+                            UserUtils.makePhoneCall(requireContext(), data.mobile)
+                        }
+                        binding.newJobsCard.setOnClickListener {
+                            ProviderPlaceBidScreen.FROM_AWARDED = false
+                            ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                            MyJobPostViewScreen.bookingId = data.booking_id.toInt()
+                            MyJobPostViewScreen.categoryId = data.category_id.toInt()
+                            MyJobPostViewScreen.userId = data.booking_user_id.toInt()
+                            MyJobPostViewScreen.postJobId = data.post_job_id.toInt()
+                            val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
+                            binding.root.context.startActivity(intent)
+                        }
+                        binding.newJobsLayout.visibility = View.VISIBLE
+                        binding.newJobsCard.visibility = View.VISIBLE
+                    } else {
+                        binding.newJobsLayout.visibility = View.GONE
+                        binding.newJobsCard.visibility = View.GONE
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun updateUpcomingLayout(status: String) {
+        val factory = ViewModelFactory(ProviderBookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(requireContext()).toInt())
+        viewModel.bookingListWithDetails(requireContext(), requestBody).observe(requireActivity()) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    val list = ArrayList<com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail>()
+                    for (details in it.data!!) {
+                        if (status == "Completed") {
+                            if (details.booking_status.equals(
+                                    status,
+                                    ignoreCase = true
+                                ) || details.booking_status.equals(
+                                    "Expired",
+                                    ignoreCase = true
+                                ) || details.booking_status.equals("Cancelled", ignoreCase = true)
+                            ) {
+                                list.add(details)
+                            }
+                        } else {
+                            if (details.booking_status.equals(status, ignoreCase = true)) {
+                                list.add(details)
+                            }
+                        }
+                    }
+                    if (list.isNotEmpty()) {
+                        val data = list[0]
+                        binding.scheduleIn.text = data.scheduled_date
+                        binding.location.text = data.details[0].city
+                        binding.description.text = data.details[0].job_description
+                        binding.costPerHour.text = data.amount
+                        binding.callBtn.setOnClickListener {
+                            UserUtils.makePhoneCall(requireContext(), data.mobile)
+                        }
+                        binding.upcomingCard.setOnClickListener {
+                            val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
+                            UserUtils.spid = data.sp_id
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                            binding.root.context.startActivity(intent)
+                        }
+                        binding.upcomingCard.visibility = View.VISIBLE
+                        binding.upcomingLayout.visibility = View.VISIBLE
+                    } else {
+                        binding.upcomingCard.visibility = View.GONE
+                        binding.upcomingLayout.visibility = View.GONE
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    snackBar(binding.bidCount, it.message!!)
+                }
+            }
+        }
     }
 
     private fun showPendingActionableAlerts() {

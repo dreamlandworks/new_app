@@ -82,15 +82,19 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                 }
             }
 
-            if (filter.lowToHigh) {
-                binding.note.visibility = View.GONE
-                binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedBy { data: JobPostDetail -> data.amount })
-            } else if (filter.highToLow) {
-                binding.note.visibility = View.GONE
-                binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedByDescending { data: JobPostDetail -> data.amount })
-            } else {
-                binding.note.visibility = View.GONE
-                binding.recyclerView.adapter = ProviderMyBidsAdapter(list)
+            when {
+                filter.lowToHigh -> {
+                    binding.note.visibility = View.GONE
+                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedBy { data: JobPostDetail -> data.amount })
+                }
+                filter.highToLow -> {
+                    binding.note.visibility = View.GONE
+                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedByDescending { data: JobPostDetail -> data.amount })
+                }
+                else -> {
+                    binding.note.visibility = View.GONE
+                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list)
+                }
             }
         }
 

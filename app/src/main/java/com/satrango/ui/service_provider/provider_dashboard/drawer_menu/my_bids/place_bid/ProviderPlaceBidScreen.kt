@@ -152,7 +152,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         val requestBody1 = ViewProposalReqModel(EDIT_BID_ID.toInt(), RetrofitBuilder.USER_KEY, 2)
-        viewModel.viewProposal(this, requestBody1).observe(this, {
+        viewModel.viewProposal(this, requestBody1).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -166,7 +166,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.bidAmount, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun updateBidDetails(data: ViewProposalResModel) {
@@ -255,8 +255,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 RetrofitBuilder.PROVIDER_KEY,
                 binding.proposalDescription.text.toString().trim()
             )
-            viewModel.editBid(this, requestBody).observe(this, {
-                when(it) {
+            viewModel.editBid(this, requestBody).observe(this) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -269,7 +269,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                         snackBar(binding.bidAmount, it.message!!)
                     }
                 }
-            })
+            }
         } else {
             val requestBody = ProviderPostBidReqModel(
                 binding.bidAmount.text.toString().trim(),
@@ -281,10 +281,11 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 RetrofitBuilder.PROVIDER_KEY,
                 postJobId,
                 binding.proposalDescription.text.toString().trim(),
-                UserUtils.getUserId(this).toInt()
+                UserUtils.getUserId(this).toInt(),
+                binding.title.text.toString().trim()
             )
-            viewModel.postBid(this, requestBody).observe(this, {
-                when(it) {
+            viewModel.postBid(this, requestBody).observe(this) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -298,7 +299,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                         snackBar(binding.bidAmount, it.message!!)
                     }
                 }
-            })
+            }
         }
     }
 
@@ -415,8 +416,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     ) {
         val factory = ViewModelFactory(ProviderMyBidsRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
-        viewModel.deleteBidAttachment(this, ProviderDeleteBidAttachmentReqModel(imagePath.bid_attach_id.toInt(), RetrofitBuilder.PROVIDER_KEY)).observe(this, {
-            when(it) {
+        viewModel.deleteBidAttachment(this, ProviderDeleteBidAttachmentReqModel(imagePath.bid_attach_id.toInt(), RetrofitBuilder.PROVIDER_KEY)).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -435,7 +436,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.bidAmount, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

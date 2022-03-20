@@ -157,24 +157,16 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="wrap_content"
+                <EditText
+                    android:id="@+id/bidAmount"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:hint="@string/rs_0_00"
                     android:layout_marginStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/purple_500"
-                    app:boxStrokeWidth="@dimen/_1sdp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/bidAmount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textColor="@color/black"
-                        android:singleLine="true" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center"
+                    android:background="@drawable/gray_corner"
+                    android:inputType="number"
+                    android:importantForAutofill="no" />
 
             </LinearLayout>
 
@@ -182,6 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -191,24 +184,15 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    app:boxStrokeColor="@color/purple_500"
-                    app:boxStrokeWidth="@dimen/_1sdp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/estimateTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:hint="@string/_0"
-                        android:textColor="@color/black"
-                        android:singleLine="true" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/estimateTime"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:background="@drawable/gray_corner"
+                    android:inputType="number"
+                    android:importantForAutofill="no" />
 
                 <TextView
                     android:id="@+id/hoursBtn"
@@ -325,7 +309,7 @@
                     style="@style/purple_outline_button_style"
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:background="@drawable/purple_out_line"
-                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_20sdp"
                     android:paddingVertical="@dimen/_5sdp"
                     android:text="@string/reset"
                     android:textSize="@dimen/sub_text" />
@@ -336,7 +320,7 @@
                     android:layout_height="wrap_content"
                     style="@style/filled_button_style"
                     android:background="@drawable/provider_btn_bg"
-                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_20sdp"
                     android:paddingVertical="@dimen/_5sdp"
                     android:text="@string/submit"
                     android:textSize="@dimen/sub_text" />

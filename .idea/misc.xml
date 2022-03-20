@@ -189,8 +189,10 @@
         <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_provider_dashboard.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_provider_in_voice_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_my_bookings_screen.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/activity_provider_place_bid_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_provider_rating_review_screen.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/activity_search_view_profile.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_user_booking_cancel_screen.xml" value="0.4272474513438369" />
@@ -200,6 +202,7 @@
         <entry key="app/src/main/res/layout/booking_status_change_otp_dialog.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/booking_status_row.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/fragment_provider_home_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/fragment_user_alert_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/invoice_list_view_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />

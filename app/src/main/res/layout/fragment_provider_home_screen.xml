@@ -385,6 +385,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/upcomingLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -409,6 +410,7 @@
         </RelativeLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/upcomingCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="@dimen/_5sdp"
@@ -452,6 +454,7 @@
                             android:textSize="@dimen/sub_text" />
 
                         <ImageView
+                            android:id="@+id/callBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_phoneno_purple"
@@ -459,6 +462,7 @@
                             tools:ignore="ContentDescription" />
 
                         <ImageView
+                            android:id="@+id/chatBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_chat_purple"
@@ -512,6 +516,7 @@
                         android:textSize="@dimen/sub_text" />
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -558,6 +563,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <RelativeLayout
+            android:id="@+id/newJobsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -567,8 +573,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_jobs"
-                android:textSize="@dimen/text"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="@dimen/text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -582,6 +588,7 @@
         </RelativeLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/newJobsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="@dimen/_5sdp"
@@ -625,6 +632,7 @@
                             android:textSize="@dimen/sub_text" />
 
                         <ImageView
+                            android:id="@+id/newJobCallBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_phoneno_purple"
@@ -685,6 +693,7 @@
                         android:textSize="@dimen/sub_text" />
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
