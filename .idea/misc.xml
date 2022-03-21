@@ -187,6 +187,8 @@
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.232421875" />
+        <entry key="app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_dashboard.xml" value="0.232421875" />
