@@ -95,7 +95,7 @@ class MyJobPostsScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
         val requestBody = MyJobPostReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.myJobPosts(this, requestBody).observe(this, {
+        viewModel.myJobPosts(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -121,7 +121,7 @@ class MyJobPostsScreen : AppCompatActivity() {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 }

@@ -55,6 +55,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     private lateinit var progressDialog: BeautifulProgressDialog
     private val CAMERA_REQUEST: Int = 101
     private val GALLERY_REQUEST: Int = 100
+
     companion object {
         var bookingId = 0
         var postJobId = 0
@@ -173,14 +174,14 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         binding.apply {
             bidAmount.setText(data.bid_details.amount)
             estimateTime.setText(data.bid_details.esimate_time)
-            if (data.bid_details.estimate_type == "Hours") {
+            estimateTimeType = if (data.bid_details.estimate_type == "Hours") {
                 hoursBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 hoursBtn.setTextColor(resources.getColor(R.color.white))
-                estimateTimeType = 1
+                1
             } else {
                 daysBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 daysBtn.setTextColor(resources.getColor(R.color.white))
-                estimateTimeType = 2
+                2
             }
             proposalDescription.setText(data.bid_details.proposal)
             attachmentsRV.layoutManager = LinearLayoutManager(this@ProviderPlaceBidScreen, LinearLayoutManager.HORIZONTAL, false)

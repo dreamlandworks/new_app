@@ -186,6 +186,7 @@
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.232421875" />
@@ -209,7 +210,9 @@
         <entry key="app/src/main/res/layout/invoice_list_view_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/my_bookings_row.xml" value="0.2543822146216332" />
+        <entry key="app/src/main/res/layout/my_job_posts_row.xml" value="0.21592254638671876" />
         <entry key="app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/provider_edit_bid_success_dialog.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/provider_mybids_row.xml" value="0.221484375" />
         <entry key="app/src/main/res/layout/reschedule_requested_dialog.xml" value="0.3098958333333333" />

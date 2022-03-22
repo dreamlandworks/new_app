@@ -1,7 +1,6 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -90,12 +89,16 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             binding.discussionBoardBtn.setTextColor(resources.getColor(R.color.purple_500))
             binding.viewBidsBtn.setTextColor(resources.getColor(R.color.purple_500))
 
-            if (ProviderPlaceBidScreen.FROM_EDIT_BID) {
-                binding.editPostBtn.text = "Edit Bid"
-            } else if (ProviderPlaceBidScreen.FROM_AWARDED) {
-                binding.editPostBtn.visibility = View.GONE
-            } else {
-                binding.editPostBtn.text = "Place Bid"
+            when {
+                ProviderPlaceBidScreen.FROM_EDIT_BID -> {
+                    binding.editPostBtn.text = "Edit Bid"
+                }
+                ProviderPlaceBidScreen.FROM_AWARDED -> {
+                    binding.editPostBtn.visibility = View.GONE
+                }
+                else -> {
+                    binding.editPostBtn.text = "Place Bid"
+                }
             }
         }
     }
@@ -111,10 +114,10 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         var languages = ""
         for (language in data.languages) {
-            if (languages.isNotEmpty()) {
-                languages = "$languages,${language}"
+            languages = if (languages.isNotEmpty()) {
+                "$languages,${language}"
             } else {
-                languages = language
+                language
             }
 
         }
@@ -142,7 +145,8 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         if (images.isEmpty()) {
             binding.attachmentsLayout.visibility = View.GONE
         } else {
-            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
             toast(this, images.size.toString())
         }
@@ -209,7 +213,10 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-
+        if (data.job_post_details.booking_status == "Expired") {
+            binding.expiresInText.text = "Expired On"
+            binding.expiresOn.text = data.job_post_details.expired_on
+        }
 
     }
 
@@ -219,8 +226,15 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     private fun loadScreen() {
-        val requestBody = MyJobPostViewReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, postJobId, UserUtils.getUserId(this).toInt())
+        val requestBody = MyJobPostViewReqModel(
+            bookingId,
+            categoryId,
+            RetrofitBuilder.USER_KEY,
+            postJobId,
+            UserUtils.getUserId(this).toInt()
+        )
         Log.e("JOB POST:", Gson().toJson(requestBody))
+        toast(this, Gson().toJson(requestBody))
         viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -286,7 +300,11 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

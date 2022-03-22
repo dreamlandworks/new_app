@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.satrango.R
 import com.satrango.databinding.MyJobPostsRowBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
@@ -77,11 +80,17 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.editBtn.visibility = View.GONE
                     binding.awardedBtn.visibility = View.VISIBLE
                     binding.awardedBtn.text = "My Bookings"
+                    Glide.with(binding.awardedToPic).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(
+                        R.drawable.images).into(binding.awardedToPic)
+                    binding.awardedTo.text = jobPostDetail.awarded_to
+                    binding.awardedLayout.visibility = View.GONE
                 }
                 "Expired" -> {
                     binding.editBtn.visibility = View.GONE
                     binding.awardedBtn.visibility = View.VISIBLE
                     binding.awardedBtn.text = "Post Again"
+                    binding.expiresInText.text = "Expires On:"
+                    binding.expiresOn.text = jobPostDetail.expires_on
                 }
             }
             binding.root.setOnClickListener {
