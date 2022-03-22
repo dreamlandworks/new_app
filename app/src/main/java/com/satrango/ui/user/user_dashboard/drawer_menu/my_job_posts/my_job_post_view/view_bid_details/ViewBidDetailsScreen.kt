@@ -84,15 +84,15 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         proposal.text = data.bid_details.proposal
                         gender.text = data.bid_details.sp_gender
 
-                        var languagesText = ""
-                        for (language in data.language) {
-                            languagesText = if (languagesText.isEmpty()) {
-                                language.name
-                            } else {
-                                languagesText + "," + language.name
-                            }
-                        }
-                        languages.text = languagesText
+//                        var languagesText = ""
+//                        for (language in data.language) {
+//                            languagesText = if (languagesText.isEmpty()) {
+//                                language.name
+//                            } else {
+//                                languagesText + "," + language.name
+//                            }
+//                        }
+                        languages.text = data.bid_details.languages
                         aboutMe.text = data.bid_details.about_me
 
                         qualification.text = data.bid_details.qualification
@@ -123,6 +123,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         if (images.isEmpty()) {
                             attachmentsText.visibility = View.GONE
                         }
+                        binding.myLocation.text = data.bid_details.place
 
                         if (isProvider(this@ViewBidDetailsScreen)) {
                             binding.awardBtn.setOnClickListener {

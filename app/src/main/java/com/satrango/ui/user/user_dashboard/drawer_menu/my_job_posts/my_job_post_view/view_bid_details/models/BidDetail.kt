@@ -8,6 +8,8 @@ data class BidDetail(
     val esimate_time: String,
     val estimate_type: String,
     val exp: String,
+    val place: String,
+    val languages: String,
     val jobs_completed: String,
     val profession: String,
     val proposal: String,
