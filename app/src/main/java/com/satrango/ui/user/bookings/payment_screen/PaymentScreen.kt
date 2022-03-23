@@ -592,6 +592,11 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         dialog.setCancelable(false)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val closBtn = dialogView.findViewById<TextView>(R.id.closBtn)
+        closBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserDashboardScreen::class.java))

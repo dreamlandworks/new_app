@@ -186,7 +186,8 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                         this,
                         it.data!!.installment_det_id.toString()
                     )
-                    PaymentScreen.amount = bidPrice * 100
+                    PaymentScreen.amount = bidPrice
+//                    PaymentScreen.amount = bidPrice * 100
                     PaymentScreen.FROM_USER_SET_GOALS = true
                     PaymentScreen.FROM_USER_PLANS = false
                     PaymentScreen.FROM_PROVIDER_PLANS = false

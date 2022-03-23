@@ -199,9 +199,11 @@
         <entry key="app/src/main/res/layout/activity_provider_rating_review_screen.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/activity_provider_view_placed_bid_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_search_view_profile.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_set_goals_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_user_booking_cancel_screen.xml" value="0.4272474513438369" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_view_bid_details_screens.xml" value="0.232421875" />
+        <entry key="app/src/main/res/layout/activity_view_bids_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/attachment_row.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/booking_closing_dialog.xml" value="0.2543822146216332" />
@@ -214,6 +216,7 @@
         <entry key="app/src/main/res/layout/months_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/my_bookings_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/my_job_posts_row.xml" value="0.21592254638671876" />
+        <entry key="app/src/main/res/layout/payment_success_dialog.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/provider_edit_bid_success_dialog.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
@@ -224,6 +227,7 @@
         <entry key="app/src/main/res/layout/show_pending_actionable_alerts_dialog.xml" value="0.20051303976058144" />
         <entry key="app/src/main/res/layout/upi_row.xml" value="0.335" />
         <entry key="app/src/main/res/layout/user_alert_row.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/view_bids_row.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.2543822146216332" />
       </map>
     </option>
