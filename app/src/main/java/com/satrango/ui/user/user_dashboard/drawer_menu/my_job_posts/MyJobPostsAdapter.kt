@@ -82,8 +82,9 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.awardedBtn.text = "My Bookings"
                     Glide.with(binding.awardedToPic).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(
                         R.drawable.images).into(binding.awardedToPic)
-                    binding.awardedTo.text = jobPostDetail.awarded_to
-                    binding.awardedLayout.visibility = View.GONE
+                    binding.expiresOn.text = jobPostDetail.awarded_to
+                    binding.expiresInText.text = "Expires On: "
+                    Glide.with(binding.expiresInText).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(R.drawable.images).into(binding.awardedToPic)
                 }
                 "Expired" -> {
                     binding.editBtn.visibility = View.GONE
