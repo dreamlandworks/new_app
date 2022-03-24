@@ -109,8 +109,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     )
                     binding.installment.setText("")
                     binding.setGoals.setSelection(0)
-                    binding.recyclerView.layoutManager =
-                        LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = SetGoalsAdapter(installmentsList, this)
                 }
             }

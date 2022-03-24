@@ -16,7 +16,7 @@ data class JobPostDetail(
     val estimate_time: String,
     val estimate_type: String,
     val expires_in: String,
-    val expires_on: String,
+    val expired_on: String,
     val fname: Any,
     val from: String,
     val lname: Any,

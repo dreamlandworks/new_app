@@ -500,15 +500,15 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 }
             }
         }
-        if (finalAmount <= finalWalletBalance) {
-            if (binding.walletBalanceCheck.isChecked) {
-                updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance.toString())
-            } else {
-                toast(this, "Please select wallet balance")
-            }
-        } else {
+//        if (finalAmount <= finalWalletBalance) {
+//            if (binding.walletBalanceCheck.isChecked) {
+//            updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance.toString())
+//            } else {
+//                toast(this, "Please select wallet balance")
+//            }
+//        } else {
             updateBookingStatusInServer(finalAmount.toString(), status, paymentResponse!!, finalUserId, finalWalletBalance.toString())
-        }
+//        }
     }
 
     private fun updateBookingStatusInServer(finalAmount: String, status: String, paymentResponse: String, finalUserId: Int, finalWalletBalance: String) {

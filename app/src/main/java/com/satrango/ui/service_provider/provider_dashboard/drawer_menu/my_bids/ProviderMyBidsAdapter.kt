@@ -96,8 +96,12 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                     isProvider(binding.atText.context, true)
                     ProviderPlaceBidScreen.FROM_AWARDED = false
                     ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                    if (data.category_id.contains(",")) {
+//                        MyJobPostViewScreen.categoryId =
+                    } else {
+                        MyJobPostViewScreen.categoryId = data.category_id.toInt()
+                    }
                     MyJobPostViewScreen.bookingId = data.booking_id.toInt()
-                    MyJobPostViewScreen.categoryId = data.category_id.toInt()
                     MyJobPostViewScreen.userId = data.booking_user_id.toInt()
                     MyJobPostViewScreen.postJobId = data.post_job_id.toInt()
                     val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)

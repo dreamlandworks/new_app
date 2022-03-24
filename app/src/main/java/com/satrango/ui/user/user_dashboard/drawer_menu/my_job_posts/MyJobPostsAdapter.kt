@@ -80,18 +80,18 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.editBtn.visibility = View.GONE
                     binding.awardedBtn.visibility = View.VISIBLE
                     binding.awardedBtn.text = "My Bookings"
-                    Glide.with(binding.awardedToPic).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(
-                        R.drawable.images).into(binding.awardedToPic)
+                    Glide.with(binding.awardedToImage).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(
+                        R.drawable.images).into(binding.awardedToImage)
+                    binding.expiresInText.text = "Awarded to: "
                     binding.expiresOn.text = jobPostDetail.awarded_to
-                    binding.expiresInText.text = "Expires On: "
-                    Glide.with(binding.expiresInText).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(R.drawable.images).into(binding.awardedToPic)
+                    binding.awardedToImage.visibility = View.VISIBLE
                 }
                 "Expired" -> {
                     binding.editBtn.visibility = View.GONE
                     binding.awardedBtn.visibility = View.VISIBLE
                     binding.awardedBtn.text = "Post Again"
-                    binding.expiresInText.text = "Expires On:"
-                    binding.expiresOn.text = jobPostDetail.expires_on
+                    binding.expiresInText.text = "Expired On:"
+                    binding.expiresOn.text = jobPostDetail.expired_on
                 }
             }
             binding.root.setOnClickListener {
