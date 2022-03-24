@@ -34,7 +34,7 @@ class ProviderReleaseGoalsAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(data: GoalsInstallmentsDetail) {
             binding.text.text = "Installment ${data.inst_no}"
-            binding.totalCost.text = data.amount
+            binding.totalCost.text = "Rs.${data.amount}/-"
         }
 
     }

@@ -141,7 +141,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        viewModel.bidRanges(this).observe(this, {
+        viewModel.bidRanges(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -186,7 +186,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                     snackBar(binding.backBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -261,9 +261,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                 binding.hours.setTextColor(Color.parseColor("#0A84FF"))
                 UserUtils.estimateTypeId = 2
             }
-
         }
-
 
     }
 

@@ -110,6 +110,7 @@ class ProviderHomeScreen : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateNewJobs() {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(requireContext()).toInt())
         val factory = ViewModelFactory(ProviderMyBidsRepository())
@@ -124,7 +125,7 @@ class ProviderHomeScreen : Fragment() {
                     val data = it.data!![0]
                     if (it.data.isNotEmpty()) {
                         binding.newJobExpiresIn.text = data.expires_in
-                        binding.newJobCostPerHour.text = data.amount
+                        binding.newJobCostPerHour.text = "Rs.${data.amount}/-"
                         binding.newJobLocation.text = data.job_post_description[0].city
                         binding.newJobDescription.text = data.job_post_description[0].job_description
                         binding.newJobCallBtn.setOnClickListener {
@@ -154,6 +155,7 @@ class ProviderHomeScreen : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUpcomingLayout(status: String) {
         val factory = ViewModelFactory(ProviderBookingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
@@ -189,7 +191,7 @@ class ProviderHomeScreen : Fragment() {
                         binding.scheduleIn.text = data.scheduled_date
                         binding.location.text = data.details[0].city
                         binding.description.text = data.details[0].job_description
-                        binding.costPerHour.text = data.amount
+                        binding.costPerHour.text = "Rs.${data.amount}/-"
                         binding.callBtn.setOnClickListener {
                             UserUtils.makePhoneCall(requireContext(), data.mobile)
                         }

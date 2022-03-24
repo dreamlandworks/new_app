@@ -285,12 +285,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@drawable/category_bg"
                 android:gravity="center"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/next" />
 
         </RelativeLayout>
