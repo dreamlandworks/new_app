@@ -45,7 +45,6 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                 "Pending" -> {
                     binding.editBtn.visibility = View.VISIBLE
                     binding.awardedBtn.visibility = View.GONE
-        //                binding.awardedBtn.text = "Award"
                     binding.editBtn.setOnClickListener {
                         when (jobPostDetail.category_id) {
                             "1" -> {

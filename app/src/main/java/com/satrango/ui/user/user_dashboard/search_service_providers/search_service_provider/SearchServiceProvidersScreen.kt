@@ -203,10 +203,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                                 if (key.phrase == value) {
                                     keyword = key.id
                                     subCategoryId = key.subcategory_id
-                                    UserUtils.saveSelectedKeywordCategoryId(
-                                        this@SearchServiceProvidersScreen,
-                                        key.category_id
-                                    )
+                                    UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
                                 }
                             }
 //                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
@@ -322,6 +319,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
                         UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
                         UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
+                        Log.e("SERACH RESULTS:", Gson().toJson(response))
 //                    showBookingTypeDialog(response)
                     }
                     progressDialog.dismiss()

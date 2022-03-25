@@ -1030,6 +1030,7 @@ object UserUtils {
         val start: LocalTime = LocalTime.parse(startTime!!.split(":")[0] + ":" + startTime.split(":")[1]) //"22:00"
         val end: LocalTime = LocalTime.parse(endTime!!.split(":")[0] + ":" + endTime.split(":")[1]) //"10:00"
         val now: LocalTime = LocalTime.parse(compareTime.split(":")[0] + ":" + compareTime.split(":")[1])
+        Log.e("TIME:", "$start|$end|$now")
         if (start.isBefore(end)) return now.isAfter(start) && now.isBefore(end)
         return if (now.isBefore(start)) now.isBefore(start) && now.isBefore(end) else now.isAfter(start) && now.isAfter(end)
     }

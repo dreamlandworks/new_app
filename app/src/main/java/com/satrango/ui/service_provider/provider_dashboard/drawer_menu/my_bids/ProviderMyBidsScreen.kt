@@ -64,19 +64,6 @@ class ProviderMyBidsScreen : AppCompatActivity() {
             for (sp in newJobsList.job_post_details) {
                 if (filter.priceRangeFrom.toDouble() <= sp.amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.amount.toDouble()) {
                     if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
-//                        if (filter.experience) {
-//                            if(sp.exp != "0-1 Year") {
-//                                list.add(sp)
-//                            }
-//                        } else if (filter.fresher) {
-//                            if(sp.exp == "0-1 Year") {
-//                                list.add(sp)
-//                            }
-//                        } else if (filter.any) {
-//                            list.add(sp)
-//                        } else {
-//
-//                        }
                         list.add(sp)
                     }
                 }
@@ -166,7 +153,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 
     private fun updateUI(status: String) {
 //        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, 2)
+        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.bidsList(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
