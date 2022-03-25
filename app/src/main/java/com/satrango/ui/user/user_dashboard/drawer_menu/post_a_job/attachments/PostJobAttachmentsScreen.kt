@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
-import android.util.Base64.DEFAULT
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -23,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.*
@@ -46,9 +44,9 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpO
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
-import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.AttachmentDeleteReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_edit.models.blue_collar.MyJobPostEditBlueCollarReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
@@ -61,17 +59,12 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
-import java.lang.Byte.decode
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 
@@ -165,7 +158,6 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                             } else {
                                 postJobBlueCollar()
                             }
-
                         }
                     }
                 }
@@ -281,6 +273,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.title,
             UserUtils.getUserId(this).toInt()
         )
+        Log.e("BID RANGE:", Gson().toJson(requestBody))
         viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -288,6 +281,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     snackBar(binding.nextBtn, it.data!!.message)
+                    showSuccessDialog("Post Job Update Successful")
                     Handler().postDelayed({
                         startActivity(Intent(this, UserDashboardScreen::class.java))
                     }, 3000)
@@ -295,14 +289,15 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
+                    toast(this, it.message!!)
                 }
             }
         }
     }
 
     private fun updateUI() {
-        data = Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
+        data =
+            Gson().fromJson(UserUtils.EDIT_MY_JOB_POST_DETAILS, MyJobPostViewResModel::class.java)
         val chips = ArrayList<ChipInfo>()
         for (language in data.languages) {
             chips.add(ChipInfo(language, language))
@@ -344,8 +339,10 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-        imagePathList = data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
-        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        imagePathList =
+            data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
+        binding.attachmentsRV.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
     }
 
@@ -381,7 +378,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     if (it.data!!.user_plan_id != "0") {
-                        showSuccessDialog()
+                        showSuccessDialog("Post Job Updated Successful")
                     } else {
                         UserMyAccountScreen.FROM_MY_ACCOUNT = false
 //                        startActivity(Intent(this, UserPlanScreen::class.java))
@@ -389,25 +386,27 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
+                    toast(this, it.message!!)
                 }
             }
         }
 
     }
 
-    private fun showSuccessDialog() {
+    private fun showSuccessDialog(messageText: String) {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.payment_success_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         val homeBtn = dialogView.findViewById<TextView>(R.id.closBtn)
+        val message = dialogView.findViewById<TextView>(R.id.text)
+        message.text = messageText
         closeBtn.setOnClickListener {
             dialog.dismiss()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
+            startActivity(Intent(this, MyJobPostsScreen::class.java))
         }
         homeBtn.setOnClickListener {
             dialog.dismiss()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
+            startActivity(Intent(this, MyJobPostsScreen::class.java))
         }
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
@@ -563,7 +562,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 )
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
             }
-            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
             Log.e("PATHS:", Gson().toJson(imagePathList))
 
@@ -593,20 +593,39 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                                 Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
-                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                                            "",
+                                            image_url,
+                                            "",
+                                            image_key
+                                        ).file_name == image_url
+                                    ) {
                                         existed = true
                                     }
                                 }
                                 if (!existed) {
-                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                    imagePathList.add(
+                                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                                            "",
+                                            image_url,
+                                            "",
+                                            image_key
+                                        )
+                                    )
                                     encodedImages.add(Attachment(image_url))
                                 }
                             }
-                            binding.attachmentsRV.layoutManager = LinearLayoutManager(this@PostJobAttachmentsScreen, LinearLayoutManager.HORIZONTAL,false)
-                            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
+                            binding.attachmentsRV.layoutManager = LinearLayoutManager(
+                                this@PostJobAttachmentsScreen,
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                            binding.attachmentsRV.adapter =
+                                AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
                             imageProgressDialog.dismiss()
                             Log.e("URLS", Gson().toJson(encodedImages))
                         }
+
                         override fun onCancelled(databaseError: DatabaseError) {
                         }
                     }
@@ -693,7 +712,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
     }
 
