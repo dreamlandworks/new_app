@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderPlaceBidScreenBinding
@@ -285,6 +286,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 UserUtils.getUserId(this).toInt(),
                 binding.title.text.toString().trim()
             )
+            Log.e("POST BID:", Gson().toJson(requestBody))
             viewModel.postBid(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
