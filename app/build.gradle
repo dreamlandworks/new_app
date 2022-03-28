@@ -89,7 +89,7 @@ dependencies {
 
     // Retrofit For Api Calls
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 
@@ -112,6 +112,7 @@ dependencies {
     // Add the following line:
     apply plugin: 'com.google.gms.google-services'
 
+    implementation 'com.paytm.appinvokesdk:appinvokesdk:1.6.8'
     // Youtube
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.23'
 }

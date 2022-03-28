@@ -94,6 +94,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/multiLocationsBtn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -129,6 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:orientation="vertical"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/_30sdp"
             android:gravity="center"

@@ -101,10 +101,10 @@ class DiscussionListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (list[position].users_id == UserUtils.getUserId(context)) {
-            return USER_VIEW
+        return if (list[position].users_id == UserUtils.getUserId(context)) {
+            USER_VIEW
         } else {
-            return PROVIDER_VIEW
+            PROVIDER_VIEW
         }
     }
 }

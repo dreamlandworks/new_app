@@ -80,7 +80,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import java.lang.NumberFormatException
 import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
@@ -89,6 +88,7 @@ import java.time.Instant
 import java.util.*
 import android.os.CountDownTimer
 import android.view.LayoutInflater
+import com.bumptech.glide.load.HttpException
 import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
 

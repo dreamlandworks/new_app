@@ -47,6 +47,8 @@ import com.bumptech.glide.Glide
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.model.ProviderInvoiceResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
+import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope

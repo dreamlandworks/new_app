@@ -195,7 +195,7 @@
         <entry key="app/src/main/res/layout/activity_post_job_description_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_post_job_multi_move_address_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_post_job_multi_move_description_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_post_job_type_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_post_job_type_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_provider_booking_response_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_dashboard.xml" value="0.232421875" />
@@ -249,8 +249,8 @@
         <entry key="app/src/main/res/layout/booking_status_row.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/choose_plan_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/complaint_request_row.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/discussion_board_sp_row.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/discussion_board_user_row.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/discussion_board_sp_row.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/discussion_board_user_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/faq_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/fragment_personal_profile_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.24427083333333333" />

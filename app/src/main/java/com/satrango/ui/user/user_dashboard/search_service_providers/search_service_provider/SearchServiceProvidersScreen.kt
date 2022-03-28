@@ -226,8 +226,12 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             ) {
                 snackBar(binding.goBtn, "Please select location")
             } else {
-                UserUtils.saveSearchFilter(this, "")
-                loadSearchResults(subCategoryId)
+                if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
+                    toast(this, "We are working on this category. So Service Providers are not available based on you search.")
+                } else {
+                    UserUtils.saveSearchFilter(this, "")
+                    loadSearchResults(subCategoryId)
+                }
             }
         }
 

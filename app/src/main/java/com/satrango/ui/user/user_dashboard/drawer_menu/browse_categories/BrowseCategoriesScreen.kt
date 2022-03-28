@@ -64,15 +64,21 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
         }
         val factory = ViewModelFactory(BrowseCategoriesRepository())
         viewModel = ViewModelProvider(this, factory)[BrowseCategoriesViewModel::class.java]
-        viewModel.getBrowseCategories(this).observe(this, {
-            when(it) {
+        viewModel.getBrowseCategories(this).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     categoriesList = it.data as java.util.ArrayList<BrowserCategoryModel>
-                    binding.categoryRV.layoutManager = LinearLayoutManager(this@BrowseCategoriesScreen, LinearLayoutManager.HORIZONTAL, false)
-                    binding.categoryRV.adapter = BrowseCategoriesAdapter(categoriesList, this@BrowseCategoriesScreen)
+                    categoriesList.removeLast()
+                    binding.categoryRV.layoutManager = LinearLayoutManager(
+                        this@BrowseCategoriesScreen,
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    binding.categoryRV.adapter =
+                        BrowseCategoriesAdapter(categoriesList, this@BrowseCategoriesScreen)
                     displaySubCategories(categoriesList[0].id)
                 }
                 is NetworkResponse.Failure -> {
@@ -81,7 +87,7 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                 }
             }
 
-        })
+        }
     }
 
     override fun selectedCategory(categoryId: String, position: Int) {

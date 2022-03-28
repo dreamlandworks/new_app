@@ -450,4 +450,11 @@
         </provider>
     </application>
 
+    <queries>
+        <package android:name="net.one97.paytm" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
+
 </manifest>

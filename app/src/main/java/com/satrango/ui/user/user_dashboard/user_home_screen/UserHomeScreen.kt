@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,13 +44,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.HttpException
+import com.bumptech.glide.load.HttpException
 import java.net.SocketTimeoutException
+
 
 class UserHomeScreen :
     BaseFragment<UserHomeViewModel, FragmentUserHomeScreenBinding, UserHomeRepository>(),
     BrowseCategoriesInterface {
 
+//    private lateinit var transactionManager: TransactionManager
+//    private val activityRequestCode: Int = 1
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var categoriesList: ArrayList<BrowserCategoryModel>
 
@@ -57,12 +61,6 @@ class UserHomeScreen :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
-//            UserDashboardScreen.fetchLocation(requireContext())
-//        }
-        if (UserUtils.getUserName(requireContext()).isNotEmpty()) {
-
-        }
         loadHomeScreen()
         toast(requireContext(), UserUtils.getUserId(requireContext()))
 
@@ -142,6 +140,7 @@ class UserHomeScreen :
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     categoriesList = it.data as java.util.ArrayList<BrowserCategoryModel>
+                    categoriesList.removeLast()
                     binding.categoryRV.adapter =
                         BrowseCategoriesAdapter(categoriesList, this@UserHomeScreen)
                 }
@@ -154,7 +153,66 @@ class UserHomeScreen :
 
         updatePopularServices("1")
 
+        try {
+//            processPaytm()
+
+        } catch (e: java.lang.Exception) {
+            toast(requireContext(), e.message!!)
+        }
     }
+
+//    private fun processPaytm() {
+//        val paytmOrder = PaytmOrder("orderid", "mid", "txnToken", "1", "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=<order_id>")
+//        transactionManager = TransactionManager(paytmOrder,object:  PaytmPaymentTransactionCallback {
+//            override fun onTransactionResponse(p0: Bundle?) {
+//                Toast.makeText(requireContext(), "Payment Transaction response " + p0.toString(), Toast.LENGTH_LONG).show();
+//            }
+//
+//            override fun networkNotAvailable() {
+//
+//            }
+//
+//            override fun onErrorProceed(p0: String?) {
+//
+//            }
+//
+//            override fun clientAuthenticationFailed(p0: String?) {
+//
+//            }
+//
+//            override fun someUIErrorOccurred(p0: String?) {
+//
+//            }
+//
+//            override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
+//
+//            }
+//
+//            override fun onBackPressedCancelTransaction() {
+//
+//            }
+//
+//            override fun onTransactionCancel(p0: String?, p1: Bundle?) {
+//
+//            }
+//
+//        });
+//        transactionManager.setAppInvokeEnabled(false)
+//        transactionManager.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage");
+//        transactionManager.setEmiSubventionEnabled(true);
+//        transactionManager.startTransaction(requireActivity(), activityRequestCode);
+//        transactionManager.startTransactionAfterCheckingLoginStatus(requireActivity(), resources.getString(R.string.paytm_client_id), activityRequestCode);
+//    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (requestCode == activityRequestCode && data != null) {
+//            Toast.makeText(
+//                requireContext(),
+//                data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+//    }
 
     private fun updatePopularServices(categoryId: String) {
         binding.userPopularServicesRv.layoutManager =

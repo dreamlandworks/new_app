@@ -62,6 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:text="@string/you_can_receive_commission_of_upto_rs_50_000_per_month_by_simply_referring_your_friends_to_our_app"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />

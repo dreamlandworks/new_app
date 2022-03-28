@@ -146,7 +146,8 @@ class SearchServiceProviderAdapter(
         minChargesCost.text = "Rs. ${round(charges.min_charges.toDouble()).toInt()}/-"
         if (charges.category_id == "3") {
             cpkmsText.text = "Distance Per Kms:"
-            cpkmsCost.text = "Rs" + UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()
+//            cpkmsCost.text = "Rs" + UserUtils.roundOffDecimal(charges.distance_kms.toDouble()).toString()
+            cpkmsCost.text = "Rs" + round(charges.distance_kms.toDouble()).toInt().toString()
         } else {
             cpkmsText.visibility = View.GONE
             cpkmsCost.visibility = View.GONE

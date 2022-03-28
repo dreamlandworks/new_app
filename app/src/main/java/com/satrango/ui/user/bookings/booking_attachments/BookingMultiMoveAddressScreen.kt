@@ -157,7 +157,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             }
 
         }
-        
+
+        toast(this, "Multimove screenR")
     }
 
     private fun initializeToolBar() {

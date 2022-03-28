@@ -103,7 +103,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 toast(this@PaymentScreen, finalWalletBalance)
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
             } else {
-
                 amount
             }
             payableAmount.text = "Rs. $finalAmount"
@@ -171,56 +170,56 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
 
             googlePayBtn.setOnClickListener {
-                when {
-                    FROM_PROVIDER_PLANS -> {
-//                        startActivity(Intent(this@PaymentScreen, ProviderDashboard::class.java))
-                        saveProviderPlan("paymentId")
-                    }
-                    FROM_USER_PLANS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
-                        saveUserPlan("paymentId")
-                    }
-                    FROM_USER_BOOKING_ADDRESS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
-                        updateStatusInServer("paymentId", "Success")
-                    }
-                    FROM_PROVIDER_BOOKING_RESPONSE -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
-                        updateStatusInServer("paymentId", "Success")
-                    }
-                    FROM_USER_SET_GOALS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
-                        updateInstallmentPaymentStatus("Success", "paymentId")
-                    }
-                    FROM_COMPLETE_BOOKING -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
-                        completeBooking("Success", "paymentId")
-                    }
-                }
+//                when {
+//                    FROM_PROVIDER_PLANS -> {
+////                        startActivity(Intent(this@PaymentScreen, ProviderDashboard::class.java))
+//                        saveProviderPlan("paymentId")
+//                    }
+//                    FROM_USER_PLANS -> {
+////                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+//                        saveUserPlan("paymentId")
+//                    }
+//                    FROM_USER_BOOKING_ADDRESS -> {
+////                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+//                        updateStatusInServer("paymentId", "Success")
+//                    }
+//                    FROM_PROVIDER_BOOKING_RESPONSE -> {
+////                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+//                        updateStatusInServer("paymentId", "Success")
+//                    }
+//                    FROM_USER_SET_GOALS -> {
+////                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+//                        updateInstallmentPaymentStatus("Success", "paymentId")
+//                    }
+//                    FROM_COMPLETE_BOOKING -> {
+////                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
+//                        completeBooking("Success", "paymentId")
+//                    }
+//                }
             }
 
             phonePeBtn.setOnClickListener {
-                when {
-                    FROM_PROVIDER_PLANS -> {
-                        saveProviderPlan("paymentId")
-                    }
-                    FROM_USER_PLANS -> {
-                        saveUserPlan("paymentId")
-                    }
-                    FROM_USER_BOOKING_ADDRESS -> {
-                        updateStatusInServer("paymentId", "Success")
-                    }
-                    FROM_PROVIDER_BOOKING_RESPONSE -> {
-                        updateStatusInServer("paymentId", "Success")
-                    }
-                    FROM_USER_SET_GOALS -> {
-                        updateInstallmentPaymentStatus("Success", "paymentId")
-                    }
-                    FROM_COMPLETE_BOOKING -> {
-                        completeBooking("Success", "paymentId")
-                    }
-                }
-//                makePayment()
+//                when {
+//                    FROM_PROVIDER_PLANS -> {
+//                        saveProviderPlan("paymentId")
+//                    }
+//                    FROM_USER_PLANS -> {
+//                        saveUserPlan("paymentId")
+//                    }
+//                    FROM_USER_BOOKING_ADDRESS -> {
+//                        updateStatusInServer("paymentId", "Success")
+//                    }
+//                    FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                        updateStatusInServer("paymentId", "Success")
+//                    }
+//                    FROM_USER_SET_GOALS -> {
+//                        updateInstallmentPaymentStatus("Success", "paymentId")
+//                    }
+//                    FROM_COMPLETE_BOOKING -> {
+//                        completeBooking("Success", "paymentId")
+//                    }
+//                }
+                makePayment()
             }
 
             addNewUPI.setOnClickListener {
@@ -366,7 +365,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         val finalAmount = if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toDouble()).toInt()
         } else {
-            amount.toInt()
+            amount
         }
         val requestBody = UserPlanPaymentReqModel(
             finalAmount,
