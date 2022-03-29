@@ -1,5 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+<!--    <style name="AppTheme" parent="ChatSDKTheme">-->
+<!--    </style>-->
     <style name="Theme.Satrango" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_500</item>
