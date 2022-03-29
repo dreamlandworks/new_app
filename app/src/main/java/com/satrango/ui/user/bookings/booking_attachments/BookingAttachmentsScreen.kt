@@ -59,6 +59,7 @@ import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import org.json.JSONObject
 import java.io.*
 import java.net.URL
 import java.net.URLConnection
@@ -378,6 +379,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             imageProgressDialog.setCancelable(false)
             imageProgressDialog.show()
             profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                imageProgressDialog.dismiss()
                 toast(this, it.message!!)
             }.addOnSuccessListener {
                 profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -508,6 +510,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
+                    val jsonResponse = JSONObject(it.data!!)
+                    UserUtils.saveTxnToken(this@BookingAttachmentsScreen, jsonResponse.getString("txn_id"))
+                    UserUtils.saveOrderId(this@BookingAttachmentsScreen, jsonResponse.getString("order_id"))
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.saveInstantBooking(this, false)

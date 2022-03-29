@@ -100,6 +100,7 @@
                 android:id="@+id/phonePeBtn"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
+                android:visibility="gone"
                 android:src="@drawable/phone_pe_logo"
                 android:layout_margin="@dimen/_10sdp"
                 tools:ignore="ContentDescription" />
@@ -108,6 +109,7 @@
                 android:id="@+id/googlePayBtn"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
+                android:visibility="gone"
                 android:src="@drawable/googlepay"
                 android:layout_margin="@dimen/_10sdp"
                 tools:ignore="ContentDescription" />
@@ -123,6 +125,7 @@
             <ImageView
                 android:id="@+id/amazonBtn"
                 android:layout_width="@dimen/_40sdp"
+                android:visibility="gone"
                 android:layout_height="@dimen/_40sdp"
                 android:src="@drawable/amazon_pay"
                 android:layout_margin="@dimen/_10sdp"
@@ -131,6 +134,7 @@
             <ImageView
                 android:id="@+id/wtsappPayBtn"
                 android:layout_width="@dimen/_40sdp"
+                android:visibility="gone"
                 android:layout_height="@dimen/_40sdp"
                 android:src="@drawable/whatsapp_logo"
                 android:layout_margin="@dimen/_10sdp"
@@ -160,6 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
+            android:visibility="gone"
             android:textStyle="bold"
             android:gravity="center"
             android:drawablePadding="@dimen/_10sdp"
@@ -170,6 +175,7 @@
             tools:ignore="UseCompatTextViewDrawableXml" />
 
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text"
@@ -179,6 +185,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/upisRV"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
@@ -304,6 +311,7 @@
             android:background="@color/lightGray"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/addCreditDebitCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -323,6 +331,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text"
+        android:visibility="gone"
         android:textStyle="bold"
         android:layout_margin="@dimen/_10sdp"
         android:text="@string/net_banking"/>
@@ -331,6 +340,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/_15sdp">
 
         <TextView

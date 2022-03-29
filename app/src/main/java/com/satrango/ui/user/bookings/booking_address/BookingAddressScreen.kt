@@ -381,6 +381,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 this@BookingAddressScreen,
                                 jsonResponse.getString("booking_ref_id")
                             )
+                            UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
+                            UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this@BookingAddressScreen,
                                 UserUtils.getBookingId(this@BookingAddressScreen),
@@ -472,6 +474,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             this@BookingAddressScreen,
                             jsonResponse.getString("booking_ref_id")
                         )
+                        UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
+                        UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                             if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
@@ -884,6 +888,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
+                    val jsonResponse = JSONObject(it.data!!)
+                    UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
+                    UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(

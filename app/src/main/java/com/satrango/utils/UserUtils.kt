@@ -654,6 +654,32 @@ object UserUtils {
         editor.commit()
     }
 
+    fun getOrderId(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.order_id), "")!!
+    }
+
+    fun saveOrderId(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.order_id), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getTxnToken(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.txn_id), "")!!
+    }
+
+    fun saveTxnToken(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.txn_id), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
     fun getInstantBooking(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.book_instantly), false)
