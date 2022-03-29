@@ -3,11 +3,14 @@ package com.satrango.ui.user.bookings.payment_screen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -68,6 +71,12 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var transactionManager: TransactionManager
     private val activityRequestCode: Int = 1
+    private val REQUEST_CODE = 123
+
+    val BHIM_UPI = "in.org.npci.upiapp"
+    val GOOGLE_PAY = "com.google.android.apps.nbu.paisa.user"
+    val PHONE_PE = "com.phonepe.app"
+    val PAYTM = "net.one97.paytm"
 
     companion object {
         var id = 0
@@ -93,6 +102,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
         initializeProgressDialog()
         initializeToolbar()
+
+
 
         binding.apply {
 
@@ -188,15 +199,48 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
             }
 
+//            val upiApps = listOf<String>(PAYTM, GOOGLE_PAY, PHONE_PE, BHIM_UPI)
+
+            /*2.1 Defining button elements for generic UPI OS intent and specific UPI Apps */
+
+            /*2.2 Combining button elements of specific UPI Apps in a list in the same order as the above upiApps list of UPI app package names */
+//            val upiAppButtons = listOf<Button>(paytmButton, gpayButton, phonepeButton, bhimButton)
+
+            /*3. Defining a UPI intent with a Paytm merchant UPI spec deeplink */
+            val uri = "upi://pay?pa=paytmqr2810050501011ooqggb29a01@paytm&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=0&paytmqr=2810050501011OOQGGB29A01&am=$amount&sign=MEYCIQDq96qhUnqvyLsdgxtfdZ11SQP//6F7f7VGJ0qr//lF/gIhAPgTMsopbn4Y9DiE7AwkQEPPnb2Obx5Fcr0HJghd4gzo"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            intent.data = Uri.parse(uri)
+
             paytmBtn.setOnClickListener {
 
-                try {
-                    processPaytm()
-                } catch (e: java.lang.Exception) {
-                    toast(this@PaymentScreen, e.message!!)
-                }
+                val chooser = Intent.createChooser(intent, "Pay with...")
+                startActivityForResult(chooser, REQUEST_CODE)
+
+//                try {
+//                    processPaytm()
+//                } catch (e: java.lang.Exception) {
+//                    toast(this@PaymentScreen, e.message!!)
+//                }
 
             }
+
+//            for(i in upiApps.indices){
+//                val b = upiAppButtons[i]
+//                val p = upiApps[i]
+////                Log.d("UpiAppVisibility", p + " | " + isAppInstalled(p).toString() + " | " + isAppUpiReady(p))
+//                if(isAppInstalled(p)&&isAppUpiReady(p)) {
+//                    b.visibility = View.VISIBLE
+//                    b.setOnClickListener{
+//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+//                        intent.data = Uri.parse(uri)
+//                        intent.setPackage(p)
+//                        startActivityForResult(intent, REQUEST_CODE)
+//                    }
+//                }
+//                else{
+//                    b.visibility = View.INVISIBLE
+//                }
+//            }
 
             addNewUPI.setOnClickListener {
                 if (enterUPIid.visibility == View.VISIBLE) {
@@ -230,48 +274,74 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         }
     }
 
+    private fun isAppInstalled(packageName: String): Boolean {
+        val pm = packageManager
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+            return true
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return false
+    }
+    /*
+        This function checks if the app with this package name is responding to UPI intent
+        - i.e. the app has a ready UPI user (as per the NPCI recommended implementation)
+        - Circular: https://www.npci.org.in/sites/default/files/circular/Circular-73-Payer_App_behaviour_for_Intent_based_transaction_on_UPI.pdf
+    */
+    private fun isAppUpiReady(packageName: String): Boolean {
+        var appUpiReady = false
+        val upiIntent = Intent(Intent.ACTION_VIEW, Uri.parse("upi://pay"))
+        val pm = packageManager
+        val upiActivities: List<ResolveInfo> = pm.queryIntentActivities(upiIntent, 0)
+        for (a in upiActivities){
+            if (a.activityInfo.packageName == packageName) appUpiReady = true
+        }
+        return appUpiReady
+    }
+
     private fun processPaytm() {
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount.toString(), "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${UserUtils.getOrderId(this)}")
         transactionManager = TransactionManager(paytmOrder,object: PaytmPaymentTransactionCallback {
             override fun onTransactionResponse(p0: Bundle?) {
-                Toast.makeText(this@PaymentScreen, "Payment Transaction response " + p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, "Payment Transaction response " + p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun networkNotAvailable() {
-                Toast.makeText(this@PaymentScreen, "Network Not available", Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, "Network Not available", Toast.LENGTH_LONG).show()
 
             }
 
             override fun onErrorProceed(p0: String?) {
-                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun clientAuthenticationFailed(p0: String?) {
-                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun someUIErrorOccurred(p0: String?) {
-                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
-                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun onBackPressedCancelTransaction() {
-                Toast.makeText(this@PaymentScreen, "Transaction Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, "Transaction Cancelled", Toast.LENGTH_LONG).show()
             }
 
             override fun onTransactionCancel(p0: String?, p1: Bundle?) {
-                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
-        });
+        })
         transactionManager.setAppInvokeEnabled(false)
-        transactionManager.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage");
-        transactionManager.setEmiSubventionEnabled(true);
-        transactionManager.startTransaction(this, activityRequestCode);
-        transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode);
+        transactionManager.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage")
+        transactionManager.setEmiSubventionEnabled(true)
+        transactionManager.startTransaction(this, activityRequestCode)
+        transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
     }
 
     private fun loadSavedUpiList() {
@@ -345,6 +415,12 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+        if (requestCode == REQUEST_CODE) {
+            // Process based on the data in response.
+            Log.d("result", data.toString())
+            data?.getStringExtra("Status")?.let { Log.d("result", it) };
+            data?.getStringExtra("Status")?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show() };
         }
     }
 
