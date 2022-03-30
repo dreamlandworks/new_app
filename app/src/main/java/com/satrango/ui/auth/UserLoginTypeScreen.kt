@@ -39,6 +39,7 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 
 import android.widget.Toast
+import com.google.firebase.messaging.ktx.messaging
 import java.text.SimpleDateFormat
 
 
@@ -53,6 +54,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserLoginTypeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Firebase.messaging.isAutoInitEnabled = true
 
         if (!UserUtils.updateNewFCMToken(this)) {
             snackBar(binding.userBtn, "Please check internet connection!")

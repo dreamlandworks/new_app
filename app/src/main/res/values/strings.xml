@@ -108,6 +108,7 @@
     <string name="choose">Choose</string>
     <string name="from">From</string>
     <string name="from_job_post">From Job Post</string>
+    <string name="post_job_id">post_job_id</string>
     <string name="invoice_details">InvoiceDetails</string>
     <string name="instant_booking_sp_count">Instant Booking Sp Count</string>
     <string name="saveInstallmentDetId">saveInstallmentDetId</string>

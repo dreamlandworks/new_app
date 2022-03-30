@@ -77,6 +77,19 @@ object UserUtils {
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
     }
 
+    fun savePostJobId(context: Context, postJobId: Int) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt(context.resources.getString(R.string.post_job_id), postJobId)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getPostJobId(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getInt(context.resources.getString(R.string.post_job_id), 0)
+    }
+
     fun saveInVoiceDetails(context: Context, invoiceDetails: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -1080,6 +1093,11 @@ object UserUtils {
         if (PermissionUtils.isNetworkConnected(context)) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
+                    Toast.makeText(
+                        context,
+                        "Fetching FCM registration token failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
                     Toast.makeText(context, task.exception.message, Toast.LENGTH_SHORT).show()
                     return@OnCompleteListener
@@ -1096,9 +1114,11 @@ object UserUtils {
                     )
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
+                        Toast.makeText(context, "FCM UPDATE ERROR", Toast.LENGTH_SHORT).show()
                         return@launch
                     } else {
                         Log.e("FCM TOKEN UPDATED:", token)
+                        Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
                     }
                 }
                 Log.e("FCM TOKEN", token)

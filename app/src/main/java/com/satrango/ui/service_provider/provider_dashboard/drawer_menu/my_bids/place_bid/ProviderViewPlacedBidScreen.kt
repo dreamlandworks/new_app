@@ -31,6 +31,7 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
@@ -57,7 +58,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
         loadProfileImage(profilePic)
 
         initializeProgressDialog()
-
+//        toast(this, UserUtils.getPostJobId(this).toString())
         val factory = ViewModelFactory(PostJobRepository())
         viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 
@@ -134,7 +135,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
                 MyJobPostViewScreen.bookingId = bookingId
                 MyJobPostViewScreen.categoryId = categoryId
                 MyJobPostViewScreen.userId = userId
-                MyJobPostViewScreen.postJobId = postJobId
+                UserUtils.savePostJobId(this@ProviderViewPlacedBidScreen, postJobId)
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                 binding.root.context.startActivity(intent)
             }
@@ -145,7 +146,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
                 intent.putExtra("expiresIn", binding.expiresOn.text.toString().trim())
                 intent.putExtra("bidRanges", binding.bidRanges.text.toString().trim())
                 intent.putExtra("title", binding.title.text.toString().trim())
-                ProviderPlaceBidScreen.postJobId = postJobId
+//                ProviderPlaceBidScreen.postJobId = postJobId
                 ProviderPlaceBidScreen.bookingId = bookingId
                 startActivity(intent)
             }

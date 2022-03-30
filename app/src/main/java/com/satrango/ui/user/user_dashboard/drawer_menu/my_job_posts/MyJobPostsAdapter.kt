@@ -114,7 +114,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                 isProvider(binding.avgAmount.context, false)
                 MyJobPostViewScreen.bookingId = jobPostDetail.booking_id.toInt()
                 MyJobPostViewScreen.categoryId = jobPostDetail.category_id.toInt()
-                MyJobPostViewScreen.postJobId = jobPostDetail.post_job_id.toInt()
+                UserUtils.savePostJobId(binding.avgAmount.context, jobPostDetail.post_job_id.toInt())
                 MyJobPostViewScreen.userId = jobPostDetail.sp_id.toInt()
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                 binding.root.context.startActivity(intent)

@@ -137,7 +137,7 @@ class ProviderHomeScreen : Fragment() {
                             MyJobPostViewScreen.bookingId = data.booking_id.toInt()
                             MyJobPostViewScreen.categoryId = data.category_id.toInt()
                             MyJobPostViewScreen.userId = data.booking_user_id.toInt()
-                            MyJobPostViewScreen.postJobId = data.post_job_id.toInt()
+                            UserUtils.savePostJobId(requireContext(), data.post_job_id.toInt())
                             val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                             binding.root.context.startActivity(intent)
                         }

@@ -76,6 +76,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityProviderPlaceBidScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        toast(this, UserUtils.getPostJobId(this).toString())
+
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
@@ -281,7 +283,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 binding.estimateTime.text.toString().toInt(),
                 estimateTimeType,
                 RetrofitBuilder.PROVIDER_KEY,
-                postJobId,
+                UserUtils.getPostJobId(this),
                 binding.proposalDescription.text.toString().trim(),
                 UserUtils.getUserId(this).toInt(),
                 binding.title.text.toString().trim()

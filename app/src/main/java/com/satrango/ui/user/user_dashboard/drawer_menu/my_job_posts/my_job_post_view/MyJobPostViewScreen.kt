@@ -49,7 +49,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         var myJobPostViewScreen = false
         var bookingId: Int = 0
         var categoryId: Int = 0
-        var postJobId: Int = 0
         var userId: Int = 0
     }
 
@@ -179,7 +178,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
                 intent.putExtra("expiresIn", data.job_post_details.expires_in)
                 intent.putExtra("bidRanges", data.job_post_details.range_slots)
                 intent.putExtra("title", data.job_post_details.title)
-                intent.putExtra("postJobId", data.job_post_details.post_job_id)
+//                intent.putExtra("postJobId", data.job_post_details.post_job_id)
                 ProviderPlaceBidScreen.bookingId = bookingId
                 startActivity(intent)
             }
@@ -230,7 +229,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             bookingId,
             categoryId,
             RetrofitBuilder.USER_KEY,
-            postJobId,
+            UserUtils.getPostJobId(this),
             UserUtils.getUserId(this).toInt()
         )
         Log.e("JOB POST:", Gson().toJson(requestBody))
