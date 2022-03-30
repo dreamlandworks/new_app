@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -1080,6 +1081,7 @@ object UserUtils {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
+                    Toast.makeText(context, task.exception.message, Toast.LENGTH_SHORT).show()
                     return@OnCompleteListener
                 }
                 val token = task.result
@@ -1100,6 +1102,7 @@ object UserUtils {
                     }
                 }
                 Log.e("FCM TOKEN", token)
+                Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
             })
             return true
         }
