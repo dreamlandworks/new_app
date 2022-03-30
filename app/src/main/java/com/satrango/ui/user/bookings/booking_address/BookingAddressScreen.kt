@@ -988,7 +988,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     ), "0", true
                 )
             )
-            validateFields()
+            if (!waitingDialog.isShowing) {
+                validateFields()
+            }
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()

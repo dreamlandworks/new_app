@@ -103,8 +103,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         initializeProgressDialog()
         initializeToolbar()
 
-
-
         binding.apply {
 
             if (!FROM_COMPLETE_BOOKING) {
@@ -213,14 +211,14 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
             paytmBtn.setOnClickListener {
 
-                val chooser = Intent.createChooser(intent, "Pay with...")
-                startActivityForResult(chooser, REQUEST_CODE)
+//                val chooser = Intent.createChooser(intent, "Pay with...")
+//                startActivityForResult(chooser, REQUEST_CODE)
 
-//                try {
-//                    processPaytm()
-//                } catch (e: java.lang.Exception) {
-//                    toast(this@PaymentScreen, e.message!!)
-//                }
+                try {
+                    processPaytm()
+                } catch (e: java.lang.Exception) {
+                    toast(this@PaymentScreen, e.message!!)
+                }
 
             }
 
@@ -301,7 +299,9 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     }
 
     private fun processPaytm() {
-        val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount.toString(), "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${UserUtils.getOrderId(this)}")
+        val callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this)}"
+        toast(this, callbackUrl)
+        val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount.toString(), callbackUrl)
         transactionManager = TransactionManager(paytmOrder,object: PaytmPaymentTransactionCallback {
             override fun onTransactionResponse(p0: Bundle?) {
                 Toast.makeText(this@PaymentScreen, "Payment Transaction response " + p0.toString(), Toast.LENGTH_LONG).show()

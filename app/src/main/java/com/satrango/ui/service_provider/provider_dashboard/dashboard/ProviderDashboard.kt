@@ -401,7 +401,7 @@ class ProviderDashboard : AppCompatActivity() {
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
+                        Log.e("RESPONSE TOKEN", UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType"))
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         if (FCMService.notificationManager != null) {

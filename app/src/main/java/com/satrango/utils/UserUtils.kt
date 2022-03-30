@@ -803,7 +803,7 @@ object UserUtils {
         bookingId: String,
         from: String,
         type: String
-    ) {
+    ): String {
         saveProviderAction(context, "")
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
@@ -813,6 +813,7 @@ object UserUtils {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
             Log.e("FCM RESPONSE:", token)
         }
+        return token
     }
 
     fun sendOTPFCM(

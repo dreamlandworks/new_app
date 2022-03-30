@@ -30,7 +30,7 @@ allprojects {
 //        maven { url "https://chatsdk.jfrog.io/artifactory/release/matisse" }
 //        maven { url "https://chatsdk.jfrog.io/artifactory/release/material-search-view" }
 //        maven { url "https://chatsdk.jfrog.io/artifactory/release/android-image-cropper" }
-    }
+}
 }
 
 task clean(type: Delete) {
