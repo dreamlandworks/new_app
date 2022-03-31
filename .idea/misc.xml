@@ -3,11 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.3385416666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.15885416666666666" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_provider_view_placed_bid_screen.xml" value="0.3385416666666667" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/my_bookings_row.xml" value="0.334375" />
-        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/provider_mybids_row.xml" value="0.2359375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/arrow_forward_icon.xml" value="0.2484375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/green_btn_bg.xml" value="0.2484375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/ic_phoneno_purple.xml" value="0.2484375" />
@@ -191,7 +188,7 @@
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_my_job_posts_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
@@ -280,6 +277,8 @@
         <entry key="app/src/main/res/layout/password_success_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/payment_success_dialog.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/payment_type_dialog.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/paytm_payment_failure_dialog.xml" value="0.183203125" />
+        <entry key="app/src/main/res/layout/paytm_payment_success_dialog.xml" value="0.1527777777777778" />
         <entry key="app/src/main/res/layout/popup_content.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/provider_booking_alert_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/provider_choose_plan_row.xml" value="0.11944444444444445" />
@@ -332,7 +331,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

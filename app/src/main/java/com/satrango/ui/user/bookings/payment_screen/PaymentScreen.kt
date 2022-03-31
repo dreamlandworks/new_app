@@ -1,6 +1,7 @@
 package com.satrango.ui.user.bookings.payment_screen
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,7 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -51,6 +51,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
@@ -60,6 +61,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
@@ -159,30 +166,32 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 //                toast(this@PaymentScreen, walletBalanceChecked.toString())
             }
 
+            proceedWithUPIBtn.setOnClickListener {
+                val uri = "upi://pay?pa=paytmqr2810050501011ooqggb29a01@paytm&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=0&paytmqr=2810050501011OOQGGB29A01&am=$amount&sign=MEYCIQDq96qhUnqvyLsdgxtfdZ11SQP//6F7f7VGJ0qr//lF/gIhAPgTMsopbn4Y9DiE7AwkQEPPnb2Obx5Fcr0HJghd4gzo"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                intent.data = Uri.parse(uri)
+                val chooser = Intent.createChooser(intent, "Pay with...")
+                startActivityForResult(chooser, REQUEST_CODE)
+            }
+
             proceedToPayBtn.setOnClickListener {
                 when {
                     FROM_PROVIDER_PLANS -> {
-//                        startActivity(Intent(this@PaymentScreen, ProviderDashboard::class.java))
                         saveProviderPlan("paymentId")
                     }
                     FROM_USER_PLANS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         saveUserPlan("paymentId")
                     }
                     FROM_USER_BOOKING_ADDRESS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateStatusInServer("paymentId", "Success")
                     }
                     FROM_PROVIDER_BOOKING_RESPONSE -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateStatusInServer("paymentId", "Success")
                     }
                     FROM_USER_SET_GOALS -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         updateInstallmentPaymentStatus("Success", "paymentId")
                     }
                     FROM_COMPLETE_BOOKING -> {
-//                        startActivity(Intent(this@PaymentScreen, UserDashboardScreen::class.java))
                         completeBooking("Success", "paymentId")
                     }
                 }
@@ -197,29 +206,12 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
             }
 
-//            val upiApps = listOf<String>(PAYTM, GOOGLE_PAY, PHONE_PE, BHIM_UPI)
-
-            /*2.1 Defining button elements for generic UPI OS intent and specific UPI Apps */
-
-            /*2.2 Combining button elements of specific UPI Apps in a list in the same order as the above upiApps list of UPI app package names */
-//            val upiAppButtons = listOf<Button>(paytmButton, gpayButton, phonepeButton, bhimButton)
-
-            /*3. Defining a UPI intent with a Paytm merchant UPI spec deeplink */
-            val uri = "upi://pay?pa=paytmqr2810050501011ooqggb29a01@paytm&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=0&paytmqr=2810050501011OOQGGB29A01&am=$amount&sign=MEYCIQDq96qhUnqvyLsdgxtfdZ11SQP//6F7f7VGJ0qr//lF/gIhAPgTMsopbn4Y9DiE7AwkQEPPnb2Obx5Fcr0HJghd4gzo"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-            intent.data = Uri.parse(uri)
-
             paytmBtn.setOnClickListener {
-
-//                val chooser = Intent.createChooser(intent, "Pay with...")
-//                startActivityForResult(chooser, REQUEST_CODE)
-
                 try {
                     processPaytm()
                 } catch (e: java.lang.Exception) {
                     toast(this@PaymentScreen, e.message!!)
                 }
-
             }
 
 //            for(i in upiApps.indices){
@@ -304,7 +296,12 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount.toString(), callbackUrl)
         transactionManager = TransactionManager(paytmOrder,object: PaytmPaymentTransactionCallback {
             override fun onTransactionResponse(p0: Bundle?) {
-                Toast.makeText(this@PaymentScreen, "Payment Transaction response " + p0.toString(), Toast.LENGTH_LONG).show()
+                Log.e("PAYTM: ", Gson().toJson(p0.toString()))
+                if (resources.getString(R.string.txn_success) == p0!!.getString(resources.getString(R.string.status_caps))!!) {
+                    showPaymentSuccessDialog()
+                } else {
+                    showPaymentFailureDialog()
+                }
             }
 
             override fun networkNotAvailable() {
@@ -342,6 +339,30 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         transactionManager.setEmiSubventionEnabled(true)
         transactionManager.startTransaction(this, activityRequestCode)
         transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
+    }
+
+    private fun showPaymentFailureDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.paytm_payment_failure_dialog, null)
+        val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
+
+    private fun showPaymentSuccessDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.paytm_payment_success_dialog, null)
+        val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            finish()
+            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.show()
     }
 
     private fun loadSavedUpiList() {
@@ -419,8 +440,8 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         if (requestCode == REQUEST_CODE) {
             // Process based on the data in response.
             Log.d("result", data.toString())
-            data?.getStringExtra("Status")?.let { Log.d("result", it) };
-            data?.getStringExtra("Status")?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show() };
+            data?.getStringExtra("Status")?.let { Log.d("result", it) }
+            data?.getStringExtra("Status")?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show() }
         }
     }
 

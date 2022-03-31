@@ -1114,15 +1114,12 @@ object UserUtils {
                     )
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
-                        Toast.makeText(context, "FCM UPDATE ERROR", Toast.LENGTH_SHORT).show()
                         return@launch
                     } else {
                         Log.e("FCM TOKEN UPDATED:", token)
-                        Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
                     }
                 }
                 Log.e("FCM TOKEN", token)
-                Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
             })
             return true
         }

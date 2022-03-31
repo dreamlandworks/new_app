@@ -652,6 +652,7 @@
     <string name="service_provider_has_requested_booking_reschedule_request_on">Service Provider has requested Booking Reschedule request on</string>
     <string name="mod_balance">Mod. Balance</string>
     <string name="status_">Status:</string>
+    <string name="status_caps">STATUS</string>
     <string name="my_training">My Training</string>
     <string name="training_videos">Training Videos</string>
     <string name="leaderboard">Leaderboard</string>
@@ -708,6 +709,10 @@
     <string name="alert">Alert</string>
     <string name="paytm_client_id">APrhhJ49874327306737</string>
     <string name="paytm_mid">APrhhJ49874327306737</string>
+    <string name="txn_success">TXN_SUCCESS</string>
+    <string name="payment_success">PAYMENT SUCCESS</string>
+    <string name="payment_failed">PAYMENT FAILED</string>
+    <string name="proceed_with_upi_payment">Proceed with UPI Payment</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
