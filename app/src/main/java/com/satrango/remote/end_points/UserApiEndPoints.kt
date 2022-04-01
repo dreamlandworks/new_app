@@ -1,5 +1,8 @@
 package com.satrango.remote.end_points
 
+import com.satrango.R
+import com.satrango.utils.UserUtils
+
 object UserApiEndPoints {
 
     final const val LOGIN = "user/login"
@@ -79,5 +82,6 @@ object UserApiEndPoints {
     final const val COMPLETE_BOOKING = "user/complete_booking"
     final const val SAVE_USER_UPI = "user/save_user_upi"
     final const val GET_USER_UPI = "user/get_user_upi"
+    final const val PAYTM_PROCESS_TXN = "user/process_txn"
 
 }

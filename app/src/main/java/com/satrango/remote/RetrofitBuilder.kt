@@ -13,6 +13,7 @@ object RetrofitBuilder {
     const val BASE_URL = "http://dev.satrango.com/"
 //    const val BASE_URL = "https://www.squill.in/"
     const val FCM_URL = "https://fcm.googleapis.com/"
+    const val PAYTM_URL = "https://securegw-stage.paytm.in/theia/api/v1/"
     const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
     const val PROVIDER_KEY = "Dld0F54x99UeL8nZkByWC0BwUEi4aF4O"
 
@@ -77,6 +78,28 @@ object RetrofitBuilder {
 
         return Retrofit.Builder()
             .baseUrl(FCM_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build().create(UserApiService::class.java)
+    }
+
+    fun getPaytmProcessBuilder(): UserApiService {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val client = OkHttpClient.Builder()
+            .writeTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        return Retrofit.Builder()
+            .baseUrl(PAYTM_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build().create(UserApiService::class.java)

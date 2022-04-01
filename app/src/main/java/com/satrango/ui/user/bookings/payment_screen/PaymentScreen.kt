@@ -1,7 +1,6 @@
 package com.satrango.ui.user.bookings.payment_screen
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -39,8 +38,7 @@ import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansRe
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansViewModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
-import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiReqModel
-import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiReqModel
+import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
@@ -63,7 +61,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -167,11 +164,32 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             }
 
             proceedWithUPIBtn.setOnClickListener {
-                val uri = "upi://pay?pa=paytmqr2810050501011ooqggb29a01@paytm&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=0&paytmqr=2810050501011OOQGGB29A01&am=$amount&sign=MEYCIQDq96qhUnqvyLsdgxtfdZ11SQP//6F7f7VGJ0qr//lF/gIhAPgTMsopbn4Y9DiE7AwkQEPPnb2Obx5Fcr0HJghd4gzo"
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                intent.data = Uri.parse(uri)
-                val chooser = Intent.createChooser(intent, "Pay with...")
-                startActivityForResult(chooser, REQUEST_CODE)
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val requestBodyOne = PaytmProcessTxnReqModel(
+                            amount.toString(),
+                            UserUtils.getBookingId(this@PaymentScreen),
+                            UserUtils.getTxnToken(this@PaymentScreen),
+                            UserUtils.getUserId(this@PaymentScreen)
+                        )
+                        val response = RetrofitBuilder.getUserRetrofitInstance().getPaytmProcessTxn(requestBodyOne)
+                        val jsonResponse = JSONObject(response.string())
+                        val jsonProcessTxn = jsonResponse.getJSONObject("process_txn")
+                        val jsonBody = jsonProcessTxn.getJSONObject("body")
+                        val resultInfo = jsonBody.getJSONObject("resultInfo")
+                        val statusCode = resultInfo.getString("resultCode")
+                        if (statusCode == "0000") {
+                            val jsonDeepLink = jsonBody.getJSONObject("deepLinkInfo")
+                            val deepLink = jsonDeepLink.getString("deepLink")
+                            processUpi(deepLink)
+                        } else {
+                            toast(this@PaymentScreen, "Something went wrong, please try again.")
+                        }
+                        Log.e("PAYMENT:", jsonResponse.toString())
+                    } catch (e: java.lang.Exception) {
+                        toast(this@PaymentScreen, e.message!!)
+                    }
+                }
             }
 
             proceedToPayBtn.setOnClickListener {
@@ -214,24 +232,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 }
             }
 
-//            for(i in upiApps.indices){
-//                val b = upiAppButtons[i]
-//                val p = upiApps[i]
-////                Log.d("UpiAppVisibility", p + " | " + isAppInstalled(p).toString() + " | " + isAppUpiReady(p))
-//                if(isAppInstalled(p)&&isAppUpiReady(p)) {
-//                    b.visibility = View.VISIBLE
-//                    b.setOnClickListener{
-//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-//                        intent.data = Uri.parse(uri)
-//                        intent.setPackage(p)
-//                        startActivityForResult(intent, REQUEST_CODE)
-//                    }
-//                }
-//                else{
-//                    b.visibility = View.INVISIBLE
-//                }
-//            }
-
             addNewUPI.setOnClickListener {
                 if (enterUPIid.visibility == View.VISIBLE) {
                     if (enterUPIid.text.toString().trim().isNotEmpty()) {
@@ -264,6 +264,15 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         }
     }
 
+    private fun processUpi(deepLink: String) {
+        /* for Production */
+        // URL url = new URL("https://securegw.paytm.in/theia/api/v1/processTransaction?mid=YOUR_MID_HERE&orderId=ORDERID_98765");
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
+        intent.data = Uri.parse(deepLink)
+        val chooser = Intent.createChooser(intent, "Pay with...")
+        startActivityForResult(chooser, REQUEST_CODE)
+    }
+
     private fun isAppInstalled(packageName: String): Boolean {
         val pm = packageManager
         try {
@@ -291,6 +300,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     }
 
     private fun processPaytm() {
+//        val productionCallbackUrl = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${UserUtils.getOrderId(this)}"
         val callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this)}"
         toast(this, callbackUrl)
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount.toString(), callbackUrl)
@@ -306,7 +316,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
             override fun networkNotAvailable() {
                 Toast.makeText(this@PaymentScreen, "Network Not available", Toast.LENGTH_LONG).show()
-
             }
 
             override fun onErrorProceed(p0: String?) {
@@ -335,7 +344,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
         })
         transactionManager.setAppInvokeEnabled(false)
-        transactionManager.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage")
+        transactionManager.setShowPaymentUrl("https://securegw.paytm.in/theia/api/v1/showPaymentPage")
         transactionManager.setEmiSubventionEnabled(true)
         transactionManager.startTransaction(this, activityRequestCode)
         transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
@@ -346,8 +355,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         val dialogView = layoutInflater.inflate(R.layout.paytm_payment_failure_dialog, null)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            finish()
-            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
+            dialog.dismiss()
         }
         dialog.setContentView(dialogView)
         dialog.show()
@@ -389,8 +397,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
     private fun completeBooking(status: String, referenceId: String) {
 
-        val inVoiceDetails =
-            Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
+        val inVoiceDetails = Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
         Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -438,10 +445,16 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             ).show()
         }
         if (requestCode == REQUEST_CODE) {
-            // Process based on the data in response.
             Log.d("result", data.toString())
             data?.getStringExtra("Status")?.let { Log.d("result", it) }
-            data?.getStringExtra("Status")?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show() }
+            data?.getStringExtra("Status")?.let {
+                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                if (it.lowercase(Locale.getDefault()) == "success") {
+                    paymentSuccessDialog(this)
+                } else {
+                    showPaymentFailureDialog()
+                }
+            }
         }
     }
 

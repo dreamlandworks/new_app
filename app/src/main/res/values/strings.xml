@@ -707,8 +707,8 @@
     <string name="enter_upi_id">Enter UPI Id</string>
     <string name="deducted_from_wallet_rs_0">Deducted from Wallet - Rs. 0</string>
     <string name="alert">Alert</string>
-    <string name="paytm_client_id">APrhhJ49874327306737</string>
-    <string name="paytm_mid">APrhhJ49874327306737</string>
+    <string name="paytm_client_id">vruhtJ06924265556375</string>
+    <string name="paytm_mid">vruhtJ06924265556375</string>
     <string name="txn_success">TXN_SUCCESS</string>
     <string name="payment_success">PAYMENT SUCCESS</string>
     <string name="payment_failed">PAYMENT FAILED</string>

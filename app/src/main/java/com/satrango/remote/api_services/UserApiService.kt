@@ -1,5 +1,6 @@
 package com.satrango.remote.api_services
 
+import com.satrango.R
 import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.ui.auth.FCMReqModel
@@ -15,10 +16,7 @@ import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReq
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
-import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiReqModel
-import com.satrango.ui.user.bookings.payment_screen.models.GetUserUpiResModel
-import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiReqModel
-import com.satrango.ui.user.bookings.payment_screen.models.SaveUserUpiResModel
+import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
@@ -81,6 +79,7 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsR
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListResModel
+import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -482,5 +481,17 @@ interface UserApiService {
     suspend fun getUserUpi(
         @Body requestBody: GetUserUpiReqModel
     ): GetUserUpiResModel
+
+    @POST("processTransaction")
+    suspend fun getPaytmProcess(
+        @Query("orderId") orderId: String,
+        @Query("mid") mid: String,
+        @Body requestBody: PaytmReqModel
+    ): ResponseBody
+
+    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)
+    suspend fun getPaytmProcessTxn(
+        @Body requestBody: PaytmProcessTxnReqModel
+    ) : ResponseBody
 
 }
