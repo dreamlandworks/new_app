@@ -92,7 +92,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = paymentData!!.amount.toInt() * 100
+            PaymentScreen.amount = paymentData!!.amount.toInt()
             PaymentScreen.period = paymentData!!.period.toInt()
             PaymentScreen.id = paymentData!!.id.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))

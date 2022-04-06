@@ -407,6 +407,8 @@ class ProviderDashboard : AppCompatActivity() {
                         if (FCMService.notificationManager != null) {
                             FCMService.notificationManager.cancelAll()
                         }
+                        finish()
+                        startActivity(intent)
                     } else {
                         progressDialog.dismiss()
                         toast(this@ProviderDashboard, jsonResponse.getString("message"))

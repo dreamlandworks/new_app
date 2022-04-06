@@ -83,5 +83,6 @@ object UserApiEndPoints {
     final const val SAVE_USER_UPI = "user/save_user_upi"
     final const val GET_USER_UPI = "user/get_user_upi"
     final const val PAYTM_PROCESS_TXN = "user/process_txn"
+    final const val MEMBERSHIP_PAYMENT_TXN = "user/membership_payments_txn_user"
 
 }

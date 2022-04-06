@@ -59,9 +59,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_jo
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_multi_move.PostJobMultiMoveResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.PostJobPlansResModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.*
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintModuleResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.models.ComplaintResModel
@@ -493,5 +491,10 @@ interface UserApiService {
     suspend fun getPaytmProcessTxn(
         @Body requestBody: PaytmProcessTxnReqModel
     ) : ResponseBody
+
+    @POST(UserApiEndPoints.MEMBERSHIP_PAYMENT_TXN)
+    suspend fun getPaytmMembershipProcessTxn(
+        @Body requestBody: UserPlansTxnReqModel
+    ) : UserPlansTxnResModel
 
 }

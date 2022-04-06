@@ -6,6 +6,8 @@ data class BookingDetails(
     val scheduled_date: String,
     val scheduled_time: String,
     val started_at: String,
+    val txn_id: String,
+    val order_id: String,
     val completed_at: String,
     val estimate_time: String,
     val estimate_type: String,

@@ -39,5 +39,6 @@ object ServiceProviderEndPoints {
     final const val SP_DASHBOARD = "provider/sp_dashboard"
     final const val ID_PROOF = "provider/id_proof"
     final const val CHANGE_BOOKING_STATUS = "provider/booking_status_change"
+    final const val MEMBERSHIP_PAYMENT_TXN = "provider/membership_payments_txn_sp"
 
 }

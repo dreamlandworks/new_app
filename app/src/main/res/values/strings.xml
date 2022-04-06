@@ -713,6 +713,14 @@
     <string name="payment_success">PAYMENT SUCCESS</string>
     <string name="payment_failed">PAYMENT FAILED</string>
     <string name="proceed_with_upi_payment">Proceed with UPI Payment</string>
+    <string name="wallet_deduction">Wallet Deduction</string>
+    <string name="pay">Pay</string>
+    <string name="confirm_payment">Confirm Payment</string>
+    <string name="booking_summary">Booking Summary</string>
+    <string name="invoice_amount">Invoice Amount</string>
+    <string name="paid">Paid</string>
+    <string name="dues">Dues</string>
+    <string name="payable_amount">Payable Amount</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

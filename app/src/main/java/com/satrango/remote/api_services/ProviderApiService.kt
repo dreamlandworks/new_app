@@ -37,9 +37,11 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.m
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_tariff.UpdateTariffReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.model.ProviderMyTrainingResModel
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
+import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlanTxnReqModel
+import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlanTxnResModel
 import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlansResModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlansTxnResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.models.UserFAQResModel
-import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -243,5 +245,10 @@ interface ProviderApiService {
     suspend fun changeBookingStatus(
         @Body requestBody: ChangeBookingStatusReqModel
     ): ResponseBody
+
+    @POST(ServiceProviderEndPoints.MEMBERSHIP_PAYMENT_TXN)
+    suspend fun getPaytmMembershipProcessTxn(
+        @Body requestBody: ProviderPlanTxnReqModel
+    ) : ProviderPlanTxnResModel
 
 }

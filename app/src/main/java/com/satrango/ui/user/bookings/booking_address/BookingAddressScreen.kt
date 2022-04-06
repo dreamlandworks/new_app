@@ -360,7 +360,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     Data::class.java
                 ).profession_id
             )
-            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
+//            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
             Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
                 try {

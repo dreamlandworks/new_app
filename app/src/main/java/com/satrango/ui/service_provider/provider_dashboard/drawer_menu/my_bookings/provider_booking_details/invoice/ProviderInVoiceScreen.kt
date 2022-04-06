@@ -176,7 +176,6 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
 
         val requestBody = ProviderInvoiceReqModel(bookingId.toInt(), RetrofitBuilder.PROVIDER_KEY, isExtraDemandRaised)
-//        toast(this, Gson().toJson(requestBody))
         viewModel.getInvoice(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -204,6 +203,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         totalTimeLapsed.text = response.booking_details.time_lapsed
                         lessAmount.text = response.booking_details.paid
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
+                        UserUtils.saveOrderId(this@ProviderInVoiceScreen, response.booking_details.order_id)
+                        UserUtils.saveTxnToken(this@ProviderInVoiceScreen, response.booking_details.txn_id)
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
                                 otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
@@ -386,30 +387,30 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         UserUtils.spid = "0"
                         progressDialog.dismiss()
                         dialog.dismiss()
-                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
                         UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
                         PaymentScreen.amount = finalDues.toInt()
                         PaymentScreen.FROM_USER_PLANS = false
                         PaymentScreen.FROM_PROVIDER_PLANS = false
                         PaymentScreen.FROM_USER_SET_GOALS = false
+                        PaymentScreen.FROM_COMPLETE_BOOKING = true
                         PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
                         PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-                        PaymentScreen.FROM_COMPLETE_BOOKING = true
+                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
                         startActivity(Intent(this, PaymentScreen::class.java))
                     } else {
                         CoroutineScope(Dispatchers.Main).launch {
                             try {
                                 val requestBody = CompleteBookingReqModel(
-                                    "0",
-                                    "0",
+                                    response.booking_details.dues,
+                                    response.booking_details.wallet_balance,
                                     bookingId,
-                                    "0",
+                                    response.booking_details.cgst_tax,
                                     response.booking_details.completed_at,
                                     RetrofitBuilder.USER_KEY,
                                     "1",
                                     "",
                                     "",
-                                    "0",
+                                    response.booking_details.sgst_tax,
                                     response.booking_details.sp_id,
                                     response.booking_details.dues,
                                     UserUtils.getUserId(this@ProviderInVoiceScreen)

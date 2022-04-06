@@ -178,6 +178,7 @@
         <entry key="app/src/main/res/drawable/distance_bg_yellow.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/ic_addmore.xml" value="0.16" />
         <entry key="app/src/main/res/drawable/ic_addmore_blue.xml" value="0.117" />
+        <entry key="app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.152" />
         <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_out_line.xml" value="0.1645" />
@@ -188,7 +189,7 @@
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_my_job_posts_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_post_job_date_time_screen.xml" value="0.23697916666666666" />
