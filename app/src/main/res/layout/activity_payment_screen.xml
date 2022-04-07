@@ -30,13 +30,12 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
-
-            <com.google.android.material.card.MaterialCardView
+            
+            <androidx.cardview.widget.CardView
                 android:id="@+id/bookingSummaryCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:elevation="@dimen/_5sdp"
                 app:cardElevation="@dimen/_5sdp">
 
                 <LinearLayout
@@ -124,7 +123,7 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/amountText"
@@ -136,12 +135,11 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/invoiceAmountCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:elevation="@dimen/_5sdp"
                 app:cardElevation="@dimen/_5sdp"
                 android:layout_margin="@dimen/_10sdp">
 
@@ -303,7 +301,7 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
@@ -324,10 +322,9 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="@dimen/_5sdp"
                 android:layout_margin="@dimen/_10sdp"
                 app:cardElevation="@dimen/_5sdp">
 
@@ -429,7 +426,7 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
@@ -447,11 +444,10 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/sub_text" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:elevation="@dimen/_5sdp"
                 app:cardElevation="@dimen/_5sdp">
 
                 <LinearLayout
@@ -572,32 +568,31 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/confirmPaymentBtn"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
-            app:cardElevation="@dimen/_5sdp"
-            android:elevation="@dimen/_5sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+            app:cardElevation="@dimen/_5sdp">
 
             <TextView
+                android:id="@+id/confirmPaymentBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/confirm_payment"
                 android:textStyle="bold"
                 android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
                 android:textSize="@dimen/text"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/blue"/>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"

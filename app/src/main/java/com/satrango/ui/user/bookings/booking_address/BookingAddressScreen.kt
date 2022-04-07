@@ -967,12 +967,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         try {
             val geoCoder = Geocoder(context, Locale.getDefault())
             val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-            val addressName: String = address.get(0).getAddressLine(0)
-            val city: String = address.get(0).locality
-            val state: String = address.get(0).adminArea
-            val country: String = address.get(0).countryName
-            val postalCode: String = address.get(0).postalCode
-            val knownName: String = address.get(0).featureName
+            val addressName: String = address[0].getAddressLine(0)
+            val city: String = address[0].locality
+            val state: String = address[0].adminArea
+            val country: String = address[0].countryName
+            val postalCode: String = address[0].postalCode
+            val knownName: String = address[0].featureName
             fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             UserUtils.setLatitude(context, latitude.toString())
             UserUtils.setLongitude(context, longitude.toString())
@@ -988,9 +988,9 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     ), "0", true
                 )
             )
-            if (!waitingDialog.isShowing) {
-                validateFields()
-            }
+//            if (!waitingDialog.isShowing) {
+            validateFields()
+//            }
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
                 .show()

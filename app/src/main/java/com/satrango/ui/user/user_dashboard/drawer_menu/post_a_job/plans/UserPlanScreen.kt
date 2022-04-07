@@ -102,52 +102,51 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         }
     }
 
-    private fun makePayment() {
-        val checkout = Checkout()
-        checkout.setKeyID(getString(R.string.razorpay_api_key))
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("currency", "INR")
-            orderRequest.put("amount", paymentData!!.amount.toDouble() * 100) // 500rs * 100 = 50000 paisa passed
-            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-            orderRequest.put("theme.color", R.color.blue)
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-    }
+//    private fun makePayment() {
+//        val checkout = Checkout()
+//        checkout.setKeyID(getString(R.string.razorpay_api_key))
+//        try {
+//            val orderRequest = JSONObject()
+//            orderRequest.put("currency", "INR")
+//            orderRequest.put("amount", paymentData!!.amount.toDouble() * 100) // 500rs * 100 = 50000 paisa passed
+//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
+//            orderRequest.put("theme.color", R.color.blue)
+//            checkout.open(this, orderRequest)
+//        } catch (e: Exception) {
+//            toast(this, e.message!!)
+//        }
+//    }
 
     @SuppressLint("SimpleDateFormat")
     override fun onPaymentSuccess(paymentId: String?) {
-        val factory = ViewModelFactory(PostJobRepository())
-        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        val requestBody = UserPlanPaymentReqModel(
-            paymentData!!.amount.toInt(),
-            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
-            RetrofitBuilder.USER_KEY,
-            "Success",
-            paymentData!!.period.toInt(),
-            paymentData!!.id.toInt(),
-            paymentId!!,
-            UserUtils.getUserId(this).toInt()
-        )
-
-        viewModel.saveUserPlanPayment(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    showSuccessDialog()
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
-                }
-            }
-        }
+//        val factory = ViewModelFactory(PostJobRepository())
+//        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
+//        val requestBody = UserPlanPaymentReqModel(
+//            paymentData!!.amount.toInt(),
+//            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
+//            RetrofitBuilder.USER_KEY,
+//            paymentData!!.period.toInt(),
+//            paymentData!!.id.toInt(),
+//            UserUtils.getUserId(this).toInt(),
+//
+//        )
+//
+//        viewModel.saveUserPlanPayment(this, requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    showSuccessDialog()
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(binding.recyclerView, it.message!!)
+//                }
+//            }
+//        }
     }
 
     private fun showSuccessDialog() {

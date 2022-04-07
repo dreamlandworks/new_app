@@ -4,9 +4,9 @@ data class ProviderMemberShipPlanPaymentReqModel(
     val amount: Int,
     val date: String,
     val key: String,
-    val payment_status: String,
     val period: Int,
     val plan_id: Int,
-    val reference_id: String,
-    val sp_id: Int
+    val sp_id: Int,
+    val w_amount: String,
+    val order_id: String
 )

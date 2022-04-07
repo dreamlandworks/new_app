@@ -4,7 +4,6 @@ data class InstallmentPaymentReqModel(
     val amount: String,
     val booking_id: Int,
     val date: String,
-    val installment_det_id: Int,
     val key: String,
     val payment_status: String,
     val reference_id: String,

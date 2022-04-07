@@ -670,13 +670,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.getBookingId(this),
             UserUtils.scheduled_date,
             RetrofitBuilder.USER_KEY,
-            status,
-            paymentResponse!!,
             data!!.users_id.toInt(),
             UserUtils.time_slot_from,
             UserUtils.getUserId(this).toInt(),
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
+            UserUtils.getOrderId(this),
             finalWalletAmount.toString()
         )
         viewModel.confirmPayment(this, requestBody).observe(this) {

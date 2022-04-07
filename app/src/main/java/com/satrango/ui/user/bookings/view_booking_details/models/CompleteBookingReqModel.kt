@@ -7,11 +7,10 @@ data class CompleteBookingReqModel(
     val cgst: String,
     val completed_at: String,
     val key: String,
-    val method_id: String,
-    val payment_status: String,
     val reference_id: String,
     val sgst: String,
     val sp_id: String,
     val total_amount: String,
-    val users_id: String
+    val users_id: String,
+    val order_id: String
 )

@@ -241,7 +241,6 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             bidPrice.toString(),
             ViewBidsScreen.bookingId,
             SimpleDateFormat("yyyy-MM-dd").format(Date()),
-            UserUtils.getInstallmentDetId(this)!!.toInt(),
             RetrofitBuilder.USER_KEY,
             status,
             referenceId,

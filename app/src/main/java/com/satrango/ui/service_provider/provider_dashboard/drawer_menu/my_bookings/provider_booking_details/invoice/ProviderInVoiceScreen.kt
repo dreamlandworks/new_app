@@ -407,13 +407,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     response.booking_details.cgst_tax,
                                     response.booking_details.completed_at,
                                     RetrofitBuilder.USER_KEY,
-                                    "1",
-                                    "",
-                                    "",
+                                    "Success",
                                     response.booking_details.sgst_tax,
                                     response.booking_details.sp_id,
                                     response.booking_details.dues,
-                                    UserUtils.getUserId(this@ProviderInVoiceScreen)
+                                    UserUtils.getUserId(this@ProviderInVoiceScreen),
+                                    UserUtils.getOrderId(this@ProviderInVoiceScreen)
                                 )
                                 Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
                                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)

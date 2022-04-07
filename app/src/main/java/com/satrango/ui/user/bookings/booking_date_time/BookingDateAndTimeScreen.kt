@@ -526,7 +526,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 }
             }
         }
-
+        morningTimings = filterTimeSlots(morningTimings)
         if (morningTimings.isEmpty()) {
             binding.morningText.visibility = View.GONE
             binding.morningTimeRv.visibility = View.GONE
@@ -534,7 +534,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             if (today) {
                 morningTimings.removeAt(0)
             }
-            morningTimings = filterTimeSlots(morningTimings)
             if (morningTimings.isEmpty()) {
                 binding.morningTimeRv.visibility = View.GONE
                 binding.morningText.visibility = View.GONE
@@ -545,6 +544,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
         }
         Log.e("AFTERNOON", Gson().toJson(afternoonTimings))
+        afternoonTimings = filterTimeSlots(afternoonTimings)
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
             binding.afternoonTimeRv.visibility = View.GONE
@@ -554,7 +554,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     afternoonTimings.removeAt(0)
                 }
             }
-            afternoonTimings = filterTimeSlots(afternoonTimings)
             if (afternoonTimings.isEmpty()) {
                 binding.afternoonText.visibility = View.GONE
                 binding.afternoonTimeRv.visibility = View.GONE
@@ -564,6 +563,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.afternoonTimeRv.adapter = MonthsAdapter(afternoonTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
+        eveningTimings = filterTimeSlots(eveningTimings)
         if (eveningTimings.isEmpty()) {
             binding.eveningText.visibility = View.GONE
             binding.eveningTimeRv.visibility = View.GONE
@@ -573,16 +573,16 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     eveningTimings.removeAt(0)
                 }
             }
-            eveningTimings = filterTimeSlots(eveningTimings)
             if (eveningTimings.isEmpty()) {
                 binding.eveningText.visibility = View.GONE
                 binding.eveningTimeRv.visibility = View.GONE
             } else {
                 binding.eveningText.visibility = View.VISIBLE
                 binding.eveningTimeRv.visibility = View.VISIBLE
-                eveningTimings = eveningTimings.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
+                binding.eveningTimeRv.adapter = MonthsAdapter(eveningTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
+        nightTimings = filterTimeSlots(nightTimings)
         if (nightTimings.isEmpty()) {
             binding.nightText.visibility = View.GONE
             binding.nightTimeRv.visibility = View.GONE
@@ -590,7 +590,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             if (binding.morningTimeRv.visibility != View.VISIBLE && binding.afternoonTimeRv.visibility != View.VISIBLE && binding.eveningTimeRv.visibility != View.VISIBLE) {
                 nightTimings.removeAt(0)
             }
-            nightTimings = filterTimeSlots(nightTimings)
             if (nightTimings.isEmpty()) {
                 binding.nightText.visibility = View.GONE
                 binding.nightTimeRv.visibility = View.GONE
@@ -600,6 +599,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
+        Log.e("MORNING:", Gson().toJson(morningTimings))
+        Log.e("EVENING:", Gson().toJson(eveningTimings))
+        Log.e("NIGHT:", Gson().toJson(nightTimings))
     }
 
     private fun filterTimeSlots(timings: java.util.ArrayList<MonthsModel>): java.util.ArrayList<MonthsModel> {
