@@ -514,6 +514,19 @@ object UserUtils {
         return sharedPreferences.getString(context.resources.getString(R.string.temp_address_id), "")!!
     }
 
+    fun selectedChat(context: Context, userId: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.selected_chat), userId)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getSelectedChat(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.selected_chat), "")!!
+    }
+
     fun setUserLoggedInVia(context: Context, type: String, userId: String) {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()

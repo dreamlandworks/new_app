@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
+import com.satrango.utils.UserUtils
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.*
 import org.json.JSONObject
@@ -26,7 +28,9 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                     val jsonObject = JSONObject(response.await().string())
                     Log.e("LOGIN", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
-                        userLogin.value = NetworkResponse.Success(jsonObject.getString("user id"))
+                        UserUtils.saveUserName(context, jsonObject.getString("fname") + " " + jsonObject.getString("lname"))
+                        UserUtils.saveUserProfilePic(context, RetrofitBuilder.BASE_URL + jsonObject.getString("profile_image"))
+                        userLogin.value = NetworkResponse.Success(jsonObject.getString("user_id"))
                     } else {
                         userLogin.value = NetworkResponse.Failure(jsonObject.getString("message"))
                     }

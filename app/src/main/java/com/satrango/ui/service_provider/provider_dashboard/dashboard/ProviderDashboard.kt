@@ -71,7 +71,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
-import com.satrango.ui.user.user_dashboard.UserChatScreen
+import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
@@ -89,6 +89,7 @@ import java.util.*
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import com.bumptech.glide.load.HttpException
+import com.google.firebase.database.FirebaseDatabase
 import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
 
@@ -668,6 +669,7 @@ class ProviderDashboard : AppCompatActivity() {
                 val responseData = response.data
                 if (response.status == 200) {
                     val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+//                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
                     loadProfileImage(binding.image)
                     UserUtils.saveUserName(this@ProviderDashboard, responseData.fname + " " + responseData.lname)
@@ -686,6 +688,12 @@ class ProviderDashboard : AppCompatActivity() {
                 Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun updateProfilePicInFirebase(imageUrl: String, userName: String) {
+        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.profile_image)).setValue(imageUrl)
+        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.user_name)).setValue(userName)
     }
 
     private fun alertDialog(message: String) {

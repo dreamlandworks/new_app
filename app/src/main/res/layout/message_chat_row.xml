@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/_3sdp"
+    android:layout_marginHorizontal="@dimen/_10sdp">
+
+    <LinearLayout
+        android:id="@+id/incomingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:background="@drawable/incoming_msg_bg">
+
+        <TextView
+            android:id="@+id/incomingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/online"
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/incomingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/online"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:textSize="@dimen/_9sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/outgoingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:background="@drawable/outgoing_msg_bg">
+
+        <TextView
+            android:id="@+id/outGoingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/online"
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/outGoingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/online"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:textSize="@dimen/_9sdp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

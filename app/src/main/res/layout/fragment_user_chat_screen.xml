@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.user.user_dashboard.UserChatScreen">
+    tools:context=".ui.user.user_dashboard.chats.UserChatScreen">
 
     <include
         android:id="@+id/toolBar"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="@string/both"
             android:layout_weight="1"
-            android:paddingVertical="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
             android:gravity="center"
             android:textSize="@dimen/_12sdp"
             android:background="@drawable/category_bg"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/online"
             android:layout_weight="1"
-            android:paddingVertical="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:gravity="center"
             android:textSize="@dimen/_12sdp"
@@ -47,17 +48,17 @@
             android:layout_height="wrap_content"
             android:text="@string/offline"
             android:layout_weight="1"
-            android:paddingVertical="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
             android:gravity="center"
             android:textSize="@dimen/_12sdp"
             android:textColor="@color/black"/>
 
     </LinearLayout>
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This Page is under Development"
-        android:gravity="center"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

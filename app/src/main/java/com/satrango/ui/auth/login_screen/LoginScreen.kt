@@ -15,6 +15,7 @@ import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 //import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
+import com.google.firebase.database.*
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
@@ -28,6 +29,9 @@ import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginScreen : AppCompatActivity() {
 
@@ -43,11 +47,15 @@ class LoginScreen : AppCompatActivity() {
     // private lateinit var facebookCallBackManager: CallbackManager
     private lateinit var progressDialog: BeautifulProgressDialog
 
+    private lateinit var firebaseDatabaseReference: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firebaseDatabaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
 
         initializeSocialLogins()
         PermissionUtils.checkAndRequestPermissions(this)
@@ -136,7 +144,7 @@ class LoginScreen : AppCompatActivity() {
         }
 
         val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.USER_KEY)
-        viewModel.userLogin(this, requestBody).observe(this, {
+        viewModel.userLogin(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.mobileNo.clearFocus()
@@ -147,19 +155,37 @@ class LoginScreen : AppCompatActivity() {
                     UserUtils.setUserLoggedInVia(this, type, it.data!!)
                     UserUtils.setPhoneNo(this, phoneNo)
                     progressDialog.dismiss()
-                    startActivity(Intent(this, UserLoginTypeScreen::class.java))
+                    setupFirebaseUserDatabase()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    if (UserUtils.getGoogleId(this).isNotEmpty() || UserUtils.getFacebookId(this)
-                            .isNotEmpty()
-                    ) {
+                    if (UserUtils.getGoogleId(this).isNotEmpty() || UserUtils.getFacebookId(this).isNotEmpty()) {
                         startActivity(Intent(this, UserSignUpScreenThree::class.java))
                     } else {
                         snackBar(binding.signUpBtn, it.message!!)
                     }
                 }
             }
+        }
+    }
+
+    private fun setupFirebaseUserDatabase() {
+        firebaseDatabaseReference.addListenerForSingleValueEvent(object: ValueEventListener {
+            @SuppressLint("SimpleDateFormat")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getPhoneNo(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.date_time)).setValue(Date().time)
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.users_id)).setValue(UserUtils.getUserId(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
+                toast(this@LoginScreen, "Success")
+                startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                toast(this@LoginScreen, error.message)
+            }
+
         })
     }
 

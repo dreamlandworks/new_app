@@ -721,6 +721,21 @@
     <string name="paid">Paid</string>
     <string name="dues">Dues</string>
     <string name="payable_amount">Payable Amount</string>
+    <string name="firebase_database_reference_url">https://satrango-37ac9-default-rtdb.firebaseio.com/</string>
+    <string name="users">users</string>
+    <string name="user_name">username</string>
+    <string name="date_time">datetime</string>
+    <string name="profile_image">profile_image</string>
+    <string name="last_message">last_message</string>
+    <string name="users_id">user_id</string>
+    <string name="chat">chats</string>
+    <string name="selected_chat">Selected Chat</string>
+    <string name="sent_by">sent_by</string>
+    <string name="message_sm">message</string>
+    <string name="unseen">unseen</string>
+    <string name="message_type">type</string>
+    <string name="text">text</string>
+    <string name="online_status">online_status</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

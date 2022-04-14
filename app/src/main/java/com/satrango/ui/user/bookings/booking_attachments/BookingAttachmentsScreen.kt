@@ -5,20 +5,25 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Base64.*
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -61,10 +66,12 @@ import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
 import java.io.*
+import java.lang.Exception
 import java.net.URL
 import java.net.URLConnection
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.jar.Manifest
 import kotlin.collections.ArrayList
 import kotlin.math.round
 
@@ -80,6 +87,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     private val CAMERA_REQUEST: Int = 101
     private var data: Data? = null
     private var addressIndex = 0
+
+    private lateinit var mGetContent: ActivityResultLauncher<String>
+    private lateinit var mGetPermission: ActivityResultLauncher<Intent>
 
     companion object {
         lateinit var imagePathList: ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
@@ -233,9 +243,75 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     }
                 }
             }
+        }
 
+        mGetContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) toast(this, it.path!!)
+        }
+
+        mGetPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                toast(this, "Permission Given In Android 11")
+            } else {
+                toast(this, "Permission Denied")
+            }
+        }
+
+        pickPdfFile()
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty()) {
+            if (requestCode == 101 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mGetContent.launch("pdf/*")
+                toast(this, "Permission Granted")
+            } else {
+                takePermission()
+            }
         }
     }
+
+    private fun pickPdfFile() {
+        takePermission()
+    }
+
+    private fun takePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(String.format("package:%s", packageName))
+                mGetPermission.launch(intent)
+            } catch (e: Exception) {
+                toast(this, e.message!!)
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 101)
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun takePermission() {
+        if (isPermissionGranted()) {
+            mGetContent.launch("pdf/*")
+        } else {
+            takePermissions()
+        }
+    }
+
 
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)

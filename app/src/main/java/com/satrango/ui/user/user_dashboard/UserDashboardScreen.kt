@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
@@ -53,6 +54,7 @@ import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
+import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
@@ -395,6 +397,7 @@ class   UserDashboardScreen : AppCompatActivity() {
                 val responseData = response.data
                 if (response.status == 200) {
                     val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+//                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
                     loadProfileImage(binding.image)
                     UserUtils.saveUserName(
@@ -425,6 +428,12 @@ class   UserDashboardScreen : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun updateProfilePicInFirebase(imageUrl: String, userName: String) {
+        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.profile_image)).setValue(imageUrl)
+        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.user_name)).setValue(userName)
     }
 
     private fun getFragment(itemId: Int): Fragment {

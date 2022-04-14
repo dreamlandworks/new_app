@@ -212,5 +212,6 @@
                 android:src="@drawable/ic_round_send_24"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
