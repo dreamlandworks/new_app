@@ -19,19 +19,19 @@ class MyApp: Application(), LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users)).child(UserUtils.getPhoneNo(this))
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
         Log.d("MyApp", "App in background")
-        databaseReference.child(getString(R.string.online_status)).setValue(getString(R.string.offline))
+        databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.offline))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onAppForegrounded() {
         Log.d("MyApp", "App in foreground")
-        databaseReference.child(getString(R.string.online_status)).setValue(getString(R.string.online))
+        databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
     }
 
 }

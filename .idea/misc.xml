@@ -185,6 +185,7 @@
         <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_out_line.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/read_icon.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/user_btn_bg.xml" value="0.2525" />
         <entry key="app/src/main/res/layout/activity_booking_address_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />

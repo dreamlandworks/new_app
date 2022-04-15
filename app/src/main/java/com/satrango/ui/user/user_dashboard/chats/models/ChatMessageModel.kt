@@ -4,5 +4,6 @@ data class ChatMessageModel(
     val message: String,
     val datetime: String,
     val sentBy: String,
-    val type: String
+    val type: String,
+    val unseen: String
 )

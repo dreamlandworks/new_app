@@ -18,6 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -28,11 +32,16 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.chats.ChatScreen
+import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
+import com.satrango.ui.user.user_dashboard.chats.models.ChatsModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.getPhoneNo
+import com.satrango.utils.UserUtils.getUserId
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProgress
@@ -44,8 +53,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
-class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
+class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterface {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var viewModel: MyBookingsViewModel
@@ -138,7 +149,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = MyBookingsAdapter(list, this)
+                    binding.recyclerView.adapter = MyBookingsAdapter(list, this, this)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -147,8 +158,6 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-//                    binding.note.visibility = View.VISIBLE
-//                    binding.note.text = it.message!!
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
@@ -321,5 +330,46 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface {
         dialog.setCancelable(false)
         dialog.setContentView(dialogView)
         dialog.show()
+    }
+
+    override fun startMessaging(bookingDetails: BookingDetail) {
+        val branch = if (UserUtils.getUserId(this).toInt() > bookingDetails.sp_id.toInt()) {
+            bookingDetails.sp_id + "|" + UserUtils.getUserId(this)
+        } else {
+            UserUtils.getUserId(this) + "|" + bookingDetails.sp_id
+        }
+        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        databaseReference.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val datetime = Date().time
+                val userChatReference = databaseReference.child(getString(R.string.users)).child(getUserId(this@UserMyBookingsScreen)).child(getString(R.string.chat)).child(branch)
+                userChatReference.child(getString(R.string.chat_branch)).child(branch)
+                userChatReference.child(getString(R.string.users_id)).setValue(bookingDetails.sp_id)
+                userChatReference.child(getString(R.string.user_name)).setValue(bookingDetails.sp_fname + " " + bookingDetails.sp_lname)
+                userChatReference.child(getString(R.string.profile_image)).setValue(RetrofitBuilder.BASE_URL + bookingDetails.sp_profile_pic)
+                userChatReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
+                userChatReference.child(getString(R.string.sent_by)).setValue(UserUtils.getUserId(this@UserMyBookingsScreen))
+                userChatReference.child(getString(R.string.date_time)).setValue(datetime)
+
+                val spDatabaseReference = databaseReference.child(getString(R.string.users)).child(bookingDetails.sp_id).child(getString(R.string.chat)).child(branch)
+                spDatabaseReference.child(getString(R.string.chat_branch)).setValue(branch)
+                spDatabaseReference.child(getString(R.string.users_id)).setValue(UserUtils.getUserId(this@UserMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@UserMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@UserMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
+                spDatabaseReference.child(getString(R.string.sent_by)).setValue(UserUtils.getUserId(this@UserMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.date_time)).setValue(datetime)
+                val chatsModel = ChatsModel(branch, RetrofitBuilder.BASE_URL + bookingDetails.sp_profile_pic, bookingDetails.sp_id,
+                    bookingDetails.sp_fname + " " + bookingDetails.sp_lname, "",
+                    UserUtils.getUserId(this@UserMyBookingsScreen), datetime)
+                UserUtils.selectedChat(this@UserMyBookingsScreen, Gson().toJson(chatsModel))
+                startActivity(Intent(this@UserMyBookingsScreen, ChatScreen::class.java))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                toast(this@UserMyBookingsScreen, error.message)
+            }
+
+        })
     }
 }

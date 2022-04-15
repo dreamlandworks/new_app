@@ -66,6 +66,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links:21.0.0'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.1'
 
     // Google Material
     implementation 'com.google.android.material:material:1.4.0'

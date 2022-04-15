@@ -1,51 +1,49 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.satrango.R
-import com.satrango.databinding.ActivityAddBankAccountScreenBinding.inflate
 import com.satrango.databinding.MyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
-import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
-import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
+import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
-import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.UserUtils.isReschedule
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.util.*
 
-class MyBookingsAdapter(private val list: List<BookingDetail>,
-private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
+class MyBookingsAdapter(
+    private val list: List<BookingDetail>,
+    private val alertsInterface: AlertsInterface,
+    private val bookingInterface: BookingInterface
+): RecyclerView.Adapter<MyBookingsAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: MyBookingsRowBinding, alertsInterface: AlertsInterface): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(
+        binding: MyBookingsRowBinding,
+        alertsInterface: AlertsInterface,
+        bookingInterface: BookingInterface
+    ): RecyclerView.ViewHolder(binding.root) {
         val binding = binding
         val alertsInterface = alertsInterface
+        val bookingInterface = bookingInterface
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(data: BookingDetail) {
             binding.amount.text = "Rs ${data.amount}"
@@ -74,12 +72,12 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
             }
             binding.jobDescription.text = data.details[0].job_description
             if (!data.fname.isNullOrBlank() && !data.lname.isNullOrBlank()) {
-                binding.spName.text = "${data.fname} ${data.lname}"
+                binding.spName.text = "${data.sp_fname} ${data.sp_lname}"
             } else {
                 binding.spName.text = "Unknown"
             }
-            if (!data.profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+            if (!data.sp_profile_pic.isNullOrBlank()) {
+                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.sp_profile_pic).into(binding.profilePic)
             }
 
             when(data.booking_status.lowercase(Locale.getDefault())) {
@@ -92,98 +90,6 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
                             if (response.booking_status_details.isNotEmpty()) {
                                 val details = response.booking_status_details[response.booking_status_details.size - 1]
                                 binding.startBtn.text = details.description
-//                                when (details.status_id) {
-//                                    "4" -> {
-//                                        binding.startBtn.text = "Service Provider Rejected"
-//                                    }
-//                                    "5" -> {
-//                                        binding.startBtn.text = "Service Provider Accepted"
-//                                    }
-//                                    "6" -> {
-//                                        binding.startBtn.text = "Service Provider Not Responded"
-//                                    }
-//                                    "7" -> {
-//                                        binding.startBtn.text = "Payment Pending"
-//                                    }
-//                                    "8" -> {
-//                                        binding.startBtn.text = "Payment Done"
-//                                    }
-//                                    "9" -> {
-//                                        binding.startBtn.text = "Pending"
-//                                    }
-//                                    "10" -> {
-//                                        binding.startBtn.text = "Reschedule Requested"
-//                                    }
-//                                    "11" -> {
-//                                        binding.startBtn.text = "Reschedule Rejected"
-//                                    }
-//                                    "12" -> {
-//                                        binding.startBtn.text = "Reschedule Approved"
-//                                    }
-//                                    "13" -> {
-//                                        binding.startBtn.text = "Booking Started and OTP Verified"
-//                                    }
-//                                    "14" -> {
-//                                        binding.startBtn.text = "Booking Started"
-//                                    }
-//                                    "15" -> {
-//                                        binding.startBtn.text = "Booking Paused"
-//                                    }
-//                                    "16" -> {
-//                                        binding.startBtn.text = "Booking Resumed"
-//                                    }
-//                                    "17" -> {
-//                                        binding.startBtn.text = "Sent for Review"
-//                                    }
-//                                    "18" -> {
-//                                        binding.startBtn.text = "Reviewed and not Accepted"
-//                                    }
-//                                    "19" -> {
-//                                        binding.startBtn.text = "Reviewed and found appropriate"
-//                                    }
-//                                    "20" -> {
-//                                        binding.startBtn.text = "Part PAyment requested"
-//                                    }
-//                                    "21" -> {
-//                                        binding.startBtn.text = "Part Payment Released"
-//                                    }
-//                                    "22" -> {
-//                                        binding.startBtn.text = "Marked as Completed"
-//                                    }
-//                                    "23" -> {
-//                                        binding.startBtn.text = "OTP Verified and Booking Completed"
-//                                    }
-//                                    "24" -> {
-//                                        binding.startBtn.text = "Cancelled by User"
-//                                    }
-//                                    "25" -> {
-//                                        binding.startBtn.text = "Cancelled by Service Provider"
-//                                    }
-//                                    "26" -> {
-//                                        binding.startBtn.text = "Open"
-//                                    }
-//                                    "27" -> {
-//                                        binding.startBtn.text = "Awarded"
-//                                    }
-//                                    "28" -> {
-//                                        binding.startBtn.text = "Expired"
-//                                    }
-//                                    "29" -> {
-//                                        binding.startBtn.text = "Rejected"
-//                                    }
-//                                    "37" -> {
-//                                        binding.startBtn.text = "Extra Demand Raised"
-//                                    }
-//                                    "38" -> {
-//                                        binding.startBtn.text = "Extra Demand Accepted"
-//                                    }
-//                                    "39" -> {
-//                                        binding.startBtn.text = "Extra Demand Rejected"
-//                                    }
-//                                    "40" -> {
-//                                        binding.startBtn.text = "Service Provider Placed Bid"
-//                                    }
-//                                }
                                 binding.startBtn.visibility = View.VISIBLE
                             } else {
                                 binding.startBtn.text = "Service Provider started to your location"
@@ -298,6 +204,10 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
                     binding.startBtn.elevation = 0f
                 }
             }
+            binding.messageBtn.setOnClickListener {
+                bookingInterface.startMessaging(data)
+            }
+
         }
 
 
@@ -308,7 +218,7 @@ private val alertsInterface: AlertsInterface): RecyclerView.Adapter<MyBookingsAd
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(MyBookingsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false), alertsInterface)
+        return ViewHolder(MyBookingsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false), alertsInterface, bookingInterface)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

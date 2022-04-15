@@ -560,6 +560,8 @@ class ProviderDashboard : AppCompatActivity() {
                         dialogInterface.dismiss()
                         UserUtils.setUserLoggedInVia(this, "", "")
                         UserUtils.deleteUserCredentials(this)
+                        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users))
+                        databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.offline))
                         startActivity(Intent(this, LoginScreen::class.java))
                     }
                     is NetworkResponse.Failure -> {

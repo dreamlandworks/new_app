@@ -173,11 +173,12 @@ class LoginScreen : AppCompatActivity() {
         firebaseDatabaseReference.addListenerForSingleValueEvent(object: ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(snapshot: DataSnapshot) {
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getPhoneNo(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.date_time)).setValue(Date().time)
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.users_id)).setValue(UserUtils.getUserId(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.date_time)).setValue(Date().time)
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.mobile)).setValue(UserUtils.getPhoneNo(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
                 toast(this@LoginScreen, "Success")
                 startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
             }
@@ -277,8 +278,8 @@ class LoginScreen : AppCompatActivity() {
             val image = account.photoUrl
             UserUtils.setGoogleId(this, googleId!!)
             UserUtils.setFacebookId(this, "")
-            UserUtils.setFirstName(this, userName.split(" ")[0])
-            UserUtils.setMail(this, email)
+            UserUtils.setFirstName(this, userName!!.split(" ")[0])
+            UserUtils.setMail(this, email!!)
             try {
                 UserUtils.setLastName(this, userName.split(" ")[1])
             } catch (e: IndexOutOfBoundsException) {
