@@ -47,6 +47,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
@@ -95,7 +96,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeToolBar()
-        initializeProgressDialog()
         initializeProgressDialog()
 
         registerReceiver(otpReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER))
@@ -378,8 +378,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -786,6 +785,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         if (categoryId == "2") {
             binding.viewFilesBtn.visibility = View.VISIBLE
+            binding.viewFilesBtn.setOnClickListener {
+                UserUtils.saveBookingId(this, bookingId)
+                ViewFilesScreen.categoryId = categoryId.toInt()
+                ViewFilesScreen.userId = userId.toInt()
+                startActivity(Intent(this, ViewFilesScreen::class.java))
+            }
         } else {
             binding.viewFilesBtn.visibility = View.GONE
         }

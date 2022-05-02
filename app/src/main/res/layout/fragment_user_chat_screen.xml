@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="3"
+        android:visibility="gone"
         android:layout_margin="@dimen/_10sdp">
 
         <TextView

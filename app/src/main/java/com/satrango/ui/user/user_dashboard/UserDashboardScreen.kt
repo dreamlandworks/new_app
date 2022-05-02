@@ -49,9 +49,11 @@ import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.login_screen.LoginViewModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
@@ -288,7 +290,7 @@ class   UserDashboardScreen : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         isProvider(this, false)
-        PermissionUtils.checkAndRequestPermissions(this)
+//        PermissionUtils.checkAndRequestPermissions(this)
         getUserProfilePicture()
     }
 
@@ -301,7 +303,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
             for (grant in grantResults) {
                 if (grant != PackageManager.PERMISSION_GRANTED) {
-                    PermissionUtils.checkAndRequestPermissions(this)
+//                    PermissionUtils.checkAndRequestPermissions(this)
                     return
                 }
             }
@@ -402,6 +404,8 @@ class   UserDashboardScreen : AppCompatActivity() {
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
                     loadProfileImage(binding.image)
+                    UserUtils.saveGoogleMapsKey(this@UserDashboardScreen, response.data.maps_key)
+                    UserUtils.saveFCMServerKey(this@UserDashboardScreen, response.data.fcm_key)
                     UserUtils.saveUserName(
                         this@UserDashboardScreen,
                         responseData.fname + " " + responseData.lname

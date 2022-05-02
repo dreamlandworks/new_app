@@ -611,8 +611,9 @@ class ProviderDashboard : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         isProvider(this, true)
-        PermissionUtils.checkAndRequestPermissions(this)
+//        PermissionUtils.checkAndRequestPermissions(this)
         loadUserProfileData()
+//        loadUserProfileData()
         updateSpProfile()
     }
 
@@ -672,6 +673,8 @@ class ProviderDashboard : AppCompatActivity() {
                 if (response.status == 200) {
                     val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
+                    UserUtils.saveGoogleMapsKey(this@ProviderDashboard, response.data.maps_key)
+                    UserUtils.saveFCMServerKey(this@ProviderDashboard, response.data.fcm_key)
                     UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
                     loadProfileImage(binding.image)
                     UserUtils.saveUserName(this@ProviderDashboard, responseData.fname + " " + responseData.lname)
@@ -719,7 +722,7 @@ class ProviderDashboard : AppCompatActivity() {
         if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
             for (grant in grantResults) {
                 if (grant != PackageManager.PERMISSION_GRANTED) {
-                    PermissionUtils.checkAndRequestPermissions(this)
+//                    PermissionUtils.checkAndRequestPermissions(this)
                     return
                 }
             }

@@ -306,7 +306,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     private fun takePermission() {
         if (isPermissionGranted()) {
-            mGetContent.launch("pdf/*")
+//            mGetContent.launch("pdf/*")
         } else {
             takePermissions()
         }

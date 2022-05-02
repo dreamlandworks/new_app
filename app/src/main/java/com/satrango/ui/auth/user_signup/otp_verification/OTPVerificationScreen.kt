@@ -85,7 +85,7 @@ class OTPVerificationScreen : AppCompatActivity() {
     }
     private fun requestOTP() {
         if (UserUtils.FORGOT_PWD) {
-            viewModel.forgotPwdRequestOTP(this).observe(this, {
+            viewModel.forgotPwdRequestOTP(this).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -101,9 +101,9 @@ class OTPVerificationScreen : AppCompatActivity() {
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }
-            })
+            }
         } else {
-            viewModel.requestOTP(this).observe(this, {
+            viewModel.requestOTP(this).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -117,7 +117,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                         snackBar(binding.nextBtn, it.message!!)
                     }
                 }
-            })
+            }
         }
     }
 

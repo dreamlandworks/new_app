@@ -1,12 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Satrango</string>
-
+    <string name="app_name">Squill</string>
     <!--    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>-->
     <string name="razorpay_api_key">rzp_test_wOHvzNqK3lI6pN</string>
-    <string name="fcm_server_key">AAAAKN1BReU:APA91bGKiUADwwYmrfdxBEKhxle_k7axC4nGQYMDVAU-w3fJ09vDaWNoUfum3KCXr5bJKNcUE2bxtt30_ID6DF1vWHUfBu7grfoc_ncZi13HrKM73Np4POKUrT1ng-FAlK_T7ZQf-kPc</string>
+<!--    <string name="fcm_server_key">AAAAKN1BReU:APA91bGKiUADwwYmrfdxBEKhxle_k7axC4nGQYMDVAU-w3fJ09vDaWNoUfum3KCXr5bJKNcUE2bxtt30_ID6DF1vWHUfBu7grfoc_ncZi13HrKM73Np4POKUrT1ng-FAlK_T7ZQf-kPc</string>-->
+    <string name="fcm_server_key">fcm_server_key</string>
     <string name="facebook_app_id">184529536828797</string>
     <string name="fb_login_protocol_scheme">fb184529536828797</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBSDwshVDwzn4ddIN728zPgFgarpjwjMQE</string>
+<!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBSDwshVDwzn4ddIN728zPgFgarpjwjMQE</string>-->
+    <string name="google_maps_key" >google_maps_key</string>
 
     <string name="userLogin">login</string>
     <string name="userFacebookLogin">facebook</string>
@@ -189,6 +190,7 @@
     <string name="choose_profile">Choose Profile</string>
     <string name="single_move">Single Move</string>
     <string name="blue_collar">Blue Collar</string>
+    <string name="blue_collar_sm">blue_collar</string>
     <string name="multi_move">Multi Move</string>
     <string name="browse_all">Browse all</string>
     <string name="recommended_for_you">Recommended for you</string>
@@ -203,6 +205,7 @@
     <string name="job_posts">Job Posts</string>
     <string name="referrals">Referrals</string>
     <string name="bookings">Bookings</string>
+    <string name="bookings_sm">bookings</string>
     <string name="commission_earned">Commission Earned</string>
     <string name="this_month">This Month</string>
     <string name="previous_month">Previous Month</string>
@@ -739,6 +742,11 @@
     <string name="online_status">online_status</string>
     <string name="mobile">mobile</string>
     <string name="one">1</string>
+    <string name="image">image</string>
+    <string name="pdf">pdf</string>
+    <string name="download">Download</string>
+    <string name="modifications_needed">Modifications Needed</string>
+    <string name="please_enter_description">Please Enter Description</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

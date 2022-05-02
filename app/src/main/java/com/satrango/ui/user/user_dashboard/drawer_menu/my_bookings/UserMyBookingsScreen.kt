@@ -357,11 +357,11 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
                 spDatabaseReference.child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@UserMyBookingsScreen))
                 spDatabaseReference.child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@UserMyBookingsScreen))
                 spDatabaseReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
-                spDatabaseReference.child(getString(R.string.sent_by)).setValue(UserUtils.getUserId(this@UserMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.sent_by)).setValue(getUserId(this@UserMyBookingsScreen))
                 spDatabaseReference.child(getString(R.string.date_time)).setValue(datetime)
                 val chatsModel = ChatsModel(branch, RetrofitBuilder.BASE_URL + bookingDetails.sp_profile_pic, bookingDetails.sp_id,
-                    bookingDetails.sp_fname + " " + bookingDetails.sp_lname, "",
-                    UserUtils.getUserId(this@UserMyBookingsScreen), datetime)
+                    bookingDetails.sp_fname + " " + bookingDetails.sp_lname, "","",
+                    getUserId(this@UserMyBookingsScreen), datetime)
                 UserUtils.selectedChat(this@UserMyBookingsScreen, Gson().toJson(chatsModel))
                 startActivity(Intent(this@UserMyBookingsScreen, ChatScreen::class.java))
             }

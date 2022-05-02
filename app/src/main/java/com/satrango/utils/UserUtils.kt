@@ -655,6 +655,32 @@ object UserUtils {
         editor.commit()
     }
 
+    private fun getFCMServerKey(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.fcm_server_key), "")!!
+    }
+
+    fun saveFCMServerKey(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.fcm_server_key), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getGoogleMapsKey(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getString(context.resources.getString(R.string.google_maps_key), "")!!
+    }
+
+    fun saveGoogleMapsKey(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.google_maps_key), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
     fun getBookingId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getString(context.resources.getString(R.string.booking_id), "")!!
@@ -834,7 +860,7 @@ object UserUtils {
         saveProviderAction(context, "")
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
@@ -851,7 +877,7 @@ object UserUtils {
     ) {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data("$bookingId|$otp|${getUserId(context)}", "$bookingId|$otp|${getUserId(context)}", "otp"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
@@ -866,7 +892,7 @@ object UserUtils {
     ) {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data(bookingDetails, bookingDetails, "otpResponse"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
@@ -883,7 +909,7 @@ object UserUtils {
     ) {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId", "extraDemand"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
@@ -900,7 +926,7 @@ object UserUtils {
     ) {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId", "reschedule"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
@@ -918,7 +944,7 @@ object UserUtils {
         saveProviderAction(context, "")
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${context.getString(R.string.fcm_server_key)}"
+        map["Authorization"] = "key=${getFCMServerKey(context)}"
         val requestBody = FCMMessageReqModel(Data("${bookingId}|$type", "accepted|$type", from), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)

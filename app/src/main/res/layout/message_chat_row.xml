@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_10sdp"
     android:layout_marginVertical="@dimen/_3sdp"
-    android:layout_marginHorizontal="@dimen/_10sdp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/incomingLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/incoming_msg_bg"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_5sdp"
-        android:background="@drawable/incoming_msg_bg">
+        android:paddingHorizontal="@dimen/_5sdp">
+
+        <ImageView
+            android:id="@+id/incomingImage"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:src="@drawable/logo"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/incomingMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/online"
             android:layout_margin="@dimen/_8sdp"
-            android:textColor="@color/black"/>
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:text="@string/online"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/incomingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/online"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:textSize="@dimen/_9sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:textColor="@color/black"/>
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:text="@string/online"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_9sdp" />
 
     </LinearLayout>
 
@@ -40,38 +51,54 @@
         android:id="@+id/outgoingLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="end"
-        android:paddingHorizontal="@dimen/_5sdp"
-        android:background="@drawable/outgoing_msg_bg">
-
-        <TextView
-            android:id="@+id/outGoingMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/online"
-            android:layout_margin="@dimen/_8sdp"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/outGoingTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/online"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:textSize="@dimen/_9sdp"
-            android:textColor="@color/white"/>
+        android:background="@drawable/outgoing_msg_bg"
+        android:paddingHorizontal="@dimen/_5sdp">
 
         <ImageView
-            android:id="@+id/readIcon"
-            android:layout_width="@dimen/_14sdp"
-            android:layout_height="@dimen/_14sdp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:src="@drawable/un_read_icon"
+            android:id="@+id/outgoingImage"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:src="@drawable/logo"
+            android:visibility="gone"
             tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/outGoingMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:text="@string/online"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/outGoingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:text="@string/online"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+            <ImageView
+                android:id="@+id/readIcon"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:src="@drawable/un_read_icon"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
 
     </LinearLayout>
 

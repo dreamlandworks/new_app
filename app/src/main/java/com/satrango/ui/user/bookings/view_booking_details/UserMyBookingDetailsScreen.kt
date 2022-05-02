@@ -29,10 +29,12 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
@@ -209,6 +211,12 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
 
         if (categoryId == "2") {
             binding.viewFilesBtn.visibility = View.VISIBLE
+            binding.viewFilesBtn.setOnClickListener {
+                UserUtils.saveBookingId(this, bookingId)
+                ViewFilesScreen.categoryId = categoryId.toInt()
+                ViewFilesScreen.userId = userId.toInt()
+                startActivity(Intent(this, ViewFilesScreen::class.java))
+            }
         } else {
             binding.viewFilesBtn.visibility = View.GONE
         }

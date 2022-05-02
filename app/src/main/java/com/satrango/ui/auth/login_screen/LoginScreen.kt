@@ -1,14 +1,22 @@
 package com.satrango.ui.auth.login_screen
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 //import com.facebook.*
@@ -38,6 +46,9 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var viewModel: LoginViewModel
     private val GOOGLE_SIGN_IN: Int = 100
     private lateinit var binding: ActivityLoginScreenBinding
+
+    private lateinit var mGetContent: ActivityResultLauncher<String>
+    private lateinit var mGetPermission: ActivityResultLauncher<Intent>
 
     // Google SignIn Objects
     private lateinit var googleSignInOptions: GoogleSignInOptions
@@ -126,6 +137,67 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.FORGOT_PWD = true
                 startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java))
             }
+        }
+
+        mGetContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) toast(this, it.path!!)
+        }
+
+        mGetPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                toast(this, "Permission Given In Android 11")
+            } else {
+                toast(this, "Permission Denied")
+            }
+        }
+
+        takePermission()
+    }
+
+    private fun takePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(String.format("package:%s", packageName))
+                mGetPermission.launch(intent)
+            } catch (e: java.lang.Exception) {
+                toast(this, e.message!!)
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO), PermissionUtils.PERMISSIONS_CODE)
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        var permissionOne = false
+        var permissionTwo = false
+        var permissionThree = false
+        var permissionFour = false
+        var permissionFive = false
+        var permissionSix = false
+        var permissionSeven = false
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            permissionOne = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+            permissionTwo = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+            permissionThree = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED
+            permissionFour = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            permissionFive = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            permissionSix = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            permissionSeven = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            permissionOne && permissionTwo && permissionThree && permissionFour && permissionFive && permissionSix && permissionSeven
+        }
+    }
+
+    private fun takePermission() {
+        if (isPermissionGranted()) {
+//            mGetContent.launch("pdf/*")
+        } else {
+            takePermissions()
         }
     }
 
@@ -259,12 +331,18 @@ class LoginScreen : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
-            for (grant in grantResults) {
-                if (grant != PackageManager.PERMISSION_GRANTED) {
-                    PermissionUtils.checkAndRequestPermissions(this)
-                }
-            }
+//        if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
+//            for (grant in grantResults) {
+//                if (grant != PackageManager.PERMISSION_GRANTED) {
+//                    PermissionUtils.checkAndRequestPermissions(this)
+//                }
+//            }
+//        }
+        if (requestCode == PermissionUtils.PERMISSIONS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mGetContent.launch("pdf/*")
+            toast(this, "Permission Granted")
+        } else {
+            takePermission()
         }
     }
 

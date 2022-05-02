@@ -3,6 +3,8 @@ package com.satrango.remote.api_services
 import com.satrango.R
 import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.remote.fcm.FCMMessageReqModel
+import com.satrango.remote.fcm.SendFCMReqModel
+import com.satrango.remote.fcm.SendFCMResModel
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
@@ -496,5 +498,10 @@ interface UserApiService {
     suspend fun getPaytmMembershipProcessTxn(
         @Body requestBody: UserPlansTxnReqModel
     ) : UserPlansTxnResModel
+
+    @POST(UserApiEndPoints.SEND_FCM)
+    suspend fun sendFcm(
+        @Body requestBody: SendFCMReqModel
+    ) : SendFCMResModel
 
 }

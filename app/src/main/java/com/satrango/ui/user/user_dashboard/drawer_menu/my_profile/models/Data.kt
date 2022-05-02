@@ -10,6 +10,8 @@ data class Data(
     val mobile: String,
     val profile_pic: String,
     val referral_id: String,
+    val maps_key: String,
+    val fcm_key: String,
     val sp_activated: String, // 1 = Not Activated, 2 = Approval Waiting, 3 = Activated, 4 = Not Approved, 5 = Banned
     val activation_code: String // 0 = Not Applied Yet, 1 = ID Card Uploaded, 2 = 1st Video Uploaded, 3 = 2nd Video Uploaded , 4 = 3rd Video Uploaded, 5 = Activated
 )

@@ -111,12 +111,12 @@ object PermissionUtils {
         var networkEnabled = false
 
         try {
-            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch (e: Exception) {
         }
 
         try {
-            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         } catch (e: Exception) {
         }
 

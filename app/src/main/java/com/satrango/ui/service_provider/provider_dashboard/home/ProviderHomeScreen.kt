@@ -114,43 +114,36 @@ class ProviderHomeScreen : Fragment() {
     private fun updateNewJobs() {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(requireContext()).toInt())
         val factory = ViewModelFactory(ProviderMyBidsRepository())
-        val viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
-        viewModel.jobsList(requireContext(), requestBody).observe(requireActivity()) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    val data = it.data!![0]
-                    if (it.data.isNotEmpty()) {
-                        binding.newJobExpiresIn.text = data.expires_in
-                        binding.newJobCostPerHour.text = "Rs.${data.amount}/-"
-                        binding.newJobLocation.text = data.job_post_description[0].city
-                        binding.newJobDescription.text = data.job_post_description[0].job_description
-                        binding.newJobCallBtn.setOnClickListener {
-                            UserUtils.makePhoneCall(requireContext(), data.mobile)
-                        }
-                        binding.newJobsCard.setOnClickListener {
-                            ProviderPlaceBidScreen.FROM_AWARDED = false
-                            ProviderPlaceBidScreen.FROM_EDIT_BID = false
-                            MyJobPostViewScreen.bookingId = data.booking_id.toInt()
-                            MyJobPostViewScreen.categoryId = data.category_id.toInt()
-                            MyJobPostViewScreen.userId = data.booking_user_id.toInt()
-                            UserUtils.savePostJobId(requireContext(), data.post_job_id.toInt())
-                            val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
-                            binding.root.context.startActivity(intent)
-                        }
-                        binding.newJobsLayout.visibility = View.VISIBLE
-                        binding.newJobsCard.visibility = View.VISIBLE
-                    } else {
-                        binding.newJobsLayout.visibility = View.GONE
-                        binding.newJobsCard.visibility = View.GONE
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
+            if (response.status == 200) {
+                if (response.job_post_details.isNotEmpty()) {
+                    val data = response.job_post_details[0]
+                    binding.newJobExpiresIn.text = data.expires_in
+                    binding.newJobCostPerHour.text = "Rs.${data.amount}/-"
+                    binding.newJobLocation.text = data.job_post_description[0].city
+                    binding.newJobDescription.text = data.job_post_description[0].job_description
+                    binding.newJobCallBtn.setOnClickListener {
+                        UserUtils.makePhoneCall(requireContext(), data.mobile)
                     }
+                    binding.newJobsCard.setOnClickListener {
+                        ProviderPlaceBidScreen.FROM_AWARDED = false
+                        ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                        MyJobPostViewScreen.bookingId = data.booking_id.toInt()
+                        MyJobPostViewScreen.categoryId = data.category_id.toInt()
+                        MyJobPostViewScreen.userId = data.booking_user_id.toInt()
+                        UserUtils.savePostJobId(requireContext(), data.post_job_id.toInt())
+                        val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
+                        binding.root.context.startActivity(intent)
+                    }
+                    binding.newJobsLayout.visibility = View.VISIBLE
+                    binding.newJobsCard.visibility = View.VISIBLE
+                } else {
+                    binding.newJobsLayout.visibility = View.GONE
+                    binding.newJobsCard.visibility = View.GONE
                 }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                }
+            } else {
+                toast(requireContext(), Gson().toJson(response.message))
             }
         }
     }

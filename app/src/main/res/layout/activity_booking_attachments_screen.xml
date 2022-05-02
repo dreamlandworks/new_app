@@ -309,11 +309,11 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@drawable/blue_out_line"
                 android:gravity="center"
+                android:paddingVertical="@dimen/_5sdp"
                 android:text="@string/back_sm" />
 
             <TextView

@@ -26,18 +26,6 @@ import kotlin.collections.ArrayList
 class ChatAdapter(var options: FirebaseRecyclerOptions<ChatsModel>) :
     FirebaseRecyclerAdapter<ChatsModel, ChatAdapter.ViewHolder>(options) {
 
-//    companion object {
-//        private fun buildQuery() = FirebaseDatabase.getInstance()
-//            .getReferenceFromUrl("https://satrango-37ac9-default-rtdb.firebaseio.com/")
-//            .child("users")
-//
-//        private fun buildOptions(lifecycleOwner: LifecycleOwner) = FirebaseRecyclerOptions.Builder<ChatModel>()
-//            .setQuery(buildQuery(), ChatModel::class.java)
-//            .setLifecycleOwner(lifecycleOwner)
-//            .build()
-//
-//    }
-
     class ViewHolder(binding: ChatRowBinding) : RecyclerView.ViewHolder(binding.root) {
         val binding = binding
     }
@@ -54,34 +42,31 @@ class ChatAdapter(var options: FirebaseRecyclerOptions<ChatsModel>) :
 
     @SuppressLint("NewApi", "SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: ChatsModel) {
-        Glide.with(holder.binding.profileImage).load(model.profile_image).error(R.drawable.images)
-            .into(holder.binding.profileImage)
+        Glide.with(holder.binding.profileImage).load(model.profile_image).error(R.drawable.images).into(holder.binding.profileImage)
         holder.binding.userName.text = model.username
         holder.binding.time.text = SimpleDateFormat("hh:mm a").format(Date(model.datetime))
-        if (model.sent_by != UserUtils.getUserId(holder.binding.count.context)) {
-            holder.binding.lastMessage.text = model.last_message
-            holder.binding.lastMessage.setTextColor(holder.binding.count.context.getColor(R.color.blue))
-//            val temp = ArrayList<ChatMessageModel>()
-////            for (chat in data.chats) {
-////                if (chat.unseen == 0) {
-////                    temp.add(chat)
-////                }
-////            }
-////            holder.binding.count.text = temp.size.toString()
-//            holder.binding.count.visibility = View.GONE
-        } else {
-            holder.binding.lastMessage.text = model.last_message
-            holder.binding.count.visibility = View.GONE
+        holder.binding.root.setOnClickListener {
+            UserUtils.selectedChat(holder.binding.root.context, Gson().toJson(model))
+            holder.binding.root.context.startActivity(Intent(holder.binding.root.context, ChatScreen::class.java))
         }
-            holder.binding.root.setOnClickListener {
-                UserUtils.selectedChat(holder.binding.root.context, Gson().toJson(model))
-                holder.binding.root.context.startActivity(
-                    Intent(
-                        holder.binding.root.context,
-                        ChatScreen::class.java
-                    )
-                )
+        when(model.type) {
+            holder.binding.count.context.getString(R.string.text) -> {
+                holder.binding.lastMessage.text = model.last_message
+            }
+            holder.binding.count.context.getString(R.string.pdf) -> {
+                holder.binding.lastMessage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.clip_icon_24, 0, 0, 0)
+                holder.binding.lastMessage.text = holder.binding.lastMessage.context.getString(R.string.pdf)
+            }
+            holder.binding.count.context.getString(R.string.image) -> {
+                holder.binding.lastMessage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_camera_alt_24, 0, 0, 0)
+                holder.binding.lastMessage.text = holder.binding.lastMessage.context.getString(R.string.image)
             }
         }
+        if (model.sent_by != UserUtils.getUserId(holder.binding.count.context)) {
+            holder.binding.lastMessage.setTextColor(holder.binding.count.context.getColor(R.color.blue))
+        } else {
+            holder.binding.count.visibility = View.GONE
+        }
+    }
 
 }

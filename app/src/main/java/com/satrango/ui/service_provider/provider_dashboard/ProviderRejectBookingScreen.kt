@@ -18,6 +18,8 @@ import com.satrango.databinding.ActivityProviderRejectBookingScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
+import com.satrango.remote.fcm.NotificationX
+import com.satrango.remote.fcm.SendFCMReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -172,22 +174,30 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
-                        UserUtils.sendFCM(this@ProviderRejectBookingScreen, response!!.booking_details.fcm_token, "reject", "reject", "reject|$bookingType|$finalReason")
-                        if (FCMService.notificationManager != null) {
-                            FCMService.notificationManager.cancelAll()
-                        }
-                        binding.feedBack.setText("")
-                        ProviderDashboard.bookingId = "0"
-                        UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
-                        if (ProviderDashboard.bottomSheetDialog != null) {
-                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+                        val fcmResponse = RetrofitBuilder.getFCMRetrofitInstance().sendFcm(
+                            SendFCMReqModel(NotificationX("$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "reject"), "high", response!!.booking_details.fcm_token)
+                        )
+                        if (fcmResponse.status == 200) {
+                            if (FCMService.notificationManager != null) {
+                                FCMService.notificationManager.cancelAll()
                             }
+                            binding.feedBack.setText("")
+                            ProviderDashboard.bookingId = "0"
+                            UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+                            if (ProviderDashboard.bottomSheetDialog != null) {
+                                if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                    ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                }
+                            }
+                            snackBar(binding.backBtn, "Booking Rejected Successfully")
+                            Handler().postDelayed({
+                                onBackPressed()
+                            }, 1000)
+                        } else {
+                            snackBar(binding.backBtn, "Failed to Reject Booking!")
                         }
-                        snackBar(binding.backBtn, "Booking Rejected Successfully")
-                        Handler().postDelayed({
-                            onBackPressed()
-                        }, 1000)
+//                        UserUtils.sendFCM(this@ProviderRejectBookingScreen, , "reject", "reject", "")
+
                     } else {
                         progressDialog.dismiss()
                         snackBar(binding.backBtn, jsonResponse.getString("status_message"))

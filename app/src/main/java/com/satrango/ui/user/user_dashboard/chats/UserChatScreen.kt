@@ -18,6 +18,7 @@ import com.satrango.databinding.FragmentUserChatScreenBinding
 import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
 import com.satrango.ui.user.user_dashboard.chats.models.ChatsModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -28,7 +29,6 @@ class UserChatScreen : Fragment() {
 
     private lateinit var adapter: ChatAdapter
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var valueEventListener: ValueEventListener
     private lateinit var binding: FragmentUserChatScreenBinding
 
     override fun onCreateView(
@@ -79,6 +79,9 @@ class UserChatScreen : Fragment() {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.chats)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
+        if (isProvider(requireContext())) {
+            toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
+        }
     }
 
     override fun onResume() {

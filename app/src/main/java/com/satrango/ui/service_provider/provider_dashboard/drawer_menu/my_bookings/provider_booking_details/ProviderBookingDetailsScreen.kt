@@ -41,6 +41,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
@@ -205,11 +206,14 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         if (categoryId == "2") {
             binding.viewFilesBtn.visibility = View.VISIBLE
+            binding.viewFilesBtn.setOnClickListener {
+                UserUtils.saveBookingId(this, bookingId)
+                ViewFilesScreen.categoryId = categoryId.toInt()
+                ViewFilesScreen.userId = userId.toInt()
+                startActivity(Intent(this, ViewFilesScreen::class.java))
+            }
         } else {
             binding.viewFilesBtn.visibility = View.GONE
-        }
-        binding.viewFilesBtn.setOnClickListener {
-
         }
 
     }

@@ -188,6 +188,7 @@
         <entry key="app/src/main/res/drawable/read_icon.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/user_btn_bg.xml" value="0.2525" />
         <entry key="app/src/main/res/layout/activity_booking_address_screen.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/activity_booking_attachments_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_chat_screen.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/layout/activity_discussion_board_screen.xml" value="0.232421875" />
@@ -195,6 +196,7 @@
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_my_job_posts_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_o_t_p_verification_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_post_job_address_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_post_job_attachments_screen.xml" value="0.232421875" />
@@ -247,7 +249,8 @@
         <entry key="app/src/main/res/layout/activity_user_sign_up_screen_two.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_view_bid_details_screens.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_view_bids_screen.xml" value="0.232421875" />
-        <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/activity_view_files_screen.xml" value="0.232421875" />
+        <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_youtube_player_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/all_banks_details_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/attachment_row.xml" value="0.232421875" />
@@ -329,13 +332,15 @@
         <entry key="app/src/main/res/layout/user_latest_offer_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_offers_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_plan_payment_success_dialog.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/user_popular_services_row.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/user_popular_services_row.xml" value="0.125" />
         <entry key="app/src/main/res/layout/user_profile_address_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_referral_offer_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_signup_success_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_sub_category_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/user_tool_bar.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/view_bids_row.xml" value="0.232421875" />
+        <entry key="app/src/main/res/layout/view_files_row.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/view_image_or_pdf_in_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.2543822146216332" />
       </map>
     </option>

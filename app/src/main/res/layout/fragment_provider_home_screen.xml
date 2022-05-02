@@ -72,7 +72,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:gravity="center_horizontal"
                             android:text="10/21"
-                            android:textColor="@color/red"
+                            android:textColor="@color/yellow"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
@@ -140,7 +140,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:gravity="center_horizontal"
                             android:text="139.00"
-                            android:textColor="@color/red"
+                            android:textColor="@color/yellow"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
@@ -361,7 +361,7 @@
                                     android:gravity="center_horizontal"
                                     android:text="# 25th"
                                     android:singleLine="true"
-                                    android:textColor="@color/red"
+                                    android:textColor="@color/yellow"
                                     android:textSize="@dimen/_11sdp"
                                     android:textStyle="bold" />
 
@@ -373,7 +373,7 @@
                                     android:gravity="center_horizontal"
                                     android:singleLine="true"
                                     android:text="Juliana Jr."
-                                    android:textColor="@color/red"
+                                    android:textColor="@color/yellow"
                                     android:textSize="@dimen/_11sdp"
                                     android:textStyle="bold" />
                             </LinearLayout>

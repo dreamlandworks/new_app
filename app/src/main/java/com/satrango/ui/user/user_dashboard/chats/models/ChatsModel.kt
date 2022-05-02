@@ -6,8 +6,9 @@ data class ChatsModel(
     val user_id: String,
     val username: String,
     val last_message: String,
+    val type: String,
     val sent_by: String,
     val datetime: Long
 ) {
-    constructor(): this("", "", "", "", "", "", 0)
+    constructor(): this("", "", "", "", "", "", "", 0)
 }
