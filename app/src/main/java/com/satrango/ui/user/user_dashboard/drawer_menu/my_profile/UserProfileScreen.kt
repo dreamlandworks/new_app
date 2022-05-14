@@ -41,6 +41,7 @@ import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileAddressInterface
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
@@ -307,7 +308,12 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
 
     @SuppressLint("SetTextI18n")
     private fun showUserProfile() {
-        viewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
+        val requestBody = UserProfileReqModel(
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(this@UserProfileScreen).toInt(),
+            UserUtils.getCity(this@UserProfileScreen)
+        )
+        viewModel.userProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -348,6 +354,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
                     snackBar(binding.applyBtn, it.message!!)
                 }
             }

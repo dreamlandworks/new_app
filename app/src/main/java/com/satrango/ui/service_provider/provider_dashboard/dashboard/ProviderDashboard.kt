@@ -90,6 +90,7 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import com.bumptech.glide.load.HttpException
 import com.google.firebase.database.FirebaseDatabase
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
 
@@ -618,7 +619,12 @@ class ProviderDashboard : AppCompatActivity() {
     }
 
     private fun loadUserProfileData() {
-        viewModel.userProfile(this).observe(this) {
+        val requestBody = UserProfileReqModel(
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(this@ProviderDashboard).toInt(),
+            UserUtils.getCity(this@ProviderDashboard)
+        )
+        viewModel.userProfile(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -664,9 +670,10 @@ class ProviderDashboard : AppCompatActivity() {
     private fun updateSpProfile() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(
-                    UserUtils.getUserId(this@ProviderDashboard),
-                    RetrofitBuilder.USER_KEY
+                val requestBody = UserProfileReqModel(
+                    RetrofitBuilder.USER_KEY,
+                    UserUtils.getUserId(this@ProviderDashboard).toInt(),
+                    UserUtils.getCity(this@ProviderDashboard)
                 )
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data

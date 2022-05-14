@@ -45,9 +45,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import com.bumptech.glide.load.HttpException
+import com.google.gson.Gson
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import java.net.SocketTimeoutException
 
 
@@ -67,10 +69,12 @@ class UserHomeScreen :
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(
-                    UserUtils.getUserId(requireContext()),
-                    RetrofitBuilder.USER_KEY
+                val requestBody = UserProfileReqModel(
+                    RetrofitBuilder.USER_KEY,
+                    UserUtils.getUserId(requireContext()).toInt(),
+                    UserUtils.getCity(requireContext())
                 )
+//                toast(requireContext(), Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {

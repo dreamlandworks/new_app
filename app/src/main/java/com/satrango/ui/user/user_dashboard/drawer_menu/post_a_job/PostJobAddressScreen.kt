@@ -40,6 +40,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.MyJobPostViewResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.PostJobAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.models.post_job_single_move.PostJobSingleMoveReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlanScreen
@@ -286,7 +287,12 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
         }
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
+        val requestBody = UserProfileReqModel(
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(this@PostJobAddressScreen).toInt(),
+            UserUtils.getCity(this@PostJobAddressScreen)
+        )
+        profileViewModel.userProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

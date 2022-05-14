@@ -63,6 +63,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccount
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.refer_earn.UserReferAndEarn
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
@@ -393,9 +394,10 @@ class   UserDashboardScreen : AppCompatActivity() {
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = BrowseCategoryReqModel(
-                    UserUtils.getUserId(this@UserDashboardScreen),
-                    RetrofitBuilder.USER_KEY
+                val requestBody = UserProfileReqModel(
+                    RetrofitBuilder.USER_KEY,
+                    UserUtils.getUserId(this@UserDashboardScreen).toInt(),
+                    UserUtils.getCity(this@UserDashboardScreen)
                 )
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data

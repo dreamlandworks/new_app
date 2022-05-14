@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
@@ -25,12 +26,12 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
     val updateProfileInfo = MutableLiveData<NetworkResponse<String>>()
     val deleteUserAddress = MutableLiveData<NetworkResponse<String>>()
 
-    fun userProfileInfo(context: Context, userId: String): MutableLiveData<NetworkResponse<Data>> {
+    fun userProfileInfo(context: Context, requestBody: UserProfileReqModel): MutableLiveData<NetworkResponse<Data>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userProfileInfo.value = NetworkResponse.Loading()
-                    val response = async { repository.userProfileInfo(userId) }
+                    val response = async { repository.userProfileInfo(requestBody) }
                     if (response.await().status == 200) {
                         userProfileInfo.value = NetworkResponse.Success(response.await().data)
                     } else {

@@ -53,6 +53,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.ProviderRespons
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
@@ -136,7 +137,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-        profileViewModel.userProfileInfo(this, UserUtils.getUserId(this)).observe(this) {
+        val requestBody = UserProfileReqModel(
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(this@BookingAddressScreen).toInt(),
+            UserUtils.getCity(this@BookingAddressScreen)
+        )
+        profileViewModel.userProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

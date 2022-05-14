@@ -26,6 +26,7 @@ import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileAddressAdapter
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
@@ -198,7 +199,12 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
 
     @SuppressLint("SetTextI18n")
     private fun showUserProfile() {
-        userViewModel.userProfileInfo(requireContext(), UserUtils.getUserId(requireContext())).observe(requireActivity()) {
+        val requestBody = UserProfileReqModel(
+            RetrofitBuilder.USER_KEY,
+            UserUtils.getUserId(requireContext()).toInt(),
+            UserUtils.getCity(requireContext())
+        )
+        userViewModel.userProfileInfo(requireContext(), requestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()

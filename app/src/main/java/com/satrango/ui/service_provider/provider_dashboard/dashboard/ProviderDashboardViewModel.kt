@@ -10,6 +10,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.Data
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,12 +25,12 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
     val saveLocation = MutableLiveData<NetworkResponse<String>>()
     val onlineStatus = MutableLiveData<NetworkResponse<String>>()
 
-    fun userProfile(context: Context): MutableLiveData<NetworkResponse<Data>> {
+    fun userProfile(context: Context, requestBody: UserProfileReqModel): MutableLiveData<NetworkResponse<Data>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     userProfile.value = NetworkResponse.Loading()
-                    val response = async { repository.userProfile(context) }
+                    val response = async { repository.userProfile(context, requestBody) }
 //                    Log.e("PROFILE: ", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
                         userProfile.value = NetworkResponse.Success(response.await().data)
