@@ -26,7 +26,7 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                     userLogin.value = NetworkResponse.Loading()
                     val response = async { repository.login(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
-                    Log.e("LOGIN", jsonObject.toString())
+//                    Log.e("LOGIN", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         UserUtils.saveUserName(context, jsonObject.getString("fname") + " " + jsonObject.getString("lname"))
                         UserUtils.saveUserProfilePic(context, RetrofitBuilder.BASE_URL + jsonObject.getString("profile_image"))
@@ -49,7 +49,7 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                     userLogout.value = NetworkResponse.Loading()
                     val response = async { repository.logout(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
-                    Log.e("LOGOUT", jsonObject.toString())
+//                    Log.e("LOGOUT", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         userLogout.value = NetworkResponse.Success(jsonObject.getString("message"))
                     } else {

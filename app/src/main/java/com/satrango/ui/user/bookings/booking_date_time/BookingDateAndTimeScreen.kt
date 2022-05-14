@@ -249,7 +249,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.getUserId(this).toInt(),
             userType
         )
-        Log.e("RESCHEDULE:", Gson().toJson(requestBody))
+//        Log.e("RESCHEDULE:", Gson().toJson(requestBody))
 //        toast(this, "RESCHEDULE:" + Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -398,7 +398,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             }
         }
 
-        Log.e("SLOTS:", Gson().toJson(availableTimeSlots))
+//        Log.e("SLOTS:", Gson().toJson(availableTimeSlots))
 
         binding.morningTimeRv.layoutManager = GridLayoutManager(this, 2)
         binding.afternoonTimeRv.layoutManager = GridLayoutManager(this, 2)
@@ -409,7 +409,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         eveningTimings = ArrayList()
         nightTimings = ArrayList()
         availableTimeSlots.onEachIndexed { index, monthsModel ->
-            Log.e("SLOTS:", Gson().toJson(monthsModel))
+//            Log.e("SLOTS:", Gson().toJson(monthsModel))
 
             when {
                 UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
@@ -543,7 +543,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.morningTimeRv.adapter = MonthsAdapter(morningTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
-        Log.e("AFTERNOON", Gson().toJson(afternoonTimings))
+//        Log.e("AFTERNOON", Gson().toJson(afternoonTimings))
         afternoonTimings = filterTimeSlots(afternoonTimings)
         if (afternoonTimings.isEmpty()) {
             binding.afternoonText.visibility = View.GONE
@@ -599,9 +599,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
-        Log.e("MORNING:", Gson().toJson(morningTimings))
-        Log.e("EVENING:", Gson().toJson(eveningTimings))
-        Log.e("NIGHT:", Gson().toJson(nightTimings))
+//        Log.e("MORNING:", Gson().toJson(morningTimings))
+//        Log.e("EVENING:", Gson().toJson(eveningTimings))
+//        Log.e("NIGHT:", Gson().toJson(nightTimings))
     }
 
     private fun filterTimeSlots(timings: java.util.ArrayList<MonthsModel>): java.util.ArrayList<MonthsModel> {

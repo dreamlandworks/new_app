@@ -73,7 +73,7 @@ class LoginScreen : AppCompatActivity() {
         initializeProgressDialog()
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
+//            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage)
         }
 
         val factory = ViewModelFactory(LoginRepository())
@@ -151,7 +151,7 @@ class LoginScreen : AppCompatActivity() {
             }
         }
 
-        takePermission()
+//        takePermission()
     }
 
     private fun takePermissions() {
@@ -339,10 +339,10 @@ class LoginScreen : AppCompatActivity() {
 //            }
 //        }
         if (requestCode == PermissionUtils.PERMISSIONS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            mGetContent.launch("pdf/*")
+//            mGetContent.launch("pdf/*")
             toast(this, "Permission Granted")
         } else {
-            takePermission()
+//            takePermission()
         }
     }
 

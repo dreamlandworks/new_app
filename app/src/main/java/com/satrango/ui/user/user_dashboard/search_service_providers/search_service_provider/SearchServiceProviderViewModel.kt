@@ -33,7 +33,7 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                         keywordsList.value = NetworkResponse.Failure(response.await().message)
                     }
                 } catch (e: Exception) {
-                    Log.e("KEYWORDS", e.message!!)
+//                    Log.e("KEYWORDS", e.message!!)
                     keywordsList.value = NetworkResponse.Failure(e.message)
                 }
             }
@@ -52,7 +52,7 @@ class SearchServiceProviderViewModel(private val repository: SearchServiceProvid
                     if (response.await().status == 200) {
                         UserUtils.setTempAddressId(context, response.await().temp_address_id.toString())
                         UserUtils.setSearchResultsId(context, response.await().search_results_id.toString())
-                        Log.e("JSON:", Gson().toJson(response.await()))
+//                        Log.e("JSON:", Gson().toJson(response.await()))
                         searchResultsList.value = NetworkResponse.Success(response.await())
                     } else {
                         searchResultsList.value = NetworkResponse.Failure(response.await().message)

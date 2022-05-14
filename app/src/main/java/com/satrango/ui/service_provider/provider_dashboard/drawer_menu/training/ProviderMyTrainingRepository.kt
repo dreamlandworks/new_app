@@ -32,7 +32,7 @@ class ProviderMyTrainingRepository : BaseRepository() {
     }
 
     suspend fun getProviderDashboardDetails(context: Context, cityId: String): ProviderDashboardResModel {
-        Log.e("SPDASHBOARD:", UserUtils.getUserId(context) + "|" + cityId)
+//        Log.e("SPDASHBOARD:", UserUtils.getUserId(context) + "|" + cityId)
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getDashboardDetails(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(context).toInt(), cityId.toInt())
     }
 

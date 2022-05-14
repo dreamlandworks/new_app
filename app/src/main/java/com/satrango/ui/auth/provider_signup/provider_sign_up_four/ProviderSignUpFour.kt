@@ -82,8 +82,8 @@ class ProviderSignUpFour: AppCompatActivity() {
 //        toast(this, requestBody.toString())
         val factory = ViewModelFactory(ProviderSignUpFourRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
-        viewModel.uploadIdProof(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.uploadIdProof(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -97,7 +97,7 @@ class ProviderSignUpFour: AppCompatActivity() {
                     snackBar(binding.submitBtn, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

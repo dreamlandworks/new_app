@@ -170,7 +170,7 @@ class UserHomeScreen :
                     list.addAll(list)
                     list.addAll(list)
                     shrinkTo(list, 6)
-                    Log.e("POPULARSERVICES:", list.toString())
+//                    Log.e("POPULARSERVICES:", list.toString())
                     binding.userPopularServicesRv.adapter = UserPopularServicesAdapter(list)
                 }
                 is NetworkResponse.Failure -> {

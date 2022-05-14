@@ -345,7 +345,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             UserUtils.getPhoneNo(this)
         )
-        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
+        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -356,9 +356,14 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
+                    startActivity(
+                        Intent(
+                            this@UserSignUpScreenThree,
+                            OTPVerificationScreen::class.java
+                        )
+                    )
                 }
             }
-        })
+        }
     }
 }

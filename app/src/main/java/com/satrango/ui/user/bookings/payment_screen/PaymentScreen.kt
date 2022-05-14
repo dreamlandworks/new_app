@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -62,7 +63,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
 
-class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
+class PaymentScreen : AppCompatActivity(), UpiInterface {
+//    PaymentResultListener
 
     private var callbackUrl = ""
     private lateinit var upiList: List<com.satrango.ui.user.bookings.payment_screen.models.Data>
@@ -119,8 +121,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             }
 
             if (FROM_PROVIDER_BOOKING_RESPONSE) {
-
-                toast(this@PaymentScreen, "FROM USER BOOKING ADDRESS")
                 val data = Gson().fromJson(
                     UserUtils.getSelectedSPDetails(this@PaymentScreen),
                     Data::class.java
@@ -140,8 +140,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 payAmount.text = "Rs.$finalAmount/-"
 
             } else if (FROM_COMPLETE_BOOKING) {
-
-                toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
                 bookingSummaryLayout.visibility = View.VISIBLE
                 bookingDetailsLayout.visibility = View.GONE
                 amountLayout.visibility = View.GONE
@@ -161,7 +159,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
             } else if (FROM_USER_PLANS || FROM_PROVIDER_PLANS) {
 
-                toast(this@PaymentScreen, "FROM USER PLANS / PROVIDER PLANS")
                 bookingSummaryLayout.visibility = View.VISIBLE
                 bookingSummaryCard.visibility = View.VISIBLE
                 amountText.visibility = View.GONE
@@ -292,7 +289,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
                     try {
-                        toast(this@PaymentScreen, "Clicked")
                         processPaytm()
                     } catch (e: java.lang.Exception) {
                         toast(this@PaymentScreen, e.message!!)
@@ -348,8 +344,6 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     private fun processPaytm() {
         callbackUrl =
             "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
-        toast(this, UserUtils.getTxnToken(this))
-
         val paytmOrder = PaytmOrder(
             UserUtils.getOrderId(this),
             resources.getString(R.string.paytm_mid),
@@ -359,44 +353,70 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         )
         transactionManager =
             TransactionManager(paytmOrder, object : PaytmPaymentTransactionCallback {
-                override fun onTransactionResponse(p0: Bundle?) {
-                    Log.e("PAYTM: ", Gson().toJson(p0.toString()))
-                    toast(this@PaymentScreen, p0.toString())
-                    if (resources.getString(R.string.txn_success) == p0!!.getString(
-                            resources.getString(
-                                R.string.status_caps
-                            )
-                        )!!
-                    ) {
-                        when {
-                            FROM_PROVIDER_PLANS -> {
-                                saveProviderPlan()
+                @SuppressLint("ObsoleteSdkInt")
+                override fun onTransactionResponse(inResponse: Bundle?) {
+//                    Log.e("PAYTM: ", Gson().toJson(inResponse.toString()))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(R.string.txn_success)) {
+                            when {
+                                FROM_PROVIDER_PLANS -> {
+                                    saveProviderPlan()
+                                }
+                                FROM_USER_PLANS -> {
+                                    saveUserPlan()
+                                }
+                                FROM_USER_BOOKING_ADDRESS -> {
+                                    updateStatusInServer()
+                                }
+                                FROM_PROVIDER_BOOKING_RESPONSE -> {
+                                    updateStatusInServer()
+                                }
+                                FROM_USER_SET_GOALS -> {
+                                    updateInstallmentPaymentStatus("Success", "paymentId")
+                                }
+                                FROM_COMPLETE_BOOKING -> {
+                                    completeBooking("Success")
+                                }
                             }
-                            FROM_USER_PLANS -> {
-                                saveUserPlan()
-                            }
-                            FROM_USER_BOOKING_ADDRESS -> {
-                                updateStatusInServer()
-                            }
-                            FROM_PROVIDER_BOOKING_RESPONSE -> {
-                                updateStatusInServer()
-                            }
-                            FROM_USER_SET_GOALS -> {
-                                updateInstallmentPaymentStatus("Success", "paymentId")
-                            }
-                            FROM_COMPLETE_BOOKING -> {
-                                completeBooking("Success")
-                            }
+                        } else if (!inResponse.getBoolean(resources.getString(R.string.status_caps))) {
+                            showPaymentFailureDialog()
                         }
-                    } else {
-                        showPaymentFailureDialog()
-                        toast(this@PaymentScreen, p0.toString())
                     }
+//                    toast(this@PaymentScreen, "Response: " + inResponse.toString())
+//                    if (resources.getString(R.string.txn_success) == p0!!.getString(
+//                            resources.getString(
+//                                R.string.status_caps
+//                            )
+//                        )!!
+//                    ) {
+//                        when {
+//                            FROM_PROVIDER_PLANS -> {
+//                                saveProviderPlan()
+//                            }
+//                            FROM_USER_PLANS -> {
+//                                saveUserPlan()
+//                            }
+//                            FROM_USER_BOOKING_ADDRESS -> {
+//                                updateStatusInServer()
+//                            }
+//                            FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                                updateStatusInServer()
+//                            }
+//                            FROM_USER_SET_GOALS -> {
+//                                updateInstallmentPaymentStatus("Success", "paymentId")
+//                            }
+//                            FROM_COMPLETE_BOOKING -> {
+//                                completeBooking("Success")
+//                            }
+//                        }
+//                    } else {
+//                        showPaymentFailureDialog()
+//                        toast(this@PaymentScreen, p0.toString())
+//                    }
                 }
 
                 override fun networkNotAvailable() {
-                    Toast.makeText(this@PaymentScreen, "Network Not available", Toast.LENGTH_LONG)
-                        .show()
+                    snackBar(binding.addCreditDebitCard, "Network Not available")
                 }
 
                 override fun onErrorProceed(p0: String?) {
@@ -416,8 +436,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                 }
 
                 override fun onBackPressedCancelTransaction() {
-                    Toast.makeText(this@PaymentScreen, "Transaction Cancelled", Toast.LENGTH_LONG)
-                        .show()
+                    snackBar(binding.addCreditDebitCard, "Transaction Cancelled")
                 }
 
                 override fun onTransactionCancel(p0: String?, p1: Bundle?) {
@@ -473,7 +492,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                     upiList = response.data
                     binding.upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
                 } else {
-                    toast(this@PaymentScreen, response.message)
+                    snackBar(binding.addCreditDebitCard, response.message)
                 }
             } catch (e: java.lang.Exception) {
                 toast(this@PaymentScreen, e.message!!)
@@ -485,7 +504,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 
         val inVoiceDetails =
             Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
-        Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
+//        Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = CompleteBookingReqModel(
@@ -502,8 +521,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
                     UserUtils.getUserId(this@PaymentScreen),
                     UserUtils.getOrderId(this@PaymentScreen)
                 )
-                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-//                toast(this@PaymentScreen,"COMPLETED BOOKING" +  Gson().toJson(requestBody))
+//                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
                 val response =
                     RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                 if (JSONObject(response.string()).getInt("status") == 200) {
@@ -524,17 +542,19 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == activityRequestCode && data != null) {
-            Toast.makeText(
-                this,
-                data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
-                Toast.LENGTH_SHORT
-            ).show()
+//            Toast.makeText(
+//                this,
+//                data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
+//                Toast.LENGTH_SHORT
+//            ).show()
         }
         if (requestCode == REQUEST_CODE) {
-            Log.d("result", data.toString())
-            data?.getStringExtra("Status")?.let { Log.d("result", it) }
+//            Log.d("result", data.toString())
             data?.getStringExtra("Status")?.let {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+//                Log.d("result", it)
+            }
+            data?.getStringExtra("Status")?.let {
+//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
                 if (it.lowercase(Locale.getDefault()) == "success") {
                     paymentSuccessDialog(this)
                 } else {
@@ -574,29 +594,29 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
 //        }
 //    }
 
-    @SuppressLint("SimpleDateFormat")
-    override fun onPaymentSuccess(paymentId: String?) {
-        when {
-            FROM_PROVIDER_PLANS -> {
-                saveProviderPlan()
-            }
-            FROM_USER_PLANS -> {
-                saveUserPlan()
-            }
-            FROM_USER_BOOKING_ADDRESS -> {
-                updateStatusInServer()
-            }
-            FROM_PROVIDER_BOOKING_RESPONSE -> {
-                updateStatusInServer()
-            }
-            FROM_USER_SET_GOALS -> {
-                updateInstallmentPaymentStatus("Success", paymentId!!)
-            }
-            FROM_COMPLETE_BOOKING -> {
-                completeBooking("Success")
-            }
-        }
-    }
+//    @SuppressLint("SimpleDateFormat")
+//    override fun onPaymentSuccess(paymentId: String?) {
+//        when {
+//            FROM_PROVIDER_PLANS -> {
+//                saveProviderPlan()
+//            }
+//            FROM_USER_PLANS -> {
+//                saveUserPlan()
+//            }
+//            FROM_USER_BOOKING_ADDRESS -> {
+//                updateStatusInServer()
+//            }
+//            FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                updateStatusInServer()
+//            }
+//            FROM_USER_SET_GOALS -> {
+//                updateInstallmentPaymentStatus("Success", paymentId!!)
+//            }
+//            FROM_COMPLETE_BOOKING -> {
+//                completeBooking("Success")
+//            }
+//        }
+//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan() {
@@ -620,7 +640,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             finalWalletBalance,
             UserUtils.getOrderId(this)
         )
-        Log.d("USER PLAN:", Gson().toJson(requestBody))
+//        Log.d("USER PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         viewModel.saveUserPlanPayment(this, requestBody).observe(this) {
@@ -663,7 +683,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             finalWalletBalance,
             UserUtils.getOrderId(this)
         )
-        Log.d("SP PLAN:", Gson().toJson(requestBody))
+//        Log.d("SP PLAN:", Gson().toJson(requestBody))
         viewModel.saveMemberShip(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -688,28 +708,28 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         }
     }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        when {
-            FROM_PROVIDER_PLANS -> {
-                snackBar(binding.googlePayBtn, "Payment Failed")
-            }
-            FROM_USER_PLANS -> {
-                snackBar(binding.googlePayBtn, "Payment Failed")
-            }
-            FROM_USER_BOOKING_ADDRESS -> {
-                updateStatusInServer()
-            }
-            FROM_PROVIDER_BOOKING_RESPONSE -> {
-                updateStatusInServer()
-            }
-            FROM_USER_SET_GOALS -> {
-                updateInstallmentPaymentStatus("Failure", "")
-            }
-            FROM_COMPLETE_BOOKING -> {
-                completeBooking("Failure")
-            }
-        }
-    }
+//    override fun onPaymentError(p0: Int, p1: String?) {
+//        when {
+//            FROM_PROVIDER_PLANS -> {
+//                snackBar(binding.googlePayBtn, "Payment Failed")
+//            }
+//            FROM_USER_PLANS -> {
+//                snackBar(binding.googlePayBtn, "Payment Failed")
+//            }
+//            FROM_USER_BOOKING_ADDRESS -> {
+//                updateStatusInServer()
+//            }
+//            FROM_PROVIDER_BOOKING_RESPONSE -> {
+//                updateStatusInServer()
+//            }
+//            FROM_USER_SET_GOALS -> {
+//                updateInstallmentPaymentStatus("Failure", "")
+//            }
+//            FROM_COMPLETE_BOOKING -> {
+//                completeBooking("Failure")
+//            }
+//        }
+//    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
@@ -776,6 +796,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         finalUserId: Int,
         finalWalletBalance: String
     ) {
+
         val requestBody = PaymentConfirmReqModel(
             finalAmount,
             UserUtils.getBookingId(this),
@@ -789,30 +810,20 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             UserUtils.getOrderId(this),
             finalWalletBalance
         )
-        Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
-//        toast(this, "PAYMENT STATUS: " + Gson().toJson(requestBody))
-        val bookingFactory = ViewModelFactory(BookingRepository())
-        val viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
-        viewModel.confirmPayment(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
+//        Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().confirmPayment(requestBody)
+                if (JSONObject(response.string()).getInt("status") == 200) {
                     progressDialog.dismiss()
-                    if (JSONObject(it.data!!).getInt("status") == 200) {
-                        showSuccessDialog()
-                        Handler().postDelayed({
-                            startActivity(Intent(this, UserDashboardScreen::class.java))
-                        }, 3000)
-                    } else {
-                        showPaymentFailureDialog()
-                    }
-                }
-                is NetworkResponse.Failure -> {
+                    showSuccessDialog()
+                } else {
                     progressDialog.dismiss()
-                    snackBar(binding.googlePayBtn, "Error03:" + it.message!!)
+                    showPaymentFailureDialog()
                 }
+            } catch (e: java.lang.Exception) {
+                progressDialog.dismiss()
+                snackBar(binding.addCreditDebitCard, e.message!!)
             }
         }
     }
@@ -830,7 +841,7 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
             ViewBidsScreen.bidId,
             ViewBidsScreen.spId
         )
-        Log.d("INSTALLMENT PLAN:", Gson().toJson(requestBody))
+//        Log.d("INSTALLMENT PLAN:", Gson().toJson(requestBody))
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
         viewModel.installmentPayments(this, requestBody).observe(this) {
@@ -920,4 +931,5 @@ class PaymentScreen : AppCompatActivity(), PaymentResultListener, UpiInterface {
         upiList = tempList
         binding.upisRV.adapter = UpiAdapter(upiList, this)
     }
+
 }

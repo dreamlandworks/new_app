@@ -32,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -169,38 +170,41 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                 )
 //                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
                 CoroutineScope(Dispatchers.Main).launch {
-                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
-                    val jsonResponse = JSONObject(bookingResponse.string())
-                    progressDialog.show()
-                    if (jsonResponse.getInt("status") == 200) {
-                        progressDialog.dismiss()
-                        val fcmResponse = RetrofitBuilder.getFCMRetrofitInstance().sendFcm(
-                            SendFCMReqModel(NotificationX("$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "reject"), "high", response!!.booking_details.fcm_token)
-                        )
-                        if (fcmResponse.status == 200) {
-                            if (FCMService.notificationManager != null) {
-                                FCMService.notificationManager.cancelAll()
-                            }
-                            binding.feedBack.setText("")
-                            ProviderDashboard.bookingId = "0"
-                            UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
-                            if (ProviderDashboard.bottomSheetDialog != null) {
-                                if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                    ProviderDashboard.bottomSheetDialog!!.dismiss()
+                    try {
+                        val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+                        val jsonResponse = JSONObject(bookingResponse.string())
+                        progressDialog.show()
+                        if (jsonResponse.getInt("status") == 200) {
+                            progressDialog.dismiss()
+                            val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(
+                                SendFCMReqModel(NotificationX("$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "reject"), "high", response!!.booking_details.fcm_token)
+                            )
+                            if (fcmResponse.status == 200) {
+                                if (FCMService.notificationManager != null) {
+                                    FCMService.notificationManager.cancelAll()
                                 }
+                                binding.feedBack.setText("")
+                                ProviderDashboard.bookingId = "0"
+                                UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+                                if (ProviderDashboard.bottomSheetDialog != null) {
+                                    if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                        ProviderDashboard.bottomSheetDialog!!.dismiss()
+                                    }
+                                }
+                                snackBar(binding.backBtn, "Booking Rejected Successfully")
+                                Handler().postDelayed({
+                                    onBackPressed()
+                                }, 1000)
+                            } else {
+                                snackBar(binding.backBtn, "Failed to Reject Booking!")
                             }
-                            snackBar(binding.backBtn, "Booking Rejected Successfully")
-                            Handler().postDelayed({
-                                onBackPressed()
-                            }, 1000)
-                        } else {
-                            snackBar(binding.backBtn, "Failed to Reject Booking!")
-                        }
 //                        UserUtils.sendFCM(this@ProviderRejectBookingScreen, , "reject", "reject", "")
-
-                    } else {
-                        progressDialog.dismiss()
-                        snackBar(binding.backBtn, jsonResponse.getString("status_message"))
+                        } else {
+                            progressDialog.dismiss()
+                            snackBar(binding.backBtn, jsonResponse.getString("status_message"))
+                        }
+                    } catch (e: Exception) {
+                        snackBar(binding.backBtn, e.message!!)
                     }
                 }
             }

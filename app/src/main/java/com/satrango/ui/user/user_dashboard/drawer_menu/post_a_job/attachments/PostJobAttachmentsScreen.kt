@@ -273,7 +273,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.title,
             UserUtils.getUserId(this).toInt()
         )
-        Log.e("BID RANGE:", Gson().toJson(requestBody))
+//        Log.e("BID RANGE:", Gson().toJson(requestBody))
         viewModel.updateBlueCollarMyJobPost(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -565,7 +565,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             binding.attachmentsRV.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-            Log.e("PATHS:", Gson().toJson(imagePathList))
+//            Log.e("PATHS:", Gson().toJson(imagePathList))
 
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -590,7 +590,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                             dataSnapshot.children.forEach { data ->
                                 val image_url = data.value.toString()
                                 val image_key = data.key.toString()
-                                Log.e("SNAPSHOT:", image_url)
+//                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
                                     if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
@@ -623,7 +623,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                             binding.attachmentsRV.adapter =
                                 AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
                             imageProgressDialog.dismiss()
-                            Log.e("URLS", Gson().toJson(encodedImages))
+//                            Log.e("URLS", Gson().toJson(encodedImages))
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -661,7 +661,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }

@@ -232,7 +232,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getPostJobId(this),
             UserUtils.getUserId(this).toInt()
         )
-        Log.e("JOB POST:", Gson().toJson(requestBody))
+//        Log.e("JOB POST:", Gson().toJson(requestBody))
         toast(this, Gson().toJson(requestBody))
         viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {

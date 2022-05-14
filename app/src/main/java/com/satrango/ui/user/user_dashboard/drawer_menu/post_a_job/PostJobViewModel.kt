@@ -194,7 +194,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobSingleMove.value = NetworkResponse.Loading()
                     val response = async { repository.postJobSingleMove(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         postJobSingleMove.value = NetworkResponse.Success(data)
                     } else {
@@ -217,7 +217,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobBlueCollar.value = NetworkResponse.Loading()
                     val response = async { repository.postJobBlueCollar(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         postJobBlueCollar.value = NetworkResponse.Success(data)
                     } else {
@@ -240,7 +240,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     postJobMultiMove.value = NetworkResponse.Loading()
                     val response = async { repository.postJobMultiMove(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         postJobMultiMove.value = NetworkResponse.Success(data)
                     } else {
@@ -263,7 +263,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     myJobPosts.value = NetworkResponse.Loading()
                     val response = async { repository.myJobPosts(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         myJobPosts.value = NetworkResponse.Success(data)
                     } else {
@@ -284,10 +284,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     myJobPostsViewDetails.value = NetworkResponse.Loading()
-                    Log.e("JSON REQUEST", Gson().toJson(requestBody))
+//                    Log.e("JSON REQUEST", Gson().toJson(requestBody))
                     val response = async { repository.myJobPostsViewDetails(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         myJobPostsViewDetails.value = NetworkResponse.Success(data)
                     } else {
@@ -310,7 +310,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     viewBids.value = NetworkResponse.Loading()
                     val response = async { repository.viewBids(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         viewBids.value = NetworkResponse.Success(data)
                     } else {
@@ -333,7 +333,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     viewProposal.value = NetworkResponse.Loading()
                     val response = async { repository.viewProposal(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         viewProposal.value = NetworkResponse.Success(data)
                     } else {
@@ -354,10 +354,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     discussionMessage.value = NetworkResponse.Loading()
-                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
+//                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
                     val response = async { repository.sendDiscussionMessage(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         discussionMessage.value = NetworkResponse.Success(data)
                     } else {
@@ -378,10 +378,10 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     discussionList.value = NetworkResponse.Loading()
-                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
+//                    Log.e("JSON RESPONSE", Gson().toJson(requestBody))
                     val response = async { repository.discussionList(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         discussionList.value = NetworkResponse.Success(data.discussion_details)
                     } else {
@@ -404,7 +404,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     setGoals.value = NetworkResponse.Loading()
                     val response = async { repository.setGoals() }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         setGoals.value = NetworkResponse.Success(data.data)
                     } else {
@@ -427,7 +427,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     saveInstallments.value = NetworkResponse.Loading()
                     val response = async { repository.saveInstallments(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         saveInstallments.value = NetworkResponse.Success(data)
                     } else {
@@ -450,7 +450,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     installmentsPayment.value = NetworkResponse.Loading()
                     val response = async { repository.installmentPayments(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         installmentsPayment.value = NetworkResponse.Success(data)
                     } else {
@@ -473,7 +473,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     deleteAttachment.value = NetworkResponse.Loading()
                     val response = async { repository.deleteAttachment(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         deleteAttachment.value = NetworkResponse.Success(data)
                     } else {
@@ -496,7 +496,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     likeClicked.value = NetworkResponse.Loading()
                     val response = async { repository.likeClicked(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         likeClicked.value = NetworkResponse.Success(data)
                     } else {
@@ -519,7 +519,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateSingleMoveMyJobPost.value = NetworkResponse.Loading()
                     val response = async { repository.updateSingleMoveMyJobPost(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         updateSingleMoveMyJobPost.value = NetworkResponse.Success(data)
                     } else {
@@ -542,7 +542,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateBlueCollarMyJobPost.value = NetworkResponse.Loading()
                     val response = async { repository.updateBlueCollarMyJobPost(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         updateBlueCollarMyJobPost.value = NetworkResponse.Success(data)
                     } else {
@@ -565,7 +565,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     updateMultiMoveMyJobPost.value = NetworkResponse.Loading()
                     val response = async { repository.updateMultiMoveMyJobPost(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     if (data.status == 200) {
                         updateMultiMoveMyJobPost.value = NetworkResponse.Success(data)
                     } else {
@@ -588,7 +588,7 @@ class PostJobViewModel(private val repository: PostJobRepository): ViewModel() {
                     rejectJobPostStatus.value = NetworkResponse.Loading()
                     val response = async { repository.rejectPostJobStatus(requestBody) }
                     val data = response.await()
-                    Log.e("JSON RESPONSE", Gson().toJson(data))
+//                    Log.e("JSON RESPONSE", Gson().toJson(data))
                     val jsonResponse = JSONObject(data.string())
                     if (jsonResponse.getInt("status") == 200) {
                         rejectJobPostStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))

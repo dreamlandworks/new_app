@@ -132,7 +132,7 @@ class ProviderProfileScreen : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[ProviderProfileViewModel::class.java]
         val requestBody =
             ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.professionalDetails(this, requestBody).observe(this, {
+        viewModel.professionalDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -146,7 +146,7 @@ class ProviderProfileScreen : AppCompatActivity() {
                     snackBar(binding.changePwd, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun openImagePicker() {

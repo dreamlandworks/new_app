@@ -257,7 +257,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             }
         }
 
-        pickPdfFile()
+//        pickPdfFile()
 
     }
 
@@ -272,7 +272,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 mGetContent.launch("pdf/*")
                 toast(this, "Permission Granted")
             } else {
-                takePermission()
+//                takePermission()
             }
         }
     }
@@ -305,11 +305,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     private fun takePermission() {
-        if (isPermissionGranted()) {
+        mGetContent.launch("pdf/*")
+//        if (isPermissionGranted()) {
 //            mGetContent.launch("pdf/*")
-        } else {
-            takePermissions()
-        }
+//        } else {
+//            takePermissions()
+//        }
     }
 
 
@@ -355,16 +356,21 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     progressDialog.dismiss()
                     showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this)) {
-                        if (PermissionUtils.isNetworkConnected(this)) {
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user",
-                                "accepted|${UserUtils.bookingType}"
-                            )
-                        } else {
-                            snackBar(binding.nextBtn, "No Internet Connection!")
-                        }
+//                        if (PermissionUtils.isNetworkConnected(this)) {
+//                            UserUtils.sendFCMtoAllServiceProviders(
+//                                this,
+//                                UserUtils.getBookingId(this),
+//                                "user",
+//                                "accepted|${UserUtils.bookingType}"
+//                            )
+//                        } else {
+//                            snackBar(binding.nextBtn, "No Internet Connection!")
+//                        }
+                        UserUtils.sendFCMtoSelectedServiceProvider(
+                            this,
+                            UserUtils.getBookingId(this),
+                            "user"
+                        )
                     } else {
                         UserUtils.sendFCMtoSelectedServiceProvider(
                             this,
@@ -386,7 +392,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.addressText.visibility = View.VISIBLE
         binding.discription.setText("")
         binding.addressText.text = UserUtils.addressList[addressIndex].month
-        Log.e("ADDRESSES:", Gson().toJson(UserUtils.addressList))
+//        Log.e("ADDRESSES:", Gson().toJson(UserUtils.addressList))
     }
 
     private fun openImagePicker() {
@@ -467,7 +473,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             dataSnapshot.children.forEach { data ->
                                 val image_url = data.value.toString()
                                 val image_key = data.key.toString()
-                                Log.e("SNAPSHOT:", image_url)
+//                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
                                     if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
@@ -522,7 +528,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }
@@ -576,7 +582,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
-        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
+//        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
@@ -585,29 +591,34 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    showWaitingForSPConfirmationDialog()
                     val jsonResponse = JSONObject(it.data!!)
-                    UserUtils.saveTxnToken(this@BookingAttachmentsScreen, jsonResponse.getString("txn_id"))
-                    UserUtils.saveOrderId(this@BookingAttachmentsScreen, jsonResponse.getString("order_id"))
-                    if (UserUtils.getFromInstantBooking(this)) {
-                        if (PermissionUtils.isNetworkConnected(this)) {
-                            UserUtils.saveInstantBooking(this, false)
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this,
-                                UserUtils.getBookingId(this),
-                                "user",
-                                "accepted|${UserUtils.bookingType}"
-                            )
-                        } else {
-                            snackBar(binding.nextBtn, "No Internet Connection!")
-                        }
-                    } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
-                            this,
-                            UserUtils.getBookingId(this),
-                            "user"
-                        )
-                    }
+//                    toast(this, Gson().toJson(jsonResponse.toString()))
+                    UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+//                    if (UserUtils.getFromInstantBooking(this)) {
+////                        if (PermissionUtils.isNetworkConnected(this)) {
+////                            UserUtils.saveInstantBooking(this, false)
+////                            UserUtils.sendFCMtoAllServiceProviders(
+////                                this,
+////                                UserUtils.getBookingId(this),
+////                                "user",
+////                                "accepted|${UserUtils.bookingType}"
+////                            )
+////                        } else {
+////                            snackBar(binding.nextBtn, "No Internet Connection!")
+////                        }
+//                        UserUtils.sendFCMtoSelectedServiceProvider(
+//                            this,
+//                            UserUtils.getBookingId(this),
+//                            "user"
+//                        )
+//                    } else {
+//                        UserUtils.sendFCMtoSelectedServiceProvider(
+//                            this,
+//                            UserUtils.getBookingId(this),
+//                            "user"
+//                        )
+//                    }
+                    showWaitingForSPConfirmationDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

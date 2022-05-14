@@ -285,7 +285,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
             UserUtils.getUserId(this@UserProfileScreen),
             RetrofitBuilder.USER_KEY
         )
-        Log.e("JSON", Gson().toJson(requestBody))
+//        Log.e("JSON", Gson().toJson(requestBody))
         viewModel.updateProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

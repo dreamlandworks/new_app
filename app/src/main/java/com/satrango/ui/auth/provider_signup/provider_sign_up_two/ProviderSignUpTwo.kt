@@ -92,7 +92,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                     for (chip in binding.profOnekeywordSkills.allChips) {
                         if (keywordsOneMList.isNotEmpty()) {
                             for (key in keywordsOneMList) {
-                                Log.e("ONECOMPARE:", "${chip.text} | ${key.keyword}")
+//                                Log.e("ONECOMPARE:", "${chip.text} | ${key.keyword}")
                                 var existed = false
                                 val chipText = chip.text.toString()
                                 if (chipText.lowercase(Locale.getDefault())
@@ -125,7 +125,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                 }
                             }
                         } else {
-                            Log.e("ONECOMPARE:", "${chip.text} | NEW KEYWORD")
+//                            Log.e("ONECOMPARE:", "${chip.text} | NEW KEYWORD")
                             ProviderUtils.profession!![0].keywords_responses.add(
                                 KeywordsResponse(
                                     "0",
@@ -150,7 +150,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                             for (key in keywordsTwoMList) {
                                 var existed = false
                                 val chipText = chip.text.toString()
-                                Log.e("TWOCOMPARE:", "$chipText | ${key.keyword}")
+//                                Log.e("TWOCOMPARE:", "$chipText | ${key.keyword}")
                                 if (chipText.lowercase(Locale.getDefault())
                                         .trim() == key.keyword.lowercase(Locale.getDefault()).trim()
                                 ) {
@@ -204,7 +204,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                 for (key in keywordsThreeMList) {
                                     var existed = false
                                     val chipText = chip.text.toString()
-                                    Log.e("THREECOMPARE:", "${chip.text} | ${key.keyword}")
+//                                    Log.e("THREECOMPARE:", "${chip.text} | ${key.keyword}")
                                     if (chipText.lowercase(Locale.getDefault())
                                             .trim() == key.keyword.lowercase(Locale.getDefault())
                                             .trim()
@@ -257,8 +257,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadKeyWords(professionId: String, index: Int) {
-        Log.e("ONE:", "Gson().toJson(apiData)")
-        viewModel.getKeywords(this, professionId).observe(this, {
+//        Log.e("ONE:", "Gson().toJson(apiData)")
+        viewModel.getKeywords(this, professionId).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -268,17 +268,17 @@ class ProviderSignUpTwo : AppCompatActivity() {
                         0 -> {
                             keywordsOneMList = it.data!!
                             updateUIOne()
-                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsOneMList))
+//                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsOneMList))
                         }
                         1 -> {
                             keywordsTwoMList = it.data!!
                             updateUITwo()
-                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsTwoMList))
+//                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsTwoMList))
                         }
                         2 -> {
                             keywordsThreeMList = it.data!!
                             updateUIThree()
-                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsThreeMList))
+//                            Log.e("RESPONSE:$index:", Gson().toJson(keywordsThreeMList))
                         }
                     }
                     progressDialog.dismiss()
@@ -288,7 +288,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -297,8 +297,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
         for (data in keywordsThreeMList) {
             keywordsList.add(data.keyword)
         }
-        Log.e("THREE:", keywordsOneMList.toString())
-        Log.e("THREE:", keywordsList.toString())
+//        Log.e("THREE:", keywordsOneMList.toString())
+//        Log.e("THREE:", keywordsList.toString())
         CoroutineScope(Dispatchers.Main).launch {
             val languagesAdapter = ArrayAdapter(
                 this@ProviderSignUpTwo,
@@ -331,8 +331,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
         for (data in keywordsTwoMList) {
             keywordsList.add(data.keyword)
         }
-        Log.e("TWO:", keywordsOneMList.toString())
-        Log.e("TWO:", keywordsList.toString())
+//        Log.e("TWO:", keywordsOneMList.toString())
+//        Log.e("TWO:", keywordsList.toString())
         CoroutineScope(Dispatchers.Main).launch {
             val languagesAdapter = ArrayAdapter(
                 this@ProviderSignUpTwo,
@@ -369,8 +369,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
         for (data in keywordsOneMList) {
             keywordsList.add(data.keyword)
         }
-        Log.e("ONE:", keywordsOneMList.toString())
-        Log.e("ONE:", keywordsList.toString())
+//        Log.e("ONE:", keywordsOneMList.toString())
+//        Log.e("ONE:", keywordsList.toString())
         CoroutineScope(Dispatchers.Main).launch {
             val languagesAdapter = ArrayAdapter(
                 this@ProviderSignUpTwo,
@@ -416,7 +416,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                 snackBar(binding.nextBtn, "Enter About Me Section")
             }
             else -> {
-                Log.e("PROFESSION:", Gson().toJson(ProviderUtils.profession))
+//                Log.e("PROFESSION:", Gson().toJson(ProviderUtils.profession))
                 ProviderUtils.aboutMe = binding.aboutMe.text.toString().trim()
                 startActivity(Intent(this@ProviderSignUpTwo, ProviderSignUpThree::class.java))
             }

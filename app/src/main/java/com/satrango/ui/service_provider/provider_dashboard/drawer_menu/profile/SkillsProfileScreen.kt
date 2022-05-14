@@ -324,9 +324,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         qualificationList,
                         langList.distinctBy { langResponse: LangResponse -> langResponse.name }
                     )
-                    Log.e("JSON", Gson().toJson(requestBody))
+//                    Log.e("JSON", Gson().toJson(requestBody))
                     viewModel.updateSkills(requireContext(), requestBody)
-                        .observe(requireActivity(), {
+                        .observe(requireActivity()) {
                             when (it) {
                                 is NetworkResponse.Loading -> {
                                     ProviderProfileScreen.progressDialog.show()
@@ -346,7 +346,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     snackBar(languages, it.message!!)
                                 }
                             }
-                        })
+                        }
                 }
 
             }
@@ -356,7 +356,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 
     @SuppressLint("SetTextI18n")
     private fun loadProviderData() {
-        professionViewModel.professionsList(requireContext()).observe(requireActivity(), {
+        professionViewModel.professionsList(requireContext()).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()
@@ -374,10 +374,22 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         languagesList
                     )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.languages.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.languages.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.languages.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -387,77 +399,168 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     for (data in professionMList) {
                         professionList.add(data.name)
                     }
-                    val professionAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, professionList)
+                    val professionAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        professionList
+                    )
                     binding.professionOne.setAdapter(professionAdapter)
-                    binding.professionOne.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.professionOne.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionOne.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionOne.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionOne.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.professionOne.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionOne.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionOne.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.professionOne.setNachoValidator(ChipifyingNachoValidator())
                     binding.professionOne.enableEditChipOnTouch(true, true)
 
                     binding.professionTwo.setAdapter(professionAdapter)
-                    binding.professionTwo.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.professionTwo.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionTwo.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionTwo.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionTwo.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.professionTwo.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionTwo.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionTwo.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.professionTwo.setNachoValidator(ChipifyingNachoValidator())
                     binding.professionTwo.enableEditChipOnTouch(true, true)
 
                     binding.professionThree.setAdapter(professionAdapter)
-                    binding.professionThree.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.professionThree.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionThree.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.professionThree.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.professionThree.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.professionThree.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionThree.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.professionThree.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.professionThree.setNachoValidator(ChipifyingNachoValidator())
                     binding.professionThree.enableEditChipOnTouch(true, true)
 
                     val qualificationList = ArrayList<String>()
-                    qualificationMList = response.data.qualification.distinctBy { qualification -> qualification.qualification }
+                    qualificationMList =
+                        response.data.qualification.distinctBy { qualification -> qualification.qualification }
                     for (data in qualificationMList) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, qualificationList)
+                    val qualificationAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        qualificationList
+                    )
                     binding.qualification.setAdapter(qualificationAdapter)
 
                     experienceList = ArrayList()
                     experienceList.add("Select Experience")
-                    experienceMList = response.data.experience.distinctBy { experience -> experience.exp }
+                    experienceMList =
+                        response.data.experience.distinctBy { experience -> experience.exp }
                     for (data in experienceMList) {
                         experienceList.add(data.exp)
                     }
-                    val experienceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, experienceList)
+                    val experienceAdapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        experienceList
+                    )
                     binding.experienceOne.adapter = experienceAdapter
                     binding.experienceTwo.adapter = experienceAdapter
                     binding.experienceThree.adapter = experienceAdapter
 
-                    binding.skillsKeywordsOne.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.skillsKeywordsOne.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsOne.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsOne.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsOne.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.skillsKeywordsOne.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsOne.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsOne.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.skillsKeywordsOne.setNachoValidator(ChipifyingNachoValidator())
                     binding.skillsKeywordsOne.enableEditChipOnTouch(true, true)
 
-                    binding.skillsKeywordsTwo.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.skillsKeywordsTwo.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsTwo.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsTwo.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsTwo.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.skillsKeywordsTwo.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsTwo.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsTwo.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.skillsKeywordsTwo.setNachoValidator(ChipifyingNachoValidator())
                     binding.skillsKeywordsTwo.enableEditChipOnTouch(true, true)
 
-                    binding.skillsKeywordsThree.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.skillsKeywordsThree.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsThree.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.skillsKeywordsThree.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.skillsKeywordsThree.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.skillsKeywordsThree.addChipTerminator(
+                        ' ',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsThree.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.skillsKeywordsThree.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.skillsKeywordsThree.setNachoValidator(ChipifyingNachoValidator())
                     binding.skillsKeywordsThree.enableEditChipOnTouch(true, true)
 
                     val skillsList = ArrayList<String>()
-                    skillsMList = response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
+                    skillsMList =
+                        response.data.keywords.distinctBy { keywordResponse -> keywordResponse.keyword }
                     for (data in skillsMList) {
                         skillsList.add(data.keyword)
                     }
-                    val skillsAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, skillsList)
+                    val skillsAdapter = ArrayAdapter(
+                        requireContext(),
+                        R.layout.simple_spinner_dropdown_item,
+                        skillsList
+                    )
                     binding.skillsKeywordsOne.setAdapter(skillsAdapter)
                     binding.skillsKeywordsTwo.setAdapter(skillsAdapter)
                     binding.skillsKeywordsThree.setAdapter(skillsAdapter)
@@ -476,9 +579,25 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         for (profession in data.profession) {
                             val skills = ArrayList<KeywordsResponse>()
                             for (pro in profession.skills) {
-                                skills.add(KeywordsResponse(pro.keywords_id.toString(), pro.keyword))
+                                skills.add(
+                                    KeywordsResponse(
+                                        pro.keywords_id.toString(),
+                                        pro.keyword
+                                    )
+                                )
                             }
-                            professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id))
+                            professionFList.add(
+                                ProfessionResponseX(
+                                    skills,
+                                    profession.tariff_extra_charges,
+                                    profession.tariff_min_charges,
+                                    profession.tariff_per_day,
+                                    profession.tariff_per_hour,
+                                    profession.exp,
+                                    profession.profession_name,
+                                    profession.profession_id
+                                )
+                            )
                         }
 
                         binding.professionTwoCloseBtn.setOnClickListener {
@@ -493,9 +612,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             chips.add(ChipInfo(professionFList[0].name, professionFList[0].prof_id))
                             binding.professionOne.setTextWithChips(chips)
 
-                            binding.experienceOneText.text = "Experience in ${professionFList[0].name}"
-                            binding.skillsKeywordsOneText.text = "Keywords for ${professionFList[0].name} Profession"
-                            binding.tariffOneText.text = "Tariff for ${professionFList[0].name} Profession"
+                            binding.experienceOneText.text =
+                                "Experience in ${professionFList[0].name}"
+                            binding.skillsKeywordsOneText.text =
+                                "Keywords for ${professionFList[0].name} Profession"
+                            binding.tariffOneText.text =
+                                "Tariff for ${professionFList[0].name} Profession"
 
                             for (index in experienceMList.indices) {
                                 if (experienceMList[index].exp == professionFList[0].experience) {
@@ -517,9 +639,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             chips.add(ChipInfo(professionFList[1].name, professionFList[1].prof_id))
                             binding.professionTwo.setTextWithChips(chips)
 
-                            binding.experienceTwoText.text = "Experience in ${professionFList[1].name}"
-                            binding.skillsKeywordsTwoText.text = "Keywords for ${professionFList[1].name} Profession"
-                            binding.tariffTwoText.text = "Tariff for ${professionFList[1].name} Profession"
+                            binding.experienceTwoText.text =
+                                "Experience in ${professionFList[1].name}"
+                            binding.skillsKeywordsTwoText.text =
+                                "Keywords for ${professionFList[1].name} Profession"
+                            binding.tariffTwoText.text =
+                                "Tariff for ${professionFList[1].name} Profession"
 
                             for (index in experienceMList.indices) {
                                 if (experienceMList[index].exp == professionFList[1].experience) {
@@ -544,9 +669,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             chips.add(ChipInfo(professionFList[2].name, professionFList[2].prof_id))
                             binding.professionThree.setTextWithChips(chips)
 
-                            binding.experienceThreeText.text = "Experience in ${professionFList[2].name}"
-                            binding.skillsKeywordsThreeText.text = "Keywords for ${professionFList[2].name} Profession"
-                            binding.tariffThreeText.text = "Tariff for ${professionFList[2].name} Profession"
+                            binding.experienceThreeText.text =
+                                "Experience in ${professionFList[2].name}"
+                            binding.skillsKeywordsThreeText.text =
+                                "Keywords for ${professionFList[2].name} Profession"
+                            binding.tariffThreeText.text =
+                                "Tariff for ${professionFList[2].name} Profession"
 
                             for (index in experienceMList.indices) {
                                 if (experienceMList[index].exp == professionFList[2].experience) {
@@ -585,7 +713,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     snackBar(binding.professionOne, "Click Reset to get language values")
                 }
             }
-        })
+        }
 
     }
 
@@ -646,7 +774,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     binding.tariffOneText.text = "My Tariff for ${professionFList[index].name} is"
                                     binding.skillsKeywordsOneText.text = "Skills in ${professionFList[index].name} Profession"
 //                                    binding.experienceOne.text = "Experience in ${professionFList[index].name} Profession"
-                                    Log.e("SKILLS:", Gson().toJson(professionFList))
+//                                    Log.e("SKILLS:", Gson().toJson(professionFList))
                                 }
                             }
 

@@ -13,7 +13,7 @@ class ProviderSignUpTwoRepository: BaseRepository() {
         val map = mutableMapOf<String, String>()
         map["key"] = RetrofitBuilder.USER_KEY
         map["profession_id"] = subCatId
-        Log.e("SUBCAT:", subCatId)
+//        Log.e("SUBCAT:", subCatId)
         return RetrofitBuilder.getUserRetrofitInstance().userKeywords(map)
     }
 

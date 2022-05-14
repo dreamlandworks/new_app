@@ -58,7 +58,7 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
 
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
-        viewModel.plans(this).observe(this, {
+        viewModel.plans(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -73,7 +73,7 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

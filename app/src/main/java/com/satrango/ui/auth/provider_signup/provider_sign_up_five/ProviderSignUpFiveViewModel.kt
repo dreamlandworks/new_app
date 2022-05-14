@@ -28,7 +28,7 @@ class ProviderSignUpFiveViewModel(private val repository: ProviderSignUpFiveRepo
                     videoStatus.value = NetworkResponse.Loading()
                     val response = async { repository.uploadVideo(userId, videoNo, key, videoRecord) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("VEDIO: ", jsonResponse.toString())
+//                    Log.e("VEDIO: ", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         videoStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {

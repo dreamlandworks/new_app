@@ -112,7 +112,7 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
                             videoFile.name,
                             videoFile.asRequestBody("video/*".toMediaType())
                         )
-                    ).observe(this@ProviderSignUpSeven, {
+                    ).observe(this@ProviderSignUpSeven) {
                         when (it) {
                             is NetworkResponse.Loading -> {
                                 progressDialog.show()
@@ -126,7 +126,7 @@ class ProviderSignUpSeven : AppCompatActivity(), SurfaceHolder.Callback {
                                 showFailureDialog()
                             }
                         }
-                    })
+                    }
                 } else {
                     snackBar(binding.surfaceView, "Please Record Video!")
                 }

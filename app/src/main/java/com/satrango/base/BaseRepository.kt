@@ -1,7 +1,3 @@
 package com.satrango.base
 
-open class BaseRepository {
-
-
-
-}
+open class BaseRepository { }

@@ -288,7 +288,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 UserUtils.getUserId(this).toInt(),
                 binding.title.text.toString().trim()
             )
-            Log.e("POST BID:", Gson().toJson(requestBody))
+//            Log.e("POST BID:", Gson().toJson(requestBody))
             viewModel.postBid(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -408,7 +408,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }
@@ -428,7 +428,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    toast(this, it.message!!)
+//                    toast(this, it.message!!)
                     imagePathList.removeAt(position)
                     binding.attachmentsRV.adapter!!.notifyItemRemoved(position)
                     Handler().postDelayed({

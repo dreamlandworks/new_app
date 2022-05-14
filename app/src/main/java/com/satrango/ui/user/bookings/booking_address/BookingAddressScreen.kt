@@ -247,7 +247,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            Log.e("ADDRESS:", Gson().toJson(UserUtils.addressList))
+//                            Log.e("ADDRESS:", Gson().toJson(UserUtils.addressList))
                             UserUtils.addressList =
                                 UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
                             startActivity(Intent(this, BookingMultiMoveAddressScreen::class.java))
@@ -305,7 +305,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 Data::class.java
             ).users_id.toInt()
             finalAmount =
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).minimum_amount.toInt()
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
             cgst =
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
             sgst =
@@ -361,7 +361,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 ).profession_id
             )
 //            toast(this, "SINGLEMOVE:" + Gson().toJson(requestBody))
-            Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
+//            Log.e("SINGLE MOVE INSTANTLY:", Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()
@@ -372,7 +372,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         progressDialog.dismiss()
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
-                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
+//                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
                             UserUtils.saveBookingId(
                                 this@BookingAddressScreen,
                                 jsonResponse.getInt("booking_id").toString()
@@ -390,7 +390,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 "accepted|${UserUtils.bookingType}"
                             )
                         } else {
-                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
+//                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
                             UserUtils.sendFCMtoSelectedServiceProvider(
                                 this@BookingAddressScreen,
                                 UserUtils.getBookingId(this@BookingAddressScreen),
@@ -456,7 +456,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 ).profession_id
             )
 //            toast(this, Gson().toJson(requestBody))
-            Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
+//            Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
 
             CoroutineScope(Dispatchers.Main).launch {
                 try {
@@ -853,7 +853,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             spId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id
             finalAmount =
-                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).minimum_amount.toInt()
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toInt()
             cgst =
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount
             sgst =
@@ -878,7 +878,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             sgst,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
-        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
+//        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
         toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {

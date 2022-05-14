@@ -14,7 +14,7 @@ open class SetPasswordRepository : BaseRepository() {
 
     suspend fun resetPasswordInServer(context: Context): ResponseBody {
         val requestBody = UserResetPwdModel(UserUtils.USER_ID, UserUtils.getPassword(context), RetrofitBuilder.USER_KEY)
-        Log.e("PASSWORD", Gson().toJson(requestBody))
+//        Log.e("PASSWORD", Gson().toJson(requestBody))
         return RetrofitBuilder.getUserRetrofitInstance().userResetPassword(requestBody)
     }
 

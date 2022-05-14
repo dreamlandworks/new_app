@@ -180,7 +180,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         var cgst = "0"
         var sgst = "0"
         if (data != null) {
-            finalAmount = data.minimum_amount.toInt()
+            finalAmount = data.final_amount
             spId = data.users_id
             cgst = data.CGST_amount
             sgst = data.SGST_amount
@@ -204,7 +204,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             cgst,
             data!!.profession_id
         )
-        Log.e("MULTI MOVE:", Gson().toJson(requestBody))
+//        Log.e("MULTI MOVE:", Gson().toJson(requestBody))
         viewModel.multiMoveBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -477,7 +477,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                             dataSnapshot.children.forEach { data ->
                                 val image_url = data.value.toString()
                                 val image_key = data.key.toString()
-                                Log.e("SNAPSHOT:", image_url)
+//                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
                                     if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
@@ -531,7 +531,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }

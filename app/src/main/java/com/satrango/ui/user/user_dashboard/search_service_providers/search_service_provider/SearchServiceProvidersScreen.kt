@@ -88,8 +88,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             val filter =
                 Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
 
-            Log.e("FILTER:", Gson().toJson(filter))
-            Log.e("SPDETAILS:", Gson().toJson(spDetails))
+//            Log.e("FILTER:", Gson().toJson(filter))
+//            Log.e("SPDETAILS:", Gson().toJson(spDetails))
 
             val spDetailsList = spDetails.data
             val list =
@@ -114,7 +114,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     list.add(sp)
                 }
             }
-            Log.e("FILTERED DATA:", Gson().toJson(list))
+//            Log.e("FILTERED DATA:", Gson().toJson(list))
 
             when {
                 filter.ranking -> {
@@ -190,7 +190,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     val keywordsList = it.data as ArrayList<Data>
                     val keywords = arrayListOf<String>()
                     keywordsList.forEach { keyword -> keywords.add(keyword.phrase) }
-                    Log.e("KEYS:", keywordsList.toString())
+//                    Log.e("KEYS:", keywordsList.toString())
 
                     binding.searchBar.threshold = 3
                     val adapter =
@@ -273,7 +273,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             subCategory.toInt(),
             offerId
         )
-        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
+//        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
 //        {
 //            "address": "54-14/7-78",
 //            "city": "Vijayawada",
@@ -323,7 +323,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
                         UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
                         UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
-                        Log.e("SERACH RESULTS:", Gson().toJson(response))
+//                        Log.e("SERACH RESULTS:", Gson().toJson(response))
 //                    showBookingTypeDialog(response)
                     }
                     progressDialog.dismiss()

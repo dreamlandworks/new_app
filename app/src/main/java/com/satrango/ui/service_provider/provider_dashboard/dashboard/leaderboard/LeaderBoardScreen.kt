@@ -47,8 +47,8 @@ class LeaderBoardScreen : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
 
-        viewModel.getCitiesList(this).observe(this, {
-            when(it) {
+        viewModel.getCitiesList(this).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -60,34 +60,36 @@ class LeaderBoardScreen : AppCompatActivity() {
                     for (city in cities) {
                         cityNames.add(city.city)
                     }
-                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityNames)
+                    val adapter =
+                        ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityNames)
                     binding.citySpinner.adapter = adapter
-                    binding.citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            loadLeaderShipDetails(cities[position].id)
-                        }
+                    binding.citySpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                loadLeaderShipDetails(cities[position].id)
+                            }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
 
+                            }
                         }
-                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.audience, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
     fun loadLeaderShipDetails(cityId: String) {
-        viewModel.getLeaderboardList(this, cityId).observe(this, {
+        viewModel.getLeaderboardList(this, cityId).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -113,7 +115,7 @@ class LeaderBoardScreen : AppCompatActivity() {
                     snackBar(binding.audience, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

@@ -47,21 +47,22 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        viewModel.getInstallmentsList(this, postJobId).observe(this, {
-            when(it) {
+        viewModel.getInstallmentsList(this, postJobId).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserInstallmentsRequestAdapter(it.data!!.goals_installments_details, this)
+                    binding.recyclerView.adapter =
+                        UserInstallmentsRequestAdapter(it.data!!.goals_installments_details, this)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
     }
 
@@ -90,8 +91,8 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
             34,
             UserUtils.getUserId(this).toInt()
         )
-        viewModel.postApproveReject(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.postApproveReject(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -103,7 +104,7 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     override fun rejectInstallment(data: GoalsInstallmentsDetail) {
@@ -115,8 +116,8 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
             35,
             UserUtils.getUserId(this).toInt()
         )
-        viewModel.postApproveReject(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.postApproveReject(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -128,6 +129,6 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 }

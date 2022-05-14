@@ -30,7 +30,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                 try {
                     userProfile.value = NetworkResponse.Loading()
                     val response = async { repository.userProfile(context) }
-                    Log.e("PROFILE: ", Gson().toJson(response.await()))
+//                    Log.e("PROFILE: ", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
                         userProfile.value = NetworkResponse.Success(response.await().data)
                     } else {
@@ -51,7 +51,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                     saveLocation.value = NetworkResponse.Loading()
                     val response = repository.uploadUserLocation(requestBody)
                     val jsonResponse = JSONObject(response.string())
-                    Log.e("LOCATION", jsonResponse.toString())
+//                    Log.e("LOCATION", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         saveLocation.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {
@@ -72,7 +72,7 @@ class ProviderDashboardViewModel(private val repository: ProviderDashboardReposi
                     onlineStatus.value = NetworkResponse.Loading()
                     val response = repository.updateProviderOnlineStatus(requestBody)
                     val jsonResponse = JSONObject(response.string())
-                    Log.e("LOCATION", jsonResponse.toString())
+//                    Log.e("LOCATION", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         onlineStatus.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {

@@ -54,7 +54,7 @@ class UserProfileViewModel(private val repository: UserProfileRepository) : View
                     val response = async { repository.updateProfileInfo(requestBody) }
                     val responseObject = response.await()
                     val jsonObject = JSONObject(responseObject.string())
-                    Log.e("PROFILE", jsonObject.toString())
+//                    Log.e("PROFILE", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         updateProfileInfo.value = NetworkResponse.Success(jsonObject.getString("message"))
                     } else {

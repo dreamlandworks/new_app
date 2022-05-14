@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,18 @@
     tools:context=".ui.splash.SplashScreen">
 
     <ImageView
+        android:id="@+id/splashBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
         android:id="@+id/splashImage"
         android:layout_width="match_parent"
+        android:elevation="@dimen/_10sdp"
+        android:visibility="gone"
         android:layout_height="match_parent"
         tools:ignore="ContentDescription" />
 
-</LinearLayout>
+</RelativeLayout>

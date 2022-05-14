@@ -71,7 +71,7 @@ class ProviderSignUpOne : AppCompatActivity() {
     }
 
     private fun loadProviderData() {
-        viewModel.professionsList(this).observe(this, {
+        viewModel.professionsList(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -89,9 +89,18 @@ class ProviderSignUpOne : AppCompatActivity() {
                         languagesList
                     )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.languages.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.languages.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.languages.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -106,7 +115,11 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.qualification) {
                         qualificationList.add(data.qualification)
                     }
-                    val qualificationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, qualificationList)
+                    val qualificationAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        qualificationList
+                    )
                     binding.qualification.setAdapter(qualificationAdapter)
                     binding.qualification.threshold = 1
 
@@ -114,11 +127,24 @@ class ProviderSignUpOne : AppCompatActivity() {
                     for (data in response.data.list_profession) {
                         professionsList.add(data.name)
                     }
-                    val professionsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, professionsList)
+                    val professionsAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        professionsList
+                    )
                     binding.profession.setAdapter(professionsAdapter)
-                    binding.profession.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
-                    binding.profession.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
-                    binding.profession.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
+                    binding.profession.addChipTerminator(
+                        '\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
+                    )
+                    binding.profession.addChipTerminator(
+                        ',',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
+                    )
+                    binding.profession.addChipTerminator(
+                        ';',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
+                    )
                     binding.profession.setNachoValidator(ChipifyingNachoValidator())
                     binding.profession.enableEditChipOnTouch(true, true)
                     binding.profession.threshold = 1
@@ -140,7 +166,7 @@ class ProviderSignUpOne : AppCompatActivity() {
                     snackBar(binding.nextBtn, "Click Reset to get language values")
                 }
             }
-        })
+        }
 
     }
 
@@ -205,7 +231,7 @@ class ProviderSignUpOne : AppCompatActivity() {
                 ProviderUtils.languagesKnown = langList.distinctBy { langResponse: LangResponse -> langResponse.name }
                 ProviderUtils.profession = profList.distinctBy { professionResponseX: ProfessionResponseX -> professionResponseX.name }
                 ProviderUtils.qualification = qualList
-                Log.e("PROFESSIONS:", Gson().toJson(profList))
+//                Log.e("PROFESSIONS:", Gson().toJson(profList))
                 val intent = Intent(this@ProviderSignUpOne, ProviderSignUpTwo::class.java)
                 intent.putExtra("profession_id", profList[0].prof_id)
                 startActivity(intent)

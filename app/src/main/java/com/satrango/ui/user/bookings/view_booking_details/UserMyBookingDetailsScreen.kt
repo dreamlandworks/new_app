@@ -87,7 +87,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -170,7 +170,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 RetrofitBuilder.USER_KEY,
                 userId.toInt()
             )
-            Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//            Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
                 progressDialog.show()
                 val bookingDetails = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
@@ -354,8 +354,8 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
-                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data.booking_status_details)
+//                    Log.e("STATUS:", Gson().toJson(it.data!!.booking_status_details))
+                    binding.recyclerView.adapter = GetBookingStatusListAdapter(it.data!!.booking_status_details)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -393,7 +393,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             val response =

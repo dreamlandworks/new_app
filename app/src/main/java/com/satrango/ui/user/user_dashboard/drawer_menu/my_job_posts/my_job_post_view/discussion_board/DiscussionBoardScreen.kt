@@ -444,7 +444,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }

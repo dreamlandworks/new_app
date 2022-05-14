@@ -173,8 +173,8 @@ class AddBookingAddressScreen : AppCompatActivity() {
                 longitude.toString(),
                 UserUtils.getUserId(context).toInt()
             )
-            viewModel.addBookingAddress(context, requestBody).observe(this, {
-                when(it) {
+            viewModel.addBookingAddress(context, requestBody).observe(this) {
+                when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
                     }
@@ -195,7 +195,7 @@ class AddBookingAddressScreen : AppCompatActivity() {
                         snackBar(binding.addBtn, it.message!!)
                     }
                 }
-            })
+            }
 
         } catch (e: Exception) {
             Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)

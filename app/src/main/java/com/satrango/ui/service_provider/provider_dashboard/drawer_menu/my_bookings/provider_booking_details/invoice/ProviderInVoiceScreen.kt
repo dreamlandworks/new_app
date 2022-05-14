@@ -103,7 +103,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -414,7 +414,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                                     UserUtils.getUserId(this@ProviderInVoiceScreen),
                                     UserUtils.getOrderId(this@ProviderInVoiceScreen)
                                 )
-                                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
+//                                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
                                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
                                 if (JSONObject(response.string()).getInt("status") == 200) {
                                     divertToProviderRatingScreen()

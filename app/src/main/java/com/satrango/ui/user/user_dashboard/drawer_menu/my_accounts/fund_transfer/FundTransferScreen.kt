@@ -213,7 +213,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
                     progressDialog.dismiss()
                     binding.availableBalance.text = availableBalance.toString()
                     allBankDetails = it.data!!
-                    Log.e("BANK DETAILS:", allBankDetails.toString())
+//                    Log.e("BANK DETAILS:", allBankDetails.toString())
                     binding.accountRv.adapter = AllBankDetailsAdapter(allBankDetails, this)
                 }
                 is NetworkResponse.Failure -> {

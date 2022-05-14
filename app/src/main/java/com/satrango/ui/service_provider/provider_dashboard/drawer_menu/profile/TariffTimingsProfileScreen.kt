@@ -81,7 +81,7 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
                     validateSlots(),
                     UserUtils.getUserId(requireContext())
                 )
-                Log.e("JSON", Gson().toJson(requestBody))
+//                Log.e("JSON", Gson().toJson(requestBody))
                 viewModel.updateTariff(requireContext(), requestBody).observe(requireActivity()) {
                     when (it) {
                         is NetworkResponse.Loading -> {

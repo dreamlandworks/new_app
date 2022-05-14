@@ -180,15 +180,15 @@ class ProviderSignUpThree : AppCompatActivity() {
                     }
                 }
 
-                Log.e("TIMESLOTS:", Gson().toJson(validateSlots()))
-                Log.e("PROFESSION:", Gson().toJson(ProviderUtils.profession!!))
+//                Log.e("TIMESLOTS:", Gson().toJson(validateSlots()))
+//                Log.e("PROFESSION:", Gson().toJson(ProviderUtils.profession!!))
                 if (validateSlots().isEmpty()) {
                     snackBar(nextBtn, "Please select timeslots")
                     return@setOnClickListener
                 }
 
                 ProviderUtils.slotsList = validateSlots()
-                Log.e("SLOTS:", Gson().toJson(ProviderUtils.slotsList))
+//                Log.e("SLOTS:", Gson().toJson(ProviderUtils.slotsList))
                 submitActivationDetailsToServer()
             }
 
@@ -219,14 +219,14 @@ class ProviderSignUpThree : AppCompatActivity() {
         )
         val factory = ViewModelFactory(ProviderSignUpFourRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
-        viewModel.providerActivation(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.providerActivation(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    toast(this, it.data!!)
+//                    toast(this, it.data!!)
                     startActivity(Intent(this@ProviderSignUpThree, ProviderSignUpFour::class.java))
 
                 }
@@ -235,7 +235,7 @@ class ProviderSignUpThree : AppCompatActivity() {
                     snackBar(binding.nextBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")

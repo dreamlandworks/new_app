@@ -64,7 +64,7 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
                     val categoriesList = ArrayList<BrowserCategoryModel>()
                     val response = async { userHomeRepository.getBrowseCategories() }
                     val responseObject = JSONObject(response.await().string())
-                    Log.e("BROWSER CATEGORIES", responseObject.toString())
+//                    Log.e("BROWSER CATEGORIES", responseObject.toString())
                     if (responseObject.getInt("status") == 200) {
                         val categoriesArray = responseObject.getJSONArray("data")
                         for (index in 0 until categoriesArray.length()) {

@@ -65,7 +65,7 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
     private fun verifyUser() {
         val forgotPwdVerifyReqModel =
             ForgotPwdVerifyReqModel("", RetrofitBuilder.USER_KEY, UserUtils.getPhoneNo(this))
-        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this, {
+        viewModel.verifyUser(this, forgotPwdVerifyReqModel).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -76,10 +76,13 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.resetPasswordBtn, "No User found with this Mobile Number. Please try again")
+                    snackBar(
+                        binding.resetPasswordBtn,
+                        "No User found with this Mobile Number. Please try again"
+                    )
                 }
             }
-        })
+        }
     }
 
     private fun textWatcher() {

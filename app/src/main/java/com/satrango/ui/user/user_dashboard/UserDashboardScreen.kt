@@ -101,7 +101,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
+//            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
         initializeProgressDialog()
@@ -490,7 +490,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.split("|")[0].toInt())
-        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -576,14 +576,14 @@ class   UserDashboardScreen : AppCompatActivity() {
         response: BookingDetailsResModel
     ) {
         val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
-        Log.e("STATUS:", Gson().toJson(requestBody))
+//        Log.e("STATUS:", Gson().toJson(requestBody))
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    Log.e("STATUS:", Gson().toJson(it.data!!))
+//                    Log.e("STATUS:", Gson().toJson(it.data!!))
                     progressDialog.dismiss()
                     dialog.dismiss()
                     if (status == 1) {

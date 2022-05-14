@@ -45,7 +45,7 @@ class ProviderMyTrainingScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
-        viewModel.getTrainingList(this).observe(this, {
+        viewModel.getTrainingList(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -67,7 +67,7 @@ class ProviderMyTrainingScreen : AppCompatActivity() {
                     snackBar(binding.pointsEarned, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

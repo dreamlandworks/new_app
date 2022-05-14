@@ -131,7 +131,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateUI(data: MyJobPostViewResModel) {
         UserUtils.EDIT_MY_JOB_POST_DETAILS = Gson().toJson(data)
-        Log.e("POSTJOB:", UserUtils.EDIT_MY_JOB_POST_DETAILS)
+//        Log.e("POSTJOB:", UserUtils.EDIT_MY_JOB_POST_DETAILS)
         for (index in daysList.indices) {
             if (daysList[index].month == data.job_post_details.scheduled_date) {
                 daysList[index] = MonthsModel(daysList[index].month, daysList[index].day, true)
@@ -143,7 +143,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         for (index in timeSlots.indices) {
             if (data.job_post_details.from == timeSlots[index].month.split("\n")[0]) {
                 timeSlots[index] = MonthsModel(timeSlots[index].month, timeSlots[index].day, true)
-                Log.e("TIMINGS:", Gson().toJson(index))
+//                Log.e("TIMINGS:", Gson().toJson(index))
             }
         }
         filterTimings(false)
@@ -318,7 +318,7 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         eveningTimings = ArrayList()
         nightTimings = ArrayList()
         timeSlots.forEachIndexed { index, monthsModel ->
-            Log.e("TIMINGS:", Gson().toJson(monthsModel))
+//            Log.e("TIMINGS:", Gson().toJson(monthsModel))
             when {
                 UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
                     if (index >= 1) {
@@ -452,18 +452,18 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
         nightTimings = ArrayList()
         filterTimings(false)
 
-        for (morning in morningTimings) {
-            Log.e("morning:",Gson().toJson(morning))
-        }
-        for (afternoon in afternoonTimings) {
-            Log.e("afternoon:",Gson().toJson(afternoon))
-        }
-        for (evening in eveningTimings) {
-            Log.e("evening:",Gson().toJson(evening))
-        }
-        for (night in nightTimings) {
-            Log.e("night:",Gson().toJson(night))
-        }
+//        for (morning in morningTimings) {
+////            Log.e("morning:",Gson().toJson(morning))
+//        }
+//        for (afternoon in afternoonTimings) {
+//            Log.e("afternoon:",Gson().toJson(afternoon))
+//        }
+//        for (evening in eveningTimings) {
+//            Log.e("evening:",Gson().toJson(evening))
+//        }
+//        for (night in nightTimings) {
+//            Log.e("night:",Gson().toJson(night))
+//        }
         updateTimingsOnUI()
     }
 

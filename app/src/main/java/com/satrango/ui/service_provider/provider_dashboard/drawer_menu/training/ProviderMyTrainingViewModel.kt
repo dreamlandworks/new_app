@@ -34,7 +34,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                     trainingList.value = NetworkResponse.Loading()
                     val response = async { repository.getTrainingVideos(context) }
                     val responseJson = response.await()
-                    Log.e("TRAINING:", Gson().toJson(responseJson))
+//                    Log.e("TRAINING:", Gson().toJson(responseJson))
                     if (responseJson.status == 200) {
                         trainingList.value = NetworkResponse.Success(responseJson)
                     } else {
@@ -61,7 +61,7 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
                     leaderboardList.value = NetworkResponse.Loading()
                     val response = async { repository.getLeaderboardList(context, cityId) }
                     val responseJson = response.await()
-                    Log.e("LEADERBOARD:", Gson().toJson(responseJson))
+//                    Log.e("LEADERBOARD:", Gson().toJson(responseJson))
                     if (responseJson.status == 200) {
                         leaderboardList.value = NetworkResponse.Success(responseJson)
                     } else {

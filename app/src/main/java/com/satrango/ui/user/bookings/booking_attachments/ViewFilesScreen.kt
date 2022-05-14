@@ -270,8 +270,8 @@ class ViewFilesScreen : AppCompatActivity() {
                     val adapter = ViewFilesAdapter(files)
                     binding.userFilesRv.layoutManager = LinearLayoutManager(this@ViewFilesScreen)
                     binding.userFilesRv.adapter = adapter
-                    toast(this@ViewFilesScreen, files.size.toString())
-                    Log.e("FILES", Gson().toJson(files))
+//                    toast(this@ViewFilesScreen, "Files Uploaded")
+//                    Log.e("FILES", Gson().toJson(files))
                 }
 
                 override fun onCancelled(error: DatabaseError) {

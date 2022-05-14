@@ -20,6 +20,7 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
 
         fun bind(imagePath: Attachment) {
             Glide.with(binding.image).load(imagePath.file_name).error(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
+            Glide.with(binding.image).load(imagePath.file_name).error(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
 //            if (binding.image.drawable == null) {
 //                Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + imagePath.file_name).into(binding.image)
 //                if (binding.image.drawable == null) {

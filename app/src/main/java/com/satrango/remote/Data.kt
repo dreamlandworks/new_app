@@ -3,5 +3,5 @@ package com.satrango.remote
 data class Data(
     val body: String,
     val text: String,
-    val b: String
+    val title: String
 )

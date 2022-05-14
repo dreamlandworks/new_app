@@ -111,8 +111,8 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
     }
 
     private fun displaySubCategories(categoryId: String) {
-        viewModel.getBrowseSubCategories(this, categoryId).observe(this, {
-            when(it) {
+        viewModel.getBrowseSubCategories(this, categoryId).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -125,8 +125,7 @@ class BrowseCategoriesScreen : AppCompatActivity(), BrowseCategoriesInterface {
                     snackBar(binding.categoryRV, it.message!!)
                 }
             }
-        })
-
+        }
 
 
     }

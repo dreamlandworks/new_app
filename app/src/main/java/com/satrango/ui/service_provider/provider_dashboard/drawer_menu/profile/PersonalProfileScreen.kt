@@ -175,8 +175,8 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
             UserUtils.getUserId(requireContext()),
             RetrofitBuilder.USER_KEY
         )
-        Log.e("PROFILE:", Gson().toJson(requestBody))
-        userViewModel.updateProfileInfo(requireContext(), requestBody).observe(requireActivity(), {
+//        Log.e("PROFILE:", Gson().toJson(requestBody))
+        userViewModel.updateProfileInfo(requireContext(), requestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()
@@ -193,12 +193,12 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                     ProviderProfileScreen.progressDialog.dismiss()
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun showUserProfile() {
-        userViewModel.userProfileInfo(requireContext(), UserUtils.getUserId(requireContext())).observe(requireActivity(), {
+        userViewModel.userProfileInfo(requireContext(), UserUtils.getUserId(requireContext())).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     ProviderProfileScreen.progressDialog.show()
@@ -237,7 +237,7 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                     snackBar(binding.applyBtn, it.message!!)
                 }
             }
-        })
+        }
     }
 
 }

@@ -51,7 +51,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     singleMoveBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookSingleMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("SINGLE BOOKING", jsonResponse.toString())
+//                    Log.e("SINGLE BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
@@ -77,11 +77,13 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     blueCollarBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookBlueCollarServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("BLUECOLLAR BOOKING", jsonResponse.toString())
+//                    Log.e("BLUECOLLAR BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context,jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
-                        blueCollarBooking.value = NetworkResponse.Success(jsonResponse.getString("message"))
+                        UserUtils.saveTxnToken(context, jsonResponse.getString("txn_id"))
+                        UserUtils.saveOrderId(context, jsonResponse.getString("order_id"))
+                        blueCollarBooking.value = NetworkResponse.Success(jsonResponse.toString())
                     } else {
                         blueCollarBooking.value = NetworkResponse.Failure(jsonResponse.getString("message"))
                     }
@@ -102,7 +104,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     multiMoveBooking.value = NetworkResponse.Loading()
                     val response = async { repository.bookMultiMoveServiceProvider(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("MULTIMOVE BOOKING", jsonResponse.toString())
+//                    Log.e("MULTIMOVE BOOKING", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context, jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
@@ -181,7 +183,7 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     providerResponse.value = NetworkResponse.Loading()
-                    Log.e("REQUEST:", Gson().toJson(requestBody))
+//                    Log.e("REQUEST:", Gson().toJson(requestBody))
                     val response = async { repository.setProviderResponse(requestBody) }
                     providerResponse.value = NetworkResponse.Success(response.await().string())
                 } catch (e: Exception) {

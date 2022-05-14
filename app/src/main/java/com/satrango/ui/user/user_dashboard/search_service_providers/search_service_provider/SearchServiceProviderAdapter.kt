@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
@@ -107,6 +108,7 @@ class SearchServiceProviderAdapter(
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)
                     binding.root.context.startActivity(intent)
                 }
+//                Toast.makeText(binding.actualCost.context, data.fcm_token, Toast.LENGTH_SHORT).show()
             }
         }
     }

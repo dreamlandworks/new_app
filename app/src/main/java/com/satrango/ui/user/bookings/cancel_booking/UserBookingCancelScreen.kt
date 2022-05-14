@@ -70,7 +70,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
+//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

@@ -146,7 +146,7 @@ class ProviderDashboard : AppCompatActivity() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
+//            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
         val factory = ViewModelFactory(ProviderDashboardRepository())
@@ -258,7 +258,7 @@ class ProviderDashboard : AppCompatActivity() {
             }
         }
 
-        Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
+//        Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
         if (UserUtils.getFromFCMService(this)) {
             if (bookingId != null) {
                 bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
@@ -284,7 +284,7 @@ class ProviderDashboard : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-        Log.e("RequestBody:", Gson().toJson(requestBody))
+//        Log.e("RequestBody:", Gson().toJson(requestBody))
 //        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
@@ -292,7 +292,7 @@ class ProviderDashboard : AppCompatActivity() {
             if (apiResponse.status == 200) {
                 progressDialog.dismiss()
                 response = apiResponse
-                Log.e("Response:", Gson().toJson(response))
+//                Log.e("Response:", Gson().toJson(response))
                 showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
             } else {
                 progressDialog.dismiss()
@@ -379,7 +379,7 @@ class ProviderDashboard : AppCompatActivity() {
             }
         }
 
-        Log.e("ResponseDialog:", Gson().toJson(response))
+//        Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
             bottomSheetDialog!!.dismiss()
@@ -402,7 +402,7 @@ class ProviderDashboard : AppCompatActivity() {
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-                        Log.e("RESPONSE TOKEN", UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType"))
+//                        Log.e("RESPONSE TOKEN", UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType"))
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         if (FCMService.notificationManager != null) {

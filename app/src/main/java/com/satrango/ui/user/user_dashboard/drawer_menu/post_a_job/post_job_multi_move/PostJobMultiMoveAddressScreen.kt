@@ -233,9 +233,9 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.title,
             UserUtils.getUserId(this).toInt()
         )
-        Log.e("MULTI MOVE", Gson().toJson(requestBody))
-        viewModel.postJobMultiMove(this, requestBody).observe(this, {
-            when(it) {
+//        Log.e("MULTI MOVE", Gson().toJson(requestBody))
+        viewModel.postJobMultiMove(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -254,7 +254,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.addressText, it.message!!)
                 }
             }
-        })
+        }
     }
 
     private fun showSuccessDialog() {
@@ -343,7 +343,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         if (cursor != null) {
             cursor.moveToFirst()
             val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            Log.e("IMAGES PATH: ", imagePath)
+//            Log.e("IMAGES PATH: ", imagePath)
             cursor.close()
             return imagePath
         }

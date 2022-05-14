@@ -47,8 +47,8 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
         toast(this, postJobId)
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
-        viewModel.getInstallmentsList(this, postJobId.toInt()).observe(this, {
-            when(it) {
+        viewModel.getInstallmentsList(this, postJobId.toInt()).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -57,9 +57,12 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                     response = it.data!!
                     if (response.goals_installments_details.isNotEmpty()) {
                         binding.bookingId.text = response.goals_installments_details[0].booking_id
-                        binding.workStartedAt.text = response.goals_installments_details[0].created_dts.split(" ")[0]
-                        binding.time.text = response.goals_installments_details[0].created_dts.split(" ")[0]
-                        binding.recyclerView.adapter = ProviderReleaseGoalsAdapter(response.goals_installments_details, this)
+                        binding.workStartedAt.text =
+                            response.goals_installments_details[0].created_dts.split(" ")[0]
+                        binding.time.text =
+                            response.goals_installments_details[0].created_dts.split(" ")[0]
+                        binding.recyclerView.adapter =
+                            ProviderReleaseGoalsAdapter(response.goals_installments_details, this)
                         var total = 0.0
                         for (amount in response.goals_installments_details) {
                             total += amount.amount.toDouble()
@@ -74,7 +77,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                     snackBar(binding.recyclerView, "Error01:${it.message!!}")
                 }
             }
-        })
+        }
 
     }
 
@@ -119,8 +122,8 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
             UserUtils.getUserId(this).toInt(),
             userId.toInt()
         )
-        viewModel.postRequestInstallment(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.postRequestInstallment(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -134,7 +137,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

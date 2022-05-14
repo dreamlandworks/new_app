@@ -45,7 +45,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
         if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
             data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
             val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
-            Log.e("JSON", Gson().toJson(spDetails))
+//            Log.e("JSON", Gson().toJson(spDetails))
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
                     for (booking in sp.blocked_time_slots) {

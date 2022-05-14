@@ -52,8 +52,8 @@ class ProviderReviewScreen : AppCompatActivity() {
 
         val factory = ViewModelFactory(ProviderMyAccountRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyAccountViewModel::class.java]
-        viewModel.reviews(this).observe(this, {
-            when(it) {
+        viewModel.reviews(this).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -66,7 +66,7 @@ class ProviderReviewScreen : AppCompatActivity() {
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
-        })
+        }
 
 
     }

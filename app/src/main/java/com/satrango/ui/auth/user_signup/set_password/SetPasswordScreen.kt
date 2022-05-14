@@ -85,7 +85,7 @@ class SetPasswordScreen : AppCompatActivity() {
             return
         }
 
-        viewModel.resetPassword(this).observe(this, {
+        viewModel.resetPassword(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -94,7 +94,10 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    congratulationsDialog(this, "Your password is successfully set. \nPlease login to continue")
+                    congratulationsDialog(
+                        this,
+                        "Your password is successfully set. \nPlease login to continue"
+                    )
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -102,7 +105,7 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
             }
 
-        })
+        }
     }
 
     private fun requestFailedDialog(context: Context, message: String) {
@@ -165,7 +168,7 @@ class SetPasswordScreen : AppCompatActivity() {
             UserUtils.getGender(this),
             RetrofitBuilder.USER_KEY
         )
-        Log.e("JSON", Gson().toJson(requestBody))
+//        Log.e("JSON", Gson().toJson(requestBody))
         viewModel.createNewUser(this, requestBody).observe(this@SetPasswordScreen) {
             when (it) {
                 is NetworkResponse.Loading -> {

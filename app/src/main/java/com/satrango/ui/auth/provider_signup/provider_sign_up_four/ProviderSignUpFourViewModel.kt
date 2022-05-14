@@ -29,15 +29,15 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
                     providerActivation.value = NetworkResponse.Loading()
                     val response = async { repository.serviceProviderActivation(requestBody) }
                     val jsonResponse = JSONObject(response.await().string())
-                    Log.e("TIMESLOTS:", jsonResponse.toString())
+//                    Log.e("TIMESLOTS:", jsonResponse.toString())
                     if (jsonResponse.getInt("status") == 200) {
                         providerActivation.value = NetworkResponse.Success(jsonResponse.getString("message"))
                     } else {
                         providerActivation.value = NetworkResponse.Failure(jsonResponse.getString("message"))
                     }
-                    Log.e("ACTIVATION:", jsonResponse.toString())
+//                    Log.e("ACTIVATION:", jsonResponse.toString())
                 } catch (e: Exception) {
-                    Log.e("ACTIVATION:", e.message!!)
+//                    Log.e("ACTIVATION:", e.message!!)
                     providerActivation.value = NetworkResponse.Failure(e.message!!)
                 }
             }

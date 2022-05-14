@@ -109,7 +109,7 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
             ViewBidsScreen.postJobId,
             UserUtils.getUserId(this).toInt(),
         )
-        viewModel.myJobPostsViewDetails(this, requestBody).observe(this, {
+        viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.dataLayout.visibility = View.GONE
@@ -128,7 +128,7 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
                     binding.note.text = it.message!!
                 }
             }
-        })
+        }
     }
 
     private fun disconnected() {
@@ -182,8 +182,8 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
     }
 
     override fun deleteAttachment(position: Int, imagePath: Attachment) {
-        viewModel.deleteAttachment(this, AttachmentDeleteReqModel(displayData.attachments[position].id.toInt(), RetrofitBuilder.USER_KEY)).observe(this, {
-            when(it) {
+        viewModel.deleteAttachment(this, AttachmentDeleteReqModel(displayData.attachments[position].id.toInt(), RetrofitBuilder.USER_KEY)).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -200,7 +200,7 @@ class MyJobPostEditScreen : AppCompatActivity(), AttachmentsListener {
                     progressDialog.dismiss()
                 }
             }
-        })
+        }
 
     }
 

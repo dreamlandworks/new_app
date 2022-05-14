@@ -86,7 +86,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
-            Log.e("FILE:", getPathFromUri(this, data!!.data!!)!!)
+//            Log.e("FILE:", getPathFromUri(this, data!!.data!!)!!)
         }
         if (requestCode == 0) {
             val extras: Bundle = data!!.extras!!

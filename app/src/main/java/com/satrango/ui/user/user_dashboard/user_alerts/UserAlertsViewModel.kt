@@ -71,7 +71,7 @@ class UserAlertsViewModel(private val repository: UserAlertsRepository): ViewMod
                 try {
                     userOffers.value = NetworkResponse.Loading()
                     val response = async { repository.getUserOffers(requestBody) }
-                    Log.e("OFFERS", Gson().toJson(response.await()))
+//                    Log.e("OFFERS", Gson().toJson(response.await()))
                     if (response.await().status == 200) {
                         userOffers.value = NetworkResponse.Success(response.await().data)
                     } else {
