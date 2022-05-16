@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -16,6 +17,7 @@ import com.satrango.R
 
 object PermissionUtils {
 
+    private lateinit var gpsAlertDialog: AlertDialog.Builder
     val PERMISSIONS_CODE: Int = 101
 
     fun connectionAlert(context: Context, task: () -> Unit) {
@@ -121,22 +123,26 @@ object PermissionUtils {
         }
 
         if (!gpsEnabled && !networkEnabled) {
-            AlertDialog.Builder(context)
-                .setMessage(R.string.gps_network_not_enabled)
-                .setPositiveButton(R.string.open_location_settings) { _, _ ->
+            gpsAlertDialog = AlertDialog.Builder(context)
+            gpsAlertDialog.setMessage(R.string.gps_network_not_enabled)
+            gpsAlertDialog.setPositiveButton(R.string.open_location_settings) { _, _ ->
                     context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }.setNegativeButton(R.string.Cancel) { dialogInterface, _ ->
                     dialogInterface.dismiss()
                     checkAndRequestPermissions(context)
                     context.startActivity(context.intent)
                 }
-                .setCancelable(false)
-                .show()
+            gpsAlertDialog.setCancelable(false)
+            gpsAlertDialog.create().show()
             return false
         }
         return true
     }
 
-
+    fun dismissGpsDialog() {
+        gpsAlertDialog.setOnDismissListener { dialogInterface: DialogInterface ->
+            dialogInterface.dismiss()
+        }
+    }
 
 }

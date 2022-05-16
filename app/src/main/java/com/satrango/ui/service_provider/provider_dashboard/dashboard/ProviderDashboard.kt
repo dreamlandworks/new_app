@@ -9,13 +9,13 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -38,7 +38,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -73,7 +72,6 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -90,6 +88,7 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import com.bumptech.glide.load.HttpException
 import com.google.firebase.database.FirebaseDatabase
+import com.satrango.GpsLocationReceiver
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.utils.UserUtils.isProvider
 import org.json.JSONObject
@@ -97,6 +96,7 @@ import org.json.JSONObject
 
 class ProviderDashboard : AppCompatActivity() {
 
+    private lateinit var gpsReceiver: GpsLocationReceiver
     private var bookingType = ""
     private var categoryId = ""
     private var userId = ""
@@ -107,22 +107,191 @@ class ProviderDashboard : AppCompatActivity() {
     private lateinit var profileImage: CircleImageView
     private lateinit var userProviderSwitch: SwitchCompat
     private lateinit var response: BookingDetailsResModel
-    private lateinit var viewModel: ProviderDashboardViewModel
-    private lateinit var progressDialog: BeautifulProgressDialog
-    private lateinit var binding: ActivityProviderDashboardBinding
 
     private var flag: Boolean = true
     private lateinit var backStack: Deque<Int>
 
-    private lateinit var locationCallBack: LocationCallback
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     companion object {
+        private lateinit var locationCallBack: LocationCallback
+        private lateinit var viewModel: ProviderDashboardViewModel
+        private lateinit var progressDialog: BeautifulProgressDialog
+        private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+        private lateinit var binding: ActivityProviderDashboardBinding
+
         var FROM_FCM_SERVICE = false
         var minutes = 2
         var seconds = 59
         var bookingId = "0"
         var bottomSheetDialog: BottomSheetDialog? = null
+
+
+        fun fetchLocation(context: Context) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
+            val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            locationCallBack = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    for (location in locationResult.locations) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        fetchLocationDetails(context, latitude, longitude)
+                    }
+                }
+            }
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallBack,
+                Looper.myLooper()!!
+            )
+        }
+
+        private fun updateOnlineStatus(context: Context, statusId: Int) {
+            val requestBody = ProviderOnlineReqModel(
+                RetrofitBuilder.PROVIDER_KEY,
+                statusId,
+                UserUtils.getUserId(context)
+            )
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val response = RetrofitBuilder.getServiceProviderRetrofitInstance().updateSpOnlineStatus(requestBody)
+                    val jsonResponse = JSONObject(response.string())
+                    if (jsonResponse.getInt("status") == 200) {
+                        progressDialog.dismiss()
+                        if (statusId == 0) {
+                            binding.onlineText.text = context.resources.getString(R.string.offline)
+                            UserUtils.setOnline(context, false)
+                        } else {
+                            binding.onlineText.text = context.resources.getString(R.string.online)
+                            UserUtils.setOnline(context, true)
+                        }
+                    } else {
+                        progressDialog.dismiss()
+                        binding.onlineSwitch.isChecked = !binding.onlineSwitch.isChecked
+                    }
+                } catch (e: java.lang.Exception) {
+                    progressDialog.dismiss()
+                    Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+                }
+            }
+//            viewModel.onlineStatus(context, requestBody).observe(this) {
+//                when (it) {
+//                    is NetworkResponse.Loading -> {
+////                    progressDialog.show()
+//                    }
+//                    is NetworkResponse.Success -> {
+////                    toast(this, it.data!!.toString())
+//                        progressDialog.dismiss()
+//                        if (statusId == 0) {
+//                            binding.onlineText.text = context.resources.getString(R.string.offline)
+//                            UserUtils.setOnline(context, false)
+//                        } else {
+//                            binding.onlineText.text = context.resources.getString(R.string.online)
+//                            UserUtils.setOnline(context, true)
+//                        }
+//                    }
+//                    is NetworkResponse.Failure -> {
+//                        progressDialog.dismiss()
+//                        binding.onlineSwitch.isChecked = !binding.onlineSwitch.isChecked
+//                        Toast.makeText(context, it.message!!, Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+        }
+
+        @SuppressLint("SetTextI18n")
+        private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+            try {
+                val geoCoder = Geocoder(context, Locale.getDefault())
+                val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+                val addressName: String = address.get(0).getAddressLine(0)
+                val city: String = address.get(0).locality
+                val state: String = address.get(0).adminArea
+                val country: String = address.get(0).countryName
+                val postalCode: String = address.get(0).postalCode
+                val knownName: String = address.get(0).featureName
+                fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+                UserUtils.setLatitude(context, latitude.toString())
+                UserUtils.setLongitude(context, longitude.toString())
+                UserUtils.setCity(context, city)
+                UserUtils.setState(context, state)
+                UserUtils.setCountry(context, country)
+                UserUtils.setPostalCode(context, postalCode)
+                UserUtils.setAddress(context, knownName)
+                binding.userLocation.text = UserUtils.getCity(context)
+
+                val requestBody = ProviderLocationReqModel(
+                    UserUtils.getAddress(context),
+                    UserUtils.getCity(context),
+                    UserUtils.getCountry(context),
+                    RetrofitBuilder.PROVIDER_KEY,
+                    1,
+                    UserUtils.getPostalCode(context),
+                    UserUtils.getState(context),
+                    UserUtils.getLatitude(context),
+                    UserUtils.getLongitude(context),
+                    UserUtils.getUserId(context).toInt()
+                )
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val response = RetrofitBuilder.getServiceProviderRetrofitInstance().saveProviderLocation(requestBody)
+                        val jsonResponse = JSONObject(response.string())
+                        if (jsonResponse.getInt("status") == 200) {
+                            if (!UserUtils.getSpStatus(context)) {
+                                updateOnlineStatus(context, 1)
+                            }
+                            if (UserUtils.getSpStatus(context)) {
+                                binding.onlineText.text = context.resources.getString(R.string.online)
+                                binding.onlineSwitch.isChecked = true
+                            } else {
+                                binding.onlineText.text = context.resources.getString(R.string.offline)
+                                binding.onlineSwitch.isChecked = false
+                            }
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+                    }
+                }
+//                viewModel.saveLocation(context, requestBody).observe(context) {
+//                    when (it) {
+//                        is NetworkResponse.Loading -> {
+//
+//                        }
+//                        is NetworkResponse.Success -> {
+////                        toast(this, it.data!!)
+//                            if (!UserUtils.getSpStatus(context)) {
+//                                updateOnlineStatus(1)
+//                            }
+//                            if (UserUtils.getSpStatus(context)) {
+//                                binding.onlineText.text = context.resources.getString(R.string.online)
+//                                binding.onlineSwitch.isChecked = true
+//                            } else {
+//                                binding.onlineText.text = resources.getString(R.string.offline)
+//                                binding.onlineSwitch.isChecked = false
+//                            }
+//                        }
+//                        is NetworkResponse.Failure -> {
+//                            if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
+//                                fetchLocation(this)
+//                            }
+//                        }
+//                    }
+//                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -132,6 +301,7 @@ class ProviderDashboard : AppCompatActivity() {
         binding = ActivityProviderDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        gpsReceiver = GpsLocationReceiver()
         registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -246,9 +416,9 @@ class ProviderDashboard : AppCompatActivity() {
 
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                updateOnlineStatus(1)
+                updateOnlineStatus(this, 1)
             } else {
-                updateOnlineStatus(0)
+                updateOnlineStatus(this, 0)
             }
         }
 
@@ -289,49 +459,27 @@ class ProviderDashboard : AppCompatActivity() {
 //        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
-            val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
-            if (apiResponse.status == 200) {
-                progressDialog.dismiss()
-                response = apiResponse
+            try {
+                val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (apiResponse.status == 200) {
+                    progressDialog.dismiss()
+                    response = apiResponse
 //                Log.e("Response:", Gson().toJson(response))
-                showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
-            } else {
-                progressDialog.dismiss()
-                snackBar(binding.bottomNavigationView, response.message)
+                    showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
+                } else {
+                    progressDialog.dismiss()
+                    snackBar(binding.bottomNavigationView, response.message)
+                }
+            } catch (e: java.lang.Exception) {
+                snackBar(binding.bottomNavigationView, e.message!!)
             }
         }
     }
 
-    private fun updateOnlineStatus(statusId: Int) {
-        val requestBody = ProviderOnlineReqModel(
-            RetrofitBuilder.PROVIDER_KEY,
-            statusId,
-            UserUtils.getUserId(this)
-        )
-        viewModel.onlineStatus(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-//                    toast(this, it.data!!.toString())
-                    progressDialog.dismiss()
-                    if (statusId == 0) {
-                        binding.onlineText.text = resources.getString(R.string.offline)
-                        UserUtils.setOnline(this, false)
-                    } else {
-                        binding.onlineText.text = resources.getString(R.string.online)
-                        UserUtils.setOnline(this, true)
-                    }
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    binding.onlineSwitch.isChecked = !binding.onlineSwitch.isChecked
-                    toast(this, it.message!!)
-                }
-            }
-        }
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        unregisterReceiver(gpsReceiver)
+//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -616,6 +764,7 @@ class ProviderDashboard : AppCompatActivity() {
         loadUserProfileData()
 //        loadUserProfileData()
         updateSpProfile()
+        registerReceiver(gpsReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
     }
 
     private fun loadUserProfileData() {
@@ -736,101 +885,6 @@ class ProviderDashboard : AppCompatActivity() {
             fetchLocation(this)
         } else {
             toast(this, "No permission")
-        }
-    }
-
-    private fun fetchLocation(context: Context) {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        locationCallBack = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                for (location in locationResult.locations) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    fetchLocationDetails(context, latitude, longitude)
-                }
-            }
-        }
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallBack,
-            Looper.myLooper()!!
-        )
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
-        try {
-            val geoCoder = Geocoder(context, Locale.getDefault())
-            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-            val addressName: String = address.get(0).getAddressLine(0)
-            val city: String = address.get(0).locality
-            val state: String = address.get(0).adminArea
-            val country: String = address.get(0).countryName
-            val postalCode: String = address.get(0).postalCode
-            val knownName: String = address.get(0).featureName
-            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-            UserUtils.setLatitude(this, latitude.toString())
-            UserUtils.setLongitude(this, longitude.toString())
-            UserUtils.setCity(this, city)
-            UserUtils.setState(this, state)
-            UserUtils.setCountry(this, country)
-            UserUtils.setPostalCode(this, postalCode)
-            UserUtils.setAddress(this, knownName)
-            binding.userLocation.text = UserUtils.getCity(this)
-
-            val requestBody = ProviderLocationReqModel(
-                UserUtils.getAddress(this),
-                UserUtils.getCity(this),
-                UserUtils.getCountry(this),
-                RetrofitBuilder.PROVIDER_KEY,
-                1,
-                UserUtils.getPostalCode(this),
-                UserUtils.getState(this),
-                UserUtils.getLatitude(this),
-                UserUtils.getLongitude(this),
-                UserUtils.getUserId(this).toInt()
-            )
-            viewModel.saveLocation(this, requestBody).observe(this) {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-
-                    }
-                    is NetworkResponse.Success -> {
-//                        toast(this, it.data!!)
-                        if (!UserUtils.getSpStatus(this)) {
-                            updateOnlineStatus(1)
-                        }
-                        if (UserUtils.getSpStatus(this)) {
-                            binding.onlineText.text = resources.getString(R.string.online)
-                            binding.onlineSwitch.isChecked = true
-                        } else {
-                            binding.onlineText.text = resources.getString(R.string.offline)
-                            binding.onlineSwitch.isChecked = false
-                        }
-                    }
-                    is NetworkResponse.Failure -> {
-                        if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
-                            fetchLocation(this)
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-                .show()
         }
     }
 

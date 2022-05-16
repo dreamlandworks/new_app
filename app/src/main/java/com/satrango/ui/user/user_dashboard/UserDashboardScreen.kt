@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,7 +35,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -49,16 +47,13 @@ import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.login_screen.LoginViewModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
-import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.BrowseCategoriesScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
@@ -170,7 +165,7 @@ class   UserDashboardScreen : AppCompatActivity() {
             binding.userLocation.text = UserUtils.getCity(this)
             SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
         } else {
-            fetchLocation(this)
+            fetchLocation(this, binding.userLocation)
         }
 
 
@@ -322,7 +317,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         @SuppressLint("StaticFieldLeak")
         private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-        fun fetchLocation(context: Context) {
+        fun fetchLocation(context: Context, userLocation: TextView) {
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -349,7 +344,7 @@ class   UserDashboardScreen : AppCompatActivity() {
                     for (location in locationResult.locations) {
                         val latitude = location.latitude
                         val longitude = location.longitude
-                        fetchLocationDetails(context, latitude, longitude)
+                        fetchLocationDetails(context, latitude, longitude, userLocation)
                     }
                 }
             }
@@ -362,7 +357,12 @@ class   UserDashboardScreen : AppCompatActivity() {
 
 
         @SuppressLint("SetTextI18n")
-        private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+        private fun fetchLocationDetails(
+            context: Context,
+            latitude: Double,
+            longitude: Double,
+            userLocation: TextView
+        ) {
             try {
                 val geoCoder = Geocoder(context, Locale.getDefault())
                 val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
@@ -380,7 +380,7 @@ class   UserDashboardScreen : AppCompatActivity() {
                 UserUtils.setCountry(context, country)
                 UserUtils.setPostalCode(context, postalCode)
                 UserUtils.setAddress(context, knownName)
-                binding.userLocation.text = UserUtils.getCity(context)
+                userLocation.text = UserUtils.getCity(context)
                 SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
                 Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)

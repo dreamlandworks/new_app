@@ -89,7 +89,9 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        Places.initialize(this, UserUtils.getGoogleMapsKey(this))
+//        Places.initialize(this, UserUtils.getGoogleMapsKey(this))
+//        Places.initialize(this, "AIzaSyAtUCgXK-BpXZan6iLWyCK0p6ZwimR7yYA")
+        Places.initialize(this, resources.getString(R.string.google_maps_key))
 
         val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
         autocompleteFragment!!.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))
@@ -112,8 +114,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         })
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
 
         progressDialog = ProgressDialog(this)

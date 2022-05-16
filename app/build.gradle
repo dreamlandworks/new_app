@@ -75,8 +75,8 @@ dependencies {
 
     // Google Authentication, Fused Location
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation 'com.google.android.gms:play-services-location:18.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation  'com.google.android.gms:play-services-maps:18.0.2'
 
     // AutoFill OTP
     implementation "com.google.android.gms:play-services-auth-api-phone:17.5.1"

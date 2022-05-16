@@ -94,6 +94,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
         initializeToolBar()
         initializeProgressDialog()
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         responses = ArrayList()
         registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER_ONE))
@@ -929,6 +930,80 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
 
+//    fun fetchLocation(context: Context) {
+//        if (ActivityCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return
+//        }
+//
+//        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+//            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+//        locationCallBack = object : LocationCallback() {
+//            override fun onLocationResult(locationResult: LocationResult) {
+//                super.onLocationResult(locationResult)
+//                for (location in locationResult.locations) {
+//                    val latitude = location.latitude
+//                    val longitude = location.longitude
+//                    fetchLocationDetails(context, latitude, longitude)
+//                }
+//            }
+//        }
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+//        fusedLocationProviderClient.requestLocationUpdates(
+//            locationRequest,
+//            locationCallBack,
+//            Looper.myLooper()!!
+//        )
+//    }
+//
+//    @SuppressLint("SetTextI18n")
+//    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+//        try {
+//            val geoCoder = Geocoder(context, Locale.getDefault())
+//            val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
+//            val addressName: String = address[0].getAddressLine(0)
+//            val city: String = address[0].locality
+//            val state: String = address[0].adminArea
+//            val country: String = address[0].countryName
+//            val postalCode: String = address[0].postalCode
+//            val knownName: String = address[0].featureName
+//            fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+//            UserUtils.setLatitude(context, latitude.toString())
+//            UserUtils.setLongitude(context, longitude.toString())
+//            UserUtils.setCity(context, city)
+//            UserUtils.setState(context, state)
+//            UserUtils.setCountry(context, country)
+//            UserUtils.setPostalCode(context, postalCode)
+//            UserUtils.setAddress(context, knownName)
+//            addressList.add(
+//                MonthsModel(
+//                    UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(
+//                        this
+//                    ), "0", true
+//                )
+//            )
+////            if (!waitingDialog.isShowing) {
+//            validateFields()
+////            }
+//        } catch (e: Exception) {
+//            Toast.makeText(context, "Please Check you Internet Connection!: ${e.message!!}", Toast.LENGTH_LONG)
+//                .show()
+//        }
+//    }
+
     fun fetchLocation(context: Context) {
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -960,7 +1035,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 }
             }
         }
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             locationCallBack,
@@ -968,17 +1042,22 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         )
     }
 
+
     @SuppressLint("SetTextI18n")
-    private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+    private fun fetchLocationDetails(
+        context: Context,
+        latitude: Double,
+        longitude: Double
+    ) {
         try {
             val geoCoder = Geocoder(context, Locale.getDefault())
             val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
-            val addressName: String = address[0].getAddressLine(0)
-            val city: String = address[0].locality
-            val state: String = address[0].adminArea
-            val country: String = address[0].countryName
-            val postalCode: String = address[0].postalCode
-            val knownName: String = address[0].featureName
+            val addressName: String = address.get(0).getAddressLine(0)
+            val city: String = address.get(0).locality
+            val state: String = address.get(0).adminArea
+            val country: String = address.get(0).countryName
+            val postalCode: String = address.get(0).postalCode
+            val knownName: String = address.get(0).featureName
             fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             UserUtils.setLatitude(context, latitude.toString())
             UserUtils.setLongitude(context, longitude.toString())
@@ -998,7 +1077,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             validateFields()
 //            }
         } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+            Toast.makeText(context, "Please Check you Internet Connection!:${e.message!!}", Toast.LENGTH_LONG)
                 .show()
         }
     }

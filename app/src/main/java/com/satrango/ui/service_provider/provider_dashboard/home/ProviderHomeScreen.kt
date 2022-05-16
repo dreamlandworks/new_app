@@ -9,12 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -26,32 +23,21 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertRepository
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsScreen
 import com.satrango.ui.service_provider.provider_dashboard.alerts.ProviderAlertsViewModel
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard.Companion.fetchLocation
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.LeaderBoardScreen
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsAdapter
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsRepository
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.ProviderMyBidsViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingAdapter
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsAdapter
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
-import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
-import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsRepository
-import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertsViewModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
-import com.satrango.utils.UserUtils
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
+import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -337,6 +323,13 @@ class ProviderHomeScreen : Fragment() {
                 }
 
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
+            fetchLocation(requireContext())
         }
     }
 
