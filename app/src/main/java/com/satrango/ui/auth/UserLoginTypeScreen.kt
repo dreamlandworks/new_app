@@ -46,7 +46,6 @@ import java.text.SimpleDateFormat
 class UserLoginTypeScreen : AppCompatActivity() {
 
     private lateinit var pictureFile: File
-    private lateinit var token: String
     private lateinit var binding: ActivityUserLoginTypeScreenBinding
 
     @SuppressLint("SimpleDateFormat")

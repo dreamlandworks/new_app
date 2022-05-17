@@ -126,7 +126,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         toolBarBackTVBtn = headerView.findViewById(R.id.toolBarBackTVBtn)
         toolBarBackBtn = headerView.findViewById(R.id.toolBarBackBtn)
         updateHeaderDetails()
-        userProviderSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        userProviderSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 finish()
                 UserUtils.saveFromFCMService(this, false)
@@ -436,12 +436,6 @@ class   UserDashboardScreen : AppCompatActivity() {
                 ).show()
             }
         }
-    }
-
-    private fun updateProfilePicInFirebase(imageUrl: String, userName: String) {
-        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
-        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.profile_image)).setValue(imageUrl)
-        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.user_name)).setValue(userName)
     }
 
     private fun getFragment(itemId: Int): Fragment {

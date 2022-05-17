@@ -1138,13 +1138,10 @@ object UserUtils {
         if (PermissionUtils.isNetworkConnected(context)) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Toast.makeText(
-                        context,
-                        "Fetching FCM registration token failed",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "Fetching FCM registration token failed", Toast.LENGTH_SHORT).show()
                     Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
                     Toast.makeText(context, task.exception!!.message, Toast.LENGTH_SHORT).show()
+                    updateNewFCMToken(context)
                     return@OnCompleteListener
                 }
                 val token = task.result
