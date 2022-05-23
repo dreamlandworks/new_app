@@ -42,6 +42,8 @@ import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.*
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -304,13 +306,13 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
                     imagePathList.add(getImageFilePath(imageUri))
-                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
+                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
                     attachmentType = "image"
                 }
             } else if (data.data != null) {
                 val imageUri = data.data
                 imagePathList.add(getImageFilePath(imageUri!!))
-                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
+                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
                 attachmentType = "image"
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -320,7 +322,7 @@ class DiscussionBoardScreen : AppCompatActivity(), DiscussionBoardInterface {
                 imageStream = contentResolver.openInputStream(getImageUri(this, imageBitmap!!)!!)
                 if (imageStream != null) {
                     val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-                    encodedImages.add(Attachment(UserUtils.encodeToBase64(yourSelectedImage)!!))
+                    encodedImages.add(Attachment(UserUtils.encodeToBase64(yourSelectedImage)!!, ""))
                     attachmentType = "image"
                 }
             } catch (e: Exception) {

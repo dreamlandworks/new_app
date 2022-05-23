@@ -357,7 +357,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                             encodeToBase64FromUri(
                                 imageUri
                             )
-                        )
+                        , "")
                     )
                 }
             } else if (data.data != null) {
@@ -370,7 +370,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                         ,""
                     )
                 )
-                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
+                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
             }
             binding.attachmentsRV.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

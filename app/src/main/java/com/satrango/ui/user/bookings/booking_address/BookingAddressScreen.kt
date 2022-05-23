@@ -380,29 +380,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
 //                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
-                            UserUtils.saveBookingId(
-                                this@BookingAddressScreen,
-                                jsonResponse.getInt("booking_id").toString()
-                            )
-                            UserUtils.saveBookingRefId(
-                                this@BookingAddressScreen,
-                                jsonResponse.getString("booking_ref_id")
-                            )
+                            UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
+                            UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
                             UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
                             UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
-                            UserUtils.sendFCMtoAllServiceProviders(
-                                this@BookingAddressScreen,
-                                UserUtils.getBookingId(this@BookingAddressScreen),
-                                "user",
-                                "accepted|${UserUtils.bookingType}"
-                            )
+                            UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user", "accepted|${UserUtils.bookingType}")
                         } else {
 //                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
-                            UserUtils.sendFCMtoSelectedServiceProvider(
-                                this@BookingAddressScreen,
-                                UserUtils.getBookingId(this@BookingAddressScreen),
-                                "user"
-                            )
+                            UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
                         }
                     } else {
                         progressDialog.dismiss()
@@ -464,7 +449,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             )
 //            toast(this, Gson().toJson(requestBody))
 //            Log.e("SINGLE MOVE SELECTION", Gson().toJson(requestBody))
-
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()

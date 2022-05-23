@@ -346,7 +346,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
                 userChatReference.child(getString(R.string.chat_branch)).child(branch)
                 userChatReference.child(getString(R.string.users_id)).setValue(bookingDetails.sp_id)
                 userChatReference.child(getString(R.string.user_name)).setValue(bookingDetails.sp_fname + " " + bookingDetails.sp_lname)
-                userChatReference.child(getString(R.string.profile_image)).setValue(RetrofitBuilder.BASE_URL + bookingDetails.sp_profile_pic)
+                userChatReference.child(getString(R.string.profile_image)).setValue(bookingDetails.sp_profile_pic)
                 userChatReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
                 userChatReference.child(getString(R.string.sent_by)).setValue(UserUtils.getUserId(this@UserMyBookingsScreen))
                 userChatReference.child(getString(R.string.date_time)).setValue(datetime)
@@ -359,7 +359,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
                 spDatabaseReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
                 spDatabaseReference.child(getString(R.string.sent_by)).setValue(getUserId(this@UserMyBookingsScreen))
                 spDatabaseReference.child(getString(R.string.date_time)).setValue(datetime)
-                val chatsModel = ChatsModel(branch, RetrofitBuilder.BASE_URL + bookingDetails.sp_profile_pic, bookingDetails.sp_id,
+                val chatsModel = ChatsModel(branch, bookingDetails.sp_profile_pic, bookingDetails.sp_id,
                     bookingDetails.sp_fname + " " + bookingDetails.sp_lname, "","",
                     getUserId(this@UserMyBookingsScreen), datetime)
                 UserUtils.selectedChat(this@UserMyBookingsScreen, Gson().toJson(chatsModel))

@@ -21,7 +21,7 @@ class BrowseSubCategoriesAdapter(private val list: List<BrowserSubCategoryModel>
 
         @SuppressLint("CheckResult")
         fun bind(data: BrowserSubCategoryModel) {
-            Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + data.image).into(binding.image)
+            Glide.with(binding.image).load(data.image).into(binding.image)
             binding.title.text = data.sub_name
             binding.root.setOnClickListener {
                 SearchServiceProvidersScreen.FROM_POPULAR_SERVICES = true

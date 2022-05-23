@@ -11,19 +11,16 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Base64.*
+import android.provider.OpenableColumns
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -58,7 +55,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.mo
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
-import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
@@ -66,13 +62,8 @@ import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
 import java.io.*
-import java.lang.Exception
-import java.net.URL
-import java.net.URLConnection
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.jar.Manifest
-import kotlin.collections.ArrayList
 import kotlin.math.round
 
 
@@ -130,7 +121,13 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.apply {
 
             attachments.setOnClickListener {
-                openImagePicker()
+//                openImagePicker()
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "*/*"
+                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                startActivityForResult(intent, GALLERY_REQUEST)
             }
 
             backBtn.setOnClickListener {
@@ -277,41 +274,41 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         }
     }
 
-    private fun pickPdfFile() {
-        takePermission()
-    }
+//    private fun pickPdfFile() {
+//        takePermission()
+//    }
 
-    private fun takePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(String.format("package:%s", packageName))
-                mGetPermission.launch(intent)
-            } catch (e: Exception) {
-                toast(this, e.message!!)
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 101)
-        }
-    }
+//    private fun takePermissions() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            try {
+//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+//                intent.addCategory("android.intent.category.DEFAULT")
+//                intent.data = Uri.parse(String.format("package:%s", packageName))
+//                mGetPermission.launch(intent)
+//            } catch (e: Exception) {
+//                toast(this, e.message!!)
+//            }
+//        } else {
+//            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 101)
+//        }
+//    }
 
-    private fun isPermissionGranted(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
-        } else {
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        }
-    }
+//    private fun isPermissionGranted(): Boolean {
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            Environment.isExternalStorageManager()
+//        } else {
+//            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+//        }
+//    }
 
-    private fun takePermission() {
-        mGetContent.launch("pdf/*")
+//    private fun takePermission() {
+//        mGetContent.launch("pdf/*")
 //        if (isPermissionGranted()) {
 //            mGetContent.launch("pdf/*")
 //        } else {
 //            takePermissions()
 //        }
-    }
+//    }
 
 
     private fun initializeToolBar() {
@@ -387,6 +384,28 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         }
     }
 
+    fun getFileExtension(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor = contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor!!.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
+            }
+        }
+        return result.substring(result.lastIndexOf(".") + 1)
+    }
+
     private fun loadAddressOnUI() {
         binding.at.visibility = View.VISIBLE
         binding.addressText.visibility = View.VISIBLE
@@ -431,6 +450,32 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         startActivityForResult(intent, GALLERY_REQUEST)
     }
 
+    private fun getBase64FromFile(filepath: Uri?): String? {
+        var inputStream: InputStream? = null
+        var byteArrayOutputStream = ByteArrayOutputStream()
+        try {
+            inputStream = contentResolver.openInputStream(filepath!!)
+            val buffer = ByteArray(1024)
+            byteArrayOutputStream = ByteArrayOutputStream()
+            var bytesRead: Int
+            while (inputStream!!.read(buffer).also { bytesRead = it } != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        val pdfByteArray: ByteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(pdfByteArray, Base64.DEFAULT)
+    }
+
     @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -439,17 +484,23 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             if (data.clipData != null) {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
-                    val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), "", ""))
-                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
+                    val uri = data.clipData!!.getItemAt(i).uri
+                    val encodedImage = getBase64FromFile(uri)!!
+                    val fileExtension = getFileExtension(uri)
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension))
+                    encodedImages.add(Attachment(encodedImage, fileExtension))
+//                    encodedImages.add(Attachment(getBase64FromFile(uri)!!, getFileName(uri)))
                 }
             } else if (data.data != null) {
-                val imageUri = data.data
-                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "", ""))
-                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri)))
+                val uri = data.data
+                val encodedImage = getBase64FromFile(uri)!!
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", ""))
+                encodedImages.add(Attachment(encodedImage, getFileExtension(uri!!)))
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+            toast(this, encodedImages.size.toString())
+            Log.e("IMAGES:", Gson().toJson(encodedImages))
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
@@ -482,7 +533,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                 }
                                 if (!existed) {
                                     imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
-                                    encodedImages.add(Attachment(image_url))
+                                    encodedImages.add(Attachment(image_url, getFileExtension(uri)))
                                 }
                             }
                             binding.attachmentsRV.layoutManager = LinearLayoutManager(this@BookingAttachmentsScreen, LinearLayoutManager.HORIZONTAL, false)
@@ -503,37 +554,37 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 
     }
 
-    private fun encodeToBase64FromUri(imageUri: Uri): String {
-        var imageStream: InputStream? = null
-        try {
-            imageStream = contentResolver.openInputStream(imageUri)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-        return UserUtils.encodeToBase64(yourSelectedImage)!!
-    }
-
-    private fun getImageFilePath(uri: Uri): String {
-        val file = File(uri.path!!)
-        val filePath: List<String> = file.path.split(":")
-        val image_id = filePath[filePath.size - 1]
-        val cursor = contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            null,
-            MediaStore.Images.Media._ID + " = ? ",
-            arrayOf(image_id),
-            null
-        )
-        if (cursor != null) {
-            cursor.moveToFirst()
-            val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-//            Log.e("IMAGES PATH: ", imagePath)
-            cursor.close()
-            return imagePath
-        }
-        return ""
-    }
+//    private fun encodeToBase64FromUri(imageUri: Uri): String {
+//        var imageStream: InputStream? = null
+//        try {
+//            imageStream = contentResolver.openInputStream(imageUri)
+//        } catch (e: FileNotFoundException) {
+//            e.printStackTrace()
+//        }
+//        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+//        return UserUtils.encodeToBase64(yourSelectedImage)!!
+//    }
+//
+//    private fun getImageFilePath(uri: Uri): String {
+//        val file = File(uri.path!!)
+//        val filePath: List<String> = file.path.split(":")
+//        val image_id = filePath[filePath.size - 1]
+//        val cursor = contentResolver.query(
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//            null,
+//            MediaStore.Images.Media._ID + " = ? ",
+//            arrayOf(image_id),
+//            null
+//        )
+//        if (cursor != null) {
+//            cursor.moveToFirst()
+//            val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+////            Log.e("IMAGES PATH: ", imagePath)
+//            cursor.close()
+//            return imagePath
+//        }
+//        return ""
+//    }
 
     override fun deleteAttachment(
         position: Int,
@@ -622,7 +673,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
+                    snackBar(binding.nextBtn,"Blue Collar: " + it.message!!)
                 }
             }
         }

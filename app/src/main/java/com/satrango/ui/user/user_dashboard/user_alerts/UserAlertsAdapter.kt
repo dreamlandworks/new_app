@@ -35,8 +35,9 @@ class UserAlertsAdapter(
             binding.rowReviewLaterBtn.text = data.reject_text
             binding.rowReviewLaterBtn.visibility = View.VISIBLE
             binding.rowReviewNowBtn.visibility = View.VISIBLE
-            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(
-                UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
+            Glide.with(binding.profilePic).load(data.profile_pic)
+                .error(UserUtils.getUserProfilePic(binding.profilePic.context))
+                .into(binding.profilePic)
             binding.rowReviewNowBtn.setOnClickListener {
                 onClickAction(data)
             }

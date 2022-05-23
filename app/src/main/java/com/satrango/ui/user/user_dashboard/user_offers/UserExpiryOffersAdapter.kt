@@ -17,7 +17,7 @@ class UserExpiryOffersAdapter(private val list: List<Data>) :
 
     class ViewHolder(binding: UserExpiryOfferRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Data) {
-            Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image).into(binding.image)
+            Glide.with(binding.image.context).load(data.offer_image).into(binding.image)
             if (isProvider(binding.claimNow.context)) {
                 binding.yesDeo.setBackgroundResource(R.drawable.purple_sharp_border_out_line)
                 binding.yesDeo.setTextColor(binding.yesDeo.context.resources.getColor(R.color.purple_500))

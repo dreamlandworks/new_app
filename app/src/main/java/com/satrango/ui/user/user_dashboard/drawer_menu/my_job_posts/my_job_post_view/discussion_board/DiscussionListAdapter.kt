@@ -62,10 +62,9 @@ class DiscussionListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
         if (!data.profile_pic.isNullOrBlank()) {
-            Glide.with(holder.profileImage).load(RetrofitBuilder.BASE_URL + data.profile_pic)
-                .error(R.drawable.images).into(
-                    holder.profileImage
-                )
+            Glide.with(holder.profileImage).load(data.profile_pic)
+                .error(R.drawable.images)
+                .into(holder.profileImage)
         }
         holder.userName.text = data.fname + " " + data.lname
         val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

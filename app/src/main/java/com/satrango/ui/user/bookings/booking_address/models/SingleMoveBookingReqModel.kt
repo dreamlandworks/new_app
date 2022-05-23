@@ -28,5 +28,4 @@ data class SingleMoveBookingReqModel(
     val cgst: String,
     val sgst: String,
     val profession_id: String
-
     )

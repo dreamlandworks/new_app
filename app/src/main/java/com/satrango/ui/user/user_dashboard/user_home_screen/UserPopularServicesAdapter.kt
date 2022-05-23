@@ -18,8 +18,7 @@ class UserPopularServicesAdapter(private val list: List<BrowserSubCategoryModel>
         val binding = view
 
         fun bindData(model: BrowserSubCategoryModel) {
-            Glide.with(binding.rowImage).load(RetrofitBuilder.BASE_URL + model.image)
-                .into(binding.rowImage)
+            Glide.with(binding.rowImage).load(model.image).into(binding.rowImage)
             binding.rowTitle.text = model.sub_name
             binding.root.setOnClickListener {
                 SearchServiceProvidersScreen.subCategoryId = model.id

@@ -402,7 +402,7 @@ class   UserDashboardScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
-                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    val imageUrl = responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
                     loadProfileImage(binding.image)

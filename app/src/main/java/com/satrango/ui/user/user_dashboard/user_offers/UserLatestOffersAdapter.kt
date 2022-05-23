@@ -20,7 +20,7 @@ class UserLatestOffersAdapter(private val list: List<Data>) :
     class ViewHolder(binding: UserLatestOfferRowBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Data) {
-            Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image)
+            Glide.with(binding.image.context).load(data.offer_image)
                 .into(binding.image)
             if (isProvider(binding.image.context)) {
                 binding.title.setBackgroundColor(binding.title.context.resources.getColor(R.color.purple_500))

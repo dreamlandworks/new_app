@@ -77,7 +77,7 @@ class MyBookingsAdapter(
                 binding.spName.text = "Unknown"
             }
             if (!data.sp_profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.sp_profile_pic).into(binding.profilePic)
+                Glide.with(binding.profilePic).load(data.sp_profile_pic).into(binding.profilePic)
             }
 
             when(data.booking_status.lowercase(Locale.getDefault())) {

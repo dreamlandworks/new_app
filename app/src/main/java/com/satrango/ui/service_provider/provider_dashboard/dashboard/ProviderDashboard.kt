@@ -302,7 +302,7 @@ class ProviderDashboard : AppCompatActivity() {
         setContentView(binding.root)
 
         gpsReceiver = GpsLocationReceiver()
-        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER));
+        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -551,7 +551,8 @@ class ProviderDashboard : AppCompatActivity() {
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-//                        Log.e("RESPONSE TOKEN", UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType"))
+//                        Log.e("RESPONSE TOKEN", )
+                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
                         if (FCMService.notificationManager != null) {
@@ -764,7 +765,7 @@ class ProviderDashboard : AppCompatActivity() {
         loadUserProfileData()
 //        loadUserProfileData()
         updateSpProfile()
-        registerReceiver(gpsReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        registerReceiver(gpsReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
     }
 
     private fun loadUserProfileData() {
@@ -827,7 +828,7 @@ class ProviderDashboard : AppCompatActivity() {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
-                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    val imageUrl = responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveGoogleMapsKey(this@ProviderDashboard, response.data.maps_key)
                     UserUtils.saveFCMServerKey(this@ProviderDashboard, response.data.fcm_key)

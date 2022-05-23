@@ -368,7 +368,20 @@
         <activity
             android:name=".ui.auth.UserLoginTypeScreen"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.PICK"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.OPENABLE"/>
+                <data android:mimeType="*/*"/>
+                <data android:mimeType="*/*"/>
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ui.auth.user_signup.set_password.SetPasswordScreen"
             android:exported="true"

@@ -66,7 +66,6 @@ class UserHomeScreen :
 
         loadHomeScreen()
         toast(requireContext(), UserUtils.getUserId(requireContext()))
-
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = UserProfileReqModel(
@@ -74,17 +73,12 @@ class UserHomeScreen :
                     UserUtils.getUserId(requireContext()).toInt(),
                     UserUtils.getCity(requireContext())
                 )
-//                toast(requireContext(), Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
                 if (response.status == 200) {
                     binding.userName.text = "Hiii, ${responseData.fname} ${responseData.lname}"
                 } else {
-                    Snackbar.make(
-                        UserDashboardScreen.binding.navigationView,
-                        "Something went wrong!",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(UserDashboardScreen.binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(UserDashboardScreen.binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
@@ -118,7 +112,7 @@ class UserHomeScreen :
 
         initializeProgressDialog()
 
-        binding.searchBar.setOnFocusChangeListener { v, hasFocus ->
+        binding.searchBar.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 UserUtils.saveSearchFilter(requireContext(), "")
                 UserUtils.saveSelectedAllSPDetails(requireContext(), "")

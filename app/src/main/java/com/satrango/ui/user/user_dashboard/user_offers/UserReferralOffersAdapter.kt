@@ -17,7 +17,7 @@ class UserReferralOffersAdapter(private val list: List<Data>): RecyclerView.Adap
 
     class ViewHolder(binding: UserReferralOfferRowBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Data) {
-            Glide.with(binding.image.context).load(RetrofitBuilder.BASE_URL + data.offer_image).into(binding.image)
+            Glide.with(binding.image.context).load(data.offer_image).into(binding.image)
             if (isProvider(binding.image.context)) {
                 binding.knowMore.setBackgroundResource(R.drawable.purple_sharp_border_out_line)
                 binding.knowMore.setTextColor(binding.knowMore.context.resources.getColor(R.color.purple_500))

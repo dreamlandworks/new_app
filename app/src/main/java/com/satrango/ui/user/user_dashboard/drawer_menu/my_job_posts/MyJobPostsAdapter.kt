@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.MyJobPostsRowBinding
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
@@ -79,8 +78,9 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.editBtn.visibility = View.GONE
                     binding.awardedBtn.visibility = View.VISIBLE
                     binding.awardedBtn.text = "My Bookings"
-                    Glide.with(binding.awardedToImage).load(RetrofitBuilder.BASE_URL + jobPostDetail.awarded_to_sp_profile_pic).error(
-                        R.drawable.images).into(binding.awardedToImage)
+                    Glide.with(binding.awardedToImage)
+                        .load(jobPostDetail.awarded_to_sp_profile_pic)
+                        .error(R.drawable.images).into(binding.awardedToImage)
                     binding.expiresInText.text = "Awarded to: "
                     binding.expiresOn.text = jobPostDetail.awarded_to
                     binding.awardedToImage.visibility = View.VISIBLE
