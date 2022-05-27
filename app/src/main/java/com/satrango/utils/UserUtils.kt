@@ -1146,7 +1146,7 @@ object UserUtils {
                 }
                 val token = task.result
                 saveFCMToken(context, token)
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
                         FCMReqModel(
                             token,
@@ -1156,9 +1156,11 @@ object UserUtils {
                     )
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
+//                        Toast.makeText(context, "Token update Failed!!!", Toast.LENGTH_SHORT).show()
                         return@launch
                     } else {
 //                        Log.e("FCM TOKEN UPDATED:", token)
+//                        Toast.makeText(context, "Token updated!!!", Toast.LENGTH_SHORT).show()
                     }
                 }
 //                Log.e("FCM TOKEN", token)
