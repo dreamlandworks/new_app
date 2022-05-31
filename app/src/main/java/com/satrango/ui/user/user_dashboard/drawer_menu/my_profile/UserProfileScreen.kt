@@ -383,7 +383,6 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 toast(this, it.message!!)
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-
                 }
             }.addOnSuccessListener {
                 profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -405,6 +404,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         if (imageStream != null) {
             val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
             selectedEncodedImage = UserUtils.encodeToBase64(yourSelectedImage)!!
+            updateUserProfileToServer()
         }
     }
 

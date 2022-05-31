@@ -221,7 +221,9 @@
         <entry key="app/src/main/res/layout/activity_provider_reject_booking_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_release_goals_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_review_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_provider_sign_up_five.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_provider_sign_up_five.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_provider_sign_up_four.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_provider_sign_up_three.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_provider_sign_up_two.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_view_placed_bid_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_search_service_providers_screen.xml" value="0.11944444444444445" />
@@ -317,7 +319,7 @@
         <entry key="app/src/main/res/layout/row_slot_item.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/search_service_provider_row.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/search_type_dialog.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/service_provider_activation_dialog.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/service_provider_activation_dialog.xml" value="0.335" />
         <entry key="app/src/main/res/layout/service_provider_failure_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/service_provider_success_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/set_goals_row.xml" value="0.45" />
@@ -346,7 +348,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

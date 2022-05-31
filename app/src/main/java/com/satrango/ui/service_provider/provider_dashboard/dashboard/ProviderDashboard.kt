@@ -288,8 +288,8 @@ class ProviderDashboard : AppCompatActivity() {
 //                    }
 //                }
             } catch (e: Exception) {
-                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-                    .show()
+//                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+//                    .show()
             }
         }
     }
@@ -664,6 +664,29 @@ class ProviderDashboard : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun showApprovalWaitingDialog(context: Context) {
+        val dialog = BottomSheetDialog(context)
+        val dialogView = layoutInflater.inflate(R.layout.service_provider_activation_dialog, null)
+        val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
+        val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
+        val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, UserLoginTypeScreen::class.java))
+        }
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, UserLoginTypeScreen::class.java))
+        }
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, UserLoginTypeScreen::class.java))
+        }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
@@ -789,7 +812,8 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         "2" -> {
                             // Service Provider Approval Waiting
-                            alertDialog("Approval Waiting")
+//                            alertDialog("Approval Waiting")
+                            showApprovalWaitingDialog(this)
                         }
                         "3" -> {
                             // Service Provider Activated

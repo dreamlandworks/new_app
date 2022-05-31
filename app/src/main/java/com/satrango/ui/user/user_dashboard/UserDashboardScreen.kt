@@ -383,8 +383,8 @@ class   UserDashboardScreen : AppCompatActivity() {
                 userLocation.text = UserUtils.getCity(context)
                 SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
-                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-                    .show()
+//                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
+//                    .show()
             }
         }
 

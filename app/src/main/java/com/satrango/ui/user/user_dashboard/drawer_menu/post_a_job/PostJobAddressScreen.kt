@@ -12,6 +12,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -164,7 +165,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.title,
             UserUtils.getUserId(this).toInt()
         )
-
+//        Log.e("POST JOB:", Gson().toJson(requestBody))
         viewModel.updateSingleMoveMyJobPost(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -447,7 +448,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             addressList.add(MonthsModel(UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(this), "0", true))
             validateFields()
         } catch (e: Exception) {
-            Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Please Check you Internet Connection: ${e.message!!}", Toast.LENGTH_LONG).show()
         }
     }
 

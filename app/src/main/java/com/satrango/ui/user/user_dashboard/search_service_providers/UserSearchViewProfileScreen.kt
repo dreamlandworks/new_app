@@ -78,16 +78,16 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
             languages.text = data.languages_known
 
             ranking.text = data.rank.toString()
-            rating.text = data.rating.toString()
+            rating.text = data.rating
             reviews.text = data.total_people.toString()
             jobs.text = data.jobs_count.toString()
-//            overAllReviews.text = data.rating.toString()
 
-//            audience.text = data.
-//            professionRating.text = data.
-//            behaviourRating.text = data.
-//            satisfactionRating.text = data.
-//            skillsRating.text = data.
+            overAllReviews.text = data.rating
+            audience.text = data.total_people.toString()
+            professionRating.text = data.professionalism
+            behaviourRating.text = data.behaviour
+            satisfactionRating.text = data.satisfaction
+            skillsRating.text = data.skill
 
             bookLaterBtn.setOnClickListener {
 //                UserUtils.bookingType = "selected"

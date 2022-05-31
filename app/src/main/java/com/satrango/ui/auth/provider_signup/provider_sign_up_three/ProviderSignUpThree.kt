@@ -665,30 +665,16 @@ class ProviderSignUpThree : AppCompatActivity() {
                 } else {
                     if (time < 10) {
                         if (time + 1 < 10) {
-                            slotList.add(
-                                TimeslotResponse(
-                                    TextUtils.join(",", daysList),
-                                    "0$time:00:00",
-                                    "0${time + 1}:00:00"
-                                )
-                            )
+                            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), "0$time:00:00", "0${time + 1}:00:00"))
                         } else {
-                            slotList.add(
-                                TimeslotResponse(
-                                    TextUtils.join(",", daysList),
-                                    "0$time:00:00",
-                                    "${time + 1}:00:00"
-                                )
-                            )
+                            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), "0$time:00:00", "${time + 1}:00:00"))
                         }
                     } else {
-                        slotList.add(
-                            TimeslotResponse(
-                                TextUtils.join(",", daysList),
-                                "$time:00:00",
-                                "${time + 1}:00:00"
-                            )
-                        )
+                        if (time + 1 == 24) {
+                            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), "$time:00:00", "00:00:00"))
+                        } else {
+                            slotList.add(TimeslotResponse(TextUtils.join(",", daysList), "$time:00:00", "${time + 1}:00:00"))
+                        }
                     }
                 }
             }

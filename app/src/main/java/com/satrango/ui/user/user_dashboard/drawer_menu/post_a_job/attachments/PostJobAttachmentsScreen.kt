@@ -44,6 +44,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpO
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.models.ProviderOneModel
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsAdapter
 import com.satrango.ui.user.bookings.booking_attachments.AttachmentsListener
+import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.MyJobPostsScreen
@@ -195,7 +196,14 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
 
             attachments.setOnClickListener {
-                openImagePicker()
+//                openImagePicker()
+//                getImageFromGallery()
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "*/*"
+                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                startActivityForResult(intent, GALLERY_REQUEST)
             }
 
         }
@@ -211,25 +219,25 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         }
     }
 
-    private fun openImagePicker() {
-        val options = resources.getStringArray(R.array.imageSelections)
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select image")
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> getImageFromGallery()
-                    1 -> capturePictureFromCamera()
-                }
-            }
-        val dialog = builder.create()
-        dialog.show()
-    }
+//    private fun openImagePicker() {
+//        val options = resources.getStringArray(R.array.imageSelections)
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle("Select image")
+//            .setItems(options) { dialog, which ->
+//                when (which) {
+//                    0 -> getImageFromGallery()
+//                    1 -> capturePictureFromCamera()
+//                }
+//            }
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
-    private fun capturePictureFromCamera() {
-        val cameraIntent = Intent()
-        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
-        startActivityForResult(cameraIntent, CAMERA_REQUEST)
-    }
+//    private fun capturePictureFromCamera() {
+//        val cameraIntent = Intent()
+//        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
+//        startActivityForResult(cameraIntent, CAMERA_REQUEST)
+//    }
 
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
@@ -377,12 +385,13 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (it.data!!.user_plan_id != "0") {
-                        showSuccessDialog("Post Job Updated Successful")
-                    } else {
-                        UserMyAccountScreen.FROM_MY_ACCOUNT = false
-//                        startActivity(Intent(this, UserPlanScreen::class.java))
-                    }
+                    showSuccessDialog("Post Job Updated Successful")
+//                    if (it.data!!.user_plan_id != "0") {
+//                        showSuccessDialog("Post Job Updated Successful")
+//                    } else {
+//                        UserMyAccountScreen.FROM_MY_ACCOUNT = false
+////                        startActivity(Intent(this, UserPlanScreen::class.java))
+//                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -524,51 +533,123 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         }
     }
 
-    private fun getImageFromGallery() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, GALLERY_REQUEST)
-    }
+//    private fun getImageFromGallery() {
+//        val intent = Intent()
+//        intent.action = Intent.ACTION_GET_CONTENT
+//        intent.type = "image/*"
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//        startActivityForResult(intent, GALLERY_REQUEST)
+//    }
 
     @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+//            if (data.clipData != null) {
+//                val count: Int = data.clipData!!.itemCount
+//                for (i in 0 until count) {
+//                    val imageUri = data.clipData!!.getItemAt(i).uri
+//                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri), "", ""))
+//                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
+//                }
+//            } else if (data.data != null) {
+//                val imageUri = data.data
+//                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", getImageFilePath(imageUri!!), "", ""))
+//                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
+//            }
+//            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
+//
+//        }
+//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+//            val extras: Bundle = data.extras!!
+//            val imageBitmap = extras["data"] as Bitmap?
+//            val storageRef = FirebaseStorage.getInstance().reference
+//            val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+//            val profilePicStorageRef = storageRef.child("images/$timeStamp.jpg")
+//            val imageProgressDialog = ProgressDialog(this)
+//            imageProgressDialog.setMessage("Uploading Image...")
+//            imageProgressDialog.setCancelable(false)
+//            imageProgressDialog.show()
+//            profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+//                toast(this, it.message!!)
+//            }.addOnSuccessListener {
+//                profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
+//                    val url = uri.toString()
+//                    firebaseDatabaseRef.child(timeStamp).setValue(url)
+//                    progressDialog.dismiss()
+//                    val menuListener = object : ValueEventListener {
+//                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                            dataSnapshot.children.forEach { data ->
+//                                val image_url = data.value.toString()
+//                                val image_key = data.key.toString()
+////                                Log.e("SNAPSHOT:", image_url)
+//                                var existed = false
+//                                for (image in imagePathList) {
+//                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+//                                            "",
+//                                            image_url,
+//                                            "",
+//                                            image_key
+//                                        ).file_name == image_url
+//                                    ) {
+//                                        existed = true
+//                                    }
+//                                }
+//                                if (!existed) {
+//                                    imagePathList.add(
+//                                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+//                                            "",
+//                                            image_url,
+//                                            "",
+//                                            image_key
+//                                        )
+//                                    )
+//                                    encodedImages.add(Attachment(image_url, ""))
+//                                }
+//                            }
+//                            binding.attachmentsRV.layoutManager = LinearLayoutManager(
+//                                this@PostJobAttachmentsScreen,
+//                                LinearLayoutManager.HORIZONTAL,
+//                                false
+//                            )
+//                            binding.attachmentsRV.adapter =
+//                                AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
+//                            imageProgressDialog.dismiss()
+////                            Log.e("URLS", Gson().toJson(encodedImages))
+//                        }
+//
+//                        override fun onCancelled(databaseError: DatabaseError) {
+//                        }
+//                    }
+//                    firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
+//                    firebaseDatabaseRef.addListenerForSingleValueEvent(menuListener)
+//                }
+//            }
+//        }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+
             if (data.clipData != null) {
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
-                    val imageUri = data.clipData!!.getItemAt(i).uri
-                    imagePathList.add(
-                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                            "",
-                            getImageFilePath(imageUri),
-                            "",
-                            ""
-                        )
-                    )
-                    encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
+                    val uri = data.clipData!!.getItemAt(i).uri
+                    val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
+                    val fileExtension = UserUtils.getFileExtension(this, uri)
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension))
+                    encodedImages.add(Attachment(encodedImage, fileExtension))
+//                    encodedImages.add(Attachment(getBase64FromFile(uri)!!, getFileName(uri)))
                 }
             } else if (data.data != null) {
-                val imageUri = data.data
-                imagePathList.add(
-                    com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                        "",
-                        getImageFilePath(imageUri!!),
-                        "",
-                        ""
-                    )
-                )
-                encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
+                val uri = data.data
+                val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", ""))
+                encodedImages.add(Attachment(encodedImage, UserUtils.getFileExtension(this, uri!!)))
             }
-            binding.attachmentsRV.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-//            Log.e("PATHS:", Gson().toJson(imagePathList))
-
-        }
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+//            toast(this, encodedImages.size.toString())
+//            Log.e("IMAGES:", Gson().toJson(encodedImages))
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?
             val storageRef = FirebaseStorage.getInstance().reference
@@ -579,6 +660,7 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             imageProgressDialog.setCancelable(false)
             imageProgressDialog.show()
             profilePicStorageRef.putFile(getImageUri(this, imageBitmap!!)!!).addOnFailureListener {
+                imageProgressDialog.dismiss()
                 toast(this, it.message!!)
             }.addOnSuccessListener {
                 profilePicStorageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -593,40 +675,22 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
 //                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
-                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                                            "",
-                                            image_url,
-                                            "",
-                                            image_key
-                                        ).file_name == image_url
-                                    ) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
                                         existed = true
                                     }
                                 }
                                 if (!existed) {
-                                    imagePathList.add(
-                                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
-                                            "",
-                                            image_url,
-                                            "",
-                                            image_key
-                                        )
-                                    )
-                                    encodedImages.add(Attachment(image_url, ""))
+                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                    encodedImages.add(Attachment(image_url, UserUtils.getFileExtension(this@PostJobAttachmentsScreen, uri)))
                                 }
                             }
-                            binding.attachmentsRV.layoutManager = LinearLayoutManager(
-                                this@PostJobAttachmentsScreen,
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
-                            binding.attachmentsRV.adapter =
-                                AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
+                            binding.attachmentsRV.layoutManager = LinearLayoutManager(this@PostJobAttachmentsScreen, LinearLayoutManager.HORIZONTAL, false)
+                            binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this@PostJobAttachmentsScreen)
                             imageProgressDialog.dismiss()
-//                            Log.e("URLS", Gson().toJson(encodedImages))
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
+
                         }
                     }
                     firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
@@ -636,37 +700,37 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         }
     }
 
-    private fun encodeToBase64FromUri(imageUri: Uri): String {
-        var imageStream: InputStream? = null
-        try {
-            imageStream = contentResolver.openInputStream(imageUri)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-        return UserUtils.encodeToBase64(yourSelectedImage)!!
-    }
-
-    private fun getImageFilePath(uri: Uri): String {
-        val file = File(uri.path!!)
-        val filePath: List<String> = file.path.split(":")
-        val image_id = filePath[filePath.size - 1]
-        val cursor = contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            null,
-            MediaStore.Images.Media._ID + " = ? ",
-            arrayOf(image_id),
-            null
-        )
-        if (cursor != null) {
-            cursor.moveToFirst()
-            val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-//            Log.e("IMAGES PATH: ", imagePath)
-            cursor.close()
-            return imagePath
-        }
-        return ""
-    }
+//    private fun encodeToBase64FromUri(imageUri: Uri): String {
+//        var imageStream: InputStream? = null
+//        try {
+//            imageStream = contentResolver.openInputStream(imageUri)
+//        } catch (e: FileNotFoundException) {
+//            e.printStackTrace()
+//        }
+//        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
+//        return UserUtils.encodeToBase64(yourSelectedImage)!!
+//    }
+//
+//    private fun getImageFilePath(uri: Uri): String {
+//        val file = File(uri.path!!)
+//        val filePath: List<String> = file.path.split(":")
+//        val image_id = filePath[filePath.size - 1]
+//        val cursor = contentResolver.query(
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//            null,
+//            MediaStore.Images.Media._ID + " = ? ",
+//            arrayOf(image_id),
+//            null
+//        )
+//        if (cursor != null) {
+//            cursor.moveToFirst()
+//            val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+////            Log.e("IMAGES PATH: ", imagePath)
+//            cursor.close()
+//            return imagePath
+//        }
+//        return ""
+//    }
 
     override fun deleteAttachment(
         position: Int,

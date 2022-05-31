@@ -29,7 +29,11 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProviderMyBidsScreen : AppCompatActivity() {
 
@@ -57,36 +61,36 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
-            val newJobsList = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), ProviderMyBidsResModel::class.java)
-            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
-            val list = ArrayList<JobPostDetail>()
-            for (sp in newJobsList.job_post_details) {
-                if (filter.priceRangeFrom.toDouble() <= sp.amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.amount.toDouble()) {
-                    if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
-                        list.add(sp)
-                    }
-                }
-            }
+//        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
+//            val newJobsList = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), ProviderMyBidsResModel::class.java)
+//            val filter = Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
+//            val list = ArrayList<JobPostDetail>()
+//            for (sp in newJobsList.job_post_details) {
+//                if (filter.priceRangeFrom.toDouble() <= sp.amount.toDouble() && filter.priceRangeTo.toDouble() >= sp.amount.toDouble()) {
+//                    if (filter.distance.toDouble() >= sp.distance_miles.toDouble()) {
+//                        list.add(sp)
+//                    }
+//                }
+//            }
+//
+//            when {
+//                filter.lowToHigh -> {
+//                    binding.note.visibility = View.GONE
+//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedBy { data: JobPostDetail -> data.amount })
+//                }
+//                filter.highToLow -> {
+//                    binding.note.visibility = View.GONE
+//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedByDescending { data: JobPostDetail -> data.amount })
+//                }
+//                else -> {
+//                    binding.note.visibility = View.GONE
+//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list)
+//                }
+//            }
+//        }
 
-            when {
-                filter.lowToHigh -> {
-                    binding.note.visibility = View.GONE
-                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedBy { data: JobPostDetail -> data.amount })
-                }
-                filter.highToLow -> {
-                    binding.note.visibility = View.GONE
-                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list.sortedByDescending { data: JobPostDetail -> data.amount })
-                }
-                else -> {
-                    binding.note.visibility = View.GONE
-                    binding.recyclerView.adapter = ProviderMyBidsAdapter(list)
-                }
-            }
-        }
-
-        val factory = ViewModelFactory(ProviderMyBidsRepository())
-        viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
+//        val factory = ViewModelFactory(ProviderMyBidsRepository())
+//        viewModel = ViewModelProvider(this, factory)[ProviderMyBidsViewModel::class.java]
 
         updateUIWithNewJobs()
         binding.newJobsBtn.setOnClickListener {
@@ -126,66 +130,114 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 
     private fun updateUIWithNewJobs() {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.jobsList(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            try {
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
+                progressDialog.dismiss()
+                val data = response.job_post_details
+                binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
+                binding.note.visibility = View.GONE
+                if (data.isNotEmpty()) {
+                    binding.sortFilterBtn.visibility = View.VISIBLE
+                } else {
+                    binding.sortFilterBtn.visibility = View.GONE
                 }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    val data = it.data!!
-                    binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
-                    binding.note.visibility = View.GONE
-                    if (it.data.isNotEmpty()) {
-                        binding.sortFilterBtn.visibility = View.VISIBLE
-                    } else {
-                        binding.sortFilterBtn.visibility = View.GONE
-                    }
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    binding.note.visibility = View.VISIBLE
-//                    snackBar(binding.recyclerView, it.message!!)
-                }
+            } catch (e: Exception) {
+                progressDialog.dismiss()
+                binding.note.visibility = View.VISIBLE
+                toast(this@ProviderMyBidsScreen, e.message!!)
             }
         }
+//        viewModel.jobsList(this, requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    val data = it.data!!
+//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
+//                    binding.note.visibility = View.GONE
+//                    if (it.data.isNotEmpty()) {
+//                        binding.sortFilterBtn.visibility = View.VISIBLE
+//                    } else {
+//                        binding.sortFilterBtn.visibility = View.GONE
+//                    }
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    binding.note.visibility = View.VISIBLE
+////                    snackBar(binding.recyclerView, it.message!!)
+//                }
+//            }
+//        }
     }
 
     private fun updateUI(status: String) {
 //        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.bidsList(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    val list = it.data!!
-                    val filterList = ArrayList<JobPostDetail>()
-                    if (status == "Open") {
-                        for (bid in list) {
-                            if (bid.bid_type == status) {
-                                filterList.add(bid)
-                            }
-                        }
-                    } else {
-                        for (bid in list) {
-                            if (bid.bid_type != "Open") {
-                                filterList.add(bid)
-                            }
+        toast(this, Gson().toJson(requestBody))
+        CoroutineScope(Dispatchers.Main).launch {
+            progressDialog.show()
+            try {
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidsList(requestBody)
+                progressDialog.dismiss()
+                val list = response.job_post_details
+                val filterList = ArrayList<JobPostDetail>()
+                if (status == "Open") {
+                    for (bid in list) {
+                        if (bid.bid_type == status) {
+                            filterList.add(bid)
                         }
                     }
-                    binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
-                    binding.note.visibility = View.GONE
+                } else {
+                    for (bid in list) {
+                        if (bid.bid_type != "Open") {
+                            filterList.add(bid)
+                        }
+                    }
                 }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    binding.note.visibility = View.VISIBLE
-//                    snackBar(binding.recyclerView, it.message!!)
-                }
+                binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
+                binding.note.visibility = View.GONE
+            } catch (e: Exception) {
+                progressDialog.dismiss()
+                binding.note.visibility = View.VISIBLE
+                toast(this@ProviderMyBidsScreen, e.message!!)
             }
         }
+//        viewModel.bidsList(this, requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    val list = it.data!!
+//                    val filterList = ArrayList<JobPostDetail>()
+//                    if (status == "Open") {
+//                        for (bid in list) {
+//                            if (bid.bid_type == status) {
+//                                filterList.add(bid)
+//                            }
+//                        }
+//                    } else {
+//                        for (bid in list) {
+//                            if (bid.bid_type != "Open") {
+//                                filterList.add(bid)
+//                            }
+//                        }
+//                    }
+//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
+//                    binding.note.visibility = View.GONE
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    binding.note.visibility = View.VISIBLE
+////                    snackBar(binding.recyclerView, it.message!!)
+//                }
+//            }
+//        }
     }
 
     override fun onBackPressed() {

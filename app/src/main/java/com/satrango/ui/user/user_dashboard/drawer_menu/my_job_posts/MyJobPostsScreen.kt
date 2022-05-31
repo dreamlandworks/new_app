@@ -1,6 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityMyJobPostsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.MyJobPostReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
@@ -71,8 +73,12 @@ class MyJobPostsScreen : AppCompatActivity() {
 
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
             resources.getString(R.string.my_job_posts)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)

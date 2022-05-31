@@ -384,28 +384,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         }
     }
 
-    fun getFileExtension(uri: Uri): String {
-        var result: String? = null
-        if (uri.scheme == "content") {
-            val cursor = contentResolver.query(uri, null, null, null, null)
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
-            } finally {
-                cursor!!.close()
-            }
-        }
-        if (result == null) {
-            result = uri.path
-            val cut = result!!.lastIndexOf('/')
-            if (cut != -1) {
-                result = result.substring(cut + 1)
-            }
-        }
-        return result.substring(result.lastIndexOf(".") + 1)
-    }
-
     private fun loadAddressOnUI() {
         binding.at.visibility = View.VISIBLE
         binding.addressText.visibility = View.VISIBLE
@@ -414,19 +392,19 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 //        Log.e("ADDRESSES:", Gson().toJson(UserUtils.addressList))
     }
 
-    private fun openImagePicker() {
-        val options = resources.getStringArray(R.array.imageSelections)
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select image")
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> getImageFromGallery()
-                    1 -> capturePictureFromCamera()
-                }
-            }
-        val dialog = builder.create()
-        dialog.show()
-    }
+//    private fun openImagePicker() {
+//        val options = resources.getStringArray(R.array.imageSelections)
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle("Select image")
+//            .setItems(options) { dialog, which ->
+//                when (which) {
+//                    0 -> getImageFromGallery()
+//                    1 -> capturePictureFromCamera()
+//                }
+//            }
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: Data) {
@@ -450,32 +428,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         startActivityForResult(intent, GALLERY_REQUEST)
     }
 
-    private fun getBase64FromFile(filepath: Uri?): String? {
-        var inputStream: InputStream? = null
-        var byteArrayOutputStream = ByteArrayOutputStream()
-        try {
-            inputStream = contentResolver.openInputStream(filepath!!)
-            val buffer = ByteArray(1024)
-            byteArrayOutputStream = ByteArrayOutputStream()
-            var bytesRead: Int
-            while (inputStream!!.read(buffer).also { bytesRead = it } != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        val pdfByteArray: ByteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(pdfByteArray, Base64.DEFAULT)
-    }
-
     @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -485,17 +437,17 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 val count: Int = data.clipData!!.itemCount
                 for (i in 0 until count) {
                     val uri = data.clipData!!.getItemAt(i).uri
-                    val encodedImage = getBase64FromFile(uri)!!
-                    val fileExtension = getFileExtension(uri)
+                    val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
+                    val fileExtension = UserUtils.getFileExtension(this, uri)
                     imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension))
                     encodedImages.add(Attachment(encodedImage, fileExtension))
 //                    encodedImages.add(Attachment(getBase64FromFile(uri)!!, getFileName(uri)))
                 }
             } else if (data.data != null) {
                 val uri = data.data
-                val encodedImage = getBase64FromFile(uri)!!
+                val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
                 imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", ""))
-                encodedImages.add(Attachment(encodedImage, getFileExtension(uri!!)))
+                encodedImages.add(Attachment(encodedImage, UserUtils.getFileExtension(this, uri!!)))
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
@@ -533,7 +485,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                 }
                                 if (!existed) {
                                     imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
-                                    encodedImages.add(Attachment(image_url, getFileExtension(uri)))
+                                    encodedImages.add(Attachment(image_url, UserUtils.getFileExtension(this@BookingAttachmentsScreen, uri)))
                                 }
                             }
                             binding.attachmentsRV.layoutManager = LinearLayoutManager(this@BookingAttachmentsScreen, LinearLayoutManager.HORIZONTAL, false)
@@ -549,42 +501,10 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     firebaseDatabaseRef.addListenerForSingleValueEvent(menuListener)
                 }
             }
-//            Log.e("FIREBASE:", Gson().toJson(imagePathList))
         }
 
     }
 
-//    private fun encodeToBase64FromUri(imageUri: Uri): String {
-//        var imageStream: InputStream? = null
-//        try {
-//            imageStream = contentResolver.openInputStream(imageUri)
-//        } catch (e: FileNotFoundException) {
-//            e.printStackTrace()
-//        }
-//        val yourSelectedImage = BitmapFactory.decodeStream(imageStream)
-//        return UserUtils.encodeToBase64(yourSelectedImage)!!
-//    }
-//
-//    private fun getImageFilePath(uri: Uri): String {
-//        val file = File(uri.path!!)
-//        val filePath: List<String> = file.path.split(":")
-//        val image_id = filePath[filePath.size - 1]
-//        val cursor = contentResolver.query(
-//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//            null,
-//            MediaStore.Images.Media._ID + " = ? ",
-//            arrayOf(image_id),
-//            null
-//        )
-//        if (cursor != null) {
-//            cursor.moveToFirst()
-//            val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-////            Log.e("IMAGES PATH: ", imagePath)
-//            cursor.close()
-//            return imagePath
-//        }
-//        return ""
-//    }
 
     override fun deleteAttachment(
         position: Int,

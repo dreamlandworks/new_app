@@ -362,7 +362,7 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.setLastName(this, userName.split(" ")[1])
             } catch (e: IndexOutOfBoundsException) {
             }
-            loginToServer(email!!, "", resources.getString(R.string.userGoogleLogin))
+            loginToServer(email, "", resources.getString(R.string.userGoogleLogin))
         } else {
             snackBar(binding.signUpBtn, "Google SignIn Failed")
         }
