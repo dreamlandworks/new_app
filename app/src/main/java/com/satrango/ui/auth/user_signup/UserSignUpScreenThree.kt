@@ -253,7 +253,8 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 )
                 selectedAge = getAge(year, monthOfYear + 1, dayOfMonth)
                 if (selectedAge < 13) {
-                    snackBar(binding.dateOfBirth, "Age must be greater than 13 years")
+                    binding.dateOfBirth.error = "Age should be greater than 13 years"
+                    binding.dateOfBirth.requestFocus()
                 }
             }, mYear, mMonth, mDay
         )

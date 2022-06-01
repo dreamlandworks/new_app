@@ -320,7 +320,7 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 }
                 is NetworkResponse.Success -> {
                     val responseData = it.data!!
-                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    val imageUrl = responseData.profile_pic
                     UserUtils.saveUserProfilePic(this@UserProfileScreen, imageUrl)
                     loadProfileImage(binding.profilePic)
                     binding.firstName.setText(responseData.fname)
