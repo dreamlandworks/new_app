@@ -76,7 +76,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         binding = ActivityProviderPlaceBidScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        toast(this, UserUtils.getPostJobId(this).toString())
+//        toast(this, UserUtils.getPostJobId(this).toString())
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }

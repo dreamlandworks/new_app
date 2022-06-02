@@ -163,7 +163,14 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.scheduled_date,
             UserUtils.time_slot_from,
             UserUtils.title,
-            UserUtils.getUserId(this).toInt()
+            UserUtils.getUserId(this).toInt(),
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this)
         )
 //        Log.e("POST JOB:", Gson().toJson(requestBody))
         viewModel.updateSingleMoveMyJobPost(this, requestBody).observe(this) {

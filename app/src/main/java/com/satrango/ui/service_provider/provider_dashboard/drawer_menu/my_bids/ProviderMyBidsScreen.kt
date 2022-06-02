@@ -5,27 +5,22 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.gson.Gson
 import com.satrango.R
-import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyBidsScreenBinding
-import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.JobPostDetail
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.models.ProviderMyBidsResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.SortAndFilterServiceProvider
-import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchFilterModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
@@ -37,7 +32,6 @@ import kotlinx.coroutines.launch
 
 class ProviderMyBidsScreen : AppCompatActivity() {
 
-    private lateinit var viewModel: ProviderMyBidsViewModel
     private lateinit var binding: ActivityProviderMyBidsScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
 
@@ -57,7 +51,8 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_bids)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.my_bids)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
@@ -129,11 +124,13 @@ class ProviderMyBidsScreen : AppCompatActivity() {
     }
 
     private fun updateUIWithNewJobs() {
-        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody =
+            ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
+                val response =
+                    RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
                 progressDialog.dismiss()
                 val data = response.job_post_details
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
@@ -177,11 +174,12 @@ class ProviderMyBidsScreen : AppCompatActivity() {
     private fun updateUI(status: String) {
 //        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidsList(requestBody)
+                val response =
+                    RetrofitBuilder.getServiceProviderRetrofitInstance().getBidsList(requestBody)
                 progressDialog.dismiss()
                 val list = response.job_post_details
                 val filterList = ArrayList<JobPostDetail>()
@@ -248,7 +246,11 @@ class ProviderMyBidsScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

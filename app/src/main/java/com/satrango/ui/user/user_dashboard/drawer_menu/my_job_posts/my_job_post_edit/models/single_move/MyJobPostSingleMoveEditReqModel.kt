@@ -22,5 +22,12 @@ data class MyJobPostSingleMoveEditReqModel(
     val scheduled_date: String,
     val time_slot_from: String,
     val title: String,
-    val users_id: Int
+    val users_id: Int,
+    val address: String,
+    val city: String,
+    val country: String,
+    val postal_code: String,
+    val state: String,
+    val user_lat: String,
+    val user_long: String,
 )

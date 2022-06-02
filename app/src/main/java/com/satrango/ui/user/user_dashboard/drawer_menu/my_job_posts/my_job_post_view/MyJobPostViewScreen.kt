@@ -144,10 +144,9 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         if (images.isEmpty()) {
             binding.attachmentsLayout.visibility = View.GONE
         } else {
-            binding.attachmentsRV.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(images, this)
-            toast(this, images.size.toString())
+//            toast(this, images.size.toString())
         }
 
         binding.bidCount.text = data.job_post_details.total_bids.toString()
