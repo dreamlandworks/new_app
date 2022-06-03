@@ -439,8 +439,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                             "",
                             getImageFilePath(imageUri),
                             "",
-                            ""
-                        )
+                            "",
+                        "")
                     )
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
                 }
@@ -450,6 +450,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
                         "",
                         getImageFilePath(imageUri!!),
+                        "",
                         "",
                         ""
                     )
@@ -480,12 +481,12 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 //                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
-                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, "").file_name == image_url) {
                                         existed = true
                                     }
                                 }
                                 if (!existed) {
-                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, ""))
                                     encodedImages.add(Attachment(image_url, ""))
                                 }
                             }

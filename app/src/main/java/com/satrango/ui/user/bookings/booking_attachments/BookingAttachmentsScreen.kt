@@ -439,14 +439,14 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     val uri = data.clipData!!.getItemAt(i).uri
                     val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
                     val fileExtension = UserUtils.getFileExtension(this, uri)
-                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension))
+                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension, ""))
                     encodedImages.add(Attachment(encodedImage, fileExtension))
 //                    encodedImages.add(Attachment(getBase64FromFile(uri)!!, getFileName(uri)))
                 }
             } else if (data.data != null) {
                 val uri = data.data
                 val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
-                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", ""))
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", "", ""))
                 encodedImages.add(Attachment(encodedImage, UserUtils.getFileExtension(this, uri!!)))
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -479,12 +479,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 //                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
-                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key).file_name == image_url) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, "").file_name == image_url) {
                                         existed = true
                                     }
                                 }
                                 if (!existed) {
-                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key))
+                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, ""))
                                     encodedImages.add(Attachment(image_url, UserUtils.getFileExtension(this@BookingAttachmentsScreen, uri)))
                                 }
                             }

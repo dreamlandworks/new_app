@@ -81,6 +81,21 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupOne"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/gray_corner"
+                    android:hint="@string/keywords_skills"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    tools:ignore="LabelFor" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -88,6 +103,7 @@
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    android:visibility="gone"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/purple_500">
 
@@ -99,7 +115,8 @@
                         android:inputType="text"
                         android:paddingHorizontal="@dimen/_15sdp"
                         android:singleLine="true"
-                        android:textSize="@dimen/edit_text" />
+                        android:textSize="@dimen/edit_text"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -117,11 +134,27 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupTwo"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="wrap_content" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/gray_corner"
+                    android:hint="@string/keywords_skills"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    tools:ignore="LabelFor" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    android:visibility="gone"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
@@ -154,11 +187,27 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sub_text" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupThree"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="wrap_content" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteThree"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/gray_corner"
+                    android:hint="@string/keywords_skills"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    tools:ignore="LabelFor" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    android:visibility="gone"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"

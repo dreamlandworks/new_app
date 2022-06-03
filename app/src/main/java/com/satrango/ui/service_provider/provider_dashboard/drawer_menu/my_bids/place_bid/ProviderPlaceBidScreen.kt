@@ -350,7 +350,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                             "",
                             getImageFilePath(imageUri),
                             ""
-                        ,"")
+                        ,"", "")
                     )
                     encodedImages.add(
                         Attachment(
@@ -367,7 +367,8 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
                         "",
                         getImageFilePath(imageUri!!),
                         ""
-                        ,""
+                        ,"",
+                        ""
                     )
                 )
                 encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))

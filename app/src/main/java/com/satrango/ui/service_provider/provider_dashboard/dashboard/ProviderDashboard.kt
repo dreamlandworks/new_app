@@ -1,6 +1,7 @@
 package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
+import android.R.attr.button
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,15 +12,14 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.util.DisplayMetrics
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -33,13 +33,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.bumptech.glide.load.HttpException
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonSyntaxException
-import com.satrango.R
+import com.satrango.GpsLocationReceiver
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
 import com.satrango.remote.NetworkResponse
@@ -70,28 +72,23 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
-import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
+import com.satrango.R
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
+import org.json.JSONObject
 import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import android.os.CountDownTimer
-import android.view.LayoutInflater
-import com.bumptech.glide.load.HttpException
-import com.google.firebase.database.FirebaseDatabase
-import com.satrango.GpsLocationReceiver
-import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
-import com.satrango.utils.UserUtils.isProvider
-import org.json.JSONObject
 
 
 class ProviderDashboard : AppCompatActivity() {
@@ -628,8 +625,12 @@ class ProviderDashboard : AppCompatActivity() {
         val dialog = BottomSheetDialog(context)
         val dialogView = layoutInflater.inflate(R.layout.service_provider_activation_dialog, null)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
+        val message = dialogView.findViewById<TextView>(R.id.text)
         val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
         val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+        message.text = resources.getString(R.string.activation_note)
+        noBtn.visibility = View.VISIBLE
+
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserLoginTypeScreen::class.java))
@@ -669,7 +670,14 @@ class ProviderDashboard : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.service_provider_activation_dialog, null)
         val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
         val yesBtn = dialogView.findViewById<TextView>(R.id.yesBtn)
+        val message = dialogView.findViewById<TextView>(R.id.text)
         val noBtn = dialogView.findViewById<TextView>(R.id.noBtn)
+        val params = noBtn.layoutParams as RelativeLayout.LayoutParams
+        params.addRule(RelativeLayout.CENTER_IN_PARENT)
+        message.text = resources.getString(R.string.activation_awaiting_message)
+        yesBtn.layoutParams = params
+        noBtn.visibility = View.GONE
+        yesBtn.text = resources.getString(R.string.ok)
         closeBtn.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, UserLoginTypeScreen::class.java))

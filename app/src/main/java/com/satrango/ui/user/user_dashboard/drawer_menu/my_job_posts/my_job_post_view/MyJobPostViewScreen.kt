@@ -108,8 +108,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding.bidRanges.text = data.job_post_details.range_slots
         binding.expiresOn.text = data.job_post_details.expires_in
         binding.scheduleDate.text = data.job_post_details.scheduled_date
-        binding.estimateTime.text =
-            "${data.job_post_details.estimate_time} ${data.job_post_details.estimate_type}"
+        binding.estimateTime.text = "${data.job_post_details.estimate_time} ${data.job_post_details.estimate_type}"
 
         var languages = ""
         for (language in data.languages) {
@@ -232,7 +231,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt()
         )
 //        Log.e("JOB POST:", Gson().toJson(requestBody))
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.myJobPostsViewDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

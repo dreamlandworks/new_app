@@ -267,6 +267,7 @@
     <string name="_0">0</string>
     <string name="booking">Booking</string>
     <string name="booking_id">Booking Id</string>
+    <string name="ok">Ok</string>
     <string name="booking_ref_id">Booking Reference Id</string>
     <string name="order_id">Order ID</string>
     <string name="txn_id">Txn ID</string>
@@ -514,6 +515,7 @@
     <string name="panic">PANIC</string>
     <string name="call">Call</string>
     <string name="message">Message</string>
+    <string name="activation_awaiting_message">Your profile is waiting for Approval.\nPlease wait until your profile is Approved</string>
     <string name="view_files">View Files</string>
     <string name="request_installment">Request Installment</string>
     <string name="raise_extra_demand">Raise Extra Demand</string>
