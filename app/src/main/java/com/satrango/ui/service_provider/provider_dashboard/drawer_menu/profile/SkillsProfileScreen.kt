@@ -156,10 +156,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, profession.name, profession.id))
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, profession.name, profession.id, "", ""))
                                 } else {
                                     professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
                                 }
                             }
                             professionFList.add(professionOneList[0])
@@ -221,10 +221,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, profession.name, profession.id))
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, profession.name, profession.id, "", ""))
                                 } else {
                                     professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
                                 }
                             }
                             professionFList.add(professionTwoList[0])
@@ -287,10 +287,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, profession.name, profession.id))
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, profession.name, profession.id, "", ""))
                                 } else {
                                     professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, chip.text.toString(), "0"))
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
                                 }
                             }
                             professionFList.add(professionThreeList[0])
@@ -595,7 +595,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     profession.tariff_per_hour,
                                     profession.exp,
                                     profession.profession_name,
-                                    profession.profession_id
+                                    profession.profession_id,
+                                    "",
+                                    ""
                                 )
                             )
                         }

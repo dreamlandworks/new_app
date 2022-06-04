@@ -6,6 +6,7 @@ data class SearchServiceProviderReqModel(
     val country: String,
     val key: String,
     val search_phrase_id: String,
+    val search_phrase: String,
     val postal_code: String,
     val state: String,
     val user_lat: String,

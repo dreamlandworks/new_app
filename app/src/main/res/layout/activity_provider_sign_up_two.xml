@@ -92,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:background="@drawable/gray_corner"
+                    android:inputType="textCapSentences"
                     android:hint="@string/keywords_skills"
                     android:paddingHorizontal="@dimen/_10sdp"
                     tools:ignore="LabelFor" />
@@ -144,6 +145,7 @@
                     android:id="@+id/autoCompleteTwo"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
+                    android:inputType="textCapSentences"
                     android:background="@drawable/gray_corner"
                     android:hint="@string/keywords_skills"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -197,6 +199,7 @@
                     android:id="@+id/autoCompleteThree"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
+                    android:inputType="textCapSentences"
                     android:background="@drawable/gray_corner"
                     android:hint="@string/keywords_skills"
                     android:paddingHorizontal="@dimen/_10sdp"

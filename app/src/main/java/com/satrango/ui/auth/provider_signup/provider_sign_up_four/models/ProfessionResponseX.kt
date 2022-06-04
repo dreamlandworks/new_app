@@ -8,5 +8,7 @@ data class ProfessionResponseX(
     var tariff_per_hour: String,
     var experience: String,
     val name: String,
-    val prof_id: String
+    val prof_id: String,
+    var category_id: String,
+    var subcategory_id: String,
 )

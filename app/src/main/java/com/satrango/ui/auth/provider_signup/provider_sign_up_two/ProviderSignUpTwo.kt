@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -110,6 +111,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                     }
                                     if (!existed) {
                                         ProviderUtils.profession!![0].keywords_responses.add(KeywordsResponse(key.keyword_id, key.keyword))
+                                        ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
+                                        ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
                                     }
                                 } else {
                                     for (keyword in ProviderUtils.profession!![0].keywords_responses) {
@@ -118,17 +121,20 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                         }
                                     }
                                     if (!existed) {
-                                        ProviderUtils.profession!![0].keywords_responses.add(
-                                            KeywordsResponse("0", chipText)
-                                        )
+                                        ProviderUtils.profession!![0].keywords_responses.add(KeywordsResponse("0", chipText))
+                                        ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
+                                        ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
                                     }
                                 }
                             }
                         } else {
                             ProviderUtils.profession!![0].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
+                            ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
+                            ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
                         }
-                        ProviderUtils.profession!![0].keywords_responses =
-                            ProviderUtils.profession!![0].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                        ProviderUtils.profession!![0].keywords_responses = ProviderUtils.profession!![0].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                        ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
+                        ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
                     }
                 }
 
@@ -206,9 +212,9 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                         }
                                     }
                                     if (!existed) {
-                                        ProviderUtils.profession!![1].keywords_responses.add(
-                                            KeywordsResponse(key.keyword_id, key.keyword)
-                                        )
+                                        ProviderUtils.profession!![1].keywords_responses.add(KeywordsResponse(key.keyword_id, key.keyword))
+                                        ProviderUtils.profession!![1].category_id = key.category_id
+                                        ProviderUtils.profession!![1].subcategory_id = key.subcategory_id
                                     }
                                 } else {
                                     for (keyword in ProviderUtils.profession!![1].keywords_responses) {
@@ -217,23 +223,21 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                         }
                                     }
                                     if (!existed) {
-                                        ProviderUtils.profession!![1].keywords_responses.add(
-                                            KeywordsResponse("0", chipText)
-                                        )
+                                        ProviderUtils.profession!![1].keywords_responses.add(KeywordsResponse("0", chipText))
+                                        ProviderUtils.profession!![1].category_id = key.category_id
+                                        ProviderUtils.profession!![1].subcategory_id = key.subcategory_id
                                     }
                                 }
                             }
                         } else {
-                            ProviderUtils.profession!![1].keywords_responses.add(
-                                KeywordsResponse(
-                                    "0",
-                                    chip.text.toString()
-                                )
-                            )
+                            ProviderUtils.profession!![1].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
+                            ProviderUtils.profession!![1].category_id = keywordsTwoMList[0].category_id
+                            ProviderUtils.profession!![1].subcategory_id = keywordsTwoMList[0].subcategory_id
                         }
 
-                        ProviderUtils.profession!![1].keywords_responses =
-                            ProviderUtils.profession!![1].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                        ProviderUtils.profession!![1].keywords_responses = ProviderUtils.profession!![1].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                        ProviderUtils.profession!![1].category_id = keywordsTwoMList[0].category_id
+                        ProviderUtils.profession!![1].subcategory_id = keywordsTwoMList[0].subcategory_id
                     }
                 }
             }
@@ -293,6 +297,48 @@ class ProviderSignUpTwo : AppCompatActivity() {
 //            }
 //        }
 
+        binding.autoCompleteOne.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+                val chip = com.google.android.material.chip.Chip(this@ProviderSignUpTwo)
+                chip.text = binding.autoCompleteOne.text.toString().trim()
+                chip.isCloseIconVisible = true
+                chip.setOnCloseIconClickListener {
+                    binding.chipGroupOne.removeView(chip)
+                }
+                binding.chipGroupOne.addView(chip)
+                binding.autoCompleteOne.text = null
+            }
+            false
+        }
+
+        binding.autoCompleteTwo.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+                val chip = com.google.android.material.chip.Chip(this@ProviderSignUpTwo)
+                chip.text = binding.autoCompleteTwo.text.toString().trim()
+                chip.isCloseIconVisible = true
+                chip.setOnCloseIconClickListener {
+                    binding.chipGroupTwo.removeView(chip)
+                }
+                binding.chipGroupTwo.addView(chip)
+                binding.autoCompleteTwo.text = null
+            }
+            false
+        }
+
+        binding.autoCompleteThree.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+                val chip = com.google.android.material.chip.Chip(this@ProviderSignUpTwo)
+                chip.text = binding.autoCompleteThree.text.toString().trim()
+                chip.isCloseIconVisible = true
+                chip.setOnCloseIconClickListener {
+                    binding.chipGroupThree.removeView(chip)
+                }
+                binding.chipGroupThree.addView(chip)
+                binding.autoCompleteThree.text = null
+            }
+            false
+        }
+
         binding.autoCompleteThree.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 loadKeyWords(ProviderUtils.profession!![2].prof_id, 2)
@@ -307,18 +353,16 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                 for (key in keywordsThreeMList) {
                                     var existed = false
                                     val chipText = chip.text.toString()
-                                    if (chipText.lowercase(Locale.getDefault())
-                                            .trim() == key.keyword.lowercase(Locale.getDefault()).trim()
-                                    ) {
+                                    if (chipText.lowercase(Locale.getDefault()).trim() == key.keyword.lowercase(Locale.getDefault()).trim()) {
                                         for (keyword in ProviderUtils.profession!![2].keywords_responses) {
                                             if (key.keyword.lowercase(Locale.getDefault()).trim() == keyword.name.lowercase(Locale.getDefault()).trim() && key.keyword_id == keyword.keyword_id) {
                                                 existed = true
                                             }
                                         }
                                         if (!existed) {
-                                            ProviderUtils.profession!![2].keywords_responses.add(
-                                                KeywordsResponse(key.keyword_id, key.keyword)
-                                            )
+                                            ProviderUtils.profession!![2].category_id = key.category_id
+                                            ProviderUtils.profession!![2].subcategory_id = key.subcategory_id
+                                            ProviderUtils.profession!![2].keywords_responses.add(KeywordsResponse(key.keyword_id, key.keyword))
                                         }
                                     } else {
                                         for (keyword in ProviderUtils.profession!![2].keywords_responses) {
@@ -327,18 +371,20 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                             }
                                         }
                                         if (!existed) {
-                                            ProviderUtils.profession!![2].keywords_responses.add(
-                                                KeywordsResponse("0", chipText)
-                                            )
+                                            ProviderUtils.profession!![2].keywords_responses.add(KeywordsResponse("0", chipText))
+                                            ProviderUtils.profession!![2].category_id = key.category_id
+                                            ProviderUtils.profession!![2].subcategory_id = key.subcategory_id
                                         }
                                     }
                                 }
                             } else {
-                                ProviderUtils.profession!![2].keywords_responses.add(
-                                    KeywordsResponse("0", chip.text.toString())
-                                )
+                                ProviderUtils.profession!![2].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
+                                ProviderUtils.profession!![2].category_id = keywordsThreeMList[0].category_id
+                                ProviderUtils.profession!![2].subcategory_id = keywordsThreeMList[0].subcategory_id
                             }
                             ProviderUtils.profession!![2].keywords_responses = ProviderUtils.profession!![2].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
+                            ProviderUtils.profession!![2].category_id = keywordsThreeMList[0].category_id
+                            ProviderUtils.profession!![2].subcategory_id = keywordsThreeMList[0].subcategory_id
                         }
                     }
                 }
@@ -398,11 +444,8 @@ class ProviderSignUpTwo : AppCompatActivity() {
 //        }
 
         binding.apply {
-
             nextBtn.setOnClickListener { validateFields() }
-
             backBtn.setOnClickListener { onBackPressed() }
-
         }
 
     }

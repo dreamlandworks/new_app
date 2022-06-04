@@ -270,7 +270,7 @@
         <entry key="app/src/main/res/layout/fragment_provider_alerts_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_provider_home_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/fragment_provider_offers_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/fragment_skills_profile_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/fragment_skills_profile_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_tariff_timings_profile_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/fragment_user_alert_screen.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/fragment_user_chat_screen.xml" value="0.25" />

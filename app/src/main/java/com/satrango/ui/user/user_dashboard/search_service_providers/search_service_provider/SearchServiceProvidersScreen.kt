@@ -265,6 +265,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.getCountry(this),
             RetrofitBuilder.USER_KEY,
             keyword,
+            binding.searchBar.text.toString().trim(),
             UserUtils.getPostalCode(this),
             UserUtils.getState(this),
             UserUtils.getLatitude(this),

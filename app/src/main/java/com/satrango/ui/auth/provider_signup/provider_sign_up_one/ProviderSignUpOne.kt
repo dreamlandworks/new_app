@@ -214,9 +214,9 @@ class ProviderSignUpOne : AppCompatActivity() {
                         }
                     }
                     if (profesion != null) {
-                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", profesion.name, profesion.id))
+                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", profesion.name, profesion.id, "", ""))
                     } else {
-                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", chip.text.toString(), "0"))
+                        profList.add(ProfessionResponseX(ArrayList(), "", "", "", "", "", chip.text.toString(), "0", "", ""))
                     }
                 }
                 val qualList = mutableListOf<QualificationResponse>()
