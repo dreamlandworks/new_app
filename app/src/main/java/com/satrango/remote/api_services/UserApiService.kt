@@ -11,6 +11,8 @@ import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.auth.provider_signup.provider_sign_up_two.models.ProviderSignUpTwoKeywordsResModel
 import com.satrango.ui.auth.user_signup.models.*
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.CitiesResModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.AddFundsReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.AddFundsResModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
@@ -490,10 +492,10 @@ interface UserApiService {
         @Body requestBody: PaytmReqModel
     ): ResponseBody
 
-    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)
-    suspend fun getPaytmProcessTxn(
-        @Body requestBody: PaytmProcessTxnReqModel
-    ) : ResponseBody
+//    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)
+//    suspend fun getPaytmProcessTxn(
+//        @Body requestBody: PaytmProcessTxnReqModel
+//    ) : ResponseBody
 
     @POST(UserApiEndPoints.MEMBERSHIP_PAYMENT_TXN)
     suspend fun getPaytmMembershipProcessTxn(
@@ -504,5 +506,10 @@ interface UserApiService {
     suspend fun sendFcm(
         @Body requestBody: SendFCMReqModel
     ) : SendFCMResModel
+
+    @POST(UserApiEndPoints.ADD_FUNDS)
+    suspend fun addFunds(
+        @Body requestBody: AddFundsReqModel
+    ) : AddFundsResModel
 
 }

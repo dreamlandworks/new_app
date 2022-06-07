@@ -3,12 +3,14 @@ package com.satrango.ui.auth.provider_signup.provider_sign_up_five
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.hardware.Camera
+import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
+import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.Window
@@ -33,6 +35,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
 
@@ -142,7 +145,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
             videoPreviewBtn.setOnClickListener {
                 if (videoPath.isNotEmpty()) {
                     surfaceView.visibility = View.GONE
-//                    videoPlayer.rotation = 180f
+                    videoPlayer.rotation = 180f
                     videoPlayer.setVideoPath(videoPath)
                     videoPlayer.start()
                     videoPlayer.visibility = View.VISIBLE
@@ -161,8 +164,6 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
             binding.recordImage.visibility = View.VISIBLE
             binding.timerText.visibility = View.VISIBLE
             binding.surfaceView.visibility = View.VISIBLE
-
-            timer()
 
             mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT)
             mServiceCamera.setDisplayOrientation(90)
@@ -187,6 +188,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            mMediaRecorder.setOrientationHint(270)
             mOutputFile = getOutputFile()
             mOutputFile?.parentFile?.mkdirs()
             mMediaRecorder.setOutputFile(mOutputFile!!.absolutePath)

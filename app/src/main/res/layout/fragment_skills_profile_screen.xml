@@ -133,12 +133,28 @@
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
                 android:drawablePadding="@dimen/_10sdp"
                 android:paddingStart="@dimen/_10sdp"
                 tools:ignore="RtlSymmetry" />
 
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupOne"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:inputType="textCapSentences"
+                android:background="@drawable/gray_corner"
+                android:hint="@string/keywords_skills"
+                android:paddingHorizontal="@dimen/_10sdp"
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/experienceOneText"
@@ -371,11 +387,28 @@
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
                 android:drawablePadding="@dimen/_10sdp"
                 android:paddingStart="@dimen/_10sdp"
                 tools:ignore="RtlSymmetry" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupTwo"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTwo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:inputType="textCapSentences"
+                android:background="@drawable/gray_corner"
+                android:hint="@string/keywords_skills"
+                android:paddingHorizontal="@dimen/_10sdp"
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/experienceTwoText"
@@ -607,11 +640,28 @@
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:background="@drawable/gray_corner"
                 android:drawableStart="@drawable/ic_bagicon"
                 android:drawablePadding="@dimen/_10sdp"
                 android:paddingStart="@dimen/_10sdp"
                 tools:ignore="RtlSymmetry" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupThree"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteThree"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:inputType="textCapSentences"
+                android:background="@drawable/gray_corner"
+                android:hint="@string/keywords_skills"
+                android:paddingHorizontal="@dimen/_10sdp"
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/experienceThreeText"

@@ -75,8 +75,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                     binding.editBidBtn.setOnClickListener {
                         ProviderPlaceBidScreen.FROM_EDIT_BID = true
                         ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
-                        val intent =
-                            Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+                        val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
                         intent.putExtra("expiresIn", data.expires_in)
                         intent.putExtra("bidRanges", data.range_slots)
                         intent.putExtra("title", data.title)

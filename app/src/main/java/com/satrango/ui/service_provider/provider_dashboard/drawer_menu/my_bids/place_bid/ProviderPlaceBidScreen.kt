@@ -155,7 +155,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     private fun updateUIWithBidDetails() {
         val factory = ViewModelFactory(PostJobRepository())
         val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
-        val requestBody1 = ViewProposalReqModel(EDIT_BID_ID.toInt(), RetrofitBuilder.USER_KEY, 2)
+        val requestBody1 = ViewProposalReqModel(EDIT_BID_ID.toInt(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.viewProposal(this, requestBody1).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

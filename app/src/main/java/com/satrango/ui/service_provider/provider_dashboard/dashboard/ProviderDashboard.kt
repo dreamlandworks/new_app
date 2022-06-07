@@ -208,6 +208,11 @@ class ProviderDashboard : AppCompatActivity() {
 
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+            if (UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context).isNotEmpty()) {
+                if (latitude == UserUtils.getLatitude(context).toDouble() && longitude == UserUtils.getLongitude(context).toDouble()) {
+                    return
+                }
+            }
             try {
                 val geoCoder = Geocoder(context, Locale.getDefault())
                 val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)

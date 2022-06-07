@@ -88,6 +88,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         var finalAmount: Int = 0
         var finalWalletBalance = "0"
         var walletBalanceChecked = false
+        var FROM_PROVIDER_WALLET = false
     }
 
     @SuppressLint("SetTextI18n")
@@ -102,29 +103,20 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         binding.apply {
 
             if (!FROM_COMPLETE_BOOKING) {
-                val tempFinalAmount = Gson().fromJson(
-                    UserUtils.getSelectedAllSPDetails(this@PaymentScreen),
-                    SearchServiceProviderResModel::class.java
-                ).wallet_balance
+                val tempFinalAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
                 if (tempFinalAmount > finalWalletBalance.toInt()) {
                     finalWalletBalance = tempFinalAmount.toString()
                 }
             }
 
             finalAmount = if (FROM_USER_BOOKING_ADDRESS) {
-                Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this@PaymentScreen),
-                    Data::class.java
-                ).final_amount
+                Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java).final_amount
             } else {
                 amount
             }
 
             if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                val data = Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this@PaymentScreen),
-                    Data::class.java
-                )
+                val data = Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java)
                 bookingDetailsLayout.visibility = View.VISIBLE
                 amountLayout.visibility = View.VISIBLE
                 bookingSummaryLayout.visibility = View.GONE
@@ -143,10 +135,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 bookingSummaryLayout.visibility = View.VISIBLE
                 bookingDetailsLayout.visibility = View.GONE
                 amountLayout.visibility = View.GONE
-                val data = Gson().fromJson(
-                    UserUtils.getInvoiceDetails(this@PaymentScreen),
-                    ProviderInvoiceResModel::class.java
-                )
+                val data = Gson().fromJson(UserUtils.getInvoiceDetails(this@PaymentScreen), ProviderInvoiceResModel::class.java)
                 bookingId.text = data.booking_details.booking_id.toString()
                 workStartedAt.text = data.booking_details.started_at
                 completedAt.text = data.booking_details.completed_at
@@ -342,17 +331,9 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //    }
 
     private fun processPaytm() {
-        callbackUrl =
-            "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
-        val paytmOrder = PaytmOrder(
-            UserUtils.getOrderId(this),
-            resources.getString(R.string.paytm_mid),
-            UserUtils.getTxnToken(this),
-            finalAmount.toString(),
-            callbackUrl
-        )
-        transactionManager =
-            TransactionManager(paytmOrder, object : PaytmPaymentTransactionCallback {
+        callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
+        val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), finalAmount.toString(), callbackUrl)
+        transactionManager = TransactionManager(paytmOrder, object: PaytmPaymentTransactionCallback {
                 @SuppressLint("ObsoleteSdkInt")
                 override fun onTransactionResponse(inResponse: Bundle?) {
 //                    Log.e("PAYTM: ", Gson().toJson(inResponse.toString()))
@@ -382,41 +363,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             showPaymentFailureDialog()
                         }
                     }
-//                    toast(this@PaymentScreen, "Response: " + inResponse.toString())
-//                    if (resources.getString(R.string.txn_success) == p0!!.getString(
-//                            resources.getString(
-//                                R.string.status_caps
-//                            )
-//                        )!!
-//                    ) {
-//                        when {
-//                            FROM_PROVIDER_PLANS -> {
-//                                saveProviderPlan()
-//                            }
-//                            FROM_USER_PLANS -> {
-//                                saveUserPlan()
-//                            }
-//                            FROM_USER_BOOKING_ADDRESS -> {
-//                                updateStatusInServer()
-//                            }
-//                            FROM_PROVIDER_BOOKING_RESPONSE -> {
-//                                updateStatusInServer()
-//                            }
-//                            FROM_USER_SET_GOALS -> {
-//                                updateInstallmentPaymentStatus("Success", "paymentId")
-//                            }
-//                            FROM_COMPLETE_BOOKING -> {
-//                                completeBooking("Success")
-//                            }
-//                        }
-//                    } else {
-//                        showPaymentFailureDialog()
-//                        toast(this@PaymentScreen, p0.toString())
-//                    }
                 }
 
                 override fun networkNotAvailable() {
-                    snackBar(binding.addCreditDebitCard, "Network Not available")
+                    snackBar(binding.addCreditDebitCard, "Network not available")
                 }
 
                 override fun onErrorProceed(p0: String?) {
@@ -448,11 +398,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         transactionManager.setShowPaymentUrl("https://securegw.paytm.in/theia/api/v1/showPaymentPage")
         transactionManager.setEmiSubventionEnabled(true)
         transactionManager.startTransaction(this, activityRequestCode)
-        transactionManager.startTransactionAfterCheckingLoginStatus(
-            this,
-            resources.getString(R.string.paytm_client_id),
-            activityRequestCode
-        )
+        transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
     }
 
     private fun showPaymentFailureDialog() {
@@ -502,8 +448,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
     private fun completeBooking(referenceId: String) {
 
-        val inVoiceDetails =
-            Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
+        val inVoiceDetails = Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
 //        Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -549,12 +494,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //            ).show()
         }
         if (requestCode == REQUEST_CODE) {
-//            Log.d("result", data.toString())
             data?.getStringExtra("Status")?.let {
 //                Log.d("result", it)
             }
             data?.getStringExtra("Status")?.let {
-//                Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
                 if (it.lowercase(Locale.getDefault()) == "success") {
                     paymentSuccessDialog(this)
                 } else {

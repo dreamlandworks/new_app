@@ -198,14 +198,23 @@
             </RadioGroup>
 
             <TextView
+                android:id="@+id/ageErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textColor="@color/red"
+                android:text="@string/age_should_be_greater_than_13_year"/>
+
+            <TextView
                 android:id="@+id/dateOfBirth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/gray_corner"
                 android:drawablePadding="@dimen/_10sdp"
                 android:focusable="true"
                 android:hint="@string/date_of_birth"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:singleLine="true"
                 android:textSize="@dimen/edit_text"
                 android:isScrollContainer="true"

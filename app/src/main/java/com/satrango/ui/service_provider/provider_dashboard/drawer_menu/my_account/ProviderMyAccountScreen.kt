@@ -75,16 +75,13 @@ class ProviderMyAccountScreen : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(resources.getColor(R.color.purple_700))
+            window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
-            .setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.my_account)
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_account)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }

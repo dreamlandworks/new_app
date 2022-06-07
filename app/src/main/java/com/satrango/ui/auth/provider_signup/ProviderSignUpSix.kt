@@ -182,6 +182,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            mMediaRecorder.setOrientationHint(270)
             mOutputFile = getOutputFile()
             mOutputFile?.parentFile?.mkdirs()
             mMediaRecorder.setOutputFile(mOutputFile!!.absolutePath)

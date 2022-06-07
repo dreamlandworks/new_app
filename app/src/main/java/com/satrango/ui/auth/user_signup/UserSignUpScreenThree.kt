@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -196,11 +197,13 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         email.requestFocus()
                     }
                     dob == resources.getString(R.string.date_of_birth) -> {
-                        dateOfBirth.error = "Please Select Date Of Birth"
+                        ageErrorText.error = "Please Select Date Of Birth"
+                        ageErrorText.visibility = View.VISIBLE
                         dateOfBirth.requestFocus()
                     }
                     selectedAge < 13 -> {
-                        dateOfBirth.error = "Age should be greater than 13 years"
+                        ageErrorText.error = "Age should be greater than 13 years"
+                        ageErrorText.visibility = View.VISIBLE
                         dateOfBirth.requestFocus()
                     }
                     selectedGender != R.id.male && selectedGender != R.id.female && selectedGender != R.id.others -> {
@@ -253,8 +256,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 )
                 selectedAge = getAge(year, monthOfYear + 1, dayOfMonth)
                 if (selectedAge < 13) {
-                    binding.dateOfBirth.error = "Age should be greater than 13 years"
+                    binding.ageErrorText.error = "Age should be greater than 13 years"
+                    binding.ageErrorText.visibility = View.VISIBLE
                     binding.dateOfBirth.requestFocus()
+                } else {
+                    binding.ageErrorText.visibility = View.GONE
                 }
             }, mYear, mMonth, mDay
         )
