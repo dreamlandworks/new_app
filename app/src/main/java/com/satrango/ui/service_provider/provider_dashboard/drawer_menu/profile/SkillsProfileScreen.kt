@@ -506,7 +506,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 
                     binding.autoCompleteTwo.setOnItemClickListener { _, _, position, _ ->
                         val chip = com.google.android.material.chip.Chip(requireContext())
-                        chip.text = skillsAdapterOne.getItem(position)
+                        chip.text = skillsAdapterTwo.getItem(position)
                         chip.isCloseIconVisible = true
                         chip.setOnCloseIconClickListener {
                             binding.chipGroupTwo.removeView(chip)
@@ -517,7 +517,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
 
                     binding.autoCompleteThree.setOnItemClickListener { _, _, position, _ ->
                         val chip = com.google.android.material.chip.Chip(requireContext())
-                        chip.text = skillsAdapterOne.getItem(position)
+                        chip.text = skillsAdapterThree.getItem(position)
                         chip.isCloseIconVisible = true
                         chip.setOnCloseIconClickListener {
                             binding.chipGroupThree.removeView(chip)
@@ -569,11 +569,18 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     binding.experienceOne.setSelection(index + 1)
                                 }
                             }
-                            val skillsChips = ArrayList<ChipInfo>()
+//                            val skillsChips = ArrayList<ChipInfo>()
                             for (keyword in professionFList[0].keywords_responses) {
-                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                                val chip = com.google.android.material.chip.Chip(requireContext())
+                                chip.text = keyword.name
+                                chip.isCloseIconVisible = true
+                                chip.setOnCloseIconClickListener {
+                                    binding.chipGroupOne.removeView(chip)
+                                }
+                                binding.chipGroupOne.addView(chip)
+//                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
                             }
-                            binding.skillsKeywordsOne.setTextWithChips(skillsChips)
+//                            binding.skillsKeywordsOne.setTextWithChips(skillsChips)
                             binding.extraChargeOne.setText(professionFList[0].tariff_extra_charges)
                             binding.minChargeOne.setText(professionFList[0].tariff_min_charges)
                             binding.perDayOne.setText(professionFList[0].tariff_per_day)
@@ -596,11 +603,18 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     binding.experienceTwo.setSelection(index + 1)
                                 }
                             }
-                            val skillsChips = ArrayList<ChipInfo>()
+//                            val skillsChips = ArrayList<ChipInfo>()
                             for (keyword in professionFList[1].keywords_responses) {
-                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                                val chip = com.google.android.material.chip.Chip(requireContext())
+                                chip.text = keyword.name
+                                chip.isCloseIconVisible = true
+                                chip.setOnCloseIconClickListener {
+                                    binding.chipGroupTwo.removeView(chip)
+                                }
+                                binding.chipGroupTwo.addView(chip)
+//                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
                             }
-                            binding.skillsKeywordsTwo.setTextWithChips(skillsChips)
+//                            binding.skillsKeywordsTwo.setTextWithChips(skillsChips)
                             binding.extraChargeTwo.setText(professionFList[1].tariff_extra_charges)
                             binding.minChargeTwo.setText(professionFList[1].tariff_min_charges)
                             binding.perDayTwo.setText(professionFList[1].tariff_per_day)
@@ -626,11 +640,18 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                     binding.experienceThree.setSelection(index + 1)
                                 }
                             }
-                            val skillsChips = ArrayList<ChipInfo>()
+//                            val skillsChips = ArrayList<ChipInfo>()
                             for (keyword in professionFList[2].keywords_responses) {
-                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
+                                val chip = com.google.android.material.chip.Chip(requireContext())
+                                chip.text = keyword.name
+                                chip.isCloseIconVisible = true
+                                chip.setOnCloseIconClickListener {
+                                    binding.chipGroupThree.removeView(chip)
+                                }
+                                binding.chipGroupThree.addView(chip)
+//                                skillsChips.add(ChipInfo(keyword.name, keyword.keyword_id))
                             }
-                            binding.skillsKeywordsThree.setTextWithChips(skillsChips)
+//                            binding.skillsKeywordsThree.setTextWithChips(skillsChips)
                             binding.extraChargeThree.setText(professionFList[2].tariff_extra_charges)
                             binding.minChargeThree.setText(professionFList[2].tariff_min_charges)
                             binding.perDayThree.setText(professionFList[2].tariff_per_day)

@@ -314,7 +314,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             @SuppressLint("ObsoleteSdkInt", "SimpleDateFormat")
             override fun onTransactionResponse(inResponse: Bundle?) {
                 if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(R.string.txn_success)) {
-                    val requestBody = FundTransferReqModel(depositAmountInDouble.toString(), SimpleDateFormat("yyyy-MM-dd").format(Date()).format(Date()), RetrofitBuilder.USER_KEY, "", resources.getString(R.string.txn_success), UserUtils.getUserId(this@FundTransferScreen).toInt())
+                    val requestBody = FundTransferReqModel(depositAmountInDouble.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt(), UserUtils.getOrderId(this@FundTransferScreen))
                     viewModel.fundTransfer(this@FundTransferScreen, requestBody).observe(this@FundTransferScreen) {
                         when (it) {
                             is NetworkResponse.Loading -> {

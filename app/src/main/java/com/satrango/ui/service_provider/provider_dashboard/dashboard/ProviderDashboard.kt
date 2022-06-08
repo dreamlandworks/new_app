@@ -650,7 +650,8 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderSignUpFive::class.java))
                 }
                 "2" -> {
-                    startActivity(Intent(this, ProviderSignUpSix::class.java))
+                    startActivity(Intent(this, ProviderSignUpOne::class.java))
+//                    startActivity(Intent(this, ProviderSignUpSix::class.java))
                 }
                 "3" -> {
                     startActivity(Intent(this, ProviderSignUpSeven::class.java))
@@ -744,10 +745,10 @@ class ProviderDashboard : AppCompatActivity() {
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
                         dialogInterface.dismiss()
+                        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users)).child(UserUtils.getUserId(this))
+                        databaseReference.child(getString(R.string.online_status)).setValue(getString(R.string.offline))
                         UserUtils.setUserLoggedInVia(this, "", "")
                         UserUtils.deleteUserCredentials(this)
-                        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users))
-                        databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.offline))
                         startActivity(Intent(this, LoginScreen::class.java))
                     }
                     is NetworkResponse.Failure -> {

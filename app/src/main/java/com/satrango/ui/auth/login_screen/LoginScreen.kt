@@ -227,6 +227,7 @@ class LoginScreen : AppCompatActivity() {
                     UserUtils.setUserLoggedInVia(this, type, it.data!!)
                     UserUtils.setPhoneNo(this, phoneNo)
                     progressDialog.dismiss()
+                    startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
                     setupFirebaseUserDatabase()
                 }
                 is NetworkResponse.Failure -> {
@@ -252,7 +253,6 @@ class LoginScreen : AppCompatActivity() {
                 firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
                 firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
                 toast(this@LoginScreen, "Success")
-                startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
             }
 
             override fun onCancelled(error: DatabaseError) {
