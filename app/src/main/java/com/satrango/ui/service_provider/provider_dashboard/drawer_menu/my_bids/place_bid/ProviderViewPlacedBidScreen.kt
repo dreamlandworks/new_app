@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +58,11 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_post)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.statusBarColor = resources.getColor(R.color.purple_700)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        }
         loadProfileImage(profilePic)
 
         initializeProgressDialog()
@@ -65,7 +73,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
         bookingId = intent.getStringExtra("booking_id")!!.toInt()
         categoryId = intent.getStringExtra("category_id")!!.toInt()
         postJobId = intent.getStringExtra("post_job_id")!!.toInt()
-        bidId = intent.getStringExtra("bid_id")!!.toInt()
+//        bidId = intent.getStringExtra("bid_id")!!.toInt()
         userId = intent.getStringExtra("user_id")!!.toInt()
         binding.title.text = intent.getStringExtra("title")!!
         binding.expiresOn.text = intent.getStringExtra("expiresIn")!!
@@ -94,7 +102,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-        val requestBody1 = ViewProposalReqModel(bidId, RetrofitBuilder.USER_KEY, 2)
+        val requestBody1 = ViewProposalReqModel(bidId, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.viewProposal(this, requestBody1).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

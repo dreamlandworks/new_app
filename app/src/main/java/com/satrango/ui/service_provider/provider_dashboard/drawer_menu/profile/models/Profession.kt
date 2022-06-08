@@ -2,6 +2,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.
 
 data class Profession(
     val category_id: String,
+    val subcategory_id: String,
     val exp: String,
     val profession_name: String,
     val profession_id: String,

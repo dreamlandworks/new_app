@@ -38,6 +38,7 @@ import android.widget.Toast
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.view.allViews
 import androidx.core.view.children
+import com.google.gson.Gson
 import kotlin.collections.ArrayList
 
 
@@ -661,6 +662,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
             }
             else -> {
                 ProviderUtils.aboutMe = binding.aboutMe.text.toString().trim()
+                Log.e("KEYWORDS:", Gson().toJson(ProviderUtils.profession))
                 startActivity(Intent(this@ProviderSignUpTwo, ProviderSignUpThree::class.java))
             }
         }

@@ -105,6 +105,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                 }
             }
             professionFList = ArrayList()
+
+            if (professionOne.allChips.size > 1) {
+                snackBar(binding.professionOne, "Please select only one profession in first profession field")
+                return@apply
+            }
+
             if (professionOne.allChips.isNotEmpty()) {
                 when {
                     extraChargeOne.text.toString().isEmpty() -> {
@@ -157,10 +163,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, profession.name, profession.id, "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, profession.name, profession.id, profession.category_id, profession.subcategory_id))
                                 } else {
                                     professionOneList.add(ProfessionResponseX(keywordsOneList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeOne.text.toString().trim(), minChargeOne.text.toString().trim(), perDayOne.text.toString().trim(), perHourOne.text.toString().trim(), experience, chip.text.toString(), "0", "0", "0"))
                                 }
                             }
                             professionFList.add(professionOneList[0])
@@ -170,6 +176,12 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                 }
             }
+
+            if (professionTwo.allChips.size > 1) {
+                snackBar(binding.professionTwo, "Please select only one profession in second profession field")
+                return@apply
+            }
+
             if (professionTwo.allChips.isNotEmpty()) {
                 when {
                     extraChargeTwo.text.toString().isEmpty() -> {
@@ -222,10 +234,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, profession.name, profession.id, "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, profession.name, profession.id, profession.category_id, profession.subcategory_id))
                                 } else {
                                     professionTwoList.add(ProfessionResponseX(keywordsTwoList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeTwo.text.toString().trim(), minChargeTwo.text.toString().trim(), perDayTwo.text.toString().trim(), perHourTwo.text.toString().trim(), experience, chip.text.toString(), "0", "0", "0"))
                                 }
                             }
                             professionFList.add(professionTwoList[0])
@@ -234,8 +246,13 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                         }
                     }
                 }
-
             }
+
+            if (professionThree.allChips.size > 1) {
+                snackBar(binding.professionThree, "Please select only one profession in third profession field")
+                return@apply
+            }
+
             if (professionThree.allChips.isNotEmpty()) {
                 when {
                     extraChargeThree.text.toString().isEmpty() -> {
@@ -288,10 +305,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                                 if (profession != null) {
                                     professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, profession.name, profession.id, "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, profession.name, profession.id, profession.category_id, profession.subcategory_id))
                                 } else {
                                     professionThreeList.add(ProfessionResponseX(keywordsThreeList.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name
-                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, chip.text.toString(), "0", "", ""))
+                                    } as ArrayList<KeywordsResponse>, extraChargeThree.text.toString().trim(), minChargeThree.text.toString().trim(), perDayThree.text.toString().trim(), perHourThree.text.toString().trim(), experience, chip.text.toString(), "0", "0", "0"))
                                 }
                             }
                             professionFList.add(professionThreeList[0])
@@ -525,7 +542,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                             for (pro in profession.skills) {
                                 skills.add(KeywordsResponse(pro.keywords_id.toString(), pro.keyword))
                             }
-                            professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id, "", ""))
+                            professionFList.add(ProfessionResponseX(skills, profession.tariff_extra_charges, profession.tariff_min_charges, profession.tariff_per_day, profession.tariff_per_hour, profession.exp, profession.profession_name, profession.profession_id, profession.category_id, profession.subcategory_id))
                         }
 
                         binding.professionTwoCloseBtn.setOnClickListener {

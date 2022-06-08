@@ -60,16 +60,16 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                 "Open" -> {
                     binding.card.setOnClickListener {
                         ProviderPlaceBidScreen.FROM_EDIT_BID = false
-                        ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
-                        val intent = Intent(
-                            binding.root.context,
-                            ProviderViewPlacedBidScreen::class.java
-                        )
+//                        ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
+                        val intent = Intent(binding.root.context, ProviderViewPlacedBidScreen::class.java)
                         intent.putExtra("booking_id", data.booking_id)
-                        UserUtils.savePostJobId(
-                            binding.atText.context,
-                            data.post_job_id.toInt()
-                        )
+                        intent.putExtra("category_id", data.category_id)
+                        intent.putExtra("post_job_id", data.post_job_id)
+                        intent.putExtra("user_id", data.booking_user_id)
+                        intent.putExtra("title", data.title)
+                        intent.putExtra("expiresIn", data.expires_in)
+                        intent.putExtra("bidRange", data.bid_range_name)
+                        UserUtils.savePostJobId(binding.atText.context, data.post_job_id.toInt())
                         binding.root.context.startActivity(intent)
                     }
                     binding.editBidBtn.setOnClickListener {

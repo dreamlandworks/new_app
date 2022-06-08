@@ -1,8 +1,5 @@
 package com.satrango.remote.end_points
 
-import com.satrango.R
-import com.satrango.utils.UserUtils
-
 object UserApiEndPoints {
 
     final const val LOGIN = "user/login"
