@@ -123,19 +123,17 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                     }
                                     if (!existed) {
                                         ProviderUtils.profession!![0].keywords_responses.add(KeywordsResponse("0", chipText))
-                                        ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
-                                        ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
+                                        ProviderUtils.profession!![0].category_id = "0"
+                                        ProviderUtils.profession!![0].subcategory_id = "0"
                                     }
                                 }
                             }
                         } else {
                             ProviderUtils.profession!![0].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
-                            ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
-                            ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
+                            ProviderUtils.profession!![0].category_id = "0"
+                            ProviderUtils.profession!![0].subcategory_id = "0"
                         }
                         ProviderUtils.profession!![0].keywords_responses = ProviderUtils.profession!![0].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
-                        ProviderUtils.profession!![0].category_id = keywordsOneMList[0].category_id
-                        ProviderUtils.profession!![0].subcategory_id = keywordsOneMList[0].subcategory_id
                     }
                 }
 
@@ -225,20 +223,18 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                     }
                                     if (!existed) {
                                         ProviderUtils.profession!![1].keywords_responses.add(KeywordsResponse("0", chipText))
-                                        ProviderUtils.profession!![1].category_id = key.category_id
-                                        ProviderUtils.profession!![1].subcategory_id = key.subcategory_id
+                                        ProviderUtils.profession!![1].category_id = "0"
+                                        ProviderUtils.profession!![1].subcategory_id = "0"
                                     }
                                 }
                             }
                         } else {
                             ProviderUtils.profession!![1].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
-                            ProviderUtils.profession!![1].category_id = keywordsTwoMList[0].category_id
-                            ProviderUtils.profession!![1].subcategory_id = keywordsTwoMList[0].subcategory_id
+                            ProviderUtils.profession!![1].category_id = "0"
+                            ProviderUtils.profession!![1].subcategory_id = "0"
                         }
 
                         ProviderUtils.profession!![1].keywords_responses = ProviderUtils.profession!![1].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
-                        ProviderUtils.profession!![1].category_id = keywordsTwoMList[0].category_id
-                        ProviderUtils.profession!![1].subcategory_id = keywordsTwoMList[0].subcategory_id
                     }
                 }
             }
@@ -373,19 +369,17 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                         }
                                         if (!existed) {
                                             ProviderUtils.profession!![2].keywords_responses.add(KeywordsResponse("0", chipText))
-                                            ProviderUtils.profession!![2].category_id = key.category_id
-                                            ProviderUtils.profession!![2].subcategory_id = key.subcategory_id
+                                            ProviderUtils.profession!![2].category_id = "0"
+                                            ProviderUtils.profession!![2].subcategory_id = "0"
                                         }
                                     }
                                 }
                             } else {
                                 ProviderUtils.profession!![2].keywords_responses.add(KeywordsResponse("0", chip.text.toString()))
-                                ProviderUtils.profession!![2].category_id = keywordsThreeMList[0].category_id
-                                ProviderUtils.profession!![2].subcategory_id = keywordsThreeMList[0].subcategory_id
+                                ProviderUtils.profession!![2].category_id = "0"
+                                ProviderUtils.profession!![2].subcategory_id = "0"
                             }
                             ProviderUtils.profession!![2].keywords_responses = ProviderUtils.profession!![2].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
-                            ProviderUtils.profession!![2].category_id = keywordsThreeMList[0].category_id
-                            ProviderUtils.profession!![2].subcategory_id = keywordsThreeMList[0].subcategory_id
                         }
                     }
                 }

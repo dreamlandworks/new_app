@@ -2,6 +2,7 @@ package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
 import android.R.attr.button
+import android.R.attr.start
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -78,6 +79,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import com.satrango.R
+import com.satrango.base.MyApp
 import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -322,6 +324,10 @@ class ProviderDashboard : AppCompatActivity() {
 //            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
+//        binding.fab.setOnClickListener {
+//            startActivity(Intent(this, ProviderMyBidsScreen::class.java))
+//        }
+
         val factory = ViewModelFactory(ProviderDashboardRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderDashboardViewModel::class.java]
 
@@ -467,7 +473,7 @@ class ProviderDashboard : AppCompatActivity() {
                     progressDialog.dismiss()
                     response = apiResponse
 //                Log.e("Response:", Gson().toJson(response))
-                    showBookingAlert(bookingViewModel, bookingId, userId, response, categoryId)
+                    showBookingAlert(bookingId, userId, response, categoryId)
                 } else {
                     progressDialog.dismiss()
                     snackBar(binding.bottomNavigationView, response.message)
@@ -486,14 +492,14 @@ class ProviderDashboard : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun showBookingAlert(
-        bookingViewModel: BookingViewModel,
         bookingId: String,
         userId: String,
         response: BookingDetailsResModel,
         categoryId: String
     ) {
-        bottomSheetDialog = BottomSheetDialog(this)
-        val bottomSheet = LayoutInflater.from(this).inflate(R.layout.provider_booking_alert_dialog, null)
+
+        bottomSheetDialog = BottomSheetDialog(MyApp.instance)
+        val bottomSheet = LayoutInflater.from(MyApp.instance).inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog!!.setCancelable(false)
         val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = bottomSheet.findViewById<TextView>(R.id.rejectBtn)

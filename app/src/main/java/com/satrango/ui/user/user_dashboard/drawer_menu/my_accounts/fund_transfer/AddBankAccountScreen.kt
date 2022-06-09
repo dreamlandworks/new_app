@@ -85,7 +85,7 @@ class AddBankAccountScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             UserUtils.getUserId(this).toInt()
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.addBankAccount(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

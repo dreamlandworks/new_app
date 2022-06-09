@@ -99,7 +99,6 @@ class ProviderHomeScreen : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun updateNewJobs() {
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(requireContext()).toInt())
-        val factory = ViewModelFactory(ProviderMyBidsRepository())
         CoroutineScope(Dispatchers.Main).launch {
             val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
             if (response.status == 200) {
@@ -125,11 +124,13 @@ class ProviderHomeScreen : Fragment() {
                     binding.newJobsLayout.visibility = View.VISIBLE
                     binding.newJobsCard.visibility = View.VISIBLE
                 } else {
-                    binding.newJobsLayout.visibility = View.GONE
-                    binding.newJobsCard.visibility = View.GONE
+                    binding.noNewJobs.visibility = View.VISIBLE
+                    binding.rightArrowTwo.visibility = View.GONE
                 }
             } else {
-                toast(requireContext(), Gson().toJson(response.message))
+                binding.noNewJobs.visibility = View.VISIBLE
+                binding.rightArrowTwo.visibility = View.GONE
+//                toast(requireContext(), Gson().toJson(response.message))
             }
         }
     }
@@ -186,13 +187,15 @@ class ProviderHomeScreen : Fragment() {
                         binding.upcomingCard.visibility = View.VISIBLE
                         binding.upcomingLayout.visibility = View.VISIBLE
                     } else {
-                        binding.upcomingCard.visibility = View.GONE
-                        binding.upcomingLayout.visibility = View.GONE
+                        binding.noUpcomingBookings.visibility = View.VISIBLE
+                        binding.rightArrowOne.visibility = View.GONE
                     }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.bidCount, it.message!!)
+                    binding.noUpcomingBookings.visibility = View.VISIBLE
+                    binding.rightArrowOne.visibility = View.GONE
+//                    snackBar(binding.bidCount, it.message!!)
                 }
             }
         }

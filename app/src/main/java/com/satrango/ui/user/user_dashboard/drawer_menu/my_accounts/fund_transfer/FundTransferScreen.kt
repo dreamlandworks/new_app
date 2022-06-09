@@ -54,7 +54,6 @@ import kotlin.collections.ArrayList
 class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDetailsInterface {
 
     private lateinit var allBankDetails: List<UserBankAccount>
-    private var depositAmountInDouble = 0.0
     private var withdrawAmountInDouble = 0.0
     private lateinit var viewModel: MyAccountViewModel
     private val activityRequestCode: Int = 1
@@ -293,6 +292,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().addFunds(AddFundsReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt()))
+                toast(this@FundTransferScreen, Gson().toJson(amount))
                 if (response.status == 200) {
                     UserUtils.saveOrderId(this@FundTransferScreen, response.order_id)
                     UserUtils.saveTxnToken(this@FundTransferScreen, response.txn_id)
@@ -314,7 +314,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
             @SuppressLint("ObsoleteSdkInt", "SimpleDateFormat")
             override fun onTransactionResponse(inResponse: Bundle?) {
                 if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(R.string.txn_success)) {
-                    val requestBody = FundTransferReqModel(depositAmountInDouble.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt(), UserUtils.getOrderId(this@FundTransferScreen))
+                    val requestBody = FundTransferReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt(), UserUtils.getOrderId(this@FundTransferScreen))
                     viewModel.fundTransfer(this@FundTransferScreen, requestBody).observe(this@FundTransferScreen) {
                         when (it) {
                             is NetworkResponse.Loading -> {

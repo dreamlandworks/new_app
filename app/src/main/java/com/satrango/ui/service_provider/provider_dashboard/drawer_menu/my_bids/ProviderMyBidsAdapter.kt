@@ -72,19 +72,38 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                         UserUtils.savePostJobId(binding.atText.context, data.post_job_id.toInt())
                         binding.root.context.startActivity(intent)
                     }
-                    binding.editBidBtn.setOnClickListener {
-                        ProviderPlaceBidScreen.FROM_EDIT_BID = true
-                        ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
-                        val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
-                        intent.putExtra("expiresIn", data.expires_in)
-                        intent.putExtra("bidRanges", data.range_slots)
-                        intent.putExtra("title", data.title)
-                        UserUtils.savePostJobId(
-                            binding.atText.context,
-                            data.post_job_id.toInt()
-                        )
-                        ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
-                        binding.root.context.startActivity(intent)
+
+                    if (isProvider(binding.atText.context)) {
+                        binding.editBidBtn.text = "Place Bid"
+                        binding.editBidBtn.setOnClickListener {
+                            ProviderPlaceBidScreen.FROM_AWARDED = false
+                            ProviderPlaceBidScreen.FROM_EDIT_BID = false
+                            val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+                            intent.putExtra("expiresIn", data.expires_in)
+                            intent.putExtra("bidRanges", data.range_slots)
+                            intent.putExtra("title", data.title)
+                            UserUtils.savePostJobId(
+                                binding.atText.context,
+                                data.post_job_id.toInt()
+                            )
+                            ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
+                            binding.root.context.startActivity(intent)
+                        }
+                    } else {
+                        binding.editBidBtn.setOnClickListener {
+                            ProviderPlaceBidScreen.FROM_EDIT_BID = true
+                            ProviderPlaceBidScreen.EDIT_BID_ID = data.bid_id
+                            val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+                            intent.putExtra("expiresIn", data.expires_in)
+                            intent.putExtra("bidRanges", data.range_slots)
+                            intent.putExtra("title", data.title)
+                            UserUtils.savePostJobId(
+                                binding.atText.context,
+                                data.post_job_id.toInt()
+                            )
+                            ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
+                            binding.root.context.startActivity(intent)
+                        }
                     }
                 }
                 "Awarded", "Expired" -> {
@@ -109,8 +128,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                     binding.editBidBtn.setOnClickListener {
                         ProviderPlaceBidScreen.FROM_AWARDED = false
                         ProviderPlaceBidScreen.FROM_EDIT_BID = false
-                        val intent =
-                            Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+                        val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
                         intent.putExtra("expiresIn", data.expires_in)
                         intent.putExtra("bidRanges", data.range_slots)
                         intent.putExtra("title", data.title)
@@ -132,8 +150,7 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                             binding.atText.context,
                             data.post_job_id.toInt()
                         )
-                        val intent =
-                            Intent(binding.root.context, MyJobPostViewScreen::class.java)
+                        val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                         binding.root.context.startActivity(intent)
                     }
                 }

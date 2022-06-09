@@ -249,9 +249,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="@string/add_another_account"
-                android:textStyle="bold"
                 android:textColor="@color/red"
-                android:textSize="@dimen/text" />
+                android:textSize="@dimen/text"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 

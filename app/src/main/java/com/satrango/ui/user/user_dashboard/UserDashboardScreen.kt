@@ -156,6 +156,10 @@ class   UserDashboardScreen : AppCompatActivity() {
             true
         }
 
+        binding.fab.setOnClickListener {
+            startActivity(Intent(this, PostJobTypeScreen::class.java))
+        }
+
         binding.userLocation.setOnClickListener {
             UserLocationSelectionScreen.FROM_USER_DASHBOARD = true
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))

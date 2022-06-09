@@ -412,17 +412,26 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/upcomingCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_5sdp"
             android:layout_margin="@dimen/_10sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="@dimen/_10sdp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/noUpcomingBookings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:text="@string/upcoming_bookings_are_not_available"
+                    android:gravity="center"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -552,6 +561,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/rightArrowOne"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
@@ -590,17 +600,26 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/newJobsCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_5sdp"
             android:layout_margin="@dimen/_10sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="@dimen/_10sdp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/noNewJobs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:text="@string/new_jobs_are_not_available"
+                    android:gravity="center"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -729,6 +748,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/rightArrowTwo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
