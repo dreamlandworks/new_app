@@ -411,7 +411,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
     }
 
     private fun capturePictureFromCamera() {

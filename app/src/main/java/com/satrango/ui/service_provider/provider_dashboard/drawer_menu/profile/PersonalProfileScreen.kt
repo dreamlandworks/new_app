@@ -211,7 +211,7 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                 }
                 is NetworkResponse.Success -> {
                     val responseData = it.data!!
-                    val imageUrl = RetrofitBuilder.BASE_URL + responseData.profile_pic
+                    val imageUrl = responseData.profile_pic
                     UserUtils.saveUserProfilePic(requireContext(), imageUrl)
                     loadProfileImage(ProviderProfileScreen.binding.profilePic)
                     binding.firstName.setText(responseData.fname)

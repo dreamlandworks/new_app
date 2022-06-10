@@ -74,7 +74,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
 
                         val data = it.data!!
                         Glide.with(profilePic)
-                            .load(RetrofitBuilder.BASE_URL + data.bid_details.sp_profile)
+                            .load(data.bid_details.sp_profile)
                             .into(profilePic)
                         spName.text = data.bid_details.sp_fname + " " + data.bid_details.sp_lname
                         spOccupation.text = data.bid_details.profession

@@ -235,7 +235,7 @@ class ProviderHomeScreen : Fragment() {
         val title = dialogView.findViewById<TextView>(R.id.title)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
-        Glide.with(requireContext()).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(R.drawable.images).into(profilePic)
+        Glide.with(requireContext()).load(data.profile_pic).error(R.drawable.images).into(profilePic)
         description.text = data.description
         title.setTextColor(resources.getColor(R.color.purple_500))
         acceptBtn.setBackgroundColor(resources.getColor(R.color.purple_500))

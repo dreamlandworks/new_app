@@ -129,9 +129,9 @@ class ProviderInVoiceScreen : AppCompatActivity() {
     private fun updateUI(response: BookingDetailsResModel) {
         binding.userName.text = response.booking_details.fname + " " + response.booking_details.lname
         if (isProvider(this)) {
-            Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
+            Glide.with(this).load(response.booking_details.user_profile_pic).error(R.drawable.images).into(binding.profilePic)
         } else {
-            Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
+            Glide.with(this).load(response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
         }
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"

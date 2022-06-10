@@ -19,7 +19,7 @@ class ProviderReviewAdapter(private val list: List<SpReview>): RecyclerView.Adap
         @SuppressLint("SetTextI18n")
         fun bind(data: SpReview) {
             if (!data.profile_pic.isNullOrBlank()) {
-                Glide.with(binding.root.context).load(RetrofitBuilder.BASE_URL + data.profile_pic).placeholder(R.drawable.images).into(binding.profilePic)
+                Glide.with(binding.root.context).load(data.profile_pic).placeholder(R.drawable.images).into(binding.profilePic)
                 binding.userName.text = data.fname + " " + data.lname
                 binding.rating.text = data.overall_rating
                 binding.bookingId.text = "Booking ID: ${data.booking_id}"

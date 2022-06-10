@@ -12,7 +12,7 @@ class UserOffersAdapter(private val list: List<Data>): RecyclerView.Adapter<User
 
     class ViewHolder(binding: UserOffersRowBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Data) {
-            Glide.with(binding.offerImage.context).load(RetrofitBuilder.BASE_URL + data.offer_image).into(binding.offerImage)
+            Glide.with(binding.offerImage.context).load(data.offer_image).into(binding.offerImage)
         }
         val binding = binding
     }

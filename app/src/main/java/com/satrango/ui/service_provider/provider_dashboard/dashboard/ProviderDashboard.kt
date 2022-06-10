@@ -86,11 +86,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.math.RoundingMode
 import java.net.SocketTimeoutException
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.util.*
+import kotlin.math.round
 
 
 class ProviderDashboard : AppCompatActivity() {
@@ -208,10 +211,18 @@ class ProviderDashboard : AppCompatActivity() {
 //            }
         }
 
+        fun roundOffDecimal(number: Double): Double {
+            val df = DecimalFormat("#.###")
+            df.roundingMode = RoundingMode.CEILING
+            return df.format(number).toDouble()
+        }
+
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
             if (UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context).isNotEmpty()) {
-                if (latitude == UserUtils.getLatitude(context).toDouble() && longitude == UserUtils.getLongitude(context).toDouble()) {
+                if (roundOffDecimal(latitude) == roundOffDecimal(UserUtils.getLatitude(context).toDouble()) && roundOffDecimal(longitude) == roundOffDecimal(UserUtils.getLongitude(context).toDouble())) {
+                    binding.userLocation.text = UserUtils.getCity(context)
+                    updateSpOnlineStatus(context)
                     return
                 }
             }
@@ -251,21 +262,13 @@ class ProviderDashboard : AppCompatActivity() {
                         val response = RetrofitBuilder.getServiceProviderRetrofitInstance().saveProviderLocation(requestBody)
                         val jsonResponse = JSONObject(response.string())
                         if (jsonResponse.getInt("status") == 200) {
-                            if (!UserUtils.getSpStatus(context)) {
-                                updateOnlineStatus(context, 1)
-                            }
-                            if (UserUtils.getSpStatus(context)) {
-                                binding.onlineText.text = context.resources.getString(R.string.online)
-                                binding.onlineSwitch.isChecked = true
-                            } else {
-                                binding.onlineText.text = context.resources.getString(R.string.offline)
-                                binding.onlineSwitch.isChecked = false
-                            }
+                            updateSpOnlineStatus(context)
                         }
                     } catch (e: java.lang.Exception) {
                         Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
                     }
                 }
+
 //                viewModel.saveLocation(context, requestBody).observe(context) {
 //                    when (it) {
 //                        is NetworkResponse.Loading -> {
@@ -294,6 +297,19 @@ class ProviderDashboard : AppCompatActivity() {
             } catch (e: Exception) {
 //                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
 //                    .show()
+            }
+        }
+
+        private fun updateSpOnlineStatus(context: Context) {
+            if (!UserUtils.getSpStatus(context)) {
+                updateOnlineStatus(context, 1)
+            }
+            if (UserUtils.getSpStatus(context)) {
+                binding.onlineText.text = context.resources.getString(R.string.online)
+                binding.onlineSwitch.isChecked = true
+            } else {
+                binding.onlineText.text = context.resources.getString(R.string.offline)
+                binding.onlineSwitch.isChecked = false
             }
         }
     }

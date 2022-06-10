@@ -124,7 +124,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 locationText.text = UserUtils.getCity(this@PaymentScreen)
                 spName.text = "${data.fname} ${data.lname}"
                 spProfession.text = data.profession
-                Glide.with(spProfilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+                Glide.with(spProfilePic).load(data.profile_pic)
                     .error(R.drawable.images).into(spProfilePic)
                 totalAmount.text = "Rs.${data.final_amount}/-"
                 walletBalance.text = "Rs.$finalWalletBalance/-"

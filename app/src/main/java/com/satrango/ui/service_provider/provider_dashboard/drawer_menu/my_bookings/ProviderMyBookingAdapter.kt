@@ -74,7 +74,7 @@ class ProviderMyBookingAdapter(
                 binding.spName.text = "Unknown"
             }
             if (!data.profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+                Glide.with(binding.profilePic).load(data.profile_pic)
                     .into(binding.profilePic)
             }
             if (data.category_id == "2") {

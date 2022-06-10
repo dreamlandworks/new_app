@@ -31,7 +31,7 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
         @SuppressLint("SetTextI18n")
         fun bind(bidDetail: BidDetail) {
             if (!bidDetail.sp_profile.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + bidDetail.sp_profile).into(binding.profilePic)
+                Glide.with(binding.profilePic).load(bidDetail.sp_profile).into(binding.profilePic)
             }
             binding.title.text = bidDetail.proposal
             binding.bidPrice.text = bidDetail.amount

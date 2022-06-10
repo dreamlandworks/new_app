@@ -116,7 +116,7 @@ class ViewFilesScreen : AppCompatActivity() {
                 "${response.booking_details.fname} ${response.booking_details.lname}"
             binding.occupation.text = "User"
             Glide.with(binding.profilePic)
-                .load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic)
+                .load(response.booking_details.user_profile_pic)
                 .error(R.drawable.images)
                 .into(binding.profilePic)
             if (!UserUtils.isPending(this)) {
@@ -137,7 +137,7 @@ class ViewFilesScreen : AppCompatActivity() {
                 "${response.booking_details.sp_fname} ${response.booking_details.sp_lname}"
             binding.occupation.text = response.booking_details.sp_profession
             Glide.with(binding.profilePic)
-                .load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic)
+                .load(response.booking_details.sp_profile_pic)
                 .error(R.drawable.images)
                 .into(binding.profilePic)
             if (!UserUtils.isPending(this)) {

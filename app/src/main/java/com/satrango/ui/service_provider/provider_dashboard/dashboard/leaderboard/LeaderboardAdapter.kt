@@ -22,7 +22,7 @@ class LeaderboardAdapter(private val list: List<Data>): RecyclerView.Adapter<Lea
                 if (data.profile_pic.isNullOrBlank()) {
                     Glide.with(root.context).load(R.drawable.images).into(profileImage)
                 } else {
-                    Glide.with(root.context).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(profileImage)
+                    Glide.with(root.context).load(data.profile_pic).into(profileImage)
                 }
                 spName.text = "${data.fname} ${data.lname}"
                 professionName.text = data.profession

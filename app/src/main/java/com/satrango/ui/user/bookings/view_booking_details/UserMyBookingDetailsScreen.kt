@@ -129,7 +129,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
         binding.occupation.text = response.booking_details.sp_profession
-        Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
+        Glide.with(this).load(response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
         if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
 //            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
             if (!isPending(this)) {

@@ -49,7 +49,7 @@ class SearchServiceProviderAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bindValues(data: Data) {
-            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+            Glide.with(binding.profilePic).load(data.profile_pic).into(binding.profilePic)
             binding.userRating.text = data.id
             binding.userName.text = data.fname
             binding.userOccupation.text = data.profession

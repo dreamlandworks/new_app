@@ -215,7 +215,7 @@ class UserHomeScreen :
         val skipBtn = dialogView.findViewById<TextView>(R.id.skipBtn)
         val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
-        Glide.with(requireContext()).load(RetrofitBuilder.BASE_URL + data.profile_pic).error(R.drawable.images).into(profilePic)
+        Glide.with(requireContext()).load(data.profile_pic).error(R.drawable.images).into(profilePic)
         description.text = data.description
         skipBtn.setOnClickListener { dialog.dismiss() }
         acceptBtn.setOnClickListener {

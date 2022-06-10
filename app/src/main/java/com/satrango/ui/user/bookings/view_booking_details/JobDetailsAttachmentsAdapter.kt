@@ -24,9 +24,9 @@ class JobDetailsAttachmentsAdapter(private val list: List<Attachment>) :
         fun bind(attachment: Attachment) {
             val binding = binding
             binding.closeBtn.visibility = View.GONE
-            Glide.with(binding.image).load(RetrofitBuilder.BASE_URL + attachment.file_name).into(binding.image)
+            Glide.with(binding.image).load(attachment.file_name).into(binding.image)
             binding.image.setOnClickListener {
-                openFullScreenImageDialog(RetrofitBuilder.BASE_URL + attachment.file_name)
+                openFullScreenImageDialog(attachment.file_name)
             }
         }
 

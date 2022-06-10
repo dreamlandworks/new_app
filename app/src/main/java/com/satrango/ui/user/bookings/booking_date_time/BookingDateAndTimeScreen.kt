@@ -172,7 +172,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
     }
 
     @SuppressLint("SetTextI18n", "ObsoleteSdkInt")
@@ -180,7 +180,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = resources.getString(R.string.user)
         binding.costPerHour.text = "Rs. ${round(data.amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(RetrofitBuilder.BASE_URL + data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
         binding.rating.setBackgroundResource(R.drawable.purple_circle_color)
         binding.reviews.setBackgroundResource(R.drawable.purple_circle_color)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

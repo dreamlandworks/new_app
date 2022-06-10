@@ -29,7 +29,7 @@ class RegularAlertAdapter(
             val outputTime: String = formatter.format(parser.parse(data.created_on))
             binding.rowTime.text = outputTime
             binding.rowLayout.visibility = View.GONE
-            Glide.with(binding.profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic)
+            Glide.with(binding.profilePic).load(data.profile_pic)
                 .error(UserUtils.getUserProfilePic(binding.profilePic.context)).into(binding.profilePic)
             if (data.status == "1") {
                 binding.rootLayout.setBackgroundColor(binding.rootLayout.context.resources.getColor(R.color.grey_800))

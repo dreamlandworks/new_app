@@ -65,7 +65,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 
         binding.apply {
 
-            Glide.with(profilePic).load(RetrofitBuilder.BASE_URL + data.profile_pic).placeholder(R.drawable.images).into(profilePic)
+            Glide.with(profilePic).load(data.profile_pic).placeholder(R.drawable.images).into(profilePic)
             userName.text = data.fname
             occupation.text = data.profession
             costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"

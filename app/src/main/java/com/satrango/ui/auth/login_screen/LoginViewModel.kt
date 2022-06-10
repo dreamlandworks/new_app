@@ -29,7 +29,7 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
 //                    Log.e("LOGIN", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         UserUtils.saveUserName(context, jsonObject.getString("fname") + " " + jsonObject.getString("lname"))
-                        UserUtils.saveUserProfilePic(context, RetrofitBuilder.BASE_URL + jsonObject.getString("profile_image"))
+                        UserUtils.saveUserProfilePic(context, jsonObject.getString("profile_image"))
                         userLogin.value = NetworkResponse.Success(jsonObject.getString("user_id"))
                     } else {
                         userLogin.value = NetworkResponse.Failure(jsonObject.getString("message"))

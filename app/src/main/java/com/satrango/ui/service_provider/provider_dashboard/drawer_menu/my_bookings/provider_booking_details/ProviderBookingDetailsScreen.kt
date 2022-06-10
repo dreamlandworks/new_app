@@ -129,7 +129,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         binding.date.text = response.booking_details.scheduled_date
         binding.amount.text = "Rs ${response.booking_details.amount}"
         binding.time.text = response.booking_details.from
-        Glide.with(this).load(RetrofitBuilder.BASE_URL + response.booking_details.user_profile_pic)
+        Glide.with(this).load(response.booking_details.user_profile_pic)
             .error(R.drawable.images).into(binding.profilePic)
         binding.otpText.text = resources.getString(R.string.time_lapsed)
         binding.otp.text = response.booking_details.time_lapsed
