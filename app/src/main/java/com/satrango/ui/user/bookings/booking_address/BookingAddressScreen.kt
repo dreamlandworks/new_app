@@ -379,14 +379,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         progressDialog.dismiss()
                         showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
-//                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
+                            Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
                             UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
                             UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
                             UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
                             UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                             UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user", "accepted|${UserUtils.bookingType}")
                         } else {
-//                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
+                            Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
                             UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
                         }
                     } else {

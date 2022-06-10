@@ -446,8 +446,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             } else if (data.data != null) {
                 val uri = data.data
                 val encodedImage = UserUtils.getBase64FromFile(this, uri)!!
-                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", "", ""))
-                encodedImages.add(Attachment(encodedImage, UserUtils.getFileExtension(this, uri!!)))
+                val fileExtension = UserUtils.getFileExtension(this, uri!!)
+                imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension, ""))
+                encodedImages.add(Attachment(encodedImage, UserUtils.getFileExtension(this, uri)))
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
