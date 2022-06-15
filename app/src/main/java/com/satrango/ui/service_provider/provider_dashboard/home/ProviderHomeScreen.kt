@@ -70,7 +70,7 @@ class ProviderHomeScreen : Fragment() {
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
 
-        viewModel.getCitiesList(requireContext()).observe(requireActivity()) {
+        viewModel.getCitiesList("0").observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()

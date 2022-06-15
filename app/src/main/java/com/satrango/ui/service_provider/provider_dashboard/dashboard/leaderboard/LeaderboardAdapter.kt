@@ -1,20 +1,18 @@
 package com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard
 
 import android.annotation.SuppressLint
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.LeaderboardRowBinding
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.Data
-import com.satrango.utils.loadProfileImage
 
-class LeaderboardAdapter(private val list: List<Data>): RecyclerView.Adapter<LeaderboardAdapter.ViewHolder>() {
+class LeaderboardAdapter(private val list: List<Data>) :
+    RecyclerView.Adapter<LeaderboardAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: LeaderboardRowBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(binding: LeaderboardRowBinding) : RecyclerView.ViewHolder(binding.audience) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Data) {
             binding.apply {
@@ -40,7 +38,13 @@ class LeaderboardAdapter(private val list: List<Data>): RecyclerView.Adapter<Lea
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(LeaderboardRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            LeaderboardRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

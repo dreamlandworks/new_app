@@ -105,12 +105,12 @@ class ProviderMyTrainingViewModel(private val repository: ProviderMyTrainingRepo
     }
 
     fun getCitiesList(
-        context: Context
+        userId: String
     ): MutableLiveData<NetworkResponse<CitiesResModel>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 citiesList.value = NetworkResponse.Loading()
-                val response = async { repository.getCities() }
+                val response = async { repository.getCities(userId) }
                 val responseJson = response.await()
                 if (responseJson.status == 200) {
                     citiesList.value = NetworkResponse.Success(responseJson)

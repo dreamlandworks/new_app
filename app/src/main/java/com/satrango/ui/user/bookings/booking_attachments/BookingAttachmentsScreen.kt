@@ -351,7 +351,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this)) {
 //                        if (PermissionUtils.isNetworkConnected(this)) {
 //                            UserUtils.sendFCMtoAllServiceProviders(
@@ -363,17 +362,27 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 //                        } else {
 //                            snackBar(binding.nextBtn, "No Internet Connection!")
 //                        }
-                        UserUtils.sendFCMtoSelectedServiceProvider(
+                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
                             this,
                             UserUtils.getBookingId(this),
                             "user"
                         )
+                        if (hasToken.isNotEmpty()) {
+                            toast(this, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
+                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
                             this,
                             UserUtils.getBookingId(this),
                             "user"
                         )
+                        if (hasToken.isNotEmpty()) {
+                            toast(this, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -565,7 +574,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     progressDialog.dismiss()
                     val jsonResponse = JSONObject(it.data!!)
 //                    toast(this, Gson().toJson(jsonResponse.toString()))
-                    UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                    val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                    if (hasToken.isNotEmpty()) {
+                        toast(this, hasToken)
+                    } else {
+                        showWaitingForSPConfirmationDialog()
+                    }
 //                    if (UserUtils.getFromInstantBooking(this)) {
 ////                        if (PermissionUtils.isNetworkConnected(this)) {
 ////                            UserUtils.saveInstantBooking(this, false)
@@ -590,7 +604,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
 //                            "user"
 //                        )
 //                    }
-                    showWaitingForSPConfirmationDialog()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

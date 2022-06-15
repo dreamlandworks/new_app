@@ -1262,10 +1262,10 @@ object UserUtils {
 //        val request = SendFCMReqModel(NotificationX("${ProviderRejectBookingScreen.bookingId}|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|reject|${ProviderRejectBookingScreen.bookingType}|$finalReason", "${ProviderRejectBookingScreen.bookingId}|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|reject|${ProviderRejectBookingScreen.bookingType}|$finalReason", "reject"), "high", ProviderRejectBookingScreen.response!!.booking_details.fcm_token)
 //        val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", from), "high", token)
 
-
+//        Toast.makeText(context, "Send FCM $token", Toast.LENGTH_SHORT).show()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val requestBody = SendFCMReqModel(NotificationX("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",from), "high", ProviderRejectBookingScreen.response!!.booking_details.fcm_token)
+                val requestBody = SendFCMReqModel(NotificationX("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",from), "high", token)
                 val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
                 Toast.makeText(context, Gson().toJson(fcmResponse), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
@@ -1379,11 +1379,8 @@ object UserUtils {
         context: Context,
         bookingId: String,
         from: String
-    ) {
-        val spDetails = Gson().fromJson(
-            getSelectedSPDetails(context),
-            com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java
-        )
+    ): String {
+        val spDetails = Gson().fromJson(getSelectedSPDetails(context), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
 //        Log.e("SELECTED SP:", Gson().toJson(spDetails))
 //        for (sp in spDetails.data) {
 //            for (spSlot in spDetails.slots_data) {
@@ -1393,7 +1390,12 @@ object UserUtils {
 //                }
 //            }
 //        }
-        sendFCM(context, spDetails.fcm_token, bookingId, from, "accepted|$bookingType")
+        return if (spDetails.fcm_token.isEmpty()) {
+            "Service Provider not able to receive notifications"
+        } else {
+            sendFCM(context, spDetails.fcm_token, bookingId, from, "accepted|$bookingType")
+            ""
+        }
     }
 
     fun sendFCMtoAllServiceProviders(
@@ -1401,7 +1403,8 @@ object UserUtils {
         bookingId: String,
         from: String,
         type: String
-    ) {
+    ): String {
+        val tokenEmpty = "Service Provider not able to receive notifications"
         val spDetails = Gson().fromJson(
             getSelectedAllSPDetails(context),
             SearchServiceProviderResModel::class.java
@@ -1409,10 +1412,13 @@ object UserUtils {
         if (getSelectedSPDetails(context).isNotEmpty()) {
             val data = Gson().fromJson(
                 getSelectedSPDetails(context),
-                com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java
-            )
+                com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
 //            Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
-            sendFCM(context, data.fcm_token, bookingId, from, type)
+            if (data.fcm_token.isNotEmpty()) {
+                sendFCM(context, data.fcm_token, bookingId, from, type)
+            } else {
+                return tokenEmpty
+            }
         } else {
 //            Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
             for (sp in spDetails.data) {
@@ -1431,7 +1437,11 @@ object UserUtils {
                                     sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
                                 }
                             } else {
-                                sendFCM(context, sp.fcm_token, bookingId, from, type)
+                                if (sp.fcm_token.isNotEmpty()) {
+                                    sendFCM(context, sp.fcm_token, bookingId, from, type)
+                                } else {
+                                    return tokenEmpty
+                                }
                                 Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             }
                         }
@@ -1442,13 +1452,18 @@ object UserUtils {
                                 sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
                             }
                         } else {
+                            if (sp.fcm_token.isNotEmpty()) {
+                                sendFCM(context, sp.fcm_token, bookingId, from, type)
+                            } else {
+                                return tokenEmpty
+                            }
                             Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
-                            sendFCM(context, sp.fcm_token, bookingId, from, type)
                         }
                     }
                 }
             }
         }
+        return ""
     }
 
     fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {

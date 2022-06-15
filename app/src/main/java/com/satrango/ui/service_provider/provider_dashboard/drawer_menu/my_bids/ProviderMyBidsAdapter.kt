@@ -72,7 +72,6 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                         UserUtils.savePostJobId(binding.atText.context, data.post_job_id.toInt())
                         binding.root.context.startActivity(intent)
                     }
-
                     if (isProvider(binding.atText.context)) {
                         binding.editBidBtn.text = "Place Bid"
                         binding.editBidBtn.setOnClickListener {
@@ -124,21 +123,22 @@ class ProviderMyBidsAdapter(private val list: List<JobPostDetail>) :
                     }
                 }
                 else -> {
-                    binding.editBidBtn.text = "Place Bid"
-                    binding.editBidBtn.setOnClickListener {
-                        ProviderPlaceBidScreen.FROM_AWARDED = false
-                        ProviderPlaceBidScreen.FROM_EDIT_BID = false
-                        val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
-                        intent.putExtra("expiresIn", data.expires_in)
-                        intent.putExtra("bidRanges", data.range_slots)
-                        intent.putExtra("title", data.title)
-                        UserUtils.savePostJobId(
-                            binding.atText.context,
-                            data.post_job_id.toInt()
-                        )
-                        ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
-                        binding.root.context.startActivity(intent)
-                    }
+//                    binding.editBidBtn.text = "Place Bid"
+                    binding.editBidBtn.text = "Bid Placed"
+//                    binding.editBidBtn.setOnClickListener {
+//                        ProviderPlaceBidScreen.FROM_AWARDED = false
+//                        ProviderPlaceBidScreen.FROM_EDIT_BID = false
+//                        val intent = Intent(binding.root.context, ProviderPlaceBidScreen::class.java)
+//                        intent.putExtra("expiresIn", data.expires_in)
+//                        intent.putExtra("bidRanges", data.range_slots)
+//                        intent.putExtra("title", data.title)
+//                        UserUtils.savePostJobId(
+//                            binding.atText.context,
+//                            data.post_job_id.toInt()
+//                        )
+//                        ProviderPlaceBidScreen.bookingId = data.booking_id.toInt()
+//                        binding.root.context.startActivity(intent)
+//                    }
                     binding.card.setOnClickListener {
                         isProvider(binding.atText.context, true)
                         ProviderPlaceBidScreen.FROM_AWARDED = false

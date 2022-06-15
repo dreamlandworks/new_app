@@ -27,8 +27,8 @@ class ProviderMyTrainingRepository : BaseRepository() {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getLeaderBoardList(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(context), cityId)
     }
 
-    suspend fun getCities(): CitiesResModel {
-        return RetrofitBuilder.getUserRetrofitInstance().getCities(RetrofitBuilder.USER_KEY)
+    suspend fun getCities(userId: String): CitiesResModel {
+        return RetrofitBuilder.getUserRetrofitInstance().getCities(RetrofitBuilder.USER_KEY, userId)
     }
 
     suspend fun getProviderDashboardDetails(context: Context, cityId: String): ProviderDashboardResModel {

@@ -333,6 +333,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     toast(this@SearchServiceProvidersScreen, response.message)
                 }
             } catch (e: Exception) {
+                progressDialog.dismiss()
                 toast(this@SearchServiceProvidersScreen, e.message!!)
             }
         }

@@ -472,7 +472,8 @@ interface UserApiService {
 
     @GET(UserApiEndPoints.CITIES)
     suspend fun getCities(
-        @Query("key") key: String
+        @Query("key") key: String,
+        @Query("user_id") userId: String,
     ): CitiesResModel
 
     @POST(UserApiEndPoints.SAVE_USER_UPI)

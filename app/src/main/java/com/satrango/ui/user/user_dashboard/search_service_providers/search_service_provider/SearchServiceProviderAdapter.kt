@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
@@ -19,11 +18,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
-import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
@@ -41,7 +38,7 @@ class SearchServiceProviderAdapter(
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
 
-        fun TextView.showStrikeThrough(show: Boolean) {
+        private fun TextView.showStrikeThrough(show: Boolean) {
             paintFlags =
                 if (show) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()

@@ -129,8 +129,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
-                val response =
-                    RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
                 progressDialog.dismiss()
                 val data = response.job_post_details
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(data)

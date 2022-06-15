@@ -24,6 +24,7 @@ import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDas
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard.models.Data
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.ProviderMyTrainingViewModel
+import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -33,8 +34,7 @@ class LeaderBoardScreen : AppCompatActivity() {
     private lateinit var viewModel: ProviderMyTrainingViewModel
     private lateinit var binding: ActivityLeaderBoardScreenBinding
     private lateinit var progressDialog: BeautifulProgressDialog
-    val points =
-        "1 x positive review - 5 points <br/> 1 x overall rating (> 4.5 Stars) - 2 Points <br/>1 x overall rating (> 3.5 Stars and < 4.5 Stars) - 1 Point <br/>1 x Job Completed - 3 Points <br/>1 x (5 Stars in Professionalism) - 3 Points <br/>1 x bid submitted - 1 Point <br/>1 x Training video watched - 1 Point <br/>3 x Timely Submissions - 3 Points"
+    val points = "1 x positive review - 5 points <br/> 1 x overall rating (> 4.5 Stars) - 2 Points <br/>1 x overall rating (> 3.5 Stars and < 4.5 Stars) - 1 Point <br/>1 x Job Completed - 3 Points <br/>1 x (5 Stars in Professionalism) - 3 Points <br/>1 x bid submitted - 1 Point <br/>1 x Training video watched - 1 Point <br/>3 x Timely Submissions - 3 Points"
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class LeaderBoardScreen : AppCompatActivity() {
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
 
-        viewModel.getCitiesList(this).observe(this) {
+        viewModel.getCitiesList(UserUtils.getUserId(this)).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
@@ -60,8 +60,7 @@ class LeaderBoardScreen : AppCompatActivity() {
                     for (city in cities) {
                         cityNames.add(city.city)
                     }
-                    val adapter =
-                        ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityNames)
+                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityNames)
                     binding.citySpinner.adapter = adapter
                     binding.citySpinner.onItemSelectedListener =
                         object : AdapterView.OnItemSelectedListener {
@@ -113,6 +112,7 @@ class LeaderBoardScreen : AppCompatActivity() {
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     snackBar(binding.audience, it.message!!)
+
                 }
             }
         }

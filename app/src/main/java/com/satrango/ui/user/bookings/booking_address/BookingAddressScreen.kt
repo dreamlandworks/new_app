@@ -377,17 +377,26 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
-                        showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                             Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
                             UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
                             UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
                             UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
                             UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
-                            UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user", "accepted|${UserUtils.bookingType}")
+                            val hasToken = UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user", "accepted|${UserUtils.bookingType}")
+                            if (hasToken.isNotEmpty()) {
+                                toast(this@BookingAddressScreen, hasToken)
+                            } else {
+                                showWaitingForSPConfirmationDialog()
+                            }
                         } else {
                             Log.e("SINGLE MOVE SELECTED", Gson().toJson(jsonResponse))
-                            UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
+                            val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user")
+                            if (hasToken.isNotEmpty()) {
+                                toast(this@BookingAddressScreen, hasToken)
+                            } else {
+                                showWaitingForSPConfirmationDialog()
+                            }
                         }
                     } else {
                         progressDialog.dismiss()
@@ -467,24 +476,33 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         )
                         UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
                         UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
-                        showWaitingForSPConfirmationDialog()
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                             if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
-                                UserUtils.sendFCMtoAllServiceProviders(
+                                val hasToken = UserUtils.sendFCMtoAllServiceProviders(
                                     this@BookingAddressScreen,
                                     UserUtils.getBookingId(this@BookingAddressScreen),
                                     "user",
                                     UserUtils.bookingType
                                 )
+                                if (hasToken.isNotEmpty()) {
+                                    toast(this@BookingAddressScreen, hasToken)
+                                } else {
+                                    showWaitingForSPConfirmationDialog()
+                                }
                             } else {
                                 snackBar(binding.nextBtn, "No Internet Connection!")
                             }
                         } else {
-                            UserUtils.sendFCMtoSelectedServiceProvider(
+                            val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
                                 this@BookingAddressScreen,
                                 UserUtils.getBookingId(this@BookingAddressScreen),
                                 "user"
                             )
+                            if (hasToken.isNotEmpty()) {
+                                toast(this@BookingAddressScreen, hasToken)
+                            } else {
+                                showWaitingForSPConfirmationDialog()
+                            }
                         }
                     } else {
                         progressDialog.dismiss()
@@ -878,27 +896,36 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    showWaitingForSPConfirmationDialog()
                     val jsonResponse = JSONObject(it.data!!)
                     UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
                     UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
-                            UserUtils.sendFCMtoAllServiceProviders(
+                            val hasToken = UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
                                 UserUtils.bookingType
                             )
+                            if (hasToken.isNotEmpty()) {
+                                toast(this, hasToken)
+                            } else {
+                                showWaitingForSPConfirmationDialog()
+                            }
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
+                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
                             this,
                             UserUtils.getBookingId(this),
                             "user"
                         )
+                        if (hasToken.isNotEmpty()) {
+                            toast(this, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     }
                 }
                 is NetworkResponse.Failure -> {

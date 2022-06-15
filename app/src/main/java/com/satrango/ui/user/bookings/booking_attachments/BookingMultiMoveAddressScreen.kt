@@ -212,7 +212,6 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    showWaitingForSPConfirmationDialog()
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(
@@ -225,11 +224,16 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                             snackBar(binding.nextBtn, "No Internet Connection!")
                         }
                     } else {
-                        UserUtils.sendFCMtoSelectedServiceProvider(
+                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
                             this,
                             UserUtils.getBookingId(this),
                             "user"
                         )
+                        if (hasToken.isNotEmpty()) {
+                            toast(this, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     }
                 }
                 is NetworkResponse.Failure -> {
