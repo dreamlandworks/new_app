@@ -132,7 +132,7 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
                 progressDialog.dismiss()
                 val data = response.job_post_details
-                binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
+                binding.recyclerView.adapter = ProviderMyBidsNewJobsAdapter(data)
                 binding.note.visibility = View.GONE
                 if (data.isNotEmpty()) {
                     binding.sortFilterBtn.visibility = View.VISIBLE

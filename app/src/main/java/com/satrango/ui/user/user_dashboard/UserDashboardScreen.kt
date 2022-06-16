@@ -292,6 +292,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         isProvider(this, false)
 //        PermissionUtils.checkAndRequestPermissions(this)
         getUserProfilePicture()
+        PermissionUtils.checkGPSStatus(this)
     }
 
     override fun onRequestPermissionsResult(

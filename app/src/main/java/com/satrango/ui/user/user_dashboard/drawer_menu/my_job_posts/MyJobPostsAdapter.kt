@@ -66,12 +66,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                         ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
                         ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
                         ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
-                        binding.editBtn.context.startActivity(
-                            Intent(
-                                binding.editBtn.context,
-                                PostJobDateTimeScreen::class.java
-                            )
-                        )
+                        binding.editBtn.context.startActivity(Intent(binding.editBtn.context, PostJobDateTimeScreen::class.java))
                     }
                 }
                 "Awarded" -> {
@@ -91,6 +86,11 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.awardedBtn.text = "Post Again"
                     binding.expiresInText.text = "Expired On:"
                     binding.expiresOn.text = jobPostDetail.expired_on
+                    UserUtils.EDIT_MY_JOB_POST = true
+                    ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
+                    ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
+                    ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
+                    binding.editBtn.context.startActivity(Intent(binding.editBtn.context, PostJobDateTimeScreen::class.java))
                 }
             }
             binding.root.setOnClickListener {

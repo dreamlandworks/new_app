@@ -752,6 +752,7 @@
     <string name="age_should_be_greater_than_13_year">Age should be greater than 13 year</string>
     <string name="new_jobs_are_not_available">New Jobs are not available</string>
     <string name="upcoming_bookings_are_not_available">Upcoming bookings are not available</string>
+    <string name="please_select_city">Please Select Location</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

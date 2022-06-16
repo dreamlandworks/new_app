@@ -34,6 +34,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
@@ -252,8 +253,18 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        PermissionUtils.checkGPSStatus(this)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun loadSearchResults(subCategory: String) {
+        if (UserUtils.getCity(this).isEmpty()) {
+            toast(this, getString(com.satrango.R.string.please_select_city))
+            startActivity(Intent(this, UserLocationSelectionScreen::class.java))
+            return
+        }
         if (keyword == "0") {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
@@ -275,36 +286,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             offerId
         )
 //        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
-//        {
-//            "address": "54-14/7-78",
-//            "city": "Vijayawada",
-//            "country": "India",
-//            "key": "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL",
-//            "offer_id": 0,
-//            "postal_code": "520008",
-//            "search_phrase_id": "Android App Developer",
-//            "state": "Andhra Pradesh",
-//            "subcat_id": 0,
-//            "user_lat": "16.5094445",
-//            "user_long": "80.6706229",
-//            "users_id": 76
-//        }
-
-//        val requestBody = SearchServiceProviderReqModel(
-//            "54-14/7-78",
-//            "Vijayawada",
-//            "India",
-//            RetrofitBuilder.USER_KEY,
-//            "Android App Developer",
-//            "520008",
-//            "Andhra Pradesh",
-//            "16.5094445",
-//            "80.6706229",
-//            76,
-//            0,
-//            offerId
-//        )
-
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
