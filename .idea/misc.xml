@@ -222,7 +222,7 @@
         <entry key="app/src/main/res/layout/activity_provider_plans_screens.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_profile_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_provider_rating_review_screen.xml" value="0.2543822146216332" />
-        <entry key="app/src/main/res/layout/activity_provider_reject_booking_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_provider_reject_booking_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_provider_release_goals_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_review_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_provider_sign_up_five.xml" value="0.25" />

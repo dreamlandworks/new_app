@@ -2,20 +2,17 @@ package com.satrango.ui.service_provider.provider_dashboard
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderRejectBookingScreenBinding
-import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.remote.fcm.NotificationX
@@ -27,12 +24,10 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -171,13 +166,26 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
 //                toast(this@ProviderRejectBookingScreen, Gson().toJson(requestBody))
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+                        val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()
+                            .setProviderResponse(requestBody)
                         val jsonResponse = JSONObject(bookingResponse.string())
                         progressDialog.show()
                         if (jsonResponse.getInt("status") == 200) {
                             progressDialog.dismiss()
                             val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(
-                                SendFCMReqModel(NotificationX("$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason", "reject"), "high", response!!.booking_details.fcm_token)
+                                SendFCMReqModel(
+                                    NotificationX(
+                                        "$bookingId|${
+                                            UserUtils.getSelectedKeywordCategoryId(
+                                                this@ProviderRejectBookingScreen
+                                            )
+                                        }|${UserUtils.getUserId(this@ProviderRejectBookingScreen)}|reject|$bookingType|$finalReason",
+                                        "$bookingId|${UserUtils.getSelectedKeywordCategoryId(this@ProviderRejectBookingScreen)}|${
+                                            UserUtils.getUserId(this@ProviderRejectBookingScreen)
+                                        }|reject|$bookingType|$finalReason",
+                                        "reject"
+                                    ), "high", response!!.booking_details.fcm_token
+                                )
                             )
                             if (fcmResponse.status == 200) {
                                 if (FCMService.notificationManager != null) {
@@ -185,7 +193,10 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                 }
                                 binding.feedBack.setText("")
                                 ProviderDashboard.bookingId = "0"
-                                UserUtils.saveFromFCMService(this@ProviderRejectBookingScreen, false)
+                                UserUtils.saveFromFCMService(
+                                    this@ProviderRejectBookingScreen,
+                                    false
+                                )
                                 if (ProviderDashboard.bottomSheetDialog != null) {
                                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
                                         ProviderDashboard.bottomSheetDialog!!.dismiss()
@@ -213,7 +224,11 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

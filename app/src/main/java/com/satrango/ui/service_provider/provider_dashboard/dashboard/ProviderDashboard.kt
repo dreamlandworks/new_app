@@ -79,6 +79,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
 import com.satrango.R
+import com.satrango.base.MyApp
 import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -512,7 +513,6 @@ class ProviderDashboard : AppCompatActivity() {
         response: BookingDetailsResModel,
         categoryId: String
     ) {
-
         bottomSheetDialog = BottomSheetDialog(this)
         val bottomSheet = LayoutInflater.from(this).inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog!!.setCancelable(false)

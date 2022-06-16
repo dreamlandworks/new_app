@@ -14,15 +14,15 @@ import com.satrango.utils.UserUtils
 
 class MyApp: Application(), LifecycleObserver {
 
-//    companion object {
-//        lateinit var instance: MyApp
-//    }
+    companion object {
+        lateinit var instance: MyApp
+    }
 
     private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate() {
         super.onCreate()
-//        instance = this
+        instance = this
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users))
     }
@@ -39,8 +39,8 @@ class MyApp: Application(), LifecycleObserver {
         databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
     }
 
-//    fun getInstance(): MyApp {
-//        return instance
-//    }
+    fun getInstance(): MyApp {
+        return instance
+    }
 
 }
