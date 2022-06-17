@@ -109,6 +109,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onError(status: Status) {
+                Log.e("MAPS ERROR: ", status.statusMessage!!)
                 toast(this@UserLocationSelectionScreen, "An error occurred: $status")
             }
         })

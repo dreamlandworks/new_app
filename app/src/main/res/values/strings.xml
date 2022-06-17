@@ -6,7 +6,8 @@
     <string name="fcm_server_key">fcm_server_key</string>
     <string name="facebook_app_id">184529536828797</string>
     <string name="fb_login_protocol_scheme">fb184529536828797</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBPxm7IE8OmXYUok1ABQoiNX-_bRmELSCs</string>
+<!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBPxm7IE8OmXYUok1ABQoiNX-_bRmELSCs</string>-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBSDwshVDwzn4ddIN728zPgFgarpjwjMQE</string>
 <!--    <string name="google_maps_key" >google_maps_key</string>-->
 
     <string name="userLogin">login</string>
