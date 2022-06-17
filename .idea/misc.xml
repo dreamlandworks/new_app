@@ -244,7 +244,7 @@
         <entry key="app/src/main/res/layout/activity_user_dashboard_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_user_f_a_q_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_installments_request_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.165" />

@@ -212,7 +212,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
 //                        UserUtils.sendFCM(this@ProviderRejectBookingScreen, , "reject", "reject", "")
                         } else {
                             progressDialog.dismiss()
-                            snackBar(binding.backBtn, jsonResponse.getString("status_message"))
+                            snackBar(binding.backBtn, jsonResponse.getString("message"))
                         }
                     } catch (e: Exception) {
                         snackBar(binding.backBtn, e.message!!)

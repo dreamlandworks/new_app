@@ -12,22 +12,21 @@ import com.satrango.ui.service_provider.provider_dashboard.dashboard.leaderboard
 class LeaderboardAdapter(private val list: List<Data>) :
     RecyclerView.Adapter<LeaderboardAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: LeaderboardRowBinding) : RecyclerView.ViewHolder(binding.audience) {
+    class ViewHolder(binding: LeaderboardRowBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Data) {
             binding.apply {
                 rank.text = "#${data.rank}"
                 if (data.profile_pic.isNullOrBlank()) {
-                    Glide.with(root.context).load(R.drawable.images).into(profileImage)
+                    Glide.with(root.context).load(R.drawable.images).error(R.drawable.images).into(profileImage)
                 } else {
-                    Glide.with(root.context).load(data.profile_pic).into(profileImage)
+                    Glide.with(root.context).load(data.profile_pic).error(R.drawable.images).into(profileImage)
                 }
                 spName.text = "${data.fname} ${data.lname}"
                 professionName.text = data.profession
                 pointsCount.text = "${data.points_count} Points"
                 rating.text = data.rating
                 audience.text = data.total_people
-
             }
         }
 
@@ -38,13 +37,7 @@ class LeaderboardAdapter(private val list: List<Data>) :
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(
-            LeaderboardRowBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return ViewHolder(LeaderboardRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
