@@ -50,6 +50,7 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         var bookingId: Int = 0
         var categoryId: Int = 0
         var userId: Int = 0
+        var postStatus = ""
     }
 
     @SuppressLint("SetTextI18n")
@@ -110,6 +111,10 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding.scheduleDate.text = data.job_post_details.scheduled_date
         binding.estimateTime.text = "${data.job_post_details.estimate_time} ${data.job_post_details.estimate_type}"
 
+        if (postStatus == "Expired") {
+            binding.editPostBtn.visibility = View.GONE
+        }
+
         var languages = ""
         for (language in data.languages) {
             languages = if (languages.isNotEmpty()) {
@@ -117,7 +122,6 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
             } else {
                 language
             }
-
         }
         binding.languages.text = languages
 

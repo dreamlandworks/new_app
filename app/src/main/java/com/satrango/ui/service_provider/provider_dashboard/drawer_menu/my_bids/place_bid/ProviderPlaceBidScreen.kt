@@ -147,7 +147,9 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
         }
 
         if (FROM_EDIT_BID) {
-            updateUIWithBidDetails()
+            if (EDIT_BID_ID.isNotEmpty()) {
+                updateUIWithBidDetails()
+            }
         }
 
     }
@@ -194,7 +196,9 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
 
     private fun resetFields() {
         if (FROM_EDIT_BID) {
-            updateUIWithBidDetails()
+            if (EDIT_BID_ID.isNotEmpty()) {
+                updateUIWithBidDetails()
+            }
         } else {
             binding.apply {
                 bidAmount.setText("")

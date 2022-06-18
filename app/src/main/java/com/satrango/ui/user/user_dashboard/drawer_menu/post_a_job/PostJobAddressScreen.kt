@@ -126,12 +126,15 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
                     snackBar(binding.nextBtn, "Select Address")
                 }
             } else {
-                if (UserUtils.EDIT_MY_JOB_POST) {
-                    updatePostJobSingleMove(addressId)
-                } else {
+                if (UserUtils.POST_JOB_AGAIN) {
                     postJobSingleMove(addressId)
+                } else {
+                    if (UserUtils.EDIT_MY_JOB_POST) {
+                        updatePostJobSingleMove(addressId)
+                    } else {
+                        postJobSingleMove(addressId)
+                    }
                 }
-
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.satrango.remote.api_services
 
-import com.satrango.R
 import com.satrango.remote.end_points.UserApiEndPoints
 import com.satrango.remote.fcm.FCMMessageReqModel
 import com.satrango.remote.fcm.SendFCMReqModel
@@ -75,14 +74,12 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.models.
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsReqModel
-import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModel
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserAlertsResModelX
 import com.satrango.ui.user.user_dashboard.user_alerts.models.UserUpdateAlertsToReadReqModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.models.UserKeywordsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListReqModel
 import com.satrango.ui.user.user_dashboard.user_offers.models.OffersListResModel
-import com.satrango.utils.UserUtils
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -224,7 +221,7 @@ interface UserApiService {
         @Query("key") key: String
     ): AllLocationsResModel
 
-    @GET(UserApiEndPoints.TRANSACTiON_HISTORY)
+    @GET(UserApiEndPoints.TRANSACTION_HISTORY)
     suspend fun getTransactionHistory(
         @Query("key") key: String,
         @Query("users_id") user_id: String
@@ -501,16 +498,16 @@ interface UserApiService {
     @POST(UserApiEndPoints.MEMBERSHIP_PAYMENT_TXN)
     suspend fun getPaytmMembershipProcessTxn(
         @Body requestBody: UserPlansTxnReqModel
-    ) : UserPlansTxnResModel
+    ): UserPlansTxnResModel
 
     @POST(UserApiEndPoints.SEND_FCM)
     suspend fun sendFcm(
         @Body requestBody: SendFCMReqModel
-    ) : SendFCMResModel
+    ): SendFCMResModel
 
     @POST(UserApiEndPoints.ADD_FUNDS)
     suspend fun addFunds(
         @Body requestBody: AddFundsReqModel
-    ) : AddFundsResModel
+    ): AddFundsResModel
 
 }

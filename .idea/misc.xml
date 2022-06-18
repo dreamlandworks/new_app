@@ -199,7 +199,7 @@
         <entry key="app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.183203125" />
         <entry key="app/src/main/res/layout/activity_my_bookings_screen.xml" value="0.23697916666666666" />
-        <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_my_job_post_view_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_my_job_posts_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_o_t_p_verification_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_payment_screen.xml" value="0.25" />
@@ -246,7 +246,7 @@
         <entry key="app/src/main/res/layout/activity_user_installments_request_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_user_plan_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_privacy_policy_screen.xml" value="0.11944444444444445" />

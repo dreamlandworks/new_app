@@ -131,18 +131,19 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     if (addressIndex != UserUtils.addressList.size) {
                         loadAddressOnUI()
                     } else {
-                        if (UserUtils.EDIT_MY_JOB_POST) {
-                            updatePostJobMultiMove()
-                        } else {
+                        if (UserUtils.POST_JOB_AGAIN) {
                             postJobMultiMove()
+                        } else {
+                            if (UserUtils.EDIT_MY_JOB_POST) {
+                                updatePostJobMultiMove()
+                            } else {
+                                postJobMultiMove()
+                            }
                         }
                     }
                 }
-
             }
-
         }
-
     }
 
     private fun initializeToolBar() {
@@ -191,8 +192,8 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt()
         )
 
-        viewModel.updateMultiMoveMyJobPost(this, requestBody).observe(this, {
-            when(it) {
+        viewModel.updateMultiMoveMyJobPost(this, requestBody).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
@@ -208,7 +209,7 @@ class PostJobMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                     snackBar(binding.addressText, it.message!!)
                 }
             }
-        })
+        }
 
     }
 

@@ -35,6 +35,7 @@ import java.util.*
 
 class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListener {
 
+    private lateinit var walletBalance: String
     private var paymentData: Data? = null
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var binding: ActivityUserPlanScreenBinding
@@ -56,12 +57,8 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserPlanAdapter(
-                        it.data!!,
-                        it.data.data,
-                        it.data.activated_plan.toInt(),
-                        this
-                    )
+                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!, it.data.data, it.data.activated_plan.toInt(), this)
+                    walletBalance = it.data.wallet_balance
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -92,9 +89,10 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
             PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
             PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
             PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = paymentData!!.amount.toInt()
-            PaymentScreen.period = paymentData!!.period.toInt()
-            PaymentScreen.id = paymentData!!.id.toInt()
+            PaymentScreen.amount = data.amount.toInt()
+            PaymentScreen.period = data.period.toInt()
+            PaymentScreen.id = data.id.toInt()
+            PaymentScreen.finalWalletBalance = walletBalance.toDouble().toInt().toString()
             startActivity(Intent(this, PaymentScreen::class.java))
 //            makePayment()
         } else {

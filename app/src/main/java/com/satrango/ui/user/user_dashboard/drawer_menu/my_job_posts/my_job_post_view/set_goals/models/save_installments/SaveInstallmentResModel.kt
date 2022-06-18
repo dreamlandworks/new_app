@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post
 
 data class SaveInstallmentResModel(
     val installment_det_id: Int,
+    val wallet_balance: String,
     val message: String,
     val status: Int
 )

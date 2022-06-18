@@ -46,6 +46,7 @@ object UserUtils {
     var spid = "0"
     var EDIT_MY_JOB_POST_DETAILS = ""
     var EDIT_MY_JOB_POST = false
+    var POST_JOB_AGAIN = false
     var title = ""
     var bids_period = 0
     var bid_range_id = 0

@@ -11,6 +11,7 @@ import com.satrango.R
 import com.satrango.databinding.MyJobPostsRowBinding
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobDateTimeScreen
 import com.satrango.utils.UserUtils
@@ -88,6 +89,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.expiresOn.text = jobPostDetail.expired_on
                     binding.awardedBtn.setOnClickListener {
                         UserUtils.EDIT_MY_JOB_POST = true
+                        UserUtils.POST_JOB_AGAIN = true
                         ViewBidsScreen.bookingId = jobPostDetail.booking_id.toInt()
                         ViewBidsScreen.categoryId = jobPostDetail.category_id.toInt()
                         ViewBidsScreen.postJobId = jobPostDetail.post_job_id.toInt()
@@ -95,6 +97,14 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     }
 
                 }
+            }
+            binding.messageBtn.setOnClickListener {
+                val intent = Intent(binding.messageBtn.context, DiscussionBoardScreen::class.java)
+                intent.putExtra("postJobId", jobPostDetail.post_job_id)
+                intent.putExtra("expiresIn", jobPostDetail.expires_in)
+                intent.putExtra("bidRanges", jobPostDetail.range_slots)
+                intent.putExtra("title", jobPostDetail.title)
+                binding.messageBtn.context.startActivity(intent)
             }
             binding.root.setOnClickListener {
                 when (jobPostDetail.category_id) {
@@ -119,6 +129,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                 MyJobPostViewScreen.categoryId = jobPostDetail.category_id.toInt()
                 UserUtils.savePostJobId(binding.avgAmount.context, jobPostDetail.post_job_id.toInt())
                 MyJobPostViewScreen.userId = jobPostDetail.sp_id.toInt()
+                MyJobPostViewScreen.postStatus = status
                 val intent = Intent(binding.root.context, MyJobPostViewScreen::class.java)
                 binding.root.context.startActivity(intent)
             }

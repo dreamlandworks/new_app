@@ -15,6 +15,7 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bids.place_bid.ProviderPlaceBidScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
+import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,53 +33,101 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
 
         fun bind(imagePath: Attachment) {
             if (imagePath.id != null) {
-
+                if (imagePath.id.isNotEmpty()) {
+                    when(imagePath.id.lowercase(Locale.getDefault())) {
+                        "doc" -> {
+                            Glide.with(binding.image).load(R.drawable.doc).error(R.drawable.doc).into(binding.image)
+                        }
+                        "docx" -> {
+                            Glide.with(binding.image).load(R.drawable.docx).error(R.drawable.docx).into(binding.image)
+                        }
+                        "html" -> {
+                            Glide.with(binding.image).load(R.drawable.html).error(R.drawable.html).into(binding.image)
+                        }
+                        "htm" -> {
+                            Glide.with(binding.image).load(R.drawable.htm).error(R.drawable.htm).into(binding.image)
+                        }
+                        "odx" -> {
+                            Glide.with(binding.image).load(R.drawable.odx).error(R.drawable.odx).into(binding.image)
+                        }
+                        "pdf" -> {
+                            Glide.with(binding.image).load(R.drawable.pdf).error(R.drawable.pdf).into(binding.image)
+                        }
+                        "xls" -> {
+                            Glide.with(binding.image).load(R.drawable.xls).error(R.drawable.xls).into(binding.image)
+                        }
+                        "xlsx" -> {
+                            Glide.with(binding.image).load(R.drawable.xlsx).error(R.drawable.xlsx).into(binding.image)
+                        }
+                        "ppt" -> {
+                            Glide.with(binding.image).load(R.drawable.ppt).error(R.drawable.ppt).into(binding.image)
+                        }
+                        "pptx" -> {
+                            Glide.with(binding.image).load(R.drawable.pptx).error(R.drawable.pptx).into(binding.image)
+                        }
+                        "txt" -> {
+                            Glide.with(binding.image).load(R.drawable.txt).error(R.drawable.txt).into(binding.image)
+                        }
+                        "jpg" -> {
+                            Glide.with(binding.image).load(base64ToImage(imagePath.file_name)).error(R.drawable.img).into(binding.image)
+                        }
+                        "jpeg" -> {
+                            Glide.with(binding.image).load(base64ToImage(imagePath.file_name)).error(R.drawable.img).into(binding.image)
+                        }
+                        "png" -> {
+                            Glide.with(binding.image).load(base64ToImage(imagePath.file_name)).error(R.drawable.img).into(binding.image)
+                        }
+                    }
+                }
             }
 
-            when (imagePath.file_type.lowercase(Locale.getDefault())) {
-                "doc" -> {
-                    Glide.with(binding.image).load(R.drawable.doc).error(R.drawable.doc).into(binding.image)
-                }
-                "docx" -> {
-                    Glide.with(binding.image).load(R.drawable.docx).error(R.drawable.docx).into(binding.image)
-                }
-                "html" -> {
-                    Glide.with(binding.image).load(R.drawable.html).error(R.drawable.html).into(binding.image)
-                }
-                "htm" -> {
-                    Glide.with(binding.image).load(R.drawable.htm).error(R.drawable.htm).into(binding.image)
-                }
-                "odx" -> {
-                    Glide.with(binding.image).load(R.drawable.odx).error(R.drawable.odx).into(binding.image)
-                }
-                "pdf" -> {
-                    Glide.with(binding.image).load(R.drawable.pdf).error(R.drawable.pdf).into(binding.image)
-                }
-                "xls" -> {
-                    Glide.with(binding.image).load(R.drawable.xls).error(R.drawable.xls).into(binding.image)
-                }
-                "xlsx" -> {
-                    Glide.with(binding.image).load(R.drawable.xlsx).error(R.drawable.xlsx).into(binding.image)
-                }
-                "ppt" -> {
-                    Glide.with(binding.image).load(R.drawable.ppt).error(R.drawable.ppt).into(binding.image)
-                }
-                "pptx" -> {
-                    Glide.with(binding.image).load(R.drawable.pptx).error(R.drawable.pptx).into(binding.image)
-                }
-                "txt" -> {
-                    Glide.with(binding.image).load(R.drawable.txt).error(R.drawable.txt).into(binding.image)
-                }
-                "jpg" -> {
-                    Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
-                }
-                "jpeg" -> {
-                    Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
-                }
-                "png" -> {
-                    Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
+            if (imagePath.file_type.isNotEmpty()) {
+                when (imagePath.file_type.lowercase(Locale.getDefault())) {
+                    "doc" -> {
+                        Glide.with(binding.image).load(R.drawable.doc).error(R.drawable.doc).into(binding.image)
+                    }
+                    "docx" -> {
+                        Glide.with(binding.image).load(R.drawable.docx).error(R.drawable.docx).into(binding.image)
+                    }
+                    "html" -> {
+                        Glide.with(binding.image).load(R.drawable.html).error(R.drawable.html).into(binding.image)
+                    }
+                    "htm" -> {
+                        Glide.with(binding.image).load(R.drawable.htm).error(R.drawable.htm).into(binding.image)
+                    }
+                    "odx" -> {
+                        Glide.with(binding.image).load(R.drawable.odx).error(R.drawable.odx).into(binding.image)
+                    }
+                    "pdf" -> {
+                        Glide.with(binding.image).load(R.drawable.pdf).error(R.drawable.pdf).into(binding.image)
+                    }
+                    "xls" -> {
+                        Glide.with(binding.image).load(R.drawable.xls).error(R.drawable.xls).into(binding.image)
+                    }
+                    "xlsx" -> {
+                        Glide.with(binding.image).load(R.drawable.xlsx).error(R.drawable.xlsx).into(binding.image)
+                    }
+                    "ppt" -> {
+                        Glide.with(binding.image).load(R.drawable.ppt).error(R.drawable.ppt).into(binding.image)
+                    }
+                    "pptx" -> {
+                        Glide.with(binding.image).load(R.drawable.pptx).error(R.drawable.pptx).into(binding.image)
+                    }
+                    "txt" -> {
+                        Glide.with(binding.image).load(R.drawable.txt).error(R.drawable.txt).into(binding.image)
+                    }
+                    "jpg" -> {
+                        Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
+                    }
+                    "jpeg" -> {
+                        Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
+                    }
+                    "png" -> {
+                        Glide.with(binding.image).load(imagePath.file_name).error(R.drawable.img).into(binding.image)
+                    }
                 }
             }
+
             if (MyJobPostViewScreen.myJobPostViewScreen) {
                 binding.closeBtn.visibility = View.GONE
             }

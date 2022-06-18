@@ -54,6 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -98,10 +99,16 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
         binding.apply {
 
-            if (!FROM_COMPLETE_BOOKING) {
-                val tempFinalAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
-                if (tempFinalAmount > finalWalletBalance.toInt()) {
-                    finalWalletBalance = tempFinalAmount.toString()
+            if (FROM_USER_PLANS) {
+
+            } else if (FROM_USER_SET_GOALS) {
+                
+            } else {
+                if (!FROM_COMPLETE_BOOKING) {
+                    val tempFinalAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance
+                    if (tempFinalAmount > finalWalletBalance.toInt()) {
+                        finalWalletBalance = tempFinalAmount.toString()
+                    }
                 }
             }
 
@@ -122,8 +129,13 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 spProfession.text = data.profession
                 Glide.with(spProfilePic).load(data.profile_pic).error(R.drawable.images).into(spProfilePic)
                 totalAmount.text = "Rs.${data.final_amount}/-"
-                walletBalance.text = "Rs.$finalWalletBalance/-"
-                currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
+                if (finalWalletBalance.toInt() == 0) {
+                    currentBalance.visibility = View.GONE
+                } else {
+                    walletBalance.text = "Rs.$finalWalletBalance/-"
+                    currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
+                }
+
                 payAmount.text = "Rs.$finalAmount/-"
             } else if (FROM_COMPLETE_BOOKING) {
                 bookingSummaryLayout.visibility = View.VISIBLE
@@ -142,7 +154,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
             } else if (FROM_USER_PLANS || FROM_PROVIDER_PLANS) {
 
-                bookingSummaryLayout.visibility = View.VISIBLE
+                bookingSummaryLayout.visibility = View.GONE
                 bookingSummaryCard.visibility = View.VISIBLE
                 amountText.visibility = View.GONE
                 invoiceAmountCard.visibility = View.GONE
@@ -155,12 +167,13 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 completedText.text = "Valid till:"
                 completedAt.text = "Completed At Date"
 
-                totalAmount.text = amount.toString()
-                walletBalance.text = finalWalletBalance
-                currentBalance.text = "Deduct from wallet Balance: $amount"
-                payAmount.text = amount.toString()
+                totalAmount.text = "Rs.$amount/-"
+                walletBalance.text = "Rs.$finalWalletBalance/-"
+                currentBalance.text = "Deduct from wallet Balance: Rs.$amount/-"
+                payAmount.text = "Rs.$amount/-"
 
             }
+            toast(this@PaymentScreen, FROM_USER_PLANS.toString())
 
 //            payableAmount.text = "Rs. $finalAmount"
 //            payableBalance.text = resources.getString(R.string.total_amount_payable) + " Rs. " + finalAmount.toString()
@@ -193,7 +206,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     currentBalance.text = "Deducted from Wallet - Rs. 0"
                     payableAmount.text = "Rs. $finalAmount"
                 }
-                upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
+//                upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
             }
 
 //            proceedWithUPIBtn.setOnClickListener {

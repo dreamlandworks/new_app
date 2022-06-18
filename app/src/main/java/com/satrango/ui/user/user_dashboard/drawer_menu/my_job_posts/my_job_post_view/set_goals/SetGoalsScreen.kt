@@ -173,7 +173,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
             RetrofitBuilder.USER_KEY,
             ViewBidsScreen.postJobId
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.saveInstallments(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -181,11 +181,9 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    UserUtils.saveInstallmentDetId(
-                        this,
-                        it.data!!.installment_det_id.toString()
-                    )
+                    UserUtils.saveInstallmentDetId(this, it.data!!.installment_det_id.toString())
                     PaymentScreen.amount = bidPrice
+                    PaymentScreen.finalWalletBalance = it.data.wallet_balance
 //                    PaymentScreen.amount = bidPrice * 100
                     PaymentScreen.FROM_USER_SET_GOALS = true
                     PaymentScreen.FROM_USER_PLANS = false

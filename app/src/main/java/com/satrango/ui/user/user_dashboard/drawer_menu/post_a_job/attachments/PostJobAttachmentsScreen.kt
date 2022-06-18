@@ -87,8 +87,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
         lateinit var encodedImages: ArrayList<Attachment>
         lateinit var firebaseImageUrls: ArrayList<Attachment>
 
-        lateinit var finalKeywords: java.util.ArrayList<KeywordsResponse>
-        lateinit var finalLanguages: java.util.ArrayList<LangResponse>
+        lateinit var finalKeywords: ArrayList<KeywordsResponse>
+        lateinit var finalLanguages: ArrayList<LangResponse>
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,21 +143,17 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
                         snackBar(nextBtn, "Select Accept Bid Per")
                     }
                     else -> {
-                        if (UserUtils.getFromJobPostMultiMove(this@PostJobAttachmentsScreen) || UserUtils.getFromJobPostSingleMove(
-                                this@PostJobAttachmentsScreen
-                            )
-                        ) {
-                            startActivity(
-                                Intent(
-                                    this@PostJobAttachmentsScreen,
-                                    PostJobAddressScreen::class.java
-                                )
-                            )
+                        if (UserUtils.getFromJobPostMultiMove(this@PostJobAttachmentsScreen) || UserUtils.getFromJobPostSingleMove(this@PostJobAttachmentsScreen)) {
+                            startActivity(Intent(this@PostJobAttachmentsScreen, PostJobAddressScreen::class.java))
                         } else if (UserUtils.getFromJobPostBlueCollar(this@PostJobAttachmentsScreen)) {
-                            if (UserUtils.EDIT_MY_JOB_POST) {
-                                updatePostJobBlueCollar()
-                            } else {
+                            if (UserUtils.POST_JOB_AGAIN) {
                                 postJobBlueCollar()
+                            } else {
+                                if (UserUtils.EDIT_MY_JOB_POST) {
+                                    updatePostJobBlueCollar()
+                                } else {
+                                    postJobBlueCollar()
+                                }
                             }
                         }
                     }
@@ -347,10 +343,8 @@ class PostJobAttachmentsScreen : AppCompatActivity(), AttachmentsListener {
             }
         }
 
-        imagePathList =
-            data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
-        binding.attachmentsRV.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        imagePathList = data.attachments as ArrayList<com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment>
+        binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
     }
 
