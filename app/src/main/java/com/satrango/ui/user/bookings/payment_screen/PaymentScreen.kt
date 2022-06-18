@@ -317,22 +317,15 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
     }
 
-//    private fun processUpi(deepLink: String) {
-//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-//        intent.data = Uri.parse(deepLink)
-//        val chooser = Intent.createChooser(intent, "Pay with...")
-//        startActivityForResult(chooser, REQUEST_CODE)
-//    }
-
     private fun processPaytm() {
         var walletBalance = 0.0
         var payableAmount = 0.0
         if (binding.amountLayout.visibility == View.VISIBLE) {
-            walletBalance = binding.walletBalance.text.toString().trim().split(".")[0].split("/")[0].toDouble()
-            payableAmount = binding.totalAmount.text.toString().trim().split(".")[0].split("/")[0].toDouble()
+            walletBalance = binding.walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+            payableAmount = binding.totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
         if (binding.invoiceAmountCard.visibility == View.VISIBLE) {
-            payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[0].split("/")[0].toDouble()
+            payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
 
         when {
@@ -438,18 +431,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         dialog.setContentView(dialogView)
         dialog.show()
     }
-
-//    private fun showPaymentSuccessDialog() {
-//        val dialog = BottomSheetDialog(this)
-//        val dialogView = layoutInflater.inflate(R.layout.paytm_payment_success_dialog, null)
-//        val closeBtn = dialogView.findViewById<ImageView>(R.id.closeBtn)
-//        closeBtn.setOnClickListener {
-//            finish()
-//            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-//        }
-//        dialog.setContentView(dialogView)
-//        dialog.show()
-//    }
 
     private fun loadSavedUpiList() {
         CoroutineScope(Dispatchers.Main).launch {
