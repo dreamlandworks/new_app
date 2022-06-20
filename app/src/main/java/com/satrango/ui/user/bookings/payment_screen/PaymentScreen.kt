@@ -102,7 +102,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             if (FROM_USER_PLANS) {
 
             } else if (FROM_USER_SET_GOALS) {
-                
+
             } else {
                 if (!FROM_COMPLETE_BOOKING) {
                     val tempFinalAmount = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this@PaymentScreen), SearchServiceProviderResModel::class.java).wallet_balance

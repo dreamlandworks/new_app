@@ -1422,17 +1422,33 @@ object UserUtils {
             }
         } else {
 //            Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
-            for (sp in spDetails.data) {
-                for (spSlot in spDetails.slots_data) {
-                    if (spSlot.blocked_time_slots.isNotEmpty()) {
-                        var count = 0
-                        for (booking in spSlot.blocked_time_slots) {
-                            if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
-                                count += 1
+            if (spDetails != null) {
+                for (sp in spDetails.data) {
+                    for (spSlot in spDetails.slots_data) {
+                        if (spSlot.blocked_time_slots.isNotEmpty()) {
+                            var count = 0
+                            for (booking in spSlot.blocked_time_slots) {
+                                if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                                    count += 1
+                                }
                             }
-                        }
-                        if (count == 0) {
+                            if (count == 0) {
 //                            Log.e("FCM:", sp.fcm_token)
+                                if (from == "accepted") {
+                                    for (index in 1 until 5) {
+                                        sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
+                                    }
+                                } else {
+                                    if (sp.fcm_token.isNotEmpty()) {
+                                        sendFCM(context, sp.fcm_token, bookingId, from, type)
+                                    } else {
+                                        return tokenEmpty
+                                    }
+                                    Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
+                                }
+                            }
+                        } else {
+//                        Log.e("FCM:", sp.fcm_token)
                             if (from == "accepted") {
                                 for (index in 1 until 5) {
                                     sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
@@ -1445,20 +1461,6 @@ object UserUtils {
                                 }
                                 Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             }
-                        }
-                    } else {
-//                        Log.e("FCM:", sp.fcm_token)
-                        if (from == "accepted") {
-                            for (index in 1 until 5) {
-                                sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
-                            }
-                        } else {
-                            if (sp.fcm_token.isNotEmpty()) {
-                                sendFCM(context, sp.fcm_token, bookingId, from, type)
-                            } else {
-                                return tokenEmpty
-                            }
-                            Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                         }
                     }
                 }

@@ -59,12 +59,14 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
                 PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
                 PaymentScreen.FROM_USER_SET_GOALS = false
                 val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
-                for (sp in spDetails.data) {
-                    if (userId == sp.users_id) {
-                        PaymentScreen.amount = sp.final_amount
-                        PaymentScreen.userId = sp.users_id.toInt()
-                        startActivity(Intent(this, PaymentScreen::class.java))
-                        finish()
+                if (spDetails != null) {
+                    for (sp in spDetails.data) {
+                        if (userId == sp.users_id) {
+                            PaymentScreen.amount = sp.final_amount
+                            PaymentScreen.userId = sp.users_id.toInt()
+                            startActivity(Intent(this, PaymentScreen::class.java))
+                            finish()
+                        }
                     }
                 }
 //                makePayment()
