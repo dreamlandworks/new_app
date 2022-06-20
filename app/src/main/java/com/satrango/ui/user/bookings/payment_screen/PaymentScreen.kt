@@ -132,8 +132,12 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 if (finalWalletBalance.toInt() == 0) {
                     currentBalance.visibility = View.GONE
                 } else {
+                    if (finalWalletBalance.toInt() > data.final_amount) {
+                        currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
+                    } else if (finalWalletBalance.toInt() > 0 && finalWalletBalance.toInt() < data.final_amount) {
+                        currentBalance.text = "Deduct from wallet balance: Rs.${finalWalletBalance}/-"
+                    }
                     walletBalance.text = "Rs.$finalWalletBalance/-"
-                    currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
                 }
 
                 payAmount.text = "Rs.$finalAmount/-"
@@ -192,6 +196,15 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //                        upisRV.isEnabled = false
 //                        payableAmount.text = "Rs. 0.00"
                         currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
+                        val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+                        val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+                        if (totalAmount > totalWallet) {
+                            val result = totalAmount - totalWallet
+                            payAmount.text = "Rs. ${result.toInt()}/-"
+                        }
+                        if (totalWallet > totalAmount) {
+                            payAmount.text = "Rs.0/-"
+                        }
                     } else {
 //                        phonePeBtn.isEnabled = true
 //                        googlePayBtn.isEnabled = true
@@ -201,10 +214,19 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //                        upisRV.isEnabled = true
 //                        payableAmount.text = "Rs. ${finalAmount - finalWalletBalance.toInt()}"
                         currentBalance.text = "Deducted from Wallet - Rs. $finalWalletBalance"
+                        val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+                        val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+                        if (totalAmount > totalWallet) {
+                            val result = totalAmount - totalWallet
+                            payAmount.text = "Rs. ${result.toInt()}/-"
+                        }
+                        if (totalWallet > totalAmount) {
+                            payAmount.text = "Rs.0/-"
+                        }
                     }
                 } else {
-                    currentBalance.text = "Deducted from Wallet - Rs. 0"
-                    payableAmount.text = "Rs. $finalAmount"
+                    currentBalance.text = "Deducted from Wallet - Rs. 0/-"
+                    payAmount.text = totalAmount.text.toString().trim()
                 }
 //                upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
             }
@@ -340,23 +362,40 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         if (binding.invoiceAmountCard.visibility == View.VISIBLE) {
             payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
+        val payAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
 
-        when {
-            walletBalance >= payableAmount -> {
+        val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+        val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+
+        toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
+        //0.0|0.0|2.0|10.0|12.0
+        if (dues == 0.0 && summaryPayAmount == 0.0) {
+            if (payAmount > 0) {
+                processPaytmGateWay(payAmount, walletBalance)
+            } else {
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             }
-            walletBalance.toInt() in 1 until payableAmount.toInt() -> {
-                if (binding.walletBalanceCheck.isChecked) {
-                    val pendingPayableAmount = payableAmount - walletBalance
-                    processPaytmGateWay(pendingPayableAmount, walletBalance)
-                } else {
-                    processPaytmGateWay(payableAmount, walletBalance)
-                }
-            }
-            else -> {
-                processPaytmGateWay(payableAmount, walletBalance)
-            }
+        } else {
+            processPaytmGateWay(summaryPayAmount, walletBalance)
         }
+
+
+//        when {
+//            walletBalance >= payableAmount -> {
+//                updateToServer(payableAmount.toString(), walletBalance.toString())
+//            }
+//            walletBalance < payableAmount -> {
+//                if (binding.walletBalanceCheck.isChecked) {
+//                    val pendingPayableAmount = payableAmount - walletBalance
+//                    processPaytmGateWay(pendingPayableAmount, walletBalance)
+//                } else {
+//                    processPaytmGateWay(payableAmount, walletBalance)
+//                }
+//            }
+//            else -> {
+//                processPaytmGateWay(payableAmount, walletBalance)
+//            }
+//        }
     }
 
     private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double) {
