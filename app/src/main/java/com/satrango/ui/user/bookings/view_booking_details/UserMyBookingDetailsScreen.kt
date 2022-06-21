@@ -100,7 +100,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.viewDetailsBtn, it.message!!)
+                    snackBar(binding.viewDetailsBtn,"Error 01:" + it.message!!)
                 }
             }
         }
@@ -145,7 +145,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.viewDetailsBtn.setOnClickListener {
             ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-            intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+            intent.putExtra(binding.root.context.getString(R.string.booking_id), binding.bookingIdText.text.toString().trim())
             intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
             intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
             isProvider(this, true)
@@ -190,7 +190,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                     }
                 } else {
                     progressDialog.dismiss()
-                    snackBar(binding.recyclerView, response.message)
+                    snackBar(binding.recyclerView, "Error 02:" +  response.message)
                 }
             }
         }
@@ -359,7 +359,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
+                    snackBar(binding.recyclerView, "Error 03:" +  it.message!!)
                 }
             }
         }
@@ -403,7 +403,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 updateUI(response)
             } else {
                 progressDialog.dismiss()
-                snackBar(binding.recyclerView, response.message)
+                snackBar(binding.recyclerView, "Error 04:" +  response.message)
             }
         }
     }

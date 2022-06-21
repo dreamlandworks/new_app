@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -28,7 +27,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityViewUserBookingDetailsScreenBinding
@@ -45,6 +43,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
+import com.satrango.ui.user.bookings.raise_ticket.RaiseTicketScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
@@ -246,9 +245,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
             }
             binding.raiseExtraDemandBtn.setOnClickListener {
-
+                RaiseTicketScreen.bookingId = bookingId
+                startActivity(Intent(this, RaiseTicketScreen::class.java))
             }
             binding.inProgressViewStatusBtn.setOnClickListener {
+                UserMyBookingDetailsScreen.userId = userId
+                UserMyBookingDetailsScreen.bookingId = bookingId
+                UserMyBookingDetailsScreen.categoryId = categoryId
                 startActivity(Intent(this, UserMyBookingDetailsScreen::class.java))
             }
         }

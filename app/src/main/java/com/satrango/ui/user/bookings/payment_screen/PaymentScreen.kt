@@ -370,12 +370,16 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
         //0.0|0.0|2.0|10.0|12.0
         if (dues == 0.0 && summaryPayAmount == 0.0) {
+            toast(this, "First Entered")
             if (payAmount > 0) {
+                toast(this, "Second Entered")
                 processPaytmGateWay(payAmount, walletBalance)
             } else {
+                toast(this, "Third Entered")
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             }
         } else {
+            toast(this, "Fourth Entered")
             processPaytmGateWay(summaryPayAmount, walletBalance)
         }
 

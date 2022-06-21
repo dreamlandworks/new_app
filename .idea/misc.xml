@@ -3,11 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_complaint_request_screen.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_complaint_screen.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_payment_screen.xml" value="0.3496376811594203" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_provider_booking_details_screen.xml" value="0.15885416666666666" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_provider_place_bid_screen.xml" value="0.353713768115942" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_raise_ticket_screen.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/attachment_row.xml" value="0.35625" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/my_bookings_row.xml" value="0.334375" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/my_job_posts_row.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/no_service_provider_found.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/payment_success_dialog.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/provider_edit_bid_success_dialog.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/mx/AndroidStudioProjects/new_app/app/src/main/res/layout/view_bids_row.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/arrow_forward_icon.xml" value="0.2484375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/green_btn_bg.xml" value="0.2484375" />
         <entry key="..\:/Users/mx/AndroidStudioProjects/newapp/app/src/main/res/drawable/ic_phoneno_purple.xml" value="0.2484375" />

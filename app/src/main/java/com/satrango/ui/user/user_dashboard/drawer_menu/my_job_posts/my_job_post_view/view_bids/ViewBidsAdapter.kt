@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.satrango.R
 import com.satrango.databinding.ViewBidsRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.SetGoalsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.ViewBidDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bid_details.models.RejectJobPostStatusReqModel
@@ -79,6 +80,15 @@ class ViewBidsAdapter(private val list: List<BidDetail>): RecyclerView.Adapter<V
                 ViewBidDetailsScreen.bidId = bidDetail.bid_id.toInt()
                 ViewBidDetailsScreen.spId = bidDetail.sp_id.toInt()
                 binding.root.context.startActivity(intent)
+            }
+
+            if (MyJobPostViewScreen.postStatus == "Awarded" || MyJobPostViewScreen.postStatus == "Expired") {
+                binding.rejectBtn.setBackgroundResource(R.drawable.gray_corner)
+                binding.awardBtn.setBackgroundResource(R.drawable.gray_corner)
+                binding.rejectBtn.setTextColor(binding.awardBtn.context.resources.getColor(R.color.gray))
+                binding.awardBtn.setTextColor(binding.awardBtn.context.resources.getColor(R.color.gray))
+                binding.awardBtn.isEnabled = false
+                binding.rejectBtn.isEnabled = false
             }
 
         }

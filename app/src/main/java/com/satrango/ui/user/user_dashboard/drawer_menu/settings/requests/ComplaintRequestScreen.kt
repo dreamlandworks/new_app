@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -58,10 +59,18 @@ class ComplaintRequestScreen : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        startActivity(Intent(this, UserSettingsScreen::class.java))
+    }
+
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
-        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
+        toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
+            startActivity(Intent(this, UserSettingsScreen::class.java))
+        }
+        toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
+            startActivity(Intent(this, UserSettingsScreen::class.java))
+        }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.my_requests)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
@@ -70,7 +79,7 @@ class ComplaintRequestScreen : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.setStatusBarColor(resources.getColor(R.color.purple_700))
+                window.statusBarColor = resources.getColor(R.color.purple_700)
             }
         }
     }

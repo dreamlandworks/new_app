@@ -51,6 +51,7 @@ import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
@@ -719,7 +720,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             snackBar(yesBtn, "Post the Job")
             dialog.dismiss()
             finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
+            startActivity(Intent(this, PostJobTypeScreen::class.java))
         }
         noBtn.setOnClickListener {
             dialog.dismiss()

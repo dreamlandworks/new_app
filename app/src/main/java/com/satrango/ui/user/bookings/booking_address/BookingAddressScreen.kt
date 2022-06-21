@@ -54,6 +54,8 @@ import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.UserProfileViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
@@ -696,7 +698,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             snackBar(yesBtn, "Post the Job")
             dialog.dismiss()
             finish()
-            startActivity(Intent(this, UserDashboardScreen::class.java))
+            startActivity(Intent(this, PostJobTypeScreen::class.java))
         }
         noBtn.setOnClickListener {
             dialog.dismiss()

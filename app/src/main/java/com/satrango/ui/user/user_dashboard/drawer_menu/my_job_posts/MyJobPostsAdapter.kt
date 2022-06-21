@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satrango.R
 import com.satrango.databinding.MyJobPostsRowBinding
+import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.models.JobPostDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.MyJobPostViewScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.discussion_board.DiscussionBoardScreen
@@ -80,6 +81,14 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.expiresInText.text = "Awarded to: "
                     binding.expiresOn.text = jobPostDetail.awarded_to
                     binding.awardedToImage.visibility = View.VISIBLE
+                    binding.awardedBtn.setOnClickListener {
+                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
+                        UserUtils.spid = jobPostDetail.sp_id
+                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                        intent.putExtra(binding.root.context.getString(R.string.booking_id), jobPostDetail.booking_id)
+                        intent.putExtra(binding.root.context.getString(R.string.category_id), jobPostDetail.category_id)
+                        binding.root.context.startActivity(intent)
+                    }
                 }
                 "Expired" -> {
                     binding.editBtn.visibility = View.GONE

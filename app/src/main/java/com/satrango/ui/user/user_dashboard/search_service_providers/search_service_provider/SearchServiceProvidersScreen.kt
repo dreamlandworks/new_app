@@ -473,7 +473,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             weAreSorryBottomSheetDialog.dismiss()
         }
         yesBtn.setOnClickListener {
-            snackBar(yesBtn, "Post the Job")
             weAreSorryBottomSheetDialog.dismiss()
             finish()
             startActivity(Intent(this, PostJobTypeScreen::class.java))

@@ -105,7 +105,7 @@ class ProviderHomeScreen : Fragment() {
                 if (response.job_post_details.isNotEmpty()) {
                     val data = response.job_post_details[0]
                     binding.newJobExpiresIn.text = data.expires_in
-                    binding.newJobCostPerHour.text = "Rs.${data.amount}/-"
+                    binding.newJobCostPerHour.text = "Rs.${data.range_slots}/-"
                     binding.newJobLocation.text = data.job_post_description[0].city
                     binding.newJobDescription.text = data.job_post_description[0].job_description
                     binding.newJobCallBtn.setOnClickListener {

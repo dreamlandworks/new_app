@@ -21,6 +21,8 @@ import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqM
 import com.satrango.ui.user.bookings.change_address.AddBookingAddressReqModel
 import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
+import com.satrango.ui.user.bookings.raise_ticket.models.RaiseTicketReqModel
+import com.satrango.ui.user.bookings.raise_ticket.models.RaiseTicketResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.GoalsInstallmentsResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectResModel
@@ -490,7 +492,7 @@ interface UserApiService {
         @Body requestBody: PaytmReqModel
     ): ResponseBody
 
-//    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)
+//    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)¡
 //    suspend fun getPaytmProcessTxn(
 //        @Body requestBody: PaytmProcessTxnReqModel
 //    ) : ResponseBody
@@ -509,5 +511,10 @@ interface UserApiService {
     suspend fun addFunds(
         @Body requestBody: AddFundsReqModel
     ): AddFundsResModel
+
+    @POST(UserApiEndPoints.POST_COMPLAINT)
+    suspend fun postComplaints(
+        @Body requestBody: RaiseTicketReqModel
+    ): RaiseTicketResModel
 
 }

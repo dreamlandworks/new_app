@@ -7,18 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.MyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
+import com.satrango.ui.user.bookings.raise_ticket.RaiseTicketScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
-import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
-import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
@@ -172,11 +170,8 @@ class MyBookingsAdapter(
                     binding.reScheduleBtn.text = "Raise Support Ticket"
                     binding.startBtn.text = "Book Again"
                     binding.reScheduleBtn.setOnClickListener {
-                        binding.startBtn.setOnClickListener {
-                            ComplaintScreen.bookingId = data.booking_id.toInt()
-                            isProvider(binding.startBtn.context, false)
-                            binding.startBtn.context.startActivity(Intent(binding.startBtn.context, ComplaintScreen::class.java))
-                        }
+                        RaiseTicketScreen.bookingId = data.booking_id
+                        binding.amount.context.startActivity(Intent(binding.amount.context, RaiseTicketScreen::class.java))
                     }
                     binding.card.setOnClickListener {
                         val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)

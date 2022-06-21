@@ -113,17 +113,11 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
 
         if (postStatus == "Expired") {
             binding.editPostBtn.visibility = View.GONE
-            binding.viewBidsBtn.isEnabled = false
-            binding.viewBidsBtn.setBackgroundResource(R.drawable.gray_corner)
-            binding.viewBidsBtn.setTextColor(resources.getColor(R.color.gray))
         }
         if (postStatus == "Awarded") {
             binding.editPostBtn.isEnabled = false
-            binding.viewBidsBtn.isEnabled = false
             binding.editPostBtn.setBackgroundResource(R.drawable.gray_corner)
             binding.editPostBtn.setTextColor(resources.getColor(R.color.gray))
-            binding.viewBidsBtn.setBackgroundResource(R.drawable.gray_corner)
-            binding.viewBidsBtn.setTextColor(resources.getColor(R.color.gray))
         }
 
         var languages = ""
