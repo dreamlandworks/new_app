@@ -339,6 +339,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude = UserUtils.getLongitude(this)
             }
 
+            if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+                UserUtils.time_slot_to = "00:00:00"
+            }
+
             val requestBody = SingleMoveBookingReqModel(
                 UserUtils.address_id.toInt(),
                 finalAmount.toString(),
@@ -383,8 +387,6 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             Log.e("SINGLE MOVE RESPONSE", Gson().toJson(jsonResponse))
                             UserUtils.saveBookingId(this@BookingAddressScreen, jsonResponse.getInt("booking_id").toString())
                             UserUtils.saveBookingRefId(this@BookingAddressScreen, jsonResponse.getString("booking_ref_id"))
-                            UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
-                            UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                             val hasToken = UserUtils.sendFCMtoAllServiceProviders(this@BookingAddressScreen, UserUtils.getBookingId(this@BookingAddressScreen), "user", "accepted|${UserUtils.bookingType}")
                             if (hasToken.isNotEmpty()) {
                                 toast(this@BookingAddressScreen, hasToken)
@@ -426,6 +428,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 postalCode = UserUtils.getPostalCode(this)
                 latitude = UserUtils.getLatitude(this)
                 longitude = UserUtils.getLongitude(this)
+            }
+
+            if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+                UserUtils.time_slot_to = "00:00:00"
             }
 
             val requestBody = SingleMoveBookingReqModel(

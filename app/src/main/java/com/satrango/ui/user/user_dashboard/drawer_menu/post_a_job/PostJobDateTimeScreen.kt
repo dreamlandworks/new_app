@@ -164,8 +164,12 @@ class PostJobDateTimeScreen : AppCompatActivity(), MonthsInterface {
                 val timing = time.month.trim().split("to")
                 UserUtils.time_slot_from = timing[0].trim() + time.day.trim()
                 UserUtils.time_slot_to = timing[1] + time.day.trim()
+                if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+                    UserUtils.time_slot_to = "00:00:00"
+                }
             }
         }
+
         if (UserUtils.scheduled_date.isEmpty()) {
             return
         } else if (UserUtils.time_slot_from.isEmpty() || UserUtils.time_slot_to.isEmpty()) {

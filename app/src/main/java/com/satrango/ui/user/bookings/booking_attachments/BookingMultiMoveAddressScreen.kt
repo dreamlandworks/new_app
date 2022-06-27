@@ -187,6 +187,10 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             sgst = data.SGST_amount
         }
 
+        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+            UserUtils.time_slot_to = "00:00:00"
+        }
+
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
             finalAmount.toString(),
@@ -203,7 +207,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             UserUtils.getUserId(this).toInt(),
             sgst,
             cgst,
-            data!!.profession_id
+            data.profession_id
         )
 //        Log.e("MULTI MOVE:", Gson().toJson(requestBody))
         viewModel.multiMoveBooking(this, requestBody).observe(this) {

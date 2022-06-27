@@ -84,5 +84,6 @@ object UserApiEndPoints {
     final const val SEND_FCM = "user/send_fcm"
     final const val ADD_FUNDS = "user/add_funds"
     final const val POST_COMPLAINTS = "user/post_complaints"
+    final const val GET_TXN = "user/get_txn"
 
 }

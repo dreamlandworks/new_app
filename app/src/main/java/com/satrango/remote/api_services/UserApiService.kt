@@ -15,6 +15,8 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_accoun
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.GetBookingStatusListResModel
 import com.satrango.ui.user.bookings.booking_address.models.BlueCollarBookingReqModel
+import com.satrango.ui.user.bookings.booking_address.models.GetTxnReqModel
+import com.satrango.ui.user.bookings.booking_address.models.GetTxnResModel
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
 import com.satrango.ui.user.bookings.cancel_booking.models.UserBookingCancelReqModel
@@ -516,5 +518,10 @@ interface UserApiService {
     suspend fun postComplaints(
         @Body requestBody: RaiseTicketReqModel
     ): RaiseTicketResModel
+
+    @POST(UserApiEndPoints.GET_TXN)
+    suspend fun getTxn(
+        @Body requestBody: GetTxnReqModel
+    ): GetTxnResModel
 
 }

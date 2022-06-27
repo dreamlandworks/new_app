@@ -546,6 +546,10 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
+        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+            UserUtils.time_slot_to = "00:00:00"
+        }
+
         val requestBody = BlueCollarBookingReqModel(
             finalAmount.toString(),
             encodedImages,

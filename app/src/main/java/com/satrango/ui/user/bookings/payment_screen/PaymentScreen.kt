@@ -34,6 +34,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansRepository
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansViewModel
 import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlanTxnReqModel
+import com.satrango.ui.user.bookings.booking_address.models.GetTxnReqModel
 import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
@@ -188,13 +189,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 walletBalanceChecked = checked
                 if (checked) {
                     if (finalWalletBalance.toInt() >= finalAmount) {
-//                        phonePeBtn.isEnabled = false
-//                        googlePayBtn.isEnabled = false
-//                        paytmBtn.isEnabled = false
-//                        amazonBtn.isEnabled = false
-//                        wtsappPayBtn.isEnabled = false
-//                        upisRV.isEnabled = false
-//                        payableAmount.text = "Rs. 0.00"
                         currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
                         val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
@@ -206,13 +200,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             payAmount.text = "Rs.0/-"
                         }
                     } else {
-//                        phonePeBtn.isEnabled = true
-//                        googlePayBtn.isEnabled = true
-//                        paytmBtn.isEnabled = true
-//                        amazonBtn.isClickable = true
-//                        wtsappPayBtn.isEnabled = true
-//                        upisRV.isEnabled = true
-//                        payableAmount.text = "Rs. ${finalAmount - finalWalletBalance.toInt()}"
                         currentBalance.text = "Deducted from Wallet - Rs. $finalWalletBalance"
                         val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
@@ -228,7 +215,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     currentBalance.text = "Deducted from Wallet - Rs. 0/-"
                     payAmount.text = totalAmount.text.toString().trim()
                 }
-//                upisRV.adapter = UpiAdapter(upiList, this@PaymentScreen)
             }
 
 //            proceedWithUPIBtn.setOnClickListener {
@@ -403,6 +389,8 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
     }
 
     private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double) {
+
+        toast(this, "$payableAmount|$walletBalance")
         callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), payableAmount.toString(), callbackUrl)
         transactionManager = TransactionManager(paytmOrder, object: PaytmPaymentTransactionCallback {
@@ -447,11 +435,25 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             }
 
         })
-        transactionManager.setAppInvokeEnabled(false)
-        transactionManager.setShowPaymentUrl("https://securegw.paytm.in/theia/api/v1/showPaymentPage")
-        transactionManager.setEmiSubventionEnabled(true)
-        transactionManager.startTransaction(this, activityRequestCode)
-        transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen)))
+                if (response.status == 200) {
+                    UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
+                    UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
+                    transactionManager.setAppInvokeEnabled(false)
+                    transactionManager.setShowPaymentUrl("https://securegw.paytm.in/theia/api/v1/showPaymentPage")
+                    transactionManager.setEmiSubventionEnabled(true)
+                    transactionManager.startTransaction(this@PaymentScreen, activityRequestCode)
+                    transactionManager.startTransactionAfterCheckingLoginStatus(this@PaymentScreen, resources.getString(R.string.paytm_client_id), activityRequestCode)
+                } else {
+                    snackBar(binding.root, response.message)
+                }
+            } catch (e: Exception) {
+                snackBar(binding.root, e.message!!)
+            }
+        }
+
     }
 
     private fun updateToServer(paidAmount: String, walletBalance: String) {
