@@ -327,6 +327,13 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     private fun bookMultiMoveServiceProvider() {
+
+        if (UserUtils.time_slot_to.isNotEmpty()) {
+            if (UserUtils.time_slot_to.replace("\n", "").split(":")[0].toInt() == 24) {
+                UserUtils.time_slot_to = "00:00:00"
+            }
+        }
+
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
             data!!.final_amount.toString(),
@@ -546,9 +553,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
-        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-            UserUtils.time_slot_to = "00:00:00"
-        }
+//        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+//            UserUtils.time_slot_to = "00:00:00"
+//        }
 
         val requestBody = BlueCollarBookingReqModel(
             finalAmount.toString(),

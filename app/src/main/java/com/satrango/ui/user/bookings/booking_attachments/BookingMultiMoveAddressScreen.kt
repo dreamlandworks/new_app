@@ -187,9 +187,9 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             sgst = data.SGST_amount
         }
 
-        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-            UserUtils.time_slot_to = "00:00:00"
-        }
+//        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
+//            UserUtils.time_slot_to = "00:00:00"
+//        }
 
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,

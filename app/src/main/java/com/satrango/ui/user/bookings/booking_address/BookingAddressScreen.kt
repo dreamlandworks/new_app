@@ -339,8 +339,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude = UserUtils.getLongitude(this)
             }
 
-            if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-                UserUtils.time_slot_to = "00:00:00"
+            if (UserUtils.time_slot_to.isNotEmpty()) {
+                if (UserUtils.time_slot_to.replace("\n", "").split(":")[0].toInt() == 24) {
+                    UserUtils.time_slot_to = "00:00:00"
+                }
             }
 
             val requestBody = SingleMoveBookingReqModel(
@@ -430,8 +432,10 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude = UserUtils.getLongitude(this)
             }
 
-            if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-                UserUtils.time_slot_to = "00:00:00"
+            if (UserUtils.time_slot_to.isNotEmpty()) {
+                if (UserUtils.time_slot_to.replace("\n", "").split(":")[0].toInt() == 24) {
+                    UserUtils.time_slot_to = "00:00:00"
+                }
             }
 
             val requestBody = SingleMoveBookingReqModel(
@@ -482,8 +486,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             this@BookingAddressScreen,
                             jsonResponse.getString("booking_ref_id")
                         )
-                        UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
-                        UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
+//                        UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
+//                        UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                         if (UserUtils.getFromInstantBooking(this@BookingAddressScreen)) {
                             if (PermissionUtils.isNetworkConnected(this@BookingAddressScreen)) {
                                 val hasToken = UserUtils.sendFCMtoAllServiceProviders(
@@ -905,8 +909,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val jsonResponse = JSONObject(it.data!!)
-                    UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
-                    UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
+//                    UserUtils.saveTxnToken(this@BookingAddressScreen, jsonResponse.getString("txn_id"))
+//                    UserUtils.saveOrderId(this@BookingAddressScreen, jsonResponse.getString("order_id"))
                     if (UserUtils.getFromInstantBooking(this)) {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             val hasToken = UserUtils.sendFCMtoAllServiceProviders(

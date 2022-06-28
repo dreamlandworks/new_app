@@ -81,8 +81,8 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
                     if (jsonResponse.getInt("status") == 200) {
                         UserUtils.saveBookingId(context,jsonResponse.getInt("booking_id").toString())
                         UserUtils.saveBookingRefId(context, jsonResponse.getString("booking_ref_id"))
-                        UserUtils.saveTxnToken(context, jsonResponse.getString("txn_id"))
-                        UserUtils.saveOrderId(context, jsonResponse.getString("order_id"))
+//                        UserUtils.saveTxnToken(context, jsonResponse.getString("txn_id"))
+//                        UserUtils.saveOrderId(context, jsonResponse.getString("order_id"))
                         blueCollarBooking.value = NetworkResponse.Success(jsonResponse.toString())
                     } else {
                         blueCollarBooking.value = NetworkResponse.Failure(jsonResponse.getString("message"))
