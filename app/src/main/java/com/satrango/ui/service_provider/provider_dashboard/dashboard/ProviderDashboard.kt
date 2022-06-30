@@ -15,6 +15,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.*
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -219,6 +220,8 @@ class ProviderDashboard : AppCompatActivity() {
 
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+//            Log.e("LAT LONG:", "$latitude|$longitude")
+//            Toast.makeText(context, "$latitude|$longitude", Toast.LENGTH_SHORT).show()
             if (UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context).isNotEmpty()) {
                 if (roundOffDecimal(latitude) == roundOffDecimal(UserUtils.getLatitude(context).toDouble()) && roundOffDecimal(longitude) == roundOffDecimal(UserUtils.getLongitude(context).toDouble())) {
                     binding.userLocation.text = UserUtils.getCity(context)
@@ -269,34 +272,9 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 }
 
-//                viewModel.saveLocation(context, requestBody).observe(context) {
-//                    when (it) {
-//                        is NetworkResponse.Loading -> {
-//
-//                        }
-//                        is NetworkResponse.Success -> {
-////                        toast(this, it.data!!)
-//                            if (!UserUtils.getSpStatus(context)) {
-//                                updateOnlineStatus(1)
-//                            }
-//                            if (UserUtils.getSpStatus(context)) {
-//                                binding.onlineText.text = context.resources.getString(R.string.online)
-//                                binding.onlineSwitch.isChecked = true
-//                            } else {
-//                                binding.onlineText.text = resources.getString(R.string.offline)
-//                                binding.onlineSwitch.isChecked = false
-//                            }
-//                        }
-//                        is NetworkResponse.Failure -> {
-//                            if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
-//                                fetchLocation(this)
-//                            }
-//                        }
-//                    }
-//                }
             } catch (e: Exception) {
-//                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-//                    .show()
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG)
+                    .show()
             }
         }
 
