@@ -203,8 +203,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         totalTimeLapsed.text = response.booking_details.time_lapsed
                         lessAmount.text = response.booking_details.paid
                         paidList.adapter = InvoiceListAdapter(response.booking_paid_transactions)
-                        UserUtils.saveOrderId(this@ProviderInVoiceScreen, response.booking_details.order_id)
-                        UserUtils.saveTxnToken(this@ProviderInVoiceScreen, response.booking_details.txn_id)
+//                        UserUtils.saveOrderId(this@ProviderInVoiceScreen, response.booking_details.order_id)
+//                        UserUtils.saveTxnToken(this@ProviderInVoiceScreen, response.booking_details.txn_id)
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
                                 otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)

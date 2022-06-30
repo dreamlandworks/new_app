@@ -55,11 +55,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.round
 
 class PaymentScreen : AppCompatActivity(), UpiInterface {
 //    PaymentResultListener
@@ -227,7 +225,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
                             UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                             try {
-                                processPaytm()
+                                processPaytm("3")
                             } catch (e: java.lang.Exception) {
                                 toast(this@PaymentScreen, e.message!!)
                             }
@@ -248,7 +246,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                             UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
                             try {
-                                processPaytm()
+                                processPaytm("4")
                             } catch (e: java.lang.Exception) {
                                 toast(this@PaymentScreen, e.message!!)
                             }
@@ -256,10 +254,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     }
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                    createTxnToken()
+                    createTxnToken("1")
                 }
                 if (FROM_COMPLETE_BOOKING) {
-                    createTxnToken()
+                    createTxnToken("2")
                 }
             }
 
@@ -294,30 +292,12 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
     }
 
-    private fun createTxnToken() {
-        try {
-            binding.confirmPaymentBtn.text = getString(R.string.processing_payment)
-            CoroutineScope(Dispatchers.Main).launch {
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
-                    .getPaytmMembershipProcessTxn(ProviderPlanTxnReqModel(amount, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt()))
-                if (response.status == 200) {
-                    UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
-                    UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
-                    try {
-                        processPaytm()
-                    } catch (e: java.lang.Exception) {
-                        binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
-                        toast(this@PaymentScreen, e.message!!)
-                    }
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
-            toast(this@PaymentScreen, e.message!!)
-        }
+    private fun createTxnToken(txnType: String) {
+        binding.confirmPaymentBtn.text = getString(R.string.processing_payment)
+        processPaytm(txnType)
     }
 
-    private fun processPaytm() {
+    private fun processPaytm(txnType: String) {
         var walletBalance = 0.0
         var payableAmount = 0.0
         if (binding.amountLayout.visibility == View.VISIBLE) {
@@ -338,14 +318,14 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //            toast(this, "First Entered")
             if (payAmount > 0) {
 //                toast(this, "Second Entered")
-                processPaytmGateWay(payAmount, walletBalance)
+                processPaytmGateWay(payAmount, walletBalance, txnType)
             } else {
 //                toast(this, "Third Entered")
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             }
         } else {
 //            toast(this, "Fourth Entered")
-            processPaytmGateWay(summaryPayAmount, walletBalance)
+            processPaytmGateWay(summaryPayAmount, walletBalance, txnType)
         }
 
 
@@ -367,7 +347,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //        }
     }
 
-    private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double) {
+    private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double, txnType: String) {
 
 //        toast(this, "$payableAmount|$walletBalance")
         callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
@@ -424,7 +404,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         })
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen)))
+                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, txnType, UserUtils.getUserId(this@PaymentScreen)))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
