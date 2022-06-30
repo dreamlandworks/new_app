@@ -33,7 +33,6 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansRepository
 import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansViewModel
-import com.satrango.ui.service_provider.provider_dashboard.plans.models.ProviderPlanTxnReqModel
 import com.satrango.ui.user.bookings.booking_address.models.GetTxnReqModel
 import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
@@ -44,7 +43,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlansTxnReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.utils.UserUtils
@@ -55,11 +53,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.round
 
 class PaymentScreen : AppCompatActivity(), UpiInterface {
 //    PaymentResultListener
@@ -220,46 +216,16 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
             confirmPaymentBtn.setOnClickListener {
                 if (FROM_USER_PLANS) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val requestBody = UserPlansTxnReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt())
-                        val response = RetrofitBuilder.getUserRetrofitInstance().getPaytmMembershipProcessTxn(requestBody)
-                        if (response.status == 200) {
-                            UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
-                            UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
-                            try {
-                                processPaytm()
-                            } catch (e: java.lang.Exception) {
-                                toast(this@PaymentScreen, e.message!!)
-                            }
-                        }
-                    }
+                    processPaytm("3")
                 }
                 if (FROM_PROVIDER_PLANS) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
-                            .getPaytmMembershipProcessTxn(
-                                ProviderPlanTxnReqModel(
-                                    amount,
-                                    RetrofitBuilder.PROVIDER_KEY,
-                                    UserUtils.getUserId(this@PaymentScreen).toInt()
-                                )
-                            )
-                        if (response.status == 200) {
-                            UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
-                            UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
-                            try {
-                                processPaytm()
-                            } catch (e: java.lang.Exception) {
-                                toast(this@PaymentScreen, e.message!!)
-                            }
-                        }
-                    }
+                    processPaytm("4")
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                    createTxnToken()
+                    processPaytm("1")
                 }
                 if (FROM_COMPLETE_BOOKING) {
-                    createTxnToken()
+                    processPaytm("2")
                 }
             }
 
@@ -294,30 +260,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
     }
 
-    private fun createTxnToken() {
-        try {
-            binding.confirmPaymentBtn.text = getString(R.string.processing_payment)
-            CoroutineScope(Dispatchers.Main).launch {
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
-                    .getPaytmMembershipProcessTxn(ProviderPlanTxnReqModel(amount, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt()))
-                if (response.status == 200) {
-                    UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
-                    UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
-                    try {
-                        processPaytm()
-                    } catch (e: java.lang.Exception) {
-                        binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
-                        toast(this@PaymentScreen, e.message!!)
-                    }
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
-            toast(this@PaymentScreen, e.message!!)
-        }
-    }
-
-    private fun processPaytm() {
+    private fun processPaytm(txnType: String) {
         var walletBalance = 0.0
         var payableAmount = 0.0
         if (binding.amountLayout.visibility == View.VISIBLE) {
@@ -338,14 +281,14 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //            toast(this, "First Entered")
             if (payAmount > 0) {
 //                toast(this, "Second Entered")
-                processPaytmGateWay(payAmount, walletBalance)
+                processPaytmGateWay(payAmount, walletBalance, txnType)
             } else {
 //                toast(this, "Third Entered")
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             }
         } else {
 //            toast(this, "Fourth Entered")
-            processPaytmGateWay(summaryPayAmount, walletBalance)
+            processPaytmGateWay(summaryPayAmount, walletBalance, txnType)
         }
 
 
@@ -367,9 +310,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //        }
     }
 
-    private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double) {
+    private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double, txnType: String) {
 
 //        toast(this, "$payableAmount|$walletBalance")
+        binding.confirmPaymentBtn.text = getString(R.string.processing_payment)
         callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), payableAmount.toString(), callbackUrl)
         transactionManager = TransactionManager(paytmOrder, object: PaytmPaymentTransactionCallback {
@@ -424,7 +368,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         })
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen)))
+                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)

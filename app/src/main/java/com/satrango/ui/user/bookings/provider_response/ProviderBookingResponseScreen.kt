@@ -1,6 +1,7 @@
 package com.satrango.ui.user.bookings.provider_response
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -25,6 +26,9 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Searc
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
 import com.satrango.utils.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
@@ -50,7 +54,9 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         if (response.split("|")[0] == "accept") {
             bookingType = response.split("|")[6]
             UserUtils.saveInstantBooking(this, true)
-            showProviderAcceptDialog()
+            CoroutineScope(Dispatchers.Main).launch {
+                showProviderAcceptDialog(this@ProviderBookingResponseScreen)
+            }
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
             Handler().postDelayed({
                 PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
@@ -147,17 +153,16 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showProviderAcceptDialog() {
-        val bottomSheetDialog = BottomSheetDialog(this)
+    private fun showProviderAcceptDialog(context: Context) {
+        val bottomSheetDialog = BottomSheetDialog(context)
         val bottomSheet = layoutInflater.inflate(R.layout.sp_accepted_dialog, null)
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
-
         closeBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         }
-        bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.setContentView(bottomSheet)
         bottomSheetDialog.show()
     }
 

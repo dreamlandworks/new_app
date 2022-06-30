@@ -437,6 +437,7 @@ class ProviderDashboard : AppCompatActivity() {
                 bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
+                UserUtils.saveInstantBookingId(this, bookingId)
                 try {
                     toast(this@ProviderDashboard, bookingId)
                     getInstantBookingDetails()
@@ -449,16 +450,12 @@ class ProviderDashboard : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getInstantBookingDetails() {
-        val bookingFactory = ViewModelFactory(BookingRepository())
-        val bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(
-            bookingId.toInt(),
+            UserUtils.getInstantBookingId(this).toInt(),
             categoryId.toInt(),
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-//        Log.e("RequestBody:", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
@@ -466,7 +463,6 @@ class ProviderDashboard : AppCompatActivity() {
                 if (apiResponse.status == 200) {
                     progressDialog.dismiss()
                     response = apiResponse
-//                Log.e("Response:", Gson().toJson(response))
                     showBookingAlert(bookingId, userId, response, categoryId)
                 } else {
                     progressDialog.dismiss()
