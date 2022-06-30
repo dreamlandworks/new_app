@@ -494,11 +494,6 @@ interface UserApiService {
         @Body requestBody: PaytmReqModel
     ): ResponseBody
 
-//    @POST(UserApiEndPoints.PAYTM_PROCESS_TXN)¡
-//    suspend fun getPaytmProcessTxn(
-//        @Body requestBody: PaytmProcessTxnReqModel
-//    ) : ResponseBody
-
     @POST(UserApiEndPoints.MEMBERSHIP_PAYMENT_TXN)
     suspend fun getPaytmMembershipProcessTxn(
         @Body requestBody: UserPlansTxnReqModel

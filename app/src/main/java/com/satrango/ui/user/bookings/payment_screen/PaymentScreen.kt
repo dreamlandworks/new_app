@@ -132,6 +132,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 totalAmount.text = "Rs.${data.final_amount}/-"
                 if (finalWalletBalance.toInt() == 0) {
                     currentBalance.visibility = View.GONE
+                    walletBalanceCheck.visibility = View.GONE
                 } else {
                     if (finalWalletBalance.toInt() > data.final_amount) {
                         currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
@@ -178,7 +179,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 payAmount.text = "Rs.$amount/-"
 
             }
-            toast(this@PaymentScreen, FROM_USER_PLANS.toString())
+//            toast(this@PaymentScreen, FROM_USER_PLANS.toString())
 
 //            payableAmount.text = "Rs. $finalAmount"
 //            payableBalance.text = resources.getString(R.string.total_amount_payable) + " Rs. " + finalAmount.toString()
@@ -217,48 +218,11 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 }
             }
 
-//            proceedWithUPIBtn.setOnClickListener {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    try {
-//                        val requestBodyOne = PaytmProcessTxnReqModel(
-//                            amount.toString(),
-//                            UserUtils.getBookingId(this@PaymentScreen),
-//                            UserUtils.getTxnToken(this@PaymentScreen),
-//                            UserUtils.getUserId(this@PaymentScreen)
-//                        )
-//                        val response = RetrofitBuilder.getUserRetrofitInstance()
-//                            .getPaytmProcessTxn(requestBodyOne)
-//                        val jsonResponse = JSONObject(response.string())
-//                        val jsonProcessTxn = jsonResponse.getJSONObject("process_txn")
-//                        val jsonBody = jsonProcessTxn.getJSONObject("body")
-//                        val resultInfo = jsonBody.getJSONObject("resultInfo")
-//                        val statusCode = resultInfo.getString("resultCode")
-//                        if (statusCode == "0000") {
-//                            val jsonDeepLink = jsonBody.getJSONObject("deepLinkInfo")
-//                            val deepLink = jsonDeepLink.getString("deepLink")
-//                            processUpi(deepLink)
-//                        } else {
-//                            toast(this@PaymentScreen, "Something went wrong, please try again.")
-//                        }
-//                        Log.e("PAYMENT:", jsonResponse.toString())
-//                    } catch (e: java.lang.Exception) {
-//                        toast(this@PaymentScreen, e.message!!)
-//                    }
-//                }
-//            }
-
             confirmPaymentBtn.setOnClickListener {
                 if (FROM_USER_PLANS) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        val requestBody = UserPlansTxnReqModel(
-                            amount,
-                            RetrofitBuilder.USER_KEY,
-                            UserUtils.getUserId(this@PaymentScreen).toInt()
-                        )
-                        val response =
-                            RetrofitBuilder.getUserRetrofitInstance().getPaytmMembershipProcessTxn(
-                                requestBody
-                            )
+                        val requestBody = UserPlansTxnReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt())
+                        val response = RetrofitBuilder.getUserRetrofitInstance().getPaytmMembershipProcessTxn(requestBody)
                         if (response.status == 200) {
                             UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
                             UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
@@ -292,18 +256,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     }
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                    try {
-                        processPaytm()
-                    } catch (e: java.lang.Exception) {
-                        toast(this@PaymentScreen, e.message!!)
-                    }
+                    createTxnToken()
                 }
                 if (FROM_COMPLETE_BOOKING) {
-                    try {
-                        processPaytm()
-                    } catch (e: java.lang.Exception) {
-                        toast(this@PaymentScreen, e.message!!)
-                    }
+                    createTxnToken()
                 }
             }
 
@@ -338,6 +294,29 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
     }
 
+    private fun createTxnToken() {
+        try {
+            binding.confirmPaymentBtn.text = getString(R.string.processing_payment)
+            CoroutineScope(Dispatchers.Main).launch {
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
+                    .getPaytmMembershipProcessTxn(ProviderPlanTxnReqModel(amount, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this@PaymentScreen).toInt()))
+                if (response.status == 200) {
+                    UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
+                    UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
+                    try {
+                        processPaytm()
+                    } catch (e: java.lang.Exception) {
+                        binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
+                        toast(this@PaymentScreen, e.message!!)
+                    }
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
+            toast(this@PaymentScreen, e.message!!)
+        }
+    }
+
     private fun processPaytm() {
         var walletBalance = 0.0
         var payableAmount = 0.0
@@ -353,19 +332,19 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
 
-        toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
+//        toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
         //0.0|0.0|2.0|10.0|12.0
         if (dues == 0.0 && summaryPayAmount == 0.0) {
-            toast(this, "First Entered")
+//            toast(this, "First Entered")
             if (payAmount > 0) {
-                toast(this, "Second Entered")
+//                toast(this, "Second Entered")
                 processPaytmGateWay(payAmount, walletBalance)
             } else {
-                toast(this, "Third Entered")
+//                toast(this, "Third Entered")
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             }
         } else {
-            toast(this, "Fourth Entered")
+//            toast(this, "Fourth Entered")
             processPaytmGateWay(summaryPayAmount, walletBalance)
         }
 
@@ -390,7 +369,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
     private fun processPaytmGateWay(payableAmount: Double, walletBalance: Double) {
 
-        toast(this, "$payableAmount|$walletBalance")
+//        toast(this, "$payableAmount|$walletBalance")
         callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this@PaymentScreen)}"
         val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), payableAmount.toString(), callbackUrl)
         transactionManager = TransactionManager(paytmOrder, object: PaytmPaymentTransactionCallback {
@@ -404,33 +383,41 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                         showPaymentFailureDialog()
                     }
                 }
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
             }
 
             override fun networkNotAvailable() {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 snackBar(binding.addCreditDebitCard, "Network not available")
             }
 
             override fun onErrorProceed(p0: String?) {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun clientAuthenticationFailed(p0: String?) {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun someUIErrorOccurred(p0: String?) {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
             override fun onBackPressedCancelTransaction() {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 snackBar(binding.addCreditDebitCard, "Transaction Cancelled")
             }
 
             override fun onTransactionCancel(p0: String?, p1: Bundle?) {
+                binding.confirmPaymentBtn.text = getString(R.string.confirm_payment)
                 Toast.makeText(this@PaymentScreen, p0.toString(), Toast.LENGTH_LONG).show()
             }
 
