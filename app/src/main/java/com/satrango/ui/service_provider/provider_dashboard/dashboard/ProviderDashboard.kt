@@ -463,7 +463,7 @@ class ProviderDashboard : AppCompatActivity() {
                 if (apiResponse.status == 200) {
                     progressDialog.dismiss()
                     response = apiResponse
-                    showBookingAlert(bookingId, userId, response, categoryId)
+                    showBookingAlert(UserUtils.getInstantBookingId(this@ProviderDashboard), userId, response, categoryId)
                 } else {
                     progressDialog.dismiss()
                     snackBar(binding.bottomNavigationView, response.message)
@@ -548,7 +548,6 @@ class ProviderDashboard : AppCompatActivity() {
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-//                        Log.e("RESPONSE TOKEN", )
                         UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")

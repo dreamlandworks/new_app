@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -54,8 +55,10 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
         if (response.split("|")[0] == "accept") {
             bookingType = response.split("|")[6]
             UserUtils.saveInstantBooking(this, true)
-            CoroutineScope(Dispatchers.Main).launch {
-                showProviderAcceptDialog(this@ProviderBookingResponseScreen)
+//            showProviderAcceptDialog(this@ProviderBookingResponseScreen)
+            binding.accept.visibility = View.VISIBLE
+            binding.acceptCloseBtn.setOnClickListener {
+                startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
             }
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|$bookingType")
             Handler().postDelayed({
