@@ -587,7 +587,7 @@ class ProviderDashboard : AppCompatActivity() {
 //        var seconds = 59
         val mainHandler = Handler(Looper.getMainLooper())
         var progressTime = 180
-        mainHandler.post(object : Runnable {Git
+        mainHandler.post(object : Runnable {
             @SuppressLint("SimpleDateFormat")
             override fun run() {
                 if (seconds < 10) {
