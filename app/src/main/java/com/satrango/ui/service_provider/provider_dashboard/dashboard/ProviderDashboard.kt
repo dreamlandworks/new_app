@@ -15,6 +15,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.*
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -220,6 +221,8 @@ class ProviderDashboard : AppCompatActivity() {
 
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
+//            Log.e("LAT LONG:", "$latitude|$longitude")
+//            Toast.makeText(context, "$latitude|$longitude", Toast.LENGTH_SHORT).show()
             if (UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context).isNotEmpty()) {
                 if (roundOffDecimal(latitude) == roundOffDecimal(UserUtils.getLatitude(context).toDouble()) && roundOffDecimal(longitude) == roundOffDecimal(UserUtils.getLongitude(context).toDouble())) {
                     binding.userLocation.text = UserUtils.getCity(context)
@@ -270,34 +273,9 @@ class ProviderDashboard : AppCompatActivity() {
                     }
                 }
 
-//                viewModel.saveLocation(context, requestBody).observe(context) {
-//                    when (it) {
-//                        is NetworkResponse.Loading -> {
-//
-//                        }
-//                        is NetworkResponse.Success -> {
-////                        toast(this, it.data!!)
-//                            if (!UserUtils.getSpStatus(context)) {
-//                                updateOnlineStatus(1)
-//                            }
-//                            if (UserUtils.getSpStatus(context)) {
-//                                binding.onlineText.text = context.resources.getString(R.string.online)
-//                                binding.onlineSwitch.isChecked = true
-//                            } else {
-//                                binding.onlineText.text = resources.getString(R.string.offline)
-//                                binding.onlineSwitch.isChecked = false
-//                            }
-//                        }
-//                        is NetworkResponse.Failure -> {
-//                            if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
-//                                fetchLocation(this)
-//                            }
-//                        }
-//                    }
-//                }
             } catch (e: Exception) {
-//                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
-//                    .show()
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG)
+                    .show()
             }
         }
 
@@ -460,6 +438,7 @@ class ProviderDashboard : AppCompatActivity() {
                 bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
+                UserUtils.saveInstantBookingId(this, bookingId)
                 try {
                     toast(this@ProviderDashboard, bookingId)
                     getInstantBookingDetails()
@@ -472,16 +451,12 @@ class ProviderDashboard : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getInstantBookingDetails() {
-        val bookingFactory = ViewModelFactory(BookingRepository())
-        val bookingViewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
         val requestBody = BookingDetailsReqModel(
-            bookingId.toInt(),
+            UserUtils.getInstantBookingId(this).toInt(),
             categoryId.toInt(),
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-//        Log.e("RequestBody:", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
@@ -489,8 +464,7 @@ class ProviderDashboard : AppCompatActivity() {
                 if (apiResponse.status == 200) {
                     progressDialog.dismiss()
                     response = apiResponse
-//                Log.e("Response:", Gson().toJson(response))
-                    showBookingAlert(bookingId, userId, response, categoryId)
+                    showBookingAlert(UserUtils.getInstantBookingId(this@ProviderDashboard), userId, response, categoryId)
                 } else {
                     progressDialog.dismiss()
                     snackBar(binding.bottomNavigationView, response.message)
@@ -577,7 +551,6 @@ class ProviderDashboard : AppCompatActivity() {
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-//                        Log.e("RESPONSE TOKEN", )
                         UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
                         snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")

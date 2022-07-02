@@ -1677,4 +1677,16 @@ object UserUtils {
         return result.substring(result.lastIndexOf(".") + 1)
     }
 
+    fun saveInstantBookingId(context: Context, bookingId: String) {
+        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("instantBookingId", bookingId)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getInstantBookingId(context: Context) : String {
+        return context.getSharedPreferences("userDetails", Context.MODE_PRIVATE).getString("instantBookingId", "")!!
+    }
+
 }
