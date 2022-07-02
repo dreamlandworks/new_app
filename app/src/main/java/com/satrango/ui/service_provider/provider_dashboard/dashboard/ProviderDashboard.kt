@@ -1,9 +1,9 @@
 package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
-import android.R.attr.button
-import android.R.attr.start
+import android.R.attr.*
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -93,6 +93,7 @@ import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.math.round
 
 
@@ -545,6 +546,7 @@ class ProviderDashboard : AppCompatActivity() {
 
         closeBtn.setOnClickListener {
             UserUtils.saveFromFCMService(this, false)
+            toast(this, "Close Btn")
             bottomSheetDialog!!.dismiss()
             if (FCMService.notificationManager != null) {
                 FCMService.notificationManager.cancelAll()
@@ -554,6 +556,7 @@ class ProviderDashboard : AppCompatActivity() {
 //        Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
+            toast(this, "Accept Closed")
             bottomSheetDialog!!.dismiss()
             val requestBody = ProviderResponseReqModel(
                 this.response.booking_details.amount,
@@ -605,31 +608,41 @@ class ProviderDashboard : AppCompatActivity() {
         val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
         val mins = diff.toMinutes()
         val secs = diff.seconds
-        seconds = (59 - secs).toInt()
-        minutes = (2 - mins).toInt()
-
-        var timerTime = seconds
-        object : CountDownTimer(1800000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                if (timerTime <= 0) {
-                    timerTime = 59
-                    minutes -= 1
+        var seconds = (59 - secs).toInt()
+        var minutes = (2 - mins).toInt()
+//        var minutes = 2
+//        var seconds = 59
+        val mainHandler = Handler(Looper.getMainLooper())
+        var progressTime = 180
+        mainHandler.post(object : Runnable {Git
+            @SuppressLint("SimpleDateFormat")
+            override fun run() {
+                if (seconds < 10) {
+                    time.text = "0$minutes:0$seconds"
+                } else {
+                    time.text = "0$minutes:$seconds"
                 }
-                time.text = "0$minutes:" + checkDigit(timerTime)
-                timerTime -= 1
-                if (minutes < 0) {
-                    Companion.bookingId = "0"
-                    UserUtils.saveFromFCMService(this@ProviderDashboard, false)
+
+                progressTime -= 1
+                progressBar.progress = progressTime
+
+                seconds -= 1
+                if (minutes == 0 && seconds == 0) {
+                    toast(this@ProviderDashboard, "Closed")
                     bottomSheetDialog!!.dismiss()
                 }
-            }
+                if (seconds == 0) {
+                    seconds = 59
+                    minutes -= 1
+                }
 
-            override fun onFinish() {
-                time.text = "TimeOut"
+                mainHandler.postDelayed(this, 1000)
             }
-        }.start()
+        })
         bottomSheetDialog!!.setContentView(bottomSheet)
-        bottomSheetDialog!!.show()
+        if (!(this as Activity).isFinishing) {
+            bottomSheetDialog!!.show()
+        }
     }
 
     @SuppressLint("SetTextI18n")

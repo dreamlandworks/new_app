@@ -694,6 +694,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                     ProviderDashboard.bookingId = "0"
                                     if (ProviderDashboard.bottomSheetDialog != null) {
                                         if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                            toast(this@BookingAttachmentsScreen, "Closed in Attachment")
                                             ProviderDashboard.bottomSheetDialog!!.dismiss()
                                         }
                                     }

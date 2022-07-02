@@ -24,6 +24,7 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -199,6 +200,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                 )
                                 if (ProviderDashboard.bottomSheetDialog != null) {
                                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                        toast(this@ProviderRejectBookingScreen, "Closed from Provider response")
                                         ProviderDashboard.bottomSheetDialog!!.dismiss()
                                     }
                                 }
