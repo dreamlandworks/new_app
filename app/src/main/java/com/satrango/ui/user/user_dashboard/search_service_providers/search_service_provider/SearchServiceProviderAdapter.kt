@@ -87,8 +87,9 @@ class SearchServiceProviderAdapter(
             }
             binding.bookLaterBtn.setOnClickListener {
                 isReschedule(binding.actualCost.context, false)
-                UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
+                UserUtils.saveSpId(binding.root.context, data.users_id)
+                UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
             }

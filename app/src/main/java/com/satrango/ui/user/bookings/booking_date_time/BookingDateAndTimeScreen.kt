@@ -47,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Month
@@ -55,6 +55,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
+import kotlin.Exception
 import kotlin.collections.ArrayList
 import kotlin.math.round
 
@@ -71,7 +72,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
     private lateinit var slots_data: SlotsData
     private lateinit var availableTimeSlots: java.util.ArrayList<MonthsModel>
     private lateinit var availableSlots: java.util.ArrayList<MonthsModel>
-    private lateinit var spDetails: SearchServiceProviderResModel
+//    private lateinit var spDetails: SearchServiceProviderResModel
     private lateinit var calendar: Calendar
     private lateinit var daysList: ArrayList<MonthsModel>
     private lateinit var binding: ActivityBookingDateAndTimeScreenBinding
@@ -110,34 +111,49 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         calendar = Calendar.getInstance()
         binding.selectedMonth.text = LocalDate.now().month.name
 
-        if (!isReschedule(this)) {
-            spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
-            loadDates()
-            loadTimings(0)
-        } else {
-            val factory = ViewModelFactory(BookingRepository())
-            val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-            viewModel.spSlots(this, UserUtils.getSpId(this).toInt()).observe(this) {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        slots_data = it.data!!
-                        preferred_time_slots = slots_data.preferred_time_slots
-                        blocked_time_slots = slots_data.blocked_time_slots
-                        loadDates()
-                        loadTimings(0)
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.nextBtn, it.message!!)
-                    }
-                }
+//        if (!isReschedule(this)) {
+//            spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
+//            loadDates()
+//            loadTimings(0)
+//        } else {
+//
+//        }
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getSpSlots(RetrofitBuilder.USER_KEY, UserUtils.getSpId(this@BookingDateAndTimeScreen).toInt())
+                val jsonObject = JSONObject(JSONObject(response.string()).getJSONObject("slots_data").toString())
+                jsonObject.put("user_id", UserUtils.getUserId(this@BookingDateAndTimeScreen))
+                slots_data = Gson().fromJson(jsonObject.toString(), SlotsData::class.java)
+                preferred_time_slots = slots_data.preferred_time_slots
+                blocked_time_slots = slots_data.blocked_time_slots
+                loadDates()
+                loadTimings(0)
+            } catch (e: Exception) {
+                snackBar(binding.morningTimeRv, e.message!!)
             }
-
         }
+
+//        val factory = ViewModelFactory(BookingRepository())
+//        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+//        viewModel.spSlots(this, UserUtils.getSpId(this).toInt()).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    slots_data = it.data!!
+//                    preferred_time_slots = slots_data.preferred_time_slots
+//                    blocked_time_slots = slots_data.blocked_time_slots
+//                    loadDates()
+//                    loadTimings(0)
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(binding.nextBtn, it.message!!)
+//                }
+//            }
+//        }
 
         binding.nextBtn.setOnClickListener {
             validateFields()
@@ -304,49 +320,49 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         loadDays(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
         availableSlots = ArrayList()
 
-        if (isReschedule(this)) {
-            for (day in daysList) {
-                for (slot in preferred_time_slots) {
-                    val inFormat = SimpleDateFormat("dd-MM-yyyy")
-                    val d = day.month.split("-")
-                    val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
-                    val outFormat = SimpleDateFormat("EEEE")
-                    val goal: String = outFormat.format(date!!)
-                    val weekDays = resources.getStringArray(R.array.days)
-                    for (index in weekDays.indices) {
-                        if (weekDays[index] == goal) {
-                            if (slot.day_slot == (index + 1).toString()) {
-                                availableSlots.add(day)
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            for (day in daysList) {
-                for (slots in spDetails.slots_data) {
-                    if (slots.user_id == data.users_id) {
-                        for (slot in slots.preferred_time_slots) {
-                            val inFormat = SimpleDateFormat("dd-MM-yyyy")
-                            val d = day.month.split("-")
-                            val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
-                            val outFormat = SimpleDateFormat("EEEE")
-                            val goal: String = outFormat.format(date!!)
-                            val weekDays = resources.getStringArray(R.array.days)
-                            for (index in weekDays.indices) {
-                                if (weekDays[index] == goal) {
-                                    if (slot.day_slot == (index + 1).toString()) {
-                                        if (!availableSlots.contains(day)) {
-                                            availableSlots.add(day)
-                                        }
-                                    }
-                                }
-                            }
+//        if (isReschedule(this)) {
+        for (day in daysList) {
+            for (slot in preferred_time_slots) {
+                val inFormat = SimpleDateFormat("dd-MM-yyyy")
+                val d = day.month.split("-")
+                val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
+                val outFormat = SimpleDateFormat("EEEE")
+                val goal: String = outFormat.format(date!!)
+                val weekDays = resources.getStringArray(R.array.days)
+                for (index in weekDays.indices) {
+                    if (weekDays[index] == goal) {
+                        if (slot.day_slot == (index + 1).toString()) {
+                            availableSlots.add(day)
                         }
                     }
                 }
             }
         }
+//        } else {
+//            for (day in daysList) {
+//                for (slots in spDetails.slots_data) {
+//                    if (slots.user_id == data.users_id) {
+//                        for (slot in slots.preferred_time_slots) {
+//                            val inFormat = SimpleDateFormat("dd-MM-yyyy")
+//                            val d = day.month.split("-")
+//                            val date = inFormat.parse("${d[2]}-${d[1]}-${d[0]}")
+//                            val outFormat = SimpleDateFormat("EEEE")
+//                            val goal: String = outFormat.format(date!!)
+//                            val weekDays = resources.getStringArray(R.array.days)
+//                            for (index in weekDays.indices) {
+//                                if (weekDays[index] == goal) {
+//                                    if (slot.day_slot == (index + 1).toString()) {
+//                                        if (!availableSlots.contains(day)) {
+//                                            availableSlots.add(day)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         binding.dayRv.layoutManager = LinearLayoutManager(
             this@BookingDateAndTimeScreen,
@@ -364,23 +380,23 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         val bookedSlots = ArrayList<MonthsModel>()
         val actualTimeSlots = ArrayList<MonthsModel>()
 
-        if (isReschedule(this)) {
-            for (time in blocked_time_slots) {
-                if (time.date == availableSlots[position].month) {
-                    bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
-                }
-            }
-        } else {
-            for (slot in spDetails.slots_data) {
-                if (slot.user_id == data.users_id) {
-                    for (time in slot.blocked_time_slots) {
-                        if (time.date == availableSlots[position].month) {
-                            bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
-                        }
-                    }
-                }
+//        if (isReschedule(this)) {
+        for (time in blocked_time_slots) {
+            if (time.date == availableSlots[position].month) {
+                bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
             }
         }
+//        } else {
+//            for (slot in spDetails.slots_data) {
+//                if (slot.user_id == data.users_id) {
+//                    for (time in slot.blocked_time_slots) {
+//                        if (time.date == availableSlots[position].month) {
+//                            bookedSlots.add(MonthsModel(time.time_slot_from, "", false))
+//                        }
+//                    }
+//                }
+//            }
+//        }
         val timingsList = resources.getStringArray(R.array.bookingTimings)
         for (index in timingsList.indices) {
             actualTimeSlots.add(MonthsModel(timingsList[index], "", false))
@@ -519,11 +535,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     nightTimings.add(availableTimeSlots[index - 1])
-                                    Log.e("NIGHT ONE:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                    Log.e("NIGHT ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 nightTimings.add(availableTimeSlots[index - 1])
-                                Log.e("NIGHT TWO:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                Log.e("NIGHT TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -534,11 +550,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             nightTimings.add(monthsModel)
-                            Log.e("NIGHT THREE:", Gson().toJson(monthsModel))
+//                            Log.e("NIGHT THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         nightTimings.add(monthsModel)
-                        Log.e("NIGHT FOUR:", Gson().toJson(monthsModel))
+//                        Log.e("NIGHT FOUR:", Gson().toJson(monthsModel))
                     }
                 }
             }
@@ -616,39 +632,57 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
-        Log.e("MORNING:", Gson().toJson(morningTimings))
-        Log.e("AFTERNOON:", Gson().toJson(afternoonTimings))
-        Log.e("EVENING:", Gson().toJson(eveningTimings))
-        Log.e("NIGHT:", Gson().toJson(nightTimings))
-        toast(this, "Timings Loaded: ${morningTimings.size} ${afternoonTimings.size} ${eveningTimings.size} ${nightTimings.size} ${blocked_time_slots.size} ${bookedSlots.size} ${availableSlots.size} ${availableTimeSlots.size}")
+//        Log.e("MORNING:", Gson().toJson(morningTimings))
+//        Log.e("AFTERNOON:", Gson().toJson(afternoonTimings))
+//        Log.e("EVENING:", Gson().toJson(eveningTimings))
+//        Log.e("NIGHT:", Gson().toJson(nightTimings))
+//        toast(this, "Timings Loaded: ${morningTimings.size} ${afternoonTimings.size} ${eveningTimings.size} ${nightTimings.size} ${blocked_time_slots.size} ${bookedSlots.size} ${availableSlots.size} ${availableTimeSlots.size}")
 //        Log.e("AVAILABLE SLOTS:", Gson().toJson(availableSlots))
 //        Log.e("AVAILABLE TIME SLOTS:", Gson().toJson(availableTimeSlots))
     }
 
     private fun filterTimeSlots(timings: java.util.ArrayList<MonthsModel>): java.util.ArrayList<MonthsModel> {
-        val timeSlotsData = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
-        Log.e("RESULTS:", Gson().toJson(timeSlotsData.slots_data))
+//        val timeSlotsData = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
+//        Log.e("RESULTS:", Gson().toJson(timeSlotsData.slots_data))
         val tempAvailableTimeSlots = ArrayList<MonthsModel>()
-        val userId = if (isProvider(this)) {
-            rescheduleData.sp_id
-        } else {
-            data.sp_id
-        }
-        for (time in timeSlotsData.slots_data) {
-            if (time.user_id == userId) {
-                for (slot in timings) {
-                    for (sl in time.preferred_time_slots) {
-                        if (slot.month.split("\nto\n")[0] == sl.time_slot_from) {
-                            tempAvailableTimeSlots.add(slot)
-                            Log.e("SORTED:", Gson().toJson(slot))
-                        } else {
-                            Log.e("NOT SORTED:", Gson().toJson(slot))
+//        val userId = if (isProvider(this)) {
+//            rescheduleData.sp_id
+//        } else {
+//            data.sp_id
+//        }
+//        for (time in timeSlotsData.slots_data) {
+//            if (time.user_id == userId) {
+//                for (slot in timings) {
+//                    for (sl in time.preferred_time_slots) {
+//                        if (slot.month.split("\nto\n")[0] == sl.time_slot_from) {
+//                            tempAvailableTimeSlots.add(slot)
+//                            Log.e("SORTED:", Gson().toJson(slot))
+//                        } else {
+//                            Log.e("NOT SORTED:", Gson().toJson(slot))
+//                        }
+//                    }
+//                }
+//            }
+//            else {
+//                Log.e("USER ", "NOT FOUND: ${timeSlotsData.slots_data.size}: ${time.user_id}|${userId}")
+//            }
+//        }
+        for (slot in timings) {
+            for (sl in preferred_time_slots) {
+                if (slot.month.split("\nto\n")[0] == sl.time_slot_from) {
+                    var isExisted = false
+                    for (time in blocked_time_slots) {
+                        if (time.time_slot_from == slot.month.split("\nto\n")[0]) {
+                            isExisted = !isExisted
                         }
                     }
+                    if (!isExisted) {
+                        tempAvailableTimeSlots.add(slot)
+                    }
+                    Log.e("SORTED:", Gson().toJson(slot))
+                } else {
+                    Log.e("NOT SORTED:", Gson().toJson(slot))
                 }
-            }
-            else {
-                Log.e("USER ", "NOT FOUND: ${timeSlotsData.slots_data.size}: ${time.user_id}|${userId}")
             }
         }
         return tempAvailableTimeSlots.distinctBy { monthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>

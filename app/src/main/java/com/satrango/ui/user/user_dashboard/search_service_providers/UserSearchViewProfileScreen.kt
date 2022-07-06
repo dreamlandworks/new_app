@@ -94,6 +94,7 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
                 isReschedule(this@UserSearchViewProfileScreen, false)
                 isProvider(this@UserSearchViewProfileScreen, false)
                 UserUtils.saveFromInstantBooking(binding.root.context, false)
+                UserUtils.saveSpId(binding.root.context, data.users_id)
                 startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))
             }
             bookNowBtn.setOnClickListener {
