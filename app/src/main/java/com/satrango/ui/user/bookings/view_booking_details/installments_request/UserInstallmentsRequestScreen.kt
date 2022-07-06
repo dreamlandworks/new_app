@@ -87,7 +87,7 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
             data.booking_id.toInt(),
             data.inst_no.toInt(),
             RetrofitBuilder.PROVIDER_KEY,
-            UserUtils.spid.toInt(),
+            UserUtils.getSpId(this).toInt(),
             34,
             UserUtils.getUserId(this).toInt()
         )
@@ -112,7 +112,7 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
             data.booking_id.toInt(),
             data.inst_no.toInt(),
             RetrofitBuilder.PROVIDER_KEY,
-            UserUtils.spid.toInt(),
+            UserUtils.getSpId(this).toInt(),
             35,
             UserUtils.getUserId(this).toInt()
         )

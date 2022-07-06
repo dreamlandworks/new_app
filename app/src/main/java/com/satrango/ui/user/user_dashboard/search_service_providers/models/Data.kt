@@ -10,6 +10,7 @@ data class Data(
     val about_me: String,
     val address: String,
     val category_id: String,
+    val sp_id: String,
     val city: String,
     val country: String,
     val present_status: String,

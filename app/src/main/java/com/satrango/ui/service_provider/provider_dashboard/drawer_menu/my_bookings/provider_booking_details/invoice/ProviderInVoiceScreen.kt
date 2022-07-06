@@ -384,7 +384,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
                     if (finalDues.toInt() > 0) {
-                        UserUtils.spid = "0"
+                        UserUtils.saveSpId(binding.root.context, "0")
                         progressDialog.dismiss()
                         dialog.dismiss()
                         UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")

@@ -74,7 +74,7 @@ class ProviderMyBookingAdapter(
                 binding.spName.text = "Unknown"
             }
             if (!data.profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(data.profile_pic)
+                Glide.with(binding.profilePic).load(data.profile_pic).error(R.drawable.images)
                     .into(binding.profilePic)
             }
             if (data.category_id == "2") {
@@ -120,7 +120,7 @@ class ProviderMyBookingAdapter(
                         ProviderBookingDetailsScreen.bookingId = data.booking_id
                         ProviderBookingDetailsScreen.categoryId = data.category_id
                         ProviderBookingDetailsScreen.userId = data.users_id
-                        UserUtils.spid = data.sp_id
+                        UserUtils.saveSpId(binding.root.context, data.sp_id)
                         binding.root.context.startActivity(intent)
                     }
                 }
@@ -151,7 +151,7 @@ class ProviderMyBookingAdapter(
                             UserUtils.re_scheduled_date = data.scheduled_date
                             UserUtils.re_scheduled_time_slot_from = data.time_slot_id
                             isReschedule(binding.amount.context, true)
-                            UserUtils.spid = data.sp_id
+                            UserUtils.saveSpId(binding.root.context, data.sp_id)
                             UserUtils.saveSelectedSPDetails(binding.amount.context, Gson().toJson(data))
                             binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                         }
@@ -160,7 +160,7 @@ class ProviderMyBookingAdapter(
                         }
                         binding.card.setOnClickListener {
                             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
-                            UserUtils.spid = data.sp_id
+                            UserUtils.saveSpId(binding.root.context, data.sp_id)
                             intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                             intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                             intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)

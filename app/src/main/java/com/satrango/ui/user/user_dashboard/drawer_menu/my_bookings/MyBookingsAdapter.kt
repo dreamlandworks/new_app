@@ -5,8 +5,10 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.MyBookingsRowBinding
 import com.satrango.remote.RetrofitBuilder
@@ -75,7 +77,7 @@ class MyBookingsAdapter(
                 binding.spName.text = "Unknown"
             }
             if (!data.sp_profile_pic.isNullOrBlank()) {
-                Glide.with(binding.profilePic).load(data.sp_profile_pic).into(binding.profilePic)
+                Glide.with(binding.profilePic).load(data.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
             }
 
             when(data.booking_status.lowercase(Locale.getDefault())) {
@@ -148,8 +150,9 @@ class MyBookingsAdapter(
                             UserUtils.re_scheduled_date = data.scheduled_date
                             UserUtils.re_scheduled_time_slot_from = data.time_slot_id
                             isReschedule(binding.amount.context, true)
-                            UserUtils.spid = data.sp_id
+                            UserUtils.saveSpId(binding.root.context, data.sp_id)
                             isProvider(binding.startBtn.context, false)
+                            UserUtils.saveSelectedSPDetails(binding.amount.context, Gson().toJson(data))
                             binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                         }
                     }

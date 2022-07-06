@@ -530,7 +530,6 @@ class ProviderDashboard : AppCompatActivity() {
 //        Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
-            toast(this, "Accept Closed")
             bottomSheetDialog!!.dismiss()
             val requestBody = ProviderResponseReqModel(
                 this.response.booking_details.amount,

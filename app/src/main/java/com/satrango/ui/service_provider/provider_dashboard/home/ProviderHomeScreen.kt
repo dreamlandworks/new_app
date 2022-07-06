@@ -177,7 +177,7 @@ class ProviderHomeScreen : Fragment() {
                         }
                         binding.upcomingCard.setOnClickListener {
                             val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
-                            UserUtils.spid = data.sp_id
+                            UserUtils.saveSpId(binding.root.context, data.sp_id)
                             intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                             intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                             intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)

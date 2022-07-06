@@ -468,7 +468,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                                 ProviderBookingDetailsScreen.userId = userId
                                 isPending(this, false)
                                 isProgress(this, true)
-                                UserUtils.spid = spId
+                                UserUtils.saveSpId(binding.root.context, spId)
                                 startActivity(intent)
                                 progressDialog.dismiss()
                                 dialog.dismiss()

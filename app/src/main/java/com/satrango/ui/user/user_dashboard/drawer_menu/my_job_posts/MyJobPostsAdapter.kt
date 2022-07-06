@@ -83,7 +83,7 @@ class MyJobPostsAdapter(private val list: List<JobPostDetail>, private val statu
                     binding.awardedToImage.visibility = View.VISIBLE
                     binding.awardedBtn.setOnClickListener {
                         val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen:: class.java)
-                        UserUtils.spid = jobPostDetail.sp_id
+                        UserUtils.saveSpId(binding.root.context, jobPostDetail.sp_id)
                         intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
                         intent.putExtra(binding.root.context.getString(R.string.booking_id), jobPostDetail.booking_id)
                         intent.putExtra(binding.root.context.getString(R.string.category_id), jobPostDetail.category_id)

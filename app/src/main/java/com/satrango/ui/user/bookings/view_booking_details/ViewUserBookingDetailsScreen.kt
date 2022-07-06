@@ -190,7 +190,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.reScheduleBtn.setOnClickListener {
                 isReschedule(this, true)
                 ViewBidsScreen.bookingId = bookingId.toInt()
-                UserUtils.spid = response.booking_details.sp_id
+                UserUtils.saveSpId(binding.root.context, response.booking_details.sp_id)
                 UserUtils.re_scheduled_date = response.booking_details.scheduled_date
                 UserUtils.re_scheduled_time_slot_from = response.booking_details.time_slot_id
                 startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
@@ -289,7 +289,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.reScheduleBtn.setOnClickListener {
                 isReschedule(this, true)
                 ViewBidsScreen.bookingId = bookingId.toInt()
-                UserUtils.spid = response.booking_details.sp_id
+                UserUtils.saveSpId(this, response.booking_details.sp_id)
                 UserUtils.re_scheduled_date = response.booking_details.scheduled_date
                 UserUtils.re_scheduled_time_slot_from = response.booking_details.time_slot_id
                 startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
@@ -615,12 +615,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     if (isProvider(this)) {
                         binding.startBtn.visibility = View.GONE
                     } else {
-                        UserUtils.spid = "0"
+                        UserUtils.saveSpId(this, "0")
                     }
                     val factory = ViewModelFactory(MyBookingsRepository())
                     val viewModel =
                         ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.spid.toInt())
+                    viewModel.validateOTP(this, bookingId.toInt(), UserUtils.getSpId(this).toInt())
                         .observe(this) {
                             when (it) {
                                 is NetworkResponse.Loading -> {
@@ -775,7 +775,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         binding.requestInstallmentBtn.setOnClickListener {
             UserInstallmentsRequestScreen.postJobId = response.booking_details.post_job_id.toInt()
-            UserUtils.spid = response.booking_details.sp_id
+            UserUtils.saveSpId(this, response.booking_details.sp_id)
             ProviderReleaseGoalsScreen.userId = userId
             if (isProvider(this)) {
                 ProviderReleaseGoalsScreen.userId = response.booking_details.post_job_id

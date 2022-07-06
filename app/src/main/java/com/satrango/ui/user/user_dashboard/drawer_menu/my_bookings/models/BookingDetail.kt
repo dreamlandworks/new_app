@@ -24,6 +24,7 @@ data class BookingDetail(
     val reschedule_id: String,
     val reschedule_description: String,
     val user_fcm_token: String,
+    val users_id: String,
     val lname: String,
     val mobile: String,
     val sp_mobile: String,

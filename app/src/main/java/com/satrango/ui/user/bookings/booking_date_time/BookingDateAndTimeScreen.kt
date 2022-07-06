@@ -105,23 +105,19 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 data = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java)
                 updateUI(data)
             }
-
         }
 
         calendar = Calendar.getInstance()
         binding.selectedMonth.text = LocalDate.now().month.name
 
         if (!isReschedule(this)) {
-            spDetails = Gson().fromJson(
-                UserUtils.getSelectedAllSPDetails(this),
-                SearchServiceProviderResModel::class.java
-            )
+            spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
             loadDates()
             loadTimings(0)
         } else {
             val factory = ViewModelFactory(BookingRepository())
             val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-            viewModel.spSlots(this, UserUtils.spid.toInt()).observe(this) {
+            viewModel.spSlots(this, UserUtils.getSpId(this).toInt()).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         progressDialog.show()
@@ -173,6 +169,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
         Glide.with(this).load(data.profile_pic).into(binding.profilePic)
+        toast(this, "Updated UI ONE")
     }
 
     @SuppressLint("SetTextI18n", "ObsoleteSdkInt")
@@ -188,6 +185,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = resources.getColor(R.color.purple_700)
         }
+        toast(this, "Updated UI ONE")
     }
 
     private fun validateFields() {
@@ -355,6 +353,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        availableSlots = availableSlots.distinctBy { monthsModel -> monthsModel.day } as java.util.ArrayList<MonthsModel>
         binding.dayRv.adapter = MonthsAdapter(availableSlots, this@BookingDateAndTimeScreen, "D")
     }
 
@@ -410,7 +409,6 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         nightTimings = ArrayList()
         availableTimeSlots.onEachIndexed { index, monthsModel ->
 //            Log.e("SLOTS:", Gson().toJson(monthsModel))
-
             when {
                 UserUtils.isNowTimeBetween("07:00", "12:00", monthsModel.month) -> {
                     if (index >= 0) {
@@ -422,9 +420,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     morningTimings.add(availableTimeSlots[index - 1])
+                                    Log.e("MORNING ONE:",
+                                        Gson().toJson(availableTimeSlots[index - 1])
+                                    )
                                 }
                             } else {
                                 morningTimings.add(availableTimeSlots[index - 1])
+                                Log.e("MORNING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -435,9 +437,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             morningTimings.add(monthsModel)
+                            Log.e("MORNING THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         morningTimings.add(monthsModel)
+//                        Log.e("MORNING:", "${availableTimeSlots[index - 1]}")
+                        Log.e("MORNING FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
@@ -450,9 +455,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     afternoonTimings.add(availableTimeSlots[index - 1])
+                                    Log.e("AFTERNOON ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 afternoonTimings.add(availableTimeSlots[index - 1])
+                                Log.e("AFTERNOON TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -463,9 +470,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             afternoonTimings.add(monthsModel)
+                            Log.e("AFTERNOON THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         afternoonTimings.add(monthsModel)
+                        Log.e("AFTERNOON FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
@@ -478,9 +487,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     eveningTimings.add(availableTimeSlots[index - 1])
+                                    Log.e("EVENING ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 eveningTimings.add(availableTimeSlots[index - 1])
+                                Log.e("EVENING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -491,9 +502,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             eveningTimings.add(monthsModel)
+                            Log.e("EVENING THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         eveningTimings.add(monthsModel)
+                        Log.e("EVENING FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
@@ -506,9 +519,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     nightTimings.add(availableTimeSlots[index - 1])
+                                    Log.e("NIGHT ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 nightTimings.add(availableTimeSlots[index - 1])
+                                Log.e("NIGHT TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -519,9 +534,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             nightTimings.add(monthsModel)
+                            Log.e("NIGHT THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         nightTimings.add(monthsModel)
+                        Log.e("NIGHT FOUR:", Gson().toJson(monthsModel))
                     }
                 }
             }
@@ -599,23 +616,39 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                 binding.nightTimeRv.adapter = MonthsAdapter(nightTimings, this@BookingDateAndTimeScreen, "T")
             }
         }
-//        Log.e("MORNING:", Gson().toJson(morningTimings))
-//        Log.e("EVENING:", Gson().toJson(eveningTimings))
-//        Log.e("NIGHT:", Gson().toJson(nightTimings))
+        Log.e("MORNING:", Gson().toJson(morningTimings))
+        Log.e("AFTERNOON:", Gson().toJson(afternoonTimings))
+        Log.e("EVENING:", Gson().toJson(eveningTimings))
+        Log.e("NIGHT:", Gson().toJson(nightTimings))
+        toast(this, "Timings Loaded: ${morningTimings.size} ${afternoonTimings.size} ${eveningTimings.size} ${nightTimings.size} ${blocked_time_slots.size} ${bookedSlots.size} ${availableSlots.size} ${availableTimeSlots.size}")
+//        Log.e("AVAILABLE SLOTS:", Gson().toJson(availableSlots))
+//        Log.e("AVAILABLE TIME SLOTS:", Gson().toJson(availableTimeSlots))
     }
 
     private fun filterTimeSlots(timings: java.util.ArrayList<MonthsModel>): java.util.ArrayList<MonthsModel> {
         val timeSlotsData = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
+        Log.e("RESULTS:", Gson().toJson(timeSlotsData.slots_data))
         val tempAvailableTimeSlots = ArrayList<MonthsModel>()
+        val userId = if (isProvider(this)) {
+            rescheduleData.sp_id
+        } else {
+            data.sp_id
+        }
         for (time in timeSlotsData.slots_data) {
-            if (time.user_id == data.users_id) {
+            if (time.user_id == userId) {
                 for (slot in timings) {
                     for (sl in time.preferred_time_slots) {
                         if (slot.month.split("\nto\n")[0] == sl.time_slot_from) {
                             tempAvailableTimeSlots.add(slot)
+                            Log.e("SORTED:", Gson().toJson(slot))
+                        } else {
+                            Log.e("NOT SORTED:", Gson().toJson(slot))
                         }
                     }
                 }
+            }
+            else {
+                Log.e("USER ", "NOT FOUND: ${timeSlotsData.slots_data.size}: ${time.user_id}|${userId}")
             }
         }
         return tempAvailableTimeSlots.distinctBy { monthsModel -> monthsModel.month } as java.util.ArrayList<MonthsModel>
