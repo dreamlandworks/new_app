@@ -434,6 +434,20 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/pauseResumeBtn"
+            style="@style/purple_outline_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/purple_out_line"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/view_files"
+            android:textSize="@dimen/sub_text" />
+
         <LinearLayout
             android:id="@+id/secondLayout"
             android:layout_width="match_parent"

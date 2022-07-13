@@ -1,5 +1,6 @@
 package com.satrango.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -648,6 +649,29 @@ object UserUtils {
         )
         return sharedPreferences.getString(
             context.resources.getString(R.string.date_of_birth),
+            ""
+        )!!
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun saveBookingPauseResumeStatus(context: Context, status: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.pause_resume_booking), status)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getBookingPauseResumeStatus(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getString(
+            context.resources.getString(R.string.pause_resume_booking),
             ""
         )!!
     }

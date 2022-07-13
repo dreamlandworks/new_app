@@ -163,6 +163,12 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.root.context.startActivity(intent)
         }
 
+        if (response.booking_details.extra_demand_total_amount.isEmpty()) {
+            binding.markCompleteBtn.isEnabled = false
+            binding.markCompleteBtn.setBackgroundResource(R.drawable.gray_corner)
+            binding.markCompleteBtn.setTextColor(resources.getColor(R.color.gray))
+        }
+
         binding.markCompleteBtn.setOnClickListener {
             val requestBody = BookingDetailsReqModel(
                 bookingId.toInt(),

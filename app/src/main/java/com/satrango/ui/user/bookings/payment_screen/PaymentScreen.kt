@@ -82,7 +82,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         var finalAmount: Int = 0
         var finalWalletBalance = "0"
         var walletBalanceChecked = false
-        var FROM_PROVIDER_WALLET = false
     }
 
     @SuppressLint("SetTextI18n")
@@ -269,12 +268,12 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         var payableAmount = 0.0
         if (binding.amountLayout.visibility == View.VISIBLE) {
             walletBalance = binding.walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
-            payableAmount = binding.totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+            payableAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
         if (binding.invoiceAmountCard.visibility == View.VISIBLE) {
             payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
-        val payAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+//        val payAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
 
         val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
@@ -283,7 +282,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         //0.0|0.0|2.0|10.0|12.0
         if (dues == 0.0 && summaryPayAmount == 0.0) {
             toast(this, "First Entered")
-            if (payAmount > 0) {
+            if (payableAmount > 0) {
                 toast(this, "Second Entered")
                 generateTxn(payableAmount, walletBalance, txnType)
             } else {

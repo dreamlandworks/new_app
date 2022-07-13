@@ -50,6 +50,7 @@
     <string name="fetching_location_please_wait">Fetching Location Please Wait...</string>
     <string name="email">Email</string>
     <string name="date_of_birth">Date of Birth</string>
+    <string name="pause_resume_booking">Pause Resume Booking Status</string>
     <string name="i_agree_to_the_terms_and_conditions_of_satrango_com"><u>I agree to the terms and conditions of Satrango.com</u></string>
     <string name="back">BACK</string>
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
@@ -755,6 +756,7 @@
     <string name="new_jobs_are_not_available">New Jobs are not available</string>
     <string name="upcoming_bookings_are_not_available">Upcoming bookings are not available</string>
     <string name="please_select_city">Please Select Location</string>
+    <string name="pause">Pause</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

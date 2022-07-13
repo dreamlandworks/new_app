@@ -36,6 +36,8 @@ import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingRepository
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderBookingViewModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.ProviderMyBookingsScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderBookingResumeReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.ProviderPauseBookingReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
@@ -57,6 +59,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsVie
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.USER_ID
+import com.satrango.utils.UserUtils.getBookingPauseResumeStatus
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProgress
@@ -69,6 +73,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -173,6 +178,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun userUIOnClicks() {
         updateUserUI()
         if (isPending(this)) {
@@ -197,8 +203,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             }
         }
         if (isProgress(this)) {
+            binding.pauseResumeBtn.visibility = View.VISIBLE
+            binding.pauseResumeBtn.text = "Pause"
+
             binding.spLayout.visibility = View.VISIBLE
             binding.userLayout.visibility = View.GONE
+            binding.cancelBookingBtn.visibility = View.GONE
+
             binding.completedBtn.text = "Mark Complete"
             binding.requestInstallmentBtn.visibility = View.GONE
             binding.raiseExtraDemandBtn.visibility = View.GONE
@@ -223,6 +234,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 startActivity(intent)
             }
             binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
+        } else {
+            binding.pauseResumeBtn.visibility = View.GONE
         }
         if (isCompleted(this)) {
             binding.spLayout.visibility = View.VISIBLE
@@ -268,6 +281,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.blue))
     }
 
+    @SuppressLint("SetTextI18n")
     private fun providerUIOnClicks() {
         updateSPUI()
         if (isPending(this)) {
@@ -322,6 +336,27 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             }
             binding.raiseExtraDemandBtn.setOnClickListener { showExtraDemandDialog() }
             binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
+
+            if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
+                binding.pauseResumeBtn.text = "Resume"
+                binding.completedBtn.isEnabled = false
+                binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
+                binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
+                binding.pauseResumeBtn.setOnClickListener { resumeBooking() }
+                binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
+                binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
+            } else {
+                binding.pauseResumeBtn.text = "Pause"
+                binding.pauseResumeBtn.setOnClickListener { pauseBooking() }
+                binding.completedBtn.isEnabled = true
+                if (isProvider(this)) {
+                    binding.completedBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    binding.completedBtn.setTextColor(resources.getColor(R.color.purple_500))
+                } else {
+                    binding.completedBtn.setBackgroundResource(R.drawable.blue_out_line)
+                    binding.completedBtn.setTextColor(resources.getColor(R.color.blue))
+                }
+            }
         }
         if (isCompleted(this)) {
             binding.userLayout.visibility = View.GONE
@@ -369,6 +404,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
         binding.layoutThree.setBackgroundResource(R.drawable.purple_out_line)
         binding.layoutFour.setBackgroundResource(R.drawable.purple_out_line)
+        binding.pauseResumeBtn.setBackgroundResource(R.drawable.purple_out_line)
+        binding.pauseResumeBtn.setTextColor(resources.getColor(R.color.purple_500))
         toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -727,6 +764,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 binding.otp.text = response.booking_details.otp
             }
         }
+
+        if (response.booking_details.extra_demand_total_amount.isEmpty()) {
+            binding.completedBtn.isEnabled = false
+            binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
+            binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
+        }
+
 //        if (isCompleted(this)) {
 //            binding.otp.text = response.booking_details.time_lapsed
 //            binding.completedBtn.visibility = View.GONE
@@ -1169,6 +1213,67 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         progressDialog
                     )
                 }
+            }
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun resumeBooking() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = ProviderBookingResumeReqModel(
+                    ProviderBookingDetailsScreen.bookingId.toInt(),
+                    RetrofitBuilder.PROVIDER_KEY,
+                    SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+                    UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
+                )
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().resumeBooking(requestBody)
+                val jsonObject = JSONObject(response.string())
+                if (jsonObject.getInt("status") == 200) {
+                    binding.pauseResumeBtn.text = "Pause"
+                    UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "")
+                    binding.completedBtn.isEnabled = true
+                    binding.completedBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    binding.completedBtn.setTextColor(resources.getColor(R.color.purple_500))
+                    binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
+                    binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                } else {
+                    snackBar(binding.viewFilesBtn, jsonObject.getString("message"))
+                }
+            } catch (e: Exception) {
+                snackBar(binding.viewFilesBtn, e.message!!)
+            }
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun pauseBooking() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = ProviderPauseBookingReqModel(
+                    ProviderBookingDetailsScreen.bookingId.toInt(),
+                    RetrofitBuilder.PROVIDER_KEY,
+                    SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+                    UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
+                )
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().pauseBooking(requestBody)
+                val jsonObject = JSONObject(response.string())
+                if (jsonObject.getInt("status") == 200) {
+                    binding.pauseResumeBtn.text = "Resume"
+                    UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "Yes")
+                    if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
+                        binding.pauseResumeBtn.text = "Resume"
+                        binding.completedBtn.isEnabled = false
+                        binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
+                        binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
+                    } else {
+                        binding.pauseResumeBtn.text = "Pause"
+                    }
+                } else {
+                    snackBar(binding.viewFilesBtn, jsonObject.getString("message"))
+                }
+            } catch (e: Exception) {
+                snackBar(binding.viewFilesBtn, e.message!!)
             }
         }
     }

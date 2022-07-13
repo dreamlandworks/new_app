@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -24,6 +27,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.Compl
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isReschedule
+import com.satrango.utils.toast
 
 class ProviderMyBookingAdapter(
     private val list: List<BookingDetail>,
@@ -37,6 +41,7 @@ class ProviderMyBookingAdapter(
         val binding = binding
         val alertsInterface = alertsInterface
 
+        @RequiresApi(Build.VERSION_CODES.M)
         @SuppressLint("SetTextI18n")
         fun bind(
             data: BookingDetail,
@@ -85,14 +90,18 @@ class ProviderMyBookingAdapter(
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
                     binding.timeRemaining.text = "Started"
+
                     if (data.pause_status.equals("Yes", true)) {
                         binding.startBtn.text = "Resume"
+                        binding.cancelBookingBtn.isEnabled = false
+                        binding.cancelBookingBtn.setBackgroundResource(R.drawable.gray_corner)
+                        binding.cancelBookingBtn.setTextColor(binding.cancelBookingBtn.context.getColor(R.color.gray))
                     } else {
                         binding.startBtn.text = "Pause"
                     }
+
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.cancelBookingBtn.text = "Mark Complete"
-
                     binding.cancelBookingBtn.setOnClickListener {
                         if (data.extra_demand_total_amount.isNotEmpty()) {
                             ProviderInVoiceScreen.isExtraDemandRaised = "1"
@@ -114,6 +123,7 @@ class ProviderMyBookingAdapter(
                     }
 
                     binding.card.setOnClickListener {
+                        UserUtils.saveBookingPauseResumeStatus(binding.bookingId.context, data.pause_status)
                         ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                         ViewUserBookingDetailsScreen.FCM_TOKEN = data.user_fcm_token
                         val intent = Intent(binding.root.context, ProviderBookingDetailsScreen::class.java)
@@ -220,8 +230,17 @@ class ProviderMyBookingAdapter(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position], status, providerMyBookingInterface)
+        holder.bind(list[holder.layoutPosition], status, providerMyBookingInterface)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
     }
 
     override fun getItemCount(): Int {

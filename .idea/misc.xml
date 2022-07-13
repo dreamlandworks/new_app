@@ -192,6 +192,7 @@
         <entry key="app/src/main/res/drawable/distance_bg.xml" value="0.2525" />
         <entry key="app/src/main/res/drawable/distance_bg_green.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/distance_bg_yellow.xml" value="0.1935" />
+        <entry key="app/src/main/res/drawable/gray_corner.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/ic_addmore.xml" value="0.16" />
         <entry key="app/src/main/res/drawable/ic_addmore_blue.xml" value="0.117" />
         <entry key="app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.152" />
@@ -260,7 +261,7 @@
         <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_plan_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_privacy_policy_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_profile_screen.xml" value="0.11944444444444445" />
@@ -270,7 +271,7 @@
         <entry key="app/src/main/res/layout/activity_view_bid_details_screens.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_view_bids_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_view_files_screen.xml" value="0.232421875" />
-        <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_view_user_booking_details_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_youtube_player_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/all_banks_details_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/attachment_row.xml" value="0.232421875" />
