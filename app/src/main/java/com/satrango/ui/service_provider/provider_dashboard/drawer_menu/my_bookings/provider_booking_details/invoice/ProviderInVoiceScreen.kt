@@ -207,7 +207,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 //                        UserUtils.saveTxnToken(this@ProviderInVoiceScreen, response.booking_details.txn_id)
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
+//                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
+                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), "0", response)
                             } else {
                                 showotpInDialog(response.booking_details.finish_OTP)
                             }
