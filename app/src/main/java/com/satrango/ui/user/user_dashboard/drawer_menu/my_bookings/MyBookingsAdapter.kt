@@ -129,7 +129,7 @@ class MyBookingsAdapter(
                         binding.cancelBookingBtn.visibility = View.GONE
                         binding.reScheduleBtn.visibility = View.GONE
                         if (data.req_raised_by != UserUtils.getUserId(binding.amount.context)) {
-                            binding.startBtn.setOnClickListener {
+                            binding.card.setOnClickListener {
                                 alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), 0, data.reschedule_id.toInt(), data.reschedule_description)
                             }
                         }
@@ -155,16 +155,16 @@ class MyBookingsAdapter(
                             UserUtils.saveSelectedSPDetails(binding.amount.context, Gson().toJson(data))
                             binding.root.context.startActivity(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                         }
-                    }
-                    binding.card.setOnClickListener {
-                        ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
-                        val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
-                        intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
-                        intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
-                        intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
-                        isProvider(binding.startBtn.context, false)
-                        isPending(binding.startBtn.context, true)
-                        binding.root.context.startActivity(intent)
+                        binding.card.setOnClickListener {
+                            ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
+                            val intent = Intent(binding.root.context, ViewUserBookingDetailsScreen::class.java)
+                            intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
+                            intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            intent.putExtra(binding.root.context.getString(R.string.user_id), UserUtils.getUserId(binding.root.context))
+                            isProvider(binding.startBtn.context, false)
+                            isPending(binding.startBtn.context, true)
+                            binding.root.context.startActivity(intent)
+                        }
                     }
                 }
                 "Completed".lowercase(Locale.getDefault()) -> {

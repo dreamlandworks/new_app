@@ -340,6 +340,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
                 binding.pauseResumeBtn.text = "Resume"
                 binding.completedBtn.isEnabled = false
+                binding.raiseExtraDemandBtn.isEnabled = false
                 binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
                 binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
                 binding.pauseResumeBtn.setOnClickListener { resumeBooking() }
@@ -349,6 +350,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 binding.pauseResumeBtn.text = "Pause"
                 binding.pauseResumeBtn.setOnClickListener { pauseBooking() }
                 binding.completedBtn.isEnabled = true
+                binding.raiseExtraDemandBtn.isEnabled = true
                 if (isProvider(this)) {
                     binding.completedBtn.setBackgroundResource(R.drawable.purple_out_line)
                     binding.completedBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -357,6 +359,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.completedBtn.setTextColor(resources.getColor(R.color.blue))
                 }
             }
+        } else {
+            binding.pauseResumeBtn.visibility = View.GONE
         }
         if (isCompleted(this)) {
             binding.userLayout.visibility = View.GONE
@@ -1233,6 +1237,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.pauseResumeBtn.text = "Pause"
                     UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "")
                     binding.completedBtn.isEnabled = true
+                    binding.raiseExtraDemandBtn.isEnabled = true
                     binding.completedBtn.setBackgroundResource(R.drawable.purple_out_line)
                     binding.completedBtn.setTextColor(resources.getColor(R.color.purple_500))
                     binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -1261,14 +1266,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 if (jsonObject.getInt("status") == 200) {
                     binding.pauseResumeBtn.text = "Resume"
                     UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "Yes")
-                    if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
-                        binding.pauseResumeBtn.text = "Resume"
-                        binding.completedBtn.isEnabled = false
-                        binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
-                        binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
-                    } else {
-                        binding.pauseResumeBtn.text = "Pause"
-                    }
+                    binding.pauseResumeBtn.text = "Resume"
+                    binding.completedBtn.isEnabled = false
+                    binding.raiseExtraDemandBtn.isEnabled = false
+                    binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
+                    binding.completedBtn.setTextColor(resources.getColor(R.color.gray))
+                    binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
+                    binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
                 } else {
                     snackBar(binding.viewFilesBtn, jsonObject.getString("message"))
                 }

@@ -166,6 +166,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 binding.callBtn.isEnabled = false
                 binding.messageBtn.isEnabled = false
                 binding.markCompleteBtn.isEnabled = false
+                binding.raiseExtraDemandBtn.isEnabled = false
                 binding.markCompleteBtn.setBackgroundResource(R.drawable.gray_corner)
                 binding.markCompleteBtn.setTextColor(resources.getColor(R.color.gray))
                 binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
@@ -559,6 +560,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                     binding.callBtn.isEnabled = true
                     binding.messageBtn.isEnabled = true
                     binding.markCompleteBtn.isEnabled = true
+                    binding.raiseExtraDemandBtn.isEnabled = true
                     binding.markCompleteBtn.setBackgroundResource(R.drawable.purple_out_line)
                     binding.markCompleteBtn.setTextColor(resources.getColor(R.color.purple_500))
                     binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
@@ -594,6 +596,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                         binding.callBtn.isEnabled = false
                         binding.messageBtn.isEnabled = false
                         binding.markCompleteBtn.isEnabled = false
+                        binding.raiseExtraDemandBtn.isEnabled = false
                         binding.pauseResumeBtn.text = "Resume"
                         binding.markCompleteBtn.setBackgroundResource(R.drawable.gray_corner)
                         binding.markCompleteBtn.setTextColor(resources.getColor(R.color.gray))

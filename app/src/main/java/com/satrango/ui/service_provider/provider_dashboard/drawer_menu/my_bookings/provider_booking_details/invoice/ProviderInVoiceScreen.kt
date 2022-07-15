@@ -402,18 +402,18 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         CoroutineScope(Dispatchers.Main).launch {
                             try {
                                 val requestBody = CompleteBookingReqModel(
-                                    response.booking_details.dues,
+                                    "0",
                                     response.booking_details.wallet_balance,
                                     bookingId,
-                                    response.booking_details.cgst_tax,
+                                    "0",
                                     response.booking_details.completed_at,
                                     RetrofitBuilder.USER_KEY,
                                     "Success",
-                                    response.booking_details.sgst_tax,
+                                    "0",
                                     response.booking_details.sp_id,
-                                    response.booking_details.dues,
+                                    "0",
                                     UserUtils.getUserId(this@ProviderInVoiceScreen),
-                                    UserUtils.getOrderId(this@ProviderInVoiceScreen)
+                                    "0"
                                 )
 //                                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
                                 val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
