@@ -287,6 +287,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.data!!)
+                    updateUI("InProgress")
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -314,6 +315,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.data!!)
+                    updateUI("InProgress")
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

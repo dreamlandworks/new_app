@@ -114,10 +114,10 @@ class ProviderMyBookingAdapter(
 
                     binding.startBtn.setOnClickListener {
                         if (data.pause_status.equals("Yes", true)) {
-                            binding.startBtn.text = "Pause"
-                           providerMyBookingInterface.resumeBooking(data.booking_id.toInt())
+//                            binding.startBtn.text = "Pause"
+                            providerMyBookingInterface.resumeBooking(data.booking_id.toInt())
                         } else {
-                            binding.startBtn.text = "Resume"
+//                            binding.startBtn.text = "Resume"
                             providerMyBookingInterface.pauseBooking(data.booking_id.toInt())
                         }
                     }

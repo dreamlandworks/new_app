@@ -179,9 +179,9 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
             binding.pauseResumeBtn.setOnClickListener {
                 if (UserUtils.getBookingPauseResumeStatus(this).equals("Yes", true)) {
-                    pauseBooking()
-                } else {
                     resumeBooking()
+                } else {
+                    pauseBooking()
                 }
             }
 
@@ -555,14 +555,15 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 val response = RetrofitBuilder.getServiceProviderRetrofitInstance().resumeBooking(requestBody)
                 val jsonObject = JSONObject(response.string())
                 if (jsonObject.getInt("status") == 200) {
-                    binding.pauseResumeBtn.text = "Pause"
                     UserUtils.saveBookingPauseResumeStatus(this@ProviderBookingDetailsScreen, "")
                     binding.callBtn.isEnabled = true
                     binding.messageBtn.isEnabled = true
                     binding.markCompleteBtn.isEnabled = true
                     binding.markCompleteBtn.setBackgroundResource(R.drawable.purple_out_line)
-                    binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
-                    binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
+                    binding.markCompleteBtn.setTextColor(resources.getColor(R.color.purple_500))
+                    binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
+                    binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.purple_out_line)
+                    binding.pauseResumeBtn.text = "Pause"
                 } else {
                     snackBar(binding.recyclerView, jsonObject.getString("message"))
                 }
@@ -574,6 +575,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun pauseBooking() {
+
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = ProviderPauseBookingReqModel(
@@ -592,6 +594,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                         binding.callBtn.isEnabled = false
                         binding.messageBtn.isEnabled = false
                         binding.markCompleteBtn.isEnabled = false
+                        binding.pauseResumeBtn.text = "Resume"
                         binding.markCompleteBtn.setBackgroundResource(R.drawable.gray_corner)
                         binding.markCompleteBtn.setTextColor(resources.getColor(R.color.gray))
                         binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
