@@ -275,24 +275,28 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
 //        val payAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
 
-        val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
-        val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+        if (FROM_COMPLETE_BOOKING) {
+            generateTxn(amount.toDouble(), finalWalletBalance.toDouble(), txnType)
+        } else {
+            val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+            val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+            if (dues == 0.0 && summaryPayAmount == 0.0) {
+                toast(this, "First Entered")
+                if (payableAmount > 0) {
+                    toast(this, "Second Entered")
+                    generateTxn(payableAmount, walletBalance, txnType)
+                } else {
+                    toast(this, "Third Entered")
+                    updateToServer(payableAmount.toString(), walletBalance.toString())
+                }
+            } else {
+                toast(this, "Fourth Entered")
+                generateTxn(payableAmount, walletBalance, txnType)
+            }
+        }
 
 //        toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
         //0.0|0.0|2.0|10.0|12.0
-        if (dues == 0.0 && summaryPayAmount == 0.0) {
-            toast(this, "First Entered")
-            if (payableAmount > 0) {
-                toast(this, "Second Entered")
-                generateTxn(payableAmount, walletBalance, txnType)
-            } else {
-                toast(this, "Third Entered")
-                updateToServer(payableAmount.toString(), walletBalance.toString())
-            }
-        } else {
-            toast(this, "Fourth Entered")
-            generateTxn(payableAmount, walletBalance, txnType)
-        }
 
 
 //        when {SP

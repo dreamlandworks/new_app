@@ -97,7 +97,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-//            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
+//            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizaledMessage!!)
         }
 
         initializeProgressDialog()

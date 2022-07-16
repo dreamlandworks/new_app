@@ -1179,7 +1179,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
             if (response.status == 200) {
                 progressDialog.dismiss()
-                updateUI(response, bookingId)
+                showExtraDemandAcceptDialog(
+                    bookingId.toInt(),
+                    response.booking_details.material_advance,
+                    response.booking_details.technician_charges,
+                    response.booking_details.extra_demand_total_amount,
+                    progressDialog
+                )
+//                updateUI(response, bookingId)
             } else {
                 progressDialog.dismiss()
                 snackBar(binding.inProgressViewStatusBtn, response.message)

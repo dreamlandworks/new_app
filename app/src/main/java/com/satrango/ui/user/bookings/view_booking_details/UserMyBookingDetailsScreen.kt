@@ -406,7 +406,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
             if (response.status == 200) {
                 progressDialog.dismiss()
-                updateUI(response)
+                showExtraDemandAcceptDialog(
+                    Companion.bookingId.toInt(),
+                    response.booking_details.material_advance,
+                    response.booking_details.technician_charges,
+                    response.booking_details.extra_demand_total_amount,
+                    progressDialog
+                )
+//                updateUI(response)
             } else {
                 progressDialog.dismiss()
                 snackBar(binding.recyclerView, "Error 04:" +  response.message)

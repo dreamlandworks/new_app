@@ -207,8 +207,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
 //                        UserUtils.saveTxnToken(this@ProviderInVoiceScreen, response.booking_details.txn_id)
                         nextBtn.setOnClickListener {
                             if (!isProvider(this@ProviderInVoiceScreen)) {
-//                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
-                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), "0", response)
+                                otpDialog(response.booking_details.finish_OTP.toInt(), response.booking_details.booking_id.toString(), response.booking_details.final_dues, response)
                             } else {
                                 showotpInDialog(response.booking_details.finish_OTP)
                             }
@@ -384,12 +383,14 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
+                    toast(this, finalDues)
                     if (finalDues.toInt() > 0) {
                         UserUtils.saveSpId(binding.root.context, "0")
                         progressDialog.dismiss()
                         dialog.dismiss()
                         UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
                         PaymentScreen.amount = finalDues.toInt()
+                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
                         PaymentScreen.FROM_USER_PLANS = false
                         PaymentScreen.FROM_PROVIDER_PLANS = false
                         PaymentScreen.FROM_USER_SET_GOALS = false

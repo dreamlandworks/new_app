@@ -49,6 +49,10 @@ import com.google.gson.Gson
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.user.bookings.booking_address.BookingRepository
+import com.satrango.ui.user.bookings.booking_address.BookingViewModel
+import com.satrango.ui.user.bookings.view_booking_details.UserMyBookingDetailsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import java.net.SocketTimeoutException
 
@@ -196,12 +200,76 @@ class UserHomeScreen :
                             if (data.type_id == "9" && data.status == "2") {
                                 showPendingActionableAlertsDialog(data)
                             }
+                            if (data.type_id == "7") {
+                                showPendingExtraDemandDialog(data)
+                            }
                         }
                     }
                     progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun showPendingExtraDemandDialog(data: Action) {
+        val dialog = Dialog(requireContext())
+        val dialogView = layoutInflater.inflate(R.layout.show_pending_actionable_alerts_dialog, null)
+        val profilePic = dialogView.findViewById<CircleImageView>(R.id.profilePic)
+        val description = dialogView.findViewById<TextView>(R.id.description)
+        val skipBtn = dialogView.findViewById<TextView>(R.id.skipBtn)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        Glide.with(requireContext()).load(data.profile_pic).error(R.drawable.images).into(profilePic)
+        description.text = data.description
+        skipBtn.setOnClickListener { dialog.dismiss() }
+        acceptBtn.setOnClickListener {
+            dialog.dismiss()
+            changeExtraDemandRequestStatus(
+                data.booking_id.toInt(),
+                1
+            )
+        }
+        rejectBtn.setOnClickListener {
+            dialog.dismiss()
+            changeExtraDemandRequestStatus(
+                data.booking_id.toInt(),
+                2
+            )
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+        val window = dialog.window
+        window!!.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        dialog.show()
+    }
+
+    private fun changeExtraDemandRequestStatus(
+        bookingId: Int,
+        statusCode: Int
+    ) {
+        val factory = ViewModelFactory(BookingRepository())
+        val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
+        val requestBody =
+            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, statusCode)
+        viewModel.changeExtraDemandStatus(requireContext(), requestBody).observe(requireActivity()) {
+            when (it) {
+                is NetworkResponse.Loading -> {
+                    progressDialog.show()
+                }
+                is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
+                    if (statusCode == 1) {
+                        toast(requireContext(), "Extra Demand Accepted")
+                    } else {
+                        toast(requireContext(), "Extra Demand Rejected")
+                    }
+                }
+                is NetworkResponse.Failure -> {
+                    progressDialog.dismiss()
+                    toast(requireContext(), it.message!!)
                 }
             }
         }
