@@ -181,6 +181,7 @@ class ProviderHomeScreen : Fragment() {
                             intent.putExtra(binding.root.context.getString(R.string.user_id), data.users_id)
                             intent.putExtra(binding.root.context.getString(R.string.booking_id), data.booking_id)
                             intent.putExtra(binding.root.context.getString(R.string.category_id), data.category_id)
+                            UserUtils.isPending(requireContext(), true)
                             ViewUserBookingDetailsScreen.FROM_MY_BOOKINGS_SCREEN = true
                             binding.root.context.startActivity(intent)
                         }
