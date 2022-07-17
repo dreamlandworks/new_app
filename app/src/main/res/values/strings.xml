@@ -525,6 +525,7 @@
     <string name="material_cost">Material Cost</string>
     <string name="technician_charges">Technician Charges</string>
     <string name="material_bills_should_be_provided_by_you_only">Material Bills should be provided by you only.</string>
+    <string name="extra_demand_note">Note: You can always  raise additional demand if amount is more than you anticipated subject to approval of user</string>
     <string name="view_status">View Status</string>
     <string name="mark_complete">Mark Complete</string>
     <string name="final_expenditure">Final Expenditure</string>

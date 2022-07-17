@@ -320,7 +320,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 if (response.booking_details.extra_demand_total_amount != "0") {
                     ProviderInVoiceScreen.isExtraDemandRaised = "1"
                     if (response.booking_details.extra_demand_status == "2") {
-                        finalExpenditureDialog()
+                        finalExpenditureDialog(response.booking_details.extra_demand_total_amount)
                     } else {
                         divertToInvoiceScreen()
                     }
@@ -438,7 +438,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
-    private fun finalExpenditureDialog() {
+    private fun finalExpenditureDialog(extraDemandRaised: String) {
         val dialog = BottomSheetDialog(this)
         val dialogView =
             layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
@@ -450,8 +450,11 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {
-            if (finalExpenditure.text.toString().isEmpty()) {
+            val finalDemand = finalExpenditure.text.toString()
+            if (finalDemand.isEmpty()) {
                 toast(this, "Enter Expenditure Incurred")
+            } else if (finalDemand.toDouble() > extraDemandRaised.toDouble()) {
+                toast(this, "Final Expenditure is more than extra demanded from user")
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
                 val viewModel =

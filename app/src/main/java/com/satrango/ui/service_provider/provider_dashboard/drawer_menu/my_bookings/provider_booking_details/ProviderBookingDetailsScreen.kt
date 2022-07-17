@@ -10,14 +10,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +25,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingDetailsScreenBinding
@@ -50,7 +47,6 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
-import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProgress
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
@@ -194,7 +190,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
                 if (response.booking_details.extra_demand_total_amount != "0") {
                     ProviderInVoiceScreen.isExtraDemandRaised = "1"
                     if (response.booking_details.extra_demand_status == "1") {
-                        finalExpenditureDialog()
+                        finalExpenditureDialog(response.booking_details.extra_demand_total_amount)
                     } else {
                         divertToInvoiceScreen()
                     }
@@ -378,7 +374,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun finalExpenditureDialog() {
+    private fun finalExpenditureDialog(extraDemandRaised: String) {
         val dialog = BottomSheetDialog(this)
         val dialogView = layoutInflater.inflate(R.layout.provider_final_extra_expenditure_dialog, null)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
@@ -389,8 +385,11 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         closeBtn.setOnClickListener { dialog.dismiss() }
         submitBtn.setOnClickListener {
-            if (finalExpenditure.text.toString().isEmpty()) {
+            val finalDemand = finalExpenditure.text.toString()
+            if (finalDemand.isEmpty()) {
                 toast(this, "Enter Expenditure Incurred")
+            } else if (finalDemand.toDouble() > extraDemandRaised.toDouble()) {
+                toast(this, "Final Expenditure is more than extra demanded from user")
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
                 val viewModel =

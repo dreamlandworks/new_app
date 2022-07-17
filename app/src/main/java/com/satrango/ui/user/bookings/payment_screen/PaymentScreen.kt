@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -130,9 +131,9 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     walletBalanceCheck.visibility = View.GONE
                 } else {
                     if (finalWalletBalance.toInt() > data.final_amount) {
-                        currentBalance.text = "Deduct from wallet balance: Rs.${data.final_amount}/-"
+                        currentBalance.text = "Deduct from wallet balance: Rs. ${data.final_amount}/-"
                     } else if (finalWalletBalance.toInt() > 0 && finalWalletBalance.toInt() < data.final_amount) {
-                        currentBalance.text = "Deduct from wallet balance: Rs.${finalWalletBalance}/-"
+                        currentBalance.text = "Deduct from wallet balance: Rs. ${finalWalletBalance}/-"
                     }
                     walletBalance.text = "Rs.$finalWalletBalance/-"
                 }
@@ -141,7 +142,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             } else if (FROM_COMPLETE_BOOKING) {
                 bookingSummaryLayout.visibility = View.VISIBLE
                 bookingDetailsLayout.visibility = View.GONE
-                amountLayout.visibility = View.GONE
+                amountLayout.visibility = View.VISIBLE
                 val data = Gson().fromJson(UserUtils.getInvoiceDetails(this@PaymentScreen), ProviderInvoiceResModel::class.java)
                 bookingId.text = data.booking_details.booking_id.toString()
                 workStartedAt.text = data.booking_details.started_at
@@ -152,6 +153,11 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 cgstAmount.text = data.booking_details.cgst_tax
                 sgstAmount.text = data.booking_details.sgst_tax
                 summaryPayableAmount.text = data.booking_details.dues
+
+                totalAmount.text = "Rs.$amount/-"
+                walletBalance.text = "Rs.$finalWalletBalance/-"
+                currentBalance.text = "Deduct from wallet Balance: Rs. $amount/-"
+                payAmount.text = "Rs.$amount/-"
 
             } else if (FROM_USER_PLANS || FROM_PROVIDER_PLANS) {
 
@@ -170,22 +176,17 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
                 totalAmount.text = "Rs.$amount/-"
                 walletBalance.text = "Rs.$finalWalletBalance/-"
-                currentBalance.text = "Deduct from wallet Balance: Rs.$amount/-"
+                currentBalance.text = "Deduct from wallet Balance: Rs. $amount/-"
                 payAmount.text = "Rs.$amount/-"
 
             }
-//            toast(this@PaymentScreen, FROM_USER_PLANS.toString())
-
-//            payableAmount.text = "Rs. $finalAmount"
-//            payableBalance.text = resources.getString(R.string.total_amount_payable) + " Rs. " + finalAmount.toString()
-//            walletBalance.text = "Wallet Balance - Rs. $finalWalletBalance"
 
             walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
             walletBalanceCheck.setOnCheckedChangeListener { _, checked ->
                 walletBalanceChecked = checked
                 if (checked) {
                     if (finalWalletBalance.toInt() >= finalAmount) {
-                        currentBalance.text = "Deducted from Wallet - Rs. $finalAmount"
+                        currentBalance.text = "Deducted from Wallet - Rs. $finalAmount/-"
                         val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         if (totalAmount > totalWallet) {
@@ -196,7 +197,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             payAmount.text = "Rs.0/-"
                         }
                     } else {
-                        currentBalance.text = "Deducted from Wallet - Rs. $finalWalletBalance"
+                        currentBalance.text = "Deducted from Wallet - Rs. $finalWalletBalance/-"
                         val totalAmount = totalAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         val totalWallet = walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
                         if (totalAmount > totalWallet) {
@@ -215,19 +216,19 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
             confirmPaymentBtn.setOnClickListener {
                 if (FROM_USER_PLANS) {
-                    toast(this@PaymentScreen, "FROM USER PLANS")
+//                    toast(this@PaymentScreen, "FROM USER PLANS")
                     processPaytm("3")
                 }
                 if (FROM_PROVIDER_PLANS) {
-                    toast(this@PaymentScreen, "FROM PROVIDER PLANS")
+//                    toast(this@PaymentScreen, "FROM PROVIDER PLANS")
                     processPaytm("4")
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                    toast(this@PaymentScreen, "FROM PROVIDER BOOKING RESPONSE")
+//                    toast(this@PaymentScreen, "FROM PROVIDER BOOKING RESPONSE")
                     processPaytm("1")
                 }
                 if (FROM_COMPLETE_BOOKING) {
-                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
+//                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
                     processPaytm("2")
                 }
             }
@@ -267,60 +268,47 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         var walletBalance = 0.0
         var payableAmount = 0.0
         if (binding.amountLayout.visibility == View.VISIBLE) {
-            walletBalance = binding.walletBalance.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+            walletBalance = if (binding.walletBalanceCheck.isChecked) {
+                 binding.currentBalance.text.toString().trim().split(".")[1].split("/")[0].trim().toDouble()
+            } else {
+                0.0
+            }
             payableAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
+
         if (binding.invoiceAmountCard.visibility == View.VISIBLE) {
             payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
-//        val payAmount = binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
 
         if (FROM_COMPLETE_BOOKING) {
-            generateTxn(amount.toDouble(), finalWalletBalance.toDouble(), txnType)
+            if (payableAmount == 0.0) {
+                updateToServer(payableAmount.toString(), walletBalance.toString())
+            } else {
+                generateTxn(payableAmount, walletBalance, txnType)
+            }
         } else {
             val dues = binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
             val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
             if (dues == 0.0 && summaryPayAmount == 0.0) {
-                toast(this, "First Entered")
                 if (payableAmount > 0) {
-                    toast(this, "Second Entered")
                     generateTxn(payableAmount, walletBalance, txnType)
                 } else {
-                    toast(this, "Third Entered")
                     updateToServer(payableAmount.toString(), walletBalance.toString())
                 }
             } else {
-                toast(this, "Fourth Entered")
                 generateTxn(payableAmount, walletBalance, txnType)
             }
         }
 
-//        toast(this, "$dues|$summaryPayAmount|$payAmount|$walletBalance|$payableAmount")
-        //0.0|0.0|2.0|10.0|12.0
-
-
-//        when {SP
-//            walletBalance >= payableAmount -> {
-//                updateToServer(payableAmount.toString(), walletBalance.toString())
-//            }
-//            walletBalance < payableAmount -> {
-//                if (binding.walletBalanceCheck.isChecked) {
-//                    val pendingPayableAmount = payableAmount - walletBalance
-//                    processPaytmGateWay(pendingPayableAmount, walletBalance)
-//                } else {
-//                    processPaytmGateWay(payableAmount, walletBalance)
-//                }
-//            }
-//            else -> {
-//                processPaytmGateWay(payableAmount, walletBalance)
-//            }
-//        }
     }
 
     private fun generateTxn(payableAmount: Double, walletBalance: Double,  txnType: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType))
+                val requestBody = GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType)
+                Log.e("REQUEST:", Gson().toJson(requestBody))
+                val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(requestBody)
+                Log.e("RESPONSE:", Gson().toJson(response))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
@@ -414,7 +402,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 updateInstallmentPaymentStatus("Success", "paymentId")
             }
             FROM_COMPLETE_BOOKING -> {
-                completeBooking("Success")
+                completeBooking(paidAmount, walletBalance, "Success")
             }
         }
     }
@@ -452,15 +440,15 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         }
     }
 
-    private fun completeBooking(referenceId: String) {
+    private fun completeBooking(paidAmount: String, walletBalance: String, referenceId: String) {
 
         val inVoiceDetails = Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
 //        Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = CompleteBookingReqModel(
-                    binding.payableAmount.text.toString().split(" ")[1],
-                    binding.currentBalance.text.toString().split(" ")[5],
+                    paidAmount,
+                    walletBalance,
                     inVoiceDetails.booking_details.booking_id.toString(),
                     inVoiceDetails.booking_details.cgst_tax,
                     inVoiceDetails.booking_details.completed_at,

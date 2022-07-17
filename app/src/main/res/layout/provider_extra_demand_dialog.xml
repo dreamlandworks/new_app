@@ -132,6 +132,14 @@
         android:layout_gravity="center"
         android:background="@color/purple_500"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_35sdp"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/extra_demand_note"
+        android:textSize="@dimen/_9sdp"/>
 
     <TextView
         android:id="@+id/submitBtn"
