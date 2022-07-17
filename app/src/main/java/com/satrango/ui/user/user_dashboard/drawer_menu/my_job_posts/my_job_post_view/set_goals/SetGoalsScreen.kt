@@ -167,6 +167,7 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
     }
 
     private fun uploadToServer() {
+        toast(this, "Upload to server method called")
         val requestBody = SaveInstallmentReqModel(
             ViewBidsScreen.bookingId,
             installmentsList,
@@ -183,19 +184,23 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     progressDialog.dismiss()
                     UserUtils.saveInstallmentDetId(this, it.data!!.installment_det_id.toString())
                     PaymentScreen.amount = bidPrice
-                    PaymentScreen.finalWalletBalance = it.data.wallet_balance
-//                    PaymentScreen.amount = bidPrice * 100
+                    toast(this, "Upload Success")
+                    PaymentScreen.finalWalletBalance = it.data.wallet_balance.toDouble().toInt().toString()
+                    toast(this, PaymentScreen.finalWalletBalance)
                     PaymentScreen.FROM_USER_SET_GOALS = true
                     PaymentScreen.FROM_USER_PLANS = false
                     PaymentScreen.FROM_PROVIDER_PLANS = false
                     PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
                     PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
                     startActivity(Intent(this, PaymentScreen::class.java))
+                    toast(this, "Payment screen called")
+
 //                    makePayment()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.addAnotherAddressBtn, it.message!!)
+                    toast(this, it.message!!)
+                    snackBar(binding.addAnotherAddressBtn, it.message)
                 }
             }
         }

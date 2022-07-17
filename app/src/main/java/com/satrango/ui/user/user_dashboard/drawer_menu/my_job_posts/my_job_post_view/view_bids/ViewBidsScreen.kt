@@ -23,6 +23,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
+import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -68,9 +69,16 @@ class ViewBidsScreen : AppCompatActivity() {
                     for (bid in list.bid_details) {
                         if (bid.bid_type == "0") {
                             filteredList.add(bid)
+                        } else if (isProvider(this) && bid.sp_id == UserUtils.getUserId(this) && bid.bid_type == "1") {
+                            filteredList.add(bid)
+                        } else if (bid.users_id == UserUtils.getUserId(this) && bid.bid_type == "1") {
+                            filteredList.add(bid)
                         }
                     }
                     binding.recyclerView.adapter = ViewBidsAdapter(filteredList)
+                    if (list.bid_details.isEmpty()) {
+                        snackBar(binding.recyclerView, "No Bids on this post")
+                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

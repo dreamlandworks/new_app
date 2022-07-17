@@ -11,6 +11,7 @@ data class BidDetail(
     val sp_fcm_token: String,
     val sp_fname: String,
     val sp_id: String,
+    val users_id: String,
     val job_title: String,
     val sp_lname: String,
     val sp_mobile: String,

@@ -58,7 +58,7 @@ class UserAlertsAdapter(
                 alertsInterface.divertToOfferScreen()
             }
             if (data.type_id == "7") {
-                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.req_raised_by_id.toInt())
+                alertsInterface.extraDemandDialog(data.booking_id.toInt(), data.category_id.toInt(), data.user_id.toInt())
             }
             if (data.type_id == "8") {
                 alertsInterface.divertToViewBidDetailsScreen(data.booking_id, data.bid_user_id.toInt(), data.bid_id.toInt())

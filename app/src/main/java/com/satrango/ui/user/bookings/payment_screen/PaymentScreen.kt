@@ -179,6 +179,17 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 currentBalance.text = "Deduct from wallet Balance: Rs. $amount/-"
                 payAmount.text = "Rs.$amount/-"
 
+            } else if (FROM_USER_SET_GOALS) {
+                bookingSummaryLayout.visibility = View.GONE
+                bookingSummaryCard.visibility = View.GONE
+                amountText.visibility = View.GONE
+                invoiceAmountCard.visibility = View.GONE
+                amountLayout.visibility = View.VISIBLE
+
+                totalAmount.text = "Rs.$amount/-"
+                walletBalance.text = "Rs.$finalWalletBalance/-"
+                currentBalance.text = "Deduct from wallet Balance: Rs. $amount/-"
+                payAmount.text = "Rs.$amount/-"
             }
 
             walletBalanceCheck.isClickable = finalWalletBalance.toInt() != 0
@@ -231,6 +242,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 //                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
                     processPaytm("2")
                 }
+                if (FROM_USER_SET_GOALS) {
+//                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
+                    processPaytm("5")
+                }
             }
 
             addNewUPI.setOnClickListener {
@@ -280,7 +295,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             payableAmount = binding.summaryPayableAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
         }
 
-        if (FROM_COMPLETE_BOOKING) {
+        if (FROM_COMPLETE_BOOKING || FROM_USER_SET_GOALS) {
             if (payableAmount == 0.0) {
                 updateToServer(payableAmount.toString(), walletBalance.toString())
             } else {
