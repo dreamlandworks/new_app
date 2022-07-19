@@ -203,7 +203,14 @@ class MyBookingsAdapter(
                 }
             }
             binding.messageBtn.setOnClickListener {
-                bookingInterface.startMessaging(data)
+                bookingInterface.startUserMessaging(data)
+            }
+
+            binding.phoneBtn.setOnClickListener {
+                UserUtils.makePhoneCall(
+                    binding.phoneBtn.context,
+                    data.sp_mobile.replace(" ", "").takeLast(10)
+                )
             }
 
         }

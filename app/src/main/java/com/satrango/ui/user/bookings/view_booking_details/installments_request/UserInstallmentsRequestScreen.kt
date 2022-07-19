@@ -1,7 +1,6 @@
 package com.satrango.ui.user.bookings.view_booking_details.installments_request
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +21,6 @@ import com.satrango.ui.user.bookings.view_booking_details.installments_request.m
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsRequestInterface {
@@ -42,8 +40,6 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
 
         initializeToolBar()
         initializeProgressDialog()
-
-        toast(this, postJobId.toString())
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]

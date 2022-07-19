@@ -562,6 +562,7 @@
     <string name="completion_of_work">Completion of Work</string>
     <string name="extra_demand">Extra Demand</string>
     <string name="service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis">Service Provider has placed the following extra demand for successful completion of your work after his analysis.</string>
+    <string name="installment_dialog_text">Service Provider has placed the following installment for successful completion of your work after his analysis.</string>
     <string name="adv_for_material">Adv for Material</string>
     <string name="request">Request</string>
     <string name="no_installments">No Installments</string>

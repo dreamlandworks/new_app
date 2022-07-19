@@ -189,6 +189,9 @@
         <entry key="..\:/satrango/new_app/app/src/main/res/layout/waiting_for_sp_confirmation_dialog.xml" value="0.209375" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/provider_dashboard_drawer_menu.xml" value="0.18" />
         <entry key="..\:/satrango/new_app/app/src/main/res/menu/user_dashboard_bottom_menu.xml" value="0.15703125" />
+        <entry key="app/src/main/res/drawable/arrow_forward_icon.xml" value="0.1315" />
+        <entry key="app/src/main/res/drawable/badge_circle.xml" value="0.1315" />
+        <entry key="app/src/main/res/drawable/blue_account_balance_24.xml" value="0.1315" />
         <entry key="app/src/main/res/drawable/blue_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/blue_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/blue_out_line.xml" value="0.2525" />
@@ -262,7 +265,7 @@
         <entry key="app/src/main/res/layout/activity_user_booking_cancel_screen.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_user_dashboard_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_user_f_a_q_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_installments_request_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_user_installments_request_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.11944444444444445" />
@@ -300,6 +303,8 @@
         <entry key="app/src/main/res/layout/fragment_user_home_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/fragment_user_offers_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/full_screen_image.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/goal_installments_row.xml" value="0.17592592592592593" />
+        <entry key="app/src/main/res/layout/installment_raised_dialog.xml" value="0.30885416666666665" />
         <entry key="app/src/main/res/layout/instant_booking_not_available_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/intro_row.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/invoice_list_view_row.xml" value="0.2543822146216332" />
@@ -325,7 +330,7 @@
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/provider_extra_demand_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/provider_final_extra_expenditure_dialog.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/provider_my_bookings_row.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/provider_my_bookings_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/provider_mybids_row.xml" value="0.221484375" />
         <entry key="app/src/main/res/layout/provider_page_tool_bar.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/provider_release_goal_confirmation_dialog.xml" value="0.11944444444444445" />

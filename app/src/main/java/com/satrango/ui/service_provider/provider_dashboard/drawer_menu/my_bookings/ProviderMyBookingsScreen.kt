@@ -20,6 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderMyBookingsScreenBinding
@@ -39,6 +44,9 @@ import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
+import com.satrango.ui.user.user_dashboard.chats.ChatScreen
+import com.satrango.ui.user.user_dashboard.chats.models.ChatsModel
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.BookingInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
@@ -58,7 +66,8 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface, AlertsInterface {
+class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface, AlertsInterface,
+    BookingInterface {
 
     private lateinit var myBookingViewModel: MyBookingsViewModel
     private lateinit var binding: ActivityProviderMyBookingsScreenBinding
@@ -162,7 +171,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status, this, this)
+                    binding.recyclerView.adapter = ProviderMyBookingAdapter(list, status, this, this, this)
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -691,5 +700,57 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                 }
             }
         }
+    }
+
+
+    override fun startUserMessaging(bookingDetails: com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail) {
+
+    }
+
+    override fun startServiceProviderMessaging(bookingDetails: BookingDetail) {
+        val branch = if (UserUtils.getUserId(this).toInt() > bookingDetails.sp_id.toInt()) {
+            bookingDetails.users_id + "|" + UserUtils.getUserId(this)
+        } else {
+            UserUtils.getUserId(this) + "|" + bookingDetails.users_id
+        }
+        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        databaseReference.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val datetime = Date().time
+                val userChatReference = databaseReference.child(getString(R.string.users)).child(
+                    UserUtils.getUserId(this@ProviderMyBookingsScreen)
+                ).child(getString(R.string.chat)).child(branch)
+                userChatReference.child(getString(R.string.chat_branch)).child(branch)
+                userChatReference.child(getString(R.string.users_id)).setValue(bookingDetails.sp_id)
+                userChatReference.child(getString(R.string.user_name)).setValue(bookingDetails.fname + " " + bookingDetails.lname)
+                userChatReference.child(getString(R.string.profile_image)).setValue(bookingDetails.profile_pic)
+                userChatReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
+                userChatReference.child(getString(R.string.sent_by)).setValue(UserUtils.getUserId(this@ProviderMyBookingsScreen))
+                userChatReference.child(getString(R.string.date_time)).setValue(datetime)
+
+                val spDatabaseReference = databaseReference.child(getString(R.string.users)).child(bookingDetails.sp_id).child(getString(R.string.chat)).child(branch)
+                spDatabaseReference.child(getString(R.string.chat_branch)).setValue(branch)
+                spDatabaseReference.child(getString(R.string.users_id)).setValue(UserUtils.getUserId(this@ProviderMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@ProviderMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@ProviderMyBookingsScreen))
+                spDatabaseReference.child(getString(R.string.last_message)).setValue("No Messages Yet")
+                spDatabaseReference.child(getString(R.string.sent_by)).setValue(
+                    UserUtils.getUserId(
+                        this@ProviderMyBookingsScreen
+                    )
+                )
+                spDatabaseReference.child(getString(R.string.date_time)).setValue(datetime)
+                val chatsModel = ChatsModel(branch, bookingDetails.profile_pic, bookingDetails.sp_id,
+                    bookingDetails.fname + " " + bookingDetails.lname, "","",
+                    UserUtils.getUserId(this@ProviderMyBookingsScreen), datetime)
+                UserUtils.selectedChat(this@ProviderMyBookingsScreen, Gson().toJson(chatsModel))
+                startActivity(Intent(this@ProviderMyBookingsScreen, ChatScreen::class.java))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                toast(this@ProviderMyBookingsScreen, error.message)
+            }
+
+        })
     }
 }

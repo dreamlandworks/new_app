@@ -22,6 +22,7 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
 import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.BookingInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.complaints.ComplaintScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
@@ -33,13 +34,15 @@ class ProviderMyBookingAdapter(
     private val list: List<BookingDetail>,
     private val status: String,
     private val providerMyBookingInterface: ProviderMyBookingInterface,
-    private val alertsInterface: AlertsInterface
+    private val alertsInterface: AlertsInterface,
+    private val bookingInterface: BookingInterface
 ) : RecyclerView.Adapter<ProviderMyBookingAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: ProviderMyBookingsRowBinding, alertsInterface: AlertsInterface) :
+    class ViewHolder(binding: ProviderMyBookingsRowBinding, alertsInterface: AlertsInterface, bookingInterface: BookingInterface) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
         val alertsInterface = alertsInterface
+        val bookingInterface = bookingInterface
 
         @RequiresApi(Build.VERSION_CODES.M)
         @SuppressLint("SetTextI18n")
@@ -86,6 +89,16 @@ class ProviderMyBookingAdapter(
                 binding.locationLayout.visibility = View.GONE
             } else {
                 binding.locationLayout.visibility = View.VISIBLE
+            }
+            binding.messageBtn.setOnClickListener {
+                bookingInterface.startServiceProviderMessaging(data)
+            }
+
+            binding.phoneBtn.setOnClickListener {
+                UserUtils.makePhoneCall(
+                    binding.phoneBtn.context,
+                    data.mobile.replace(" ", "").takeLast(10)
+                )
             }
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
@@ -226,7 +239,9 @@ class ProviderMyBookingAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ), alertsInterface
+            ),
+            alertsInterface,
+            bookingInterface
         )
     }
 

@@ -1,7 +1,7 @@
 package com.satrango.ui.user.bookings.view_booking_details
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,12 +28,14 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.ProviderBookingDetailsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.GoalsInstallmentsDetail
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
+import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
+import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
@@ -227,9 +228,9 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.viewFilesBtn.visibility = View.GONE
         }
 
-        if (response.booking_details.post_job_id != "0") {
-            binding.messageBtn.visibility = View.GONE
-        }
+//        if (response.booking_details.post_job_id != "0") {
+//            binding.messageBtn.visibility = View.GONE
+//        }
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
             if (response.booking_details.extra_demand_total_amount != "0") {
                 if (response.booking_details.extra_demand_status == "0") {
@@ -244,6 +245,24 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             }
         }
 
+        val postJobId = response.booking_details.post_job_id.toInt()
+        if (postJobId != 0) {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val postJobIdResponse = RetrofitBuilder.getServiceProviderRetrofitInstance().getGoalsInstallmentsList(RetrofitBuilder.PROVIDER_KEY, postJobId)
+                    if (postJobIdResponse.status == 200) {
+                        for (installment in postJobIdResponse.goals_installments_details) {
+                            if (installment.status_id.toInt() == 33) { // 32 - installment added, 33 - installment requested, 34 - installment approved, 35 - installment rejected
+                                viewInstallmentRequest(installment)
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    toast(this@UserMyBookingDetailsScreen, "Error:$postJobId:" + e.message!!)
+                }
+            }
+        }
+
         if (isCompleted(this)) {
             binding.markCompleteBtn.visibility = View.GONE
             binding.viewDetailsBtn.setOnClickListener { onBackPressed() }
@@ -251,6 +270,54 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.messageBtn.setCardBackgroundColor(resources.getColor(R.color.gray))
             binding.callBtn.isClickable = false
             binding.messageBtn.isClickable = false
+        }
+    }
+
+    @SuppressLint("SetTextI18n", "InflateParams")
+    private fun viewInstallmentRequest(installment: GoalsInstallmentsDetail) {
+        val dialog = Dialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.installment_raised_dialog, null)
+        val acceptBtn = dialogView.findViewById<TextView>(R.id.acceptBtn)
+        val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
+        val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
+        val installmentText = dialogView.findViewById<TextView>(R.id.installmentText)
+        val installmentAmount = dialogView.findViewById<TextView>(R.id.installmentAmount)
+
+        installmentText.text = installment.description
+        installmentAmount.text = "Rs ${installment.amount}/-"
+
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        acceptBtn.setOnClickListener {
+            updateInstallmentStatus(installment, 34)
+            dialog.dismiss()
+        }
+        rejectBtn.setOnClickListener {
+            updateInstallmentStatus(installment, 35)
+            dialog.dismiss()
+        }
+         
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogView)
+    }
+
+    private fun updateInstallmentStatus(installment: GoalsInstallmentsDetail, statusCode: Int) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody = PostApproveRejectReqModel(
+                    installment.booking_id.toInt(),
+                    installment.inst_no.toInt(),
+                    RetrofitBuilder.PROVIDER_KEY,
+                    UserUtils.getSpId(this@UserMyBookingDetailsScreen).toInt(),
+                    statusCode,
+                    UserUtils.getUserId(this@UserMyBookingDetailsScreen).toInt()
+                )
+                val response = RetrofitBuilder.getUserRetrofitInstance().postInstallmentApproveReject(requestBody)
+                toast(this@UserMyBookingDetailsScreen, response.message)
+            } catch (e: Exception) {
+                toast(this@UserMyBookingDetailsScreen, e.message!!)
+            }
         }
     }
 
@@ -406,14 +473,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
             if (response.status == 200) {
                 progressDialog.dismiss()
-                showExtraDemandAcceptDialog(
-                    Companion.bookingId.toInt(),
-                    response.booking_details.material_advance,
-                    response.booking_details.technician_charges,
-                    response.booking_details.extra_demand_total_amount,
-                    progressDialog
-                )
-//                updateUI(response)
+                updateUI(response)
             } else {
                 progressDialog.dismiss()
                 snackBar(binding.recyclerView, "Error 04:" +  response.message)

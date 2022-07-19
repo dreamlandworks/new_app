@@ -4,6 +4,8 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.Bookin
 
 interface BookingInterface {
 
-    fun startMessaging(bookingDetails: BookingDetail)
+    fun startUserMessaging(bookingDetails: BookingDetail)
+
+    fun startServiceProviderMessaging(bookingDetails: com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail)
 
 }

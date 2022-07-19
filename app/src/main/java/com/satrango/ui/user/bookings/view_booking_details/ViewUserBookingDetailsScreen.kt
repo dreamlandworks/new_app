@@ -45,12 +45,12 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ExtraDemandReqModel
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.ProviderReleaseGoalsScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.review.ProviderRatingReviewScreen
-import com.satrango.ui.user.bookings.raise_ticket.RaiseTicketScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.bookings.cancel_booking.UserBookingCancelScreen
+import com.satrango.ui.user.bookings.raise_ticket.RaiseTicketScreen
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.UserInstallmentsRequestScreen
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
@@ -59,8 +59,6 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsVie
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.utils.UserUtils
-import com.satrango.utils.UserUtils.USER_ID
-import com.satrango.utils.UserUtils.getBookingPauseResumeStatus
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProgress
@@ -390,9 +388,18 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             ProviderInVoiceScreen.isExtraDemandRaised = "1"
         }
         val intent = Intent(this, ProviderInVoiceScreen::class.java)
-        intent.putExtra(binding.root.context.getString(R.string.booking_id), ProviderBookingDetailsScreen.bookingId)
-        intent.putExtra(binding.root.context.getString(R.string.category_id), ProviderBookingDetailsScreen.categoryId)
-        intent.putExtra(binding.root.context.getString(R.string.user_id), ProviderBookingDetailsScreen.userId)
+        intent.putExtra(
+            binding.root.context.getString(R.string.booking_id),
+            ProviderBookingDetailsScreen.bookingId
+        )
+        intent.putExtra(
+            binding.root.context.getString(R.string.category_id),
+            ProviderBookingDetailsScreen.categoryId
+        )
+        intent.putExtra(
+            binding.root.context.getString(R.string.user_id),
+            ProviderBookingDetailsScreen.userId
+        )
         startActivity(intent)
     }
 
@@ -422,7 +429,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.view_details)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.view_details)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
     }
@@ -1160,8 +1168,10 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
             UserMyBookingDetailsScreen.userId = intent.getStringExtra(getString(R.string.user_id))!!
-            UserMyBookingDetailsScreen.categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-            UserMyBookingDetailsScreen.bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            UserMyBookingDetailsScreen.categoryId =
+                intent.getStringExtra(getString(R.string.category_id))!!
+            UserMyBookingDetailsScreen.bookingId =
+                intent.getStringExtra(getString(R.string.booking_id))!!
             startActivity(Intent(context, UserMyBookingDetailsScreen::class.java))
         }
     }
@@ -1241,7 +1251,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
                     UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
                 )
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().resumeBooking(requestBody)
+                val response =
+                    RetrofitBuilder.getServiceProviderRetrofitInstance().resumeBooking(requestBody)
                 val jsonObject = JSONObject(response.string())
                 if (jsonObject.getInt("status") == 200) {
                     binding.pauseResumeBtn.text = "Pause"
@@ -1271,7 +1282,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
                     UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
                 )
-                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().pauseBooking(requestBody)
+                val response =
+                    RetrofitBuilder.getServiceProviderRetrofitInstance().pauseBooking(requestBody)
                 val jsonObject = JSONObject(response.string())
                 if (jsonObject.getInt("status") == 200) {
                     binding.pauseResumeBtn.text = "Resume"

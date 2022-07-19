@@ -332,7 +332,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
         dialog.show()
     }
 
-    override fun startMessaging(bookingDetails: BookingDetail) {
+    override fun startUserMessaging(bookingDetails: BookingDetail) {
         val branch = if (UserUtils.getUserId(this).toInt() > bookingDetails.sp_id.toInt()) {
             bookingDetails.sp_id + "|" + UserUtils.getUserId(this)
         } else {
@@ -371,5 +371,9 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
             }
 
         })
+    }
+
+    override fun startServiceProviderMessaging(bookingDetails: com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail) {
+
     }
 }
