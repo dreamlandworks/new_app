@@ -100,8 +100,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         initializeToolBar()
         initializeProgressDialog()
 
-        registerReceiver(otpReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER))
-        registerReceiver(otpResponseReceiver, IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER))
+        registerReceiver(otpReceiver, IntentFilter(getString(R.string.OTP_INTENT_FILTER)))
+        registerReceiver(otpResponseReceiver, IntentFilter(getString(R.string.OTP_RESPONSE_INTENT_FILTER)))
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -183,7 +183,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.userLayout.visibility = View.VISIBLE
             binding.spLayout.visibility = View.GONE
             binding.startBtn.visibility = View.GONE
-            registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+            registerReceiver(myReceiver, IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)))
             binding.cancelBookingBtn.setOnClickListener {
                 val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
                 intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
@@ -1126,12 +1126,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+            .registerReceiver((myReceiver), IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)))
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver((otpReceiver), IntentFilter(FCMService.OTP_INTENT_FILTER))
+            .registerReceiver((otpReceiver), IntentFilter(getString(R.string.OTP_INTENT_FILTER)))
         LocalBroadcastManager.getInstance(this).registerReceiver(
             (otpResponseReceiver),
-            IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER)
+            IntentFilter(getString(R.string.OTP_RESPONSE_INTENT_FILTER))
         )
     }
 

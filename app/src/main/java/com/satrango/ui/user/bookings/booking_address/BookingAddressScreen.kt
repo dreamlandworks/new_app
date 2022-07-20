@@ -99,7 +99,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         responses = ArrayList()
-        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER_ONE))
+        registerReceiver(myReceiver, IntentFilter(getString(R.string.INTENT_FILTER_ONE)))
 
         val bookingFactory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, bookingFactory)[BookingViewModel::class.java]
@@ -1099,7 +1099,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER_ONE))
+            .registerReceiver((myReceiver), IntentFilter(getString(R.string.INTENT_FILTER_ONE)))
     }
 
     override fun onDestroy() {

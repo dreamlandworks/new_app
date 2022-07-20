@@ -759,6 +759,12 @@
     <string name="upcoming_bookings_are_not_available">Upcoming bookings are not available</string>
     <string name="please_select_city">Please Select Location</string>
     <string name="pause">Pause</string>
+    <string name="INTENT_FILTER">INTENT_FILTER</string>
+    <string name="INTENT_FILTER_ONE">INTENT_FILTER_ONE</string>
+    <string name="OTP_INTENT_FILTER">OTP_INTENT_FILTER</string>
+    <string name="OTP_RESPONSE_INTENT_FILTER">OTP_RESPONSE_INTENT_FILTER</string>
+    <string name="OTP_RESPONSE_INTENT_FILTER_DONE">OTP_RESPONSE_INTENT_FILTER_DONE</string>
+    <string name="EXTRA_DEMAND_ACCEPT_REJECT">EXTRA_DEMAND_ACCEPT_REJECT</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

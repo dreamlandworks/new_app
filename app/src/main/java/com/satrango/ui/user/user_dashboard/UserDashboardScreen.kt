@@ -94,7 +94,7 @@ class   UserDashboardScreen : AppCompatActivity() {
         binding = ActivityUserDashboardScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
+        registerReceiver(myReceiver, IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)));
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
 //            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizaledMessage!!)
@@ -616,7 +616,7 @@ class   UserDashboardScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)))
     }
 
     override fun onDestroy() {

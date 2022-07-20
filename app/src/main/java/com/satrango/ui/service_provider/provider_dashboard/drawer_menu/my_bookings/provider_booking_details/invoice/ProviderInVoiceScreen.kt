@@ -82,8 +82,8 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.OTP_INTENT_FILTER));
-        registerReceiver(myDoneReceiver, IntentFilter(FCMService.OTP_RESPONSE_INTENT_FILTER_DONE));
+        registerReceiver(myReceiver, IntentFilter(getString(R.string.OTP_INTENT_FILTER)));
+        registerReceiver(myDoneReceiver, IntentFilter(getString(R.string.OTP_RESPONSE_INTENT_FILTER_DONE)));
 
         initializeProgressDialog()
 

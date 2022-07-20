@@ -80,7 +80,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
 
         initializeProgressDialog()
 
-        registerReceiver(myReceiver, IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT));
+        registerReceiver(myReceiver, IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)));
 
         val factory = ViewModelFactory(BookingRepository())
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
@@ -616,7 +616,7 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver((myReceiver), IntentFilter(FCMService.EXTRA_DEMAND_ACCEPT_REJECT))
+            .registerReceiver((myReceiver), IntentFilter(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT)))
     }
 
     override fun onDestroy() {

@@ -301,7 +301,7 @@ class ProviderDashboard : AppCompatActivity() {
         setContentView(binding.root)
 
         gpsReceiver = GpsLocationReceiver()
-        registerReceiver(myReceiver, IntentFilter(FCMService.INTENT_FILTER))
+        registerReceiver(myReceiver, IntentFilter(getString(R.string.INTENT_FILTER)))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -582,8 +582,6 @@ class ProviderDashboard : AppCompatActivity() {
         val secs = diff.seconds
         var seconds = (59 - secs).toInt()
         var minutes = (2 - mins).toInt()
-//        var minutes = 2
-//        var seconds = 59
         val mainHandler = Handler(Looper.getMainLooper())
         var progressTime = 180
         mainHandler.post(object : Runnable {
@@ -935,7 +933,7 @@ class ProviderDashboard : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(FCMService.INTENT_FILTER))
+        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(getString(R.string.INTENT_FILTER)))
     }
 
     override fun onDestroy() {
