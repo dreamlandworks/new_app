@@ -79,11 +79,9 @@ object UserApiEndPoints {
     final const val COMPLETE_BOOKING = "user/complete_booking"
     final const val SAVE_USER_UPI = "user/save_user_upi"
     final const val GET_USER_UPI = "user/get_user_upi"
-    final const val PAYTM_PROCESS_TXN = "user/process_txn"
-    final const val MEMBERSHIP_PAYMENT_TXN = "user/membership_payments_txn_user"
     final const val SEND_FCM = "user/send_fcm"
     final const val ADD_FUNDS = "user/add_funds"
-    final const val POST_COMPLAINTS = "user/post_complaints"
     final const val GET_TXN = "user/get_txn"
+    final const val SEND_FCM_TO_ALL = "user/send_multi_fcm"
 
 }

@@ -1,4 +1,4 @@
-package com.satrango.remote.fcm
+package com.satrango.remote.fcm.models
 
 import com.satrango.remote.Data
 

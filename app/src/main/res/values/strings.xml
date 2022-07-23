@@ -765,6 +765,7 @@
     <string name="OTP_RESPONSE_INTENT_FILTER">OTP_RESPONSE_INTENT_FILTER</string>
     <string name="OTP_RESPONSE_INTENT_FILTER_DONE">OTP_RESPONSE_INTENT_FILTER_DONE</string>
     <string name="EXTRA_DEMAND_ACCEPT_REJECT">EXTRA_DEMAND_ACCEPT_REJECT</string>
+    <string name="please_select_profession_to_search_service_providers">Please select profession to search service providers</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

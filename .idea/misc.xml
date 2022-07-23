@@ -347,6 +347,8 @@
         <entry key="app/src/main/res/layout/row_slot_item.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/search_service_provider_row.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/search_type_dialog.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/select_profession_dialog.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/select_profession_row.xml" value="0.287962962962963" />
         <entry key="app/src/main/res/layout/service_provider_activation_dialog.xml" value="0.335" />
         <entry key="app/src/main/res/layout/service_provider_failure_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/service_provider_success_dialog.xml" value="0.11944444444444445" />

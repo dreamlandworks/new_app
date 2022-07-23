@@ -87,14 +87,14 @@ class SearchServiceProviderAdapter(
             }
             binding.bookLaterBtn.setOnClickListener {
                 isReschedule(binding.actualCost.context, false)
-                UserUtils.saveFromInstantBooking(binding.root.context, false)
+                UserUtils.saveBookingType(binding.root.context, "selected")
                 UserUtils.saveSpId(binding.root.context, data.users_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookNowBtn.setOnClickListener {
-                UserUtils.saveFromInstantBooking(binding.root.context, true)
+                UserUtils.saveBookingType(binding.root.context, "instant")
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 if (data.category_id == "3") {
                     UserUtils.addressList = ArrayList()

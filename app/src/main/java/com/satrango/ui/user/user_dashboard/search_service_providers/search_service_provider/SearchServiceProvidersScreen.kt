@@ -2,20 +2,25 @@ package com.satrango.ui.user.user_dashboard.search_service_providers.search_serv
 
 import android.R
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -23,6 +28,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySearchServiceProvidersScreenBinding
+import com.satrango.databinding.SelectProfessionRowBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
@@ -300,13 +306,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         weAreSorryDialog()
                     } else {
 //                        toast(this@SearchServiceProvidersScreen, response.data.toString())
-                        binding.listCount.text = "${response.data.size} out of ${response.data.size}"
-                        binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
-                        binding.recyclerView.adapter = SearchServiceProviderAdapter(response.data, this@SearchServiceProvidersScreen)
                         UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
-                        UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
-//                        Log.e("SERACH RESULTS:", Gson().toJson(response))
-//                    showBookingTypeDialog(response)
+                        showBookingTypeDialog(response)
                     }
                     progressDialog.dismiss()
                 } else {
@@ -347,42 +348,28 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             keyword = "0"
         }
         viewResults.setOnClickListener {
-            UserUtils.bookingType = "selected"
+            UserUtils.saveBookingType(this, "selected")
             showBookingTypeBottomSheetDialog.dismiss()
-            UserUtils.saveFromInstantBooking(this, false)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
+            binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
         }
         bookInstantly.setOnClickListener {
-            UserUtils.bookingType = "instant"
+            UserUtils.saveBookingType(this, "instant")
             UserUtils.saveSelectedSPDetails(binding.root.context, "")
             binding.listCount.visibility = View.GONE
             showBookingTypeBottomSheetDialog.dismiss()
             binding.recyclerView.visibility = View.GONE
-            UserUtils.saveFromInstantBooking(this, true)
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-
-            var existed = 0
-            data.data.forEachIndexed { index, sp ->
-                for (spSlot in data.slots_data) {
-                    if (sp.users_id == spSlot.user_id) {
-                        for (booking in spSlot.blocked_time_slots) {
-                            if (UserUtils.getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
-                                existed += 1
-                            }
-                        }
-                    }
-                }
+            val sortedList = data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
+            if (sortedList.isEmpty()) {
+                showBookingInstantNotProceedDialog(data)
+            } else if (sortedList.size > 1) {
+                selectProfessionDialog(data)
+            } else {
+                proceedToBookingAttachments(this, data)
             }
-
-            if (data.data.isNotEmpty()) {
-                if (existed < data.data.size) {
-                    startActivity(Intent(this, BookingAttachmentsScreen::class.java))
-                } else {
-                    showBookingTypeBottomSheetDialog.dismiss()
-                    showBookingInstantNotProceedDialog(data)
-                }
-            }
+            showBookingTypeBottomSheetDialog.dismiss()
         }
         closeBtn.setOnClickListener {
             showBookingTypeBottomSheetDialog.dismiss()
@@ -390,6 +377,96 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         showBookingTypeBottomSheetDialog.setContentView(dialogView)
         showBookingTypeBottomSheetDialog.setCancelable(false)
         showBookingTypeBottomSheetDialog.show()
+    }
+
+    private fun selectProfessionDialog(data: SearchServiceProviderResModel) {
+        val dialog = Dialog(this)
+        val dialogView = layoutInflater.inflate(com.satrango.R.layout.select_profession_dialog, null)
+        val closeBtn = dialogView.findViewById<ImageView>(com.satrango.R.id.closeBtn)
+        val professionRv = dialogView.findViewById<RecyclerView>(com.satrango.R.id.professionRv)
+        professionRv.adapter = ProfessionAdapter(data.data, data)
+        closeBtn.setOnClickListener { dialog.dismiss() }
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
+    private fun proceedToBookingAttachments(context: Context, data: SearchServiceProviderResModel) {
+        var existed = 0
+        data.data.forEachIndexed { index, sp ->
+            for (spSlot in data.slots_data) {
+                if (sp.users_id == spSlot.user_id) {
+                    for (booking in spSlot.blocked_time_slots) {
+                        if (UserUtils.getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                            existed += 1
+                        }
+                    }
+                }
+            }
+        }
+
+        if (data.data.isNotEmpty()) {
+            if (existed < data.data.size) {
+                context.startActivity(Intent(context, BookingAttachmentsScreen::class.java))
+            } else {
+                showBookingInstantNotProceedDialog(data)
+            }
+        }
+    }
+
+    class ProfessionAdapter(
+        val list: List<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>,
+        val data: SearchServiceProviderResModel
+    ) : RecyclerView.Adapter<ProfessionAdapter.ViewHolder>() {
+
+        class ViewHolder(binding: SelectProfessionRowBinding, data: SearchServiceProviderResModel): RecyclerView.ViewHolder(binding.root) {
+            val binding = binding
+            val data = data
+
+            fun bind(professionData: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data) {
+                binding.professionName.text = professionData.profession
+                binding.root.setOnClickListener {
+                    val context = binding.root.context
+                    Toast.makeText(context, UserUtils.getProfessionIdForBookInstant(context), Toast.LENGTH_SHORT).show()
+                    UserUtils.saveProfessionIdForBookInstant(context, professionData.profession_id)
+                    proceedToBookingAttachments(context, data)
+                }
+            }
+
+            private fun proceedToBookingAttachments(context: Context, data: SearchServiceProviderResModel) {
+                var existed = 0
+                data.data.forEachIndexed { index, sp ->
+                    for (spSlot in data.slots_data) {
+                        if (sp.users_id == spSlot.user_id) {
+                            for (booking in spSlot.blocked_time_slots) {
+                                if (UserUtils.getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+                                    existed += 1
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (data.data.isNotEmpty()) {
+                    if (existed < data.data.size) {
+                        context.startActivity(Intent(context, BookingAttachmentsScreen::class.java))
+                    }
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(SelectProfessionRowBinding.inflate(LayoutInflater.from(parent.context), parent, false), data)
+        }
+
+        override fun getItemCount(): Int {
+            return list.size
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(list[position])
+        }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -407,7 +484,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
         showResultsBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                UserUtils.saveFromInstantBooking(this@SearchServiceProvidersScreen, false)
+                binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
                 binding.listCount.text = "${data.data.size} out of ${data.data.size}"
                 binding.recyclerView.adapter =
                     SearchServiceProviderAdapter(data.data, this@SearchServiceProvidersScreen)

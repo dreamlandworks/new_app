@@ -1,9 +1,7 @@
 package com.satrango.remote.api_services
 
 import com.satrango.remote.end_points.UserApiEndPoints
-import com.satrango.remote.fcm.FCMMessageReqModel
-import com.satrango.remote.fcm.SendFCMReqModel
-import com.satrango.remote.fcm.SendFCMResModel
+import com.satrango.remote.fcm.models.*
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
@@ -487,22 +485,15 @@ interface UserApiService {
         @Body requestBody: GetUserUpiReqModel
     ): GetUserUpiResModel
 
-    @POST("processTransaction")
-    suspend fun getPaytmProcess(
-        @Query("orderId") orderId: String,
-        @Query("mid") mid: String,
-        @Body requestBody: PaytmReqModel
-    ): ResponseBody
-
-    @POST(UserApiEndPoints.MEMBERSHIP_PAYMENT_TXN)
-    suspend fun getPaytmMembershipProcessTxn(
-        @Body requestBody: UserPlansTxnReqModel
-    ): UserPlansTxnResModel
-
     @POST(UserApiEndPoints.SEND_FCM)
     suspend fun sendFcm(
         @Body requestBody: SendFCMReqModel
     ): SendFCMResModel
+
+    @POST(UserApiEndPoints.SEND_FCM_TO_ALL)
+    suspend fun sendFcmToAll(
+        @Body requestBody: SendFcmToAllReqModel
+    ): SendFcmToAllResModel
 
     @POST(UserApiEndPoints.ADD_FUNDS)
     suspend fun addFunds(

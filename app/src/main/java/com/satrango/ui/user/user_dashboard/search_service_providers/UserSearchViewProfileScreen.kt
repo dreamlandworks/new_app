@@ -93,13 +93,13 @@ class UserSearchViewProfileScreen : AppCompatActivity() {
 //                UserUtils.bookingType = "selected"
                 isReschedule(this@UserSearchViewProfileScreen, false)
                 isProvider(this@UserSearchViewProfileScreen, false)
-                UserUtils.saveFromInstantBooking(binding.root.context, false)
+                UserUtils.saveBookingType(binding.root.context, "selected")
                 UserUtils.saveSpId(binding.root.context, data.users_id)
                 startActivity(Intent(this@UserSearchViewProfileScreen, BookingDateAndTimeScreen::class.java))
             }
             bookNowBtn.setOnClickListener {
 //                UserUtils.bookingType = "selected"
-                UserUtils.saveFromInstantBooking(binding.root.context, true)
+                UserUtils.saveBookingType(binding.root.context, "instant")
                 if (data.category_id == "3") {
                     startActivity(Intent(this@UserSearchViewProfileScreen, BookingAddressScreen::class.java))
                 } else {

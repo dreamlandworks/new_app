@@ -103,7 +103,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
         initializeProgressDialog()
 
-        if (!UserUtils.getFromInstantBooking(this)) {
+        if (UserUtils.getBookingType(this) != "instant") {
             initializeProgressDialog()
             if (UserUtils.addressList.isNotEmpty()) {
                 loadAddressOnUI()
@@ -122,7 +122,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.apply {
 
             attachments.setOnClickListener {
-//                openImagePicker()
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.type = "*/*"
@@ -134,7 +133,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             backBtn.setOnClickListener {
                 onBackPressed()
             }
-//            toast(this@BookingAttachmentsScreen, data.category_id)
 
             nextBtn.setOnClickListener {
                 val description = discription.text.toString().trim()
@@ -142,7 +140,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     snackBar(nextBtn, "Enter Description")
                 } else {
                     UserUtils.job_description = description
-                    if (!UserUtils.getFromInstantBooking(this@BookingAttachmentsScreen)) {
+                    if (UserUtils.getBookingType(this@BookingAttachmentsScreen) != "instant") {
                         when (data!!.category_id) {
                             "1" -> {
                                 UserUtils.saveSelectedSPDetails(this@BookingAttachmentsScreen, Gson().toJson(data))
@@ -151,46 +149,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             }
                             "2" -> {
                                 bookBlueCollarServiceProvider()
-                            }
-                            "3" -> {
-                                UserUtils.finalAddressList = ArrayList()
-                                var address = ""
-                                var city = ""
-                                var state = ""
-                                var country = ""
-                                var postalCode = ""
-                                var latitude = ""
-                                var longitude = ""
-                                if (UserUtils.addressList[addressIndex].day == "0") {
-                                    address = UserUtils.getAddress(this@BookingAttachmentsScreen)
-                                    city = UserUtils.getCity(this@BookingAttachmentsScreen)
-                                    state = UserUtils.getState(this@BookingAttachmentsScreen)
-                                    country = UserUtils.getCountry(this@BookingAttachmentsScreen)
-                                    postalCode = UserUtils.getPostalCode(this@BookingAttachmentsScreen)
-                                    latitude = UserUtils.getLatitude(this@BookingAttachmentsScreen)
-                                    longitude = UserUtils.getLongitude(this@BookingAttachmentsScreen)
-                                }
-                                UserUtils.finalAddressList.add(
-                                    Addresses(
-                                        UserUtils.addressList[addressIndex].day.toInt(),
-                                        UserUtils.job_description,
-                                        addressIndex + 1,
-                                        2,
-                                        address,
-                                        city,
-                                        state,
-                                        country,
-                                        postalCode,
-                                        latitude,
-                                        longitude
-                                    )
-                                )
-                                addressIndex += 1
-                                if (addressIndex != UserUtils.addressList.size) {
-                                    loadAddressOnUI()
-                                } else {
-                                    bookMultiMoveServiceProvider()
-                                }
                             }
                         }
                     } else {
@@ -255,8 +213,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             }
         }
 
-//        pickPdfFile()
-
     }
 
     override fun onRequestPermissionsResult(
@@ -269,48 +225,9 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             if (requestCode == 101 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mGetContent.launch("pdf/*")
                 toast(this, "Permission Granted")
-            } else {
-//                takePermission()
             }
         }
     }
-
-//    private fun pickPdfFile() {
-//        takePermission()
-//    }
-
-//    private fun takePermissions() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            try {
-//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-//                intent.addCategory("android.intent.category.DEFAULT")
-//                intent.data = Uri.parse(String.format("package:%s", packageName))
-//                mGetPermission.launch(intent)
-//            } catch (e: Exception) {
-//                toast(this, e.message!!)
-//            }
-//        } else {
-//            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 101)
-//        }
-//    }
-
-//    private fun isPermissionGranted(): Boolean {
-//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            Environment.isExternalStorageManager()
-//        } else {
-//            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-//        }
-//    }
-
-//    private fun takePermission() {
-//        mGetContent.launch("pdf/*")
-//        if (isPermissionGranted()) {
-//            mGetContent.launch("pdf/*")
-//        } else {
-//            takePermissions()
-//        }
-//    }
-
 
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
@@ -326,102 +243,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
     }
 
-    private fun bookMultiMoveServiceProvider() {
-
-        if (UserUtils.time_slot_to.isNotEmpty()) {
-            if (UserUtils.time_slot_to.replace("\n", "").split(":")[0].toInt() == 24) {
-                UserUtils.time_slot_to = "00:00:00"
-            }
-        }
-
-        val requestBody = MultiMoveReqModel(
-            UserUtils.finalAddressList,
-            data!!.final_amount.toString(),
-            encodedImages,
-            currentDateAndTime(),
-            1,
-            1,
-            RetrofitBuilder.USER_KEY,
-            UserUtils.scheduled_date,
-            data!!.users_id.toInt(),
-            UserUtils.started_at,
-            UserUtils.time_slot_from,
-            UserUtils.time_slot_to,
-            UserUtils.getUserId(this).toInt(),
-            data!!.CGST_amount,
-            data!!.SGST_amount,
-            data!!.profession_id
-        )
-        viewModel.multiMoveBooking(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    if (UserUtils.getFromInstantBooking(this)) {
-//                        if (PermissionUtils.isNetworkConnected(this)) {
-//                            UserUtils.sendFCMtoAllServiceProviders(
-//                                this,
-//                                UserUtils.getBookingId(this),
-//                                "user",
-//                                "accepted|${UserUtils.bookingType}"
-//                            )
-//                        } else {
-//                            snackBar(binding.nextBtn, "No Internet Connection!")
-//                        }
-                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
-                            this,
-                            UserUtils.getBookingId(this),
-                            "user"
-                        )
-                        if (hasToken.isNotEmpty()) {
-                            toast(this, hasToken)
-                        } else {
-                            showWaitingForSPConfirmationDialog()
-                        }
-                    } else {
-                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(
-                            this,
-                            UserUtils.getBookingId(this),
-                            "user"
-                        )
-                        if (hasToken.isNotEmpty()) {
-                            toast(this, hasToken)
-                        } else {
-                            showWaitingForSPConfirmationDialog()
-                        }
-                    }
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
-                }
-            }
-        }
-    }
-
     private fun loadAddressOnUI() {
         binding.at.visibility = View.VISIBLE
         binding.addressText.visibility = View.VISIBLE
         binding.discription.setText("")
         binding.addressText.text = UserUtils.addressList[addressIndex].month
-//        Log.e("ADDRESSES:", Gson().toJson(UserUtils.addressList))
     }
-
-//    private fun openImagePicker() {
-//        val options = resources.getStringArray(R.array.imageSelections)
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle("Select image")
-//            .setItems(options) { dialog, which ->
-//                when (which) {
-//                    0 -> getImageFromGallery()
-//                    1 -> capturePictureFromCamera()
-//                }
-//            }
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: Data) {
@@ -429,20 +256,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
         Glide.with(this).load(data.profile_pic).into(binding.profilePic)
-    }
-
-    private fun capturePictureFromCamera() {
-        val cameraIntent = Intent()
-        cameraIntent.action = MediaStore.ACTION_IMAGE_CAPTURE
-        startActivityForResult(cameraIntent, CAMERA_REQUEST)
-    }
-
-    private fun getImageFromGallery() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, GALLERY_REQUEST)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -458,7 +271,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     val fileExtension = UserUtils.getFileExtension(this, uri)
                     imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", encodedImage, "", fileExtension, ""))
                     encodedImages.add(Attachment(encodedImage, fileExtension))
-//                    encodedImages.add(Attachment(getBase64FromFile(uri)!!, getFileName(uri)))
                 }
             } else if (data.data != null) {
                 val uri = data.data
@@ -469,7 +281,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-//            toast(this, encodedImages.size.toString())
             Log.e("IMAGES:", Gson().toJson(encodedImages))
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
@@ -494,7 +305,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                             dataSnapshot.children.forEach { data ->
                                 val image_url = data.value.toString()
                                 val image_key = data.key.toString()
-//                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
                                     if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, "").file_name == image_url) {
@@ -553,10 +363,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
-//        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-//            UserUtils.time_slot_to = "00:00:00"
-//        }
-
         val requestBody = BlueCollarBookingReqModel(
             finalAmount.toString(),
             encodedImages,
@@ -575,8 +381,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst,
             Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
         )
-//        Log.e("BLUE COLLAR MOVE", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
         viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -585,37 +389,16 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val jsonResponse = JSONObject(it.data!!)
-//                    toast(this, Gson().toJson(jsonResponse.toString()))
-                    val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
-                    if (hasToken.isNotEmpty()) {
-                        toast(this, hasToken)
+                    if (UserUtils.getBookingType(this) == "instant") {
+                        // Book instantly...
                     } else {
-                        showWaitingForSPConfirmationDialog()
+                        val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
+                        if (hasToken.isNotEmpty()) {
+                            toast(this, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     }
-//                    if (UserUtils.getFromInstantBooking(this)) {
-////                        if (PermissionUtils.isNetworkConnected(this)) {
-////                            UserUtils.saveInstantBooking(this, false)
-////                            UserUtils.sendFCMtoAllServiceProviders(
-////                                this,
-////                                UserUtils.getBookingId(this),
-////                                "user",
-////                                "accepted|${UserUtils.bookingType}"
-////                            )
-////                        } else {
-////                            snackBar(binding.nextBtn, "No Internet Connection!")
-////                        }
-//                        UserUtils.sendFCMtoSelectedServiceProvider(
-//                            this,
-//                            UserUtils.getBookingId(this),
-//                            "user"
-//                        )
-//                    } else {
-//                        UserUtils.sendFCMtoSelectedServiceProvider(
-//                            this,
-//                            UserUtils.getBookingId(this),
-//                            "user"
-//                        )
-//                    }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -663,7 +446,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
                     dialog.dismiss()
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, "accepted", "accepted", UserUtils.bookingType)
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, "accepted", "accepted", UserUtils.getBookingType(this@BookingAttachmentsScreen)!!)
                     val bookingFactory = ViewModelFactory(BookingRepository())
                     val bookingViewModel = ViewModelProvider(this@BookingAttachmentsScreen, bookingFactory)[BookingViewModel::class.java]
                     val requestBody = ProviderResponseReqModel(
@@ -694,7 +477,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                                     ProviderDashboard.bookingId = "0"
                                     if (ProviderDashboard.bottomSheetDialog != null) {
                                         if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                            toast(this@BookingAttachmentsScreen, "Closed in Attachment")
                                             ProviderDashboard.bottomSheetDialog!!.dismiss()
                                         }
                                     }
@@ -729,7 +511,6 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             dialog.dismiss()
         }
         yesBtn.setOnClickListener {
-            snackBar(yesBtn, "Post the Job")
             dialog.dismiss()
             finish()
             startActivity(Intent(this, PostJobTypeScreen::class.java))
@@ -787,7 +568,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
     }
 
     override fun onBackPressed() {
-        if (UserUtils.getFromInstantBooking(this)) {
+        if (UserUtils.getBookingType(this) == "instant") {
             startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
         } else {
             when (data!!.category_id) {

@@ -17,14 +17,14 @@ import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.remote.Data
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.FCMMessageReqModel
+import com.satrango.remote.fcm.models.FCMMessageReqModel
 import com.satrango.remote.fcm.NotificationX
-import com.satrango.remote.fcm.SendFCMReqModel
+import com.satrango.remote.fcm.models.SendFCMReqModel
 import com.satrango.ui.auth.FCMReqModel
-import com.satrango.ui.service_provider.provider_dashboard.ProviderRejectBookingScreen
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -1108,49 +1108,27 @@ object UserUtils {
         editor.commit()
     }
 
-    fun getInstantBooking(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
-        return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.book_instantly),
-            false
-        )
-    }
-
-    fun saveInstantBooking(context: Context, fullName: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.book_instantly), fullName)
-        editor.apply()
-        editor.commit()
-    }
-
-    fun getFromInstantBooking(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
-        return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.is_book_instant),
-            false
-        )
-    }
-
-    fun saveFromInstantBooking(context: Context, fullName: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.is_book_instant), fullName)
-        editor.apply()
-        editor.commit()
-    }
+//    fun getInstantBooking(context: Context): Boolean {
+//        val sharedPreferences = context.getSharedPreferences(
+//            context.resources.getString(R.string.userDetails),
+//            Context.MODE_PRIVATE
+//        )
+//        return sharedPreferences.getBoolean(
+//            context.resources.getString(R.string.book_instantly),
+//            false
+//        )
+//    }
+//
+//    fun saveInstantBooking(context: Context, fullName: Boolean) {
+//        val sharedPreferences = context.getSharedPreferences(
+//            context.resources.getString(R.string.userDetails),
+//            Context.MODE_PRIVATE
+//        )
+//        val editor = sharedPreferences.edit()
+//        editor.putBoolean(context.resources.getString(R.string.book_instantly), fullName)
+//        editor.apply()
+//        editor.commit()
+//    }
 
     fun getProviderAction(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
@@ -1192,6 +1170,28 @@ object UserUtils {
         )
         val editor = sharedPreferences.edit()
         editor.putBoolean(context.resources.getString(R.string.from_fcm_service), fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getBookingType(context: Context): String? {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.provider_action),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getString(
+            context.resources.getString(R.string.booking_type),
+            ""
+        )
+    }
+
+    fun saveBookingType(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.provider_action),
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(context.resources.getString(R.string.booking_type), fullName)
         editor.apply()
         editor.commit()
     }
@@ -1287,10 +1287,6 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
-//        val request = SendFCMReqModel(NotificationX("${ProviderRejectBookingScreen.bookingId}|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|reject|${ProviderRejectBookingScreen.bookingType}|$finalReason", "${ProviderRejectBookingScreen.bookingId}|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|reject|${ProviderRejectBookingScreen.bookingType}|$finalReason", "reject"), "high", ProviderRejectBookingScreen.response!!.booking_details.fcm_token)
-//        val requestBody = FCMMessageReqModel(Data("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", from), "high", token)
-
-//        Toast.makeText(context, "Send FCM $token", Toast.LENGTH_SHORT).show()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val requestBody = SendFCMReqModel(NotificationX("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",from), "high", token)
@@ -1299,10 +1295,6 @@ object UserUtils {
             } catch (e: Exception) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }
-
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, Gson().toJson(response.string()), Toast.LENGTH_SHORT).show()
-//            Log.e("FCM RESPONSE:", token)
         }
         return token
     }
@@ -1409,19 +1401,10 @@ object UserUtils {
         from: String
     ): String {
         val spDetails = Gson().fromJson(getSelectedSPDetails(context), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
-//        Log.e("SELECTED SP:", Gson().toJson(spDetails))
-//        for (sp in spDetails.data) {
-//            for (spSlot in spDetails.slots_data) {
-//                if (sp.users_id == spSlot.user_id) {
-//                    Log.e("SEND FCM TO", sp.fcm_token)
-//                    sendFCM(context, sp.fcm_token, bookingId, from, bookingType)
-//                }
-//            }
-//        }
         return if (spDetails.fcm_token.isEmpty()) {
             "Service Provider not able to receive notifications"
         } else {
-            sendFCM(context, spDetails.fcm_token, bookingId, from, "accepted|$bookingType")
+            sendFCM(context, spDetails.fcm_token, bookingId, from, "accepted|${getBookingType(context)}")
             ""
         }
     }
@@ -1433,22 +1416,17 @@ object UserUtils {
         type: String
     ): String {
         val tokenEmpty = "Service Provider not able to receive notifications"
-        val spDetails = Gson().fromJson(
-            getSelectedAllSPDetails(context),
-            SearchServiceProviderResModel::class.java
-        )
+        val spDetails = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
         if (getSelectedSPDetails(context).isNotEmpty()) {
             val data = Gson().fromJson(
                 getSelectedSPDetails(context),
                 com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
-//            Log.e("SELECTED SP DETAILS:", Gson().toJson(data))
             if (data.fcm_token.isNotEmpty()) {
                 sendFCM(context, data.fcm_token, bookingId, from, type)
             } else {
                 return tokenEmpty
             }
         } else {
-//            Log.e("SELECTED SP DETAILS:", Gson().toJson(spDetails))
             if (spDetails != null) {
                 for (sp in spDetails.data) {
                     for (spSlot in spDetails.slots_data) {
@@ -1460,7 +1438,6 @@ object UserUtils {
                                 }
                             }
                             if (count == 0) {
-//                            Log.e("FCM:", sp.fcm_token)
                                 if (from == "accepted") {
                                     for (index in 1 until 5) {
                                         sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
@@ -1471,11 +1448,9 @@ object UserUtils {
                                     } else {
                                         return tokenEmpty
                                     }
-                                    Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                                 }
                             }
                         } else {
-//                        Log.e("FCM:", sp.fcm_token)
                             if (from == "accepted") {
                                 for (index in 1 until 5) {
                                     sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
@@ -1486,7 +1461,6 @@ object UserUtils {
                                 } else {
                                     return tokenEmpty
                                 }
-                                Log.d("FCM SENT MULTIPLE:", sp.fcm_token)
                             }
                         }
                     }
@@ -1655,6 +1629,22 @@ object UserUtils {
 
     fun getInstantBookingId(context: Context) : String {
         return context.getSharedPreferences("userDetails", Context.MODE_PRIVATE).getString("instantBookingId", "")!!
+    }
+
+    fun saveProfessionIdForBookInstant(
+        context: Context,
+        professionId: String
+    ) {
+        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("instantProfessionId", professionId)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getProfessionIdForBookInstant(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("instantProfessionId", "")!!
     }
 
 }
