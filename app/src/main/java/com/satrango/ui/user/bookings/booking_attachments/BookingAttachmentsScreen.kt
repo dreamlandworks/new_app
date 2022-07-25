@@ -40,6 +40,8 @@ import com.satrango.databinding.ActivityBookingAttachmentsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
+import com.satrango.remote.fcm.models.*
+import com.satrango.remote.fcm.models.Message
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
@@ -61,10 +63,14 @@ import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.round
 
 
@@ -379,7 +385,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             UserUtils.getUserId(this).toInt(),
             cgst,
             sgst,
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).profession_id
+            UserUtils.getProfessionIdForBookInstant(this)
         )
         viewModel.blueCollarBooking(this, requestBody).observe(this) {
             when (it) {
@@ -391,6 +397,12 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                     val jsonResponse = JSONObject(it.data!!)
                     if (UserUtils.getBookingType(this) == "instant") {
                         // Book instantly...
+                        val hasToken = UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, UserUtils.getBookingId(this@BookingAttachmentsScreen), "user", "accepted|${UserUtils.getBookingType(this@BookingAttachmentsScreen)}")
+                        if (hasToken.isNotEmpty()) {
+                            toast(this@BookingAttachmentsScreen, hasToken)
+                        } else {
+                            showWaitingForSPConfirmationDialog()
+                        }
                     } else {
                         val hasToken = UserUtils.sendFCMtoSelectedServiceProvider(this, UserUtils.getBookingId(this), "user")
                         if (hasToken.isNotEmpty()) {

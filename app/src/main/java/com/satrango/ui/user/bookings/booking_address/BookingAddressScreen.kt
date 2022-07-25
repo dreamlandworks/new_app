@@ -39,6 +39,9 @@ import com.satrango.databinding.ActivityBookingAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
+import com.satrango.remote.fcm.models.Notification
+import com.satrango.remote.fcm.models.SendFcmToAllReqModel
+import com.satrango.remote.fcm.models.To
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.models.SingleMoveBookingReqModel
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
@@ -232,10 +235,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.time_slot_from =
                     (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
 
-                when (Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this@BookingAddressScreen),
-                    Data::class.java
-                ).category_id) {
+                when (data.category_id) {
                     "1" -> {
                         bookSingleMoveServiceProvider()
                     }
@@ -258,7 +258,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                 }
             } else {
-                when (data.category_id) {
+                when (UserUtils.getInstantBookingCetegoryId(this)) {
                     "1" -> {
                         bookSingleMoveServiceProvider()
                     }
@@ -363,10 +363,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 longitude,
                 cgst,
                 sgst,
-                Gson().fromJson(
-                    UserUtils.getSelectedSPDetails(this),
-                    Data::class.java
-                ).profession_id
+                UserUtils.getProfessionIdForBookInstant(this)
             )
             CoroutineScope(Dispatchers.Main).launch {
                 try {

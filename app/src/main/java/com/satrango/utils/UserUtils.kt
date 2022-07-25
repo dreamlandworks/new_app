@@ -17,9 +17,8 @@ import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.remote.Data
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.models.FCMMessageReqModel
 import com.satrango.remote.fcm.NotificationX
-import com.satrango.remote.fcm.models.SendFCMReqModel
+import com.satrango.remote.fcm.models.*
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
@@ -1416,7 +1415,6 @@ object UserUtils {
         type: String
     ): String {
         val tokenEmpty = "Service Provider not able to receive notifications"
-        val spDetails = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
         if (getSelectedSPDetails(context).isNotEmpty()) {
             val data = Gson().fromJson(
                 getSelectedSPDetails(context),
@@ -1427,45 +1425,63 @@ object UserUtils {
                 return tokenEmpty
             }
         } else {
-            if (spDetails != null) {
-                for (sp in spDetails.data) {
-                    for (spSlot in spDetails.slots_data) {
-                        if (spSlot.blocked_time_slots.isNotEmpty()) {
-                            var count = 0
-                            for (booking in spSlot.blocked_time_slots) {
-                                if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
-                                    count += 1
-                                }
-                            }
-                            if (count == 0) {
-                                if (from == "accepted") {
-                                    for (index in 1 until 5) {
-                                        sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
-                                    }
-                                } else {
-                                    if (sp.fcm_token.isNotEmpty()) {
-                                        sendFCM(context, sp.fcm_token, bookingId, from, type)
-                                    } else {
-                                        return tokenEmpty
-                                    }
-                                }
-                            }
-                        } else {
-                            if (from == "accepted") {
-                                for (index in 1 until 5) {
-                                    sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
-                                }
-                            } else {
-                                if (sp.fcm_token.isNotEmpty()) {
-                                    sendFCM(context, sp.fcm_token, bookingId, from, type)
-                                } else {
-                                    return tokenEmpty
-                                }
-                            }
-                        }
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val fcms = ArrayList<To>()
+                    val sps = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
+                    for (sp in sps.data) {
+                        fcms.add(To(sp.fcm_token))
                     }
+                    val notification = Notification(
+                        "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
+                        "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
+                        from)
+                    val fcmRequestBody = SendFcmToAllReqModel(notification, "high", fcms)
+                    val response = RetrofitBuilder.getUserRetrofitInstance().sendFcmToAll(fcmRequestBody)
+                    Toast.makeText(context, response.status.toString(), Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }
             }
+//            if (spDetails != null) {
+//                for (sp in spDetails.data) {
+//                    for (spSlot in spDetails.slots_data) {
+//                        if (spSlot.blocked_time_slots.isNotEmpty()) {
+//                            var count = 0
+//                            for (booking in spSlot.blocked_time_slots) {
+//                                if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
+//                                    count += 1
+//                                }
+//                            }
+//                            if (count == 0) {
+//                                if (from == "accepted") {
+//                                    for (index in 1 until 5) {
+//                                        sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
+//                                    }
+//                                } else {
+//                                    if (sp.fcm_token.isNotEmpty()) {
+//                                        sendFCM(context, sp.fcm_token, bookingId, from, type)
+//                                    } else {
+//                                        return tokenEmpty
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            if (from == "accepted") {
+//                                for (index in 1 until 5) {
+//                                    sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
+//                                }
+//                            } else {
+//                                if (sp.fcm_token.isNotEmpty()) {
+//                                    sendFCM(context, sp.fcm_token, bookingId, from, type)
+//                                } else {
+//                                    return tokenEmpty
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
         return ""
     }
@@ -1645,6 +1661,22 @@ object UserUtils {
     fun getProfessionIdForBookInstant(context: Context): String {
         val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
         return sharedPreferences.getString("instantProfessionId", "")!!
+    }
+
+    fun saveInstantBookingCategoryId(
+        context: Context,
+        categoryId: String
+    ) {
+        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("instantCategoryId", categoryId)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getInstantBookingCetegoryId(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("instantCategoryId", "")!!
     }
 
 }

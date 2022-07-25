@@ -95,9 +95,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             val filter =
                 Gson().fromJson(UserUtils.getSearchFilter(this), SearchFilterModel::class.java)
 
-//            Log.e("FILTER:", Gson().toJson(filter))
-//            Log.e("SPDETAILS:", Gson().toJson(spDetails))
-
             val spDetailsList = spDetails.data
             val list =
                 ArrayList<com.satrango.ui.user.user_dashboard.search_service_providers.models.Data>()
@@ -362,6 +359,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.recyclerView.visibility = View.GONE
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
             val sortedList = data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
+            UserUtils.saveInstantBookingCategoryId(this, sortedList[0].category_id)
             if (sortedList.isEmpty()) {
                 showBookingInstantNotProceedDialog(data)
             } else if (sortedList.size > 1) {
