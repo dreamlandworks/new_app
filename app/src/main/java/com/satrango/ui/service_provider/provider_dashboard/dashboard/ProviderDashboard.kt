@@ -42,6 +42,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.GpsLocationReceiver
 import com.satrango.base.ViewModelFactory
@@ -188,29 +189,6 @@ class ProviderDashboard : AppCompatActivity() {
                     Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
                 }
             }
-//            viewModel.onlineStatus(context, requestBody).observe(this) {
-//                when (it) {
-//                    is NetworkResponse.Loading -> {
-////                    progressDialog.show()
-//                    }
-//                    is NetworkResponse.Success -> {
-////                    toast(this, it.data!!.toString())
-//                        progressDialog.dismiss()
-//                        if (statusId == 0) {
-//                            binding.onlineText.text = context.resources.getString(R.string.offline)
-//                            UserUtils.setOnline(context, false)
-//                        } else {
-//                            binding.onlineText.text = context.resources.getString(R.string.online)
-//                            UserUtils.setOnline(context, true)
-//                        }
-//                    }
-//                    is NetworkResponse.Failure -> {
-//                        progressDialog.dismiss()
-//                        binding.onlineSwitch.isChecked = !binding.onlineSwitch.isChecked
-//                        Toast.makeText(context, it.message!!, Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
         }
 
         fun roundOffDecimal(number: Double): Double {
@@ -464,7 +442,7 @@ class ProviderDashboard : AppCompatActivity() {
                 if (apiResponse.status == 200) {
                     progressDialog.dismiss()
                     response = apiResponse
-                    showBookingAlert(UserUtils.getInstantBookingId(this@ProviderDashboard), userId, response, categoryId)
+                    showBookingAlert(bookingId, userId, response, categoryId)
                 } else {
                     progressDialog.dismiss()
                     snackBar(binding.bottomNavigationView, response.message)
@@ -520,7 +498,6 @@ class ProviderDashboard : AppCompatActivity() {
 
         closeBtn.setOnClickListener {
             UserUtils.saveFromFCMService(this, false)
-            toast(this, "Close Btn")
             bottomSheetDialog!!.dismiss()
             if (FCMService.notificationManager != null) {
                 FCMService.notificationManager.cancelAll()
@@ -598,7 +575,6 @@ class ProviderDashboard : AppCompatActivity() {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    toast(this@ProviderDashboard, "Closed")
                     bottomSheetDialog!!.dismiss()
                 }
                 if (seconds == 0) {

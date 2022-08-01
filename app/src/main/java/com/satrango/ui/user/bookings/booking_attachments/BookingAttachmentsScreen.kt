@@ -369,6 +369,13 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             sgst = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 
+        if (UserUtils.getBookingType(this) == "instant") {
+            val calender = Calendar.getInstance()
+            val hour = calender.get(Calendar.HOUR_OF_DAY)
+            UserUtils.time_slot_from = "${hour + 1}:00:00"
+            UserUtils.scheduled_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
+        }
+
         val requestBody = BlueCollarBookingReqModel(
             finalAmount.toString(),
             encodedImages,
@@ -394,7 +401,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    val jsonResponse = JSONObject(it.data!!)
+//                    val jsonResponse = JSONObject(it.data!!)
                     if (UserUtils.getBookingType(this) == "instant") {
                         // Book instantly...
                         val hasToken = UserUtils.sendFCMtoAllServiceProviders(this@BookingAttachmentsScreen, UserUtils.getBookingId(this@BookingAttachmentsScreen), "user", "accepted|${UserUtils.getBookingType(this@BookingAttachmentsScreen)}")

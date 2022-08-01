@@ -1307,13 +1307,9 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
-        val requestBody = FCMMessageReqModel(Data("$bookingId|$otp|${getUserId(context)}", "$bookingId|$otp|${getUserId(context)}", "otp"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val requestBody = SendFCMReqModel(NotificationX("$bookingId|$otp|${getUserId(context)}", "$bookingId|$otp|${getUserId(context)}","otp"), "high", token)
-            val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, Gson().toJson(response.string()), Toast.LENGTH_SHORT).show()
-//            Log.e("FCM RESPONSE:", token)
+            RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
     }
 
@@ -1325,13 +1321,9 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
-//        val requestBody = FCMMessageReqModel(Data(bookingDetails, bookingDetails, "otpResponse"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val requestBody = SendFCMReqModel(NotificationX(bookingDetails, bookingDetails,"otpResponse"), "high", token)
-            val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, Gson().toJson(response.string()), Toast.LENGTH_SHORT).show()
-//            Log.e("FCM RESPONSE:", token)
+            RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
     }
 
@@ -1345,53 +1337,10 @@ object UserUtils {
         val map = mutableMapOf<String, String>()
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
-        val requestBody = FCMMessageReqModel(Data("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId", "extraDemand"), "high", token)
         CoroutineScope(Dispatchers.Main).launch {
             val requestBody = SendFCMReqModel(NotificationX("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId","extraDemand"), "high", token)
-            val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, Gson().toJson(response.string()), Toast.LENGTH_SHORT).show()
-//            Log.e("FCM RESPONSE:", token)
+            RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
-    }
-
-//    fun sendRescheduleFCM(
-//        context: Context,
-//        token: String,
-//        bookingId: String,
-//        categoryId: String,
-//        userId: String,
-//    ) {
-//        val map = mutableMapOf<String, String>()
-//        map["Content-Type"] = "application/json"
-//        map["Authorization"] = "key=${getFCMServerKey(context)}"
-//        val requestBody = FCMMessageReqModel(Data("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId", "reschedule"), "high", token)
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Log.e("FCM RESPONSE:", token)
-//        }
-//    }
-
-    private fun sendCancelFCM(
-        context: Context,
-        token: String,
-        bookingId: String,
-        from: String,
-        type: String
-    ) {
-        saveProviderAction(context, "")
-        val map = mutableMapOf<String, String>()
-        map["Content-Type"] = "application/json"
-        map["Authorization"] = "key=${getFCMServerKey(context)}"
-//        val requestBody = FCMMessageReqModel(Data("${bookingId}|$type", "accepted|$type", from), "high", token)
-        CoroutineScope(Dispatchers.Main).launch {
-            val requestBody = SendFCMReqModel(NotificationX("${bookingId}|$type", "accepted|$type",from), "high", token)
-            val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-//            val response = RetrofitBuilder.getFCMRetrofitInstance().sendFCM(map, requestBody)
-//            Toast.makeText(context, Gson().toJson(response.string()), Toast.LENGTH_SHORT).show()
-//            Log.e("FCM RESPONSE CANCEL:", Gson().toJson(response))
-        }
-
     }
 
     fun sendFCMtoSelectedServiceProvider(
@@ -1403,7 +1352,7 @@ object UserUtils {
         return if (spDetails.fcm_token.isEmpty()) {
             "Service Provider not able to receive notifications"
         } else {
-            sendFCM(context, spDetails.fcm_token, bookingId, from, "accepted|${getBookingType(context)}")
+            sendFCM(context, spDetails.fcm_token, bookingId, from, getBookingType(context)!!)
             ""
         }
     }

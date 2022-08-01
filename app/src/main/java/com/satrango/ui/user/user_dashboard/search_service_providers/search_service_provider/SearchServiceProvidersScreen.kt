@@ -302,7 +302,6 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     if (response.data.isEmpty()) {
                         weAreSorryDialog()
                     } else {
-//                        toast(this@SearchServiceProvidersScreen, response.data.toString())
                         UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
                         showBookingTypeDialog(response)
                     }
@@ -405,6 +404,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
         if (data.data.isNotEmpty()) {
             if (existed < data.data.size) {
+                UserUtils.saveProfessionIdForBookInstant(this, data.data[0].profession_id)
                 context.startActivity(Intent(context, BookingAttachmentsScreen::class.java))
             } else {
                 showBookingInstantNotProceedDialog(data)
@@ -425,7 +425,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 binding.professionName.text = professionData.profession
                 binding.root.setOnClickListener {
                     val context = binding.root.context
-                    Toast.makeText(context, UserUtils.getProfessionIdForBookInstant(context), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, UserUtils.getProfessionIdForBookInstant(context), Toast.LENGTH_SHORT).show()
                     UserUtils.saveProfessionIdForBookInstant(context, professionData.profession_id)
                     proceedToBookingAttachments(context, data)
                 }
