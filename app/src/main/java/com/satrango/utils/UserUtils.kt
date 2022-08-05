@@ -1290,7 +1290,7 @@ object UserUtils {
             try {
                 val requestBody = SendFCMReqModel(NotificationX("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",from), "high", token)
                 val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-                Toast.makeText(context, Gson().toJson(fcmResponse), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, Gson().toJson(fcmResponse), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }
@@ -1387,7 +1387,7 @@ object UserUtils {
                         from)
                     val fcmRequestBody = SendFcmToAllReqModel(notification, "high", fcms)
                     val response = RetrofitBuilder.getUserRetrofitInstance().sendFcmToAll(fcmRequestBody)
-                    Toast.makeText(context, response.status.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.status.toString(), Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }

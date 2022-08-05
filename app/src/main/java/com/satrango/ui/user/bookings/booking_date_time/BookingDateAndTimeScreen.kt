@@ -185,7 +185,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
         Glide.with(this).load(data.profile_pic).into(binding.profilePic)
-        toast(this, "Updated UI ONE")
+//        toast(this, "Updated UI ONE")
     }
 
     @SuppressLint("SetTextI18n", "ObsoleteSdkInt")
@@ -201,7 +201,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = resources.getColor(R.color.purple_700)
         }
-        toast(this, "Updated UI ONE")
+//        toast(this, "Updated UI ONE")
     }
 
     private fun validateFields() {

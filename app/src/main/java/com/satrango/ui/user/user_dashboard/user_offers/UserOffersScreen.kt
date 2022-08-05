@@ -87,7 +87,7 @@ class UserOffersScreen :
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
-                    toast(requireContext(), it.data.size.toString())
+//                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -114,7 +114,7 @@ class UserOffersScreen :
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
-                    toast(requireContext(), it.data.size.toString())
+//                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -141,7 +141,7 @@ class UserOffersScreen :
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
-                    toast(requireContext(), it.data.size.toString())
+//                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

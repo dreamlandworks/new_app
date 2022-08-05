@@ -66,7 +66,7 @@ class UserLoginTypeScreen : AppCompatActivity() {
 
         if (resultCode == RESULT_OK) {
             data?.data?.also { _ ->
-                toast(this, getStringPdf(data.data!!)!!)
+//                toast(this, getStringPdf(data.data!!)!!)
 //                val string = data.data?.let { contentResolver.openInputStream(it).use { it.reader().readText() } }
             }
         }

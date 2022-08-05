@@ -383,7 +383,7 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
                 if (requestedOTP == otp.toInt()) {
-                    toast(this, finalDues)
+//                    toast(this, finalDues)
                     if (finalDues.toInt() > 0) {
                         UserUtils.saveSpId(binding.root.context, "0")
                         progressDialog.dismiss()

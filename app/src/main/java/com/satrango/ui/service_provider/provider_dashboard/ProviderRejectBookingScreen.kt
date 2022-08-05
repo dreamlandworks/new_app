@@ -200,7 +200,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                 )
                                 if (ProviderDashboard.bottomSheetDialog != null) {
                                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                        toast(this@ProviderRejectBookingScreen, "Closed from Provider response")
+//                                        toast(this@ProviderRejectBookingScreen, "Closed from Provider response")
                                         ProviderDashboard.bottomSheetDialog!!.dismiss()
                                     }
                                 }

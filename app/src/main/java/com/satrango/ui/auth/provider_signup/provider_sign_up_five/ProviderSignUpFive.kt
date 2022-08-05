@@ -122,7 +122,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
                             }
                             is NetworkResponse.Success -> {
                                 progressDialog.dismiss()
-                                toast(this@ProviderSignUpFive, it.data!!)
+//                                toast(this@ProviderSignUpFive, it.data!!)
                                 startActivity(
                                     Intent(
                                         this@ProviderSignUpFive,

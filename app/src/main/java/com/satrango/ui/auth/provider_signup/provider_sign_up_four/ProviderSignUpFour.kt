@@ -89,7 +89,7 @@ class ProviderSignUpFour: AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    toast(this, it.data!!)
+//                    toast(this, it.data!!)
                     startActivity(Intent(this, ProviderSignUpFive::class.java))
                 }
                 is NetworkResponse.Failure -> {

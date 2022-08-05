@@ -13,7 +13,7 @@ import com.satrango.utils.toast
 class GpsService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Toast.makeText(this, "Entered into Service", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Entered into Service", Toast.LENGTH_SHORT).show()
 
         return START_STICKY
     }

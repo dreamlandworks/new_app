@@ -290,7 +290,6 @@ class ProviderHomeScreen : Fragment() {
                 val jsonResponse = JSONObject(response.string())
                 if (jsonResponse.getInt("status") == 200) {
                     toast(requireContext(), jsonResponse.getString("message"))
-
                 } else {
                     toast(requireContext(), jsonResponse.getString("message"))
                 }

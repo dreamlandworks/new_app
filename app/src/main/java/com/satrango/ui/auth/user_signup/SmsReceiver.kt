@@ -19,7 +19,7 @@ class SmsReceiver: BroadcastReceiver() {
                 CommonStatusCodes.SUCCESS -> {
                     var otp: String
                     val msgs = extras[SmsRetriever.EXTRA_SMS_MESSAGE] as String?
-                    Toast.makeText(context, msgs.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, msgs.toString(), Toast.LENGTH_SHORT).show()
                 }
                 CommonStatusCodes.TIMEOUT -> {
 

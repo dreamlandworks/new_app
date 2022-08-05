@@ -44,7 +44,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
 
         initializeProgressDialog()
 
-        toast(this, postJobId)
+//        toast(this, postJobId)
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
         viewModel.getInstallmentsList(this, postJobId.toInt()).observe(this) {

@@ -1,7 +1,6 @@
 package com.satrango.ui.user.bookings.provider_response
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,31 +9,17 @@ import android.text.Html
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
-import com.razorpay.Checkout
 import com.satrango.R
-import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderBookingResponseScreenBinding
-import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.models.Notification
-import com.satrango.remote.fcm.models.SendFcmToAllReqModel
-import com.satrango.remote.fcm.models.To
 import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
-import com.satrango.ui.user.bookings.booking_address.BookingRepository
-import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.UserUtils
-import com.satrango.utils.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class ProviderBookingResponseScreen : AppCompatActivity() {
 

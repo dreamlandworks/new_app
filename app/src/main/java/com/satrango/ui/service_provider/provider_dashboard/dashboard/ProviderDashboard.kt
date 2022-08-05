@@ -418,7 +418,7 @@ class ProviderDashboard : AppCompatActivity() {
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 UserUtils.saveInstantBookingId(this, bookingId)
                 try {
-                    toast(this@ProviderDashboard, bookingId)
+//                    toast(this@ProviderDashboard, bookingId)
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) { }
             }
@@ -931,7 +931,7 @@ class ProviderDashboard : AppCompatActivity() {
                 categoryId = intent.getStringExtra(getString(R.string.category_id))!!
                 userId = intent.getStringExtra(getString(R.string.user_id))!!
                 bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
-                toast(this@ProviderDashboard, bookingId)
+//                toast(this@ProviderDashboard, bookingId)
                 try {
                     getInstantBookingDetails()
                 } catch (e: NumberFormatException) {}
