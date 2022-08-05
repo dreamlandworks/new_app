@@ -436,13 +436,13 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     morningTimings.add(availableTimeSlots[index - 1])
-                                    Log.e("MORNING ONE:",
-                                        Gson().toJson(availableTimeSlots[index - 1])
-                                    )
+//                                    Log.e("MORNING ONE:",
+//                                        Gson().toJson(availableTimeSlots[index - 1])
+//                                    )
                                 }
                             } else {
                                 morningTimings.add(availableTimeSlots[index - 1])
-                                Log.e("MORNING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                Log.e("MORNING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -453,12 +453,12 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             morningTimings.add(monthsModel)
-                            Log.e("MORNING THREE:", Gson().toJson(monthsModel))
+//                            Log.e("MORNING THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         morningTimings.add(monthsModel)
 //                        Log.e("MORNING:", "${availableTimeSlots[index - 1]}")
-                        Log.e("MORNING FOUR:", Gson().toJson(monthsModel))
+//                        Log.e("MORNING FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("12:00", "16:00", monthsModel.month) -> {
@@ -471,11 +471,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     afternoonTimings.add(availableTimeSlots[index - 1])
-                                    Log.e("AFTERNOON ONE:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                    Log.e("AFTERNOON ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 afternoonTimings.add(availableTimeSlots[index - 1])
-                                Log.e("AFTERNOON TWO:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                Log.e("AFTERNOON TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -486,11 +486,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             afternoonTimings.add(monthsModel)
-                            Log.e("AFTERNOON THREE:", Gson().toJson(monthsModel))
+//                            Log.e("AFTERNOON THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         afternoonTimings.add(monthsModel)
-                        Log.e("AFTERNOON FOUR:", Gson().toJson(monthsModel))
+//                        Log.e("AFTERNOON FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("16:00", "21:00", monthsModel.month) -> {
@@ -503,11 +503,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                                     )
                                 ) {
                                     eveningTimings.add(availableTimeSlots[index - 1])
-                                    Log.e("EVENING ONE:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                    Log.e("EVENING ONE:", Gson().toJson(availableTimeSlots[index - 1]))
                                 }
                             } else {
                                 eveningTimings.add(availableTimeSlots[index - 1])
-                                Log.e("EVENING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
+//                                Log.e("EVENING TWO:", Gson().toJson(availableTimeSlots[index - 1]))
                             }
                         }
                     }
@@ -518,11 +518,11 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                             )
                         ) {
                             eveningTimings.add(monthsModel)
-                            Log.e("EVENING THREE:", Gson().toJson(monthsModel))
+//                            Log.e("EVENING THREE:", Gson().toJson(monthsModel))
                         }
                     } else {
                         eveningTimings.add(monthsModel)
-                        Log.e("EVENING FOUR:", Gson().toJson(monthsModel))
+//                        Log.e("EVENING FOUR:", Gson().toJson(monthsModel))
                     }
                 }
                 UserUtils.isNowTimeBetween("21:00", "07:00", monthsModel.month) -> {
@@ -679,9 +679,9 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
                     if (!isExisted) {
                         tempAvailableTimeSlots.add(slot)
                     }
-                    Log.e("SORTED:", Gson().toJson(slot))
+//                    Log.e("SORTED:", Gson().toJson(slot))
                 } else {
-                    Log.e("NOT SORTED:", Gson().toJson(slot))
+//                    Log.e("NOT SORTED:", Gson().toJson(slot))
                 }
             }
         }

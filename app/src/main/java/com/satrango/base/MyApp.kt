@@ -29,13 +29,13 @@ class MyApp: Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
-        Log.d("MyApp", "App in background")
+//        Log.d("MyApp", "App in background")
         databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.offline))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onAppForegrounded() {
-        Log.d("MyApp", "App in foreground")
+//        Log.d("MyApp", "App in foreground")
         databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
     }
 

@@ -333,9 +333,9 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType)
-                Log.e("REQUEST:", Gson().toJson(requestBody))
+//                Log.e("REQUEST:", Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(requestBody)
-                Log.e("RESPONSE:", Gson().toJson(response))
+//                Log.e("RESPONSE:", Gson().toJson(response))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)

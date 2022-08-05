@@ -287,7 +287,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
             }
             binding.attachmentsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.attachmentsRV.adapter = AttachmentsAdapter(imagePathList, this)
-            Log.e("IMAGES:", Gson().toJson(encodedImages))
+//            Log.e("IMAGES:", Gson().toJson(encodedImages))
         } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val extras: Bundle = data.extras!!
             val imageBitmap = extras["data"] as Bitmap?

@@ -105,7 +105,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
                                 val chipText = chip.text.toString().trim()
                                 if (chipText.lowercase(Locale.getDefault()) == key.keyword.lowercase(Locale.getDefault()).trim()) {
                                     for (keyword in ProviderUtils.profession!![0].keywords_responses) {
-                                        Log.e("CHECK:", "${key.keyword} | ${keyword.name}")
+//                                        Log.e("CHECK:", "${key.keyword} | ${keyword.name}")
                                         if (key.keyword.lowercase(Locale.getDefault()).trim() == keyword.name.lowercase(Locale.getDefault()).trim() && key.keyword_id == keyword.keyword_id) {
                                             existed = true
                                         }
@@ -656,7 +656,7 @@ class ProviderSignUpTwo : AppCompatActivity() {
             }
             else -> {
                 ProviderUtils.aboutMe = binding.aboutMe.text.toString().trim()
-                Log.e("KEYWORDS:", Gson().toJson(ProviderUtils.profession))
+//                Log.e("KEYWORDS:", Gson().toJson(ProviderUtils.profession))
                 startActivity(Intent(this@ProviderSignUpTwo, ProviderSignUpThree::class.java))
             }
         }
