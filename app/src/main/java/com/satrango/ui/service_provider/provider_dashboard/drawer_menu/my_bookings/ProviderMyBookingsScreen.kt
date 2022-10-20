@@ -259,7 +259,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
-                        toast(this, requestedOTP.toString())
+//                        toast(this, requestedOTP.toString())
                         UserUtils.sendOTPFCM(
                             this,
                             userFcmToken,

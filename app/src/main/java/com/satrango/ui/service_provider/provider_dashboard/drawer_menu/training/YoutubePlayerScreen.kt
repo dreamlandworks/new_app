@@ -62,8 +62,8 @@ class YoutubePlayerScreen : AppCompatActivity() {
     private fun updateYoutubeVideoPoints(videoId: String, points: String) {
         val factory = ViewModelFactory(ProviderMyTrainingRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderMyTrainingViewModel::class.java]
-        viewModel.submitYoutubePoints(this, videoId, points).observe(this, {
-            when(it) {
+        viewModel.submitYoutubePoints(this, videoId, points).observe(this) {
+            when (it) {
                 is NetworkResponse.Loading -> {
 
                 }
@@ -74,7 +74,7 @@ class YoutubePlayerScreen : AppCompatActivity() {
                     toast(this, it.message!!)
                 }
             }
-        })
+        }
     }
 
 

@@ -211,7 +211,7 @@ class AddBookingAddressScreen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!UserUtils.getFromInstantBooking(this)) {
+        if (UserUtils.getBookingType(this) != "instant") {
             val intent = Intent(this, BookingAddressScreen::class.java)
             intent.putExtra(getString(R.string.service_provider), data)
             startActivity(intent)

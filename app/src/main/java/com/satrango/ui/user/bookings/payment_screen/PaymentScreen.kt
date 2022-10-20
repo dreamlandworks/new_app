@@ -37,6 +37,7 @@ import com.satrango.ui.service_provider.provider_dashboard.plans.ProviderPlansVi
 import com.satrango.ui.user.bookings.booking_address.models.GetTxnReqModel
 import com.satrango.ui.user.bookings.payment_screen.models.*
 import com.satrango.ui.user.bookings.provider_response.PaymentConfirmReqModel
+import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.set_goals.models.installment_payments.InstallmentPaymentReqModel
@@ -116,30 +117,45 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             }
 
             if (FROM_PROVIDER_BOOKING_RESPONSE) {
-                val data = Gson().fromJson(UserUtils.getSelectedSPDetails(this@PaymentScreen), Data::class.java)
+                CoroutineScope(Dispatchers.Main).launch {
+                     try {
+                         val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(
+                             BookingDetailsReqModel(
+                                 UserUtils.getBookingId(this@PaymentScreen).toInt(),
+                                 UserUtils.getSelectedKeywordCategoryId(this@PaymentScreen).toInt(),
+                                 RetrofitBuilder.USER_KEY,
+                                 UserUtils.getUserId(this@PaymentScreen).toInt()
+                             )
+                         )
+                         if (response.status == 200) {
+                             totalAmount.text = "Rs.${response.booking_details.amount.toDouble().toInt()}/-"
+                             bookingDateTime.text = "${response.booking_details.scheduled_date}, ${response.booking_details.from}"
+                             finalAmount = response.booking_details.amount.toDouble().toInt()
+                             payAmount.text = "Rs.$finalAmount/-"
+
+                             if (finalWalletBalance.toInt() == 0) {
+                                 currentBalance.visibility = View.GONE
+                                 walletBalanceCheck.visibility = View.GONE
+                             } else {
+                                 if (finalWalletBalance.toInt() > response.booking_details.amount.toDouble().toInt()) {
+                                     currentBalance.text = "Deduct from wallet balance: Rs. ${response.booking_details.amount}/-"
+                                 } else if (finalWalletBalance.toInt() > 0 && finalWalletBalance.toInt() < response.booking_details.amount.toDouble().toInt()) {
+                                     currentBalance.text = "Deduct from wallet balance: Rs. ${finalWalletBalance}/-"
+                                 }
+                                 walletBalance.text = "Rs.$finalWalletBalance/-"
+                             }
+                         }
+                     } catch (e: Exception) {
+                        toast(this@PaymentScreen, "Error" + e.message!!)
+                     }
+                }
                 bookingDetailsLayout.visibility = View.VISIBLE
                 amountLayout.visibility = View.VISIBLE
                 bookingSummaryLayout.visibility = View.GONE
-                bookingDateTime.text = "${UserUtils.scheduled_date}, ${UserUtils.time_slot_from}"
                 locationText.text = UserUtils.getCity(this@PaymentScreen)
-                spName.text = "${data.fname} ${data.lname}"
-                spProfession.text = data.profession
-                Glide.with(spProfilePic).load(data.profile_pic).error(R.drawable.images).into(spProfilePic)
-                totalAmount.text = "Rs.${data.final_amount}/-"
-                if (finalWalletBalance.toInt() == 0) {
-                    currentBalance.visibility = View.GONE
-                    walletBalanceCheck.visibility = View.GONE
-                } else {
-                    if (finalWalletBalance.toInt() > data.final_amount) {
-                        currentBalance.text = "Deduct from wallet balance: Rs. ${data.final_amount}/-"
-                    } else if (finalWalletBalance.toInt() > 0 && finalWalletBalance.toInt() < data.final_amount) {
-                        currentBalance.text = "Deduct from wallet balance: Rs. ${finalWalletBalance}/-"
-                    }
-                    walletBalance.text = "Rs.$finalWalletBalance/-"
-                }
 
-                payAmount.text = "Rs.$finalAmount/-"
             } else if (FROM_COMPLETE_BOOKING) {
+
                 bookingSummaryLayout.visibility = View.VISIBLE
                 bookingDetailsLayout.visibility = View.GONE
                 amountLayout.visibility = View.VISIBLE
@@ -180,6 +196,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 payAmount.text = "Rs.$amount/-"
 
             } else if (FROM_USER_SET_GOALS) {
+
                 bookingSummaryLayout.visibility = View.GONE
                 bookingSummaryCard.visibility = View.GONE
                 amountText.visibility = View.GONE
@@ -227,23 +244,18 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
             confirmPaymentBtn.setOnClickListener {
                 if (FROM_USER_PLANS) {
-//                    toast(this@PaymentScreen, "FROM USER PLANS")
                     processPaytm("3")
                 }
                 if (FROM_PROVIDER_PLANS) {
-//                    toast(this@PaymentScreen, "FROM PROVIDER PLANS")
                     processPaytm("4")
                 }
                 if (FROM_PROVIDER_BOOKING_RESPONSE) {
-//                    toast(this@PaymentScreen, "FROM PROVIDER BOOKING RESPONSE")
                     processPaytm("1")
                 }
                 if (FROM_COMPLETE_BOOKING) {
-//                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
                     processPaytm("2")
                 }
                 if (FROM_USER_SET_GOALS) {
-//                    toast(this@PaymentScreen, "FROM COMPLETE BOOKING")
                     processPaytm("5")
                 }
             }
@@ -321,9 +333,9 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType)
-                Log.e("REQUEST:", Gson().toJson(requestBody))
+//                Log.e("REQUEST:", Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(requestBody)
-                Log.e("RESPONSE:", Gson().toJson(response))
+//                Log.e("RESPONSE:", Gson().toJson(response))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
@@ -495,13 +507,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == activityRequestCode && data != null) {
-//            Toast.makeText(
-//                this,
-//                data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
-//                Toast.LENGTH_SHORT
-//            ).show()
-        }
+        if (requestCode == activityRequestCode && data != null) { }
         if (requestCode == REQUEST_CODE) {
             data?.getStringExtra("Status")?.let {
 //                Log.d("result", it)
@@ -527,67 +533,8 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         loadProfileImage(profilePic)
     }
 
-//    private fun makePayment() {
-//        Checkout.preload(this)
-//        val checkout = Checkout()
-//        checkout.setKeyID(getString(R.string.razorpay_api_key))
-//        try {
-//            val orderRequest = JSONObject()
-//            orderRequest.put("currency", "INR")
-//            orderRequest.put(
-//                "amount",
-//                amount * 100
-//            ) // 500rs * 100 = 50000 paisa passed
-//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-//            orderRequest.put("image", "https://dev.satrango.com/public/assets/img/logo-black.png")
-//            orderRequest.put("theme.color", R.color.blue)
-//            checkout.open(this, orderRequest)
-//        } catch (e: Exception) {
-//            toast(this, e.message!!)
-//        }
-//    }
-
-//    @SuppressLint("SimpleDateFormat")
-//    override fun onPaymentSuccess(paymentId: String?) {
-//        when {
-//            FROM_PROVIDER_PLANS -> {
-//                saveProviderPlan()
-//            }
-//            FROM_USER_PLANS -> {
-//                saveUserPlan()
-//            }
-//            FROM_USER_BOOKING_ADDRESS -> {
-//                updateStatusInServer()
-//            }
-//            FROM_PROVIDER_BOOKING_RESPONSE -> {
-//                updateStatusInServer()
-//            }
-//            FROM_USER_SET_GOALS -> {
-//                updateInstallmentPaymentStatus("Success", paymentId!!)
-//            }
-//            FROM_COMPLETE_BOOKING -> {
-//                completeBooking("Success")
-//            }
-//        }
-//    }
-
     @SuppressLint("SimpleDateFormat")
     private fun saveUserPlan(paidAmount: String, walletBalance: String) {
-//        val finalAmount = if (UserUtils.getSelectedSPDetails(this).isNotEmpty()) {
-//            round(Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount.toDouble()).toInt()
-//        } else {
-//            amount
-//        }
-//        val requestBody = UserPlanPaymentReqModel(
-//            finalAmount,
-//            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
-//            RetrofitBuilder.USER_KEY,
-//            period,
-//            id,
-//            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt(),
-//            finalWalletBalance,
-//            UserUtils.getOrderId(this)
-//        )
         val requestBody = UserPlanPaymentReqModel(
             paidAmount.toInt(),
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
@@ -630,18 +577,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
     private fun saveProviderPlan(paidAmount: String, walletBalance: String) {
         val factory = ViewModelFactory(ProviderPlansRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
-        val finalAmount =
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
-//        val requestBody = ProviderMemberShipPlanPaymentReqModel(
-//            finalAmount,
-//            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
-//            RetrofitBuilder.USER_KEY,
-//            period,
-//            id,
-//            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt(),
-//            finalWalletBalance,
-//            UserUtils.getOrderId(this)
-//        )
         val requestBody = ProviderMemberShipPlanPaymentReqModel(
             paidAmount.toInt(),
             SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
@@ -677,29 +612,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             }
         }
     }
-
-//    override fun onPaymentError(p0: Int, p1: String?) {
-//        when {
-//            FROM_PROVIDER_PLANS -> {
-//                snackBar(binding.googlePayBtn, "Payment Failed")
-//            }
-//            FROM_USER_PLANS -> {
-//                snackBar(binding.googlePayBtn, "Payment Failed")
-//            }
-//            FROM_USER_BOOKING_ADDRESS -> {
-//                updateStatusInServer()
-//            }
-//            FROM_PROVIDER_BOOKING_RESPONSE -> {
-//                updateStatusInServer()
-//            }
-//            FROM_USER_SET_GOALS -> {
-//                updateInstallmentPaymentStatus("Failure", "")
-//            }
-//            FROM_COMPLETE_BOOKING -> {
-//                completeBooking("Failure")
-//            }
-//        }
-//    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
@@ -874,7 +786,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         for (index in upiList.indices) {
             if (index == position) {
                 tempList.add(
-                    com.satrango.ui.user.bookings.payment_screen.models.Data(
+                    Data(
                         upiList[index].upi,
                         upiList[index].upiAdded,
                         upiList[index].userId,
@@ -883,7 +795,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 )
             } else {
                 tempList.add(
-                    com.satrango.ui.user.bookings.payment_screen.models.Data(
+                    Data(
                         upiList[index].upi,
                         upiList[index].upiAdded,
                         upiList[index].userId,

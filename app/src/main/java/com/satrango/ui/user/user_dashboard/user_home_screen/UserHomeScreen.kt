@@ -69,7 +69,7 @@ class UserHomeScreen :
         super.onViewCreated(view, savedInstanceState)
 
         loadHomeScreen()
-        toast(requireContext(), UserUtils.getUserId(requireContext()))
+//        toast(requireContext(), UserUtils.getUserId(requireContext()))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = UserProfileReqModel(

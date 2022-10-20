@@ -177,7 +177,7 @@ class UserBookingCancelScreen : AppCompatActivity() {
             reason,
             cancel_id // pass 24 if cancelled by user  // pass 25 if cancelled by sp
         )
-        toast(this, Gson().toJson(requestBody))
+//        toast(this, Gson().toJson(requestBody))
         viewModel.cancelBooking(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

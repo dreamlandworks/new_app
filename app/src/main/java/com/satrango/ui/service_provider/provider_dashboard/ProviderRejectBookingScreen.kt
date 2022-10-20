@@ -16,7 +16,7 @@ import com.satrango.databinding.ActivityProviderRejectBookingScreenBinding
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.FCMService
 import com.satrango.remote.fcm.NotificationX
-import com.satrango.remote.fcm.SendFCMReqModel
+import com.satrango.remote.fcm.models.SendFCMReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
@@ -200,7 +200,7 @@ class ProviderRejectBookingScreen : AppCompatActivity() {
                                 )
                                 if (ProviderDashboard.bottomSheetDialog != null) {
                                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                        toast(this@ProviderRejectBookingScreen, "Closed from Provider response")
+//                                        toast(this@ProviderRejectBookingScreen, "Closed from Provider response")
                                         ProviderDashboard.bottomSheetDialog!!.dismiss()
                                     }
                                 }

@@ -149,7 +149,7 @@ class AttachmentsAdapter(private val list: ArrayList<Attachment>, private val at
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.binding.closeBtn.context, "Selected", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(holder.binding.closeBtn.context, "Selected", Toast.LENGTH_SHORT).show()
         }
         holder.binding.closeBtn.setOnClickListener {
             attachmentsListener.deleteAttachment(position, list[position])

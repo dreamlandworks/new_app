@@ -158,8 +158,6 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             }
 
         }
-
-        toast(this, "Multimove screenR")
     }
 
     private fun initializeToolBar() {
@@ -187,10 +185,6 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             sgst = data.SGST_amount
         }
 
-//        if (UserUtils.time_slot_to.split(":")[0].toInt() == 24) {
-//            UserUtils.time_slot_to = "00:00:00"
-//        }
-
         val requestBody = MultiMoveReqModel(
             UserUtils.finalAddressList,
             finalAmount.toString(),
@@ -217,13 +211,13 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (UserUtils.getFromInstantBooking(this)) {
+                    if (UserUtils.getBookingType(this) == "instant") {
                         if (PermissionUtils.isNetworkConnected(this)) {
                             UserUtils.sendFCMtoAllServiceProviders(
                                 this,
                                 UserUtils.getBookingId(this),
                                 "user",
-                                "accepted|${UserUtils.bookingType}"
+                                "accepted|${UserUtils.getBookingType(this)}"
                             )
                         } else {
                             snackBar(binding.nextBtn, "No Internet Connection!")
@@ -268,7 +262,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accepted|${UserUtils.bookingType}")
+            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accepted|${UserUtils.getBookingType(this)}")
             finish()
             startActivity(intent)
             waitingDialog.dismiss()
@@ -290,7 +284,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
                 seconds -= 1
                 if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                    UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
                     waitingDialog.dismiss()
                     try {
                         weAreSorryDialog()
@@ -310,10 +304,10 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                             .split("|")[0].trim() == "accept"
                     ) {
                         serviceProviderAcceptDialog(this@BookingMultiMoveAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
                     } else {
                         serviceProviderRejectDialog(this@BookingMultiMoveAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.bookingType}")
+                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
                     }
                 }
                 mainHandler.postDelayed(this, 1000)

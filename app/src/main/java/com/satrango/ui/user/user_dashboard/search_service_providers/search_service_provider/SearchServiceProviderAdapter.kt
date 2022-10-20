@@ -82,19 +82,21 @@ class SearchServiceProviderAdapter(
             binding.root.setOnClickListener {
                 FROM_POPULAR_SERVICES = false
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
+                UserUtils.saveProfessionIdForBookInstant(binding.root.context, data.profession_id)
                 val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
                 isReschedule(binding.actualCost.context, false)
-                UserUtils.saveFromInstantBooking(binding.root.context, false)
+                UserUtils.saveBookingType(binding.root.context, "selected")
                 UserUtils.saveSpId(binding.root.context, data.users_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookNowBtn.setOnClickListener {
-                UserUtils.saveFromInstantBooking(binding.root.context, true)
+                UserUtils.saveBookingType(binding.root.context, "instant")
+                UserUtils.saveProfessionIdForBookInstant(binding.root.context, data.profession_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 if (data.category_id == "3") {
                     UserUtils.addressList = ArrayList()
@@ -106,7 +108,6 @@ class SearchServiceProviderAdapter(
                     val intent = Intent(binding.root.context, BookingAttachmentsScreen::class.java)
                     binding.root.context.startActivity(intent)
                 }
-//                Toast.makeText(binding.actualCost.context, data.fcm_token, Toast.LENGTH_SHORT).show()
             }
         }
     }

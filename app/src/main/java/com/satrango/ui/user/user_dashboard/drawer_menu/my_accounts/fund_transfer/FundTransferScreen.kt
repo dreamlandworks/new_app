@@ -292,7 +292,7 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().addFunds(AddFundsReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt()))
-                toast(this@FundTransferScreen, Gson().toJson(amount))
+//                toast(this@FundTransferScreen, Gson().toJson(amount))
                 if (response.status == 200) {
                     UserUtils.saveOrderId(this@FundTransferScreen, response.order_id)
                     UserUtils.saveTxnToken(this@FundTransferScreen, response.txn_id)

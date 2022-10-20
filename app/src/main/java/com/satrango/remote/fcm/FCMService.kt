@@ -47,12 +47,12 @@ class FCMService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun handleIntent(intent: Intent) {
         val bundle = intent.extras
-        if (bundle != null) {
-            for (key in bundle.keySet()) {
-                val value = bundle[key]
+//        if (bundle != null) {
+//            for (key in bundle.keySet()) {
+//                val value = bundle[key]
 //                Log.e("FCM", "Key: $key Value: $value")
-            }
-        }
+//            }
+//        }
         super.handleIntent(intent)
         removeFirebaseOriginalNotifications()
         if (bundle!!.containsKey("gcm.notification.body")) {

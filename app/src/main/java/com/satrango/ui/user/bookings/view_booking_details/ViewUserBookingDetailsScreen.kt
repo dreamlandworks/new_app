@@ -525,7 +525,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
-                        toast(this, requestedOTP.toString())
+//                        toast(this, requestedOTP.toString())
                         UserUtils.sendOTPFCM(this, FCM_TOKEN, bookingId, requestedOTP.toString())
                         otpDialog(requestedOTP, bookingId)
                     }

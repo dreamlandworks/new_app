@@ -9,3 +9,4 @@
 -keepclasseswithmembers class * {
     public void onPayment*(...);
  }
+ -assumenosideeffects class android.util.Log{*;}
