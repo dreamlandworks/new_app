@@ -32,7 +32,7 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
                         UserUtils.saveUserProfilePic(context, jsonObject.getString("profile_image"))
                         userLogin.value = NetworkResponse.Success(jsonObject.getString("user_id"))
                     } else {
-                        userLogin.value = NetworkResponse.Failure(jsonObject.getString("message"))
+                        userLogin.value = NetworkResponse.Failure(jsonObject.getInt("status").toString())
                     }
                 } catch (e: Exception) {
                     userLogin.value = NetworkResponse.Failure(e.message)

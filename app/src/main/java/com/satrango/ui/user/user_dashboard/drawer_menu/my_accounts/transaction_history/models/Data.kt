@@ -1,7 +1,7 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.transaction_history.models
 
 data class Data(
-    val amount: Int,
+    val amount: Double,
     val booking_id: String,
     val date: String,
     val payment_status: String,

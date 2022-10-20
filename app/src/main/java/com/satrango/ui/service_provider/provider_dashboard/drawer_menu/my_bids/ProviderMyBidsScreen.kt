@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.ActivityProviderMyBidsScreenBinding
 import com.satrango.remote.RetrofitBuilder
@@ -127,10 +126,12 @@ class ProviderMyBidsScreen : AppCompatActivity() {
         val requestBody =
             ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         CoroutineScope(Dispatchers.Main).launch {
-            progressDialog.show()
+//            progressDialog.show()
+            binding.shimmerLayout.visibility = View.VISIBLE
+            binding.shimmerLayout.startShimmerAnimation()
             try {
                 val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getBidJobsList(requestBody)
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 val data = response.job_post_details
                 binding.recyclerView.adapter = ProviderMyBidsNewJobsAdapter(data)
                 binding.note.visibility = View.GONE
@@ -139,47 +140,28 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                 } else {
                     binding.sortFilterBtn.visibility = View.GONE
                 }
+                binding.shimmerLayout.visibility = View.GONE
+                binding.shimmerLayout.stopShimmerAnimation()
             } catch (e: Exception) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 binding.note.visibility = View.VISIBLE
+                binding.shimmerLayout.visibility = View.GONE
+                binding.shimmerLayout.stopShimmerAnimation()
                 toast(this@ProviderMyBidsScreen, e.message!!)
             }
         }
-//        viewModel.jobsList(this, requestBody).observe(this) {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    val data = it.data!!
-//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(data)
-//                    binding.note.visibility = View.GONE
-//                    if (it.data.isNotEmpty()) {
-//                        binding.sortFilterBtn.visibility = View.VISIBLE
-//                    } else {
-//                        binding.sortFilterBtn.visibility = View.GONE
-//                    }
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    binding.note.visibility = View.VISIBLE
-////                    snackBar(binding.recyclerView, it.message!!)
-//                }
-//            }
-//        }
     }
 
     private fun updateUI(status: String) {
-//        val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
         val requestBody = ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-//        toast(this, Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
-            progressDialog.show()
+//            progressDialog.show()
+            binding.shimmerLayout.visibility = View.VISIBLE
+            binding.shimmerLayout.startShimmerAnimation()
             try {
                 val response =
                     RetrofitBuilder.getServiceProviderRetrofitInstance().getBidsList(requestBody)
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 val list = response.job_post_details
                 val filterList = ArrayList<JobPostDetail>()
                 if (status == "Open") {
@@ -197,44 +179,16 @@ class ProviderMyBidsScreen : AppCompatActivity() {
                 }
                 binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
                 binding.note.visibility = View.GONE
+                binding.shimmerLayout.visibility = View.GONE
+                binding.shimmerLayout.stopShimmerAnimation()
             } catch (e: Exception) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
+                binding.shimmerLayout.visibility = View.GONE
+                binding.shimmerLayout.stopShimmerAnimation()
                 binding.note.visibility = View.VISIBLE
                 toast(this@ProviderMyBidsScreen, e.message!!)
             }
         }
-//        viewModel.bidsList(this, requestBody).observe(this) {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    val list = it.data!!
-//                    val filterList = ArrayList<JobPostDetail>()
-//                    if (status == "Open") {
-//                        for (bid in list) {
-//                            if (bid.bid_type == status) {
-//                                filterList.add(bid)
-//                            }
-//                        }
-//                    } else {
-//                        for (bid in list) {
-//                            if (bid.bid_type != "Open") {
-//                                filterList.add(bid)
-//                            }
-//                        }
-//                    }
-//                    binding.recyclerView.adapter = ProviderMyBidsAdapter(filterList)
-//                    binding.note.visibility = View.GONE
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    binding.note.visibility = View.VISIBLE
-////                    snackBar(binding.recyclerView, it.message!!)
-//                }
-//            }
-//        }
     }
 
     override fun onBackPressed() {

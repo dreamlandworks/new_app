@@ -67,6 +67,9 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
         binding.updateBtn.setOnClickListener {
             validateFields()
         }
+        binding.backBtn.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
     }
 
@@ -494,13 +497,13 @@ class TariffTimingsProfileScreen: BaseFragment<ProviderProfileViewModel, Fragmen
             var selectedFromTime = ""
             var selectedToTime = ""
 
-            if (fromTime.selectedItemPosition == 0) {
+            if (fromTime.selectedItemPosition < 0) {
                 toast(requireContext(), "Please select From Time")
                 return emptyList()
             } else {
                 selectedFromTime = "${fromTime.selectedItemPosition - 1}:00:00"
             }
-            if (toTime.selectedItemPosition == 0) {
+            if (toTime.selectedItemPosition < 0) {
                 toast(requireContext(), "Please select To Time")
                 return emptyList()
             } else {

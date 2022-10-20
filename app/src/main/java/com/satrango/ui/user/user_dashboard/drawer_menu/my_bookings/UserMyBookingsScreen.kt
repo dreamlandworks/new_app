@@ -130,7 +130,10 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
         viewModel.getMyBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
@@ -150,6 +153,9 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = MyBookingsAdapter(list, this, this)
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
+                    binding.recyclerView.visibility = View.VISIBLE
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -157,6 +163,9 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
                     }
                 }
                 is NetworkResponse.Failure -> {
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
+                    binding.recyclerView.visibility = View.VISIBLE
                     progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.message!!)
                 }

@@ -22,16 +22,26 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ktx.database
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ShortDynamicLink
+import com.google.firebase.dynamiclinks.ktx.androidParameters
+import com.google.firebase.dynamiclinks.ktx.dynamicLink
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
+import com.google.zxing.qrcode.QRCodeWriter
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserProfileScreenBinding
@@ -213,15 +223,19 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                 lastName.keyListener = lastName.tag as KeyListener
             }
 
-            dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            dateOfBirth.tag = dateOfBirth.keyListener
+//            dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            dateOfBirth.tag = dateOfBirth.keyListener
             dateOfBirth.keyListener = null
             dateOfBirthEdit.setOnClickListener {
-                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#ffffff")
-                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
+                openDateOfBirthDialog()
+                dateOfBirth.setOnClickListener {
+                    openDateOfBirthDialog()
+                }
+//                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+//                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
             }
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener

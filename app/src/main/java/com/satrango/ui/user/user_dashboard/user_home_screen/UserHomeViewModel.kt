@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.user_home_screen
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,6 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
     val browseCategoriesList = MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>>()
 
     fun getPopularServicesList(context: Context, categoryId: String): MutableLiveData<NetworkResponse<List<BrowserSubCategoryModel>>> {
-//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     val popularServicesList = ArrayList<BrowserSubCategoryModel>()
@@ -50,14 +50,10 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
                     popularServices.value = NetworkResponse.Failure(e.message)
                 }
             }
-//        } else {
-//            popularServices.value = NetworkResponse.Failure("No Internet Connection!")
-//        }
         return popularServices
     }
 
     fun getBrowseCategories(context: Context): MutableLiveData<NetworkResponse<List<BrowserCategoryModel>>> {
-//        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {
                     browseCategoriesList.value = NetworkResponse.Loading()
@@ -67,6 +63,7 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
 //                    Log.e("BROWSER CATEGORIES", responseObject.toString())
                     if (responseObject.getInt("status") == 200) {
                         val categoriesArray = responseObject.getJSONArray("data")
+//                        Toast.makeText(context, categoriesArray.length().toString(), Toast.LENGTH_SHORT).show()
                         for (index in 0 until categoriesArray.length()) {
                             val category = categoriesArray.getJSONObject(index)
                             if (index == 0) {
@@ -81,9 +78,6 @@ class UserHomeViewModel(private val userHomeRepository: UserHomeRepository): Vie
                     browseCategoriesList.value = NetworkResponse.Failure(e.message)
                 }
             }
-//        } else {
-//            browseCategoriesList.value = NetworkResponse.Failure("No Internet Connection")
-//        }
         return browseCategoriesList
     }
 

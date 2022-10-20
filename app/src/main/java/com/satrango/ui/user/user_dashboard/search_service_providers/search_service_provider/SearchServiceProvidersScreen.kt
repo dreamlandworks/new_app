@@ -16,7 +16,6 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,7 +71,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeToolBar()
-        initializeProgressDialog()
+//        initializeProgressDialog()
+        binding.shimmerLayout.startShimmerAnimation()
 
         binding.sortFilterBtn.setOnClickListener {
             isProvider(this, false)
@@ -188,7 +188,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         viewModel.getKeywordsList(this).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     val keywordsList = it.data as ArrayList<Data>
@@ -207,15 +207,18 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                                 if (key.phrase == value) {
                                     keyword = key.id
                                     subCategoryId = key.subcategory_id
-                                    UserUtils.saveSelectedKeywordCategoryId(this@SearchServiceProvidersScreen, key.category_id)
+                                    UserUtils.saveSelectedKeywordCategoryId(
+                                        this@SearchServiceProvidersScreen,
+                                        key.category_id
+                                    )
                                 }
                             }
 //                            toast(this, UserUtils.getSelectedKeywordCategoryId(this))
                         }
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
@@ -231,7 +234,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 snackBar(binding.goBtn, "Please select location")
             } else {
                 if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
-                    toast(this, "We are working on this category. So Service Providers are not available based on you search.")
+                    toast(
+                        this,
+                        "We are working on this category. So Service Providers are not available based on you search."
+                    )
                 } else {
                     UserUtils.saveSearchFilter(this, "")
                     loadSearchResults(subCategoryId)
@@ -290,7 +296,11 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         )
 //        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
-            progressDialog.show()
+//            progressDialog.show()
+            binding.shimmerLayout.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+            binding.shimmerLayout.startShimmerAnimation()
+
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
                 if (response.status == 200) {
@@ -299,19 +309,25 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                         subCategoryId = "0"
                     }
 //                binding.recyclerView.adapter = SearchServiceProviderAdapter(emptyList(), this@SearchServiceProvidersScreen)
+                    binding.shimmerLayout.stopShimmerAnimation()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
                     if (response.data.isEmpty()) {
                         weAreSorryDialog()
                     } else {
-                        UserUtils.saveSelectedAllSPDetails(this@SearchServiceProvidersScreen, Gson().toJson(response))
+                        UserUtils.saveSelectedAllSPDetails(
+                            this@SearchServiceProvidersScreen,
+                            Gson().toJson(response)
+                        )
                         showBookingTypeDialog(response)
                     }
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 } else {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     toast(this@SearchServiceProvidersScreen, response.message)
                 }
             } catch (e: Exception) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 toast(this@SearchServiceProvidersScreen, e.message!!)
             }
         }
@@ -347,7 +363,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             UserUtils.saveBookingType(this, "selected")
             showBookingTypeBottomSheetDialog.dismiss()
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
+            binding.recyclerView.layoutManager =
+                LinearLayoutManager(this@SearchServiceProvidersScreen)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(data.data, this)
         }
         bookInstantly.setOnClickListener {
@@ -357,7 +374,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             showBookingTypeBottomSheetDialog.dismiss()
             binding.recyclerView.visibility = View.GONE
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            val sortedList = data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
+            val sortedList =
+                data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
             UserUtils.saveInstantBookingCategoryId(this, sortedList[0].category_id)
             if (sortedList.isEmpty()) {
                 showBookingInstantNotProceedDialog(data)
@@ -378,7 +396,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
 
     private fun selectProfessionDialog(data: SearchServiceProviderResModel) {
         val dialog = Dialog(this)
-        val dialogView = layoutInflater.inflate(com.satrango.R.layout.select_profession_dialog, null)
+        val dialogView =
+            layoutInflater.inflate(com.satrango.R.layout.select_profession_dialog, null)
         val closeBtn = dialogView.findViewById<ImageView>(com.satrango.R.id.closeBtn)
         val professionRv = dialogView.findViewById<RecyclerView>(com.satrango.R.id.professionRv)
         professionRv.adapter = ProfessionAdapter(data.data, data)
@@ -417,7 +436,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         val data: SearchServiceProviderResModel
     ) : RecyclerView.Adapter<ProfessionAdapter.ViewHolder>() {
 
-        class ViewHolder(binding: SelectProfessionRowBinding, data: SearchServiceProviderResModel): RecyclerView.ViewHolder(binding.root) {
+        class ViewHolder(binding: SelectProfessionRowBinding, data: SearchServiceProviderResModel) :
+            RecyclerView.ViewHolder(binding.root) {
             val binding = binding
             val data = data
 
@@ -431,7 +451,10 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 }
             }
 
-            private fun proceedToBookingAttachments(context: Context, data: SearchServiceProviderResModel) {
+            private fun proceedToBookingAttachments(
+                context: Context,
+                data: SearchServiceProviderResModel
+            ) {
                 var existed = 0
                 data.data.forEachIndexed { index, sp ->
                     for (spSlot in data.slots_data) {
@@ -454,7 +477,13 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(SelectProfessionRowBinding.inflate(LayoutInflater.from(parent.context), parent, false), data)
+            return ViewHolder(
+                SelectProfessionRowBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ), data
+            )
         }
 
         override fun getItemCount(): Int {
@@ -482,7 +511,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
         }
         showResultsBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.recyclerView.layoutManager = LinearLayoutManager(this@SearchServiceProvidersScreen)
+                binding.recyclerView.layoutManager =
+                    LinearLayoutManager(this@SearchServiceProvidersScreen)
                 binding.listCount.text = "${data.data.size} out of ${data.data.size}"
                 binding.recyclerView.adapter =
                     SearchServiceProviderAdapter(data.data, this@SearchServiceProvidersScreen)

@@ -105,7 +105,9 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         viewModel.getNormalAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
@@ -125,11 +127,15 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                         updateAlertsToRead("2", it.data.reversed().last().id)
                         binding.note.visibility = View.GONE
                     }
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(),  this)
                     binding.note.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
 //                    toast(requireContext(), it.message!!)
                 }
             }
@@ -165,7 +171,9 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
@@ -188,11 +196,15 @@ class ProviderAlertsScreen : BaseFragment<ProviderAlertsViewModel, FragmentProvi
                     } else {
                         binding.note.visibility = View.VISIBLE
                     }
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     binding.alertsRV.adapter = UserAlertsAdapter(emptyList(),  this)
                     binding.note.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
             }
         }

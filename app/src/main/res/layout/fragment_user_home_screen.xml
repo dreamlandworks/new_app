@@ -10,142 +10,312 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
+            android:id="@+id/rootLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_15sdp"
-            app:cardCornerRadius="@dimen/_10sdp"
-            app:cardElevation="@dimen/_5sdp">
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <RelativeLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue_700">
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_15sdp"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="@dimen/_5sdp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/_30sdp"
-                    android:padding="@dimen/_5sdp"
-                    android:src="@drawable/user_home_dashboard_pic"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_10sdp">
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue_700">
 
-                    <TextView
-                        android:id="@+id/userName"
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:singleLine="true"
-                        android:text="Hi, "
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text"
-                        android:textStyle="bold" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:text="@string/what_do_you_need_today"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text"
-                        android:textStyle="bold" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_30sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/user_home_dashboard_pic"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_10sdp">
+
+                        <TextView
+                            android:id="@+id/userName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:singleLine="true"
+                            android:text="Hi, "
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:text="@string/what_do_you_need_today"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/searchBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/locationbackground"
+                                android:drawableStart="@drawable/ic_search"
+                                android:drawableEnd="@drawable/ic_mic"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:editable="false"
+                                android:hint="@string/search_in_thousands_of_services"
+                                android:paddingHorizontal="@dimen/_10sdp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/_12sdp"
+                                tools:ignore="LabelFor" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_5sdp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_20sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular_services"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text" />
+
+                <TextView
+                    android:id="@+id/browseAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/browse_all"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sub_text"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userPopularServicesRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:text="@string/recommended_for_you"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/layoutOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_category_bg" />
+
+                <LinearLayout
+                    android:id="@+id/layoutTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:background="@drawable/shimmer_category_bg" />
+
+                    <TextView
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:background="@drawable/shimmer_category_bg" />
+
+                    <TextView
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:background="@drawable/shimmer_category_bg" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutThree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:background="@color/colorGrey" />
+
+                    <TextView
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_alignParentEnd="true"
+                        android:background="@color/colorGrey" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutFour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:baselineAligned="false"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/searchBar"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:background="@drawable/locationbackground"
-                            android:drawableStart="@drawable/ic_search"
-                            android:drawableEnd="@drawable/ic_mic"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:hint="@string/search_in_thousands_of_services"
-                            android:paddingHorizontal="@dimen/_10sdp"
-                            android:singleLine="true"
-                            android:textSize="@dimen/_12sdp"
-                            tools:ignore="LabelFor" />
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:baselineAligned="false"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:baselineAligned="false"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            layout="@layout/shimmer_sub_category_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
 
                     </LinearLayout>
 
                 </LinearLayout>
-            </RelativeLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categoryRV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_5sdp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_20sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/popular_services"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:id="@+id/browseAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="@string/browse_all"
-                android:textColor="@color/red"
-                android:textSize="@dimen/sub_text"
-                tools:ignore="RelativeOverlap" />
-
-        </RelativeLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/userPopularServicesRv"
-                android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="wrap_content" />
-
-        </androidx.core.widget.NestedScrollView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:text="@string/recommended_for_you"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text"
-            android:visibility="gone" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>

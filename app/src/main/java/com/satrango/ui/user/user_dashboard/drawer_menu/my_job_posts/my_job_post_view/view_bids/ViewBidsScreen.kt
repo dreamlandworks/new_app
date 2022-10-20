@@ -3,9 +3,12 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -60,10 +63,12 @@ class ViewBidsScreen : AppCompatActivity() {
         viewModel.viewBids(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val list = it.data!!
                     val filteredList = ArrayList<BidDetail>()
                     for (bid in list.bid_details) {
@@ -79,15 +84,20 @@ class ViewBidsScreen : AppCompatActivity() {
                     if (list.bid_details.isEmpty()) {
                         snackBar(binding.recyclerView, "No Bids on this post")
                     }
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
             }
         }
 
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
@@ -101,6 +111,11 @@ class ViewBidsScreen : AppCompatActivity() {
             binding.layout.setBackgroundResource(R.drawable.provider_btn_bg_sm)
             binding.layoutOne.setBackgroundResource(R.drawable.purple_out_line)
             binding.layoutTwo.setBackgroundResource(R.drawable.purple_out_line)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window: Window = window
+                window.statusBarColor = resources.getColor(R.color.purple_700)
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
         }
     }
 

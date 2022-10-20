@@ -13,7 +13,6 @@ import android.widget.TextView
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.BaseFragment
 import com.satrango.databinding.FragmentUserAlertScreenBinding
@@ -29,7 +28,6 @@ import com.satrango.ui.user.user_dashboard.user_alerts.models.Action
 import com.satrango.ui.user.user_dashboard.user_alerts.models.Regular
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.toast
@@ -55,6 +53,7 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
 
         initializeToolBar()
         initializeProgressDialog()
+        binding.shimmerLayout.startShimmerAnimation()
         loadUserAlertsScreen()
 
     }
@@ -90,14 +89,14 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
         viewModel.updateAlertsToRead(requireContext(), userType, lastAlertId).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
 //                    toast(requireContext(), it.data!!)
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 }
             }
         }
@@ -122,7 +121,10 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.note.visibility = View.GONE
-                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.alertsRV.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     val nonActionable = ArrayList<Regular>()
@@ -135,18 +137,27 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
                         binding.note.visibility = View.GONE
                         binding.alertsRV.adapter = RegularAlertAdapter(it.data)
                         binding.regularBadge.text = nonActionable.size.toString()
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.alertsRV.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
                         updateAlertsToRead("1", it.data.reversed().last().id)
                     } else {
                         binding.regularBadge.visibility = View.GONE
                         binding.alertsRV.adapter = UserAlertsAdapter(emptyList(), this)
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.alertsRV.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
                         binding.note.text = "Regular Alerts are empty"
                         binding.note.visibility = View.VISIBLE
                     }
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.note.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.alertsRV.visibility = View.VISIBLE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     binding.note.text = it.message!!
                 }
             }
@@ -165,7 +176,10 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
             when (it) {
                 is NetworkResponse.Loading -> {
                     binding.note.visibility = View.GONE
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.alertsRV.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
@@ -178,18 +192,27 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
                         binding.alertsRV.adapter = UserAlertsAdapter(actionNeeded, this)
                         binding.actionNeededBadge.text = actionNeeded.size.toString()
                         binding.note.visibility = View.GONE
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.alertsRV.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
                     } else {
                         binding.actionNeededBadge.visibility = View.GONE
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.alertsRV.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
                         binding.alertsRV.adapter =
                             UserAlertsAdapter(emptyList(), this)
                         binding.note.visibility = View.VISIBLE
                         binding.note.text = "Actionable Alerts are empty"
                     }
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.note.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.alertsRV.visibility = View.VISIBLE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     binding.note.text = it.message!!
                 }
             }

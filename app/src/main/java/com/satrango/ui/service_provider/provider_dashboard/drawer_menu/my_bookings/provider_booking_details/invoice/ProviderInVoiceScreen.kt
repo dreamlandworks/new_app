@@ -49,7 +49,15 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.bookings.view_booking_details.models.CompleteBookingReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.utils.UserUtils.isFromCompleteBooking
+import com.satrango.utils.UserUtils.isFromProviderBookingResponse
+import com.satrango.utils.UserUtils.isFromProviderPlans
+import com.satrango.utils.UserUtils.isFromUserBookingAddress
+import com.satrango.utils.UserUtils.isFromUserPlans
+import com.satrango.utils.UserUtils.isFromUserSetGoals
 import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.UserUtils.setFinalWalletBalance
+import com.satrango.utils.UserUtils.setPayableAmount
 import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,15 +115,20 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     response = it.data!!
                     updateUI(response)
+
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     snackBar(binding.amount, it.message!!)
                 }
             }
@@ -179,10 +192,12 @@ class ProviderInVoiceScreen : AppCompatActivity() {
         viewModel.getInvoice(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val response = it.data!!
                     UserUtils.saveInVoiceDetails(this, Gson().toJson(response))
                     binding.apply {
@@ -213,9 +228,13 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                             }
                         }
                     }
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     snackBar(binding.amount, it.message!!)
                 }
             }
@@ -389,15 +408,23 @@ class ProviderInVoiceScreen : AppCompatActivity() {
                         progressDialog.dismiss()
                         dialog.dismiss()
                         UserUtils.sendOTPResponseFCM(this, spFcmToken, "$bookingId|$categoryId|$userId|sp")
-                        PaymentScreen.amount = finalDues.toInt()
-                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
-                        PaymentScreen.FROM_USER_PLANS = false
-                        PaymentScreen.FROM_PROVIDER_PLANS = false
-                        PaymentScreen.FROM_USER_SET_GOALS = false
-                        PaymentScreen.FROM_COMPLETE_BOOKING = true
-                        PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
-                        PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
+                        setPayableAmount(this, finalDues.toInt())
+//                        PaymentScreen.amount = finalDues.toInt()
+//                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
+                        setFinalWalletBalance(this, response.booking_details.wallet_balance)
+                        isFromUserPlans(this, false)
+                        isFromProviderPlans(this, false)
+                        isFromUserSetGoals(this, false)
+                        isFromCompleteBooking(this, true)
+                        isFromUserBookingAddress(this, false)
+                        isFromProviderBookingResponse(this, false)
+//                        PaymentScreen.FROM_USER_PLANS = false
+//                        PaymentScreen.FROM_PROVIDER_PLANS = false
+//                        PaymentScreen.FROM_USER_SET_GOALS = false
+//                        PaymentScreen.FROM_COMPLETE_BOOKING = true
+//                        PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+//                        PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//                        PaymentScreen.finalWalletBalance = response.booking_details.wallet_balance
                         startActivity(Intent(this, PaymentScreen::class.java))
                     } else {
                         CoroutineScope(Dispatchers.Main).launch {

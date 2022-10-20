@@ -3,7 +3,10 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_booki
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -42,9 +45,14 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
         binding = ActivityProviderReleaseGoalsScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.purple_700)
+        }
+
         initializeProgressDialog()
 
-//        toast(this, postJobId)
         val factory = ViewModelFactory(ProviderBookingRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
         viewModel.getInstallmentsList(this, postJobId.toInt()).observe(this) {
@@ -61,8 +69,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                             response.goals_installments_details[0].created_dts.split(" ")[0]
                         binding.time.text =
                             response.goals_installments_details[0].created_dts.split(" ")[0]
-                        binding.recyclerView.adapter =
-                            ProviderReleaseGoalsAdapter(response.goals_installments_details, this)
+                        binding.recyclerView.adapter = ProviderReleaseGoalsAdapter(response.goals_installments_details, this)
                         var total = 0.0
                         for (amount in response.goals_installments_details) {
                             total += amount.amount.toDouble()
@@ -129,7 +136,7 @@ class ProviderReleaseGoalsScreen : AppCompatActivity(), ProviderReleaseGoalsInte
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    startActivity(intent)
+//                    startActivity(intent)
                     snackBar(binding.recyclerView, it.data!!.message)
                 }
                 is NetworkResponse.Failure -> {

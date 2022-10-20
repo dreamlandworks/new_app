@@ -49,6 +49,7 @@ class ProviderHomeScreen : Fragment() {
 
     private lateinit var viewModel: ProviderMyTrainingViewModel
     private lateinit var progressDialog: BeautifulProgressDialog
+    private var apis = 0
 
     companion object {
         lateinit var binding: FragmentProviderHomeScreenBinding
@@ -73,19 +74,31 @@ class ProviderHomeScreen : Fragment() {
         viewModel.getCitiesList("0").observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.rootLayout.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val cities = it.data!!.data
                     for (city in cities) {
                         if (UserUtils.getCity(requireContext()).lowercase(Locale.getDefault()) == city.city.trim().lowercase(Locale.getDefault())) {
                             loadProviderDashboardDetails(city.id)
                         }
                     }
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.rootLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.rootLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     snackBar(binding.bidCount, it.message!!)
                 }
             }
@@ -127,6 +140,12 @@ class ProviderHomeScreen : Fragment() {
                     binding.noNewJobs.visibility = View.VISIBLE
                     binding.rightArrowTwo.visibility = View.GONE
                 }
+                apis += 1
+                if (apis == 3) {
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.rootLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.stopShimmerAnimation()
+                }
             } else {
                 binding.noNewJobs.visibility = View.VISIBLE
                 binding.rightArrowTwo.visibility = View.GONE
@@ -143,10 +162,13 @@ class ProviderHomeScreen : Fragment() {
         viewModel.bookingListWithDetails(requireContext(), requestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.rootLayout.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val list = ArrayList<com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.models.BookingDetail>()
                     for (details in it.data!!) {
                         if (status == "Completed") {
@@ -191,9 +213,15 @@ class ProviderHomeScreen : Fragment() {
                         binding.noUpcomingBookings.visibility = View.VISIBLE
                         binding.rightArrowOne.visibility = View.GONE
                     }
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.rootLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.noUpcomingBookings.visibility = View.VISIBLE
                     binding.rightArrowOne.visibility = View.GONE
 //                    snackBar(binding.bidCount, it.message!!)
@@ -208,7 +236,10 @@ class ProviderHomeScreen : Fragment() {
         viewModel.getActionableAlerts(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.rootLayout.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     if (it.data!!.isNotEmpty()) {
@@ -218,10 +249,22 @@ class ProviderHomeScreen : Fragment() {
                             }
                         }
                     }
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.rootLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.rootLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
                 }
             }
         }
@@ -307,7 +350,7 @@ class ProviderHomeScreen : Fragment() {
 //                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val data = it.data!!
 //                    toast(requireContext(), Gson().toJson(data))
                     binding.bookingCount.text = "${data.bookings_completed}/${data.total_bookings}"
@@ -321,7 +364,7 @@ class ProviderHomeScreen : Fragment() {
                     binding.cRank.text = data.competitor_rank
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     snackBar(binding.bidCount, it.message!!)
                 }
 

@@ -25,6 +25,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MyJobPostsScreen : AppCompatActivity() {
@@ -38,7 +39,7 @@ class MyJobPostsScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeToolBar()
-        initializeProgressDialog()
+//        initializeProgressDialog()
 
         updateUI("Pending")
 
@@ -85,16 +86,16 @@ class MyJobPostsScreen : AppCompatActivity() {
         loadProfileImage(profilePic)
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            this,
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
-        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
-        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
-    }
+//    @SuppressLint("UseCompatLoadingForDrawables")
+//    private fun initializeProgressDialog() {
+//        progressDialog = BeautifulProgressDialog(
+//            this,
+//            BeautifulProgressDialog.withGIF,
+//            resources.getString(R.string.loading)
+//        )
+//        progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
+//        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
+//    }
 
     private fun updateUI(status: String) {
         val factory = ViewModelFactory(PostJobRepository())
@@ -104,26 +105,31 @@ class MyJobPostsScreen : AppCompatActivity() {
         viewModel.myJobPosts(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val list = ArrayList<JobPostDetail>()
                     for (jobDetails in it.data!!.job_post_details) {
                         if (jobDetails.booking_status == status) {
                             list.add(jobDetails)
                         }
                     }
+                    toast(this, list.size.toString())
                     binding.recyclerView.adapter = MyJobPostsAdapter(list, status)
-                    if (list.isEmpty()) {
-                        binding.note.visibility = View.VISIBLE
-                    } else {
-                        binding.note.visibility = View.GONE
-                    }
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     binding.note.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }

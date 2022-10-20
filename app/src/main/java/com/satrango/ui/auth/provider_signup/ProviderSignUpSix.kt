@@ -46,6 +46,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var surfaceHolder: SurfaceHolder
     private lateinit var progressDialog: BeautifulProgressDialog
     private var timerApp: CountDownTimer? = null
+    private var selectedCamera = Camera.CameraInfo.CAMERA_FACING_FRONT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,10 +62,6 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
         initializeProgressDialog()
         val factory = ViewModelFactory(ProviderSignUpFiveRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFiveViewModel::class.java]
-
-        surfaceHolder = binding.surfaceView.holder
-        surfaceHolder.addCallback(this)
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
 
         binding.apply {
 
@@ -87,6 +84,22 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
 
             restartBtn.setOnClickListener {
                 startRecording()
+            }
+
+            switchBtn.setOnClickListener {
+                mServiceCamera.release()
+                selectedCamera = if (selectedCamera == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    Camera.CameraInfo.CAMERA_FACING_FRONT
+                } else {
+                    Camera.CameraInfo.CAMERA_FACING_BACK
+                }
+                mServiceCamera = Camera.open(selectedCamera)
+                try {
+                    mServiceCamera.setPreviewDisplay(surfaceHolder)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                mServiceCamera.startPreview()
             }
 
             nextBtn.setOnClickListener {
@@ -151,6 +164,11 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
     }
 
     private fun startRecording(): Boolean {
+
+        surfaceHolder = binding.surfaceView.holder
+        surfaceHolder.addCallback(this)
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+
         return try {
             binding.videoPreviewBtn.visibility = View.GONE
             binding.recordImage.visibility = View.VISIBLE
@@ -159,7 +177,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
 
             timer()
 
-            mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT)
+            mServiceCamera = Camera.open(selectedCamera)
             mServiceCamera.setDisplayOrientation(90)
             val params: Camera.Parameters = mServiceCamera.parameters
             mServiceCamera.parameters = params

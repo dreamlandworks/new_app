@@ -15,20 +15,20 @@ object RetrofitBuilder {
     const val BASE_URL = "https://www.satrango.com"
 //    const val BASE_URL = "http://satrango.com/"
 //    const val FCM_URL = "https://fcm.googleapis.com/"
-    const val PAYTM_URL = "https://securegw-stage.paytm.in/theia/api/v1/"
+//    const val PAYTM_URL = "https://securegw-stage.paytm.in/theia/api/v1/"
     const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
     const val PROVIDER_KEY = "Dld0F54x99UeL8nZkByWC0BwUEi4aF4O"
 
     fun getUserRetrofitInstance(): UserApiService {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
 
         val client = OkHttpClient.Builder()
-            .writeTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
-            .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
-//            .addInterceptor(loggingInterceptor)
+            .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
             .build()
 
         val gson = GsonBuilder()
@@ -43,14 +43,14 @@ object RetrofitBuilder {
     }
 
     fun getServiceProviderRetrofitInstance(): ProviderApiService {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val client = OkHttpClient.Builder()
             .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
-//            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
 
         val gson = GsonBuilder()

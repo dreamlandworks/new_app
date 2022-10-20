@@ -30,6 +30,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.setFinalWalletBalance
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import org.json.JSONObject
@@ -182,13 +183,21 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     UserUtils.saveInstallmentDetId(this, it.data!!.installment_det_id.toString())
-                    PaymentScreen.amount = bidPrice
-                    PaymentScreen.finalWalletBalance = it.data.wallet_balance.toDouble().toInt().toString()
-                    PaymentScreen.FROM_USER_SET_GOALS = true
-                    PaymentScreen.FROM_USER_PLANS = false
-                    PaymentScreen.FROM_PROVIDER_PLANS = false
-                    PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-                    PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+//                    PaymentScreen.amount = bidPrice
+                    UserUtils.setPayableAmount(this, bidPrice)
+                    setFinalWalletBalance(this, it.data.wallet_balance.toDouble().toInt().toString())
+//                    PaymentScreen.finalWalletBalance = it.data.wallet_balance.toDouble().toInt().toString()
+                    UserUtils.isFromUserPlans(this, false)
+                    UserUtils.isFromProviderPlans(this, false)
+                    UserUtils.isFromUserSetGoals(this, true)
+                    UserUtils.isFromCompleteBooking(this, false)
+                    UserUtils.isFromUserBookingAddress(this, false)
+                    UserUtils.isFromProviderBookingResponse(this, false)
+//                    PaymentScreen.FROM_USER_SET_GOALS = true
+//                    PaymentScreen.FROM_USER_PLANS = false
+//                    PaymentScreen.FROM_PROVIDER_PLANS = false
+//                    PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//                    PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
                     startActivity(Intent(this, PaymentScreen::class.java))
 
 //                    makePayment()

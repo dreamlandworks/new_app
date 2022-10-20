@@ -12,17 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.satrango.R
 import com.satrango.databinding.FragmentUserChatScreenBinding
-import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
 import com.satrango.ui.user.user_dashboard.chats.models.ChatsModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.loadProfileImage
-import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
-import java.lang.Exception
 
 
 class UserChatScreen : Fragment() {
@@ -95,14 +91,25 @@ class UserChatScreen : Fragment() {
     }
 
     private fun loadChats() {
-        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
-        val options: FirebaseRecyclerOptions<ChatsModel> = FirebaseRecyclerOptions.Builder<ChatsModel>()
-                .setQuery(databaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(requireContext())).child(getString(R.string.chat)), ChatsModel::class.java)
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmerAnimation()
+        databaseReference = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        val options: FirebaseRecyclerOptions<ChatsModel> =
+            FirebaseRecyclerOptions.Builder<ChatsModel>()
+                .setQuery(
+                    databaseReference.child(getString(R.string.users))
+                        .child(UserUtils.getUserId(requireContext()))
+                        .child(getString(R.string.chat)),
+                    ChatsModel::class.java
+                )
                 .build()
         adapter = ChatAdapter(options)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.itemAnimator = null
         binding.recyclerView.adapter = adapter
+        binding.shimmerLayout.visibility = View.GONE
+        binding.shimmerLayout.stopShimmerAnimation()
     }
 
 }

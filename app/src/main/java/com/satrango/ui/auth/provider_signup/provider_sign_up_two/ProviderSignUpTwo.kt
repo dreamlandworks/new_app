@@ -136,7 +136,6 @@ class ProviderSignUpTwo : AppCompatActivity() {
                         ProviderUtils.profession!![0].keywords_responses = ProviderUtils.profession!![0].keywords_responses.distinctBy { keywordsResponse: KeywordsResponse -> keywordsResponse.name } as ArrayList<KeywordsResponse>
                     }
                 }
-
             }
         }
 

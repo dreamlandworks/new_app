@@ -226,6 +226,16 @@
                     android:src="@drawable/ic_play_svg"
                     tools:ignore="ContentDescription" />
 
+                <ImageView
+                    android:id="@+id/switchBtn"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="@dimen/_15sdp"
+                    android:src="@drawable/ic_baseline_cameraswitch_24"
+                    tools:ignore="ContentDescription" />
+
                 <TextView
                     android:id="@+id/videoPreviewBtn"
                     android:layout_width="wrap_content"

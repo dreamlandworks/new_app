@@ -2,10 +2,7 @@ package com.satrango.ui.user.user_dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -14,10 +11,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -34,6 +31,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.tasks.Task
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
@@ -41,7 +44,6 @@ import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserDashboardScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.auth.login_screen.LoginRepository
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.login_screen.LoginViewModel
@@ -69,6 +71,10 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.*
 import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.UserUtils.setFirstName
+import com.satrango.utils.UserUtils.setLastName
+import com.satrango.utils.UserUtils.setMail
+import com.truecaller.android.sdk.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +82,8 @@ import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.util.*
 
-class   UserDashboardScreen : AppCompatActivity() {
+
+class UserDashboardScreen : AppCompatActivity() {
 
     private lateinit var progressDialog: BeautifulProgressDialog
     private lateinit var referralId: TextView
@@ -107,7 +114,13 @@ class   UserDashboardScreen : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, R.string.app_name)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolBar,
+            R.string.app_name,
+            R.string.app_name
+        )
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -167,7 +180,8 @@ class   UserDashboardScreen : AppCompatActivity() {
 
         if (UserUtils.getCity(this).isNotEmpty()) {
             binding.userLocation.text = UserUtils.getCity(this)
-            SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+            SearchServiceProvidersScreen.userLocationText =
+                binding.userLocation.text.toString().trim()
         } else {
             fetchLocation(this, binding.userLocation)
         }
@@ -210,6 +224,41 @@ class   UserDashboardScreen : AppCompatActivity() {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+
+        updateApp()
+    }
+
+    fun updateApp() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask: Task<AppUpdateInfo> = appUpdateManager.appUpdateInfo
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { result ->
+            if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+//                requestUpdate(result);
+//                val ctw: ContextThemeWrapper =
+//                    ContextThemeWrapper(this, com.satrango.R.style.Theme_AlertDialog)
+                val alertDialogBuilder =
+                    android.app.AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Update App")
+                alertDialogBuilder.setCancelable(false)
+                alertDialogBuilder.setIcon(R.drawable.logo)
+                alertDialogBuilder.setMessage("Update app to experience new features in ${getString(R.string.app_name)}.")
+                alertDialogBuilder.setPositiveButton(
+                    "Update"
+                ) { _, _ ->
+                    try {
+                        startActivity(Intent("android.intent.action.VIEW", Uri.parse("market://details?id=$packageName")))
+                    } catch (e: ActivityNotFoundException) {
+                        startActivity(
+                            Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                    }
+                }
+                alertDialogBuilder.setNegativeButton(
+                    "No Thanks"
+                ) { _, _ -> }
+                alertDialogBuilder.show()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -235,7 +284,8 @@ class   UserDashboardScreen : AppCompatActivity() {
             dialogInterface.dismiss()
             val factory = ViewModelFactory(LoginRepository())
             val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
-            val requestBody = LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
+            val requestBody =
+                LogoutReqModel(UserUtils.getUserId(this).toInt(), RetrofitBuilder.USER_KEY)
             viewModel.userLogout(this, requestBody).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -243,8 +293,12 @@ class   UserDashboardScreen : AppCompatActivity() {
                     }
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
-                        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users))
-                        databaseReference.child(UserUtils.getUserId(this)).child(getString(R.string.online_status)).setValue(getString(R.string.offline))
+                        val databaseReference = FirebaseDatabase.getInstance()
+                            .getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+                            .child(getString(R.string.users))
+                        databaseReference.child(UserUtils.getUserId(this))
+                            .child(getString(R.string.online_status))
+                            .setValue(getString(R.string.offline))
                         UserUtils.setUserLoggedInVia(this, "", "")
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, "")
                         UserUtils.deleteUserCredentials(this)
@@ -360,7 +414,6 @@ class   UserDashboardScreen : AppCompatActivity() {
             )
         }
 
-
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(
             context: Context,
@@ -386,7 +439,8 @@ class   UserDashboardScreen : AppCompatActivity() {
                 UserUtils.setPostalCode(context, postalCode)
                 UserUtils.setAddress(context, knownName)
                 userLocation.text = UserUtils.getCity(context)
-                SearchServiceProvidersScreen.userLocationText = binding.userLocation.text.toString().trim()
+                SearchServiceProvidersScreen.userLocationText =
+                    binding.userLocation.text.toString().trim()
             } catch (e: Exception) {
 //                Toast.makeText(context, "Please Check you Internet Connection!", Toast.LENGTH_LONG)
 //                    .show()
@@ -410,6 +464,9 @@ class   UserDashboardScreen : AppCompatActivity() {
                     val imageUrl = responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
+                    setFirstName(this@UserDashboardScreen, responseData.fname)
+                    setLastName(this@UserDashboardScreen, responseData.lname)
+                    setMail(this@UserDashboardScreen, responseData.email_id)
                     loadProfileImage(binding.image)
                     UserUtils.saveGoogleMapsKey(this@UserDashboardScreen, response.data.maps_key)
                     UserUtils.saveFCMServerKey(this@UserDashboardScreen, response.data.fcm_key)
@@ -472,7 +529,11 @@ class   UserDashboardScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://$packageName/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -490,7 +551,12 @@ class   UserDashboardScreen : AppCompatActivity() {
     fun openBookingDetails(bookingId: String, categoryId: String, userId: String) {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        val requestBody = BookingDetailsReqModel(bookingId.toInt(), categoryId.toInt(), RetrofitBuilder.USER_KEY, userId.split("|")[0].toInt())
+        val requestBody = BookingDetailsReqModel(
+            bookingId.toInt(),
+            categoryId.toInt(),
+            RetrofitBuilder.USER_KEY,
+            userId.split("|")[0].toInt()
+        )
 //        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
@@ -556,11 +622,25 @@ class   UserDashboardScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { extraDemandAcceptRejectDialog.dismiss() }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog, viewModel, response)
+            changeExtraDemandStatus(
+                bookingId,
+                1,
+                extraDemandAcceptRejectDialog,
+                progressDialog,
+                viewModel,
+                response
+            )
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, extraDemandAcceptRejectDialog, progressDialog, viewModel, response)
+            changeExtraDemandStatus(
+                bookingId,
+                2,
+                extraDemandAcceptRejectDialog,
+                progressDialog,
+                viewModel,
+                response
+            )
         }
 
         extraDemandAcceptRejectDialog.setCancelable(false)
@@ -576,7 +656,8 @@ class   UserDashboardScreen : AppCompatActivity() {
         viewModel: BookingViewModel,
         response: BookingDetailsResModel
     ) {
-        val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        val requestBody =
+            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
 //        Log.e("STATUS:", Gson().toJson(requestBody))
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this) {
             when (it) {

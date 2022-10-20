@@ -29,6 +29,7 @@ class UserOffersScreen :
     BaseFragment<UserAlertsViewModel, FragmentUserOffersScreenBinding, UserAlertsRepository>() {
 
     private lateinit var progressDialog: BeautifulProgressDialog
+    private var apis = 0
 
     override fun getFragmentViewModel(): Class<UserAlertsViewModel> =
         UserAlertsViewModel::class.java
@@ -44,22 +45,9 @@ class UserOffersScreen :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeToolBar()
-        initializeProgressDialog()
+//        initializeProgressDialog()
+        binding.shimmerLayout.startShimmerAnimation()
 
-//        if (PermissionUtils.checkGPSStatus(requireActivity()) && networkAvailable(requireContext())) {
-//            UserDashboardScreen.fetchLocation(requireContext())
-//        }
-
-//        val requestBody = OffersListReqModel(
-//            UserUtils.getCity(requireContext()),
-//            UserUtils.getCountry(requireContext()),
-//            RetrofitBuilder.USER_KEY,
-//            2,
-//            UserUtils.getPostalCode(requireContext()),
-//            UserUtils.getState(requireContext()),
-//            UserUtils.getUserId(requireContext()).toInt(),
-//            ""
-//        )
         isProvider(requireContext(), false)
 
         binding.latestOfferRv.layoutManager =
@@ -82,15 +70,24 @@ class UserOffersScreen :
         viewModel.getUserOffers(requireContext(), requestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.latestOfferRv.adapter = UserLatestOffersAdapter(it.data!!)
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
 //                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                     snackBar(binding.root, it.message!!)
                 }
             }
@@ -109,15 +106,24 @@ class UserOffersScreen :
         viewModel.getUserOffers(requireActivity(), expiryRequestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.expiryOfferRv.adapter = UserExpiryOffersAdapter(it.data!!)
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
 //                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                     snackBar(binding.root, it.message!!)
                 }
             }
@@ -136,15 +142,24 @@ class UserOffersScreen :
         viewModel.getUserOffers(requireContext(), referralRequestBody).observe(requireActivity()) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     binding.referralOfferRv.adapter = UserReferralOffersAdapter(it.data!!)
+                    apis += 1
+                    if (apis == 3) {
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.shimmerLayout.stopShimmerAnimation()
+                    }
 //                    toast(requireContext(), it.data.size.toString())
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                     snackBar(binding.root, it.message!!)
                 }
             }

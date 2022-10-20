@@ -360,12 +360,19 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         }
         Handler().postDelayed({
 //            makePayment()
-            PaymentScreen.FROM_USER_BOOKING_ADDRESS = true
-            PaymentScreen.FROM_USER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-            PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = finalAmount
+            UserUtils.isFromUserPlans(this, false)
+            UserUtils.isFromProviderPlans(this, false)
+            UserUtils.isFromUserSetGoals(this, false)
+            UserUtils.isFromCompleteBooking(this, false)
+            UserUtils.isFromUserBookingAddress(this, true)
+            UserUtils.isFromProviderBookingResponse(this, false)
+            UserUtils.setPayableAmount(this, finalAmount)
+//            PaymentScreen.FROM_USER_BOOKING_ADDRESS = true
+//            PaymentScreen.FROM_USER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//            PaymentScreen.FROM_USER_SET_GOALS = false
+//            PaymentScreen.amount = finalAmount
             PaymentScreen.userId = finalUserId.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)

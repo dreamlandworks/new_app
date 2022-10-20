@@ -83,5 +83,6 @@ object UserApiEndPoints {
     final const val ADD_FUNDS = "user/add_funds"
     final const val GET_TXN = "user/get_txn"
     final const val SEND_FCM_TO_ALL = "user/send_multi_fcm"
+    final const val SEARCH_SP = "user/search_sp"
 
 }

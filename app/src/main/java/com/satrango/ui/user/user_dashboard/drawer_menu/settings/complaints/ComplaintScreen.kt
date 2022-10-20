@@ -102,7 +102,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             } else {
                 var selectedCount = 0
                 moduleNames.forEachIndexed { index, browserCategoryModel ->
-                    if (browserCategoryModel.selected) {
+                    if (browserCategoryModel.selected!!) {
                         selectedCount += 1
                     }
                 }
@@ -151,7 +151,7 @@ class ComplaintScreen : AppCompatActivity(), BrowseCategoriesInterface {
             "1"
         }
         moduleNames.forEach { browserCategoryModel ->
-            if (browserCategoryModel.selected) {
+            if (browserCategoryModel.selected!!) {
                 moduleId = browserCategoryModel.id.toInt()
             }
         }

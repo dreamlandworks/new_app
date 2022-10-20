@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.freshchat.consumer.sdk.beans.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -36,14 +37,26 @@ class UserReferAndEarn : AppCompatActivity() {
         binding = ActivityUserReferAndEarnBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        intializeToolBar()
-        val referralLink = "http://satrango.com/referral?id=${UserUtils.getPhoneNo(this)}"
+        initializeToolBar()
+        createReferLink()
 
-        binding.backBtn.setOnClickListener { onBackPressed() }
-        binding.apply { applyBtn.setOnClickListener { createReferLink() } }
-        binding.copyLink.setOnClickListener { setClipboard(this, referralLink) }
-        binding.referralLink.setText(referralLink)
+        binding.apply {
+            applyBtn.setOnClickListener { shareReferLink() }
+            backBtn.setOnClickListener { onBackPressed() }
+            share.setOnClickListener { shareReferLink() }
+            copyLink.setOnClickListener {
+                setClipboard(this@UserReferAndEarn, UserUtils.getReferralLink(this@UserReferAndEarn))
+            }
+        }
 
+    }
+
+    private fun shareReferLink() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, UserUtils.getReferralLink(this@UserReferAndEarn))
+        intent.type = "text/plain"
+        startActivity(intent)
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -60,7 +73,7 @@ class UserReferAndEarn : AppCompatActivity() {
         toast(context,"Copied")
     }
 
-    private fun intializeToolBar() {
+    private fun initializeToolBar() {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         val backTextBtn = toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn)
         backTextBtn.text = resources.getString(R.string.back)
@@ -74,7 +87,7 @@ class UserReferAndEarn : AppCompatActivity() {
     private fun createReferLink() {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("http://dev.satrango.com/userid=${UserUtils.getUserId(this@UserReferAndEarn)}")
-            domainUriPrefix = "https://satrango.page.link"
+            domainUriPrefix = "https://squill.page.link"
             androidParameters {
                 this.build()
             }
@@ -90,14 +103,11 @@ class UserReferAndEarn : AppCompatActivity() {
                 ) { task ->
                     if (task.isSuccessful) {
                         val shortLink: Uri? = task.result?.shortLink
+                        UserUtils.saveReferralLink(this, shortLink.toString())
+                        binding.referralLink.setText(UserUtils.getReferralLink(this@UserReferAndEarn))
                         val flowchartLink: Uri? = task.result?.previewLink
-                        val intent = Intent()
-                        intent.action = Intent.ACTION_SEND
-                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        intent.type = "text/plain"
-                        startActivity(intent)
                     } else {
-                        Toast.makeText(this@UserReferAndEarn, "Error", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UserReferAndEarn, "Error: ${task.exception}", Toast.LENGTH_SHORT).show()
                     }
                 }
     }

@@ -167,7 +167,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images).into(profilePic)
         if (isProvider(this)) {
             toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
             binding.card.setCardBackgroundColor(resources.getColor(R.color.purple_500))
@@ -184,7 +184,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).error(R.drawable.images).into(binding.profilePic)
 //        toast(this, "Updated UI ONE")
     }
 
@@ -193,7 +193,7 @@ class BookingDateAndTimeScreen : AppCompatActivity(), MonthsInterface {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = resources.getString(R.string.user)
         binding.costPerHour.text = "Rs. ${round(data.amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).error(R.drawable.images).into(binding.profilePic)
         binding.rating.setBackgroundResource(R.drawable.purple_circle_color)
         binding.reviews.setBackgroundResource(R.drawable.purple_circle_color)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

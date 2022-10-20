@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserInstallmentsRequestScreenBinding
@@ -87,6 +89,7 @@ class UserInstallmentsRequestScreen : AppCompatActivity(), UserInstallmentsReque
             34,
             UserUtils.getUserId(this).toInt()
         )
+        Log.e("BODY:", Gson().toJson(requestBody))
         viewModel.postApproveReject(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {

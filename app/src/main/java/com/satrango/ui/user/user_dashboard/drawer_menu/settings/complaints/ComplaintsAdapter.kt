@@ -34,7 +34,7 @@ class ComplaintsAdapter(private val list: List<BrowserCategoryModel>, private va
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.title.text = list[position].category
 
-        if (list[position].selected) {
+        if (list[position].selected!!) {
             if (isProvider(holder.binding.rootLayout.context)) {
                 holder.binding.title.setBackgroundResource(R.drawable.provider_btn_bg)
                 holder.binding.title.setTextColor(holder.binding.title.context.getColor(R.color.white))

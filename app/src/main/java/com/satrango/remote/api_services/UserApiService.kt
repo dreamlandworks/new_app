@@ -510,4 +510,8 @@ interface UserApiService {
         @Body requestBody: GetTxnReqModel
     ): GetTxnResModel
 
+    suspend fun getSpDetails(
+        @Body requestBody: GetQRCodeSPReqModel
+    ): SearchServiceProviderResModel
+
 }

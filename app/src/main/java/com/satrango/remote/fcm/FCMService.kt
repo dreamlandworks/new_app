@@ -14,6 +14,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
@@ -141,6 +142,9 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         remoteMessage.notification?.let {
+            if (Freshchat.isFreshchatNotification(remoteMessage)) {
+                Freshchat.handleFcmMessage(this, remoteMessage);
+            }
             if (it.title!! == "user") {
                 val notificationIntent = Intent(getString(R.string.INTENT_FILTER))
                 notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])

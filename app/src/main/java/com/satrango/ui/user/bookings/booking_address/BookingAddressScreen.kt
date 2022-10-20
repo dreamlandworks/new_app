@@ -27,6 +27,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
+import com.freshchat.consumer.sdk.beans.User
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -229,7 +230,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 UserUtils.time_slot_from =
                     (calender.get(Calendar.HOUR_OF_DAY) + 1).toString() + ":00:00"
 
-                when (UserUtils.getBookingId(this)) {
+                when (UserUtils.getSelectedKeywordCategoryId(this)) {
                     "1" -> {
                         bookSingleMoveServiceProvider()
                     }
@@ -287,7 +288,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
             resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images).into(profilePic)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -758,7 +759,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).error(R.drawable.images).into(binding.profilePic)
         if (UserUtils.getSelectedKeywordCategoryId(this) == "3") {
             binding.btnsLayout.visibility = View.VISIBLE
         } else {
@@ -802,12 +803,19 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         }
         Handler().postDelayed({
 //            makePayment()
-            PaymentScreen.FROM_USER_BOOKING_ADDRESS = true
-            PaymentScreen.FROM_USER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-            PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = data.final_amount
+            UserUtils.isFromUserPlans(this, false)
+            UserUtils.isFromProviderPlans(this, false)
+            UserUtils.isFromUserSetGoals(this, false)
+            UserUtils.isFromCompleteBooking(this, false)
+            UserUtils.isFromUserBookingAddress(this, true)
+            UserUtils.isFromProviderBookingResponse(this, false)
+            UserUtils.setPayableAmount(this, data.final_amount)
+//            PaymentScreen.FROM_USER_BOOKING_ADDRESS = true
+//            PaymentScreen.FROM_USER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//            PaymentScreen.FROM_USER_SET_GOALS = false
+//            PaymentScreen.amount = data.final_amount
             PaymentScreen.userId = data.users_id.toInt()
             startActivity(Intent(this, PaymentScreen::class.java))
         }, 3000)

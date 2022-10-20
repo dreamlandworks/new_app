@@ -12,752 +12,769 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_90sdp">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.card.MaterialCardView
+            <include layout="@layout/shimmer_provider_home_layout" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/rootLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:layout_centerVertical="true"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_5sdp"
-                app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="@dimen/_5sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/green_corner_border_10dp"
-                    android:orientation="horizontal" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:elevation="@dimen/_10sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/_90sdp">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
                     android:layout_marginVertical="@dimen/_5sdp"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    app:cardBackgroundColor="@color/purple_500"
-                    app:cardCornerRadius="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_5sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:background="@drawable/white_border"
-                        android:orientation="vertical">
+                        android:background="@drawable/green_corner_border_10dp"
+                        android:orientation="horizontal" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="@dimen/_70sdp"
+                        android:layout_marginVertical="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        app:cardBackgroundColor="@color/purple_500"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        app:cardElevation="@dimen/_5sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/white_border"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="@string/bookings"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/bookingCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:text="10/21"
+                                android:textColor="@color/yellow"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/bookings"
-                            android:textColor="@color/white"
+                            android:text="@string/bids"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/bookingCount"
+                            android:id="@+id/bidCount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:gravity="center_horizontal"
                             android:text="10/21"
-                            android:textColor="@color/yellow"
+                            android:textColor="@color/red"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="@dimen/_70sdp"
+                        android:layout_marginVertical="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/purple_500"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        app:cardElevation="@dimen/_5sdp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/white_border"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/bids"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="@string/earnings"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/bidCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_horizontal"
-                        android:text="10/21"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/earningText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:text="139.00"
+                                android:textColor="@color/yellow"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="bold" />
 
-                </LinearLayout>
+                        </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/purple_500"
-                    app:cardCornerRadius="@dimen/_5sdp"
-                    app:cardElevation="@dimen/_5sdp">
+                    </com.google.android.material.card.MaterialCardView>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:background="@drawable/white_border"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/earnings"
-                            android:textColor="@color/white"
+                            android:text="@string/commission"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/earningText"
+                            android:id="@+id/commissionCount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:gravity="center_horizontal"
                             android:text="139.00"
-                            android:textColor="@color/yellow"
+                            android:textColor="@color/red"
                             android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/commission"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/commissionCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_horizontal"
-                        android:text="139.00"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
                 </LinearLayout>
+            </RelativeLayout>
 
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_90sdp">
-
-            <com.google.android.material.card.MaterialCardView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_70sdp"
-                android:layout_centerVertical="true"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_5sdp"
-                app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="@dimen/_5sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/green_corner_border_10dp"
-                    android:orientation="horizontal" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:elevation="@dimen/_10sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/my_rank"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/myRank"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_horizontal"
-                        android:text="26"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/rating"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/ratingCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_horizontal"
-                        android:text="4.5"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_10sdp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/points"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/pointsCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_horizontal"
-                        android:text="730/800"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
+                android:layout_height="@dimen/_90sdp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_90sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
                     android:layout_marginVertical="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    app:cardBackgroundColor="@color/purple_500"
-                    app:cardCornerRadius="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="@dimen/_5sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:background="@drawable/white_border"
-                        android:orientation="vertical">
+                        android:background="@drawable/green_corner_border_10dp"
+                        android:orientation="horizontal" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp">
 
                         <TextView
-                            android:id="@+id/leaderBoard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/view_leader_board"
-                            android:textColor="@color/yellow"
-                            android:singleLine="true"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/next_competitor"
-                            android:textColor="@color/white"
-                            android:singleLine="true"
-                            android:textSize="@dimen/sub_text"
+                            android:text="@string/my_rank"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/myRank"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:gravity="center_horizontal"
+                            android:text="26"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="@string/rating"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/ratingCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:gravity="center_horizontal"
+                            android:text="4.5"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="@string/points"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pointsCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:gravity="center_horizontal"
+                            android:text="730/800"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_marginVertical="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:cardBackgroundColor="@color/purple_500"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        app:cardElevation="@dimen/_5sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
+                            android:background="@drawable/white_border"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="@dimen/_35sdp"
-                                android:layout_height="@dimen/_35sdp"
-                                app:civ_border_color="@color/yellow"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:src="@drawable/images"/>
+                            <TextView
+                                android:id="@+id/leaderBoard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:singleLine="true"
+                                android:text="@string/view_leader_board"
+                                android:textColor="@color/yellow"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:singleLine="true"
+                                android:text="@string/next_competitor"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sub_text"
+                                android:textStyle="bold" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:gravity="center_vertical">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/cRank"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:gravity="center_horizontal"
-                                    android:text="# 25th"
-                                    android:singleLine="true"
-                                    android:textColor="@color/yellow"
-                                    android:textSize="@dimen/_11sdp"
-                                    android:textStyle="bold" />
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:src="@drawable/images"
+                                    app:civ_border_color="@color/yellow" />
 
-                                <TextView
-                                    android:id="@+id/cName"
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:gravity="center_horizontal"
-                                    android:singleLine="true"
-                                    android:text="Juliana Jr."
-                                    android:textColor="@color/yellow"
-                                    android:textSize="@dimen/_11sdp"
-                                    android:textStyle="bold" />
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/cRank"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:gravity="center_horizontal"
+                                        android:singleLine="true"
+                                        android:text="# 25th"
+                                        android:textColor="@color/yellow"
+                                        android:textSize="@dimen/_11sdp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/cName"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:gravity="center_horizontal"
+                                        android:singleLine="true"
+                                        android:text="Juliana Jr."
+                                        android:textColor="@color/yellow"
+                                        android:textSize="@dimen/_11sdp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/upcomingLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/upcoming_bookings"
-                android:textSize="@dimen/text"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/view_more"
-                android:layout_alignParentEnd="true"
-                android:textSize="@dimen/text"
-                android:textColor="@color/red"
-                tools:ignore="RelativeOverlap" />
-
-        </RelativeLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/upcomingCard"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:cardCornerRadius="@dimen/_5sdp"
-            app:cardElevation="@dimen/_5sdp"
-            android:layout_margin="@dimen/_10sdp">
-
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/upcomingLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_10sdp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="1">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp">
 
                 <TextView
-                    android:id="@+id/noUpcomingBookings"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:text="@string/upcoming_bookings_are_not_available"
-                    android:gravity="center"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upcoming_bookings"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/view_more"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/upcomingCard"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardElevation="@dimen/_5sdp">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/scheduled_in"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:id="@+id/scheduleIn"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:singleLine="true"
-                            android:layout_height="wrap_content"
-                            android:text="@string/scheduled_in"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/sub_text" />
-
-                        <ImageView
-                            android:id="@+id/callBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_phoneno_purple"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            tools:ignore="ContentDescription" />
-
-                        <ImageView
-                            android:id="@+id/chatBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_chat_purple"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:id="@+id/costPerHour"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/_0"
-                            android:textColor="@color/red"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/text" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:id="@+id/location"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location"
-                            android:singleLine="true"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/sub_text"
-                            android:gravity="center_vertical"
-                            app:drawableStartCompat="@drawable/ic_location_icon" />
-
-                    </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp"
+                    android:weightSum="1">
 
                     <TextView
-                        android:id="@+id/description"
+                        android:id="@+id/noUpcomingBookings"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis"
-                        android:lines="2"
-                        android:textSize="@dimen/sub_text" />
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/upcoming_bookings_are_not_available"
+                        android:visibility="gone" />
 
                     <LinearLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:gravity="end">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/scheduled_in"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/scheduleIn"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/scheduled_in"
+                                android:textSize="@dimen/sub_text" />
+
+                            <ImageView
+                                android:id="@+id/callBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:src="@drawable/ic_phoneno_purple"
+                                tools:ignore="ContentDescription" />
+
+                            <ImageView
+                                android:id="@+id/chatBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_chat_purple"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/costPerHour"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:text="@string/_0"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/text" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/location"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="@string/location"
+                                android:textSize="@dimen/sub_text"
+                                app:drawableStartCompat="@drawable/ic_location_icon" />
+
+                        </LinearLayout>
 
                         <TextView
-                            android:id="@+id/reScheduleBtn"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/re_schedule"
-                            android:paddingHorizontal="@dimen/_10sdp"
-                            android:paddingVertical="@dimen/_3sdp"
-                            style="@style/purple_outline_button_style"
-                            android:background="@drawable/purple_out_line"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:lines="2"
+                            android:text="@string/service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis"
                             android:textSize="@dimen/sub_text" />
 
-                        <TextView
-                            android:id="@+id/startBtn"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/start"
-                            android:paddingHorizontal="@dimen/_15sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:paddingVertical="@dimen/_3sdp"
-                            android:textColor="@color/white"
-                            style="@style/purple_outline_button_style"
-                            android:background="@drawable/provider_btn_bg"
-                            android:textSize="@dimen/sub_text" />
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/reScheduleBtn"
+                                style="@style/purple_outline_button_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/purple_out_line"
+                                android:paddingHorizontal="@dimen/_10sdp"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="@string/re_schedule"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/startBtn"
+                                style="@style/purple_outline_button_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:background="@drawable/provider_btn_bg"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="@string/start"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sub_text" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/rightArrowOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/arrow_forward_icon"
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/rightArrowOne"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/arrow_forward_icon"
-                    tools:ignore="ContentDescription" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <RelativeLayout
-            android:id="@+id/newJobsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_jobs"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/view_more"
-                android:layout_alignParentEnd="true"
-                android:textSize="@dimen/text"
-                android:textColor="@color/red"
-                tools:ignore="RelativeOverlap" />
-
-        </RelativeLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/newJobsCard"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:cardCornerRadius="@dimen/_5sdp"
-            app:cardElevation="@dimen/_5sdp"
-            android:layout_margin="@dimen/_10sdp">
-
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/newJobsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_10sdp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="1">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp">
 
                 <TextView
-                    android:id="@+id/noNewJobs"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:text="@string/new_jobs_are_not_available"
-                    android:gravity="center"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_jobs"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/view_more"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/newJobsCard"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardElevation="@dimen/_5sdp">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/expires_in"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:id="@+id/newJobExpiresIn"
-                            android:layout_width="0dp"
-                            android:singleLine="true"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="@string/expires_in"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/sub_text" />
-
-                        <ImageView
-                            android:id="@+id/newJobCallBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_phoneno_purple"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            tools:ignore="ContentDescription" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_chat_purple"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:id="@+id/newJobCostPerHour"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/_0"
-                            android:textColor="@color/red"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/text" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sub_text" />
-
-                        <TextView
-                            android:id="@+id/newJobLocation"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/location"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:textSize="@dimen/sub_text"
-                            android:gravity="center_vertical"
-                            app:drawableStartCompat="@drawable/ic_location_icon" />
-
-                    </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp"
+                    android:weightSum="1">
 
                     <TextView
-                        android:id="@+id/newJobDescription"
+                        android:id="@+id/noNewJobs"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis"
-                        android:lines="2"
-                        android:textSize="@dimen/sub_text" />
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/new_jobs_are_not_available"
+                        android:visibility="gone" />
 
                     <LinearLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:gravity="end">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/expires_in"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/newJobExpiresIn"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/expires_in"
+                                android:textSize="@dimen/sub_text" />
+
+                            <ImageView
+                                android:id="@+id/newJobCallBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:src="@drawable/ic_phoneno_purple"
+                                tools:ignore="ContentDescription" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_chat_purple"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/newJobCostPerHour"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:text="@string/_0"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/text" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/newJobLocation"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="@string/location"
+                                android:textSize="@dimen/sub_text"
+                                app:drawableStartCompat="@drawable/ic_location_icon" />
+
+                        </LinearLayout>
 
                         <TextView
-                            android:id="@+id/newJobIgnoreBtn"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/newJobDescription"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/ignore"
-                            android:paddingHorizontal="@dimen/_10sdp"
-                            android:paddingVertical="@dimen/_3sdp"
-                            style="@style/purple_outline_button_style"
-                            android:background="@drawable/purple_out_line"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:lines="2"
+                            android:text="@string/service_provider_has_placed_the_following_extra_demand_for_successful_completion_of_your_work_after_his_analysis"
                             android:textSize="@dimen/sub_text" />
 
-                        <TextView
-                            android:id="@+id/newJobBidNowBtn"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/bid_now"
-                            android:paddingHorizontal="@dimen/_15sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:paddingVertical="@dimen/_3sdp"
-                            android:textColor="@color/white"
-                            style="@style/purple_outline_button_style"
-                            android:background="@drawable/provider_btn_bg"
-                            android:textSize="@dimen/sub_text" />
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/newJobIgnoreBtn"
+                                style="@style/purple_outline_button_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/purple_out_line"
+                                android:paddingHorizontal="@dimen/_10sdp"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="@string/ignore"
+                                android:textSize="@dimen/sub_text" />
+
+                            <TextView
+                                android:id="@+id/newJobBidNowBtn"
+                                style="@style/purple_outline_button_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:background="@drawable/provider_btn_bg"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_3sdp"
+                                android:text="@string/bid_now"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sub_text" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/rightArrowTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/arrow_forward_icon"
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/rightArrowTwo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/arrow_forward_icon"
-                    tools:ignore="ContentDescription" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
     </LinearLayout>
 

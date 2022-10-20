@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
+import com.freshchat.consumer.sdk.beans.User
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.satrango.R
@@ -22,6 +23,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderPaymentListener
 import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
 import de.hdodenhof.circleimageview.CircleImageView
@@ -118,14 +120,21 @@ class ProviderPlansScreen : AppCompatActivity(), ProviderPaymentListener {
         paymentData = data
         if (data.premium_tag == "Yes") {
 //            startActivity(Intent(this, UserDashboardScreen::class.java))
-            PaymentScreen.amount = paymentData!!.amount.toInt()
+            UserUtils.setPayableAmount(this, paymentData!!.amount.toInt())
+//            PaymentScreen.amount = paymentData!!.amount.toInt()
             PaymentScreen.period = paymentData!!.period.toInt()
             PaymentScreen.id = paymentData!!.id.toInt()
-            PaymentScreen.FROM_PROVIDER_PLANS = true
-            PaymentScreen.FROM_USER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
-            PaymentScreen.FROM_USER_SET_GOALS = false
+            UserUtils.isFromUserPlans(this, false)
+            UserUtils.isFromProviderPlans(this, true)
+            UserUtils.isFromUserSetGoals(this, false)
+            UserUtils.isFromCompleteBooking(this, false)
+            UserUtils.isFromUserBookingAddress(this, false)
+            UserUtils.isFromProviderBookingResponse(this, false)
+//            PaymentScreen.FROM_PROVIDER_PLANS = true
+//            PaymentScreen.FROM_USER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+//            PaymentScreen.FROM_USER_SET_GOALS = false
             startActivity(Intent(this, PaymentScreen::class.java))
 //            makePayment()
         } else {

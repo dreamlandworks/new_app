@@ -35,6 +35,10 @@ class ProviderReleaseGoalsAdapter(
         fun bind(data: GoalsInstallmentsDetail) {
             binding.text.text = "Installment ${data.inst_no}"
             binding.totalCost.text = "Rs.${data.amount}/-"
+
+            if (data.inst_status_id == "33") {
+                binding.requestBtn.text = "Requested"
+            }
         }
 
     }
@@ -42,9 +46,6 @@ class ProviderReleaseGoalsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
-        if (list[position].inst_request_status_id == "33") {
-            holder.binding.requestBtn.text = "Requested"
-        }
         holder.binding.requestBtn.setOnClickListener {
             if (holder.binding.requestBtn.text.toString().trim() == "Requested") {
                 Toast.makeText(

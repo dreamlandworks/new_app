@@ -47,16 +47,23 @@ class ProviderBookingResponseScreen : AppCompatActivity() {
             }
             UserUtils.sendFCMtoAllServiceProviders(this, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this)}")
             Handler().postDelayed({
-                PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
-                PaymentScreen.FROM_USER_PLANS = false
-                PaymentScreen.FROM_PROVIDER_PLANS = false
-                PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
-                PaymentScreen.FROM_USER_SET_GOALS = false
+                UserUtils.isFromUserPlans(this, false)
+                UserUtils.isFromProviderPlans(this, false)
+                UserUtils.isFromUserSetGoals(this, false)
+                UserUtils.isFromCompleteBooking(this, false)
+                UserUtils.isFromUserBookingAddress(this, false)
+                UserUtils.isFromProviderBookingResponse(this, true)
+//                PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = true
+//                PaymentScreen.FROM_USER_PLANS = false
+//                PaymentScreen.FROM_PROVIDER_PLANS = false
+//                PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+//                PaymentScreen.FROM_USER_SET_GOALS = false
                 val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java)
                 if (spDetails != null) {
                     for (sp in spDetails.data) {
                         if (userId == sp.users_id) {
-                            PaymentScreen.amount = sp.final_amount
+                            UserUtils.setPayableAmount(this, sp.final_amount)
+//                            PaymentScreen.amount = sp.final_amount
                             PaymentScreen.userId = sp.users_id.toInt()
                             startActivity(Intent(this, PaymentScreen::class.java))
                             finish()

@@ -84,15 +84,23 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         paymentData = data
         if (data.premium_tag == "Yes") {
 //            Checkout.preload(applicationContext)
-            PaymentScreen.FROM_USER_PLANS = true
-            PaymentScreen.FROM_PROVIDER_PLANS = false
-            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
-            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
-            PaymentScreen.FROM_USER_SET_GOALS = false
-            PaymentScreen.amount = data.amount.toInt()
+            UserUtils.isFromUserPlans(this, true)
+            UserUtils.isFromProviderPlans(this, false)
+            UserUtils.isFromUserSetGoals(this, false)
+            UserUtils.isFromCompleteBooking(this, false)
+            UserUtils.isFromUserBookingAddress(this, false)
+            UserUtils.isFromProviderBookingResponse(this, false)
+//            PaymentScreen.FROM_USER_PLANS = true
+//            PaymentScreen.FROM_PROVIDER_PLANS = false
+//            PaymentScreen.FROM_PROVIDER_BOOKING_RESPONSE = false
+//            PaymentScreen.FROM_USER_BOOKING_ADDRESS = false
+//            PaymentScreen.FROM_USER_SET_GOALS = false
+            UserUtils.setPayableAmount(this, data.amount.toInt())
+//            PaymentScreen.amount = data.amount.toInt()
             PaymentScreen.period = data.period.toInt()
             PaymentScreen.id = data.id.toInt()
-            PaymentScreen.finalWalletBalance = walletBalance.toDouble().toInt().toString()
+            UserUtils.setFinalWalletBalance(this, walletBalance.toDouble().toInt().toString())
+//            PaymentScreen.finalWalletBalance = walletBalance.toDouble().toInt().toString()
             startActivity(Intent(this, PaymentScreen::class.java))
 //            makePayment()
         } else {

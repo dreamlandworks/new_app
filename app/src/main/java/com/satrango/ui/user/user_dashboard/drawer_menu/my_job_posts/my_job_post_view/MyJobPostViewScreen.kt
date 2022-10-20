@@ -7,9 +7,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -161,6 +164,11 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
         binding.avgAmount.text = data.job_post_details.average_bids_amount
 
         if (isProvider(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window: Window = window
+                window.statusBarColor = resources.getColor(R.color.purple_700)
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
             binding.viewBidsBtn.setOnClickListener {
                 ViewBidsScreen.bookingId = bookingId
                 ViewBidsScreen.postJobId = data.job_post_details.post_job_id.toInt()
@@ -246,17 +254,23 @@ class MyJobPostViewScreen : AppCompatActivity(), AttachmentsListener {
                 is NetworkResponse.Loading -> {
                     binding.dataLayout.visibility = View.GONE
                     binding.noteLayout.visibility = View.GONE
-                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
+//                    progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     binding.dataLayout.visibility = View.VISIBLE
                     updateUI(it.data!!)
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
                     disconnected()
                     binding.note.text = it.message!!
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
 
             }

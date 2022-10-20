@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.satrango.databinding.UpiRowBinding
 import com.satrango.ui.user.bookings.payment_screen.models.Data
+import com.satrango.utils.UserUtils.getFinalWalletBalance
 
 class UpiAdapter(private val list: List<Data>, private val upiInterface: UpiInterface): RecyclerView.Adapter<UpiAdapter.ViewHolder>() {
 
@@ -18,7 +19,7 @@ class UpiAdapter(private val list: List<Data>, private val upiInterface: UpiInte
             if (data.isChecked) {
                 binding.amount.visibility = View.VISIBLE
                 if (PaymentScreen.walletBalanceChecked) {
-                    val remainingBalance = PaymentScreen.finalAmount - PaymentScreen.finalWalletBalance.toInt()
+                    val remainingBalance = PaymentScreen.finalAmount - getFinalWalletBalance(binding.amount.context).toInt()
                     if (remainingBalance > 0) {
                         binding.amount.text = "Rs. $remainingBalance"
                     }

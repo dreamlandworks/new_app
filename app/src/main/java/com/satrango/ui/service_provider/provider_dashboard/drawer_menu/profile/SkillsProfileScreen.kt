@@ -2,20 +2,15 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
 import android.R
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.text.InputType
-import android.text.method.KeyListener
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
+import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
 import com.hootsuite.nachos.chip.ChipInfo
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.hootsuite.nachos.validator.ChipifyingNachoValidator
@@ -36,7 +31,6 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.m
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.models.update_skills.UpdateSkillsReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -133,7 +127,10 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                     else -> {
                         val keywordsOneList = ArrayList<KeywordsResponse>()
-                        for (chip in binding.skillsKeywordsOne.allChips) {
+//                        toast(requireContext(), chipGroupOne.size.toString())
+                        val chipIds = binding.chipGroupOne.children
+                        for (chipId in chipIds) {
+                            val chip = binding.chipGroupOne.findViewById(chipId.id) as com.google.android.material.chip.Chip
                             var keyword: KeywordResponse? = null
                             for (skill in skillsMList) {
                                 if (chip.text.toString() == skill.keyword) {
@@ -146,6 +143,19 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 keywordsOneList.add(KeywordsResponse("0", chip.text.toString()))
                             }
                         }
+//                        for (chip in binding.skillsKeywordsOne.allChips) {
+//                            var keyword: KeywordResponse? = null
+//                            for (skill in skillsMList) {
+//                                if (chip.text.toString() == skill.keyword) {
+//                                    keyword = skill
+//                                }
+//                            }
+//                            if (keyword != null) {
+//                                keywordsOneList.add(KeywordsResponse(keyword.id, keyword.keyword))
+//                            } else {
+//                                keywordsOneList.add(KeywordsResponse("0", chip.text.toString()))
+//                            }
+//                        }
                         if (keywordsOneList.isNotEmpty()) {
                             val professionOneList = ArrayList<ProfessionResponseX>()
                             var experience = ""
@@ -170,6 +180,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 }
                             }
                             professionFList.add(professionOneList[0])
+//                            toast(requireContext(), professionOneList[0].name)
                         } else {
                             snackBar(professionOne, "Please Enter Keywords for First Profession")
                         }
@@ -204,7 +215,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                     else -> {
                         val keywordsTwoList = ArrayList<KeywordsResponse>()
-                        for (chip in binding.skillsKeywordsTwo.allChips) {
+                        val chipIds = binding.chipGroupTwo.children
+                        for (chipId in chipIds) {
+                            val chip = binding.chipGroupTwo.findViewById(chipId.id) as com.google.android.material.chip.Chip
                             var keyword: KeywordResponse? = null
                             for (skill in skillsMList) {
                                 if (chip.text.toString() == skill.keyword) {
@@ -217,6 +230,19 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 keywordsTwoList.add(KeywordsResponse("0", chip.text.toString()))
                             }
                         }
+//                        for (chip in binding.skillsKeywordsTwo.allChips) {
+//                            var keyword: KeywordResponse? = null
+//                            for (skill in skillsMList) {
+//                                if (chip.text.toString() == skill.keyword) {
+//                                    keyword = skill
+//                                }
+//                            }
+//                            if (keyword != null) {
+//                                keywordsTwoList.add(KeywordsResponse(keyword.id, keyword.keyword))
+//                            } else {
+//                                keywordsTwoList.add(KeywordsResponse("0", chip.text.toString()))
+//                            }
+//                        }
                         if (keywordsTwoList.isNotEmpty()) {
                             val professionTwoList = ArrayList<ProfessionResponseX>()
                             var experience = ""
@@ -275,7 +301,9 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                     else -> {
                         val keywordsThreeList = ArrayList<KeywordsResponse>()
-                        for (chip in binding.skillsKeywordsThree.allChips) {
+                        val chipIds = binding.chipGroupTwo.children
+                        for (chipId in chipIds) {
+                            val chip = binding.chipGroupTwo.findViewById(chipId.id) as com.google.android.material.chip.Chip
                             var keyword: KeywordResponse? = null
                             for (skill in skillsMList) {
                                 if (chip.text.toString() == skill.keyword) {
@@ -288,6 +316,19 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                                 keywordsThreeList.add(KeywordsResponse("0", chip.text.toString()))
                             }
                         }
+//                        for (chip in binding.skillsKeywordsThree.allChips) {
+//                            var keyword: KeywordResponse? = null
+//                            for (skill in skillsMList) {
+//                                if (chip.text.toString() == skill.keyword) {
+//                                    keyword = skill
+//                                }
+//                            }
+//                            if (keyword != null) {
+//                                keywordsThreeList.add(KeywordsResponse(keyword.id, keyword.keyword))
+//                            } else {
+//                                keywordsThreeList.add(KeywordsResponse("0", chip.text.toString()))
+//                            }
+//                        }
                         if (keywordsThreeList.isNotEmpty()) {
                             val professionThreeList = ArrayList<ProfessionResponseX>()
                             var experience = ""
@@ -318,6 +359,7 @@ class SkillsProfileScreen: BaseFragment<ProviderProfileViewModel, FragmentSkills
                     }
                 }
             }
+
 
             when {
                 professionFList.isEmpty() -> {

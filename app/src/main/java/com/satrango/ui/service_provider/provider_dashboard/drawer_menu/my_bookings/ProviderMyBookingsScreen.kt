@@ -147,10 +147,12 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
         viewModel.bookingListWithDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
-                    progressDialog.show()
+//                    progressDialog.show()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
                         if (status == "Completed") {
@@ -177,9 +179,13 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                     } else {
                         binding.note.visibility = View.GONE
                     }
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                 }
                 is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmerAnimation()
                     snackBar(binding.recyclerView, it.message!!)
                 }
             }
@@ -260,12 +266,7 @@ class ProviderMyBookingsScreen : AppCompatActivity(), ProviderMyBookingInterface
                         progressDialog.dismiss()
                         val requestedOTP = it.data!!
 //                        toast(this, requestedOTP.toString())
-                        UserUtils.sendOTPFCM(
-                            this,
-                            userFcmToken,
-                            bookingId.toString(),
-                            requestedOTP.toString()
-                        )
+                        UserUtils.sendOTPFCM(this, userFcmToken, bookingId.toString(), requestedOTP.toString())
                         otpDialog(requestedOTP, bookingId, categoryId, userId, spId, userFcmToken)
                     }
                     is NetworkResponse.Failure -> {

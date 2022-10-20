@@ -3,14 +3,12 @@ package com.satrango.ui.auth.provider_signup.provider_sign_up_five
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.hardware.Camera
-import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Environment
-import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.Window
@@ -26,7 +24,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSix
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -47,6 +44,8 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var surfaceHolder: SurfaceHolder
     private lateinit var binding: ActivityProviderSignUpFiveBinding
     private lateinit var progressDialog: BeautifulProgressDialog
+    private var selectedCamera = Camera.CameraInfo.CAMERA_FACING_FRONT
+
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,10 +60,6 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
         }
 
         initializeProgressDialog()
-
-        surfaceHolder = binding.surfaceView.holder
-        surfaceHolder.addCallback(this)
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
 
         val factory = ViewModelFactory(ProviderSignUpFiveRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFiveViewModel::class.java]
@@ -92,6 +87,22 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
 
             restartBtn.setOnClickListener {
                 startRecording()
+            }
+
+            switchBtn.setOnClickListener {
+                mServiceCamera.release()
+                selectedCamera = if (selectedCamera == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    Camera.CameraInfo.CAMERA_FACING_FRONT
+                } else {
+                    Camera.CameraInfo.CAMERA_FACING_BACK
+                }
+                mServiceCamera = Camera.open(selectedCamera)
+                try {
+                    mServiceCamera.setPreviewDisplay(surfaceHolder)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                mServiceCamera.startPreview()
             }
 
             nextBtn.setOnClickListener {
@@ -159,13 +170,17 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
     }
 
     private fun startRecording(): Boolean {
+
+        surfaceHolder = binding.surfaceView.holder
+        surfaceHolder.addCallback(this)
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+
         return try {
             binding.videoPreviewBtn.visibility = View.GONE
             binding.recordImage.visibility = View.VISIBLE
             binding.timerText.visibility = View.VISIBLE
             binding.surfaceView.visibility = View.VISIBLE
-
-            mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT)
+            mServiceCamera = Camera.open(selectedCamera)
             mServiceCamera.setDisplayOrientation(90)
             val params: Camera.Parameters = mServiceCamera.parameters
             mServiceCamera.parameters = params

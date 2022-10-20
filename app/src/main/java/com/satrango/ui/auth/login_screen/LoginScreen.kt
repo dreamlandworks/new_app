@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.*
 import com.google.firebase.database.*
+import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
@@ -31,6 +33,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
+import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
@@ -38,13 +41,14 @@ import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
+import com.truecaller.android.sdk.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class LoginScreen : AppCompatActivity() {
 
     private lateinit var viewModel: LoginViewModel
-    private val GOOGLE_SIGN_IN: Int = 100
+    private val GOOGLE_SIGN_IN: Int = 110
     private lateinit var binding: ActivityLoginScreenBinding
 
     private lateinit var mGetContent: ActivityResultLauncher<String>
@@ -98,7 +102,8 @@ class LoginScreen : AppCompatActivity() {
 
             signUpBtn.setOnClickListener {
                 UserUtils.FORGOT_PWD = false
-                startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
+                UserUtils.setMail(this@LoginScreen, "")
+                startActivity(Intent(this@LoginScreen, ProviderSignUpOne::class.java))
             }
 
             signInBtn.setOnClickListener {
@@ -137,6 +142,13 @@ class LoginScreen : AppCompatActivity() {
                 UserUtils.FORGOT_PWD = true
                 startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java))
             }
+
+            trueCallerBtn.setOnClickListener {
+                UserUtils.setMail(this@LoginScreen, "")
+                if (TruecallerSDK.getInstance().isUsable) {
+                    TruecallerSDK.getInstance().getUserProfile(this@LoginScreen)
+                }
+            }
         }
 
         mGetContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -152,6 +164,43 @@ class LoginScreen : AppCompatActivity() {
         }
 
 //        takePermission()
+
+        val trueScope = TruecallerSdkScope.Builder(this, trueCallerCallback)
+            .consentMode(TruecallerSdkScope.CONSENT_MODE_BOTTOMSHEET)
+            .buttonColor(Color.MAGENTA)
+            .buttonTextColor(Color.WHITE)
+            .loginTextPrefix(TruecallerSdkScope.LOGIN_TEXT_PREFIX_TO_GET_STARTED)
+            .loginTextSuffix(TruecallerSdkScope.LOGIN_TEXT_SUFFIX_PLEASE_VERIFY_MOBILE_NO)
+            .ctaTextPrefix(TruecallerSdkScope.CTA_TEXT_PREFIX_USE)
+            .buttonShapeOptions(TruecallerSdkScope.BUTTON_SHAPE_ROUNDED)
+            .privacyPolicyUrl("https://www.squill.in/privacy")
+            .termsOfServiceUrl("https://www.squill.in/privacy")
+            .footerType(TruecallerSdkScope.FOOTER_TYPE_NONE)
+            .consentTitleOption(TruecallerSdkScope.SDK_CONSENT_TITLE_LOG_IN)
+            .sdkOptions(TruecallerSdkScope.SDK_OPTION_WITH_OTP)
+            .build()
+        TruecallerSDK.init(trueScope)
+    }
+
+    val trueCallerCallback = object : ITrueCallback {
+        override fun onSuccessProfileShared(data: TrueProfile) {
+            UserUtils.setGoogleId(this@LoginScreen, "")
+            UserUtils.setFacebookId(this@LoginScreen, "trueCaller")
+            UserUtils.setFirstName(this@LoginScreen, data.firstName)
+            UserUtils.setMail(this@LoginScreen, data.email)
+            UserUtils.setLastName(this@LoginScreen, data.lastName)
+            UserUtils.setPhoneNo(this@LoginScreen, data.phoneNumber.takeLast(10))
+            loginToServer(data.phoneNumber.takeLast(10), "", resources.getString(R.string.userLogin))
+        }
+
+        override fun onFailureProfileShared(error: TrueError) {
+            toast(this@LoginScreen,"Error01" + error.errorType.toString())
+        }
+
+        override fun onVerificationRequired(error: TrueError?) {
+            toast(this@LoginScreen, "Error02" + error!!.errorType.toString())
+        }
+
     }
 
     private fun takePermissions() {
@@ -312,12 +361,14 @@ class LoginScreen : AppCompatActivity() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
+        TruecallerSDK.getInstance().onActivityResultObtained(this, requestCode, resultCode, data)
         if (requestCode == GOOGLE_SIGN_IN) {
             try {
-                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)
                 validateGoogleSignInResult(result)
             } catch (e: Exception) {
                 snackBar(binding.signUpBtn, e.message!!)
@@ -331,13 +382,6 @@ class LoginScreen : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (PermissionUtils.PERMISSIONS_CODE == requestCode && grantResults.isNotEmpty()) {
-//            for (grant in grantResults) {
-//                if (grant != PackageManager.PERMISSION_GRANTED) {
-//                    PermissionUtils.checkAndRequestPermissions(this)
-//                }
-//            }
-//        }
         if (requestCode == PermissionUtils.PERMISSIONS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //            mGetContent.launch("pdf/*")
             toast(this, "Permission Granted")
@@ -364,7 +408,7 @@ class LoginScreen : AppCompatActivity() {
             }
             loginToServer(email, "", resources.getString(R.string.userGoogleLogin))
         } else {
-            snackBar(binding.signUpBtn, "Google SignIn Failed")
+            snackBar(binding.signUpBtn, "Google SignIn Failed:${result.status.statusMessage}")
         }
     }
 

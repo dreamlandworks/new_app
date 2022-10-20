@@ -6,24 +6,38 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64.DEFAULT
+import android.util.Base64.encodeToString
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ktx.database
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ShortDynamicLink
+import com.google.firebase.dynamiclinks.ktx.androidParameters
+import com.google.firebase.dynamiclinks.ktx.dynamicLink
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
+import com.google.zxing.qrcode.QRCodeWriter
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderProfileScreenBinding
@@ -39,8 +53,10 @@ import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ProviderProfileScreen : AppCompatActivity() {
 
@@ -50,6 +66,7 @@ class ProviderProfileScreen : AppCompatActivity() {
     companion object {
         lateinit var professionalDetails: ProviderProfileProfessionResModel
         lateinit var binding: ActivityProviderProfileScreenBinding
+        @SuppressLint("StaticFieldLeak")
         lateinit var progressDialog: BeautifulProgressDialog
         var selectedEncodedImage = ""
     }
@@ -64,6 +81,8 @@ class ProviderProfileScreen : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = resources.getColor(R.color.purple_700)
         }
+
+//        createQRLinkLink()
 
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
@@ -140,6 +159,7 @@ class ProviderProfileScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     professionalDetails = it.data!!
+                    createQRLinkLink()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -250,5 +270,52 @@ class ProviderProfileScreen : AppCompatActivity() {
 
     override fun onBackPressed() {
         startActivity(Intent(this, ProviderDashboard::class.java))
+    }
+
+    private fun createQRLinkLink() {
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = Uri.parse("http://dev.satrango.com/userid=SP${UserUtils.getUserId(this@ProviderProfileScreen)}|${Gson().toJson(professionalDetails.profession)}")
+            domainUriPrefix = "https://squill.page.link"
+            androidParameters {
+                this.build()
+            }
+        }
+
+        val dynamicLinkUri = dynamicLink.uri
+        val shortLinkTask: Task<ShortDynamicLink> =
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(dynamicLinkUri)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(
+                    this
+                ) { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result?.shortLink
+                        val flowchartLink: Uri? = task.result?.previewLink
+                        generateQRCode(shortLink.toString())
+                        shortLink.toString()
+                    } else {
+                        Toast.makeText(this@ProviderProfileScreen, "QR Code Error:${task.exception}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+    }
+
+    private fun generateQRCode(data: String) {
+        val qrWriter = QRCodeWriter()
+        try {
+            val bitMatrix = qrWriter.encode(data, BarcodeFormat.QR_CODE, 512, 512)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+                }
+            }
+            binding.qrCode.setImageBitmap(bitmap)
+
+        } catch (e: WriterException) {
+            toast(this, e.message!!)
+        }
     }
 }

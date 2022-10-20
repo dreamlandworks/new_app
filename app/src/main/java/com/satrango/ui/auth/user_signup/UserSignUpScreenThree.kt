@@ -32,6 +32,7 @@ import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.util.*
 
 class UserSignUpScreenThree : AppCompatActivity() {
@@ -76,24 +77,19 @@ class UserSignUpScreenThree : AppCompatActivity() {
             mobileNo.setText(UserUtils.getPhoneNo(this@UserSignUpScreenThree))
             if (UserUtils.getMail(this@UserSignUpScreenThree).isNotEmpty()) {
                 email.setText(UserUtils.getMail(this@UserSignUpScreenThree))
+                email.isClickable = false
+                email.isEnabled = false
+            }
+            if (UserUtils.getPhoneNo(this@UserSignUpScreenThree).isNotEmpty()) {
+                mobileNo.setText(UserUtils.getPhoneNo(this@UserSignUpScreenThree))
             }
 
             if (email.text.toString().contains("@") || email.text.toString().contains(".")) {
-                email.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_email_blue_24,
-                    0,
-                    R.drawable.ic_greencheck,
-                    0
-                )
+                email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_blue_24, 0, R.drawable.ic_greencheck, 0)
             }
 
             if (mobileNo.text.toString().length == 10) {
-                mobileNo.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_phoneno,
-                    0,
-                    R.drawable.ic_greencheck,
-                    0
-                )
+                mobileNo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_phoneno, 0, R.drawable.ic_greencheck, 0)
             }
 
             email.addTextChangedListener(object : TextWatcher {
@@ -192,7 +188,7 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         email.error = "Please Enter Mail Id"
                         email.requestFocus()
                     }
-                    !mail.contains("@") || !mail.contains(".") -> {
+                    mail.isNotEmpty() && (!mail.contains("@") || !mail.contains(".")) -> {
                         email.error = "Please Enter valid Mail Id"
                         email.requestFocus()
                     }
@@ -343,6 +339,8 @@ class UserSignUpScreenThree : AppCompatActivity() {
         UserUtils.setCountry(this, country)
         UserUtils.setPostalCode(this, postalCode)
         UserUtils.setAddress(this, knownName)
+//        toast(this@UserSignUpScreenThree, "Clicked")
+
         verifyUser()
     }
 

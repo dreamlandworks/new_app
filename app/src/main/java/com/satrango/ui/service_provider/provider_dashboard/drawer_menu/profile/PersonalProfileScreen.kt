@@ -1,6 +1,7 @@
 package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -31,11 +32,13 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserPro
 import com.satrango.utils.UserUtils
 import com.satrango.utils.loadProfileImage
 import com.satrango.utils.snackBar
+import java.util.*
 
 class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPersonalProfileScreenBinding, ProviderProfileRepository>() {
 
     private var gender = ""
     private lateinit var userViewModel: UserProfileViewModel
+    private var selectedAge = 0
 
     override fun getFragmentViewModel(): Class<ProviderProfileViewModel> = ProviderProfileViewModel::class.java
 
@@ -110,16 +113,21 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                 lastName.keyListener = lastName.tag as KeyListener
             }
 
-            dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            dateOfBirth.tag = dateOfBirth.keyListener
+//            dateOfBirth.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            dateOfBirth.tag = dateOfBirth.keyListener
             dateOfBirth.keyListener = null
             dateOfBirthEdit.setOnClickListener {
-                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#ffffff")
-                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
-                dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
+                openDateOfBirthDialog()
+//                dateOfBirthLayout.boxBackgroundColor = Color.parseColor("#ffffff")
+//                lastNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                firstNameLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                emailLayout.boxBackgroundColor = Color.parseColor("#E7F0FF")
+//                dateOfBirth.keyListener = dateOfBirth.tag as KeyListener
+                dateOfBirth.setOnClickListener {
+                    openDateOfBirthDialog()
+                }
             }
+
             emailId.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailId.tag = emailId.keyListener
             emailId.keyListener = null
@@ -157,12 +165,46 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                     email.isEmpty() -> snackBar(binding.applyBtn, "Enter Email Id")
                     dob.isEmpty() -> snackBar(binding.applyBtn, "Select Date od Birth")
                     gender.isEmpty() -> snackBar(binding.applyBtn, "Select Gender")
+                    email.isNotEmpty() && (!email.contains("@") || !email.contains(".")) -> {
+                        emailId.error = "Please Enter valid Mail Id"
+                        emailId.requestFocus()
+                    }
                     else -> updateUserProfileToServer()
                 }
             }
 
         }
         showUserProfile()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun openDateOfBirthDialog() {
+        val c = Calendar.getInstance()
+        val mYear = c[Calendar.YEAR] // current year
+        val mMonth = c[Calendar.MONTH] // current month
+        val mDay = c[Calendar.DAY_OF_MONTH] // current day
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(), { _, year, monthOfYear, dayOfMonth ->
+                selectedAge = UserSignUpScreenThree.getAge(year, monthOfYear + 1, dayOfMonth)
+                if (selectedAge < 13) {
+                    binding.ageErrorText.error = "Age should be greater than 13 years"
+                    binding.ageErrorText.visibility = View.VISIBLE
+                    binding.dateOfBirth.requestFocus()
+                } else {
+                    binding.ageErrorText.visibility = View.GONE
+                    binding.dateOfBirth.setText(year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth)
+                    binding.dateOfBirth.setCompoundDrawablesWithIntrinsicBounds(
+                        0,
+                        0,
+                        R.drawable.ic_greencheck,
+                        0
+                    )
+                }
+            }, mYear, mMonth, mDay
+        )
+        datePickerDialog.datePicker.maxDate = Date().time
+        datePickerDialog.show()
     }
 
     private fun updateUserProfileToServer() {

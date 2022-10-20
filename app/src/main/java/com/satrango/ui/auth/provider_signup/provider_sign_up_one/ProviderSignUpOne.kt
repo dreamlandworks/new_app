@@ -89,18 +89,9 @@ class ProviderSignUpOne : AppCompatActivity() {
                         languagesList
                     )
                     binding.languages.setAdapter(languagesAdapter)
-                    binding.languages.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.languages.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.languages.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
+                    binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.languages.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
                     binding.languages.setNachoValidator(ChipifyingNachoValidator())
                     binding.languages.enableEditChipOnTouch(true, true)
 
@@ -133,18 +124,9 @@ class ProviderSignUpOne : AppCompatActivity() {
                         professionsList
                     )
                     binding.profession.setAdapter(professionsAdapter)
-                    binding.profession.addChipTerminator(
-                        '\n',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL
-                    )
-                    binding.profession.addChipTerminator(
-                        ',',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR
-                    )
-                    binding.profession.addChipTerminator(
-                        ';',
-                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN
-                    )
+                    binding.profession.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+                    binding.profession.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+                    binding.profession.addChipTerminator(';', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_CURRENT_TOKEN)
                     binding.profession.setNachoValidator(ChipifyingNachoValidator())
                     binding.profession.enableEditChipOnTouch(true, true)
                     binding.profession.threshold = 1

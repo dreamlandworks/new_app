@@ -154,24 +154,25 @@ class ProviderSignUpThree : AppCompatActivity() {
                 }
 
                 for (keyword in ProviderUtils.profession!!) {
-                    if (keyword.tariff_extra_charges.isEmpty()) {
-                        snackBar(nextBtn, "Please Enter Tariff Extra Charges for ${keyword.name} profession")
-                        return@setOnClickListener
-                    }
-                    if (keyword.tariff_min_charges.isEmpty()) {
-                        snackBar(nextBtn, "Please Enter Tariff Minimum Charges for ${keyword.name} profession")
+//                    toast(this@ProviderSignUpThree, keyword.tariff_extra_charges)
+//                    if (keyword.tariff_extra_charges.isEmpty()) {
+//                        snackBar(nextBtn, "Please Enter Tariff Extra Charges for ${keyword.name} profession")
+//                        return@setOnClickListener
+//                    }
+                    if (keyword.tariff_per_hour.isEmpty()) {
+                        snackBar(nextBtn, "Please Enter Tariff Per Hour for ${keyword.name} profession")
                         return@setOnClickListener
                     }
                     if (keyword.tariff_per_day.isEmpty()) {
                         snackBar(nextBtn, "Please Enter Tariff Per Day for ${keyword.name} profession")
                         return@setOnClickListener
                     }
-                    if (keyword.tariff_per_hour.isEmpty()) {
-                        snackBar(nextBtn, "Please Enter Tariff Per Hour for ${keyword.name} profession")
-                        return@setOnClickListener
-                    }
                     if (keyword.tariff_per_day < keyword.tariff_per_hour) {
                         snackBar(nextBtn, "Please Enter Per Hour charges less than Per Day Charges For ${keyword.name} Profession")
+                        return@setOnClickListener
+                    }
+                    if (keyword.tariff_min_charges.isEmpty()) {
+                        snackBar(nextBtn, "Please Enter Tariff Minimum Charges for ${keyword.name} profession")
                         return@setOnClickListener
                     }
                     if (keyword.experience.isEmpty()) {

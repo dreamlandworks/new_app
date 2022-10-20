@@ -1,11 +1,12 @@
 package com.satrango.base
 
 import android.app.Application
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.multidex.MultiDex
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.satrango.R
@@ -41,6 +42,11 @@ class MyApp: Application(), LifecycleObserver {
 
     fun getInstance(): MyApp {
         return instance
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        MultiDex.install(this)
+        super.attachBaseContext(base)
     }
 
 }

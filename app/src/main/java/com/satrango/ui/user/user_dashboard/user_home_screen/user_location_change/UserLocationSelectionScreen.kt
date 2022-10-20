@@ -105,7 +105,8 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
                 marker = mMap!!.addMarker(markerOptions)!!
                 latitude = place.latLng!!.latitude
                 longitude = place.latLng!!.longitude
-//                toast(this@UserLocationSelectionScreen, "${place.name}, ${place.latLng!!.latitude}, ${place.latLng!!.longitude}, ${place.address}, ${place.attributions}")
+//                toast(this@UserLocationSelectionScreen, "TEST2: $latitude, $longitude")
+//                fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             }
 
             override fun onError(status: Status) {
@@ -149,6 +150,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (UserUtils.getLatitude(this).isNotEmpty() && UserUtils.getLongitude(this).isNotEmpty()) {
+//            toast(this@UserLocationSelectionScreen, "Maps Ready Data")
             loadLocation(UserUtils.getLatitude(this).toDouble(), UserUtils.getLongitude(this).toDouble())
         } else {
             fetchLocation(this)
@@ -156,6 +158,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun loadLocation(latitude: Double, longitude: Double) {
+//        toast(this, "Test: $latitude$longitude")
         val latLong = LatLng(latitude, longitude)
         mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 16f))
         val markerOptions = MarkerOptions()
@@ -165,7 +168,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap!!.addMarker(markerOptions)!!
         mMap!!.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
-//                Log.d("System out", "onMarkerDragStart..." + marker.position.latitude + "..." + marker.position.longitude)
             }
 
             override fun onMarkerDragEnd(marker: Marker) {
@@ -206,6 +208,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
                 for (location in locationResult.locations) {
                     latitude = location.latitude
                     longitude = location.longitude
+//                    toast(this@UserLocationSelectionScreen, "Results Data")
                     loadLocation(latitude, longitude)
                 }
             }
@@ -264,6 +267,7 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         try {

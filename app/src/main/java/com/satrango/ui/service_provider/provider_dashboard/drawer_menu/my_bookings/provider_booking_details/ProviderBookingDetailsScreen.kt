@@ -443,9 +443,27 @@ class ProviderBookingDetailsScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
         updateStatusList()
+        if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
+            binding.pauseResumeBtn.text = "Resume"
+            binding.callBtn.isEnabled = false
+            binding.messageBtn.isEnabled = false
+            binding.markCompleteBtn.isEnabled = false
+            binding.raiseExtraDemandBtn.isEnabled = false
+            binding.markCompleteBtn.setBackgroundResource(R.drawable.gray_corner)
+            binding.markCompleteBtn.setTextColor(resources.getColor(R.color.gray))
+            binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
+            binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
+        } else {
+            binding.pauseResumeBtn.text = "Pause"
+            binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.purple_out_line)
+            binding.markCompleteBtn.setTextColor(resources.getColor(R.color.purple_500))
+            binding.markCompleteBtn.setBackgroundResource(R.drawable.purple_out_line)
+        }
     }
 
     private fun updateStatusList() {

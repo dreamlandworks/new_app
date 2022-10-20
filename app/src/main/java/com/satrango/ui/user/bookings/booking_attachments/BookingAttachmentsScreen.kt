@@ -246,7 +246,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
             resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).into(profilePic)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images).into(profilePic)
     }
 
     private fun loadAddressOnUI() {
@@ -261,7 +261,7 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener, Payme
         binding.userName.text = "${data.fname} ${data.lname}"
         binding.occupation.text = data.profession
         binding.costPerHour.text = "Rs. ${round(data.final_amount.toDouble()).toInt()}/-"
-        Glide.with(this).load(data.profile_pic).into(binding.profilePic)
+        Glide.with(this).load(data.profile_pic).error(R.drawable.images).into(binding.profilePic)
     }
 
     @SuppressLint("SimpleDateFormat")

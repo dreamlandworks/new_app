@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -103,7 +104,7 @@ class ProviderMyBookingAdapter(
             when {
                 status.equals("InProgress", ignoreCase = true) -> {
                     binding.timeRemaining.text = "Started"
-
+                    binding.navigateBtn.visibility = View.GONE
                     if (data.pause_status.equals("Yes", true)) {
                         binding.startBtn.text = "Resume"
                         binding.cancelBookingBtn.isEnabled = false
@@ -148,6 +149,19 @@ class ProviderMyBookingAdapter(
                     }
                 }
                 status.equals("Pending", ignoreCase = true) -> {
+                    if (data.category_id == "1") {
+                        binding.navigateBtn.setOnClickListener {
+                            val context = binding.navigateBtn.context
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=${data.details[0].latitude},${data.details[0].longitude}&mode=l"))
+                            intent.setPackage("com.google.android.apps.maps")
+                            if (intent.resolveActivity(context.packageManager) != null) {
+                                context.startActivity(intent)
+                            }
+                        }
+                        binding.navigateBtn.visibility = View.VISIBLE
+                    } else {
+                        binding.navigateBtn.visibility = View.GONE
+                    }
                     if (data.reschedule_status == "10") {
                         binding.startBtn.text = "Reschedule Request Raised"
                         binding.reScheduleBtn.visibility = View.GONE
@@ -193,6 +207,7 @@ class ProviderMyBookingAdapter(
                     }
                 }
                 status.equals("Completed", ignoreCase = true) -> {
+                    binding.navigateBtn.visibility = View.GONE
                     binding.timeRemaining.text = "Completed"
                     binding.startBtn.text = "Raise Ticket"
                     binding.reScheduleBtn.visibility = View.GONE
