@@ -103,7 +103,7 @@ class LoginScreen : AppCompatActivity() {
             signUpBtn.setOnClickListener {
                 UserUtils.FORGOT_PWD = false
                 UserUtils.setMail(this@LoginScreen, "")
-                startActivity(Intent(this@LoginScreen, ProviderSignUpOne::class.java))
+                startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
             }
 
             signInBtn.setOnClickListener {

@@ -28,6 +28,7 @@ import com.satrango.ui.auth.provider_signup.provider_sign_up_two.ProviderSignUpT
 import com.satrango.utils.ProviderUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
+import com.satrango.utils.toast
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -78,16 +79,15 @@ class ProviderSignUpOne : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     response = it.data!!
+                    progressDialog.dismiss()
+//                    toast(this, Gson().toJson(response.data))
 
                     val languagesList = ArrayList<String>()
                     for (data in response.data.language) {
                         languagesList.add(data.name)
                     }
-                    val languagesAdapter = ArrayAdapter(
-                        this,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        languagesList
-                    )
+
+                    val languagesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languagesList)
                     binding.languages.setAdapter(languagesAdapter)
                     binding.languages.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
                     binding.languages.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
@@ -139,8 +139,6 @@ class ProviderSignUpOne : AppCompatActivity() {
                     }
 
                     ProviderUtils.experience = response.data.experience
-
-                    progressDialog.dismiss()
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

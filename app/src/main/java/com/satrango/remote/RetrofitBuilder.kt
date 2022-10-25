@@ -23,7 +23,6 @@ object RetrofitBuilder {
 //        val loggingInterceptor = HttpLoggingInterceptor()
 //        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 //        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
 
         val client = OkHttpClient.Builder()
             .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)

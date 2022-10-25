@@ -53,7 +53,7 @@ interface ProviderApiService {
     @GET(ServiceProviderEndPoints.PROFESSIONS_LIST)
     suspend fun providerList(
         @Query("key") key: String
-    ): ProviderOneModel
+    ): ResponseBody
 
     @POST(ServiceProviderEndPoints.ACTIVATION_CONFIRMATION)
     suspend fun providerActivationConfirmation(
