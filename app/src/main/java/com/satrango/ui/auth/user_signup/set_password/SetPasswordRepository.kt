@@ -19,6 +19,7 @@ open class SetPasswordRepository : BaseRepository() {
     }
 
     suspend fun createNewUser(requestBody: UserSignUpModel): ResponseBody {
+        Log.e("NEW USER REQUEST:", Gson().toJson(requestBody))
         return RetrofitBuilder.getUserRetrofitInstance().userSignUp(requestBody)
     }
 

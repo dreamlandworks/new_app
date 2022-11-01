@@ -1,31 +1,26 @@
 package com.satrango.ui.auth.login_screen
 
-import android.Manifest
+//import com.facebook.*
+//import com.facebook.login.LoginResult
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
-import android.util.Log
-import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-//import com.facebook.*
-//import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityLoginScreenBinding
@@ -33,20 +28,20 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.UserLoginTypeScreen
 import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
-import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isForgetPassword
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import com.truecaller.android.sdk.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class LoginScreen : AppCompatActivity() {
 
+    private val RC_SIGN_IN: Int = 111
     private lateinit var viewModel: LoginViewModel
     private val GOOGLE_SIGN_IN: Int = 110
     private lateinit var binding: ActivityLoginScreenBinding
@@ -57,6 +52,11 @@ class LoginScreen : AppCompatActivity() {
     // Google SignIn Objects
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+
+    private var mAuth: FirebaseAuth? = null
+
 
     // Facebook SignIn Object
     // private lateinit var facebookCallBackManager: CallbackManager
@@ -70,7 +70,8 @@ class LoginScreen : AppCompatActivity() {
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        firebaseDatabaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+        firebaseDatabaseReference = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
 
         initializeSocialLogins()
         PermissionUtils.checkAndRequestPermissions(this)
@@ -92,8 +93,31 @@ class LoginScreen : AppCompatActivity() {
             }
 
             googleSigInBtn.setOnClickListener {
-                val signInIntent = googleSignInClient.signInIntent
-                startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+//                val signInRequest = BeginSignInRequest.builder()
+//                    .setGoogleIdTokenRequestOptions(
+//                        BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+//                            .setSupported(true)
+//                             Your server's client ID, not your Android client ID.
+//                            .setServerClientId(getString(R.string.your_web_client_id))
+//                             Only show accounts previously used to sign in.
+//                            .setFilterByAuthorizedAccounts(true)
+//                            .build())
+                mAuth = FirebaseAuth.getInstance()
+//                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                    .requestEmail()
+//                    .build()
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("175510734309-kamrkdlu5359pdi4jos8sv6voicg8qqa.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build()
+                mGoogleSignInClient = GoogleSignIn.getClient(this@LoginScreen, gso)
+                val signInIntent = mGoogleSignInClient!!.signInIntent
+                startActivityForResult(
+                    signInIntent,
+                    RC_SIGN_IN
+                )
+//                val signInIntent = googleSignInClient.signInIntent
+//                startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
             }
 
 //            facebookSignInBtn.setOnClickListener {
@@ -101,7 +125,7 @@ class LoginScreen : AppCompatActivity() {
 //            }
 
             signUpBtn.setOnClickListener {
-                UserUtils.FORGOT_PWD = false
+                isForgetPassword(this@LoginScreen, false)
                 UserUtils.setMail(this@LoginScreen, "")
                 startActivity(Intent(this@LoginScreen, UserSignUpScreenOne::class.java))
             }
@@ -139,7 +163,7 @@ class LoginScreen : AppCompatActivity() {
             }
 
             forgetPassword.setOnClickListener {
-                UserUtils.FORGOT_PWD = true
+                isForgetPassword(this@LoginScreen, true)
                 startActivity(Intent(this@LoginScreen, ForgotPasswordScreenOne::class.java))
             }
 
@@ -155,13 +179,14 @@ class LoginScreen : AppCompatActivity() {
             if (it != null) toast(this, it.path!!)
         }
 
-        mGetPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                toast(this, "Permission Given In Android 11")
-            } else {
-                toast(this, "Permission Denied")
+        mGetPermission =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    toast(this, "Permission Given In Android 11")
+                } else {
+                    toast(this, "Permission Denied")
+                }
             }
-        }
 
 //        takePermission()
 
@@ -190,11 +215,15 @@ class LoginScreen : AppCompatActivity() {
             UserUtils.setMail(this@LoginScreen, data.email)
             UserUtils.setLastName(this@LoginScreen, data.lastName)
             UserUtils.setPhoneNo(this@LoginScreen, data.phoneNumber.takeLast(10))
-            loginToServer(data.phoneNumber.takeLast(10), "", resources.getString(R.string.userLogin))
+            loginToServer(
+                data.phoneNumber.takeLast(10),
+                "",
+                resources.getString(R.string.userLogin)
+            )
         }
 
         override fun onFailureProfileShared(error: TrueError) {
-            toast(this@LoginScreen,"Error01" + error.errorType.toString())
+            toast(this@LoginScreen, "Error01" + error.errorType.toString())
         }
 
         override fun onVerificationRequired(error: TrueError?) {
@@ -203,56 +232,93 @@ class LoginScreen : AppCompatActivity() {
 
     }
 
-    private fun takePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(String.format("package:%s", packageName))
-                mGetPermission.launch(intent)
-            } catch (e: java.lang.Exception) {
-                toast(this, e.message!!)
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO), PermissionUtils.PERMISSIONS_CODE)
-        }
-    }
+//    private fun takePermissions() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            try {
+//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+//                intent.addCategory("android.intent.category.DEFAULT")
+//                intent.data = Uri.parse(String.format("package:%s", packageName))
+//                mGetPermission.launch(intent)
+//            } catch (e: java.lang.Exception) {
+//                toast(this, e.message!!)
+//            }
+//        } else {
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION,
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_NETWORK_STATE,
+//                    Manifest.permission.CAMERA,
+//                    Manifest.permission.RECORD_AUDIO
+//                ),
+//                PermissionUtils.PERMISSIONS_CODE
+//            )
+//        }
+//    }
 
-    private fun isPermissionGranted(): Boolean {
-        var permissionOne = false
-        var permissionTwo = false
-        var permissionThree = false
-        var permissionFour = false
-        var permissionFive = false
-        var permissionSix = false
-        var permissionSeven = false
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            permissionOne = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-            permissionTwo = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-            permissionThree = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED
-            permissionFour = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            permissionFive = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            permissionSix = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            permissionSeven = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        }
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
-        } else {
-            permissionOne && permissionTwo && permissionThree && permissionFour && permissionFive && permissionSix && permissionSeven
-        }
-    }
+//    private fun isPermissionGranted(): Boolean {
+//        var permissionOne = false
+//        var permissionTwo = false
+//        var permissionThree = false
+//        var permissionFour = false
+//        var permissionFive = false
+//        var permissionSix = false
+//        var permissionSeven = false
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+//            permissionOne = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.CAMERA
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionTwo = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.RECORD_AUDIO
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionThree = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_NETWORK_STATE
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionFour = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionFive = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionSix = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) == PackageManager.PERMISSION_GRANTED
+//            permissionSeven = ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.READ_EXTERNAL_STORAGE
+//            ) == PackageManager.PERMISSION_GRANTED
+//        }
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            Environment.isExternalStorageManager()
+//        } else {
+//            permissionOne && permissionTwo && permissionThree && permissionFour && permissionFive && permissionSix && permissionSeven
+//        }
+//    }
 
-    private fun takePermission() {
-        if (isPermissionGranted()) {
+//    private fun takePermission() {
+//        if (isPermissionGranted()) {
 //            mGetContent.launch("pdf/*")
-        } else {
-            takePermissions()
-        }
-    }
+//        } else {
+//            takePermissions()
+//        }
+//    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -281,10 +347,12 @@ class LoginScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    if (UserUtils.getGoogleId(this).isNotEmpty() || UserUtils.getFacebookId(this).isNotEmpty()) {
+                    if (UserUtils.getGoogleId(this).isNotEmpty() || UserUtils.getFacebookId(this)
+                            .isNotEmpty()
+                    ) {
                         startActivity(Intent(this, UserSignUpScreenThree::class.java))
                     } else {
-                        snackBar(binding.signUpBtn, it.message!!)
+                        snackBar(binding.signUpBtn, "Invalid Credentials")
                     }
                 }
             }
@@ -292,15 +360,31 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun setupFirebaseUserDatabase() {
-        firebaseDatabaseReference.addListenerForSingleValueEvent(object: ValueEventListener {
+        firebaseDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(snapshot: DataSnapshot) {
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.date_time)).setValue(Date().time)
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.mobile)).setValue(UserUtils.getPhoneNo(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.profile_image)).setValue(UserUtils.getUserProfilePic(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.user_name)).setValue(UserUtils.getUserName(this@LoginScreen))
-                firebaseDatabaseReference.child(getString(R.string.users)).child(UserUtils.getUserId(this@LoginScreen)).child(getString(R.string.online_status)).setValue(getString(R.string.online))
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.user_name))
+                    .setValue(UserUtils.getUserName(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.date_time)).setValue(Date().time)
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.mobile))
+                    .setValue(UserUtils.getPhoneNo(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.profile_image))
+                    .setValue(UserUtils.getUserProfilePic(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.user_name))
+                    .setValue(UserUtils.getUserName(this@LoginScreen))
+                firebaseDatabaseReference.child(getString(R.string.users))
+                    .child(UserUtils.getUserId(this@LoginScreen))
+                    .child(getString(R.string.online_status)).setValue(getString(R.string.online))
                 toast(this@LoginScreen, "Success")
             }
 
@@ -312,13 +396,14 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun initializeSocialLogins() {
-
+//        mAuth = FirebaseAuth.getInstance()
         // Google SignIn Object Initialization
-        googleSignInOptions = GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+//        googleSignInOptions = GoogleSignInOptions
+//            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestEmail()
+//            .requestIdToken("175510734309-fsc4plk38o4hhfhbmp237tngccn795p5.apps.googleusercontent.com")
+//            .build()
+//        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
         // Facebook SignIn Object Initialization
 //        facebookCallBackManager = CallbackManager.Factory.create()
@@ -365,15 +450,48 @@ class LoginScreen : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        facebookCallBackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
-        TruecallerSDK.getInstance().onActivityResultObtained(this, requestCode, resultCode, data)
-        if (requestCode == GOOGLE_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)
-                validateGoogleSignInResult(result)
-            } catch (e: Exception) {
-                snackBar(binding.signUpBtn, e.message!!)
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account!!.idToken)
+            } catch (e: ApiException) {
+
+                Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
+//        if (requestCode == GOOGLE_SIGN_IN) {
+//            val task: com.google.android.gms.tasks.Task<GoogleSignInAccount> =
+//                GoogleSignIn.getSignedInAccountFromIntent(data)
+//            try {
+//                val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
+//                validateGoogleSignInResult(account.idToken)
+//            } catch (e: ApiException) {
+//                toast(this, "Error01 " + e.message!!)
+//            }
+//        } else {
+//            TruecallerSDK.getInstance()
+//                .onActivityResultObtained(this, requestCode, resultCode, data)
+//        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String?) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        mAuth!!.signInWithCredential(credential)
+            .addOnCompleteListener(
+                this
+            ) { task ->
+                if (task.isSuccessful) {
+                    val user = mAuth!!.currentUser
+                    toast(this, user!!.email!!)
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Failed to login. Try again later!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     override fun onRequestPermissionsResult(
@@ -385,31 +503,37 @@ class LoginScreen : AppCompatActivity() {
         if (requestCode == PermissionUtils.PERMISSIONS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //            mGetContent.launch("pdf/*")
             toast(this, "Permission Granted")
-        } else {
-//            takePermission()
         }
+//        else {
+//            takePermission()
+//        }
     }
 
-    private fun validateGoogleSignInResult(result: GoogleSignInResult?) {
-        if (result!!.isSuccess) {
-            val account = result.signInAccount
-            val token = account!!.idToken
-            val userName = account.displayName
-            val email = account.email
-            val googleId = account.id
-            val image = account.photoUrl
-            UserUtils.setGoogleId(this, googleId!!)
-            UserUtils.setFacebookId(this, "")
-            UserUtils.setFirstName(this, userName!!.split(" ")[0])
-            UserUtils.setMail(this, email!!)
-            try {
-                UserUtils.setLastName(this, userName.split(" ")[1])
-            } catch (e: IndexOutOfBoundsException) {
+    private fun validateGoogleSignInResult(result: String?) {
+        val credential = GoogleAuthProvider.getCredential(result!!, null)
+        mAuth!!.signInWithCredential(credential)
+            .addOnCompleteListener(
+                this
+            ) { task ->
+                if (task.isSuccessful) {
+                    val account = mAuth!!.currentUser
+                    val userName = account!!.displayName
+                    val email = account.email
+                    val googleId = account.tenantId
+                    val image = account.photoUrl
+                    UserUtils.setGoogleId(this, googleId!!)
+                    UserUtils.setFacebookId(this, "")
+                    UserUtils.setFirstName(this, userName!!.split(" ")[0])
+                    UserUtils.setMail(this, email!!)
+                    try {
+                        UserUtils.setLastName(this, userName.split(" ")[1])
+                    } catch (e: IndexOutOfBoundsException) {
+                    }
+                    loginToServer(email, "", resources.getString(R.string.userGoogleLogin))
+                } else {
+                    snackBar(binding.signUpBtn, "Google SignIn Failed:${task.exception!!.message}")
+                }
             }
-            loginToServer(email, "", resources.getString(R.string.userGoogleLogin))
-        } else {
-            snackBar(binding.signUpBtn, "Google SignIn Failed:${result.status.statusMessage}")
-        }
     }
 
     override fun onBackPressed() {
@@ -418,7 +542,11 @@ class LoginScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.password)]!!.isNotEmpty() && UserUtils.getUserId(this).isNotEmpty()) {
+        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(
+                this@LoginScreen
+            )[resources.getString(R.string.password)]!!.isNotEmpty() && UserUtils.getUserId(this)
+                .isNotEmpty()
+        ) {
             startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
         }
     }

@@ -19,6 +19,7 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.ui.auth.user_signup.SmsReceiver
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isForgetPassword
 import com.satrango.utils.snackBar
 
 class OTPVerificationScreen : AppCompatActivity() {
@@ -84,7 +85,7 @@ class OTPVerificationScreen : AppCompatActivity() {
         progressDialog.show()
     }
     private fun requestOTP() {
-        if (UserUtils.FORGOT_PWD) {
+        if (isForgetPassword(this)) {
             viewModel.forgotPwdRequestOTP(this).observe(this) {
                 when (it) {
                     is NetworkResponse.Loading -> {
@@ -98,7 +99,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
-                        snackBar(binding.nextBtn, it.message!!)
+                        snackBar(binding.nextBtn, "FORGOT PASSWORD : " + it.message!!)
                     }
                 }
             }
@@ -114,7 +115,7 @@ class OTPVerificationScreen : AppCompatActivity() {
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
-                        snackBar(binding.nextBtn, it.message!!)
+                        snackBar(binding.nextBtn, "REQUEST OTP : " + it.message!!)
                     }
                 }
             }

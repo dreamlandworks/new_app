@@ -1,14 +1,12 @@
 package com.satrango.ui.auth.user_signup.set_password
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetPasswordScreenBinding
@@ -30,8 +27,8 @@ import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.user_signup.models.UserSignUpModel
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.isForgetPassword
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 
 class SetPasswordScreen : AppCompatActivity() {
 
@@ -62,14 +59,14 @@ class SetPasswordScreen : AppCompatActivity() {
                 } else if (cPwd.isEmpty()) {
                     reEnterPassword.error = "Please Enter Confirm Password"
                     reEnterPassword.requestFocus()
-                } else if(pwd.isEmpty() && cPwd.isEmpty()) {
+                } else if (pwd.isEmpty() && cPwd.isEmpty()) {
                     password.error = "Please Enter Password & Please confirm your password"
                     password.requestFocus()
                 } else if (pwd != cPwd) {
                     snackBar(binding.nextBtn, "Passwords don't match. Please enter again")
                 } else {
                     UserUtils.setPassword(this@SetPasswordScreen, pwd)
-                    if (UserUtils.FORGOT_PWD) {
+                    if (isForgetPassword(this@SetPasswordScreen)) {
                         resetPwdOnServer()
                     } else {
                         signUpToServer()
@@ -137,7 +134,11 @@ class SetPasswordScreen : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -178,7 +179,10 @@ class SetPasswordScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    congratulationsDialog(this, "Your password is successfully set. \nPlease login to continue")
+                    congratulationsDialog(
+                        this,
+                        "Your password is successfully set. \nPlease login to continue"
+                    )
 //                    showCustomDialog()
                 }
                 is NetworkResponse.Failure -> {

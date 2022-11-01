@@ -54,7 +54,6 @@ object UserUtils {
     var bid_per = 0
 
     var estimateTypeId = 0
-    var FORGOT_PWD = false
     var USER_ID = ""
     var scheduled_date = ""
     var re_scheduled_date = ""
@@ -81,6 +80,19 @@ object UserUtils {
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+    }
+
+    fun isForgetPassword(context: Context, fromJobPost: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isForgetPassword", fromJobPost)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun isForgetPassword(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("isForgetPassword", false)
     }
 
     fun saveSpId(context: Context, spId: String) {

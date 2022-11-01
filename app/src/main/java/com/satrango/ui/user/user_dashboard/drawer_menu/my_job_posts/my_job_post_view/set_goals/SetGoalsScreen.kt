@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.satrango.R
@@ -36,7 +35,6 @@ import com.satrango.utils.toast
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListener {
 
@@ -162,7 +160,11 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -185,7 +187,10 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
                     UserUtils.saveInstallmentDetId(this, it.data!!.installment_det_id.toString())
 //                    PaymentScreen.amount = bidPrice
                     UserUtils.setPayableAmount(this, bidPrice)
-                    setFinalWalletBalance(this, it.data.wallet_balance.toDouble().toInt().toString())
+                    setFinalWalletBalance(
+                        this,
+                        it.data.wallet_balance.toDouble().toInt().toString()
+                    )
 //                    PaymentScreen.finalWalletBalance = it.data.wallet_balance.toDouble().toInt().toString()
                     UserUtils.isFromUserPlans(this, false)
                     UserUtils.isFromProviderPlans(this, false)

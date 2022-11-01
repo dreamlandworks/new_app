@@ -522,10 +522,10 @@
             android:name="com.truecaller.android.sdk.PartnerKey"
             android:value="@string/trueCallerPartnerKey" />
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:exported="true"
-            android:value="@string/facebook_app_id" /> <!-- <activity -->
+<!--        <meta-data-->
+<!--            android:name="com.facebook.sdk.ApplicationId"-->
+<!--            android:exported="true"-->
+<!--            android:value="@string/facebook_app_id" /> &lt;!&ndash; <activity &ndash;&gt;-->
         <!-- android:name="com.facebook.FacebookActivity" -->
         <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
         <!-- android:label="@string/app_name" -->

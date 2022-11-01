@@ -5,16 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satrango.remote.NetworkResponse
-import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.AllLocationsResModel
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.DataX
-import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeReqModel
-import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.models.UserLocationChangeResModel
-import com.satrango.utils.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.lang.Exception
 
 class UserLocationChangeViewModel(private val repository: UserLocationChangeRepository): ViewModel() {

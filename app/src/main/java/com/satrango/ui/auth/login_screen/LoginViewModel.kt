@@ -2,6 +2,7 @@ package com.satrango.ui.auth.login_screen
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,9 +25,11 @@ class LoginViewModel(private val repository: LoginRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     userLogin.value = NetworkResponse.Loading()
+//                    Toast.makeText(context, requestBody.toString(), Toast.LENGTH_SHORT).show()
                     val response = async { repository.login(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
 //                    Log.e("LOGIN", jsonObject.toString())
+//                    Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_SHORT).show()
                     if (jsonObject.getInt("status") == 200) {
                         UserUtils.saveUserName(context, jsonObject.getString("fname") + " " + jsonObject.getString("lname"))
                         UserUtils.saveUserProfilePic(context, jsonObject.getString("profile_image"))

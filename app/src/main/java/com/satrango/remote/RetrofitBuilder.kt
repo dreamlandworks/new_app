@@ -11,13 +11,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitBuilder {
 
 //    const val BASE_URL = "http://dev.satrango.com/"
-//    const val BASE_URL = "https://www.squill.in/"
-    const val BASE_URL = "https://www.satrango.com"
+    const val BASE_URL = "https://www.squill.in/"
+//    const val BASE_URL = "https://www.satrango.com"
 //    const val BASE_URL = "http://satrango.com/"
 //    const val FCM_URL = "https://fcm.googleapis.com/"
 //    const val PAYTM_URL = "https://securegw-stage.paytm.in/theia/api/v1/"
-    const val USER_KEY = "BbJOTPWmcOaAJdnvCda74vDFtiJQCSYL"
-    const val PROVIDER_KEY = "Dld0F54x99UeL8nZkByWC0BwUEi4aF4O"
+    const val USER_KEY = "L9c4rxAzCfpT3JX08RHaKo5kewSWV6i2"
+    const val PROVIDER_KEY = "Mkuxb3rL24pRnyKwvCZilA95IOoJ8VHG"
 
     fun getUserRetrofitInstance(): UserApiService {
 //        val loggingInterceptor = HttpLoggingInterceptor()

@@ -307,7 +307,7 @@ class UserDashboardScreen : AppCompatActivity() {
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
                         dialogInterface.dismiss()
-                        snackBar(binding.navigationView, "Something went wrong. Please try again")
+                        snackBar(binding.navigationView, "Error03: Something went wrong. Please try again")
                     }
                 }
             }
@@ -481,14 +481,14 @@ class UserDashboardScreen : AppCompatActivity() {
                 } else {
                     Snackbar.make(
                         binding.navigationView,
-                        "Something went wrong!",
+                        "Error02: Something went wrong!",
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.navigationView, "Error01: Something Went Wrong", Snackbar.LENGTH_SHORT)
                     .show()
             } catch (e: SocketTimeoutException) {
                 Snackbar.make(

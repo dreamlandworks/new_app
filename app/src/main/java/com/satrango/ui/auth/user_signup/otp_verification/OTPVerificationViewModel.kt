@@ -1,9 +1,13 @@
 package com.satrango.ui.auth.user_signup.otp_verification
 
 import android.content.Context
+import android.graphics.LinearGradient
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.satrango.remote.NetworkResponse
 import com.satrango.utils.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +29,8 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                     forgotPwdRequestOTP.value = NetworkResponse.Loading()
                     val response = async { repository.forgotPwdRequestOTP(context) }
                     val jsonObject = JSONObject(response.await().string())
+                    Log.e("FORGOT RESPONSE:", jsonObject.toString())
+//                    Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_SHORT).show()
                     if (jsonObject.getInt("status") == 200) {
                         forgotPwdRequestOTP.value = NetworkResponse.Success(jsonObject.getString("id") + "|" + jsonObject.getInt("otp"))
                     } else {
@@ -46,9 +52,10 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                     requestOTP.value = NetworkResponse.Loading()
                     val response = async { repository.requestOTP(context) }
                     val jsonObject = JSONObject(response.await().string())
+                    Log.e("OTP RESPONSE:", jsonObject.toString())
+//                    Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_SHORT).show()
                     if (jsonObject.getInt("status") == 200) {
-                        requestOTP.value =
-                            NetworkResponse.Success(jsonObject.getInt("otp").toString())
+                        requestOTP.value = NetworkResponse.Success(jsonObject.getInt("otp").toString())
                     } else {
                         requestOTP.value = NetworkResponse.Failure(jsonObject.getString("message"))
                     }

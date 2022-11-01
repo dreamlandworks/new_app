@@ -184,10 +184,10 @@ class UserSignUpScreenThree : AppCompatActivity() {
                         mobileNo.error = "Please Enter 10 digit Mobile Number"
                         mobileNo.requestFocus()
                     }
-                    mail.isEmpty() -> {
-                        email.error = "Please Enter Mail Id"
-                        email.requestFocus()
-                    }
+//                    mail.isEmpty() -> {
+//                        email.error = "Please Enter Mail Id"
+//                        email.requestFocus()
+//                    }
                     mail.isNotEmpty() && (!mail.contains("@") || !mail.contains(".")) -> {
                         email.error = "Please Enter valid Mail Id"
                         email.requestFocus()

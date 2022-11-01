@@ -46,6 +46,7 @@ class SetPasswordViewModel(private val repository: SetPasswordRepository) : View
                     createNewUser.value = NetworkResponse.Loading()
                     val response = async { repository.createNewUser(requestBody) }
                     val jsonObject = JSONObject(response.await().string())
+                    Log.e("NEW USER RESPONSE:", jsonObject.toString())
                     if (jsonObject.getInt("status") == 200) {
                         createNewUser.value =
                             NetworkResponse.Success(jsonObject.getString("referral_id"))
