@@ -12,3 +12,4 @@
  -assumenosideeffects class android.util.Log{*;}
  -assumenosideeffects class android.util.Log{*;}
 # -assumenosideeffects class android.util.Log{*;}
+-keep class com.satrango.ui.*

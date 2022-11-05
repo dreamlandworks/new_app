@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 @Keep
-data class ProviderBookingReqModel(
+data class  ProviderBookingReqModel(
     @SerializedName("key")
     val key: String,
     @SerializedName("sp_id")

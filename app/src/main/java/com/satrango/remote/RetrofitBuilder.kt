@@ -20,15 +20,15 @@ object RetrofitBuilder {
     const val PROVIDER_KEY = "Mkuxb3rL24pRnyKwvCZilA95IOoJ8VHG"
 
     fun getUserRetrofitInstance(): UserApiService {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
 
         val client = OkHttpClient.Builder()
             .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
-//            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
 
         val gson = GsonBuilder()
@@ -43,14 +43,15 @@ object RetrofitBuilder {
     }
 
     fun getServiceProviderRetrofitInstance(): ProviderApiService {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
 
         val client = OkHttpClient.Builder()
             .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
-//            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
 
         val gson = GsonBuilder()

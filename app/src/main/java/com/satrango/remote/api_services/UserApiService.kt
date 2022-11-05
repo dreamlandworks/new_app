@@ -192,11 +192,11 @@ interface UserApiService {
         @Body json: FCMReqModel
     ): ResponseBody
 
-    @POST(UserApiEndPoints.FCM_SEND)
-    suspend fun sendFCM(
-        @HeaderMap map: Map<String, String>,
-        @Body requestBody: FCMMessageReqModel
-    ): ResponseBody
+//    @POST(UserApiEndPoints.FCM_SEND)
+//    suspend fun sendFCM(
+//        @HeaderMap map: Map<String, String>,
+//        @Body requestBody: FCMMessageReqModel
+//    ): ResponseBody
 
     @POST(UserApiEndPoints.CONFIRM_PAYMENT)
     suspend fun confirmPayment(
@@ -510,6 +510,7 @@ interface UserApiService {
         @Body requestBody: GetTxnReqModel
     ): GetTxnResModel
 
+    @POST(UserApiEndPoints.SEARCH_SP)
     suspend fun getSpDetails(
         @Body requestBody: GetQRCodeSPReqModel
     ): SearchServiceProviderResModel

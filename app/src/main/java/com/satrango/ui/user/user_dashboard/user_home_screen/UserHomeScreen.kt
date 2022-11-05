@@ -78,7 +78,7 @@ class UserHomeScreen :
                 } else {
                     Snackbar.make(
                         UserDashboardScreen.binding.navigationView,
-                        "Something went wrong!",
+                        "EH01: Something went wrong!",
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
@@ -91,7 +91,7 @@ class UserHomeScreen :
             } catch (e: JsonSyntaxException) {
                 Snackbar.make(
                     UserDashboardScreen.binding.navigationView,
-                    "Something Went Wrong",
+                    "EH02: Something Went Wrong",
                     Snackbar.LENGTH_SHORT
                 )
                     .show()
@@ -107,15 +107,15 @@ class UserHomeScreen :
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(
-            requireActivity(),
-            BeautifulProgressDialog.withGIF,
-            resources.getString(R.string.loading)
-        )
-        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
-        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
-    }
+//    private fun initializeProgressDialog() {
+//        progressDialog = BeautifulProgressDialog(
+//            requireActivity(),
+//            BeautifulProgressDialog.withGIF,
+//            resources.getString(R.string.loading)
+//        )
+//        progressDialog.setGifLocation(Uri.parse("android.resource://${activity?.packageName}/${R.drawable.blue_loading}"))
+//        progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
+//    }
 
     private fun loadHomeScreen() {
 

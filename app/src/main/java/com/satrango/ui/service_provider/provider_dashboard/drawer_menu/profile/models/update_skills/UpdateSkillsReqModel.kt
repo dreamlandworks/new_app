@@ -3,6 +3,7 @@ package com.satrango.ui.service_provider.provider_dashboard.drawer_menu.profile.
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.satrango.ui.auth.provider_signup.provider_sign_up_four.models.*
+import java.io.Serializable
 
 @Keep
 data class UpdateSkillsReqModel(
@@ -18,4 +19,4 @@ data class UpdateSkillsReqModel(
     val qualification_responses: List<QualificationResponse>,
     @SerializedName("lang_responses")
     val lang_responses: List<LangResponse>
-)
+): Serializable

@@ -543,7 +543,8 @@ tools:ignore="LockedOrientationActivity"> -->
         <!-- <data android:scheme="@string/fb_login_protocol_scheme" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <receiver android:name=".GpsLocationReceiver">
+        <receiver android:name=".GpsLocationReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
 

@@ -38,6 +38,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.tasks.Task
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
@@ -458,8 +459,10 @@ class UserDashboardScreen : AppCompatActivity() {
                     UserUtils.getUserId(this@UserDashboardScreen).toInt(),
                     UserUtils.getCity(this@UserDashboardScreen)
                 )
+//                toast(this@UserDashboardScreen, Gson().toJson(requestBody))
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(requestBody)
                 val responseData = response.data
+//                toast(this@UserDashboardScreen, Gson().toJson(responseData))
                 if (response.status == 200) {
                     val imageUrl = responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")

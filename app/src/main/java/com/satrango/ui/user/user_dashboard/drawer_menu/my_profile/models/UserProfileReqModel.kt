@@ -2,6 +2,7 @@ package com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Keep
 data class UserProfileReqModel(
@@ -11,4 +12,4 @@ data class UserProfileReqModel(
     val id: Int,
     @SerializedName("city")
     val city: String
-)
+): Serializable
