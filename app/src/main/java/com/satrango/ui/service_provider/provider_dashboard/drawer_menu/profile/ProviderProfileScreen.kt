@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64.DEFAULT
 import android.util.Base64.encodeToString
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -51,6 +52,9 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -82,17 +86,13 @@ class ProviderProfileScreen : AppCompatActivity() {
             window.statusBarColor = resources.getColor(R.color.purple_700)
         }
 
-//        createQRLinkLink()
-
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener {
-//            ProviderDashboard.FROM_FCM_SERVICE = false
             UserUtils.saveFromFCMService(this, false)
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener {
             UserUtils.saveFromFCMService(this, false)
-//            ProviderDashboard.FROM_FCM_SERVICE = false
             startActivity(Intent(this, ProviderDashboard::class.java))
         }
         toolBar.findViewById<CircleImageView>(R.id.toolBarImage).visibility = View.GONE
@@ -100,8 +100,8 @@ class ProviderProfileScreen : AppCompatActivity() {
             resources.getString(R.string.my_profile)
 
         initializeProgressDialog()
-        loadFragment(PersonalProfileScreen())
         loadProfessionalDetails()
+        loadFragment(PersonalProfileScreen())
 
         binding.apply {
 
@@ -147,26 +147,41 @@ class ProviderProfileScreen : AppCompatActivity() {
     }
 
     private fun loadProfessionalDetails() {
-        val factory = ViewModelFactory(ProviderProfileRepository())
-        val viewModel = ViewModelProvider(this, factory)[ProviderProfileViewModel::class.java]
-        val requestBody =
-            ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this).toInt())
-        viewModel.professionalDetails(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val requestBody =
+                    ProviderBookingReqModel(RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this@ProviderProfileScreen).toInt())
+                val response = RetrofitBuilder.getServiceProviderRetrofitInstance().getProfessionalDetails(requestBody)
+//                toast(this@ProviderProfileScreen, response.string())
+                val data = Gson().fromJson(response.string(), ProviderProfileProfessionResModel::class.java)
+                if (data.status == 200) {
+                    professionalDetails = data
+//                    createQRLinkLink()
                 }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    professionalDetails = it.data!!
-                    createQRLinkLink()
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.changePwd, it.message!!)
-                }
+            } catch (e: Exception) {
+//                toast(this@ProviderProfileScreen, e.message!!)
+                snackBar(binding.changePwd, e.message!!)
             }
         }
+//        val factory = ViewModelFactory(ProviderProfileRepository())
+//        val viewModel = ViewModelProvider(this, factory)[ProviderProfileViewModel::class.java]
+//
+//        viewModel.professionalDetails(this, requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    professionalDetails = it.data!!
+//                    createQRLinkLink()
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(binding.changePwd,"Error:" + it.message!!)
+//                }
+//            }
+//        }
     }
 
     private fun openImagePicker() {

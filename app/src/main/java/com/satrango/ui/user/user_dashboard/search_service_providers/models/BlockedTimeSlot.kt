@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Keep
 data class BlockedTimeSlot(
-    @SerializedName("data")
+    @SerializedName("date")
     val date: String,
     @SerializedName("time_slot_from")
     val time_slot_from: String

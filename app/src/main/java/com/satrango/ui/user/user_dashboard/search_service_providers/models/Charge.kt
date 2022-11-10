@@ -7,7 +7,7 @@ import java.io.Serializable
 @Keep
 data class Charge(
     @SerializedName("amount")
-    val amount: Any,
+    val amount: String,
     @SerializedName("description")
     val description: String,
     @SerializedName("id")

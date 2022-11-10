@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -219,7 +220,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
 //                    progressDialog.dismiss()
-                    snackBar(binding.recyclerView, it.message!!)
+                    toast(this, "KEYWORDS: " + it.message!!)
+                    snackBar(binding.recyclerView, it.message)
                 }
             }
 
@@ -294,7 +296,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             subCategory.toInt(),
             offerId
         )
-//        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
+        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
 //            progressDialog.show()
             binding.shimmerLayout.visibility = View.VISIBLE

@@ -162,7 +162,7 @@ class PersonalProfileScreen : BaseFragment<ProviderProfileViewModel, FragmentPer
                     fName.isEmpty() -> snackBar(binding.applyBtn, "Enter First Name")
                     lName.isEmpty() -> snackBar(binding.applyBtn, "Enter Last Name")
                     mobile.isEmpty() -> snackBar(binding.applyBtn, "Enter mobile number")
-                    email.isEmpty() -> snackBar(binding.applyBtn, "Enter Email Id")
+//                    email.isEmpty() -> snackBar(binding.applyBtn, "Enter Email Id")
                     dob.isEmpty() -> snackBar(binding.applyBtn, "Select Date od Birth")
                     gender.isEmpty() -> snackBar(binding.applyBtn, "Select Gender")
                     email.isNotEmpty() && (!email.contains("@") || !email.contains(".")) -> {

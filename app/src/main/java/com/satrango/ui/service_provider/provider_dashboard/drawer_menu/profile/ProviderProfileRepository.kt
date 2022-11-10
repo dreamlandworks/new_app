@@ -10,7 +10,7 @@ import okhttp3.ResponseBody
 
 class ProviderProfileRepository: BaseRepository() {
 
-    suspend fun getProfessionalDetails(requestBody: ProviderBookingReqModel): ProviderProfileProfessionResModel {
+    suspend fun getProfessionalDetails(requestBody: ProviderBookingReqModel): ResponseBody {
         return RetrofitBuilder.getServiceProviderRetrofitInstance().getProfessionalDetails(requestBody)
     }
 

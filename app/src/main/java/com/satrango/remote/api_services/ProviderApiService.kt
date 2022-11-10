@@ -152,7 +152,8 @@ interface ProviderApiService {
     @POST(ServiceProviderEndPoints.PROFESSIONAL_DETAILS)
     suspend fun getProfessionalDetails(
         @Body requestBody: ProviderBookingReqModel
-    ): ProviderProfileProfessionResModel
+    ): ResponseBody
+//            ProviderProfileProfessionResModel
 
     @POST(ServiceProviderEndPoints.UPDATE_SKILLS)
     suspend fun updateSkills(

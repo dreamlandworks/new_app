@@ -20,8 +20,8 @@ data class Data(
     val address: String,
     @SerializedName("category_id")
     val category_id: String,
-    @SerializedName("sp_id")
-    val sp_id: String,
+//    @SerializedName("sp_id")
+//    val sp_id: String,
     @SerializedName("city")
     val city: String,
     @SerializedName("country")
@@ -42,7 +42,7 @@ data class Data(
     val dob: String,
     @SerializedName("exp")
     val exp: String,
-    @SerializedName("extra_charges")
+    @SerializedName("extra_charge")
     val extra_charge: String,
     @SerializedName("fcm_token")
     val fcm_token: String,
@@ -82,7 +82,7 @@ data class Data(
     val postcode: String,
     @SerializedName("profession")
     val profession: String,
-    @SerializedName("professionlism")
+    @SerializedName("professionalism")
     val professionalism: String,
     @SerializedName("behaviour")
     val behaviour: String,
@@ -104,7 +104,7 @@ data class Data(
     val reg_status: String,
     @SerializedName("registered_on")
     val registered_on: String,
-    @SerializedName("status")
+    @SerializedName("state")
     val state: String,
     @SerializedName("subcategory_id")
     val subcategory_id: String,

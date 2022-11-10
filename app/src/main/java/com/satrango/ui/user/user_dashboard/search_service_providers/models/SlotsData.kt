@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Keep
 data class SlotsData(
-    @SerializedName("blocked_tile_slots")
+    @SerializedName("blocked_time_slots")
     val blocked_time_slots: List<BlockedTimeSlot>,
     @SerializedName("preferred_time_slots")
     val preferred_time_slots: List<PreferredTimeSlot>,

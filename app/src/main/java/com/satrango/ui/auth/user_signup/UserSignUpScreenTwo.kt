@@ -140,11 +140,16 @@ class UserSignUpScreenTwo : AppCompatActivity() {
         val geoCoder = Geocoder(this, Locale.getDefault())
         val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
         val addressName: String = address.get(0).getAddressLine(0)
-        val city: String = address.get(0).locality
-        val state: String = address.get(0).adminArea
-        val country: String = address.get(0).countryName
-        val postalCode: String = address.get(0).postalCode
-        val knownName: String = address.get(0).featureName
+        var city = "unknown"
+        var state = "unknown"
+        var country = "unknown"
+        var postalCode = "unknown"
+        var knownName = "unknown"
+        try { city = address.get(0).locality } catch (e: Exception) { }
+        try { state = address.get(0).adminArea } catch (e: Exception) { }
+        try { country = address.get(0).countryName } catch (e: Exception) { }
+        try { postalCode = address.get(0).postalCode } catch (e: Exception) { }
+        try { knownName = address.get(0).featureName } catch (e: Exception) { }
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
         UserUtils.setLatitude(this, latitude.toString())
         UserUtils.setLongitude(this, longitude.toString())

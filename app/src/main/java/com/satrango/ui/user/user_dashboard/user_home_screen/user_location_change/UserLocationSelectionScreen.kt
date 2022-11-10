@@ -89,8 +89,6 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-//        Places.initialize(this, UserUtils.getGoogleMapsKey(this))
-//        Places.initialize(this, "AIzaSyAtUCgXK-BpXZan6iLWyCK0p6ZwimR7yYA")
         Places.initialize(this, resources.getString(R.string.google_maps_key))
 
         val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
@@ -226,31 +224,36 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
 //                if (address[0].postalCode.isNullOrBlank()) {
 //                    toast(this, "Please select another location")
 //                } else {
-                    val city: String = address[0].locality
-                    val state: String = address[0].adminArea
-                    val country: String = address[0].countryName
-                    val postalCode: String = address[0].postalCode
-                    val knownName: String = address[0].featureName
-                    UserUtils.setLatitude(context, latitude.toString())
-                    UserUtils.setLongitude(context, longitude.toString())
-                    UserUtils.setCity(context, city)
-                    UserUtils.setState(context, state)
-                    UserUtils.setCountry(context, country)
-                    UserUtils.setPostalCode(context, postalCode)
-                    UserUtils.setAddress(context, knownName)
-                    if (FROM_USER_POST_JOB_ADDRESS) {
-                        FROM_USER_POST_JOB_ADDRESS = false
-                        onBackPressed()
-                    } else if(FROM_USER_BOOKING_ADDRESS) {
-                        FROM_USER_BOOKING_ADDRESS = false
-                        onBackPressed()
+                var city = "unknown"
+                var state = "unknown"
+                var country = "unknown"
+                var postalCode = "unknown"
+                var knownName = "unknown"
+                try { city = address.get(0).locality } catch (e: Exception) { }
+                try { state = address.get(0).adminArea } catch (e: Exception) { }
+                try { country = address.get(0).countryName } catch (e: Exception) { }
+                try { postalCode = address.get(0).postalCode } catch (e: Exception) { }
+                try { knownName = address.get(0).featureName } catch (e: Exception) { }
+                UserUtils.setLatitude(context, latitude.toString())
+                UserUtils.setLongitude(context, longitude.toString())
+                UserUtils.setCity(context, city)
+                UserUtils.setState(context, state)
+                UserUtils.setCountry(context, country)
+                UserUtils.setPostalCode(context, postalCode)
+                UserUtils.setAddress(context, knownName)
+                if (FROM_USER_POST_JOB_ADDRESS) {
+                    FROM_USER_POST_JOB_ADDRESS = false
+                    onBackPressed()
+                } else if(FROM_USER_BOOKING_ADDRESS) {
+                    FROM_USER_BOOKING_ADDRESS = false
+                    onBackPressed()
+                } else {
+                    if (FROM_USER_DASHBOARD) {
+                        startActivity(Intent(this, UserDashboardScreen::class.java))
                     } else {
-                        if (FROM_USER_DASHBOARD) {
-                            startActivity(Intent(this, UserDashboardScreen::class.java))
-                        } else {
-                            startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
-                        }
+                        startActivity(Intent(this, SearchServiceProvidersScreen::class.java))
                     }
+                }
 //                }
             } else {
                 toast(this, "Location Details not found. Please select Another Location")
