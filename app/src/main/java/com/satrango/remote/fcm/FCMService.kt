@@ -11,10 +11,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.media.RingtoneManager.getDefaultUri
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.freshchat.consumer.sdk.Freshchat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satrango.R
@@ -22,7 +19,6 @@ import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
 import com.satrango.ui.user.bookings.provider_response.ProviderBookingResponseScreen
-import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetailsScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +62,7 @@ class FCMService : FirebaseMessagingService() {
                         notificationManager.cancelAll()
                         if (ProviderDashboard.bottomSheetDialog != null) {
                             if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                ProviderDashboard.countDownTimer.cancel()
                                 ProviderDashboard.bottomSheetDialog!!.dismiss()
                                 UserUtils.saveFromFCMService(this, false)
                                 ProviderDashboard.FROM_FCM_SERVICE = false
@@ -73,7 +70,10 @@ class FCMService : FirebaseMessagingService() {
                             }
                         } else {
                             val intentFilterOne = Intent(getString(R.string.INTENT_FILTER_ONE))
-                            intentFilterOne.putExtra(resources.getString(R.string.sp_id), body.split("|")[2])
+                            intentFilterOne.putExtra(
+                                resources.getString(R.string.sp_id),
+                                body.split("|")[2]
+                            )
                             sendBroadcast(intentFilterOne)
                         }
                     }
@@ -92,34 +92,82 @@ class FCMService : FirebaseMessagingService() {
                     if (title == "otp") {
 //                        Log.e("FCM SERVICE:", body.toString())
                         val notificationIntent = Intent(getString(R.string.OTP_INTENT_FILTER))
-                        notificationIntent.putExtra(application.getString(R.string.booking_id), body!!.split("|")[0])
-                        notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                        notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                        notificationIntent.putExtra(
+                            application.getString(R.string.booking_id),
+                            body!!.split("|")[0]
+                        )
+                        notificationIntent.putExtra(
+                            application.getString(R.string.category_id),
+                            body.split("|")[1]
+                        )
+                        notificationIntent.putExtra(
+                            application.getString(R.string.user_id),
+                            body.split("|")[2]
+                        )
                         sendBroadcast(notificationIntent)
                     } else if (title == "otpResponse") {
                         if (body!!.split("|")[3] == "user") {
-                            val notificationIntent = Intent(getString(R.string.OTP_RESPONSE_INTENT_FILTER))
-                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
-                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                            val notificationIntent =
+                                Intent(getString(R.string.OTP_RESPONSE_INTENT_FILTER))
+                            notificationIntent.putExtra(
+                                application.getString(R.string.booking_id),
+                                body.split("|")[0]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.category_id),
+                                body.split("|")[1]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.user_id),
+                                body.split("|")[2]
+                            )
                             sendBroadcast(notificationIntent)
                         } else {
-                            val notificationIntent = Intent(getString(R.string.OTP_RESPONSE_INTENT_FILTER_DONE))
-                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
-                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                            val notificationIntent =
+                                Intent(getString(R.string.OTP_RESPONSE_INTENT_FILTER_DONE))
+                            notificationIntent.putExtra(
+                                application.getString(R.string.booking_id),
+                                body.split("|")[0]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.category_id),
+                                body.split("|")[1]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.user_id),
+                                body.split("|")[2]
+                            )
                             sendBroadcast(notificationIntent)
                         }
                     } else if (title == "extraDemand") {
-                        val notificationIntent = Intent(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT))
+                        val notificationIntent =
+                            Intent(getString(R.string.EXTRA_DEMAND_ACCEPT_REJECT))
                         if (body!!.split("|").size == 3) {
-                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
-                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
+                            notificationIntent.putExtra(
+                                application.getString(R.string.booking_id),
+                                body.split("|")[0]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.category_id),
+                                body.split("|")[1]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.user_id),
+                                body.split("|")[2]
+                            )
                         } else {
-                            notificationIntent.putExtra(application.getString(R.string.booking_id), body.split("|")[0])
-                            notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
-                            notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2] + "|" + body.split("|")[3])
+                            notificationIntent.putExtra(
+                                application.getString(R.string.booking_id),
+                                body.split("|")[0]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.category_id),
+                                body.split("|")[1]
+                            )
+                            notificationIntent.putExtra(
+                                application.getString(R.string.user_id),
+                                body.split("|")[2] + "|" + body.split("|")[3]
+                            )
                         }
                         sendBroadcast(notificationIntent)
                     } else if (body!!.split("|")[4] == "selected" || body.split("|")[3] == "accept") {
@@ -142,23 +190,44 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         remoteMessage.notification?.let {
-            if (Freshchat.isFreshchatNotification(remoteMessage)) {
-                Freshchat.handleFcmMessage(this, remoteMessage);
-            }
+//            if (Freshchat.isFreshchatNotification(remoteMessage)) {
+//                Freshchat.handleFcmMessage(this, remoteMessage);
+//            }
             if (it.title!! == "user") {
                 val notificationIntent = Intent(getString(R.string.INTENT_FILTER))
-                notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
-                notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
-                notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
-                notificationIntent.putExtra(application.getString(R.string.booking_type), it.body!!.split("|")[3])
+                notificationIntent.putExtra(
+                    application.getString(R.string.booking_id),
+                    it.body!!.split("|")[0]
+                )
+                notificationIntent.putExtra(
+                    application.getString(R.string.category_id),
+                    it.body!!.split("|")[1]
+                )
+                notificationIntent.putExtra(
+                    application.getString(R.string.user_id),
+                    it.body!!.split("|")[2]
+                )
+                notificationIntent.putExtra(
+                    application.getString(R.string.booking_type),
+                    it.body!!.split("|")[3]
+                )
                 sendBroadcast(notificationIntent)
             }
             if (it.title!! == "otp") {
 //                Log.e("FCM SERVICE:", it.body.toString())
                 val notificationIntent = Intent(getString(R.string.OTP_INTENT_FILTER))
-                notificationIntent.putExtra(application.getString(R.string.booking_id), it.body!!.split("|")[0])
-                notificationIntent.putExtra(application.getString(R.string.category_id), it.body!!.split("|")[1])
-                notificationIntent.putExtra(application.getString(R.string.user_id), it.body!!.split("|")[2])
+                notificationIntent.putExtra(
+                    application.getString(R.string.booking_id),
+                    it.body!!.split("|")[0]
+                )
+                notificationIntent.putExtra(
+                    application.getString(R.string.category_id),
+                    it.body!!.split("|")[1]
+                )
+                notificationIntent.putExtra(
+                    application.getString(R.string.user_id),
+                    it.body!!.split("|")[2]
+                )
                 sendBroadcast(notificationIntent)
             }
         }
@@ -169,7 +238,13 @@ class FCMService : FirebaseMessagingService() {
         super.onNewToken(token)
         if (PermissionUtils.isNetworkConnected(this)) {
             CoroutineScope(Dispatchers.Main).launch {
-                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(FCMReqModel(token, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FCMService)))
+                RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
+                    FCMReqModel(
+                        token,
+                        RetrofitBuilder.USER_KEY,
+                        UserUtils.getUserId(this@FCMService)
+                    )
+                )
             }
         }
     }
@@ -180,12 +255,16 @@ class FCMService : FirebaseMessagingService() {
         val requestID = System.currentTimeMillis().toInt()
         val alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationIntent = Intent(applicationContext, ProviderDashboard::class.java)
-        notificationIntent.putExtra(application.getString(R.string.booking_id), body?.split("|")!![0])
+        notificationIntent.putExtra(
+            application.getString(R.string.booking_id),
+            body?.split("|")!![0]
+        )
         notificationIntent.putExtra(application.getString(R.string.category_id), body.split("|")[1])
         notificationIntent.putExtra(application.getString(R.string.user_id), body.split("|")[2])
         val contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
+            val notificationChannel =
+                NotificationChannel("channelId", "description", NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.GREEN
             notificationChannel.enableVibration(false)

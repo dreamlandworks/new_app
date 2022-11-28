@@ -12,28 +12,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserPlanScreenBinding
 import com.satrango.remote.NetworkResponse
-import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.Data
-import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
-import com.satrango.utils.toast
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 
-class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListener {
+class UserPlanScreen : AppCompatActivity(), UserPlanListener
+//    , PaymentResultListener
+{
 
     private lateinit var walletBalance: String
     private var paymentData: Data? = null
@@ -57,7 +51,12 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    binding.recyclerView.adapter = UserPlanAdapter(it.data!!, it.data.data, it.data.activated_plan.toInt(), this)
+                    binding.recyclerView.adapter = UserPlanAdapter(
+                        it.data!!,
+                        it.data.data,
+                        it.data.activated_plan.toInt(),
+                        this
+                    )
                     walletBalance = it.data.wallet_balance
                 }
                 is NetworkResponse.Failure -> {
@@ -75,7 +74,8 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.choose_your_plan)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.choose_your_plan)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
     }
@@ -124,8 +124,8 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
 //        }
 //    }
 
-    @SuppressLint("SimpleDateFormat")
-    override fun onPaymentSuccess(paymentId: String?) {
+//    @SuppressLint("SimpleDateFormat")
+//    override fun onPaymentSuccess(paymentId: String?) {
 //        val factory = ViewModelFactory(PostJobRepository())
 //        val viewModel = ViewModelProvider(this, factory)[PostJobViewModel::class.java]
 //        val requestBody = UserPlanPaymentReqModel(
@@ -153,7 +153,7 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
 //                }
 //            }
 //        }
-    }
+//    }
 
     private fun showSuccessDialog() {
         val dialog = BottomSheetDialog(this)
@@ -173,9 +173,9 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
         dialog.show()
     }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        snackBar(binding.recyclerView, "Payment Failed")
-    }
+//    override fun onPaymentError(p0: Int, p1: String?) {
+//        snackBar(binding.recyclerView, "Payment Failed")
+//    }
 
     override fun onBackPressed() {
         if (UserMyAccountScreen.FROM_MY_ACCOUNT) {
@@ -187,7 +187,11 @@ class UserPlanScreen : AppCompatActivity(), UserPlanListener, PaymentResultListe
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }

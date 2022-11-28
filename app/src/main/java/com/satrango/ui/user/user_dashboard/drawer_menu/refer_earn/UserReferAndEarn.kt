@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.freshchat.consumer.sdk.beans.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -45,7 +44,10 @@ class UserReferAndEarn : AppCompatActivity() {
             backBtn.setOnClickListener { onBackPressed() }
             share.setOnClickListener { shareReferLink() }
             copyLink.setOnClickListener {
-                setClipboard(this@UserReferAndEarn, UserUtils.getReferralLink(this@UserReferAndEarn))
+                setClipboard(
+                    this@UserReferAndEarn,
+                    UserUtils.getReferralLink(this@UserReferAndEarn)
+                )
             }
         }
 
@@ -70,7 +72,7 @@ class UserReferAndEarn : AppCompatActivity() {
             val clip = ClipData.newPlainText("Copied Text", text)
             clipboard.setPrimaryClip(clip)
         }
-        toast(context,"Copied")
+        toast(context, "Copied")
     }
 
     private fun initializeToolBar() {
@@ -79,14 +81,16 @@ class UserReferAndEarn : AppCompatActivity() {
         backTextBtn.text = resources.getString(R.string.back)
         backTextBtn.setOnClickListener { onBackPressed() }
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.refer_amp_earn)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.refer_amp_earn)
         val imageView = toolBar.findViewById<ImageView>(R.id.toolBarImage)
         imageView.visibility = View.GONE
     }
 
     private fun createReferLink() {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-            link = Uri.parse("http://dev.satrango.com/userid=${UserUtils.getUserId(this@UserReferAndEarn)}")
+            link =
+                Uri.parse("http://dev.satrango.com/userid=${UserUtils.getUserId(this@UserReferAndEarn)}")
             domainUriPrefix = "https://squill.page.link"
             androidParameters {
                 this.build()
@@ -107,7 +111,11 @@ class UserReferAndEarn : AppCompatActivity() {
                         binding.referralLink.setText(UserUtils.getReferralLink(this@UserReferAndEarn))
                         val flowchartLink: Uri? = task.result?.previewLink
                     } else {
-                        Toast.makeText(this@UserReferAndEarn, "Error: ${task.exception}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@UserReferAndEarn,
+                            "Error: ${task.exception}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
     }

@@ -11,12 +11,10 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.freshchat.consumer.sdk.Freshchat
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.satrango.R
-import com.satrango.remote.Data
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.remote.fcm.NotificationX
 import com.satrango.remote.fcm.models.*
@@ -24,7 +22,6 @@ import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
-import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,7 +67,10 @@ object UserUtils {
     var bookingType = ""
 
     fun setFromJobPost(context: Context, fromJobPost: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean(context.resources.getString(R.string.from_job_post), fromJobPost)
         editor.apply()
@@ -78,12 +78,21 @@ object UserUtils {
     }
 
     fun getFromJobPost(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.from_job_post), false)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getBoolean(
+            context.resources.getString(R.string.from_job_post),
+            false
+        )
     }
 
     fun isForgetPassword(context: Context, fromJobPost: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isForgetPassword", fromJobPost)
         editor.apply()
@@ -91,12 +100,18 @@ object UserUtils {
     }
 
     fun isForgetPassword(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isForgetPassword", false)
     }
 
     fun saveSpId(context: Context, spId: String) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.sp_id), spId)
         editor.apply()
@@ -104,7 +119,10 @@ object UserUtils {
     }
 
     fun getSpId(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getString(context.resources.getString(R.string.sp_id), "")!!
     }
 
@@ -238,7 +256,10 @@ object UserUtils {
     }
 
     fun isReschedule(context: Context, fromProvider: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean(context.resources.getString(R.string.re_schedule), fromProvider)
         editor.apply()
@@ -246,12 +267,21 @@ object UserUtils {
     }
 
     fun isReschedule(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.re_schedule), false)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getBoolean(
+            context.resources.getString(R.string.re_schedule),
+            false
+        )
     }
 
     fun isFromUserPlans(context: Context, fromProvider: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromUserPlans", fromProvider)
         editor.apply()
@@ -259,12 +289,18 @@ object UserUtils {
     }
 
     fun isFromUserPlans(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromUserPlans", false)
     }
 
     fun isFromProviderPlans(context: Context, fromProvider: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromProviderPlans", fromProvider)
         editor.apply()
@@ -272,12 +308,18 @@ object UserUtils {
     }
 
     fun isFromProviderPlans(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromProviderPlans", false)
     }
 
     fun isFromUserSetGoals(context: Context, fromProvider: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromUserSetGoals", fromProvider)
         editor.apply()
@@ -285,12 +327,18 @@ object UserUtils {
     }
 
     fun isFromUserSetGoals(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromUserSetGoals", false)
     }
 
     fun isFromUserBookingAddress(context: Context, fromJobPost: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromUserBookingAddress", fromJobPost)
         editor.apply()
@@ -298,12 +346,18 @@ object UserUtils {
     }
 
     fun isFromUserBookingAddress(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromUserBookingAddress", false)
     }
 
     fun isFromCompleteBooking(context: Context, fromJobPost: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromCompleteBooking", fromJobPost)
         editor.apply()
@@ -311,12 +365,18 @@ object UserUtils {
     }
 
     fun isFromCompleteBooking(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromCompleteBooking", false)
     }
 
     fun isFromProviderBookingResponse(context: Context, fromJobPost: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putBoolean("isFromProviderBookingResponse", fromJobPost)
         editor.apply()
@@ -324,12 +384,18 @@ object UserUtils {
     }
 
     fun isFromProviderBookingResponse(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getBoolean("isFromProviderBookingResponse", false)
     }
 
     fun setPayableAmount(context: Context, amount: Int) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putInt("setPayableAmount", amount)
         editor.apply()
@@ -337,12 +403,18 @@ object UserUtils {
     }
 
     fun getPayableAmount(context: Context): Int {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getInt("setPayableAmount", 0)
     }
 
     fun setFinalWalletBalance(context: Context, amount: String) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         val editor = sharedPreferences.edit()
         editor.putString("setFinalWalletBalance", amount)
         editor.apply()
@@ -350,7 +422,10 @@ object UserUtils {
     }
 
     fun getFinalWalletBalance(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getString("setFinalWalletBalance", "0")!!
     }
 
@@ -971,7 +1046,10 @@ object UserUtils {
     }
 
     fun getReferralLink(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(
+            context.resources.getString(R.string.userDetails),
+            Context.MODE_PRIVATE
+        )
         return sharedPreferences.getString("saveReferralLink", "")!!
     }
 
@@ -997,6 +1075,7 @@ object UserUtils {
         )!!
     }
 
+    @SuppressLint("ApplySharedPref")
     fun saveSelectedKeywordCategoryId(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
             context.resources.getString(R.string.userDetails),
@@ -1332,10 +1411,7 @@ object UserUtils {
     }
 
     fun deleteUserCredentials(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
-            Context.MODE_PRIVATE
-        )
+        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(context.resources.getString(R.string.phoneNo), "")
         editor.putString(context.resources.getString(R.string.password), "")
@@ -1379,7 +1455,15 @@ object UserUtils {
         map["Authorization"] = "key=${getFCMServerKey(context)}"
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val requestBody = SendFCMReqModel(NotificationX("$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type", "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",from), "high", token)
+                val requestBody = SendFCMReqModel(
+                    NotificationX(
+                        "$bookingId|${getSelectedKeywordCategoryId(context)}|${
+                            getUserId(context)
+                        }|$type",
+                        "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
+                        from
+                    ), "high", token
+                )
                 val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
 //                Toast.makeText(context, Gson().toJson(fcmResponse), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
@@ -1399,7 +1483,13 @@ object UserUtils {
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
         CoroutineScope(Dispatchers.Main).launch {
-            val requestBody = SendFCMReqModel(NotificationX("$bookingId|$otp|${getUserId(context)}", "$bookingId|$otp|${getUserId(context)}","otp"), "high", token)
+            val requestBody = SendFCMReqModel(
+                NotificationX(
+                    "$bookingId|$otp|${getUserId(context)}",
+                    "$bookingId|$otp|${getUserId(context)}",
+                    "otp"
+                ), "high", token
+            )
             RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
     }
@@ -1413,7 +1503,11 @@ object UserUtils {
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
         CoroutineScope(Dispatchers.Main).launch {
-            val requestBody = SendFCMReqModel(NotificationX(bookingDetails, bookingDetails,"otpResponse"), "high", token)
+            val requestBody = SendFCMReqModel(
+                NotificationX(bookingDetails, bookingDetails, "otpResponse"),
+                "high",
+                token
+            )
             RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
     }
@@ -1429,7 +1523,13 @@ object UserUtils {
         map["Content-Type"] = "application/json"
         map["Authorization"] = "key=${getFCMServerKey(context)}"
         CoroutineScope(Dispatchers.Main).launch {
-            val requestBody = SendFCMReqModel(NotificationX("$bookingId|$categoryId|$userId", "$bookingId|$categoryId|$userId","extraDemand"), "high", token)
+            val requestBody = SendFCMReqModel(
+                NotificationX(
+                    "$bookingId|$categoryId|$userId",
+                    "$bookingId|$categoryId|$userId",
+                    "extraDemand"
+                ), "high", token
+            )
             RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
     }
@@ -1439,7 +1539,10 @@ object UserUtils {
         bookingId: String,
         from: String
     ): String {
-        val spDetails = Gson().fromJson(getSelectedSPDetails(context), com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
+        val spDetails = Gson().fromJson(
+            getSelectedSPDetails(context),
+            com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java
+        )
         return if (spDetails.fcm_token.isEmpty()) {
             "Service Provider not able to receive notifications"
         } else {
@@ -1458,7 +1561,8 @@ object UserUtils {
         if (getSelectedSPDetails(context).isNotEmpty()) {
             val data = Gson().fromJson(
                 getSelectedSPDetails(context),
-                com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
+                com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java
+            )
             if (data.fcm_token.isNotEmpty()) {
                 sendFCM(context, data.fcm_token, bookingId, from, type)
             } else {
@@ -1468,16 +1572,21 @@ object UserUtils {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val fcms = ArrayList<To>()
-                    val sps = Gson().fromJson(getSelectedAllSPDetails(context), SearchServiceProviderResModel::class.java)
+                    val sps = Gson().fromJson(
+                        getSelectedAllSPDetails(context),
+                        SearchServiceProviderResModel::class.java
+                    )
                     for (sp in sps.data) {
                         fcms.add(To(sp.fcm_token))
                     }
                     val notification = Notification(
                         "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
                         "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
-                        from)
+                        from
+                    )
                     val fcmRequestBody = SendFcmToAllReqModel(notification, "high", fcms)
-                    val response = RetrofitBuilder.getUserRetrofitInstance().sendFcmToAll(fcmRequestBody)
+                    val response =
+                        RetrofitBuilder.getUserRetrofitInstance().sendFcmToAll(fcmRequestBody)
 //                    Toast.makeText(context, response.status.toString(), Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
@@ -1522,6 +1631,7 @@ object UserUtils {
 //                    }
 //                }
 //            }
+//            return "fcm_sent"
         }
         return ""
     }
@@ -1548,7 +1658,7 @@ object UserUtils {
     }
 
     fun roundOffDecimal(number: Double): Double {
-        val df = DecimalFormat("#.##")
+        val df = DecimalFormat("#.###")
         df.roundingMode = RoundingMode.CEILING
         return df.format(number).toDouble()
     }
@@ -1593,7 +1703,8 @@ object UserUtils {
                 }
                 val token = task.result
                 saveFCMToken(context, token)
-                Freshchat.getInstance(context).setPushRegistrationToken(token)
+//                Freshchat.getInstance(context).setPushRegistrationToken(token)
+//                ZohoSalesIQ.enablePush(token, true)
                 CoroutineScope(Dispatchers.Main).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
                         FCMReqModel(
@@ -1606,10 +1717,11 @@ object UserUtils {
                     if (jsonResponse.getInt("status") != 200) {
 //                        Toast.makeText(context, "Token update Failed!!!", Toast.LENGTH_SHORT).show()
                         return@launch
-                    } else {
+                    }
+//                    else {
 //                        Log.e("FCM TOKEN UPDATED:", token)
 //                        Toast.makeText(context, "Token updated!!!", Toast.LENGTH_SHORT).show()
-                    }
+//                    }
                 }
 //                Log.e("FCM TOKEN", token)
             })
@@ -1684,8 +1796,9 @@ object UserUtils {
         editor.commit()
     }
 
-    fun getInstantBookingId(context: Context) : String {
-        return context.getSharedPreferences("userDetails", Context.MODE_PRIVATE).getString("instantBookingId", "")!!
+    fun getInstantBookingId(context: Context): String {
+        return context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+            .getString("instantBookingId", "")!!
     }
 
     fun saveProfessionIdForBookInstant(
@@ -1715,7 +1828,7 @@ object UserUtils {
         editor.commit()
     }
 
-    fun getInstantBookingCetegoryId(context: Context): String {
+    fun getInstantBookingCategoryId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
         return sharedPreferences.getString("instantCategoryId", "")!!
     }

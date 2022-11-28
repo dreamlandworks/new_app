@@ -156,32 +156,12 @@ class ProviderProfileScreen : AppCompatActivity() {
                 val data = Gson().fromJson(response.string(), ProviderProfileProfessionResModel::class.java)
                 if (data.status == 200) {
                     professionalDetails = data
-//                    createQRLinkLink()
+                    createQRLinkLink()
                 }
             } catch (e: Exception) {
-//                toast(this@ProviderProfileScreen, e.message!!)
                 snackBar(binding.changePwd, e.message!!)
             }
         }
-//        val factory = ViewModelFactory(ProviderProfileRepository())
-//        val viewModel = ViewModelProvider(this, factory)[ProviderProfileViewModel::class.java]
-//
-//        viewModel.professionalDetails(this, requestBody).observe(this) {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    professionalDetails = it.data!!
-//                    createQRLinkLink()
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    snackBar(binding.changePwd,"Error:" + it.message!!)
-//                }
-//            }
-//        }
     }
 
     private fun openImagePicker() {

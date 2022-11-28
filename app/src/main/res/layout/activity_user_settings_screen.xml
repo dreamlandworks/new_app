@@ -183,6 +183,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/customerCare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -199,7 +200,6 @@
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/customerCare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"

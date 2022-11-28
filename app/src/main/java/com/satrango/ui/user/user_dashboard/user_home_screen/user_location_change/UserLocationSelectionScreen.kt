@@ -39,11 +39,16 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserLocationSelectionScreenBinding
+import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
+import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobAddressScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.utils.*
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -89,7 +94,25 @@ class UserLocationSelectionScreen : AppCompatActivity(), OnMapReadyCallback {
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
 
-        Places.initialize(this, resources.getString(R.string.google_maps_key))
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserProfile(
+                    UserProfileReqModel(
+                        RetrofitBuilder.USER_KEY,
+                        UserUtils.getUserId(this@UserLocationSelectionScreen).toInt(),
+                        UserUtils.getCity(this@UserLocationSelectionScreen)
+                    )
+                )
+                if (response.status == 200) {
+//                    Places.initialize(this@UserLocationSelectionScreen, resources.getString(R.string.google_maps_key))
+//                    toast(this@UserLocationSelectionScreen, resources.getString(R.string.google_maps_key))
+                    Places.initialize(this@UserLocationSelectionScreen, response.data.maps_key)
+                    toast(this@UserLocationSelectionScreen, "Maps are ready to search")
+                }
+            } catch (e: Exception) {
+                toast(this@UserLocationSelectionScreen, e.message!!)
+            }
+        }
 
         val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
         autocompleteFragment!!.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS))

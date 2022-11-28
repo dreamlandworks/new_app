@@ -11,10 +11,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,7 +24,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
-import com.freshchat.consumer.sdk.beans.User
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -253,7 +249,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                 }
             } else {
-                when (UserUtils.getInstantBookingCetegoryId(this)) {
+//                toast(this, UserUtils.getInstantBookingCategoryId(this))
+                when (UserUtils.getInstantBookingCategoryId(this)) {
                     "1" -> {
                         bookSingleMoveServiceProvider()
                     }
@@ -288,7 +285,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
             resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
-        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images).into(profilePic)
+        Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images)
+            .into(profilePic)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -387,6 +385,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     )
                     if (UserUtils.getBookingType(this@BookingAddressScreen) == "instant") {
                         // Book Instantly
+//                        toast(this@BookingAddressScreen, "Book instantly")
                         val hasToken = UserUtils.sendFCMtoAllServiceProviders(
                             this@BookingAddressScreen,
                             UserUtils.getBookingId(this@BookingAddressScreen),
@@ -412,7 +411,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                     }
                 } else {
                     progressDialog.dismiss()
-                    toast(this@BookingAddressScreen, jsonResponse.getString("status_message"))
+                    toast(this@BookingAddressScreen, jsonResponse.getString("message"))
                 }
             } catch (e: java.lang.Exception) {
                 toast(this@BookingAddressScreen, e.message!!)
@@ -552,117 +551,193 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             startActivity(intent)
             waitingDialog.dismiss()
         }
-        var minutes = 2
-        var seconds = 59
-        val mainHandler = Handler(Looper.getMainLooper())
-        var progressTime = 180
-        mainHandler.post(object : Runnable {
+
+        val countDownTimer = object : CountDownTimer(180000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                val timeFormat = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+                time.text = timeFormat
+                progressBar.progress = (millisUntilFinished / 1000).toInt()
+            }
+
             @SuppressLint("SimpleDateFormat")
-            override fun run() {
-                if (seconds < 10) {
-                    time.text = "0$minutes:0$seconds"
-                } else {
-                    time.text = "0$minutes:$seconds"
-                }
-
-                progressTime -= 1
-                progressBar.progress = progressTime
-
-                seconds -= 1
-                if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(
+            override fun onFinish() {
+                UserUtils.sendFCMtoAllServiceProviders(
+                    this@BookingAddressScreen,
+                    UserUtils.getBookingId(this@BookingAddressScreen),
+                    "accepted",
+                    "accept|${UserUtils.getBookingType(this@BookingAddressScreen)}|selected"
+                )
+                try {
+                    val bookingFactory = ViewModelFactory(BookingRepository())
+                    val bookingViewModel = ViewModelProvider(
                         this@BookingAddressScreen,
-                        UserUtils.getBookingId(this@BookingAddressScreen),
-                        "accepted",
-                        "accept|${UserUtils.getBookingType(this@BookingAddressScreen)}|selected"
+                        bookingFactory
+                    )[BookingViewModel::class.java]
+                    val requestBody = ProviderResponseReqModel(
+                        data.final_amount.toString(),
+                        UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+                        "",
+                        RetrofitBuilder.USER_KEY,
+                        data.users_id.toInt(),
+                        6,
+                        UserUtils.getUserId(this@BookingAddressScreen).toInt()
                     )
-                    waitingDialog.dismiss()
-                    try {
-                        val bookingFactory = ViewModelFactory(BookingRepository())
-                        val bookingViewModel = ViewModelProvider(
-                            this@BookingAddressScreen,
-                            bookingFactory
-                        )[BookingViewModel::class.java]
-                        val requestBody = ProviderResponseReqModel(
-                            data.final_amount.toString(),
-                            UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
-                            "",
-                            RetrofitBuilder.USER_KEY,
-                            data.users_id.toInt(),
-                            6,
-                            UserUtils.getUserId(this@BookingAddressScreen).toInt()
-                        )
-//                        toast(this@BookingAddressScreen, Gson().toJson(requestBody))
-                        bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
-                            .observe(this@BookingAddressScreen) {
-                                when (it) {
-                                    is NetworkResponse.Loading -> {
-                                        progressDialog.show()
+                    bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
+                        .observe(this@BookingAddressScreen) {
+                            when (it) {
+                                is NetworkResponse.Loading -> {
+                                    progressDialog.show()
+                                }
+                                is NetworkResponse.Success -> {
+                                    progressDialog.dismiss()
+                                    UserUtils.saveFromFCMService(
+                                        this@BookingAddressScreen,
+                                        false
+                                    )
+                                    if (FCMService.notificationManager != null) {
+                                        FCMService.notificationManager.cancelAll()
                                     }
-                                    is NetworkResponse.Success -> {
-                                        progressDialog.dismiss()
-                                        UserUtils.saveFromFCMService(
-                                            this@BookingAddressScreen,
-                                            false
-                                        )
-                                        if (FCMService.notificationManager != null) {
-                                            FCMService.notificationManager.cancelAll()
+                                    ProviderDashboard.bookingId = "0"
+                                    if (ProviderDashboard.bottomSheetDialog != null) {
+                                        if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                            toast(
+                                                this@BookingAddressScreen,
+                                                "Closed from Booking Address"
+                                            )
+                                            ProviderDashboard.countDownTimer.cancel()
+                                            ProviderDashboard.bottomSheetDialog!!.dismiss()
                                         }
-                                        ProviderDashboard.bookingId = "0"
-                                        if (ProviderDashboard.bottomSheetDialog != null) {
-                                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
-                                                toast(
-                                                    this@BookingAddressScreen,
-                                                    "Closed from Booking Address"
-                                                )
-                                                ProviderDashboard.bottomSheetDialog!!.dismiss()
-                                            }
-                                        }
-                                        weAreSorryDialog()
-                                    }
-                                    is NetworkResponse.Failure -> {
-                                        progressDialog.dismiss()
-                                        toast(this@BookingAddressScreen, it.message!!)
                                     }
                                 }
+                                is NetworkResponse.Failure -> {
+                                    progressDialog.dismiss()
+                                    toast(this@BookingAddressScreen, it.message!!)
+                                }
                             }
-                    } catch (e: java.lang.Exception) {
-                    }
-//                    Checkout.preload(applicationContext)
-//                    weAreSorryDialog()
+                        }
+                } catch (e: java.lang.Exception) {
                 }
-                if (seconds == 0) {
-                    seconds = 59
-                    minutes -= 1
-                }
-                if (UserUtils.getProviderAction(this@BookingAddressScreen)
-                        .split("|")[0].isNotEmpty()
-                ) {
-                    waitingDialog.dismiss()
-                    if (UserUtils.getProviderAction(this@BookingAddressScreen)
-                            .split("|")[0].trim() == "accept"
-                    ) {
-                        serviceProviderAcceptDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(
-                            this@BookingAddressScreen,
-                            "accepted",
-                            "accepted",
-                            "accepted|${UserUtils.getBookingType(this@BookingAddressScreen)}"
-                        )
-                    } else {
-                        serviceProviderRejectDialog(this@BookingAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(
-                            this@BookingAddressScreen,
-                            "accepted",
-                            "accepted",
-                            "accepted|${UserUtils.getBookingType(this@BookingAddressScreen)}"
-                        )
-                    }
-                }
-                mainHandler.postDelayed(this, 1000)
+                waitingDialog.dismiss()
+                weAreSorryDialog()
             }
-        })
+
+        }.start()
+
+//        var minutes = 2
+//        var seconds = 59
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        var progressTime = 180
+//        mainHandler.post(object : Runnable {
+//            @SuppressLint("SimpleDateFormat")
+//            override fun run() {
+//                if (seconds < 10) {
+//                    time.text = "0$minutes:0$seconds"
+//                } else {
+//                    time.text = "0$minutes:$seconds"
+//                }
+//
+//                progressTime -= 1
+//                progressBar.progress = progressTime
+//
+//                seconds -= 1
+//                if (minutes == 0 && seconds == 0) {
+//                    UserUtils.sendFCMtoAllServiceProviders(
+//                        this@BookingAddressScreen,
+//                        UserUtils.getBookingId(this@BookingAddressScreen),
+//                        "accepted",
+//                        "accept|${UserUtils.getBookingType(this@BookingAddressScreen)}|selected"
+//                    )
+//                    waitingDialog.dismiss()
+//                    try {
+//                        val bookingFactory = ViewModelFactory(BookingRepository())
+//                        val bookingViewModel = ViewModelProvider(
+//                            this@BookingAddressScreen,
+//                            bookingFactory
+//                        )[BookingViewModel::class.java]
+//                        val requestBody = ProviderResponseReqModel(
+//                            data.final_amount.toString(),
+//                            UserUtils.getBookingId(this@BookingAddressScreen).toInt(),
+//                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+//                            "",
+//                            RetrofitBuilder.USER_KEY,
+//                            data.users_id.toInt(),
+//                            6,
+//                            UserUtils.getUserId(this@BookingAddressScreen).toInt()
+//                        )
+////                        toast(this@BookingAddressScreen, Gson().toJson(requestBody))
+//                        bookingViewModel.setProviderResponse(this@BookingAddressScreen, requestBody)
+//                            .observe(this@BookingAddressScreen) {
+//                                when (it) {
+//                                    is NetworkResponse.Loading -> {
+//                                        progressDialog.show()
+//                                    }
+//                                    is NetworkResponse.Success -> {
+//                                        progressDialog.dismiss()
+//                                        UserUtils.saveFromFCMService(
+//                                            this@BookingAddressScreen,
+//                                            false
+//                                        )
+//                                        if (FCMService.notificationManager != null) {
+//                                            FCMService.notificationManager.cancelAll()
+//                                        }
+//                                        ProviderDashboard.bookingId = "0"
+//                                        if (ProviderDashboard.bottomSheetDialog != null) {
+//                                            if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+//                                                toast(
+//                                                    this@BookingAddressScreen,
+//                                                    "Closed from Booking Address"
+//                                                )
+//                                                ProviderDashboard.bottomSheetDialog!!.dismiss()
+//                                            }
+//                                        }
+//                                    }
+//                                    is NetworkResponse.Failure -> {
+//                                        progressDialog.dismiss()
+//                                        toast(this@BookingAddressScreen, it.message!!)
+//                                    }
+//                                }
+//                            }
+//                        weAreSorryDialog()
+//                    } catch (e: java.lang.Exception) {
+//                    }
+////                    Checkout.preload(applicationContext)
+////                    weAreSorryDialog()
+//                }
+//                if (seconds == 0) {
+//                    seconds = 59
+//                    minutes -= 1
+//                }
+//                if (UserUtils.getProviderAction(this@BookingAddressScreen)
+//                        .split("|")[0].isNotEmpty()
+//                ) {
+//                    waitingDialog.dismiss()
+//                    if (UserUtils.getProviderAction(this@BookingAddressScreen)
+//                            .split("|")[0].trim() == "accept"
+//                    ) {
+//                        serviceProviderAcceptDialog(this@BookingAddressScreen)
+//                        UserUtils.sendFCMtoAllServiceProviders(
+//                            this@BookingAddressScreen,
+//                            "accepted",
+//                            "accepted",
+//                            "accepted|${UserUtils.getBookingType(this@BookingAddressScreen)}"
+//                        )
+//                    } else {
+//                        serviceProviderRejectDialog(this@BookingAddressScreen)
+//                        UserUtils.sendFCMtoAllServiceProviders(
+//                            this@BookingAddressScreen,
+//                            "accepted",
+//                            "accepted",
+//                            "accepted|${UserUtils.getBookingType(this@BookingAddressScreen)}"
+//                        )
+//                    }
+//                }
+//                mainHandler.postDelayed(this, 1000)
+//            }
+//        })
         waitingDialog.setContentView(dialogView)
         if (!(this as Activity).isFinishing) {
             waitingDialog.show()
@@ -749,7 +824,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -905,11 +984,26 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             var country = "unknown"
             var postalCode = "unknown"
             var knownName = "unknown"
-            try { city = address.get(0).locality } catch (e: Exception) { }
-            try { state = address.get(0).adminArea } catch (e: Exception) { }
-            try { country = address.get(0).countryName } catch (e: Exception) { }
-            try { postalCode = address.get(0).postalCode } catch (e: Exception) { }
-            try { knownName = address.get(0).featureName } catch (e: Exception) { }
+            try {
+                city = address.get(0).locality
+            } catch (e: Exception) {
+            }
+            try {
+                state = address.get(0).adminArea
+            } catch (e: Exception) {
+            }
+            try {
+                country = address.get(0).countryName
+            } catch (e: Exception) {
+            }
+            try {
+                postalCode = address.get(0).postalCode
+            } catch (e: Exception) {
+            }
+            try {
+                knownName = address.get(0).featureName
+            } catch (e: Exception) {
+            }
             fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
             UserUtils.setLatitude(context, latitude.toString())
             UserUtils.setLongitude(context, longitude.toString())
@@ -987,6 +1081,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                                 ProviderDashboard.bookingId = "0"
                                 if (ProviderDashboard.bottomSheetDialog != null) {
                                     if (ProviderDashboard.bottomSheetDialog!!.isShowing) {
+                                        ProviderDashboard.countDownTimer.cancel()
                                         ProviderDashboard.bottomSheetDialog!!.dismiss()
                                     }
                                 }

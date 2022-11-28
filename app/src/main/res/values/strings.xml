@@ -10,8 +10,8 @@
 
     <string name="freshchat_file_provider_authority">com.satrango.provider</string>
 
-<!--    <string name="trueCallerPartnerKey">BD3Mf8af98ad8edd344629b332ff5826ab4e5</string>-->
-    <string name="trueCallerPartnerKey">FA7xk69f2704bd7ea44e6a9b066d39b8e4d6f</string>
+    <string name="trueCallerPartnerKey">BD3Mf8af98ad8edd344629b332ff5826ab4e5</string>
+<!--    <string name="trueCallerPartnerKey">kdWMa10c1002b1b604fa0b580d433b9f4ca09</string>-->
 
     <string name="userLogin">login</string>
     <string name="userFacebookLogin">facebook</string>
@@ -771,6 +771,7 @@
     <string name="EXTRA_DEMAND_ACCEPT_REJECT">EXTRA_DEMAND_ACCEPT_REJECT</string>
     <string name="please_select_profession_to_search_service_providers">Please select profession to search service providers</string>
     <string name="register_via_truecaller">Register Via TrueCaller</string>
+    <string name="your_web_client_id">175510734309-543f91sk6iviel5la9ljpe02okhm14s4.apps.googleusercontent.com</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>
