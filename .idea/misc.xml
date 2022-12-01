@@ -220,6 +220,7 @@
         <entry key="app/src/main/res/layout/activity_booking_date_and_time_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_booking_multi_move_address_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_chat_screen.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/layout/activity_complaint_screen.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/activity_discussion_board_screen.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/activity_fund_transfer_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.335" />
@@ -321,7 +322,7 @@
         <entry key="app/src/main/res/layout/my_bookings_row.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/my_job_posts_row.xml" value="0.21592254638671876" />
         <entry key="app/src/main/res/layout/no_installments_dialog.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/no_service_provider_found.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/no_service_provider_found.xml" value="0.25" />
         <entry key="app/src/main/res/layout/password_failure_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/password_success_dialog.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/payment_success_dialog.xml" value="0.232421875" />

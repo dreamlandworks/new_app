@@ -8,10 +8,9 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.freshchat.consumer.sdk.Freshchat
-import com.freshchat.consumer.sdk.FreshchatConfig
 import com.satrango.R
 import com.satrango.databinding.ActivityUserSettingsScreenBinding
 import com.satrango.ui.auth.user_signup.TermsAndConditionScreen
@@ -22,12 +21,11 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.settings.faqs.UserFAQScre
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.feedback.FeedBackScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.requests.ComplaintRequestScreen
 import com.satrango.utils.UserUtils
-import com.satrango.utils.UserUtils.getFirstName
-import com.satrango.utils.UserUtils.getLastName
-import com.satrango.utils.UserUtils.getMail
-import com.satrango.utils.UserUtils.getPhoneNo
 import com.satrango.utils.UserUtils.isProvider
-import com.satrango.utils.toast
+import com.zoho.commons.InitConfig
+import com.zoho.livechat.android.ZohoLiveChat
+import com.zoho.livechat.android.listeners.InitListener
+import com.zoho.salesiqembed.ZohoSalesIQ
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserSettingsScreen : AppCompatActivity() {
@@ -87,33 +85,61 @@ class UserSettingsScreen : AppCompatActivity() {
                 )
             }
             customerCare.setOnClickListener {
-                reachCustomerSupport()
+//                reachCustomerSupport()
+                if (ZohoSalesIQ.isLiveChatAvailable()) {
+                    ZohoLiveChat.Chat.show()
+                } else {
+                    ZohoSalesIQ.showLauncher(true)
+                }
             }
         }
+
+        reachCustomerSupport()
 
     }
 
     private fun reachCustomerSupport() {
-//        val config = FreshchatConfig(
-//            "20874dd7-eda0-4655-b0e0-e18a97b4f80a",
-//            "579f96b9-4621-439d-b18a-5ce523f6b20a"
-//        )
-        val config = FreshchatConfig(
-            "242471f0-5f77-451e-9875-91d4f6d8df65",
-            "c8300a05-b9cf-4f23-a225-6d663305959f"
-        )
-        config.domain = "msdk.in.freshchat.com"
-        config.isCameraCaptureEnabled = true
-        config.isGallerySelectionEnabled = true
-        val freshChat = Freshchat.getInstance(applicationContext)
-        freshChat.init(config)
+        val initConfig = InitConfig()
+        ZohoSalesIQ.init(
+            application,
+            "ZqUGlb8vQgTD%2B2nQ29l8D8omc3VIw5JY7e%2F5zKbaWIlaHOWhQkgKjONc01%2F8BrdODDQan%2BMS85znVdDi3X4fqb0Jg1lKFfev_in",
+            "xfuLcMoNAd0Fsx6u3Jr7h57LR6dqWDHACHgTdHZkQpexceH4uHQFBbtcHz%2Bw2zHOU5MY68vPnvd04ktPS8%2Bq%2Bo%2BUjY93hdvudrkbCbaAfxY66iHDOw81Yi6tqHFhW0wU4mSp9seXEj%2FtjLNtagh%2BvuXCkQb0krleRxTIyYyhFJwKn9iU1KaanHoXu8Z4WViD",
+            initConfig,
+            object : InitListener {
 
-        val freshChatUser = Freshchat.getInstance(applicationContext).user
-        freshChatUser.firstName = getFirstName(applicationContext)
-        freshChatUser.lastName = getLastName(applicationContext)
-        freshChatUser.email = getMail(applicationContext)
-        freshChatUser.setPhone("+91", getPhoneNo(applicationContext))
-        freshChat.user = freshChatUser
+                override fun onInitSuccess() {
+//                if (ZohoSalesIQ.isLiveChatAvailable()) {
+//                    ZohoLiveChat.Chat.show()
+//                } else {
+//                    ZohoSalesIQ.showLauncher(true)
+//                }
+                }
+
+                override fun onInitError(errorCode: Int, errorMessage: String?) {
+                    Toast.makeText(this@UserSettingsScreen, errorMessage!!, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+
+//        val config = FreshchatConfig(
+//            "242471f0-5f77-451e-9875-91d4f6d8df65",
+//            "c8300a05-b9cf-4f23-a225-6d663305959f"
+//        )
+//        config.domain = "msdk.in.freshchat.com"
+//        config.isCameraCaptureEnabled = true
+//        config.isGallerySelectionEnabled = true
+//        val freshChat = Freshchat.getInstance(applicationContext)
+//        freshChat.init(config)
+//
+//        val freshChatUser = Freshchat.getInstance(applicationContext).user
+//        freshChatUser.firstName = getFirstName(applicationContext)
+//        freshChatUser.lastName = getLastName(applicationContext)
+//        freshChatUser.email = getMail(applicationContext)
+//        freshChatUser.setPhone("+91", getPhoneNo(applicationContext))
+//        freshChat.user = freshChatUser
+
+
 //        toast(
 //            this,
 //            getFirstName(this) + "|" + getLastName(this) + "|" + getMail(this) + "|" + getPhoneNo(
@@ -130,7 +156,7 @@ class UserSettingsScreen : AppCompatActivity() {
 //        userMeta["usedWishlistFeature"] = "yes"
 //        Freshchat.getInstance(applicationContext).setUserProperties(userMeta)
 
-        Freshchat.showConversations(applicationContext)
+//        Freshchat.showConversations(applicationContext)
 
     }
 
@@ -167,7 +193,7 @@ class UserSettingsScreen : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window: Window = window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.setStatusBarColor(resources.getColor(R.color.purple_700))
+                window.statusBarColor = resources.getColor(R.color.purple_700)
             }
         }
     }

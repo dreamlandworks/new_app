@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "175510734309-bv2v3q5d9g9h2fblf96983qm6j4pq8bs.apps.googleusercontent.com",
+          "client_id": "175510734309-que96stbpm8piqsv5sspan4mslgejibe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.satrango",
+            "certificate_hash": "1247de53166526f9674ab47d4720127b4db2a38d"
+          }
+        },
+        {
+          "client_id": "175510734309-tsgehrtvja3gsh9jil2eumkojpgl0api.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.satrango",
@@ -23,20 +31,8 @@
           }
         },
         {
-          "client_id": "175510734309-kamrkdlu5359pdi4jos8sv6voicg8qqa.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.satrango",
-            "certificate_hash": "813eaeea06adb2d42c6d8d93dd0effe120c06515"
-          }
-        },
-        {
-          "client_id": "175510734309-m6d93ihkognrpj8n1r6b9supn9fifbkk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.satrango",
-            "certificate_hash": "1247de53166526f9674ab47d4720127b4db2a38d"
-          }
+          "client_id": "175510734309-3h29lbrph7vt491g2527van9rua1nrs0.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -46,7 +42,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175510734309-3h29lbrph7vt491g2527van9rua1nrs0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

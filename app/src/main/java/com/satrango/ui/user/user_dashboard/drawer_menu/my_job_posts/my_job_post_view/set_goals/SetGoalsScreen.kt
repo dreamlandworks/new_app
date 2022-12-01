@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivitySetGoalsScreenBinding
@@ -32,11 +30,12 @@ import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.setFinalWalletBalance
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListener {
+class SetGoalsScreen : AppCompatActivity(),
+//    PaymentResultListener,
+    SetGoalsListener {
 
     private lateinit var selectedInstallmentToUpdate: DataX
     private lateinit var viewModel: PostJobViewModel
@@ -216,37 +215,37 @@ class SetGoalsScreen : AppCompatActivity(), PaymentResultListener, SetGoalsListe
         }
     }
 
-    private fun makePayment() {
-        Checkout.preload(applicationContext)
-        val checkout = Checkout()
-        checkout.setKeyID(getString(R.string.razorpay_api_key))
-        try {
-            val orderRequest = JSONObject()
-            orderRequest.put("currency", "INR")
-            orderRequest.put(
-                "amount",
-                bidPrice * 100
-            ) // 500rs * 100 = 50000 paisa
-            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
-            orderRequest.put(
-                "image",
-                "https://dev.satrango.com/public/assets/img/logo-black.png"
-            )
-            orderRequest.put("theme.color", R.color.blue)
-            checkout.open(this, orderRequest)
-        } catch (e: Exception) {
-            toast(this, e.message!!)
-        }
-    }
+//    private fun makePayment() {
+//        Checkout.preload(applicationContext)
+//        val checkout = Checkout()
+//        checkout.setKeyID(getString(R.string.razorpay_api_key))
+//        try {
+//            val orderRequest = JSONObject()
+//            orderRequest.put("currency", "INR")
+//            orderRequest.put(
+//                "amount",
+//                bidPrice * 100
+//            ) // 500rs * 100 = 50000 paisa
+//            orderRequest.put("receipt", "order_rcptid_${System.currentTimeMillis()}")
+//            orderRequest.put(
+//                "image",
+//                "https://dev.satrango.com/public/assets/img/logo-black.png"
+//            )
+//            orderRequest.put("theme.color", R.color.blue)
+//            checkout.open(this, orderRequest)
+//        } catch (e: Exception) {
+//            toast(this, e.message!!)
+//        }
+//    }
 
-    override fun onPaymentSuccess(response: String?) {
-        updateInstallmentPaymentStatus("Success", response!!)
-    }
+//    override fun onPaymentSuccess(response: String?) {
+//        updateInstallmentPaymentStatus("Success", response!!)
+//    }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        updateInstallmentPaymentStatus("Failure", "")
-        snackBar(binding.addAnotherAddressBtn, "Payment Failed Try again")
-    }
+//    override fun onPaymentError(p0: Int, p1: String?) {
+//        updateInstallmentPaymentStatus("Failure", "")
+//        snackBar(binding.addAnotherAddressBtn, "Payment Failed Try again")
+//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun updateInstallmentPaymentStatus(status: String, referenceId: String) {

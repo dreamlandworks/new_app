@@ -7,16 +7,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
@@ -29,17 +28,16 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
-import com.razorpay.Checkout
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityBookingMultiMoveAddressScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_attachments.models.MultiMoveReqModel
+import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobTypeScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.attachments.models.Attachment
@@ -55,7 +53,6 @@ import java.io.FileNotFoundException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.round
 
 class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
@@ -91,7 +88,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 
         database = Firebase.database
         firebaseDatabaseRef = database.getReference(UserUtils.getFCMToken(this))
-        
+
         imagePathList = ArrayList()
         encodedImages = ArrayList()
 
@@ -164,7 +161,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.booking)
     }
 
     private fun loadAddressOnUI() {
@@ -262,57 +260,110 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val time = dialogView.findViewById<TextView>(R.id.time)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
         closeBtn.setOnClickListener {
-            UserUtils.sendFCMtoAllServiceProviders(this, UserUtils.getBookingId(this), "accepted", "accepted|${UserUtils.getBookingType(this)}")
+            UserUtils.sendFCMtoAllServiceProviders(
+                this,
+                UserUtils.getBookingId(this),
+                "accepted",
+                "accepted|${UserUtils.getBookingType(this)}"
+            )
             finish()
             startActivity(intent)
             waitingDialog.dismiss()
         }
-        var minutes = 2
-        var seconds = 59
-        val mainHandler = Handler(Looper.getMainLooper())
-        var progressTime = 180
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                if (seconds < 10) {
-                    time.text = "0$minutes:0$seconds"
-                } else {
-                    time.text = "0$minutes:$seconds"
-                }
+        val countDownTimer = object : CountDownTimer(180000, 1000) {
 
-                progressTime -= 1
-                progressBar.progress = progressTime
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                val timeFormat = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+                time.text = timeFormat
+                progressBar.progress = (millisUntilFinished / 1000).toInt()
 
-                seconds -= 1
-                if (minutes == 0 && seconds == 0) {
-                    UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
-                    waitingDialog.dismiss()
-                    try {
-                        weAreSorryDialog()
-                    } catch (e: java.lang.Exception) {
-                    }
-                    Checkout.preload(applicationContext)
-                    weAreSorryDialog()
-//                    startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java)
-                }
-                if (seconds == 0) {
-                    seconds = 59
-                    minutes -= 1
-                }
-                if (UserUtils.getProviderAction(this@BookingMultiMoveAddressScreen).split("|")[0].isNotEmpty()) {
+                if (UserUtils.getProviderAction(this@BookingMultiMoveAddressScreen)
+                        .split("|")[0].isNotEmpty()
+                ) {
                     waitingDialog.dismiss()
                     if (UserUtils.getProviderAction(this@BookingMultiMoveAddressScreen)
                             .split("|")[0].trim() == "accept"
                     ) {
                         serviceProviderAcceptDialog(this@BookingMultiMoveAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
+                        UserUtils.sendFCMtoAllServiceProviders(
+                            this@BookingMultiMoveAddressScreen,
+                            "accepted",
+                            "accepted",
+                            "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}"
+                        )
                     } else {
                         serviceProviderRejectDialog(this@BookingMultiMoveAddressScreen)
-                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
+                        UserUtils.sendFCMtoAllServiceProviders(
+                            this@BookingMultiMoveAddressScreen,
+                            "accepted",
+                            "accepted",
+                            "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}"
+                        )
                     }
                 }
-                mainHandler.postDelayed(this, 1000)
             }
-        })
+
+            override fun onFinish() {
+                UserUtils.sendFCMtoAllServiceProviders(
+                    this@BookingMultiMoveAddressScreen,
+                    "accepted",
+                    "accepted",
+                    "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}"
+                )
+                waitingDialog.dismiss()
+                weAreSorryDialog()
+            }
+
+        }
+
+//        var minutes = 2
+//        var seconds = 59
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        var progressTime = 180
+//        mainHandler.post(object : Runnable {
+//            override fun run() {
+//                if (seconds < 10) {
+//                    time.text = "0$minutes:0$seconds"
+//                } else {
+//                    time.text = "0$minutes:$seconds"
+//                }
+//
+//                progressTime -= 1
+//                progressBar.progress = progressTime
+//
+//                seconds -= 1
+//                if (minutes == 0 && seconds == 0) {
+//                    UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
+//                    waitingDialog.dismiss()
+//                    try {
+//                        weAreSorryDialog()
+//                    } catch (e: java.lang.Exception) {
+//                    }
+//                    Checkout.preload(applicationContext)
+//                    weAreSorryDialog()
+////                    startActivity(Intent(this@BookingAddressScreen, UserDashboardScreen::class.java)
+//                }
+//                if (seconds == 0) {
+//                    seconds = 59
+//                    minutes -= 1
+//                }
+//                if (UserUtils.getProviderAction(this@BookingMultiMoveAddressScreen).split("|")[0].isNotEmpty()) {
+//                    waitingDialog.dismiss()
+//                    if (UserUtils.getProviderAction(this@BookingMultiMoveAddressScreen)
+//                            .split("|")[0].trim() == "accept"
+//                    ) {
+//                        serviceProviderAcceptDialog(this@BookingMultiMoveAddressScreen)
+//                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
+//                    } else {
+//                        serviceProviderRejectDialog(this@BookingMultiMoveAddressScreen)
+//                        UserUtils.sendFCMtoAllServiceProviders(this@BookingMultiMoveAddressScreen, "accepted", "accepted", "accepted|${UserUtils.getBookingType(this@BookingMultiMoveAddressScreen)}")
+//                    }
+//                }
+//                mainHandler.postDelayed(this, 1000)
+//            }
+//        })
         waitingDialog.setContentView(dialogView)
         waitingDialog.show()
     }
@@ -349,7 +400,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
             dialog.dismiss()
         }
         val finalAmount = if (data != null) {
-            data.final_amount           
+            data.final_amount
         } else {
             0
         }
@@ -450,7 +501,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
                             getImageFilePath(imageUri),
                             "",
                             "",
-                        "")
+                            ""
+                        )
                     )
                     encodedImages.add(Attachment(encodeToBase64FromUri(imageUri), ""))
                 }
@@ -491,18 +543,38 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
 //                                Log.e("SNAPSHOT:", image_url)
                                 var existed = false
                                 for (image in imagePathList) {
-                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, "").file_name == image_url) {
+                                    if (com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                                            "",
+                                            image_url,
+                                            "",
+                                            image_key,
+                                            ""
+                                        ).file_name == image_url
+                                    ) {
                                         existed = true
                                     }
                                 }
                                 if (!existed) {
-                                    imagePathList.add(com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment("", image_url, "", image_key, ""))
+                                    imagePathList.add(
+                                        com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment(
+                                            "",
+                                            image_url,
+                                            "",
+                                            image_key,
+                                            ""
+                                        )
+                                    )
                                     encodedImages.add(Attachment(image_url, ""))
                                 }
                             }
-                            binding.attachmentsRV.layoutManager = LinearLayoutManager(this@BookingMultiMoveAddressScreen, LinearLayoutManager.HORIZONTAL, false)
+                            binding.attachmentsRV.layoutManager = LinearLayoutManager(
+                                this@BookingMultiMoveAddressScreen,
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
                             binding.attachmentsRV.adapter = AttachmentsAdapter(
-                                imagePathList, this@BookingMultiMoveAddressScreen)
+                                imagePathList, this@BookingMultiMoveAddressScreen
+                            )
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -548,7 +620,7 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         }
         return ""
     }
-    
+
     override fun deleteAttachment(
         position: Int,
         imagePath: com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.models.Attachment
@@ -569,7 +641,8 @@ class BookingMultiMoveAddressScreen : AppCompatActivity(), AttachmentsListener {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, timeStamp, null)
         return Uri.parse(path)
     }
 

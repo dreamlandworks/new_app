@@ -42,6 +42,8 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.models.Data
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.USER_ID
+import com.satrango.utils.UserUtils.getInstantBookingCategoryId
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -281,21 +283,40 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             if (keyword.isEmpty()) keyword = "0"
         }
 //        toast(this, subCategory)
+//        {
+//            "address": "GJ9C+72G",
+//            "city": "Vijayawada",
+//            "country": "India",
+//            "key": "L9c4rxAzCfpT3JX08RHaKo5kewSWV6i2",
+//            "offer_id": 0,
+//            "postal_code": "520001",
+//            "search_phrase": "Split AC Mechanic",
+//            "search_phrase_id": "0",
+//            "state": "Andhra Pradesh",
+//            "subcat_id": 3,
+//            "user_lat": "16.5181936",
+//            "user_long": "80.6200626",
+//            "users_id": 34
+//        }
         val requestBody = SearchServiceProviderReqModel(
-            UserUtils.getAddress(this),
-            UserUtils.getCity(this),
-            UserUtils.getCountry(this),
-            RetrofitBuilder.USER_KEY,
-            keyword,
-            binding.searchBar.text.toString().trim(),
-            UserUtils.getPostalCode(this),
-            UserUtils.getState(this),
-            UserUtils.getLatitude(this),
-            UserUtils.getLongitude(this),
-            UserUtils.getUserId(this).toInt(),
-            subCategory.toInt(),
-            offerId
+            "GJ9C+72G", "Vijayawada", "India", "L9c4rxAzCfpT3JX08RHaKo5kewSWV6i2", "0", "Split AC Mechanic", "520001",
+            "Andhra Pradesh", "16.5181936", "80.6200626", 34, 3, 0
         )
+//        val requestBody = SearchServiceProviderReqModel(
+//            UserUtils.getAddress(this),
+//            UserUtils.getCity(this),
+//            UserUtils.getCountry(this),
+//            RetrofitBuilder.USER_KEY,
+//            keyword,
+//            binding.searchBar.text.toString().trim(),
+//            UserUtils.getPostalCode(this),
+//            UserUtils.getState(this),
+//            UserUtils.getLatitude(this),
+//            UserUtils.getLongitude(this),
+//            UserUtils.getUserId(this).toInt(),
+//            subCategory.toInt(),
+//            offerId
+//        )
         Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
 //            progressDialog.show()
@@ -304,7 +325,8 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.shimmerLayout.startShimmerAnimation()
 
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
+                val response =
+                    RetrofitBuilder.getUserRetrofitInstance().getUserSearchResults(requestBody)
                 if (response.status == 200) {
                     keyword = "0"
                     if (!FROM_POPULAR_SERVICES) {
@@ -376,8 +398,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             showBookingTypeBottomSheetDialog.dismiss()
             binding.recyclerView.visibility = View.GONE
             binding.listCount.text = "${data.data.size} out of ${data.data.size}"
-            val sortedList =
-                data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
+            val sortedList = data.data.distinctBy { data: com.satrango.ui.user.user_dashboard.search_service_providers.models.Data -> data.profession_id }
             UserUtils.saveInstantBookingCategoryId(this, sortedList[0].category_id)
             if (sortedList.isEmpty()) {
                 showBookingInstantNotProceedDialog(data)

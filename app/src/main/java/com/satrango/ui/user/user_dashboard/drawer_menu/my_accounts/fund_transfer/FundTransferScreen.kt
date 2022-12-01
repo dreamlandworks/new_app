@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -16,12 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
-import com.google.gson.Gson
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityFundTransferScreenBinding
@@ -29,8 +25,6 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.ProviderMyAccountScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.AddFundsReqModel
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_account.models.AddFundsResModel
-import com.satrango.ui.user.bookings.payment_screen.PaymentScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountRepository
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.MyAccountViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_accounts.UserMyAccountScreen
@@ -46,12 +40,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDetailsInterface {
+class FundTransferScreen : AppCompatActivity(),
+//    PaymentResultListener,
+    AllBankDetailsInterface {
 
     private lateinit var allBankDetails: List<UserBankAccount>
     private var withdrawAmountInDouble = 0.0
@@ -74,12 +68,14 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         initializeProgressDialog()
 
         val factory = ViewModelFactory(MyAccountRepository())
-        viewModel = ViewModelProvider(this@FundTransferScreen, factory)[MyAccountViewModel::class.java]
+        viewModel =
+            ViewModelProvider(this@FundTransferScreen, factory)[MyAccountViewModel::class.java]
 
         loadExistingBankAccounts()
 
         binding.apply {
-            accountRv.layoutManager = LinearLayoutManager(this@FundTransferScreen, LinearLayoutManager.HORIZONTAL, false)
+            accountRv.layoutManager =
+                LinearLayoutManager(this@FundTransferScreen, LinearLayoutManager.HORIZONTAL, false)
 
             hundredBtn.setOnClickListener {
                 if (isProvider(this@FundTransferScreen)) {
@@ -213,7 +209,8 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
     }
 
     private fun loadExistingBankAccounts() {
-        val requestBody = AllBankDetailsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+        val requestBody =
+            AllBankDetailsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
         viewModel.allBankDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -282,16 +279,22 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
 //        }
 //    }
 
-    override fun onPaymentSuccess(statusCode: String?) {
+//    override fun onPaymentSuccess(statusCode: String?) {
 //        updateToServerToAddFund("Success", statusCode!!)
-    }
+//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun updateToServerToAddFund(amount: String) {
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = RetrofitBuilder.getUserRetrofitInstance().addFunds(AddFundsReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt()))
+                val response = RetrofitBuilder.getUserRetrofitInstance().addFunds(
+                    AddFundsReqModel(
+                        amount,
+                        RetrofitBuilder.USER_KEY,
+                        UserUtils.getUserId(this@FundTransferScreen).toInt()
+                    )
+                )
 //                toast(this@FundTransferScreen, Gson().toJson(amount))
                 if (response.status == 200) {
                     UserUtils.saveOrderId(this@FundTransferScreen, response.order_id)
@@ -308,78 +311,113 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
     }
 
     private fun addFundsByPaytmGateWay(amount: String) {
-        val callbackUrl = "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this)}"
-        val paytmOrder = PaytmOrder(UserUtils.getOrderId(this), resources.getString(R.string.paytm_mid), UserUtils.getTxnToken(this), amount, callbackUrl)
-        val transactionManager = TransactionManager(paytmOrder, object: PaytmPaymentTransactionCallback {
-            @SuppressLint("ObsoleteSdkInt", "SimpleDateFormat")
-            override fun onTransactionResponse(inResponse: Bundle?) {
-                if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(R.string.txn_success)) {
-                    val requestBody = FundTransferReqModel(amount, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@FundTransferScreen).toInt(), UserUtils.getOrderId(this@FundTransferScreen))
-                    viewModel.fundTransfer(this@FundTransferScreen, requestBody).observe(this@FundTransferScreen) {
-                        when (it) {
-                            is NetworkResponse.Loading -> {
-                                progressDialog.show()
-                            }
-                            is NetworkResponse.Success -> {
-                                progressDialog.dismiss()
-                                if (isProvider(this@FundTransferScreen)) {
-                                    startActivity(Intent(this@FundTransferScreen, ProviderMyAccountScreen::class.java))
-                                } else {
-                                    startActivity(Intent(this@FundTransferScreen, UserMyAccountScreen::class.java))
+        val callbackUrl =
+            "http://dev.satrango.com/user/verify_txn?order_id=${UserUtils.getOrderId(this)}"
+        val paytmOrder = PaytmOrder(
+            UserUtils.getOrderId(this),
+            resources.getString(R.string.paytm_mid),
+            UserUtils.getTxnToken(this),
+            amount,
+            callbackUrl
+        )
+        val transactionManager =
+            TransactionManager(paytmOrder, object : PaytmPaymentTransactionCallback {
+                @SuppressLint("ObsoleteSdkInt", "SimpleDateFormat")
+                override fun onTransactionResponse(inResponse: Bundle?) {
+                    if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(
+                            R.string.txn_success
+                        )
+                    ) {
+                        val requestBody = FundTransferReqModel(
+                            amount,
+                            RetrofitBuilder.USER_KEY,
+                            UserUtils.getUserId(this@FundTransferScreen).toInt(),
+                            UserUtils.getOrderId(this@FundTransferScreen)
+                        )
+                        viewModel.fundTransfer(this@FundTransferScreen, requestBody)
+                            .observe(this@FundTransferScreen) {
+                                when (it) {
+                                    is NetworkResponse.Loading -> {
+                                        progressDialog.show()
+                                    }
+                                    is NetworkResponse.Success -> {
+                                        progressDialog.dismiss()
+                                        if (isProvider(this@FundTransferScreen)) {
+                                            startActivity(
+                                                Intent(
+                                                    this@FundTransferScreen,
+                                                    ProviderMyAccountScreen::class.java
+                                                )
+                                            )
+                                        } else {
+                                            startActivity(
+                                                Intent(
+                                                    this@FundTransferScreen,
+                                                    UserMyAccountScreen::class.java
+                                                )
+                                            )
+                                        }
+                                    }
+                                    is NetworkResponse.Failure -> {
+                                        progressDialog.dismiss()
+                                        snackBar(binding.depositAmount, it.message!!)
+                                    }
                                 }
                             }
-                            is NetworkResponse.Failure -> {
-                                progressDialog.dismiss()
-                                snackBar(binding.depositAmount, it.message!!)
-                            }
-                        }
                     }
                 }
-            }
 
-            override fun networkNotAvailable() {
-                snackBar(binding.addFundsBtn, "Network not available")
-            }
+                override fun networkNotAvailable() {
+                    snackBar(binding.addFundsBtn, "Network not available")
+                }
 
-            override fun onErrorProceed(p0: String?) {
-                Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
-            }
+                override fun onErrorProceed(p0: String?) {
+                    Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
+                }
 
-            override fun clientAuthenticationFailed(p0: String?) {
-                Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
-            }
+                override fun clientAuthenticationFailed(p0: String?) {
+                    Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
+                }
 
-            override fun someUIErrorOccurred(p0: String?) {
-                Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
-            }
+                override fun someUIErrorOccurred(p0: String?) {
+                    Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
+                }
 
-            override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
-                Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
-            }
+                override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
+                    Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
+                }
 
-            override fun onBackPressedCancelTransaction() {
-                snackBar(binding.addFundsBtn, "Transaction Cancelled")
-            }
+                override fun onBackPressedCancelTransaction() {
+                    snackBar(binding.addFundsBtn, "Transaction Cancelled")
+                }
 
-            override fun onTransactionCancel(p0: String?, p1: Bundle?) {
-                Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
-            }
+                override fun onTransactionCancel(p0: String?, p1: Bundle?) {
+                    Toast.makeText(this@FundTransferScreen, p0.toString(), Toast.LENGTH_LONG).show()
+                }
 
-        })
+            })
         transactionManager.setAppInvokeEnabled(false)
         transactionManager.setShowPaymentUrl("https://securegw.paytm.in/theia/api/v1/showPaymentPage")
         transactionManager.setEmiSubventionEnabled(true)
         transactionManager.startTransaction(this, activityRequestCode)
-        transactionManager.startTransactionAfterCheckingLoginStatus(this, resources.getString(R.string.paytm_client_id), activityRequestCode)
+        transactionManager.startTransactionAfterCheckingLoginStatus(
+            this,
+            resources.getString(R.string.paytm_client_id),
+            activityRequestCode
+        )
     }
 
-    override fun onPaymentError(p0: Int, statusCode: String?) {
+//    override fun onPaymentError(p0: Int, statusCode: String?) {
 //        updateToServerToAddFund("Failure", statusCode!!)
-    }
+//    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.blue_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -388,7 +426,8 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.fund_transfer)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
+            resources.getString(R.string.fund_transfer)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         loadProfileImage(profilePic)
         if (isProvider(this@FundTransferScreen)) {
@@ -421,7 +460,17 @@ class FundTransferScreen : AppCompatActivity(), PaymentResultListener, AllBankDe
         val tempList = ArrayList<UserBankAccount>()
         allBankDetails.forEachIndexed { index, userBankAccount ->
             if (allBankDetails.indexOf(bankAccount) == index) {
-                tempList.add(UserBankAccount(userBankAccount.account_name, userBankAccount.account_no, userBankAccount.bank_details_id, userBankAccount.ifsc_code, userBankAccount.ubd_id, userBankAccount.users_id, !userBankAccount.isSelected))
+                tempList.add(
+                    UserBankAccount(
+                        userBankAccount.account_name,
+                        userBankAccount.account_no,
+                        userBankAccount.bank_details_id,
+                        userBankAccount.ifsc_code,
+                        userBankAccount.ubd_id,
+                        userBankAccount.users_id,
+                        !userBankAccount.isSelected
+                    )
+                )
                 ubdId = userBankAccount.ubd_id
             } else {
                 tempList.add(userBankAccount)

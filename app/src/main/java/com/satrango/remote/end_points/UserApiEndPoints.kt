@@ -23,7 +23,7 @@ object UserApiEndPoints {
     final const val USER_MULTI_MOVE_BOOKING = "user/multi_move_booking"
     final const val USER_ADD_BOOKING_ADDRESS = "user/add_address"
     final const val UPDATE_FCM_TOKEN = "user/update_token"
-    final const val FCM_SEND = "fcm/send"
+//    final const val FCM_SEND = "fcm/send"
     final const val CONFIRM_PAYMENT = "user/booking_payments"
     final const val PROVIDER_RESPONSE = "user/sp_booking_response"
     final const val USER_DETAILS_ACCEPT = "user/booking_details"

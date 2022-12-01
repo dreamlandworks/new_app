@@ -715,26 +715,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
     }
 
     private fun updateStatusInServer(paidAmount: String, walletBalance: String) {
-//        var finalAmount = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).final_amount
-        val finalUserId =
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
-//        var finalWalletBalance = Gson().fromJson(UserUtils.getSelectedAllSPDetails(this), SearchServiceProviderResModel::class.java).wallet_balance
-//        if (finalWalletBalance <= 0) {
-//            finalWalletBalance = 0
-//        } else {
-//            if (binding.walletBalanceCheck.isChecked) {
-//                finalWalletBalance = if (finalWalletBalance >= finalAmount) {
-//                    finalWalletBalance = finalAmount
-//                    finalAmount = 0
-//                    finalWalletBalance
-//                } else {
-//                    finalWalletBalance -= finalAmount
-//                    finalAmount -= finalWalletBalance
-//                    finalWalletBalance
-//                }
-//            }
-//        }
-//        updateBookingStatusInServer(finalAmount.toString(), finalUserId, finalWalletBalance.toString())
+        val finalUserId = Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).users_id.toInt()
         updateBookingStatusInServer(paidAmount, finalUserId, walletBalance)
     }
 
@@ -761,6 +742,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().confirmPayment(requestBody)
+                toast(this@PaymentScreen, Gson().toJson(response))
                 if (JSONObject(response.string()).getInt("status") == 200) {
                     progressDialog.dismiss()
                     showSuccessDialog()

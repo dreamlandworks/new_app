@@ -83,6 +83,7 @@ import com.satrango.utils.*
 import com.satrango.R
 import com.satrango.base.MyApp
 import com.satrango.utils.UserUtils.isProvider
+import com.satrango.utils.UserUtils.roundOffDecimal
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -119,15 +120,20 @@ class ProviderDashboard : AppCompatActivity() {
     companion object {
         private lateinit var locationCallBack: LocationCallback
         private lateinit var viewModel: ProviderDashboardViewModel
+        @SuppressLint("StaticFieldLeak")
         private lateinit var progressDialog: BeautifulProgressDialog
+        @SuppressLint("StaticFieldLeak")
         private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+        @SuppressLint("StaticFieldLeak")
         private lateinit var binding: ActivityProviderDashboardBinding
 
         var FROM_FCM_SERVICE = false
         var minutes = 2
         var seconds = 59
         var bookingId = "0"
+        @SuppressLint("StaticFieldLeak")
         var bottomSheetDialog: BottomSheetDialog? = null
+        lateinit var countDownTimer: CountDownTimer
 
 
         fun fetchLocation(context: Context) {
@@ -191,11 +197,11 @@ class ProviderDashboard : AppCompatActivity() {
             }
         }
 
-        fun roundOffDecimal(number: Double): Double {
-            val df = DecimalFormat("#.###")
-            df.roundingMode = RoundingMode.CEILING
-            return df.format(number).toDouble()
-        }
+//        fun roundOffDecimal(number: Double): Double {
+//            val df = DecimalFormat("#.###")
+//            df.roundingMode = RoundingMode.CEILING
+//            return df.format(number).toDouble()
+//        }
 
         @SuppressLint("SetTextI18n")
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
@@ -248,6 +254,7 @@ class ProviderDashboard : AppCompatActivity() {
                     try {
                         val response = RetrofitBuilder.getServiceProviderRetrofitInstance().saveProviderLocation(requestBody)
                         val jsonResponse = JSONObject(response.string())
+                        Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
                         if (jsonResponse.getInt("status") == 200) {
                             updateSpOnlineStatus(context)
                         }
@@ -445,6 +452,7 @@ class ProviderDashboard : AppCompatActivity() {
             progressDialog.show()
             try {
                 val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                toast(this@ProviderDashboard, Gson().toJson(apiResponse))
                 if (apiResponse.status == 200) {
                     progressDialog.dismiss()
                     response = apiResponse
@@ -504,6 +512,7 @@ class ProviderDashboard : AppCompatActivity() {
 
         closeBtn.setOnClickListener {
             UserUtils.saveFromFCMService(this, false)
+            countDownTimer.cancel()
             bottomSheetDialog!!.dismiss()
             if (FCMService.notificationManager != null) {
                 FCMService.notificationManager.cancelAll()
@@ -513,6 +522,7 @@ class ProviderDashboard : AppCompatActivity() {
 //        Log.e("ResponseDialog:", Gson().toJson(response))
 
         acceptBtn.setOnClickListener {
+            countDownTimer.cancel()
             bottomSheetDialog!!.dismiss()
             val requestBody = ProviderResponseReqModel(
                 this.response.booking_details.amount,
@@ -563,34 +573,51 @@ class ProviderDashboard : AppCompatActivity() {
         val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
         val mins = diff.toMinutes()
         val secs = diff.seconds
-        var seconds = (59 - secs).toInt()
-        var minutes = (2 - mins).toInt()
-        val mainHandler = Handler(Looper.getMainLooper())
-        var progressTime = 180
-        mainHandler.post(object : Runnable {
-            @SuppressLint("SimpleDateFormat")
-            override fun run() {
-                if (seconds < 10) {
-                    time.text = "0$minutes:0$seconds"
-                } else {
-                    time.text = "0$minutes:$seconds"
-                }
+        val seconds = (59 - secs).toInt()
+        val minutes = (2 - mins).toInt()
+        val millisInFuture = minutes + seconds
 
-                progressTime -= 1
-                progressBar.progress = progressTime
-
-                seconds -= 1
-                if (minutes == 0 && seconds == 0) {
-                    bottomSheetDialog!!.dismiss()
-                }
-                if (seconds == 0) {
-                    seconds = 59
-                    minutes -= 1
-                }
-
-                mainHandler.postDelayed(this, 1000)
+        countDownTimer = object: CountDownTimer(180000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val remainingMinutes = (millisUntilFinished / 1000) / 60
+                val remainingSeconds = (millisUntilFinished / 1000) % 60
+                val timeFormat = String.format(Locale.getDefault(), "%02d:%02d", remainingMinutes, remainingSeconds)
+                time.text = timeFormat
+                progressBar.progress = (millisUntilFinished / 1000).toInt()
             }
-        })
+
+            override fun onFinish() {
+                bottomSheetDialog!!.dismiss()
+            }
+
+        }
+
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        var progressTime = 180
+//        mainHandler.post(object : Runnable {
+//            @SuppressLint("SimpleDateFormat")
+//            override fun run() {
+//                if (seconds < 10) {
+//                    time.text = "0$minutes:0$seconds"
+//                } else {
+//                    time.text = "0$minutes:$seconds"
+//                }
+//
+//                progressTime -= 1
+//                progressBar.progress = progressTime
+//
+//                seconds -= 1
+//                if (minutes == 0 && seconds == 0) {
+//                    bottomSheetDialog!!.dismiss()
+//                }
+//                if (seconds == 0) {
+//                    seconds = 59
+//                    minutes -= 1
+//                }
+//
+//                mainHandler.postDelayed(this, 1000)
+//            }
+//        })
         bottomSheetDialog!!.setContentView(bottomSheet)
         if (!(this as Activity).isFinishing) {
             bottomSheetDialog!!.show()
@@ -786,7 +813,6 @@ class ProviderDashboard : AppCompatActivity() {
         isProvider(this, true)
 //        PermissionUtils.checkAndRequestPermissions(this)
         loadUserProfileData()
-//        loadUserProfileData()
         updateSpProfile()
         registerReceiver(gpsReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
     }
@@ -876,11 +902,11 @@ class ProviderDashboard : AppCompatActivity() {
         }
     }
 
-    private fun updateProfilePicInFirebase(imageUrl: String, userName: String) {
-        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
-        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.profile_image)).setValue(imageUrl)
-        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.user_name)).setValue(userName)
-    }
+//    private fun updateProfilePicInFirebase(imageUrl: String, userName: String) {
+//        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+//        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.profile_image)).setValue(imageUrl)
+//        databaseReference.child(getString(R.string.users)).child(UserUtils.getPhoneNo(this)).child(getString(R.string.user_name)).setValue(userName)
+//    }
 
     private fun alertDialog(message: String) {
         val dialog = AlertDialog.Builder(this)

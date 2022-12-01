@@ -18,8 +18,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.databinding.SearchServiceProviderRowBinding
-import com.satrango.ui.user.bookings.booking_address.BookingAddressScreen
 import com.satrango.ui.user.bookings.booking_attachments.BookingAttachmentsScreen
+import com.satrango.ui.user.bookings.booking_attachments.BookingMultiMoveAddressScreen
 import com.satrango.ui.user.bookings.booking_date_time.BookingDateAndTimeScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.UserSearchViewProfileScreen
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
@@ -66,9 +66,13 @@ class SearchServiceProviderAdapter(
             } else {
                 binding.actualCost.visibility = View.GONE
             }
-            binding.userDistance.text = "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms away"
+            binding.userDistance.text =
+                "${UserUtils.roundOffDecimal(data.distance_kms.toDouble())} Kms away"
 
-            val spDetails = Gson().fromJson(UserUtils.getSelectedAllSPDetails(binding.profilePic.context), SearchServiceProviderResModel::class.java)
+            val spDetails = Gson().fromJson(
+                UserUtils.getSelectedAllSPDetails(binding.profilePic.context),
+                SearchServiceProviderResModel::class.java
+            )
             for (sp in spDetails.slots_data) {
                 if (data.users_id == sp.user_id) {
                     for (booking in sp.blocked_time_slots) {
@@ -83,7 +87,8 @@ class SearchServiceProviderAdapter(
                 FROM_POPULAR_SERVICES = false
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 UserUtils.saveProfessionIdForBookInstant(binding.root.context, data.profession_id)
-                val intent = Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
+                val intent =
+                    Intent(Intent(binding.root.context, UserSearchViewProfileScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookLaterBtn.setOnClickListener {
@@ -91,16 +96,19 @@ class SearchServiceProviderAdapter(
                 UserUtils.saveBookingType(binding.root.context, "selected")
                 UserUtils.saveSpId(binding.root.context, data.users_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
-                val intent = Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
+                val intent =
+                    Intent(Intent(binding.root.context, BookingDateAndTimeScreen::class.java))
                 binding.root.context.startActivity(intent)
             }
             binding.bookNowBtn.setOnClickListener {
                 UserUtils.saveBookingType(binding.root.context, "instant")
                 UserUtils.saveProfessionIdForBookInstant(binding.root.context, data.profession_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
+                UserUtils.saveInstantBookingCategoryId(binding.root.context, data.category_id)
                 if (data.category_id == "3") {
                     UserUtils.addressList = ArrayList()
-                    val intent = Intent(binding.root.context, BookingAddressScreen::class.java)
+                    val intent =
+                        Intent(binding.root.context, BookingMultiMoveAddressScreen::class.java)
                     binding.root.context.startActivity(intent)
                 } else {
                     val database = Firebase.database
@@ -116,7 +124,13 @@ class SearchServiceProviderAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        return ViewHolder(SearchServiceProviderRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            SearchServiceProviderRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
