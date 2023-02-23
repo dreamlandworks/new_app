@@ -18,30 +18,20 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.text.InputType
 import android.text.method.KeyListener
-import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ktx.database
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.ShortDynamicLink
-import com.google.firebase.dynamiclinks.ktx.androidParameters
-import com.google.firebase.dynamiclinks.ktx.dynamicLink
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.gson.Gson
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.google.zxing.qrcode.QRCodeWriter
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserProfileScreenBinding
@@ -49,14 +39,15 @@ import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
+import com.satrango.ui.service_provider.provider_dashboard.dashboard.ProviderDashboard
+import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.browse_categories.models.BrowseCategoryReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileAddressInterface
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileUpdateReqModel
-import com.satrango.utils.UserUtils
-import com.satrango.utils.loadProfileImage
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
+import com.satrango.utils.*
+import com.satrango.utils.UserUtils.getAppLanguage
+import com.satrango.utils.UserUtils.isProvider
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -82,6 +73,34 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
         setContentView(binding.root)
         initializeToolBar()
         initializeProgressDialog()
+
+        val selectLanguages = arrayOf("English", "Telugu")
+        val languages = arrayOf("en", "te")
+        binding.langSpinner.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, selectLanguages)
+        binding.langSpinner.setSelection(languages.indexOf(getAppLanguage(this)))
+        binding.langSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                UserUtils.setAppLanguage(this@UserProfileScreen, languages[p2])
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase!!, getAppLanguage(newBase)))
+    }
+
+    override fun onBackPressed() {
+        if (isProvider(this)) {
+            startActivity(Intent(this, ProviderDashboard::class.java))
+        } else {
+            startActivity(Intent(this, UserDashboardScreen::class.java))
+        }
     }
 
     private var connectionReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -307,13 +326,16 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
+                    progressDialog.dismiss()
                     snackBar(binding.applyBtn, it.data!!)
                     Handler().postDelayed({
-                        showUserProfile()
+                        LocaleHelper.wrap(this@UserProfileScreen, getAppLanguage(this@UserProfileScreen))
+                        startActivity(intent)
                     }, 1500)
                 }
                 is NetworkResponse.Failure -> {
                     snackBar(binding.applyBtn, it.message!!)
+                    toast(this, it.message)
                     progressDialog.dismiss()
                 }
             }
@@ -366,6 +388,8 @@ class UserProfileScreen : AppCompatActivity(), UserProfileAddressInterface {
                         UserProfileAddressAdapter(responseData.address, this@UserProfileScreen)
                     binding.addressRv.visibility = View.VISIBLE
                     progressDialog.dismiss()
+//                    finish()
+//                    startActivity(Intent(this, UserDashboardScreen::class.java))
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()

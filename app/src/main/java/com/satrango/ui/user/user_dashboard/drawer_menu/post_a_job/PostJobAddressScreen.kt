@@ -48,6 +48,7 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.UserPlan
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.post_job_multi_move.PostJobMultiMoveAddressScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.currentDateTime
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
 import com.satrango.utils.toast
@@ -231,7 +232,7 @@ class PostJobAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.bid_per,
             UserUtils.bid_range_id,
             UserUtils.bids_period,
-            SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(Date()),
+            currentDateTime(),
             UserUtils.estimate_time,
             UserUtils.estimateTypeId,
             UserUtils.job_description,

@@ -8,6 +8,8 @@ import java.io.Serializable
 data class BookingDetails(
     @SerializedName("amount")
     val amount: String,
+    @SerializedName("final_amount")
+    val final_amount: String,
     @SerializedName("estimate_time")
     val estimate_time: String,
     @SerializedName("estimate_type")
@@ -18,10 +20,14 @@ data class BookingDetails(
     val sp_fcm_token: String,
     @SerializedName("fname")
     val fname: String,
+    @SerializedName("device_id")
+    val device_id: String,
     @SerializedName("from")
     val from: String,
     @SerializedName("sp_profile_pic")
     val sp_profile_pic: String,
+    @SerializedName("booking_status")
+    val booking_status: String,
     @SerializedName("user_profile_pic")
     val user_profile_pic: String,
     @SerializedName("time_slot_id")

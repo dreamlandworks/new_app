@@ -16,6 +16,7 @@ import com.satrango.databinding.ActivityForgotPasswordScreenOneBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
+import com.satrango.utils.Constants.phone_no_alert
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
 
@@ -42,9 +43,9 @@ class ForgotPasswordScreenOne : AppCompatActivity() {
             resetPasswordBtn.setOnClickListener {
                 val mobile = mobileNo.text.toString().trim()
                 if (mobile.isEmpty()) {
-                    snackBar(mobileNo, "Please Enter Valid 10 digit Mobile Number")
+                    snackBar(mobileNo, phone_no_alert)
                 } else if (mobile.length != 10) {
-                    snackBar(mobileNo, "Please Enter Valid 10 digit Mobile Number")
+                    snackBar(mobileNo, phone_no_alert)
                 } else {
                     UserUtils.setPhoneNo(this@ForgotPasswordScreenOne, mobile)
                     verifyUser()

@@ -2,16 +2,16 @@
     <string name="app_name">Squill</string>
     <!--    <string name="razorpay_api_key">rzp_live_VIyMilt2ymDzxD</string>-->
     <string name="razorpay_api_key">rzp_test_wOHvzNqK3lI6pN</string>
-    <string name="fcm_server_key">fcm_server_key</string>
+    <string name="fcm_server_key" translatable="false">fcm_server_key</string>
     <string name="facebook_app_id">184529536828797</string>
     <string name="fb_login_protocol_scheme">fb184529536828797</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA867-7uHTkq-MZOCLAb2AT_CDpHTPqc_c</string>
-<!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBh8N3tWG793V4nizXW64z3jU-nzxSmutc</string>-->
+    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyA867-7uHTkq-MZOCLAb2AT_CDpHTPqc_c</string>
+<!--    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyBh8N3tWG793V4nizXW64z3jU-nzxSmutc</string>-->
 
     <string name="freshchat_file_provider_authority">com.satrango.provider</string>
 
-    <string name="trueCallerPartnerKey">BD3Mf8af98ad8edd344629b332ff5826ab4e5</string>
-<!--    <string name="trueCallerPartnerKey">kdWMa10c1002b1b604fa0b580d433b9f4ca09</string>-->
+<!--    <string name="trueCallerPartnerKey">BD3Mf8af98ad8edd344629b332ff5826ab4e5</string>-->
+    <string name="trueCallerPartnerKey">kdWMa10c1002b1b604fa0b580d433b9f4ca09</string>
 
     <string name="userLogin">login</string>
     <string name="userFacebookLogin">facebook</string>
@@ -772,6 +772,9 @@
     <string name="please_select_profession_to_search_service_providers">Please select profession to search service providers</string>
     <string name="register_via_truecaller">Register Via TrueCaller</string>
     <string name="your_web_client_id">175510734309-543f91sk6iviel5la9ljpe02okhm14s4.apps.googleusercontent.com</string>
+    <string name="session_time_out_alert">Already logged in another device</string>
+    <string name="app_language">app_language</string>
+    <string name="pull_down_to_refresh">Pull down to refresh</string>
 
     <string-array name="imageSelections">
         <item>Choose photo from gallery</item>

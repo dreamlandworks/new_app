@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/grey_800"
+    android:orientation="vertical"
     tools:context=".ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen">
 
     <include
@@ -27,12 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginVertical="@dimen/_5sdp"
-            android:background="@drawable/category_bg"
-            android:textSize="@dimen/sub_text"
             android:layout_weight="1"
+            android:background="@drawable/category_bg"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:text="@string/pending" />
+            android:text="@string/pending"
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/inProgressBtn"
@@ -41,11 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/_5sdp"
             android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sub_text"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text="@string/in_progress" />
+            android:text="@string/in_progress"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
 
         <TextView
             android:id="@+id/completedBtn"
@@ -54,26 +54,25 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginVertical="@dimen/_5sdp"
-            android:textSize="@dimen/sub_text"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingHorizontal="@dimen/_10sdp"
             android:text="@string/completed"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="@dimen/sub_text" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/note"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pull_down_to_refresh"
+        android:textSize="@dimen/_10sdp"
         android:gravity="center"
-        android:visibility="gone"
-        android:textSize="@dimen/sub_text"
-        android:text="@string/bookings_are_not_available"/>
+        android:layout_marginBottom="@dimen/_5sdp"/>
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerLayout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeDownToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -82,20 +81,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/shimmer_my_booking_layout" />
+            <TextView
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/bookings_are_not_available"
+                android:textSize="@dimen/sub_text"
+                android:visibility="gone" />
 
-            <include layout="@layout/shimmer_my_booking_layout" />
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <include layout="@layout/shimmer_my_booking_layout" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/shimmer_my_booking_layout" />
+
+                    <include layout="@layout/shimmer_my_booking_layout" />
+
+                    <include layout="@layout/shimmer_my_booking_layout" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

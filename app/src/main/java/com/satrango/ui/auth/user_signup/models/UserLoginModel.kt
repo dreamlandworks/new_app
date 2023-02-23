@@ -10,6 +10,8 @@ data class UserLoginModel(
     val username: String,
     @SerializedName("password")
     val password: String,
+    @SerializedName("device_id")
+    val device_id: String,
     @SerializedName("type")
     val type: String,
     @SerializedName("key")

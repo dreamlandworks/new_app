@@ -118,10 +118,10 @@ class ProviderMyBookingAdapter(
                     binding.cancelBookingBtn.text = "Mark Complete"
                     binding.cancelBookingBtn.setOnClickListener {
                         if (data.extra_demand_total_amount.isNotEmpty()) {
-                            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                            UserUtils.isExtraDemandRaised(binding.phoneBtn.context, "1")
                             providerMyBookingInterface.markComplete(data.material_advance, data.booking_id.toInt(), data.category_id, data.users_id)
                         } else {
-                            ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                            UserUtils.isExtraDemandRaised(binding.phoneBtn.context, "0")
                             openExtraDemandNotRaisedDialog(binding.cancelBookingBtn.context, data, providerMyBookingInterface)
                         }
                     }

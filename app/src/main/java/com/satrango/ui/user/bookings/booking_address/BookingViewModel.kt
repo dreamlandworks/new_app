@@ -166,8 +166,13 @@ class BookingViewModel(val repository: BookingRepository): ViewModel() {
             viewModelScope.launch {
                 try {
                     viewBookingDetails.value = NetworkResponse.Loading()
-                    val response = async { repository.viewBookingDetails(requestBody) }
-                    viewBookingDetails.value = NetworkResponse.Success(response.await())
+                    val serverResponse = async { repository.viewBookingDetails(requestBody) }
+                    val response = serverResponse.await()
+                    if (response.status == 200) {
+                        viewBookingDetails.value = NetworkResponse.Success(response)
+                    } else {
+                        viewBookingDetails.value = NetworkResponse.Failure(response.message)
+                    }
                 } catch (e: Exception) {
                     viewBookingDetails.value = NetworkResponse.Failure(e.message)
                 }

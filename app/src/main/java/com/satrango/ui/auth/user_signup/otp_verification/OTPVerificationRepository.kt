@@ -15,14 +15,14 @@ open class OTPVerificationRepository: BaseRepository() {
 
     suspend fun forgotPwdRequestOTP(context: Context): ResponseBody {
         val requestBody = ForgotPwdOtpReqModel(UserUtils.getPhoneNo(context), RetrofitBuilder.USER_KEY)
-        Log.e("FORGOT REQUEST:", Gson().toJson(requestBody))
+//        Log.e("FORGOT REQUEST:", Gson().toJson(requestBody))
 //        Toast.makeText(context, Gson().toJson(requestBody), Toast.LENGTH_SHORT).show()
         return RetrofitBuilder.getUserRetrofitInstance().userForgetPwdOtpRequest(requestBody)
     }
 
     suspend fun requestOTP(context: Context): ResponseBody {
         val requestBody = OTPVerificationModel(UserUtils.getFirstName(context), UserUtils.getLastName(context), UserUtils.getPhoneNo(context), RetrofitBuilder.USER_KEY)
-        Log.e("OTP REQUEST:", Gson().toJson(requestBody))
+//        Log.e("OTP REQUEST:", Gson().toJson(requestBody))
 //        Toast.makeText(context, Gson().toJson(requestBody), Toast.LENGTH_SHORT).show()
         return RetrofitBuilder.getUserRetrofitInstance().userRequestOTP(requestBody)
     }

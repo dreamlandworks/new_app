@@ -125,7 +125,7 @@ class ProviderViewPlacedBidScreen : AppCompatActivity(), AttachmentsListener {
     private fun updateBidDetails(data: ViewProposalResModel) {
         binding.apply {
             bidAmount.text = "Rs ${data.bid_details.amount}"
-            estimateTime.text = "${data.bid_details.esimate_time} ${data.bid_details.estimate_type}"
+            estimateTime.text = "${data.bid_details.estimate_time} ${data.bid_details.estimate_type}"
             proposal.text = data.bid_details.proposal
             attachmentsRV1.layoutManager = LinearLayoutManager(
                 this@ProviderViewPlacedBidScreen,

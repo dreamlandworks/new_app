@@ -53,9 +53,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
         android:paddingHorizontal="@dimen/_30sdp"
         android:paddingBottom="@dimen/_30sdp">
 
@@ -70,25 +70,25 @@
 
         <TextView
             android:id="@+id/userBtn"
+            style="@style/filled_button_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/user_btn_bg"
-            style="@style/filled_button_style"
             android:gravity="center_horizontal"
             android:letterSpacing=".1"
             android:text="@string/user" />
 
         <TextView
             android:id="@+id/serviceProviderBtn"
+            style="@style/filled_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/user_btn_bg"
-            style="@style/filled_button_style"
-            android:letterSpacing=".1"
             android:gravity="center_horizontal"
-            android:text="@string/service_provider"/>
+            android:letterSpacing=".1"
+            android:text="@string/service_provider" />
 
     </LinearLayout>
 

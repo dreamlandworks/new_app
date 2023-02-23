@@ -178,7 +178,7 @@ class ProviderPlaceBidScreen : AppCompatActivity(), AttachmentsListener {
     private fun updateBidDetails(data: ViewProposalResModel) {
         binding.apply {
             bidAmount.setText(data.bid_details.amount)
-            estimateTime.setText(data.bid_details.esimate_time)
+            estimateTime.setText(data.bid_details.estimate_time)
             estimateTimeType = if (data.bid_details.estimate_type == "Hours") {
                 hoursBtn.setBackgroundResource(R.drawable.provider_btn_bg)
                 hoursBtn.setTextColor(resources.getColor(R.color.white))

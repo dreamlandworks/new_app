@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -71,6 +72,9 @@ import com.satrango.ui.user.user_dashboard.user_home_screen.UserHomeScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
 import com.satrango.ui.user.user_dashboard.user_offers.UserOffersScreen
 import com.satrango.utils.*
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProgress
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.UserUtils.setFirstName
 import com.satrango.utils.UserUtils.setLastName
@@ -145,7 +149,6 @@ class UserDashboardScreen : AppCompatActivity() {
             if (isChecked) {
                 finish()
                 UserUtils.saveFromFCMService(this, false)
-//                ProviderDashboard.FROM_FCM_SERVICE = false
                 startActivity(Intent(this, ProviderDashboard::class.java))
             }
         }
@@ -185,7 +188,13 @@ class UserDashboardScreen : AppCompatActivity() {
             SearchServiceProvidersScreen.userLocationText =
                 binding.userLocation.text.toString().trim()
         } else {
-            fetchLocation(this, binding.userLocation)
+            if (PermissionUtils.checkAndRequestPermissions(this)) {
+                if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
+                    fetchLocation(this, binding.userLocation)
+                } else {
+                    PermissionUtils.checkAndRequestPermissions(this)
+                }
+            }
         }
 
 
@@ -204,6 +213,9 @@ class UserDashboardScreen : AppCompatActivity() {
                     startActivity(Intent(this, UserMyAccountScreen::class.java))
                 }
                 R.id.userOptMyBooking -> {
+                    isPending(this, true)
+                    isProgress(this, false)
+                    isCompleted(this, false)
                     startActivity(Intent(this, UserMyBookingsScreen::class.java))
                 }
                 R.id.userOptMyJobPosts -> {
@@ -230,7 +242,7 @@ class UserDashboardScreen : AppCompatActivity() {
         updateApp()
     }
 
-    fun updateApp() {
+    private fun updateApp() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         val appUpdateInfoTask: Task<AppUpdateInfo> = appUpdateManager.appUpdateInfo
         // Checks that the platform will allow the specified type of update.
@@ -303,6 +315,7 @@ class UserDashboardScreen : AppCompatActivity() {
                             .setValue(getString(R.string.offline))
                         UserUtils.setUserLoggedInVia(this, "", "")
                         UserUtils.saveUserProfilePic(this@UserDashboardScreen, "")
+                        UserUtils.setMail(this, "")
                         UserUtils.deleteUserCredentials(this)
                         startActivity(Intent(this, LoginScreen::class.java))
                     }
@@ -456,7 +469,7 @@ class UserDashboardScreen : AppCompatActivity() {
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "HardwareIds")
     private fun getUserProfilePicture() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -470,6 +483,17 @@ class UserDashboardScreen : AppCompatActivity() {
                 val responseData = response.data
 //                toast(this@UserDashboardScreen, Gson().toJson(responseData))
                 if (response.status == 200) {
+                    if (response.data.device_id != Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID) && responseData.device_id.isNotEmpty()) {
+                        AlertDialog.Builder(this@UserDashboardScreen)
+                            .setTitle(resources.getString(R.string.app_name))
+                            .setMessage(resources.getString(R.string.session_time_out_alert))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok)) { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                logoutUser()
+                            }.show()
+                        return@launch
+                    }
                     val imageUrl = responseData.profile_pic
 //                    updateProfilePicInFirebase(imageUrl, "${response.data.fname} ${response.data.lname}")
                     UserUtils.saveUserProfilePic(this@UserDashboardScreen, imageUrl)
@@ -493,6 +517,7 @@ class UserDashboardScreen : AppCompatActivity() {
                         "Error02: Something went wrong!",
                         Snackbar.LENGTH_SHORT
                     ).show()
+                    logoutUser()
                 }
             } catch (e: HttpException) {
                 Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
@@ -507,6 +532,18 @@ class UserDashboardScreen : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun logoutUser() {
+        val databaseReference = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+            .child(getString(R.string.users)).child(UserUtils.getUserId(this))
+        databaseReference.child(getString(R.string.online_status))
+            .setValue(getString(R.string.offline))
+        UserUtils.setUserLoggedInVia(this, "", "")
+        UserUtils.deleteUserCredentials(this)
+        UserUtils.setMail(this, "")
+        startActivity(Intent(this, LoginScreen::class.java))
     }
 
     private fun getFragment(itemId: Int): Fragment {
@@ -702,6 +739,10 @@ class UserDashboardScreen : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase!!, UserUtils.getAppLanguage(newBase)))
     }
 
     override fun onStart() {

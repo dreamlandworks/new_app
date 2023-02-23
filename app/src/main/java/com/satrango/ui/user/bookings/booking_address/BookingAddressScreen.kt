@@ -12,6 +12,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.*
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -54,6 +55,7 @@ import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.search_service_provider.SearchServiceProvidersScreen
 import com.satrango.ui.user.user_dashboard.user_home_screen.user_location_change.UserLocationSelectionScreen
+import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.snackBar
@@ -127,16 +129,14 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             if (isProvider(this)) {
                 binding.rowLayout.setBackgroundResource(R.drawable.purple_bg_sm)
             }
-            fetchLocation(this)
+            if (PermissionUtils.checkAndRequestPermissions(this)) {
+                fetchLocation(this)
+            }
         }
 
         val factory = ViewModelFactory(UserProfileRepository())
         val profileViewModel = ViewModelProvider(this, factory)[UserProfileViewModel::class.java]
-        val requestBody = UserProfileReqModel(
-            RetrofitBuilder.USER_KEY,
-            UserUtils.getUserId(this@BookingAddressScreen).toInt(),
-            UserUtils.getCity(this@BookingAddressScreen)
-        )
+        val requestBody = UserProfileReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@BookingAddressScreen).toInt(), UserUtils.getCity(this@BookingAddressScreen))
         profileViewModel.userProfileInfo(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -205,8 +205,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         for (address in addressList) {
             if (address.isSelected) {
                 if (UserUtils.getTempAddressId(this@BookingAddressScreen) == address.day) {
-                    UserUtils.temp_address_id =
-                        UserUtils.getTempAddressId(this@BookingAddressScreen)
+                    UserUtils.temp_address_id = UserUtils.getTempAddressId(this@BookingAddressScreen)
                     UserUtils.address_id = "0"
                 } else {
                     UserUtils.temp_address_id = "0"
@@ -264,12 +263,8 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                         if (UserUtils.addressList.isEmpty()) {
                             snackBar(binding.nextBtn, "Please Select Addresses")
                         } else {
-                            UserUtils.addressList =
-                                UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
-                            val intent = Intent(
-                                this@BookingAddressScreen,
-                                BookingMultiMoveAddressScreen::class.java
-                            )
+                            UserUtils.addressList = UserUtils.addressList.distinctBy { monthsModel: MonthsModel -> monthsModel.month } as ArrayList<MonthsModel>
+                            val intent = Intent(this@BookingAddressScreen, BookingMultiMoveAddressScreen::class.java)
                             startActivity(intent)
                         }
                     }
@@ -282,8 +277,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         val toolBar = binding.root.findViewById<View>(R.id.toolBar)
         toolBar.findViewById<ImageView>(R.id.toolBarBackBtn).setOnClickListener { onBackPressed() }
         toolBar.findViewById<TextView>(R.id.toolBarBackTVBtn).setOnClickListener { onBackPressed() }
-        toolBar.findViewById<TextView>(R.id.toolBarTitle).text =
-            resources.getString(R.string.booking)
+        toolBar.findViewById<TextView>(R.id.toolBarTitle).text = resources.getString(R.string.booking)
         val profilePic = toolBar.findViewById<CircleImageView>(R.id.toolBarImage)
         Glide.with(profilePic).load(UserUtils.getUserProfilePic(this)).error(R.drawable.images)
             .into(profilePic)
@@ -308,23 +302,23 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                 Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount
         }
 //        if (UserUtils.getBookingType(this) == "instant") {
-        var address = ""
-        var city = ""
-        var state = ""
-        var country = ""
-        var postalCode = ""
-        var latitude = ""
-        var longitude = ""
+//        var address = ""
+//        var city = ""
+//        var state = ""
+//        var country = ""
+//        var postalCode = ""
+//        var latitude = ""
+//        var longitude = ""
 
-        if (UserUtils.address_id == "0") {
-            address = UserUtils.getAddress(this)
-            city = UserUtils.getCity(this)
-            state = UserUtils.getState(this)
-            country = UserUtils.getCountry(this)
-            postalCode = UserUtils.getPostalCode(this)
-            latitude = UserUtils.getLatitude(this)
-            longitude = UserUtils.getLongitude(this)
-        }
+//        if (UserUtils.address_id == "0") {
+        val address = UserUtils.getAddress(this)
+        val city = UserUtils.getCity(this)
+        val state = UserUtils.getState(this)
+        val country = UserUtils.getCountry(this)
+        val postalCode = UserUtils.getPostalCode(this)
+        val latitude = UserUtils.getLatitude(this)
+        val longitude = UserUtils.getLongitude(this)
+//        }
 
         if (UserUtils.getBookingType(this) == "instant") {
             val calender = Calendar.getInstance()
@@ -369,9 +363,12 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
         )
         CoroutineScope(Dispatchers.Main).launch {
             try {
+//                toast(this@BookingAddressScreen, Gson().toJson(requestBody))
+                Log.e("SINGLE BOOKING:", Gson().toJson(requestBody))
                 val bookingResponse = RetrofitBuilder.getUserRetrofitInstance()
                     .bookSingleMoveProvider(requestBody)
                 val jsonResponse = JSONObject(bookingResponse.string())
+                Log.e("SINGLEBOOKING RESPONSE:", Gson().toJson(jsonResponse))
                 progressDialog.show()
                 if (jsonResponse.getInt("status") == 200) {
                     progressDialog.dismiss()
@@ -620,6 +617,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
                             }
                         }
                 } catch (e: java.lang.Exception) {
+                    toast(this@BookingAddressScreen, e.message!!)
                 }
                 waitingDialog.dismiss()
                 weAreSorryDialog()
@@ -931,6 +929,7 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
     }
 
     fun fetchLocation(context: Context) {
+        progressDialog.show()
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -1012,16 +1011,11 @@ class BookingAddressScreen : AppCompatActivity(), MonthsInterface {
             UserUtils.setCountry(context, country)
             UserUtils.setPostalCode(context, postalCode)
             UserUtils.setAddress(context, knownName)
-            addressList.add(
-                MonthsModel(
-                    UserUtils.getAddress(this) + ", " + UserUtils.getCity(this) + ", " + UserUtils.getPostalCode(
-                        this
-                    ), "0", true
-                )
-            )
-//            if (!waitingDialog.isShowing) {
+            addressList.add(MonthsModel(
+                UserUtils.getAddress(this) + ", " +
+                        UserUtils.getCity(this) + ", " +
+                        UserUtils.getPostalCode(this), "0", true))
             validateFields()
-//            }
         } catch (e: Exception) {
             Toast.makeText(
                 context,

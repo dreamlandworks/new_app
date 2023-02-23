@@ -1,7 +1,6 @@
 package com.satrango.ui.service_provider.provider_dashboard.dashboard
 
 import android.Manifest
-import android.R.attr.*
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -14,8 +13,8 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
 import android.os.*
+import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -45,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.satrango.GpsLocationReceiver
+import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityProviderDashboardBinding
 import com.satrango.remote.NetworkResponse
@@ -56,7 +56,6 @@ import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.login_screen.LoginViewModel
 import com.satrango.ui.auth.login_screen.LogoutReqModel
 import com.satrango.ui.auth.provider_signup.ProviderSignUpSeven
-import com.satrango.ui.auth.provider_signup.ProviderSignUpSix
 import com.satrango.ui.auth.provider_signup.provider_sign_up_five.ProviderSignUpFive
 import com.satrango.ui.auth.provider_signup.provider_sign_up_one.ProviderSignUpOne
 import com.satrango.ui.service_provider.provider_dashboard.ProviderLocationReqModel
@@ -70,8 +69,6 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.training.
 import com.satrango.ui.service_provider.provider_dashboard.home.ProviderHomeScreen
 import com.satrango.ui.service_provider.provider_dashboard.models.ProviderOnlineReqModel
 import com.satrango.ui.service_provider.provider_dashboard.offers.ProviderOffersScreen
-import com.satrango.ui.user.bookings.booking_address.BookingRepository
-import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.bookings.view_booking_details.models.ProviderResponseReqModel
@@ -80,8 +77,28 @@ import com.satrango.ui.user.user_dashboard.chats.UserChatScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_profile.models.UserProfileReqModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.settings.UserSettingsScreen
 import com.satrango.utils.*
-import com.satrango.R
-import com.satrango.base.MyApp
+import com.satrango.utils.Constants.accept
+import com.satrango.utils.Constants.alert
+import com.satrango.utils.Constants.are_you_sure_to_logout
+import com.satrango.utils.Constants.booking_accepted
+import com.satrango.utils.Constants.login_time_out
+import com.satrango.utils.Constants.message
+import com.satrango.utils.Constants.no_capital
+import com.satrango.utils.Constants.no_permission
+import com.satrango.utils.Constants.not_approved
+import com.satrango.utils.Constants.ok_capital
+import com.satrango.utils.Constants.please_check_internet_connection
+import com.satrango.utils.Constants.server_busy
+import com.satrango.utils.Constants.something_went_wrong
+import com.satrango.utils.Constants.sp_banned
+import com.satrango.utils.Constants.status
+import com.satrango.utils.Constants.unknown
+import com.satrango.utils.Constants.user
+import com.satrango.utils.Constants.yes_capital
+import com.satrango.utils.UserUtils.currentDateTime
+import com.satrango.utils.UserUtils.isCompleted
+import com.satrango.utils.UserUtils.isPending
+import com.satrango.utils.UserUtils.isProgress
 import com.satrango.utils.UserUtils.isProvider
 import com.satrango.utils.UserUtils.roundOffDecimal
 import de.hdodenhof.circleimageview.CircleImageView
@@ -89,15 +106,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.math.RoundingMode
 import java.net.SocketTimeoutException
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.Instant
 import java.util.*
-import kotlin.concurrent.thread
-import kotlin.math.round
 
 
 class ProviderDashboard : AppCompatActivity() {
@@ -120,17 +131,21 @@ class ProviderDashboard : AppCompatActivity() {
     companion object {
         private lateinit var locationCallBack: LocationCallback
         private lateinit var viewModel: ProviderDashboardViewModel
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var progressDialog: BeautifulProgressDialog
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var binding: ActivityProviderDashboardBinding
 
         var FROM_FCM_SERVICE = false
-        var minutes = 2
+//        var minutes = 2
         var seconds = 59
         var bookingId = "0"
+
         @SuppressLint("StaticFieldLeak")
         var bottomSheetDialog: BottomSheetDialog? = null
         lateinit var countDownTimer: CountDownTimer
@@ -175,9 +190,10 @@ class ProviderDashboard : AppCompatActivity() {
             )
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val response = RetrofitBuilder.getServiceProviderRetrofitInstance().updateSpOnlineStatus(requestBody)
+                    val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
+                        .updateSpOnlineStatus(requestBody)
                     val jsonResponse = JSONObject(response.string())
-                    if (jsonResponse.getInt("status") == 200) {
+                    if (jsonResponse.getInt(status) == 200) {
                         progressDialog.dismiss()
                         if (statusId == 0) {
                             binding.onlineText.text = context.resources.getString(R.string.offline)
@@ -207,8 +223,12 @@ class ProviderDashboard : AppCompatActivity() {
         private fun fetchLocationDetails(context: Context, latitude: Double, longitude: Double) {
 //            Log.e("LAT LONG:", "$latitude|$longitude")
 //            Toast.makeText(context, "$latitude|$longitude", Toast.LENGTH_SHORT).show()
-            if (UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context).isNotEmpty()) {
-                if (roundOffDecimal(latitude) == roundOffDecimal(UserUtils.getLatitude(context).toDouble()) && roundOffDecimal(longitude) == roundOffDecimal(UserUtils.getLongitude(context).toDouble())) {
+            val checkOne = UserUtils.getLatitude(context).isNotEmpty() && UserUtils.getLongitude(context)
+                .isNotEmpty()
+            val checkTwo = roundOffDecimal(latitude) == roundOffDecimal(
+                UserUtils.getLatitude(context).toDouble()) && roundOffDecimal(longitude) == roundOffDecimal(UserUtils.getLongitude(context).toDouble())
+            if (checkOne) {
+                if (checkTwo) {
                     binding.userLocation.text = UserUtils.getCity(context)
                     updateSpOnlineStatus(context)
                     return
@@ -218,16 +238,31 @@ class ProviderDashboard : AppCompatActivity() {
                 val geoCoder = Geocoder(context, Locale.getDefault())
                 val address: List<Address> = geoCoder.getFromLocation(latitude, longitude, 1)
 //                val addressName: String = address.get(0).getAddressLine(0)
-                var city = "unknown"
-                var state = "unknown"
-                var country = "unknown"
-                var postalCode = "unknown"
-                var knownName = "unknown"
-                try { city = address.get(0).locality } catch (e: Exception) { }
-                try { state = address.get(0).adminArea } catch (e: Exception) { }
-                try { country = address.get(0).countryName } catch (e: Exception) { }
-                try { postalCode = address.get(0).postalCode } catch (e: Exception) { }
-                try { knownName = address.get(0).featureName } catch (e: Exception) { }
+                var city = unknown
+                var state = unknown
+                var country = unknown
+                var postalCode = unknown
+                var knownName = unknown
+                try {
+                    city = address.get(0).locality
+                } catch (e: Exception) {
+                }
+                try {
+                    state = address.get(0).adminArea
+                } catch (e: Exception) {
+                }
+                try {
+                    country = address.get(0).countryName
+                } catch (e: Exception) {
+                }
+                try {
+                    postalCode = address.get(0).postalCode
+                } catch (e: Exception) {
+                }
+                try {
+                    knownName = address.get(0).featureName
+                } catch (e: Exception) {
+                }
                 fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
                 UserUtils.setLatitude(context, latitude.toString())
                 UserUtils.setLongitude(context, longitude.toString())
@@ -252,10 +287,12 @@ class ProviderDashboard : AppCompatActivity() {
                 )
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val response = RetrofitBuilder.getServiceProviderRetrofitInstance().saveProviderLocation(requestBody)
+//                        Toast.makeText(context, Gson().toJson(requestBody), Toast.LENGTH_SHORT).show()
+                        val response = RetrofitBuilder.getServiceProviderRetrofitInstance()
+                            .saveProviderLocation(requestBody)
                         val jsonResponse = JSONObject(response.string())
-                        Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
-                        if (jsonResponse.getInt("status") == 200) {
+//                        Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
+                        if (jsonResponse.getInt(status) == 200) {
                             updateSpOnlineStatus(context)
                         }
                     } catch (e: java.lang.Exception) {
@@ -309,14 +346,16 @@ class ProviderDashboard : AppCompatActivity() {
 //            Log.e("Error" + Thread.currentThread().stackTrace[2], paramThrowable.localizedMessage!!)
         }
 
-//        binding.fab.setOnClickListener {
-//            startActivity(Intent(this, ProviderMyBidsScreen::class.java))
-//        }
-
         val factory = ViewModelFactory(ProviderDashboardRepository())
         viewModel = ViewModelProvider(this, factory)[ProviderDashboardViewModel::class.java]
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.app_name, R.string.app_name)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolBar,
+            R.string.app_name,
+            R.string.app_name
+        )
         binding.navigationView.itemIconTintList = null
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.black)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -345,7 +384,7 @@ class ProviderDashboard : AppCompatActivity() {
         }
 
         if (!UserUtils.updateNewFCMToken(this)) {
-            snackBar(binding.bottomNavigationView, "Please check internet connection!")
+            snackBar(binding.bottomNavigationView, please_check_internet_connection)
             Handler().postDelayed({
                 finish()
                 startActivity(Intent(this, UserLoginTypeScreen::class.java))
@@ -383,6 +422,9 @@ class ProviderDashboard : AppCompatActivity() {
                     startActivity(Intent(this, ProviderMyAccountScreen::class.java))
                 }
                 R.id.providerOptMyBooking -> {
+                    isPending(this, true)
+                    isProgress(this, false)
+                    isCompleted(this, false)
                     startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                 }
                 R.id.providerOptMyBids -> {
@@ -415,24 +457,24 @@ class ProviderDashboard : AppCompatActivity() {
             }
         }
 
-        binding.providerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.providerSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                binding.providerSwitch.text = "User"
+                binding.providerSwitch.text = user
                 startActivity(Intent(this, UserDashboardScreen::class.java))
             }
         }
 
 //        Log.e("FROM_FCM_SERVICE:", UserUtils.getFromFCMService(this).toString())
         if (UserUtils.getFromFCMService(this)) {
-            if (bookingId != null) {
-                bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-                categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-                userId = intent.getStringExtra(getString(R.string.user_id))!!
-                UserUtils.saveInstantBookingId(this, bookingId)
-                try {
+            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            userId = intent.getStringExtra(getString(R.string.user_id))!!
+            UserUtils.saveInstantBookingId(this, bookingId)
+//            toast(this, "TOAST01: $bookingId|$categoryId|$userId")
+            try {
 //                    toast(this@ProviderDashboard, bookingId)
-                    getInstantBookingDetails()
-                } catch (e: NumberFormatException) { }
+                getInstantBookingDetails()
+            } catch (e: NumberFormatException) {
             }
         } else {
             bookingId = "0"
@@ -451,18 +493,19 @@ class ProviderDashboard : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             progressDialog.show()
             try {
-                val apiResponse = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
-                toast(this@ProviderDashboard, Gson().toJson(apiResponse))
-                if (apiResponse.status == 200) {
+//                toast(this@ProviderDashboard, Gson().toJson(requestBody))
+                response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                if (response.status == 200) {
                     progressDialog.dismiss()
-                    response = apiResponse
+//                    toast(this@ProviderDashboard,"RS01:" + Gson().toJson(response))
                     showBookingAlert(bookingId, userId, response, categoryId)
+//                    toast(this@ProviderDashboard,"RS02:" + Gson().toJson(response))
                 } else {
                     progressDialog.dismiss()
-                    snackBar(binding.bottomNavigationView, response.message)
+                    snackBar(binding.bottomNavigationView," Error01:" + response.message)
                 }
             } catch (e: java.lang.Exception) {
-                snackBar(binding.bottomNavigationView, e.message!!)
+                snackBar(binding.bottomNavigationView, "Error02:" + e.message!!)
             }
         }
     }
@@ -481,7 +524,8 @@ class ProviderDashboard : AppCompatActivity() {
         categoryId: String
     ) {
         bottomSheetDialog = BottomSheetDialog(this)
-        val bottomSheet = LayoutInflater.from(this).inflate(R.layout.provider_booking_alert_dialog, null)
+        val bottomSheet =
+            LayoutInflater.from(this).inflate(R.layout.provider_booking_alert_dialog, null)
         bottomSheetDialog!!.setCancelable(false)
         val acceptBtn = bottomSheet.findViewById<TextView>(R.id.acceptBtn)
         val rejectBtn = bottomSheet.findViewById<TextView>(R.id.rejectBtn)
@@ -495,14 +539,18 @@ class ProviderDashboard : AppCompatActivity() {
         val progressBar = bottomSheet.findViewById<CircularProgressIndicator>(R.id.progressBar)
 
         timeFrom.text = response.booking_details.from
-        date.text = "${response.booking_details.scheduled_date.split("-")[2]}-${response.booking_details.scheduled_date.split("-")[1]}-${response.booking_details.scheduled_date.split("-")[0]}"
+        date.text = "${response.booking_details.scheduled_date.split("-")[2]}-${
+            response.booking_details.scheduled_date.split("-")[1]
+        }-${response.booking_details.scheduled_date.split("-")[0]}"
         if (response.job_details.isNotEmpty()) {
             jobDescription.text = response.job_details[0].job_description
             if (categoryId != "2") {
                 if (response.job_details[0].locality.isNullOrBlank()) {
-                    jobLocation.text = response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                    jobLocation.text =
+                        response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
                 } else {
-                    jobLocation.text = response.job_details[0].locality + ", " + response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
+                    jobLocation.text =
+                        response.job_details[0].locality + ", " + response.job_details[0].city + ", " + response.job_details[0].state + ", " + response.job_details[0].country + ", " + response.job_details[0].zipcode
                 }
             } else {
                 jobLocation.visibility = View.GONE
@@ -527,7 +575,7 @@ class ProviderDashboard : AppCompatActivity() {
             val requestBody = ProviderResponseReqModel(
                 this.response.booking_details.amount,
                 bookingId.toInt(),
-                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()),
+                currentDateTime(),
                 "",
                 RetrofitBuilder.USER_KEY,
                 UserUtils.getUserId(this).toInt(),
@@ -537,15 +585,22 @@ class ProviderDashboard : AppCompatActivity() {
 //            toast(this, Gson().toJson(requestBody))
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val bookingResponse = RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
+                    val bookingResponse =
+                        RetrofitBuilder.getUserRetrofitInstance().setProviderResponse(requestBody)
                     val jsonResponse = JSONObject(bookingResponse.string())
                     progressDialog.show()
                     if (jsonResponse.getInt("status") == 200) {
                         progressDialog.dismiss()
                         Companion.bookingId = "0"
-                        UserUtils.sendFCM(this@ProviderDashboard, response.booking_details.fcm_token, "accept", "accept", "accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType")
+                        UserUtils.sendFCM(
+                            this@ProviderDashboard,
+                            response.booking_details.fcm_token,
+                            accept,
+                            accept,
+                            "$accept|${response.booking_details.amount}|${UserUtils.getUserId(this@ProviderDashboard)}|$bookingType"
+                        )
                         UserUtils.saveFromFCMService(this@ProviderDashboard, false)
-                        snackBar(binding.bottomNavigationView, "Booking Accepted Successfully")
+                        snackBar(binding.bottomNavigationView, booking_accepted)
                         if (FCMService.notificationManager != null) {
                             FCMService.notificationManager.cancelAll()
                         }
@@ -553,7 +608,7 @@ class ProviderDashboard : AppCompatActivity() {
                         startActivity(intent)
                     } else {
                         progressDialog.dismiss()
-                        toast(this@ProviderDashboard, jsonResponse.getString("message"))
+                        toast(this@ProviderDashboard, jsonResponse.getString(message))
                     }
                 } catch (e: java.lang.Exception) {
                     toast(this@ProviderDashboard, e.message!!)
@@ -569,19 +624,24 @@ class ProviderDashboard : AppCompatActivity() {
             startActivity(Intent(this, ProviderRejectBookingScreen::class.java))
         }
 
-        val dashboardInstant = Instant.now()
-        val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
-        val mins = diff.toMinutes()
-        val secs = diff.seconds
-        val seconds = (59 - secs).toInt()
-        val minutes = (2 - mins).toInt()
-        val millisInFuture = minutes + seconds
+//        val dashboardInstant = Instant.now()
+//        val diff: Duration = Duration.between(FCMService.fcmInstant, dashboardInstant)
+//        val mins = diff.toMinutes()
+//        val secs = diff.seconds
+//        val seconds = (59 - secs).toInt()
+//        val minutes = (2 - mins).toInt()
+//        val millisInFuture = minutes + seconds
 
-        countDownTimer = object: CountDownTimer(180000, 1000) {
+        countDownTimer = object : CountDownTimer(180000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val remainingMinutes = (millisUntilFinished / 1000) / 60
                 val remainingSeconds = (millisUntilFinished / 1000) % 60
-                val timeFormat = String.format(Locale.getDefault(), "%02d:%02d", remainingMinutes, remainingSeconds)
+                val timeFormat = String.format(
+                    Locale.getDefault(),
+                    "%02d:%02d",
+                    remainingMinutes,
+                    remainingSeconds
+                )
                 time.text = timeFormat
                 progressBar.progress = (millisUntilFinished / 1000).toInt()
             }
@@ -590,34 +650,8 @@ class ProviderDashboard : AppCompatActivity() {
                 bottomSheetDialog!!.dismiss()
             }
 
-        }
+        }.start()
 
-//        val mainHandler = Handler(Looper.getMainLooper())
-//        var progressTime = 180
-//        mainHandler.post(object : Runnable {
-//            @SuppressLint("SimpleDateFormat")
-//            override fun run() {
-//                if (seconds < 10) {
-//                    time.text = "0$minutes:0$seconds"
-//                } else {
-//                    time.text = "0$minutes:$seconds"
-//                }
-//
-//                progressTime -= 1
-//                progressBar.progress = progressTime
-//
-//                seconds -= 1
-//                if (minutes == 0 && seconds == 0) {
-//                    bottomSheetDialog!!.dismiss()
-//                }
-//                if (seconds == 0) {
-//                    seconds = 59
-//                    minutes -= 1
-//                }
-//
-//                mainHandler.postDelayed(this, 1000)
-//            }
-//        })
         bottomSheetDialog!!.setContentView(bottomSheet)
         if (!(this as Activity).isFinishing) {
             bottomSheetDialog!!.show()
@@ -742,9 +776,9 @@ class ProviderDashboard : AppCompatActivity() {
 
     private fun logoutDialog() {
         val dialog = AlertDialog.Builder(this)
-        dialog.setMessage("Are you sure to logout?")
+        dialog.setMessage(are_you_sure_to_logout)
         dialog.setCancelable(false)
-        dialog.setPositiveButton("YES") { dialogInterface, _ ->
+        dialog.setPositiveButton(yes_capital) { dialogInterface, _ ->
 
             val factory = ViewModelFactory(LoginRepository())
             val viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
@@ -758,27 +792,35 @@ class ProviderDashboard : AppCompatActivity() {
                     is NetworkResponse.Success -> {
                         progressDialog.dismiss()
                         dialogInterface.dismiss()
-                        val databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(getString(R.string.firebase_database_reference_url)).child(getString(R.string.users)).child(UserUtils.getUserId(this))
-                        databaseReference.child(getString(R.string.online_status)).setValue(getString(R.string.offline))
-                        UserUtils.setUserLoggedInVia(this, "", "")
-                        UserUtils.deleteUserCredentials(this)
-                        startActivity(Intent(this, LoginScreen::class.java))
+                        logoutUser()
                     }
                     is NetworkResponse.Failure -> {
                         progressDialog.dismiss()
                         dialogInterface.dismiss()
                         snackBar(
                             UserDashboardScreen.binding.navigationView,
-                            "Something went wrong. Please try again"
+                            something_went_wrong
                         )
                     }
                 }
             }
         }
-        dialog.setNegativeButton("NO") { dialogInterface, _ ->
+        dialog.setNegativeButton(no_capital) { dialogInterface, _ ->
             dialogInterface.dismiss()
         }
         dialog.show()
+    }
+
+    private fun logoutUser() {
+        val databaseReference = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl(getString(R.string.firebase_database_reference_url))
+            .child(getString(R.string.users)).child(UserUtils.getUserId(this))
+        databaseReference.child(getString(R.string.online_status))
+            .setValue(getString(R.string.offline))
+        UserUtils.setUserLoggedInVia(this, "", "")
+        UserUtils.deleteUserCredentials(this)
+        UserUtils.setMail(this, "")
+        startActivity(Intent(this, LoginScreen::class.java))
     }
 
     private fun getFragment(itemId: Int): Fragment {
@@ -814,9 +856,11 @@ class ProviderDashboard : AppCompatActivity() {
 //        PermissionUtils.checkAndRequestPermissions(this)
         loadUserProfileData()
         updateSpProfile()
+        fetchLocation(this)
         registerReceiver(gpsReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
     }
 
+    @SuppressLint("HardwareIds")
     private fun loadUserProfileData() {
         val requestBody = UserProfileReqModel(
             RetrofitBuilder.USER_KEY,
@@ -843,25 +887,39 @@ class ProviderDashboard : AppCompatActivity() {
                         }
                         "3" -> {
                             // Service Provider Activated
-                            if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
-                                fetchLocation(this)
+                            if (PermissionUtils.checkAndRequestPermissions(this)) {
+                                if (PermissionUtils.checkGPSStatus(this) && networkAvailable(this)) {
+                                    fetchLocation(this)
+                                } else {
+                                    PermissionUtils.checkAndRequestPermissions(this)
+                                }
                             }
                         }
                         "4" -> {
                             // Service Provider Not Approved
-                            alertDialog("Not Approved")
+                            alertDialog(not_approved)
                         }
                         "5" -> {
                             // Service Provider Banned
-                            alertDialog("Your Service Provider Account has been Banned!")
+                            alertDialog(sp_banned)
                         }
+                    }
+                    if (response.device_id != Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID) && response.device_id.isNotEmpty()) {
+                        AlertDialog.Builder(this)
+                            .setTitle(resources.getString(R.string.app_name))
+                            .setMessage(resources.getString(R.string.session_time_out_alert))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok)) { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                logoutUser()
+                            }.show()
+                        return@observe
                     }
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    toast(this, "Error : ${it.data.toString()}")
-
-                    startActivity(Intent(this, UserLoginTypeScreen::class.java))
+                    toast(this, login_time_out)
+                    logoutUser()
                 }
             }
         }
@@ -884,20 +942,32 @@ class ProviderDashboard : AppCompatActivity() {
                     UserUtils.saveFCMServerKey(this@ProviderDashboard, response.data.fcm_key)
                     UserUtils.saveUserProfilePic(this@ProviderDashboard, imageUrl)
                     loadProfileImage(binding.image)
-                    UserUtils.saveUserName(this@ProviderDashboard, responseData.fname + " " + responseData.lname)
+                    UserUtils.saveUserName(
+                        this@ProviderDashboard,
+                        responseData.fname + " " + responseData.lname
+                    )
                     if (responseData.referral_id != null) {
                         UserUtils.saveReferralId(this@ProviderDashboard, responseData.referral_id)
                     }
                     updateHeaderDetails()
                 } else {
-                    Snackbar.make(binding.navigationView, "Something went wrong!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.navigationView,
+                        something_went_wrong,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: HttpException) {
-                Snackbar.make(binding.navigationView, "Server Busy", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.navigationView, server_busy, Snackbar.LENGTH_SHORT).show()
             } catch (e: JsonSyntaxException) {
-                Snackbar.make(binding.navigationView, "Something Went Wrong", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.navigationView, something_went_wrong, Snackbar.LENGTH_SHORT)
+                    .show()
             } catch (e: SocketTimeoutException) {
-                Snackbar.make(binding.navigationView, "Please check internet Connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.navigationView,
+                    please_check_internet_connection,
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -910,10 +980,10 @@ class ProviderDashboard : AppCompatActivity() {
 
     private fun alertDialog(message: String) {
         val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Alert")
+        dialog.setTitle(alert)
         dialog.setMessage(message)
         dialog.setCancelable(false)
-        dialog.setPositiveButton("OK") { dialogInterface, _ ->
+        dialog.setPositiveButton(ok_capital) { dialogInterface, _ ->
             startActivity(Intent(this, UserLoginTypeScreen::class.java))
             dialogInterface.dismiss()
         }
@@ -935,13 +1005,14 @@ class ProviderDashboard : AppCompatActivity() {
             }
             fetchLocation(this)
         } else {
-            toast(this, "No permission")
+            toast(this, no_permission)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver((myReceiver), IntentFilter(getString(R.string.INTENT_FILTER)))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver((myReceiver), IntentFilter(getString(R.string.INTENT_FILTER)))
     }
 
     override fun onDestroy() {
@@ -951,7 +1022,11 @@ class ProviderDashboard : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initializeProgressDialog() {
-        progressDialog = BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, resources.getString(R.string.loading))
+        progressDialog = BeautifulProgressDialog(
+            this,
+            BeautifulProgressDialog.withGIF,
+            resources.getString(R.string.loading)
+        )
         progressDialog.setGifLocation(Uri.parse("android.resource://${packageName}/${R.drawable.purple_loading}"))
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
@@ -959,20 +1034,26 @@ class ProviderDashboard : AppCompatActivity() {
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
-                bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
-                categoryId = intent.getStringExtra(getString(R.string.category_id))!!
-                userId = intent.getStringExtra(getString(R.string.user_id))!!
-                bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
-//                toast(this@ProviderDashboard, bookingId)
-                try {
-                    getInstantBookingDetails()
-                } catch (e: NumberFormatException) {}
+            bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
+            categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            userId = intent.getStringExtra(getString(R.string.user_id))!!
+            bookingType = intent.getStringExtra(getString(R.string.booking_type))!!
+            UserUtils.saveInstantBookingId(context, bookingId)
+//                toast(this@ProviderDashboard, "TOAST02: $bookingId|$categoryId|$userId")
+            try {
+                getInstantBookingDetails()
+            } catch (e: NumberFormatException) {
+            }
 
         }
     }
 
-    fun checkDigit(number: Int): String {
-        return if (number <= 9) "0$number" else number.toString()
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase!!, UserUtils.getAppLanguage(newBase)))
     }
+
+//    fun checkDigit(number: Int): String {
+//        return if (number <= 9) "0$number" else number.toString()
+//    }
 
 }

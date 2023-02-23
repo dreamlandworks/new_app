@@ -195,6 +195,7 @@
         <entry key="app/src/main/res/drawable/blue_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/blue_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/blue_out_line.xml" value="0.2525" />
+        <entry key="app/src/main/res/drawable/btn_bg_pink_sm.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/btn_bg_white_blue_border.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable/category_bg.xml" value="0.1405" />
         <entry key="app/src/main/res/drawable/chat_count_bg.xml" value="0.207" />
@@ -208,6 +209,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_cameraswitch_24.xml" value="0.1665" />
         <entry key="app/src/main/res/drawable/incoming_msg_bg.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/outgoing_msg_bg.xml" value="0.165" />
+        <entry key="app/src/main/res/drawable/pink_corner_border.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_circle_color.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/purple_out_line.xml" value="0.1645" />
@@ -274,12 +276,12 @@
         <entry key="app/src/main/res/layout/activity_user_f_a_q_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_installments_request_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_location_selection_screen.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/activity_user_login_type_screen.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_user_my_account_screen.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_user_my_booking_details_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_plan_screen.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/layout/activity_user_privacy_policy_screen.xml" value="0.11944444444444445" />
-        <entry key="app/src/main/res/layout/activity_user_profile_screen.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_user_profile_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_refer_and_earn.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_settings_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user_sign_up_screen_two.xml" value="0.11944444444444445" />
@@ -336,7 +338,7 @@
         <entry key="app/src/main/res/layout/provider_edit_bid_success_dialog.xml" value="0.232421875" />
         <entry key="app/src/main/res/layout/provider_extra_demand_accept_dialog.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/provider_extra_demand_dialog.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/provider_final_extra_expenditure_dialog.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/provider_final_extra_expenditure_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/provider_my_bookings_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/provider_mybids_row.xml" value="0.221484375" />
         <entry key="app/src/main/res/layout/provider_page_tool_bar.xml" value="0.11944444444444445" />

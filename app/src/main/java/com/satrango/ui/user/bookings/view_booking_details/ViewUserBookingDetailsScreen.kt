@@ -58,7 +58,26 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsRep
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.MyBookingsViewModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
+import com.satrango.utils.Constants.booking_started
+import com.satrango.utils.Constants.close
+import com.satrango.utils.Constants.enter_expenditure_incurred
+import com.satrango.utils.Constants.enter_material_charges_alert
+import com.satrango.utils.Constants.extra_demand_accepted
+import com.satrango.utils.Constants.extra_demand_raised
+import com.satrango.utils.Constants.extra_demand_rejected
+import com.satrango.utils.Constants.final_expenditure_alert
+import com.satrango.utils.Constants.invalid_otp
+import com.satrango.utils.Constants.mark_complete
+import com.satrango.utils.Constants.message
+import com.satrango.utils.Constants.otp_success
+import com.satrango.utils.Constants.otp_to_start_job
+import com.satrango.utils.Constants.pause
+import com.satrango.utils.Constants.resume
+import com.satrango.utils.Constants.status
+import com.satrango.utils.Constants.user
+import com.satrango.utils.Constants.yes_camil
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.currentDateTime
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
 import com.satrango.utils.UserUtils.isProgress
@@ -106,44 +125,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
 
-//        if (FROM_MY_BOOKINGS_SCREEN) {
         if (isProvider(this)) {
             providerUIOnClicks()
         } else {
             userUIOnClicks()
         }
-//        } else {
-//            binding.spLayout.visibility = View.VISIBLE
-//            binding.firstLayout.visibility = View.VISIBLE
-//            binding.secondLayout.visibility = View.GONE
-//            binding.viewFilesBtn.visibility = View.VISIBLE
-//            binding.completedBtn.visibility = View.GONE
-//            if (!isProvider(this)) {
-//                binding.viewFilesBtn.setTextColor(resources.getColor(R.color.blue))
-//                binding.inProgressViewStatusBtn.setTextColor(resources.getColor(R.color.blue))
-//                binding.viewFilesBtn.setBackgroundResource(R.drawable.btn_bg_white_blue_border)
-//                binding.inProgressViewStatusBtn.setBackgroundResource(R.drawable.btn_bg_white_blue_border)
-//            } else {
-//                updateSPUI()
-//            }
-//            binding.viewFilesBtn.setOnClickListener {
-//
-//            }
-//            binding.inProgressViewStatusBtn.setOnClickListener {
-//                if (isProvider(this)) {
-//                    ProviderBookingDetailsScreen.bookingId = bookingId
-//                    ProviderBookingDetailsScreen.categoryId = categoryId
-//                    ProviderBookingDetailsScreen.userId = userId
-//                    startActivity(Intent(this, ProviderBookingDetailsScreen::class.java))
-//                } else {
-//                    UserMyBookingDetailsScreen.bookingId = bookingId
-//                    UserMyBookingDetailsScreen.categoryId = categoryId
-//                    UserMyBookingDetailsScreen.userId = userId
-//                    startActivity(Intent(this, UserMyBookingDetailsScreen::class.java))
-//                }
-//            }
-//            binding.userLayout.visibility = View.GONE
-//        }
+
         bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
         categoryId = intent.getStringExtra(getString(R.string.category_id))!!
         userId = intent.getStringExtra(getString(R.string.user_id))!!
@@ -154,8 +141,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             RetrofitBuilder.USER_KEY,
             userId.toInt()
         )
-//        Log.e("PROVIDER RESPONSE", Gson().toJson(requestBody))
-//        toast(this, Gson().toJson(requestBody))
         viewModel.viewBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -202,13 +187,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         }
         if (isProgress(this)) {
             binding.pauseResumeBtn.visibility = View.VISIBLE
-            binding.pauseResumeBtn.text = "Pause"
+            binding.pauseResumeBtn.text = pause
 
             binding.spLayout.visibility = View.VISIBLE
             binding.userLayout.visibility = View.GONE
             binding.cancelBookingBtn.visibility = View.GONE
 
-            binding.completedBtn.text = "Mark Complete"
+            binding.completedBtn.text = mark_complete
             binding.requestInstallmentBtn.visibility = View.GONE
             binding.raiseExtraDemandBtn.visibility = View.GONE
             if (categoryId == "2") {
@@ -221,9 +206,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             }
             binding.completedBtn.setOnClickListener {
                 if (response.booking_details.extra_demand_status == "0") {
-                    ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                    UserUtils.isExtraDemandRaised(this, "0")
                 } else {
-                    ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                    UserUtils.isExtraDemandRaised(this, "1")
                 }
                 val intent = Intent(this, ProviderInVoiceScreen::class.java)
                 intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
@@ -291,10 +276,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.cancelBookingBtn.setOnClickListener {
                 val intent = Intent(binding.root.context, UserBookingCancelScreen::class.java)
                 intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
-                intent.putExtra(
-                    binding.root.context.getString(R.string.category_id),
-                    categoryId
-                )
+                intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
                 intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                 binding.root.context.startActivity(intent)
             }
@@ -307,23 +289,23 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 startActivity(Intent(this, BookingDateAndTimeScreen::class.java))
             }
             binding.startBtn.setOnClickListener {
-                requestOTP("SP")
+                requestOTP()
             }
         }
         if (isProgress(this)) {
             binding.userLayout.visibility = View.GONE
             binding.spLayout.visibility = View.VISIBLE
-            binding.completedBtn.text = "Mark Complete"
+            binding.completedBtn.text = mark_complete
             binding.completedBtn.setOnClickListener {
                 if (response.booking_details.extra_demand_total_amount != "0") {
-                    ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                    UserUtils.isExtraDemandRaised(this, "1")
                     if (response.booking_details.extra_demand_status == "2") {
                         finalExpenditureDialog(response.booking_details.extra_demand_total_amount)
                     } else {
                         divertToInvoiceScreen()
                     }
                 } else {
-                    ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                    UserUtils.isExtraDemandRaised(this, "0")
                     divertToInvoiceScreen()
                 }
             }
@@ -335,8 +317,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             binding.raiseExtraDemandBtn.setOnClickListener { showExtraDemandDialog() }
             binding.inProgressViewStatusBtn.setOnClickListener { onBackPressed() }
 
-            if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals("Yes", true)) {
-                binding.pauseResumeBtn.text = "Resume"
+            if (UserUtils.getBookingPauseResumeStatus(binding.root.context).equals(yes_camil, true)) {
+                binding.pauseResumeBtn.text = resume
                 binding.completedBtn.isEnabled = false
                 binding.raiseExtraDemandBtn.isEnabled = false
                 binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
@@ -345,7 +327,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
                 binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
             } else {
-                binding.pauseResumeBtn.text = "Pause"
+                binding.pauseResumeBtn.text = pause
                 binding.pauseResumeBtn.setOnClickListener { pauseBooking() }
                 binding.completedBtn.isEnabled = true
                 binding.raiseExtraDemandBtn.isEnabled = true
@@ -383,9 +365,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
 
     private fun divertToInvoiceScreen() {
         if (response.booking_details.extra_demand_status == "0") {
-            ProviderInVoiceScreen.isExtraDemandRaised = "0"
+            UserUtils.isExtraDemandRaised(this, "0")
         } else {
-            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+            UserUtils.isExtraDemandRaised(this, "1")
         }
         val intent = Intent(this, ProviderInVoiceScreen::class.java)
         intent.putExtra(
@@ -418,11 +400,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         binding.pauseResumeBtn.setBackgroundResource(R.drawable.purple_out_line)
         binding.pauseResumeBtn.setTextColor(resources.getColor(R.color.purple_500))
         toolBar.setBackgroundColor(resources.getColor(R.color.purple_500))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window: Window = window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(R.color.purple_700)
-        }
+        val window: Window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = resources.getColor(R.color.purple_700)
     }
 
     private fun initializeToolBar() {
@@ -459,9 +439,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
             val finalDemand = finalExpenditure.text.toString()
             if (finalDemand.isEmpty()) {
-                toast(this, "Enter Expenditure Incurred")
+                toast(this, enter_expenditure_incurred)
             } else if (finalDemand.toDouble() > extraDemandRaised.toDouble()) {
-                toast(this, "Final Expenditure is more than extra demanded from user")
+                toast(this, final_expenditure_alert)
             } else {
                 val factory = ViewModelFactory(ProviderBookingRepository())
                 val viewModel =
@@ -480,9 +460,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             progressDialog.dismiss()
                             dialog.dismiss()
                             if (response.booking_details.extra_demand_status == "0") {
-                                ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                                UserUtils.isExtraDemandRaised(this, "0")
                             } else {
-                                ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                                UserUtils.isExtraDemandRaised(this, "1")
                             }
                             val intent = Intent(this, ProviderInVoiceScreen::class.java)
                             intent.putExtra(
@@ -512,28 +492,9 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun requestOTP(userType: String) {
-        val factory = ViewModelFactory(MyBookingsRepository())
-        val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
-        viewModel.otpRequest(this, bookingId.toInt(), userType)
-            .observe(this) {
-                when (it) {
-                    is NetworkResponse.Loading -> {
-                        progressDialog.show()
-                    }
-                    is NetworkResponse.Success -> {
-                        progressDialog.dismiss()
-                        val requestedOTP = it.data!!
-//                        toast(this, requestedOTP.toString())
-                        UserUtils.sendOTPFCM(this, FCM_TOKEN, bookingId, requestedOTP.toString())
-                        otpDialog(requestedOTP, bookingId)
-                    }
-                    is NetworkResponse.Failure -> {
-                        progressDialog.dismiss()
-                        snackBar(binding.inProgressViewStatusBtn, it.message!!)
-                    }
-                }
-            }
+    private fun requestOTP() {
+        otpDialog(response.booking_details.otp.toInt(), bookingId)
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -552,7 +513,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         closeBtn.setOnClickListener { dialog.dismiss() }
 
         if (isProvider(this)) {
-            title.text = "OTP to Start Job"
+            title.text = otp_to_start_job
             title.setTextColor(resources.getColor(R.color.purple_500))
             firstNo.setBackgroundResource(R.drawable.purpleborderbutton)
             secondNo.setBackgroundResource(R.drawable.purpleborderbutton)
@@ -652,13 +613,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         submitBtn.setOnClickListener {
 
             if (firstNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.startBtn, "Invalid OTP")
+                snackBar(binding.startBtn, invalid_otp)
             } else if (secondNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.startBtn, "Invalid OTP")
+                snackBar(binding.startBtn, invalid_otp)
             } else if (thirdNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.startBtn, "Invalid OTP")
+                snackBar(binding.startBtn, invalid_otp)
             } else if (fourthNo.text.toString().trim().isEmpty()) {
-                snackBar(binding.startBtn, "Invalid OTP")
+                snackBar(binding.startBtn, invalid_otp)
             } else {
                 val otp = firstNo.text.toString().trim() + secondNo.text.toString()
                     .trim() + thirdNo.text.toString().trim() + fourthNo.text.toString().trim()
@@ -669,8 +630,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         UserUtils.saveSpId(this, "0")
                     }
                     val factory = ViewModelFactory(MyBookingsRepository())
-                    val viewModel =
-                        ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
+                    val viewModel = ViewModelProvider(this, factory)[MyBookingsViewModel::class.java]
                     viewModel.validateOTP(this, bookingId.toInt(), UserUtils.getSpId(this).toInt())
                         .observe(this) {
                             when (it) {
@@ -682,41 +642,20 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                     dialog.dismiss()
                                     if (!isProvider(this)) {
                                         if (response.booking_details.extra_demand_status == "0") {
-                                            ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                                            UserUtils.isExtraDemandRaised(this, "0")
                                         } else {
-                                            ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                                            UserUtils.isExtraDemandRaised(this, "1")
                                         }
                                         val intent = Intent(this, ProviderInVoiceScreen::class.java)
-                                        intent.putExtra(
-                                            binding.root.context.getString(R.string.booking_id),
-                                            bookingId
-                                        )
-                                        intent.putExtra(
-                                            binding.root.context.getString(R.string.category_id),
-                                            categoryId
-                                        )
-                                        intent.putExtra(
-                                            binding.root.context.getString(R.string.user_id),
-                                            userId
-                                        )
+                                        intent.putExtra(binding.root.context.getString(R.string.booking_id), bookingId)
+                                        intent.putExtra(binding.root.context.getString(R.string.category_id), categoryId)
+                                        intent.putExtra(binding.root.context.getString(R.string.user_id), userId)
                                         startActivity(intent)
                                     } else {
-                                        UserUtils.sendOTPResponseFCM(
-                                            this,
-                                            FCM_TOKEN,
-                                            "$bookingId|$categoryId|$userId|sp"
-                                        )
-                                        startActivity(
-                                            Intent(
-                                                this,
-                                                ProviderMyBookingsScreen::class.java
-                                            )
-                                        )
+                                        UserUtils.sendOTPResponseFCM(this, response.booking_details.fcm_token, "$bookingId|$categoryId|$userId|user")
+                                        startActivity(Intent(this, ProviderMyBookingsScreen::class.java))
                                     }
-                                    snackBar(
-                                        binding.inProgressViewStatusBtn,
-                                        "OTP Verification Success"
-                                    )
+                                    snackBar(binding.inProgressViewStatusBtn, otp_success)
                                 }
                                 is NetworkResponse.Failure -> {
                                     progressDialog.dismiss()
@@ -726,7 +665,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             }
                         }
                 } else {
-                    toast(this, "Invalid OTP")
+                    toast(this, invalid_otp)
                 }
             }
         }
@@ -744,7 +683,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         if (isProvider(this)) {
             binding.userName.text =
                 "${response.booking_details.fname} ${response.booking_details.lname}"
-            binding.occupation.text = "User"
+            binding.occupation.text = user
             Glide.with(binding.profilePic)
                 .load(response.booking_details.user_profile_pic)
                 .error(R.drawable.images)
@@ -918,7 +857,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             categoryId,
                             "$userId|1"
                         )
-                        snackBar(binding.inProgressViewStatusBtn, "Extra Demand Accepted")
+                        snackBar(binding.inProgressViewStatusBtn, extra_demand_accepted)
                     } else {
                         UserUtils.sendExtraDemandFCM(
                             this, response.booking_details.sp_fcm_token,
@@ -926,7 +865,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                             categoryId,
                             "$userId|2"
                         )
-                        snackBar(binding.inProgressViewStatusBtn, "Extra Demand Rejected")
+                        snackBar(binding.inProgressViewStatusBtn, extra_demand_rejected)
                     }
                 }
                 is NetworkResponse.Failure -> {
@@ -1008,7 +947,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
             when {
                 materialCharges.text.toString().isEmpty() && technicianCharges.text.toString()
                     .isEmpty() -> {
-                    toast(this, "Enter Material Charges or Technician Charges")
+                    toast(this, enter_material_charges_alert)
                 }
                 else -> {
 
@@ -1020,7 +959,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                         ViewModelProvider(this, factory)[ProviderBookingViewModel::class.java]
                     val requestBody = ExtraDemandReqModel(
                         bookingId,
-                        SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format((Date())),
+                        currentDateTime(),
                         totalCost.text.toString().trim(),
                         mCharges,
                         tCharges,
@@ -1041,7 +980,8 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                                 )
                                 progressDialog.dismiss()
                                 dialog.dismiss()
-                                snackBar(binding.inProgressViewStatusBtn, "Extra Demand Raised")
+                                startActivity(intent)
+                                snackBar(binding.inProgressViewStatusBtn, extra_demand_raised)
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
@@ -1068,7 +1008,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         val fourthNo = bottomSheet.findViewById<TextView>(R.id.fourthNo)
         val submitBtn = bottomSheet.findViewById<TextView>(R.id.submitBtn)
         val closeBtn = bottomSheet.findViewById<MaterialCardView>(R.id.closeBtn)
-        title.text = "OTP to Start Job"
+        title.text = otp_to_start_job
         if (isProvider(this)) {
             firstNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
             secondNo.setBackgroundResource(R.drawable.otp_digit_purple_bg)
@@ -1084,18 +1024,13 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
         secondNo.text = otp[1].toString()
         thirdNo.text = otp[2].toString()
         fourthNo.text = otp[3].toString()
-        submitBtn.text = "Close"
+        submitBtn.text = close
         closeBtn.setOnClickListener {
             if (isProvider(this)) {
                 ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
                 ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
                 ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
-                startActivity(
-                    Intent(
-                        this@ViewUserBookingDetailsScreen,
-                        ProviderRatingReviewScreen::class.java
-                    )
-                )
+                startActivity(Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
             } else {
                 startActivity(Intent(this, UserMyBookingsScreen::class.java))
                 bottomSheetDialog.dismiss()
@@ -1106,12 +1041,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 ProviderRatingReviewScreen.bookingId = ProviderBookingDetailsScreen.bookingId
                 ProviderRatingReviewScreen.categoryId = ProviderBookingDetailsScreen.categoryId
                 ProviderRatingReviewScreen.userId = ProviderBookingDetailsScreen.userId
-                startActivity(
-                    Intent(
-                        this@ViewUserBookingDetailsScreen,
-                        ProviderRatingReviewScreen::class.java
-                    )
-                )
+                startActivity(Intent(this@ViewUserBookingDetailsScreen, ProviderRatingReviewScreen::class.java))
             } else {
                 bottomSheetDialog.dismiss()
                 startActivity(Intent(this, UserMyBookingsScreen::class.java))
@@ -1166,11 +1096,12 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
     private val otpResponseReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
+            toast(context, booking_started)
+            isPending(context, false)
+            isProgress(context, true)
             UserMyBookingDetailsScreen.userId = intent.getStringExtra(getString(R.string.user_id))!!
-            UserMyBookingDetailsScreen.categoryId =
-                intent.getStringExtra(getString(R.string.category_id))!!
-            UserMyBookingDetailsScreen.bookingId =
-                intent.getStringExtra(getString(R.string.booking_id))!!
+            UserMyBookingDetailsScreen.categoryId = intent.getStringExtra(getString(R.string.category_id))!!
+            UserMyBookingDetailsScreen.bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             startActivity(Intent(context, UserMyBookingDetailsScreen::class.java))
         }
     }
@@ -1204,40 +1135,6 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 snackBar(binding.inProgressViewStatusBtn, response.message)
             }
         }
-//        viewModel.viewBookingDetails(this, requestBody).observe(this, {
-//            when (it) {
-//                is NetworkResponse.Loading -> {
-//                    progressDialog.show()
-//                }
-//                is NetworkResponse.Success -> {
-//                    progressDialog.dismiss()
-//                    updateUI(it.data!!, bookingId)
-//                }
-//                is NetworkResponse.Failure -> {
-//                    progressDialog.dismiss()
-//                    snackBar(UserDashboardScreen.binding.navigationView, it.message!!)
-//                }
-//            }
-//        })
-    }
-
-    private fun updateUI(
-        response: BookingDetailsResModel,
-        bookingId: String
-    ) {
-        if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
-            if (response.booking_details.extra_demand_total_amount != "0") {
-                if (response.booking_details.extra_demand_status == "0") {
-                    showExtraDemandAcceptDialog(
-                        bookingId.toInt(),
-                        response.booking_details.material_advance,
-                        response.booking_details.technician_charges,
-                        response.booking_details.extra_demand_total_amount,
-                        progressDialog
-                    )
-                }
-            }
-        }
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -1247,14 +1144,14 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 val requestBody = ProviderBookingResumeReqModel(
                     ProviderBookingDetailsScreen.bookingId.toInt(),
                     RetrofitBuilder.PROVIDER_KEY,
-                    SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+                    currentDateTime(),
                     UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
                 )
                 val response =
                     RetrofitBuilder.getServiceProviderRetrofitInstance().resumeBooking(requestBody)
                 val jsonObject = JSONObject(response.string())
-                if (jsonObject.getInt("status") == 200) {
-                    binding.pauseResumeBtn.text = "Pause"
+                if (jsonObject.getInt(status) == 200) {
+                    binding.pauseResumeBtn.text = pause
                     UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "")
                     binding.completedBtn.isEnabled = true
                     binding.raiseExtraDemandBtn.isEnabled = true
@@ -1263,7 +1160,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.purple_500))
                     binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.purple_out_line)
                 } else {
-                    snackBar(binding.viewFilesBtn, jsonObject.getString("message"))
+                    snackBar(binding.viewFilesBtn, jsonObject.getString(message))
                 }
             } catch (e: Exception) {
                 snackBar(binding.viewFilesBtn, e.message!!)
@@ -1278,16 +1175,16 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                 val requestBody = ProviderPauseBookingReqModel(
                     ProviderBookingDetailsScreen.bookingId.toInt(),
                     RetrofitBuilder.PROVIDER_KEY,
-                    SimpleDateFormat("yyyy-MM-dd hh:mm").format(Date()),
+                    currentDateTime(),
                     UserUtils.getUserId(this@ViewUserBookingDetailsScreen).toInt()
                 )
                 val response =
                     RetrofitBuilder.getServiceProviderRetrofitInstance().pauseBooking(requestBody)
                 val jsonObject = JSONObject(response.string())
-                if (jsonObject.getInt("status") == 200) {
-                    binding.pauseResumeBtn.text = "Resume"
-                    UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, "Yes")
-                    binding.pauseResumeBtn.text = "Resume"
+                if (jsonObject.getInt(status) == 200) {
+                    binding.pauseResumeBtn.text = resume
+                    UserUtils.saveBookingPauseResumeStatus(this@ViewUserBookingDetailsScreen, yes_camil)
+                    binding.pauseResumeBtn.text = resume
                     binding.completedBtn.isEnabled = false
                     binding.raiseExtraDemandBtn.isEnabled = false
                     binding.completedBtn.setBackgroundResource(R.drawable.gray_corner)
@@ -1295,7 +1192,7 @@ class ViewUserBookingDetailsScreen : AppCompatActivity() {
                     binding.raiseExtraDemandBtn.setBackgroundResource(R.drawable.gray_corner)
                     binding.raiseExtraDemandBtn.setTextColor(resources.getColor(R.color.gray))
                 } else {
-                    snackBar(binding.viewFilesBtn, jsonObject.getString("message"))
+                    snackBar(binding.viewFilesBtn, jsonObject.getString(message))
                 }
             } catch (e: Exception) {
                 snackBar(binding.viewFilesBtn, e.message!!)

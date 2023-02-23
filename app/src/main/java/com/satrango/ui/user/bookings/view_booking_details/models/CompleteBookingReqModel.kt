@@ -29,5 +29,7 @@ data class CompleteBookingReqModel(
     @SerializedName("users_id")
     val users_id: String,
     @SerializedName("order_id")
-    val order_id: String
+    val order_id: String,
+    @SerializedName("expenditure_incurred")
+    val expenditure_incurred: String,
 ): Serializable

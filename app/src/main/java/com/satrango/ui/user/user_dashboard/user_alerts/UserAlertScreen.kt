@@ -429,8 +429,7 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
         )
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response =
-                    RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
+                val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
                 progressDialog.show()
                 if (response.status == 200) {
                     progressDialog.dismiss()
@@ -537,7 +536,7 @@ class UserAlertScreen: BaseFragment<UserAlertsViewModel, FragmentUserAlertScreen
 
     override fun onResume() {
         super.onResume()
-        isProvider(requireContext(), fromProvider = false)
+        isProvider(requireContext(), false)
     }
 
 }

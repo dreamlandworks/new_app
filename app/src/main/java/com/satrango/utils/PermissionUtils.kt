@@ -44,7 +44,7 @@ object PermissionUtils {
     }
 
 
-    fun checkAndRequestPermissions(context: Activity) {
+    fun checkAndRequestPermissions(context: Activity): Boolean {
         when {
             ActivityCompat.checkSelfPermission(
                 context,
@@ -89,9 +89,12 @@ object PermissionUtils {
                 requestForAllPermissions(context)
             }
             else -> {
-                checkGPSStatus(context)
+                if (checkGPSStatus(context)) {
+                    return true
+                }
             }
         }
+        return false
     }
 
     private fun requestForAllPermissions(context: Context) {

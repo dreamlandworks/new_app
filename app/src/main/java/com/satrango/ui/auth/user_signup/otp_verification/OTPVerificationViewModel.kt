@@ -52,7 +52,7 @@ class OTPVerificationViewModel(private val repository: OTPVerificationRepository
                     requestOTP.value = NetworkResponse.Loading()
                     val response = async { repository.requestOTP(context) }
                     val jsonObject = JSONObject(response.await().string())
-                    Log.e("OTP RESPONSE:", jsonObject.toString())
+//                    Log.e("OTP RESPONSE:", jsonObject.toString())
 //                    Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_SHORT).show()
                     if (jsonObject.getInt("status") == 200) {
                         requestOTP.value = NetworkResponse.Success(jsonObject.getInt("otp").toString())

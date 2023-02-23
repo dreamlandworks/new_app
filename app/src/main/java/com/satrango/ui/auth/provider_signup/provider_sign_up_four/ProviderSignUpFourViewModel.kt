@@ -47,7 +47,7 @@ class ProviderSignUpFourViewModel(private val repository: ProviderSignUpFourRepo
         return providerActivation
     }
 
-    fun uploadIdProof(context: Context, requestBody: ProviderIdProofReqModel): MutableLiveData<NetworkResponse<String>> {
+    fun uploadIdProof(requestBody: ProviderIdProofReqModel): MutableLiveData<NetworkResponse<String>> {
 //        if (hasInternetConnection(context)) {
             viewModelScope.launch {
                 try {

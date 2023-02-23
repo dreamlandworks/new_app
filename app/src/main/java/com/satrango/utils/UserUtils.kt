@@ -22,6 +22,7 @@ import com.satrango.ui.auth.FCMReqModel
 import com.satrango.ui.user.bookings.booking_attachments.models.Addresses
 import com.satrango.ui.user.bookings.booking_date_time.MonthsModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.utils.Constants.datetime_format
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,736 +69,752 @@ object UserUtils {
 
     fun setFromJobPost(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_job_post), fromJobPost)
+        editor.putBoolean(StorageConstants.from_job_post, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun getFromJobPost(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_job_post),
+            StorageConstants.from_job_post,
             false
         )
     }
 
     fun isForgetPassword(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isForgetPassword", fromJobPost)
+        editor.putBoolean(StorageConstants.is_forget_password, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun isForgetPassword(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isForgetPassword", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_forget_password, false)
     }
 
     fun saveSpId(context: Context, spId: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.sp_id), spId)
+        editor.putString(StorageConstants.sp_id, spId)
         editor.apply()
         editor.commit()
     }
 
     fun getSpId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.sp_id), "")!!
+        return sharedPreferences.getString(StorageConstants.sp_id, "")!!
     }
 
     fun savePostJobId(context: Context, postJobId: Int) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putInt(context.resources.getString(R.string.post_job_id), postJobId)
+        editor.putInt(StorageConstants.post_job_id, postJobId)
         editor.apply()
         editor.commit()
     }
 
     fun getPostJobId(context: Context): Int {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getInt(context.resources.getString(R.string.post_job_id), 0)
+        return sharedPreferences.getInt(StorageConstants.post_job_id, 0)
     }
 
     fun saveInVoiceDetails(context: Context, invoiceDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.invoice_details), invoiceDetails)
+        editor.putString(StorageConstants.invoice_details, invoiceDetails)
         editor.apply()
         editor.commit()
     }
 
     fun getInvoiceDetails(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.invoice_details),
+            StorageConstants.invoice_details,
             ""
         )!!
     }
 
-    fun isProvider(context: Context, fromProvider: Boolean) {
+    fun isProvider(context: Context, isProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_provider), fromProvider)
+        editor.putBoolean(StorageConstants.from_provider, isProvider)
         editor.apply()
         editor.commit()
     }
 
     fun isProvider(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_provider),
+            StorageConstants.from_provider,
             false
         )
     }
 
-    fun isPending(context: Context, fromProvider: Boolean) {
+    fun isPending(context: Context, isPending: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_pending), fromProvider)
+        editor.putBoolean(StorageConstants.from_pending, isPending)
         editor.apply()
         editor.commit()
     }
 
     fun isPending(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_pending),
+            StorageConstants.from_pending,
             false
         )
     }
 
-    fun isProgress(context: Context, fromProvider: Boolean) {
+    fun isProgress(context: Context, inProgress: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_progress), fromProvider)
+        editor.putBoolean(StorageConstants.from_progress, inProgress)
         editor.apply()
         editor.commit()
     }
 
     fun isProgress(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_progress),
+            StorageConstants.from_progress,
             false
         )
     }
 
-    fun isCompleted(context: Context, fromProvider: Boolean) {
+    fun isCompleted(context: Context, isCompleted: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_completed), fromProvider)
+        editor.putBoolean(StorageConstants.from_completed, isCompleted)
         editor.apply()
         editor.commit()
     }
 
     fun isCompleted(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_completed),
+            StorageConstants.from_completed,
             false
         )
     }
 
     fun isReschedule(context: Context, fromProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.re_schedule), fromProvider)
+        editor.putBoolean(StorageConstants.re_schedule, fromProvider)
         editor.apply()
         editor.commit()
     }
 
     fun isReschedule(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.re_schedule),
+            StorageConstants.re_schedule,
             false
         )
     }
 
     fun isFromUserPlans(context: Context, fromProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromUserPlans", fromProvider)
+        editor.putBoolean(StorageConstants.is_from_user_plans, fromProvider)
         editor.apply()
         editor.commit()
     }
 
     fun isFromUserPlans(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromUserPlans", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_user_plans, false)
     }
 
     fun isFromProviderPlans(context: Context, fromProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromProviderPlans", fromProvider)
+        editor.putBoolean(StorageConstants.is_from_provider_plans, fromProvider)
         editor.apply()
         editor.commit()
     }
 
     fun isFromProviderPlans(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromProviderPlans", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_provider_plans, false)
     }
 
     fun isFromUserSetGoals(context: Context, fromProvider: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromUserSetGoals", fromProvider)
+        editor.putBoolean(StorageConstants.is_from_user_set_goals, fromProvider)
         editor.apply()
         editor.commit()
     }
 
     fun isFromUserSetGoals(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromUserSetGoals", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_user_set_goals, false)
     }
 
     fun isFromUserBookingAddress(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromUserBookingAddress", fromJobPost)
+        editor.putBoolean(StorageConstants.is_from_user_booking_address, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun isFromUserBookingAddress(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromUserBookingAddress", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_user_booking_address, false)
     }
 
     fun isFromCompleteBooking(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromCompleteBooking", fromJobPost)
+        editor.putBoolean(StorageConstants.is_from_complete_booking, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun isFromCompleteBooking(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromCompleteBooking", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_complete_booking, false)
     }
 
     fun isFromProviderBookingResponse(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean("isFromProviderBookingResponse", fromJobPost)
+        editor.putBoolean(StorageConstants.is_from_provider_booking_response, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun isFromProviderBookingResponse(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean("isFromProviderBookingResponse", false)
+        return sharedPreferences.getBoolean(StorageConstants.is_from_provider_booking_response, false)
     }
 
     fun setPayableAmount(context: Context, amount: Int) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putInt("setPayableAmount", amount)
+        editor.putInt(StorageConstants.set_payable_amount, amount)
         editor.apply()
         editor.commit()
     }
 
     fun getPayableAmount(context: Context): Int {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getInt("setPayableAmount", 0)
+        return sharedPreferences.getInt(StorageConstants.set_payable_amount, 0)
     }
 
     fun setFinalWalletBalance(context: Context, amount: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString("setFinalWalletBalance", amount)
+        editor.putString(StorageConstants.set_final_wallet_balance, amount)
         editor.apply()
         editor.commit()
     }
 
     fun getFinalWalletBalance(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString("setFinalWalletBalance", "0")!!
+        return sharedPreferences.getString(StorageConstants.set_final_wallet_balance, "0")!!
     }
 
     fun getSpStatus(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.sp_status), true)
+        return sharedPreferences.getBoolean(StorageConstants.sp_status, true)
     }
 
     fun setOnline(context: Context, spStatus: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.sp_status), spStatus)
+        editor.putBoolean(StorageConstants.sp_status, spStatus)
         editor.apply()
         editor.commit()
     }
 
     fun saveInstallmentDetId(context: Context, fromJobPost: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.saveInstallmentDetId), fromJobPost)
+        editor.putString(StorageConstants.save_installment_det_id, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun getInstallmentDetId(context: Context): String? {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.saveInstallmentDetId),
+            StorageConstants.save_installment_det_id,
             "0"
         )
     }
 
     fun setFromJobPostSingleMove(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.single_move), fromJobPost)
+        editor.putBoolean(StorageConstants.single_move, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun getFromJobPostSingleMove(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.single_move),
+            StorageConstants.single_move,
             false
         )
     }
 
     fun setFromJobPostMultiMove(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.multi_move), fromJobPost)
+        editor.putBoolean(StorageConstants.multi_move, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun getFromJobPostMultiMove(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getBoolean(context.resources.getString(R.string.multi_move), false)
+        return sharedPreferences.getBoolean(StorageConstants.multi_move, false)
     }
 
     fun setFromJobPostBlueCollar(context: Context, fromJobPost: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.blue_collar), fromJobPost)
+        editor.putBoolean(StorageConstants.blue_collar, fromJobPost)
         editor.apply()
         editor.commit()
     }
 
     fun getFromJobPostBlueCollar(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.blue_collar),
+            StorageConstants.blue_collar,
             false
         )
     }
 
     fun setPassword(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.password), password)
+        editor.putString(StorageConstants.password, password)
         editor.apply()
         editor.commit()
     }
 
     fun getPassword(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.password), "")!!
+        return sharedPreferences.getString(StorageConstants.password, "")!!
     }
 
     fun setFirstName(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.first_name), password)
+        editor.putString(StorageConstants.first_name, password)
         editor.apply()
         editor.commit()
     }
 
     fun getFirstName(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.first_name), "")!!
+        return sharedPreferences.getString(StorageConstants.first_name, "")!!
     }
 
     fun setLastName(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.last_name), password)
+        editor.putString(StorageConstants.last_name, password)
         editor.apply()
         editor.commit()
     }
 
     fun getLastName(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.last_name), "")!!
+        return sharedPreferences.getString(StorageConstants.last_name, "")!!
     }
 
     fun setPhoneNo(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.phoneNo), password)
+        editor.putString(StorageConstants.phone_no, password)
         editor.apply()
         editor.commit()
     }
 
     fun getPhoneNo(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.phoneNo), "")!!
+        return sharedPreferences.getString(StorageConstants.phone_no, "")!!
     }
 
     fun setGender(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.gender), password)
+        editor.putString(StorageConstants.gender, password)
         editor.apply()
         editor.commit()
     }
 
     fun getGender(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.gender), "")!!
+        return sharedPreferences.getString(StorageConstants.gender, "")!!
     }
 
     fun setLatitude(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.latitude), password)
+        editor.putString(StorageConstants.latitude, password)
         editor.apply()
         editor.commit()
     }
 
     fun getLatitude(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.latitude), "")!!
+        return sharedPreferences.getString(StorageConstants.latitude, "")!!
     }
 
     fun setLongitude(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.longitude), password)
+        editor.putString(StorageConstants.longitude, password)
         editor.apply()
         editor.commit()
     }
 
     fun getLongitude(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.longitude), "")!!
+        return sharedPreferences.getString(StorageConstants.longitude, "")!!
+    }
+
+    fun setAppLanguage(context: Context, password: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            StorageConstants.user_details,
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(StorageConstants.app_language, password)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun getAppLanguage(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(StorageConstants.app_language, "en")!!
     }
 
     fun setCity(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.city_name), password)
+        editor.putString(StorageConstants.city_name, password)
         editor.apply()
         editor.commit()
     }
 
     fun getCity(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.city_name), "")!!
+        return sharedPreferences.getString(StorageConstants.city_name, "")!!
     }
 
     fun setState(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.state), password)
+        editor.putString(StorageConstants.state, password)
         editor.apply()
         editor.commit()
     }
 
     fun getState(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.state), "")!!
+        return sharedPreferences.getString(StorageConstants.state, "")!!
     }
 
     fun setCountry(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.country), password)
+        editor.putString(StorageConstants.country, password)
         editor.apply()
         editor.commit()
     }
 
     fun getCountry(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.country), "")!!
+        return sharedPreferences.getString(StorageConstants.country, "")!!
     }
 
     fun setAddress(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.address), password)
+        editor.putString(StorageConstants.address, password)
         editor.apply()
         editor.commit()
     }
 
     fun getAddress(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.address), "")!!
+        return sharedPreferences.getString(StorageConstants.address, "")!!
     }
 
     fun saveFCMToken(context: Context, token: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.fcm_token), token)
+        editor.putString(StorageConstants.fcm_token, token)
         editor.apply()
         editor.commit()
     }
 
     fun getFCMToken(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.fcm_token), "")!!
+        return sharedPreferences.getString(StorageConstants.fcm_token, "")!!
     }
 
     fun setPostalCode(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.postal_code), password)
+        editor.putString(StorageConstants.postal_code, password)
         editor.apply()
         editor.commit()
     }
 
     fun getPostalCode(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.postal_code), "")!!
+        return sharedPreferences.getString(StorageConstants.postal_code, "")!!
     }
 
     fun setDateOfBirth(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.date_of_birth), password)
+        editor.putString(StorageConstants.date_of_birth, password)
         editor.apply()
         editor.commit()
     }
 
     fun getDateOfBirth(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.date_of_birth),
+            StorageConstants.date_of_birth,
             ""
         )!!
     }
@@ -805,218 +822,218 @@ object UserUtils {
     @SuppressLint("ApplySharedPref")
     fun saveBookingPauseResumeStatus(context: Context, status: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.pause_resume_booking), status)
+        editor.putString(StorageConstants.pause_resume_booking, status)
         editor.apply()
         editor.commit()
     }
 
     fun getBookingPauseResumeStatus(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.pause_resume_booking),
+            StorageConstants.pause_resume_booking,
             ""
         )!!
     }
 
     fun setMail(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.email), password)
+        editor.putString(StorageConstants.email, password)
         editor.apply()
         editor.commit()
     }
 
     fun getMail(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.email), "")!!
+        return sharedPreferences.getString(StorageConstants.email, "")!!
     }
 
     fun setFacebookId(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.facebook_id), password)
+        editor.putString(StorageConstants.facebook_id, password)
         editor.apply()
         editor.commit()
     }
 
     fun getFacebookId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.facebook_id), "")!!
+        return sharedPreferences.getString(StorageConstants.facebook_id, "")!!
     }
 
     fun setGoogleId(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.google_id), password)
+        editor.putString(StorageConstants.google_id, password)
         editor.apply()
         editor.commit()
     }
 
     fun getGoogleId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.google_id), "")!!
+        return sharedPreferences.getString(StorageConstants.google_id, "")!!
     }
 
     fun setTwitterId(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.twitter), password)
+        editor.putString(StorageConstants.twitter, password)
         editor.apply()
         editor.commit()
     }
 
     fun getTwitterId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.twitter), "")!!
+        return sharedPreferences.getString(StorageConstants.twitter, "")!!
     }
 
     fun setSearchResultsId(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.search_results_id), password)
+        editor.putString(StorageConstants.search_results_id, password)
         editor.apply()
         editor.commit()
     }
 
     fun getSearchResultsId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.search_results_id),
+            StorageConstants.search_results_id,
             ""
         )!!
     }
 
     fun setTempAddressId(context: Context, password: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.temp_address_id), password)
+        editor.putString(StorageConstants.temp_address_id, password)
         editor.apply()
         editor.commit()
     }
 
     fun getTempAddressId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.temp_address_id),
+            StorageConstants.temp_address_id,
             ""
         )!!
     }
 
     fun selectedChat(context: Context, userId: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.selected_chat), userId)
+        editor.putString(StorageConstants.selected_chat, userId)
         editor.apply()
         editor.commit()
     }
 
     fun getSelectedChat(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.selected_chat),
+            StorageConstants.selected_chat,
             ""
         )!!
     }
 
     fun setUserLoggedInVia(context: Context, type: String, userId: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.userLoggedVia), type)
-        editor.putString(context.resources.getString(R.string.userId), userId)
+        editor.putString(StorageConstants.user_login_via, type)
+        editor.putString(StorageConstants.user_id, userId)
         editor.apply()
         editor.commit()
     }
 
     fun getUserLoggedInVia(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.userLoggedVia),
+            StorageConstants.user_login_via,
             ""
         )!!
     }
 
     fun getUserId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.userId), "")!!
+        return sharedPreferences.getString(StorageConstants.user_id, "0")!!
     }
 
 //    fun setReferralId(context: Context, referralId: String) {
 //        val sharedPreferences = context.getSharedPreferences(
-//            context.resources.getString(R.string.userDetails),
+//            StorageConstants.user_details,
 //            Context.MODE_PRIVATE
 //        )
 //        val editor = sharedPreferences.edit()
-//        editor.putString(context.resources.getString(R.string.userReferralId), referralId)
+//        editor.putString(StorageConstants.userReferralId, referralId)
 //        editor.apply()
 //        editor.commit()
 //    }
 
     fun saveSelectedSPDetails(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
         editor.putString(
-            context.resources.getString(R.string.selected_service_provider_single),
+            StorageConstants.selected_service_provider_single,
             spDetails
         )
         editor.apply()
@@ -1025,52 +1042,52 @@ object UserUtils {
 
     fun getSelectedSPDetails(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.selected_service_provider_single),
+            StorageConstants.selected_service_provider_single,
             ""
         )!!
     }
 
     fun saveReferralLink(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString("saveReferralLink", spDetails)
+        editor.putString(StorageConstants.save_referral_link, spDetails)
         editor.apply()
         editor.commit()
     }
 
     fun getReferralLink(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString("saveReferralLink", "")!!
+        return sharedPreferences.getString(StorageConstants.save_referral_link, "")!!
     }
 
     fun saveSelectedAllSPDetails(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.selected_service_provider), spDetails)
+        editor.putString(StorageConstants.selected_service_provider, spDetails)
         editor.apply()
         editor.commit()
     }
 
     fun getSelectedAllSPDetails(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.selected_service_provider),
+            StorageConstants.selected_service_provider,
             ""
         )!!
     }
@@ -1078,33 +1095,33 @@ object UserUtils {
     @SuppressLint("ApplySharedPref")
     fun saveSelectedKeywordCategoryId(context: Context, spDetails: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.selected_keyword_id), spDetails)
+        editor.putString(StorageConstants.selected_keyword_id, spDetails)
         editor.apply()
         editor.commit()
     }
 
     fun getSelectedKeywordCategoryId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.selected_keyword_id),
+            StorageConstants.selected_keyword_id,
             ""
         )!!
     }
 
     fun getReferralId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.userReferralId),
+            StorageConstants.user_referral_id,
             ""
         )!!
     }
@@ -1118,303 +1135,325 @@ object UserUtils {
 
     fun saveUserProfilePic(context: Context, url: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.userImageUrl), url)
+        editor.putString(StorageConstants.user_image_url, url)
         editor.apply()
         editor.commit()
     }
 
     fun getUserProfilePic(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.userImageUrl), "")!!
+        return sharedPreferences.getString(StorageConstants.user_image_url, "")!!
     }
 
     fun getUserName(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.userName), "")!!
+        return sharedPreferences.getString(StorageConstants.user_name, "")!!
     }
 
     fun saveUserName(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.userName), fullName)
+        editor.putString(StorageConstants.user_name, fullName)
         editor.apply()
         editor.commit()
     }
 
     private fun getFCMServerKey(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.fcm_server_key),
+            StorageConstants.fcm_server_key,
             ""
         )!!
     }
 
     fun saveFCMServerKey(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.fcm_server_key), fullName)
+        editor.putString(StorageConstants.fcm_server_key, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getGoogleMapsKey(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.google_maps_key),
+            StorageConstants.google_maps_key,
             ""
         )!!
     }
 
     fun saveGoogleMapsKey(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.google_maps_key), fullName)
+        editor.putString(StorageConstants.google_maps_key, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getBookingId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.booking_id), "")!!
+        return sharedPreferences.getString(StorageConstants.booking_id, "")!!
     }
 
     fun saveBookingId(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.booking_id), fullName)
+        editor.putString(StorageConstants.booking_id, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getBookingRefId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.booking_ref_id),
+            StorageConstants.booking_ref_id,
             ""
         )!!
     }
 
     fun saveBookingRefId(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.booking_ref_id), fullName)
+        editor.putString(StorageConstants.booking_ref_id, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getOrderId(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.order_id), "")!!
+        return sharedPreferences.getString(StorageConstants.order_id, "")!!
     }
 
     fun saveOrderId(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.order_id), fullName)
+        editor.putString(StorageConstants.order_id, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getTxnToken(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(context.resources.getString(R.string.txn_id), "")!!
+        return sharedPreferences.getString(StorageConstants.txn_id, "")!!
     }
 
     fun saveTxnToken(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.txn_id), fullName)
+        editor.putString(StorageConstants.txn_id, fullName)
         editor.apply()
         editor.commit()
     }
 
 //    fun getInstantBooking(context: Context): Boolean {
 //        val sharedPreferences = context.getSharedPreferences(
-//            context.resources.getString(R.string.userDetails),
+//            StorageConstants.user_details,
 //            Context.MODE_PRIVATE
 //        )
 //        return sharedPreferences.getBoolean(
-//            context.resources.getString(R.string.book_instantly),
+//            StorageConstants.book_instantly,
 //            false
 //        )
 //    }
 //
 //    fun saveInstantBooking(context: Context, fullName: Boolean) {
 //        val sharedPreferences = context.getSharedPreferences(
-//            context.resources.getString(R.string.userDetails),
+//            StorageConstants.user_details,
 //            Context.MODE_PRIVATE
 //        )
 //        val editor = sharedPreferences.edit()
-//        editor.putBoolean(context.resources.getString(R.string.book_instantly), fullName)
+//        editor.putBoolean(StorageConstants.book_instantly, fullName)
 //        editor.apply()
 //        editor.commit()
 //    }
 
     fun getProviderAction(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             ""
         )!!
     }
 
     private fun saveProviderAction(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.booking_id), fullName)
+        editor.putString(StorageConstants.booking_id, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getFromFCMService(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getBoolean(
-            context.resources.getString(R.string.from_fcm_service),
+            StorageConstants.from_fcm_service,
             false
         )
     }
 
     fun saveFromFCMService(context: Context, fullName: Boolean) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(context.resources.getString(R.string.from_fcm_service), fullName)
+        editor.putBoolean(StorageConstants.from_fcm_service, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getBookingType(context: Context): String? {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.booking_type),
+            StorageConstants.booking_type,
             ""
         )
     }
 
     fun saveBookingType(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.provider_action),
+            StorageConstants.provider_action,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.booking_type), fullName)
+        editor.putString(StorageConstants.booking_type, fullName)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun isExtraDemandRaised(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences(
+            StorageConstants.provider_action,
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences.getString(
+            StorageConstants.is_extra_demand_raised,
+            "0"
+        )!!
+    }
+
+    fun isExtraDemandRaised(context: Context, fullName: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            StorageConstants.provider_action,
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(StorageConstants.is_extra_demand_raised, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun getSearchFilter(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         return sharedPreferences.getString(
-            context.resources.getString(R.string.search_filter),
+            StorageConstants.search_filter,
             ""
         )!!
     }
 
     fun saveSearchFilter(context: Context, fullName: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.search_filter), fullName)
+        editor.putString(StorageConstants.search_filter, fullName)
         editor.apply()
         editor.commit()
     }
 
     fun saveReferralId(context: Context, referralId: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.userReferralId), referralId)
+        editor.putString(StorageConstants.user_referral_id, referralId)
         editor.apply()
         editor.commit()
     }
 
     fun saveLoginCredentials(context: Context, phoneNo: String, pwd: String) {
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.phoneNo), phoneNo)
-        editor.putString(context.resources.getString(R.string.password), getPassword(context))
+        editor.putString(StorageConstants.phone_no, phoneNo)
+        editor.putString(StorageConstants.password, getPassword(context))
         editor.apply()
         editor.commit()
     }
 
     fun deleteUserCredentials(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(context.resources.getString(R.string.userDetails), Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString(context.resources.getString(R.string.phoneNo), "")
-        editor.putString(context.resources.getString(R.string.password), "")
+        editor.putString(StorageConstants.phone_no, "")
+        editor.putString(StorageConstants.password, "")
         editor.apply()
         editor.commit()
     }
@@ -1422,18 +1461,12 @@ object UserUtils {
     fun getLoginCredentials(context: Context): MutableMap<String, String> {
         val map = mutableMapOf<String, String>()
         val sharedPreferences = context.getSharedPreferences(
-            context.resources.getString(R.string.userDetails),
+            StorageConstants.user_details,
             Context.MODE_PRIVATE
         )
-        sharedPreferences.getString(context.resources.getString(R.string.password), "")
-        map.put(
-            context.resources.getString(R.string.phoneNo),
-            sharedPreferences.getString(context.resources.getString(R.string.phoneNo), "")!!
-        )
-        map.put(
-            context.resources.getString(R.string.password),
-            sharedPreferences.getString(context.resources.getString(R.string.password), "")!!
-        )
+        sharedPreferences.getString(StorageConstants.password, "")
+        map[StorageConstants.phone_no] = sharedPreferences.getString(StorageConstants.phone_no, "")!!
+        map[StorageConstants.password] = sharedPreferences.getString(StorageConstants.password, "")!!
         return map
     }
 
@@ -1461,11 +1494,12 @@ object UserUtils {
                             getUserId(context)
                         }|$type",
                         "$bookingId|${getSelectedKeywordCategoryId(context)}|${getUserId(context)}|$type",
-                        from
-                    ), "high", token
+                        from)
+                    , "high", token
                 )
+//                Toast.makeText(context, Gson().toJson(requestBody, Toast.LENGTH_SHORT).show()
                 val fcmResponse = RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
-//                Toast.makeText(context, Gson().toJson(fcmResponse), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, Gson().toJson(fcmResponse, Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }
@@ -1487,8 +1521,8 @@ object UserUtils {
                 NotificationX(
                     "$bookingId|$otp|${getUserId(context)}",
                     "$bookingId|$otp|${getUserId(context)}",
-                    "otp"
-                ), "high", token
+                    "otp")
+                , "high", token
             )
             RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
@@ -1527,8 +1561,8 @@ object UserUtils {
                 NotificationX(
                     "$bookingId|$categoryId|$userId",
                     "$bookingId|$categoryId|$userId",
-                    "extraDemand"
-                ), "high", token
+                    "extraDemand")
+                , "high", token
             )
             RetrofitBuilder.getUserRetrofitInstance().sendFcm(requestBody)
         }
@@ -1541,8 +1575,7 @@ object UserUtils {
     ): String {
         val spDetails = Gson().fromJson(
             getSelectedSPDetails(context),
-            com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java
-        )
+            com.satrango.ui.user.user_dashboard.search_service_providers.models.Data::class.java)
         return if (spDetails.fcm_token.isEmpty()) {
             "Service Provider not able to receive notifications"
         } else {
@@ -1587,51 +1620,11 @@ object UserUtils {
                     val fcmRequestBody = SendFcmToAllReqModel(notification, "high", fcms)
                     val response =
                         RetrofitBuilder.getUserRetrofitInstance().sendFcmToAll(fcmRequestBody)
-//                    Toast.makeText(context, response.status.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.status.toString(, Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }
             }
-//            if (spDetails != null) {
-//                for (sp in spDetails.data) {
-//                    for (spSlot in spDetails.slots_data) {
-//                        if (spSlot.blocked_time_slots.isNotEmpty()) {
-//                            var count = 0
-//                            for (booking in spSlot.blocked_time_slots) {
-//                                if (getComingHour() == booking.time_slot_from.split(":")[0].toInt()) {
-//                                    count += 1
-//                                }
-//                            }
-//                            if (count == 0) {
-//                                if (from == "accepted") {
-//                                    for (index in 1 until 5) {
-//                                        sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
-//                                    }
-//                                } else {
-//                                    if (sp.fcm_token.isNotEmpty()) {
-//                                        sendFCM(context, sp.fcm_token, bookingId, from, type)
-//                                    } else {
-//                                        return tokenEmpty
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            if (from == "accepted") {
-//                                for (index in 1 until 5) {
-//                                    sendCancelFCM(context, sp.fcm_token, bookingId, from, type)
-//                                }
-//                            } else {
-//                                if (sp.fcm_token.isNotEmpty()) {
-//                                    sendFCM(context, sp.fcm_token, bookingId, from, type)
-//                                } else {
-//                                    return tokenEmpty
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            return "fcm_sent"
         }
         return ""
     }
@@ -1678,12 +1671,13 @@ object UserUtils {
         ) && now.isAfter(end)
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun checktimings(time: String, endtime: String): Boolean {
         val pattern = "HH:mm"
         val sdf = SimpleDateFormat(pattern)
         try {
-            val date1: Date = sdf.parse(time)
-            val date2: Date = sdf.parse(endtime)
+            val date1: Date = sdf.parse(time)!!
+            val date2: Date = sdf.parse(endtime)!!
             return date1.after(date2)
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -1695,16 +1689,11 @@ object UserUtils {
         if (PermissionUtils.isNetworkConnected(context)) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-//                    Toast.makeText(context, "Fetching FCM registration token failed", Toast.LENGTH_SHORT).show()
                     Log.w("FCM ERROR:", "Fetching FCM registration token failed", task.exception)
-//                    Toast.makeText(context, task.exception!!.message, Toast.LENGTH_SHORT).show()
-//                    updateNewFCMToken(context)
                     return@OnCompleteListener
                 }
                 val token = task.result
                 saveFCMToken(context, token)
-//                Freshchat.getInstance(context).setPushRegistrationToken(token)
-//                ZohoSalesIQ.enablePush(token, true)
                 CoroutineScope(Dispatchers.Main).launch {
                     val response = RetrofitBuilder.getUserRetrofitInstance().updateFCMToken(
                         FCMReqModel(
@@ -1715,15 +1704,9 @@ object UserUtils {
                     )
                     val jsonResponse = JSONObject(response.string())
                     if (jsonResponse.getInt("status") != 200) {
-//                        Toast.makeText(context, "Token update Failed!!!", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
-//                    else {
-//                        Log.e("FCM TOKEN UPDATED:", token)
-//                        Toast.makeText(context, "Token updated!!!", Toast.LENGTH_SHORT).show()
-//                    }
                 }
-//                Log.e("FCM TOKEN", token)
             })
             return true
         }
@@ -1766,6 +1749,7 @@ object UserUtils {
         return Base64.encodeToString(pdfByteArray, Base64.DEFAULT)
     }
 
+    @SuppressLint("Range")
     fun getFileExtension(context: Context, uri: Uri): String {
         var result: String? = null
         if (uri.scheme == "content") {
@@ -1789,48 +1773,52 @@ object UserUtils {
     }
 
     fun saveInstantBookingId(context: Context, bookingId: String) {
-        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString("instantBookingId", bookingId)
+        editor.putString(StorageConstants.instant_booking_id, bookingId)
         editor.apply()
         editor.commit()
     }
 
     fun getInstantBookingId(context: Context): String {
-        return context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
-            .getString("instantBookingId", "")!!
+        return context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
+            .getString(StorageConstants.instant_booking_id, "")!!
     }
 
     fun saveProfessionIdForBookInstant(
         context: Context,
         professionId: String
     ) {
-        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString("instantProfessionId", professionId)
+        editor.putString(StorageConstants.instant_profession_id, professionId)
         editor.apply()
         editor.commit()
     }
 
     fun getProfessionIdForBookInstant(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("instantProfessionId", "")!!
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(StorageConstants.instant_profession_id, "")!!
     }
 
     fun saveInstantBookingCategoryId(
         context: Context,
         categoryId: String
     ) {
-        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString("instantCategoryId", categoryId)
+        editor.putString(StorageConstants.instant_category_id, categoryId)
         editor.apply()
         editor.commit()
     }
 
     fun getInstantBookingCategoryId(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("instantCategoryId", "")!!
+        val sharedPreferences = context.getSharedPreferences(StorageConstants.user_details, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(StorageConstants.instant_category_id, "")!!
+    }
+
+    fun currentDateTime(): String {
+        return SimpleDateFormat(datetime_format).format(Date())
     }
 
 }

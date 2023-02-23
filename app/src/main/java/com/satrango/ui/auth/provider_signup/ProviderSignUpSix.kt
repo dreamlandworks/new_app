@@ -140,7 +140,7 @@ class ProviderSignUpSix : AppCompatActivity(), SurfaceHolder.Callback {
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
-                                snackBar(nextBtn, it.message!!)
+                                snackBar(nextBtn, it.message!! + ". Please try again.")
                             }
                         }
                     }

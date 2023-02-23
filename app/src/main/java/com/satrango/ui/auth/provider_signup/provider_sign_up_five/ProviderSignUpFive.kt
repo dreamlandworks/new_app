@@ -81,6 +81,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
                     startBtn.setImageResource(R.drawable.ic_baseline_stop_circle_24)
                     timerApp = null
                     startRecording()
+                    timer()
                     playing = true
                 }
             }
@@ -143,7 +144,7 @@ class ProviderSignUpFive : AppCompatActivity(), SurfaceHolder.Callback {
                             }
                             is NetworkResponse.Failure -> {
                                 progressDialog.dismiss()
-                                snackBar(nextBtn, it.message!!)
+                                snackBar(nextBtn, it.message!! + ". Please try again.")
                             }
                         }
                     }

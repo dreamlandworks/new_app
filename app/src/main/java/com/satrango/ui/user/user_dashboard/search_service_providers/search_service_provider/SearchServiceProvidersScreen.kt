@@ -87,9 +87,7 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             startActivity(Intent(this, UserLocationSelectionScreen::class.java))
         }
 
-        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this)
-                .isNotEmpty()
-        ) {
+        if (UserUtils.getSearchFilter(this).isNotEmpty() && UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
 
             val spDetails = Gson().fromJson(
                 UserUtils.getSelectedAllSPDetails(this),
@@ -176,6 +174,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
                     binding.recyclerView.adapter = SearchServiceProviderAdapter(list, this)
                 }
             }
+            binding.shimmerLayout.stopShimmerAnimation()
+            binding.shimmerLayout.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
         } else if (UserUtils.getSelectedAllSPDetails(this).isNotEmpty()) {
             val spDetails = Gson().fromJson(
                 UserUtils.getSelectedAllSPDetails(this),
@@ -184,6 +185,9 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             binding.listCount.text = "${spDetails.data.size} out of ${spDetails.data.size}"
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.recyclerView.adapter = SearchServiceProviderAdapter(spDetails.data, this)
+            binding.shimmerLayout.stopShimmerAnimation()
+            binding.shimmerLayout.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
         }
 
         val factory = ViewModelFactory(SearchServiceProviderRepository())
@@ -282,42 +286,22 @@ class SearchServiceProvidersScreen : AppCompatActivity() {
             keyword = binding.searchBar.text.toString()
             if (keyword.isEmpty()) keyword = "0"
         }
-//        toast(this, subCategory)
-//        {
-//            "address": "GJ9C+72G",
-//            "city": "Vijayawada",
-//            "country": "India",
-//            "key": "L9c4rxAzCfpT3JX08RHaKo5kewSWV6i2",
-//            "offer_id": 0,
-//            "postal_code": "520001",
-//            "search_phrase": "Split AC Mechanic",
-//            "search_phrase_id": "0",
-//            "state": "Andhra Pradesh",
-//            "subcat_id": 3,
-//            "user_lat": "16.5181936",
-//            "user_long": "80.6200626",
-//            "users_id": 34
-//        }
         val requestBody = SearchServiceProviderReqModel(
-            "GJ9C+72G", "Vijayawada", "India", "L9c4rxAzCfpT3JX08RHaKo5kewSWV6i2", "0", "Split AC Mechanic", "520001",
-            "Andhra Pradesh", "16.5181936", "80.6200626", 34, 3, 0
+            UserUtils.getAddress(this),
+            UserUtils.getCity(this),
+            UserUtils.getCountry(this),
+            RetrofitBuilder.USER_KEY,
+            keyword,
+            binding.searchBar.text.toString().trim(),
+            UserUtils.getPostalCode(this),
+            UserUtils.getState(this),
+            UserUtils.getLatitude(this),
+            UserUtils.getLongitude(this),
+            UserUtils.getUserId(this).toInt(),
+            subCategory.toInt(),
+            offerId
         )
-//        val requestBody = SearchServiceProviderReqModel(
-//            UserUtils.getAddress(this),
-//            UserUtils.getCity(this),
-//            UserUtils.getCountry(this),
-//            RetrofitBuilder.USER_KEY,
-//            keyword,
-//            binding.searchBar.text.toString().trim(),
-//            UserUtils.getPostalCode(this),
-//            UserUtils.getState(this),
-//            UserUtils.getLatitude(this),
-//            UserUtils.getLongitude(this),
-//            UserUtils.getUserId(this).toInt(),
-//            subCategory.toInt(),
-//            offerId
-//        )
-        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
+//        Log.e("SEARCHREQUEST:", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
 //            progressDialog.show()
             binding.shimmerLayout.visibility = View.VISIBLE

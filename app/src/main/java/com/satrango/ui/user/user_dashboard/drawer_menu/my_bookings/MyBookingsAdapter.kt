@@ -21,6 +21,12 @@ import com.satrango.ui.user.bookings.view_booking_details.ViewUserBookingDetails
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_job_posts.my_job_post_view.view_bids.ViewBidsScreen
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
+import com.satrango.utils.Constants.cancelled
+import com.satrango.utils.Constants.completed
+import com.satrango.utils.Constants.expired
+import com.satrango.utils.Constants.inProgress
+import com.satrango.utils.Constants.pending
+import com.satrango.utils.Constants.unknown
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
@@ -75,14 +81,14 @@ class MyBookingsAdapter(
             if (!data.fname.isNullOrBlank() && !data.lname.isNullOrBlank()) {
                 binding.spName.text = "${data.sp_fname} ${data.sp_lname}"
             } else {
-                binding.spName.text = "Unknown"
+                binding.spName.text = unknown
             }
             if (!data.sp_profile_pic.isNullOrBlank()) {
                 Glide.with(binding.profilePic).load(data.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
             }
 
             when(data.booking_status.lowercase(Locale.getDefault())) {
-                "InProgress".lowercase(Locale.getDefault()) -> {
+                inProgress.lowercase(Locale.getDefault()) -> {
                     binding.timeRemaining.text = "Started"
                     binding.startBtn.visibility = View.GONE
                     CoroutineScope(Dispatchers.Main).launch {
@@ -122,7 +128,7 @@ class MyBookingsAdapter(
                     }
 
                 }
-                "Pending".lowercase(Locale.getDefault()) -> {
+                pending.lowercase(Locale.getDefault()) -> {
                     binding.reScheduleBtn.setTextColor(binding.reScheduleBtn.resources.getColor(R.color.white))
                     if (data.reschedule_status == "10") {
                         binding.startBtn.text = "Reschedule Request Raised"
@@ -131,7 +137,7 @@ class MyBookingsAdapter(
                         binding.reScheduleBtn.visibility = View.GONE
                         if (data.req_raised_by != UserUtils.getUserId(binding.amount.context)) {
                             binding.card.setOnClickListener {
-                                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), 0, data.reschedule_id.toInt(), data.reschedule_description)
+                                alertsInterface.rescheduleUserAcceptRejectDialog(data.booking_id.toInt(), data.category_id.toInt(), data.users_id.toInt(), data.reschedule_id.toInt(), data.reschedule_description)
                             }
                         }
                     } else {
@@ -168,7 +174,7 @@ class MyBookingsAdapter(
                         }
                     }
                 }
-                "Completed".lowercase(Locale.getDefault()) -> {
+                completed.lowercase(Locale.getDefault()) -> {
                     binding.timeRemaining.text = "Completed"
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.text = "Raise Support Ticket"
@@ -188,14 +194,14 @@ class MyBookingsAdapter(
                         binding.root.context.startActivity(intent)
                     }
                 }
-                "Expired".lowercase(Locale.getDefault()) -> {
+                expired.lowercase(Locale.getDefault()) -> {
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.startBtn.text = "Expired"
                     binding.startBtn.setBackgroundResource(R.drawable.user_red_btn_bg)
                     binding.startBtn.elevation = 0f
                 }
-                "Cancelled".lowercase(Locale.getDefault()) -> {
+                cancelled.lowercase(Locale.getDefault()) -> {
                     binding.cancelBookingBtn.visibility = View.GONE
                     binding.reScheduleBtn.visibility = View.GONE
                     binding.startBtn.text = "Cancelled"

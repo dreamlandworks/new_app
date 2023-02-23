@@ -37,6 +37,7 @@ import java.io.*
 
 class ProviderSignUpFour: AppCompatActivity() {
 
+    private var retry: Int = 0
     private lateinit var progressDialog: BeautifulProgressDialog
     private var selectedEncodedImage = ""
     private val REQUEST_CAMERA: Int = 101
@@ -78,23 +79,22 @@ class ProviderSignUpFour: AppCompatActivity() {
     }
 
     private fun sendActivationRequestToServer() {
+        retry += 1
         val requestBody = ProviderIdProofReqModel(selectedEncodedImage, RetrofitBuilder.PROVIDER_KEY, UserUtils.getUserId(this))
-//        toast(this, requestBody.toString())
         val factory = ViewModelFactory(ProviderSignUpFourRepository())
         val viewModel = ViewModelProvider(this, factory)[ProviderSignUpFourViewModel::class.java]
-        viewModel.uploadIdProof(this, requestBody).observe(this) {
+        viewModel.uploadIdProof(requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-//                    toast(this, it.data!!)
                     startActivity(Intent(this, ProviderSignUpFive::class.java))
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    snackBar(binding.submitBtn, it.message!!)
+                    snackBar(binding.submitBtn, it.message!! + ". Please Try Again.")
                 }
             }
         }

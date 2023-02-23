@@ -14,19 +14,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.gson.Gson
 import com.satrango.R
 import com.satrango.base.ViewModelFactory
 import com.satrango.databinding.ActivityUserMyBookingDetailsScreenBinding
 import com.satrango.remote.NetworkResponse
 import com.satrango.remote.RetrofitBuilder
-import com.satrango.remote.fcm.FCMService
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.GetBookingStatusListAdapter
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.invoice.ProviderInVoiceScreen
 import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.models.ChangeExtraDemandStatusReqModel
@@ -34,11 +33,13 @@ import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookin
 import com.satrango.ui.user.bookings.booking_address.BookingRepository
 import com.satrango.ui.user.bookings.booking_address.BookingViewModel
 import com.satrango.ui.user.bookings.booking_attachments.ViewFilesScreen
-import com.satrango.ui.service_provider.provider_dashboard.drawer_menu.my_bookings.provider_booking_details.release_goals.models.ProviderGoalsInstallmentsListResModel
 import com.satrango.ui.user.bookings.view_booking_details.installments_request.models.PostApproveRejectReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsReqModel
 import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsResModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.UserMyBookingsScreen
+import com.satrango.utils.Constants.extra_demand_accepted
+import com.satrango.utils.Constants.extra_demand_rejected
+import com.satrango.utils.Constants.mark_complete_alert
 import com.satrango.utils.UserUtils
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
@@ -131,16 +132,8 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         binding.time.text = response.booking_details.from
         binding.occupation.text = response.booking_details.sp_profession
         Glide.with(this).load(response.booking_details.sp_profile_pic).error(R.drawable.images).into(binding.profilePic)
-        if (response.booking_details.otp_raised_by == response.booking_details.sp_id) {
-//            if (ViewUserBookingDetailsScreen.FROM_COMPLETED && !ViewUserBookingDetailsScreen.FROM_PENDING) {
-            if (!isPending(this)) {
-                binding.otpText.text = resources.getString(R.string.time_lapsed)
-                binding.otp.text = response.booking_details.time_lapsed
-            } else {
-                binding.otpText.text = resources.getString(R.string.otp)
-                binding.otp.text = response.booking_details.otp
-            }
-        }
+        binding.otpText.text = resources.getString(R.string.time_lapsed)
+        binding.otp.text = response.booking_details.time_lapsed
         binding.bookingIdText.text = bookingId
 
         binding.viewDetailsBtn.setOnClickListener {
@@ -184,16 +177,22 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 if (response.status == 200) {
                     progressDialog.dismiss()
                     if (bookingDetails.booking_details.extra_demand_status == "0" && bookingDetails.booking_details.expenditure_incurred.isEmpty()) {
-                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        UserUtils.isExtraDemandRaised(this@UserMyBookingDetailsScreen, "0")
                         divertToInvoiceScreen()
                     } else if (bookingDetails.booking_details.extra_demand_status == "1" && bookingDetails.booking_details.expenditure_incurred.isNotEmpty()) {
-                        ProviderInVoiceScreen.isExtraDemandRaised = "1"
+                        UserUtils.isExtraDemandRaised(this@UserMyBookingDetailsScreen, "1")
                         divertToInvoiceScreen()
                     } else if (bookingDetails.booking_details.extra_demand_status == "2" && bookingDetails.booking_details.expenditure_incurred.isEmpty()) {
-                        ProviderInVoiceScreen.isExtraDemandRaised = "0"
+                        UserUtils.isExtraDemandRaised(this@UserMyBookingDetailsScreen, "0")
+                        divertToInvoiceScreen()
+                    } else if (bookingDetails.booking_details.extra_demand_status.isEmpty() && bookingDetails.booking_details.expenditure_incurred.isEmpty()) {
+                        UserUtils.isExtraDemandRaised(this@UserMyBookingDetailsScreen, "0")
                         divertToInvoiceScreen()
                     } else {
-                        toast(this@UserMyBookingDetailsScreen, "Please Ask the Service Provider to click on Mark Complete to get Booking Invoice")
+                        toast(
+                            this@UserMyBookingDetailsScreen,
+                            mark_complete_alert
+                        )
                     }
                 } else {
                     progressDialog.dismiss()
@@ -227,10 +226,6 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         } else {
             binding.viewFilesBtn.visibility = View.GONE
         }
-
-//        if (response.booking_details.post_job_id != "0") {
-//            binding.messageBtn.visibility = View.GONE
-//        }
         if (!response.booking_details.extra_demand_status.isNullOrBlank()) {
             if (response.booking_details.extra_demand_total_amount != "0") {
                 if (response.booking_details.extra_demand_status == "0") {
@@ -271,6 +266,11 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             binding.callBtn.isClickable = false
             binding.messageBtn.isClickable = false
         }
+    }
+
+    private fun dismissDialogs() {
+        supportFragmentManager.fragments.takeIf { it.isNotEmpty() }
+            ?.map { (it as? DialogFragment)?.dismiss() }
     }
 
     @SuppressLint("SetTextI18n", "InflateParams")
@@ -329,6 +329,7 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         startActivity(intent)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showExtraDemandAcceptDialog(
         bookingId: Int,
         materialAdvance: String,
@@ -345,21 +346,33 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         val rejectBtn = dialogView.findViewById<TextView>(R.id.rejectBtn)
         val closeBtn = dialogView.findViewById<MaterialCardView>(R.id.closeBtn)
 
-        materialCharges.text = materialAdvance
-        technicianCharges.text = technicalCharges
-        totalCost.text = extraDemandTotalAmount
+        materialCharges.text = "Rs $materialAdvance.00"
+        technicianCharges.text = "Rs $technicalCharges.00"
+        totalCost.text = "Rs $extraDemandTotalAmount.00"
 
-        closeBtn.setOnClickListener { extraDemandAcceptRejectDialog.dismiss() }
+        closeBtn.setOnClickListener {
+            extraDemandAcceptRejectDialog.dismiss()
+            startActivity(intent)
+        }
 
         acceptBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog)
+            changeExtraDemandStatus(bookingId, 1, extraDemandAcceptRejectDialog, progressDialog, materialAdvance, technicalCharges, extraDemandTotalAmount)
         }
 
         rejectBtn.setOnClickListener {
-            changeExtraDemandStatus(bookingId, 2, extraDemandAcceptRejectDialog, progressDialog)
+            changeExtraDemandStatus(
+                bookingId,
+                2,
+                extraDemandAcceptRejectDialog,
+                progressDialog,
+                materialAdvance,
+                technicalCharges,
+                extraDemandTotalAmount
+            )
         }
 
-        extraDemandAcceptRejectDialog.setCancelable(false)
+        extraDemandAcceptRejectDialog.setCancelable(true)
+        extraDemandAcceptRejectDialog.setCanceledOnTouchOutside(true)
         extraDemandAcceptRejectDialog.setContentView(dialogView)
         extraDemandAcceptRejectDialog.show()
     }
@@ -368,13 +381,22 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
         bookingId: Int,
         status: Int,
         dialog: BottomSheetDialog,
-        progressDialog: BeautifulProgressDialog
+        progressDialog: BeautifulProgressDialog,
+        materialAdvance: String,
+        technicalCharges: String,
+        extraDemandTotalAmount: String
     ) {
 
         val factory = ViewModelFactory(BookingRepository())
         val viewModel = ViewModelProvider(this, factory)[BookingViewModel::class.java]
-        val requestBody =
-            ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        val requestBody = ChangeExtraDemandStatusReqModel(bookingId, RetrofitBuilder.USER_KEY, status)
+        if (status == 1) {
+            UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token, bookingId.toString(), categoryId, "$userId|1|$materialAdvance|$technicalCharges|$extraDemandTotalAmount")
+            toast(this, extra_demand_accepted)
+        } else {
+            UserUtils.sendExtraDemandFCM(this, response.booking_details.sp_fcm_token, bookingId.toString(), categoryId, "$userId|2|$materialAdvance|$technicalCharges|$extraDemandTotalAmount")
+            toast(this, extra_demand_rejected)
+        }
         viewModel.changeExtraDemandStatus(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -383,28 +405,9 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     dialog.dismiss()
-                    if (status == 1) {
-                        UserUtils.sendExtraDemandFCM(
-                            this,
-                            response.booking_details.sp_fcm_token,
-                            bookingId.toString(),
-                            categoryId,
-                            "$userId|1"
-                        )
-                        toast(this, "Extra Demand Accepted")
-                        loadScreen()
-                    } else {
-                        UserUtils.sendExtraDemandFCM(
-                            this,
-                            response.booking_details.sp_fcm_token,
-                            bookingId.toString(),
-                            categoryId,
-                            "$userId|2"
-                        )
-                        toast(this, "Extra Demand Rejected")
-                        loadScreen()
-                    }
-                    updateStatusList()
+//                    loadScreen()
+//                    updateStatusList()
+                    startActivity(intent)
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
@@ -455,7 +458,14 @@ class UserMyBookingDetailsScreen : AppCompatActivity() {
             val bookingId = intent.getStringExtra(getString(R.string.booking_id))!!
             val categoryId = intent.getStringExtra(getString(R.string.category_id))!!
             val userId = intent.getStringExtra(getString(R.string.user_id))!!
-            openBookingDetails(bookingId, categoryId, userId)
+            dismissDialogs()
+            if (userId.contains("|")) {
+                binding.markCompleteBtn.isEnabled = true
+                binding.markCompleteBtn.setBackgroundResource(R.drawable.user_btn_bg)
+                binding.markCompleteBtn.setTextColor(resources.getColor(R.color.white))
+            } else {
+                openBookingDetails(bookingId, categoryId, userId)
+            }
         }
     }
 

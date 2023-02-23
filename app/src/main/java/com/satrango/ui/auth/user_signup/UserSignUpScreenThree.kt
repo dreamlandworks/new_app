@@ -29,6 +29,7 @@ import com.satrango.ui.auth.forgot_password.ForgotPwdVerifyReqModel
 import com.satrango.ui.auth.forgot_password.ForgotPwdViewModel
 import com.satrango.ui.auth.login_screen.LoginScreen
 import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
+import com.satrango.ui.auth.user_signup.set_password.SetPasswordScreen
 import com.satrango.utils.PermissionUtils
 import com.satrango.utils.UserUtils
 import com.satrango.utils.snackBar
@@ -366,12 +367,11 @@ class UserSignUpScreenThree : AppCompatActivity() {
                 }
                 is NetworkResponse.Failure -> {
                     progressDialog.dismiss()
-                    startActivity(
-                        Intent(
-                            this@UserSignUpScreenThree,
-                            OTPVerificationScreen::class.java
-                        )
-                    )
+                    if (UserUtils.getFacebookId(this) == "trueCaller") {
+                        startActivity(Intent(this@UserSignUpScreenThree, SetPasswordScreen::class.java))
+                    } else {
+                        startActivity(Intent(this@UserSignUpScreenThree, OTPVerificationScreen::class.java))
+                    }
                 }
             }
         }

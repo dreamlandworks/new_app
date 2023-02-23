@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
@@ -42,11 +43,12 @@ import com.satrango.ui.auth.forgot_password.ForgotPasswordScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenOne
 import com.satrango.ui.auth.user_signup.UserSignUpScreenThree
 import com.satrango.ui.auth.user_signup.models.UserLoginModel
-import com.satrango.utils.PermissionUtils
-import com.satrango.utils.UserUtils
+import com.satrango.ui.auth.user_signup.otp_verification.OTPVerificationScreen
+import com.satrango.utils.*
+import com.satrango.utils.Constants.login
+import com.satrango.utils.Constants.password_alert
+import com.satrango.utils.Constants.phone_no_alert
 import com.satrango.utils.UserUtils.isForgetPassword
-import com.satrango.utils.snackBar
-import com.satrango.utils.toast
 import com.truecaller.android.sdk.*
 import com.truecaller.android.sdk.clients.VerificationCallback
 import com.truecaller.android.sdk.clients.VerificationDataBundle
@@ -105,9 +107,9 @@ class LoginScreen : AppCompatActivity() {
         binding.apply {
 
             val userCredentials = UserUtils.getLoginCredentials(this@LoginScreen)
-            if (userCredentials[resources.getString(R.string.phoneNo)]!!.isNotEmpty()) {
-                mobileNo.setText(userCredentials[resources.getString(R.string.phoneNo)])
-                password.setText(userCredentials[resources.getString(R.string.password)])
+            if (userCredentials[StorageConstants.phone_no]!!.isNotEmpty()) {
+                mobileNo.setText(userCredentials[StorageConstants.phone_no])
+                password.setText(userCredentials[StorageConstants.password])
             }
 
             googleSigInBtn.setOnClickListener {
@@ -143,21 +145,21 @@ class LoginScreen : AppCompatActivity() {
 
                 when {
                     phoneNo.isEmpty() -> {
-                        mobileNo.error = "Please Enter Valid 10 digit Mobile number"
+                        mobileNo.error = phone_no_alert
                         mobileNo.requestFocus()
                     }
                     phoneNo.length != 10 -> {
-                        mobileNo.error = "Please Enter Valid 10 digit Mobile number"
+                        mobileNo.error = phone_no_alert
                         mobileNo.requestFocus()
                     }
                     pwd.isEmpty() -> {
-                        password.error = "Please Enter Password"
+                        password.error = password_alert
                         password.requestFocus()
                     }
                     else -> {
                         UserUtils.setGoogleId(this@LoginScreen, "")
                         UserUtils.setFacebookId(this@LoginScreen, "")
-                        loginToServer(phoneNo, pwd, "login")
+                        loginToServer(phoneNo, pwd, login)
                     }
                 }
 
@@ -170,22 +172,7 @@ class LoginScreen : AppCompatActivity() {
 
             trueCallerBtn.setOnClickListener {
                 UserUtils.setMail(this@LoginScreen, "")
-//                try {
-//                    if (TruecallerSDK.getInstance().isUsable) {
                 TruecallerSDK.getInstance().getUserProfile(this@LoginScreen)
-//                    }
-//                } catch (e: Exception) {
-//                    try {
-//                        TruecallerSDK.getInstance().requestVerification(
-//                            "IN",
-//                            PHONE_NUMBER_STRING,
-//                            apiCallback,
-//                            this@LoginScreen
-//                        )
-//                    } catch (e: RuntimeException) {
-//                        toast(this@LoginScreen, "Error10:"+ e.message)
-//                    }
-//                }
             }
         }
 
@@ -221,18 +208,14 @@ class LoginScreen : AppCompatActivity() {
 
     val trueCallerCallback = object : ITrueCallback {
         override fun onSuccessProfileShared(data: TrueProfile) {
-            toast(this@LoginScreen, "Truecaller Success")
+//            toast(this@LoginScreen, "Truecaller Success")
             UserUtils.setGoogleId(this@LoginScreen, "")
             UserUtils.setFacebookId(this@LoginScreen, "trueCaller")
             UserUtils.setFirstName(this@LoginScreen, data.firstName)
             UserUtils.setMail(this@LoginScreen, data.email)
             UserUtils.setLastName(this@LoginScreen, data.lastName)
             UserUtils.setPhoneNo(this@LoginScreen, data.phoneNumber.takeLast(10))
-            loginToServer(
-                data.phoneNumber.takeLast(10),
-                "",
-                resources.getString(R.string.userTrueCallerLogin)
-            )
+            loginToServer(data.phoneNumber.takeLast(10), "", resources.getString(R.string.userTrueCallerLogin))
         }
 
         override fun onFailureProfileShared(error: TrueError) {
@@ -254,12 +237,12 @@ class LoginScreen : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // 23
             val readPhoneStatePermission =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-            val readSMSStatePermission =
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+//            val readSMSStatePermission =
+//                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
             val readPhoneNosStatePermission =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS)
             if (readPhoneStatePermission != PackageManager.PERMISSION_GRANTED ||
-                readSMSStatePermission != PackageManager.PERMISSION_GRANTED ||
+//                readSMSStatePermission != PackageManager.PERMISSION_GRANTED ||
                 readPhoneNosStatePermission != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                     arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS), 100)
@@ -275,7 +258,7 @@ class LoginScreen : AppCompatActivity() {
             val phoneNumber1 = manager.line1Number
             try {
                 TruecallerSDK.getInstance().requestVerification("IN", phoneNumber1, apiCallback, this)
-                toast(this, phoneNumber1)
+//                toast(this, phoneNumber1)
             } catch (e: RuntimeException) {
                 toast(this, e.message.toString())
             }
@@ -300,6 +283,7 @@ class LoginScreen : AppCompatActivity() {
         progressDialog.setLayoutColor(resources.getColor(R.color.progressDialogColor))
     }
 
+    @SuppressLint("HardwareIds")
     private fun loginToServer(phoneNo: String, password: String, type: String) {
 
         if (!PermissionUtils.isNetworkConnected(this@LoginScreen)) {
@@ -307,7 +291,8 @@ class LoginScreen : AppCompatActivity() {
             return
         }
 
-        val requestBody = UserLoginModel(phoneNo, password, type, RetrofitBuilder.USER_KEY)
+        val androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        val requestBody = UserLoginModel(phoneNo, password, androidId, type, RetrofitBuilder.USER_KEY)
         viewModel.userLogin(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
@@ -316,10 +301,13 @@ class LoginScreen : AppCompatActivity() {
                     progressDialog.show()
                 }
                 is NetworkResponse.Success -> {
-                    toast(this, "Login success")
+//                    toast(this, "Login success")
                     UserUtils.setUserLoggedInVia(this, type, it.data!!)
                     UserUtils.setPhoneNo(this, phoneNo)
                     progressDialog.dismiss()
+                    UserUtils.setLatitude(this, "0")
+                    UserUtils.setLongitude(this, "0")
+                    UserUtils.setCity(this, "")
                     startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
                     setupFirebaseUserDatabase()
                 }
@@ -332,7 +320,6 @@ class LoginScreen : AppCompatActivity() {
                     } else {
                         snackBar(binding.signUpBtn, "Invalid Credentials")
                     }
-                    toast(this, "Login error:" + it.message!!)
                 }
             }
         }
@@ -364,7 +351,7 @@ class LoginScreen : AppCompatActivity() {
                 firebaseDatabaseReference.child(getString(R.string.users))
                     .child(UserUtils.getUserId(this@LoginScreen))
                     .child(getString(R.string.online_status)).setValue(getString(R.string.online))
-                toast(this@LoginScreen, "Success")
+//                toast(this@LoginScreen, "Success")
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -404,7 +391,7 @@ class LoginScreen : AppCompatActivity() {
                     val email = account.email
                     val googleId = account.uid
                     val image = account.photoUrl
-                    toast(this, account.email!!)
+//                    toast(this, account.email!!)
                     UserUtils.setGoogleId(this, googleId)
                     UserUtils.setFacebookId(this, "")
                     UserUtils.setMail(this, email!!)
@@ -439,16 +426,12 @@ class LoginScreen : AppCompatActivity() {
         }
         when (requestCode) {
             100 -> {
-
-
                 // Note: If request is cancelled, the result arrays are empty.
                 // Permissions granted (SEND_SMS).
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(LOG_TAG, "Permission granted!")
                     Toast.makeText(this, "Permission granted!", Toast.LENGTH_LONG).show()
                     getPhoneNumbers()
                 } else {
-                    Log.i(LOG_TAG, "Permission denied!")
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_LONG).show()
                 }
             }
@@ -461,11 +444,14 @@ class LoginScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (UserUtils.getLoginCredentials(this@LoginScreen)[resources.getString(R.string.phoneNo)]!!.isNotEmpty() && UserUtils.getLoginCredentials(
+        if (UserUtils.getLoginCredentials(this@LoginScreen)[StorageConstants.phone_no]!!.isNotEmpty() && UserUtils.getLoginCredentials(
                 this@LoginScreen
-            )[resources.getString(R.string.password)]!!.isNotEmpty() && UserUtils.getUserId(this)
+            )[StorageConstants.password]!!.isNotEmpty() && UserUtils.getUserId(this)
                 .isNotEmpty()
         ) {
+            UserUtils.setLatitude(this, "0")
+            UserUtils.setLongitude(this, "0")
+            UserUtils.setCity(this, "")
             startActivity(Intent(this@LoginScreen, UserLoginTypeScreen::class.java))
         }
     }

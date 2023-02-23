@@ -17,7 +17,7 @@ data class PostJobSingleMoveReqModel(
     val bid_per: Int,
     @SerializedName("bid_range_id")
     val bid_range_id: Int,
-    @SerializedName("bid_period")
+    @SerializedName("bids_period")
     val bids_period: Int,
     @SerializedName("created_on")
     val created_on: String,

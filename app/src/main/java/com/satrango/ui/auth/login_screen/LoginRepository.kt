@@ -10,12 +10,10 @@ import okhttp3.ResponseBody
 open class LoginRepository : BaseRepository() {
 
     suspend fun login(requestBody: UserLoginModel): ResponseBody {
-//        Log.e("LOGIN", Gson().toJson(requestBody))
         return RetrofitBuilder.getUserRetrofitInstance().login(requestBody)
     }
 
     suspend fun logout(requestBody: LogoutReqModel): ResponseBody {
-//        Log.e("LOGOUT", Gson().toJson(requestBody))
         return RetrofitBuilder.getUserRetrofitInstance().logout(requestBody)
     }
 

@@ -223,7 +223,7 @@ class UserHomeScreen :
                             if (data.type_id == "9" && data.status == "2") {
                                 showPendingActionableAlertsDialog(data)
                             }
-                            if (data.type_id == "7") {
+                            if (data.type_id == "7" && data.status == "2") {
                                 showPendingExtraDemandDialog(data)
                             }
                         }

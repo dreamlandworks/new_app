@@ -168,8 +168,7 @@ class PostJobDescriptionScreen : AppCompatActivity() {
                                 position: Int,
                                 id: Long
                             ) {
-                                UserUtils.bid_range_id =
-                                    bidRanges[position + 1].bid_range_id.toInt()
+                                UserUtils.bid_range_id = bidRanges[position + 1].bid_range_id.toInt()
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -45,7 +45,19 @@ import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.PostJobViewMod
 import com.satrango.ui.user.user_dashboard.drawer_menu.post_a_job.plans.models.UserPlanPaymentReqModel
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.Data
 import com.satrango.ui.user.user_dashboard.search_service_providers.models.SearchServiceProviderResModel
+import com.satrango.utils.Constants.activation
+import com.satrango.utils.Constants.activation_date_time
+import com.satrango.utils.Constants.completed_at_date
+import com.satrango.utils.Constants.freedom
+import com.satrango.utils.Constants.message
+import com.satrango.utils.Constants.plan_id
+import com.satrango.utils.Constants.status
+import com.satrango.utils.Constants.status_camil
+import com.satrango.utils.Constants.success_camil
+import com.satrango.utils.Constants.success_small
+import com.satrango.utils.Constants.valid_till
 import com.satrango.utils.UserUtils
+import com.satrango.utils.UserUtils.currentDateTime
 import com.satrango.utils.UserUtils.getFinalWalletBalance
 import com.satrango.utils.UserUtils.getPayableAmount
 import com.satrango.utils.UserUtils.isFromCompleteBooking
@@ -67,7 +79,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PaymentScreen : AppCompatActivity(), UpiInterface {
-//    PaymentResultListener
 
     private var callbackUrl = ""
     private lateinit var upiList: List<com.satrango.ui.user.bookings.payment_screen.models.Data>
@@ -81,15 +92,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         var id = 0
         var period = 0
         var userId = 0
-
-        //        var amount = 0
-        //        var FROM_USER_PLANS = false
-//        var FROM_PROVIDER_PLANS = false
-//        var FROM_USER_SET_GOALS = false
-//        var FROM_USER_BOOKING_ADDRESS = false
-//        var FROM_COMPLETE_BOOKING = false
-//        var FROM_PROVIDER_BOOKING_RESPONSE = false
-//        var finalWalletBalance = "0"
         var finalAmount: Int = 0
         var walletBalanceChecked = false
     }
@@ -115,9 +117,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                         UserUtils.getSelectedAllSPDetails(this@PaymentScreen),
                         SearchServiceProviderResModel::class.java
                     ).wallet_balance
-                    if (tempFinalAmount > getFinalWalletBalance(this@PaymentScreen).toInt()) {
                         setFinalWalletBalance(this@PaymentScreen, tempFinalAmount.toString())
-                    }
                 }
             }
 
@@ -144,25 +144,24 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                                 )
                             )
                         if (response.status == 200) {
-                            totalAmount.text =
-                                "Rs.${response.booking_details.amount.toDouble().toInt()}/-"
+                            totalAmount.text = "Rs.${response.booking_details.final_amount.toDouble().toInt()}/-"
                             bookingDateTime.text =
                                 "${response.booking_details.scheduled_date}, ${response.booking_details.from}"
-                            finalAmount = response.booking_details.amount.toDouble().toInt()
+                            finalAmount = response.booking_details.final_amount.toDouble().toInt()
                             payAmount.text = "Rs.$finalAmount/-"
 
                             if (getFinalWalletBalance(this@PaymentScreen).toInt() == 0) {
                                 currentBalance.visibility = View.GONE
                                 walletBalanceCheck.visibility = View.GONE
                             } else {
-                                if (getFinalWalletBalance(this@PaymentScreen).toInt() > response.booking_details.amount.toDouble()
+                                if (getFinalWalletBalance(this@PaymentScreen).toInt() > response.booking_details.final_amount.toDouble()
                                         .toInt()
                                 ) {
                                     currentBalance.text =
-                                        "Deduct from wallet balance: Rs. ${response.booking_details.amount}/-"
+                                        "Deduct from wallet balance: Rs. ${response.booking_details.final_amount}/-"
                                 } else if (getFinalWalletBalance(this@PaymentScreen).toInt() > 0 && getFinalWalletBalance(
                                         this@PaymentScreen
-                                    ).toInt() < response.booking_details.amount.toDouble().toInt()
+                                    ).toInt() < response.booking_details.final_amount.toDouble().toInt()
                                 ) {
                                     currentBalance.text = "Deduct from wallet balance: Rs. ${
                                         getFinalWalletBalance(this@PaymentScreen)
@@ -214,17 +213,16 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 invoiceAmountCard.visibility = View.GONE
                 amountLayout.visibility = View.VISIBLE
 
-                bookingIdText.text = "Plan Id:"
-                bookingId.text = "Freedom"
-                startedOnText.text = "Activation:"
-                workStartedAt.text = "Activation Date and Time"
-                completedText.text = "Valid till:"
-                completedAt.text = "Completed At Date"
+                bookingIdText.text = plan_id
+                bookingId.text = freedom
+                startedOnText.text = activation
+                workStartedAt.text = activation_date_time
+                completedText.text = valid_till
+                completedAt.text = completed_at_date
 
                 totalAmount.text = "Rs.${getPayableAmount(this@PaymentScreen)}/-"
                 walletBalance.text = "Rs.${getFinalWalletBalance(this@PaymentScreen)}/-"
-                currentBalance.text =
-                    "Deduct from wallet Balance: Rs. ${getPayableAmount(this@PaymentScreen)}/-"
+                currentBalance.text = "Deduct from wallet Balance: Rs. ${getPayableAmount(this@PaymentScreen)}/-"
                 payAmount.text = "Rs.${getPayableAmount(this@PaymentScreen)}/-"
 
             } else if (isFromUserSetGoals(this@PaymentScreen)) {
@@ -357,7 +355,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             }
         } else {
             val dues =
-                binding.duesAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
+                binding.payAmount.text.toString().trim().split(".")[1].split("/")[0].toDouble()
             val summaryPayAmount = binding.summaryPayableAmount.text.toString().trim()
                 .split(".")[1].split("/")[0].toDouble()
             if (dues == 0.0 && summaryPayAmount == 0.0) {
@@ -376,15 +374,8 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
     private fun generateTxn(payableAmount: Double, walletBalance: Double, txnType: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val requestBody = GetTxnReqModel(
-                    payableAmount.toString(),
-                    RetrofitBuilder.USER_KEY,
-                    UserUtils.getUserId(this@PaymentScreen),
-                    txnType
-                )
-//                Log.e("REQUEST:", Gson().toJson(requestBody))
+                val requestBody = GetTxnReqModel(payableAmount.toString(), RetrofitBuilder.USER_KEY, UserUtils.getUserId(this@PaymentScreen), txnType)
                 val response = RetrofitBuilder.getUserRetrofitInstance().getTxn(requestBody)
-//                Log.e("RESPONSE:", Gson().toJson(response))
                 if (response.status == 200) {
                     UserUtils.saveTxnToken(this@PaymentScreen, response.txn_id)
                     UserUtils.saveOrderId(this@PaymentScreen, response.order_id)
@@ -414,13 +405,13 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 @SuppressLint("ObsoleteSdkInt")
                 override fun onTransactionResponse(inResponse: Bundle?) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        if (inResponse!!.getString(resources.getString(R.string.status_caps)) == resources.getString(
+                        if (inResponse != null && inResponse.getString(resources.getString(R.string.status_caps)) == resources.getString(
                                 R.string.txn_success
                             )
                         ) {
                             updateToServer(payableAmount.toString(), walletBalance.toString())
-                        } else if (!inResponse.getBoolean(resources.getString(R.string.status_caps))) {
-                            toast(this@PaymentScreen, "PAYMENT FAILED")
+                        } else if (!inResponse!!.getBoolean(resources.getString(R.string.status_caps))) {
+//                            toast(this@PaymentScreen, "PAYMENT FAILED")
                             showPaymentFailureDialog()
                         }
                     }
@@ -490,10 +481,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 updateStatusInServer(paidAmount, walletBalance)
             }
             isFromUserSetGoals(this@PaymentScreen) -> {
-                updateInstallmentPaymentStatus("Success", "paymentId")
+                updateInstallmentPaymentStatus(success_camil, "paymentId")
             }
             isFromCompleteBooking(this) -> {
-                completeBooking(paidAmount, walletBalance, "Success")
+                completeBooking(paidAmount, walletBalance, success_camil)
             }
         }
     }
@@ -535,7 +526,6 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
 
         val inVoiceDetails =
             Gson().fromJson(UserUtils.getInvoiceDetails(this), ProviderInvoiceResModel::class.java)
-//        Log.e("INVOICE:", Gson().toJson(inVoiceDetails))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val requestBody = CompleteBookingReqModel(
@@ -550,39 +540,31 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                     inVoiceDetails.booking_details.sp_id,
                     inVoiceDetails.booking_details.dues,
                     UserUtils.getUserId(this@PaymentScreen),
-                    UserUtils.getOrderId(this@PaymentScreen)
+                    UserUtils.getOrderId(this@PaymentScreen),
+                    inVoiceDetails.booking_details.expenditure_incurred
                 )
-//                Log.e("COMPLETE BOOKING:", Gson().toJson(requestBody))
-                val response =
-                    RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
-                if (JSONObject(response.string()).getInt("status") == 200) {
-                    showBookingCompletedSuccessDialog(
-                        inVoiceDetails.booking_details.booking_id,
-                        inVoiceDetails.booking_details.sp_id
-                    )
+                val response = RetrofitBuilder.getUserRetrofitInstance().completeBooking(requestBody)
+                val jsonObject = JSONObject(response.string())
+                if (jsonObject.getInt(status) == 200) {
+                    showBookingCompletedSuccessDialog(inVoiceDetails.booking_details.booking_id, inVoiceDetails.booking_details.sp_id)
                 } else {
-                    toast(this@PaymentScreen, "Error:" + response.string())
+                    toast(this@PaymentScreen, "Error03:" + jsonObject.getString(message))
                 }
-//                toast(this@PaymentScreen, response.string())
             } catch (e: Exception) {
-                toast(this@PaymentScreen, "Error:" + e.message!!)
+                toast(this@PaymentScreen, "Error04:" + e.message!!)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == activityRequestCode && data != null) {
-        }
+        if (requestCode == activityRequestCode && data != null) { }
         if (requestCode == REQUEST_CODE) {
-            data?.getStringExtra("Status")?.let {
-//                Log.d("result", it)
-            }
-            data?.getStringExtra("Status")?.let {
-                if (it.lowercase(Locale.getDefault()) == "success") {
+            data?.getStringExtra(status_camil)?.let { }
+            data?.getStringExtra(status_camil)?.let {
+                if (it.lowercase(Locale.getDefault()) == success_small) {
                     paymentSuccessDialog(this)
                 } else {
-                    toast(this@PaymentScreen, "ON ACTIVITY RESULTS")
                     showPaymentFailureDialog()
                 }
             }
@@ -603,7 +585,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
     private fun saveUserPlan(paidAmount: String, walletBalance: String) {
         val requestBody = UserPlanPaymentReqModel(
             paidAmount.toInt(),
-            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
+            currentDateTime(),
             RetrofitBuilder.USER_KEY,
             period,
             id,
@@ -630,7 +612,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             startActivity(Intent(this, UserDashboardScreen::class.java))
                         }, 3000)
                     } else {
-                        toast(this@PaymentScreen, "USER PLAN PAYMENT FAILURE")
+//                        toast(this@PaymentScreen, "USER PLAN PAYMENT FAILURE")
                         showPaymentFailureDialog()
                     }
                 }
@@ -648,7 +630,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         val viewModel = ViewModelProvider(this, factory)[ProviderPlansViewModel::class.java]
         val requestBody = ProviderMemberShipPlanPaymentReqModel(
             paidAmount.toInt(),
-            SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date()),
+            currentDateTime(),
             RetrofitBuilder.USER_KEY,
             period,
             id,
@@ -673,7 +655,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                             startActivity(Intent(this, ProviderDashboard::class.java))
                         }, 3000)
                     } else {
-                        toast(this@PaymentScreen, "MEMBERSHIP FAILURE")
+//                        toast(this@PaymentScreen, "MEMBERSHIP FAILURE")
                         showPaymentFailureDialog()
                     }
                 }
@@ -738,17 +720,18 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
             UserUtils.getOrderId(this),
             finalWalletBalance
         )
+//        toast(this, Gson().toJson(requestBody))
 //        Log.d("PAYMENT STATUS:", Gson().toJson(requestBody))
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().confirmPayment(requestBody)
-                toast(this@PaymentScreen, Gson().toJson(response))
-                if (JSONObject(response.string()).getInt("status") == 200) {
+//                toast(this@PaymentScreen, Gson().toJson(response))
+                if (JSONObject(response.string()).getInt(status) == 200) {
                     progressDialog.dismiss()
                     showSuccessDialog()
                 } else {
                     progressDialog.dismiss()
-                    toast(this@PaymentScreen, "CONFIRM PAYMENT FAILURE")
+//                    toast(this@PaymentScreen, "CONFIRM PAYMENT FAILURE")
                     showPaymentFailureDialog()
                 }
             } catch (e: java.lang.Exception) {
@@ -763,7 +746,7 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
         val requestBody = InstallmentPaymentReqModel(
             getPayableAmount(this).toString(),
             ViewBidsScreen.bookingId,
-            SimpleDateFormat("yyyy-MM-dd").format(Date()),
+            currentDateTime(),
             RetrofitBuilder.USER_KEY,
             status,
             referenceId,
@@ -781,10 +764,10 @@ class PaymentScreen : AppCompatActivity(), UpiInterface {
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
-                    if (status == "Success") {
+                    if (status == success_camil) {
                         paymentSuccessDialog(this)
                     } else {
-                        toast(this@PaymentScreen, "INSTALLMENT FAILURE")
+//                        toast(this@PaymentScreen, "INSTALLMENT FAILURE")
                         showPaymentFailureDialog()
                     }
                 }

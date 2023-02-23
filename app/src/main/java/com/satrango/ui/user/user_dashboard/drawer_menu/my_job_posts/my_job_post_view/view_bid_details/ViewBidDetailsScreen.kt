@@ -79,7 +79,7 @@ class ViewBidDetailsScreen : AppCompatActivity(), AttachmentsListener {
                         spName.text = data.bid_details.sp_fname + " " + data.bid_details.sp_lname
                         spOccupation.text = data.bid_details.profession
                         completesIn.text =
-                            data.bid_details.esimate_time + " " + data.bid_details.estimate_type
+                            data.bid_details.estimate_time + " " + data.bid_details.estimate_type
                         bid.text = "Rs.${data.bid_details.amount}/-"
                         proposal.text = data.bid_details.proposal
                         gender.text = data.bid_details.sp_gender

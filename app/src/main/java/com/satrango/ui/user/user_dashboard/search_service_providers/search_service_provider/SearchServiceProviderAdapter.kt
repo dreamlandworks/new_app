@@ -94,6 +94,7 @@ class SearchServiceProviderAdapter(
             binding.bookLaterBtn.setOnClickListener {
                 isReschedule(binding.actualCost.context, false)
                 UserUtils.saveBookingType(binding.root.context, "selected")
+                UserUtils.saveProfessionIdForBookInstant(binding.root.context, data.profession_id)
                 UserUtils.saveSpId(binding.root.context, data.users_id)
                 UserUtils.saveSelectedSPDetails(binding.root.context, Gson().toJson(data))
                 val intent =

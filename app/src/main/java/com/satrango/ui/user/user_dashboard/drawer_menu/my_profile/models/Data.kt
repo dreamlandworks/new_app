@@ -20,6 +20,8 @@ data class Data(
     val gender: String,
     @SerializedName("mobile")
     val mobile: String,
+    @SerializedName("device_id")
+    val device_id: String,
     @SerializedName("profile_pic")
     val profile_pic: String,
     @SerializedName("referral_id")

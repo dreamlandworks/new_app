@@ -629,44 +629,44 @@ class BookingAttachmentsScreen : AppCompatActivity(), AttachmentsListener
 //        updateStatusInServer(paymentResponse, "Success")
 //    }
 
-    private fun updateStatusInServer(paymentResponse: String?, status: String) {
-        var finalWalletAmount = Gson().fromJson(
-            UserUtils.getSelectedAllSPDetails(this),
-            SearchServiceProviderResModel::class.java
-        ).wallet_balance
-        if (finalWalletAmount == 0) {
-            finalWalletAmount = 0
-        }
-        val requestBody = PaymentConfirmReqModel(
-            data!!.final_amount.toString(),
-            UserUtils.getBookingId(this),
-            UserUtils.scheduled_date,
-            RetrofitBuilder.USER_KEY,
-            data!!.users_id.toInt(),
-            UserUtils.time_slot_from,
-            UserUtils.getUserId(this).toInt(),
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
-            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
-            UserUtils.getOrderId(this),
-            finalWalletAmount.toString()
-        )
-        viewModel.confirmPayment(this, requestBody).observe(this) {
-            when (it) {
-                is NetworkResponse.Loading -> {
-                    progressDialog.show()
-                }
-                is NetworkResponse.Success -> {
-                    progressDialog.dismiss()
-                    finish()
-                    startActivity(Intent(this, UserDashboardScreen::class.java))
-                }
-                is NetworkResponse.Failure -> {
-                    progressDialog.dismiss()
-                    snackBar(binding.nextBtn, it.message!!)
-                }
-            }
-        }
-    }
+//    private fun updateStatusInServer(paymentResponse: String?, status: String) {
+//        var finalWalletAmount = Gson().fromJson(
+//            UserUtils.getSelectedAllSPDetails(this),
+//            SearchServiceProviderResModel::class.java
+//        ).wallet_balance
+//        if (finalWalletAmount == 0) {
+//            finalWalletAmount = 0
+//        }
+//        val requestBody = PaymentConfirmReqModel(
+//            data!!.final_amount.toString(),
+//            UserUtils.getBookingId(this),
+//            UserUtils.scheduled_date,
+//            RetrofitBuilder.USER_KEY,
+//            data!!.users_id.toInt(),
+//            UserUtils.time_slot_from,
+//            UserUtils.getUserId(this).toInt(),
+//            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).CGST_amount,
+//            Gson().fromJson(UserUtils.getSelectedSPDetails(this), Data::class.java).SGST_amount,
+//            UserUtils.getOrderId(this),
+//            finalWalletAmount.toString()
+//        )
+//        viewModel.confirmPayment(this, requestBody).observe(this) {
+//            when (it) {
+//                is NetworkResponse.Loading -> {
+//                    progressDialog.show()
+//                }
+//                is NetworkResponse.Success -> {
+//                    progressDialog.dismiss()
+//                    finish()
+//                    startActivity(Intent(this, UserDashboardScreen::class.java))
+//                }
+//                is NetworkResponse.Failure -> {
+//                    progressDialog.dismiss()
+//                    snackBar(binding.nextBtn, it.message!!)
+//                }
+//            }
+//        }
+//    }
 
 //    override fun onPaymentError(p0: Int, paymentError: String?) {
 //        updateStatusInServer("", "failure")

@@ -1,17 +1,13 @@
 package com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,14 +29,20 @@ import com.satrango.ui.user.bookings.view_booking_details.models.BookingDetailsR
 import com.satrango.ui.user.bookings.view_booking_details.models.RescheduleStatusChangeReqModel
 import com.satrango.ui.user.user_dashboard.UserDashboardScreen
 import com.satrango.ui.user.user_dashboard.chats.ChatScreen
-import com.satrango.ui.user.user_dashboard.chats.models.ChatModel
 import com.satrango.ui.user.user_dashboard.chats.models.ChatsModel
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.BookingDetail
 import com.satrango.ui.user.user_dashboard.drawer_menu.my_bookings.models.MyBookingsReqModel
 import com.satrango.ui.user.user_dashboard.user_alerts.AlertsInterface
 import com.satrango.ui.user.user_dashboard.user_alerts.UserAlertScreen
+import com.satrango.utils.Constants.black
+import com.satrango.utils.Constants.cancelled
+import com.satrango.utils.Constants.completed
+import com.satrango.utils.Constants.expired
+import com.satrango.utils.Constants.inProgress
+import com.satrango.utils.Constants.message
+import com.satrango.utils.Constants.pending
+import com.satrango.utils.Constants.white
 import com.satrango.utils.UserUtils
-import com.satrango.utils.UserUtils.getPhoneNo
 import com.satrango.utils.UserUtils.getUserId
 import com.satrango.utils.UserUtils.isCompleted
 import com.satrango.utils.UserUtils.isPending
@@ -73,47 +75,64 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
         initializeToolBar()
         initializeProgressDialog()
 
+        binding.swipeDownToRefresh.setOnRefreshListener {
+            when {
+                isPending(this) -> updatePendingUI()
+                isProgress(this) -> updateProgressUI()
+                isCompleted(this) -> updateCompletedUI()
+            }
+            binding.swipeDownToRefresh.isRefreshing = false
+        }
+
         binding.inProgressBtn.setOnClickListener {
-            binding.inProgressBtn.setBackgroundResource(R.drawable.user_btn_bg)
-            binding.completedBtn.setBackgroundResource(0)
-            binding.pendingBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setTextColor(Color.parseColor("#FFFFFF"))
-            binding.completedBtn.setTextColor(Color.parseColor("#000000"))
-            binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
-            isProgress(this, true)
-            isPending(this, false)
-            isCompleted(this, false)
-            updateUI("InProgress")
+            updateProgressUI()
         }
         binding.pendingBtn.setOnClickListener {
             updatePendingUI()
         }
         binding.completedBtn.setOnClickListener {
-            binding.completedBtn.setBackgroundResource(R.drawable.user_btn_bg)
-            binding.inProgressBtn.setBackgroundResource(0)
-            binding.pendingBtn.setBackgroundResource(0)
-            binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
-            binding.completedBtn.setTextColor(Color.parseColor("#FFFFFF"))
-            binding.pendingBtn.setTextColor(Color.parseColor("#000000"))
-            isCompleted(this, true)
-            isProgress(this, false)
-            isPending(this, false)
-            updateUI("Completed")
+            updateCompletedUI()
         }
 
+    }
+
+    private fun updateCompletedUI() {
+        binding.completedBtn.setBackgroundResource(R.drawable.user_btn_bg)
+        binding.inProgressBtn.setBackgroundResource(0)
+        binding.pendingBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setTextColor(Color.parseColor(black))
+        binding.completedBtn.setTextColor(Color.parseColor(white))
+        binding.pendingBtn.setTextColor(Color.parseColor(black))
+        isCompleted(this, true)
+        isProgress(this, false)
+        isPending(this, false)
+        updateUI(completed)
+    }
+
+    private fun updateProgressUI() {
+        binding.inProgressBtn.setBackgroundResource(R.drawable.user_btn_bg)
+        binding.completedBtn.setBackgroundResource(0)
+        binding.pendingBtn.setBackgroundResource(0)
+        binding.inProgressBtn.setTextColor(Color.parseColor(white))
+        binding.completedBtn.setTextColor(Color.parseColor(black))
+        binding.pendingBtn.setTextColor(Color.parseColor(black))
+        isProgress(this, true)
+        isPending(this, false)
+        isCompleted(this, false)
+        updateUI(inProgress)
     }
 
     private fun updatePendingUI() {
         binding.pendingBtn.setBackgroundResource(R.drawable.user_btn_bg)
         binding.completedBtn.setBackgroundResource(0)
         binding.inProgressBtn.setBackgroundResource(0)
-        binding.inProgressBtn.setTextColor(Color.parseColor("#000000"))
-        binding.completedBtn.setTextColor(Color.parseColor("#000000"))
-        binding.pendingBtn.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.inProgressBtn.setTextColor(Color.parseColor(black))
+        binding.completedBtn.setTextColor(Color.parseColor(black))
+        binding.pendingBtn.setTextColor(Color.parseColor(white))
         isPending(this, true)
         isProgress(this, false)
         isCompleted(this, false)
-        updateUI("Pending")
+        updateUI(pending)
     }
 
     private fun initializeToolBar() {
@@ -125,37 +144,38 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
         loadProfileImage(profilePic)
     }
 
-    private fun updateUI(status: String) {
-        val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+    private fun updateUI(bookingType: String) {
+        binding.note.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmerAnimation()
+        val requestBody = MyBookingsReqModel(RetrofitBuilder.USER_KEY, getUserId(this).toInt())
         viewModel.getMyBookingDetails(this, requestBody).observe(this) {
             when (it) {
                 is NetworkResponse.Loading -> {
 //                    progressDialog.show()
-                    binding.shimmerLayout.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
-                    binding.shimmerLayout.startShimmerAnimation()
                 }
                 is NetworkResponse.Success -> {
                     progressDialog.dismiss()
                     val list = ArrayList<BookingDetail>()
                     for (details in it.data!!) {
-                        if (status == "Completed") {
-                            if (details.booking_status.equals(
-                                    status,
-                                    ignoreCase = true) || details.booking_status.equals("Expired", ignoreCase = true) || details.booking_status.equals("Cancelled", ignoreCase = true)) {
+                        if (bookingType == completed) {
+                            if (details.booking_status.equals(bookingType, ignoreCase = true) ||
+                                details.booking_status.equals(expired, ignoreCase = true) ||
+                                details.booking_status.equals(cancelled, ignoreCase = true)) {
                                 list.add(details)
                             }
                         } else {
-                            if (details.booking_status.equals(status, ignoreCase = true)) {
+                            if (details.booking_status.equals(bookingType, ignoreCase = true)) {
                                 list.add(details)
                             }
                         }
                     }
                     binding.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.recyclerView.adapter = MyBookingsAdapter(list, this, this)
+                    binding.recyclerView.visibility = View.VISIBLE
                     binding.shimmerLayout.visibility = View.GONE
                     binding.shimmerLayout.stopShimmerAnimation()
-                    binding.recyclerView.visibility = View.VISIBLE
                     if (list.isEmpty()) {
                         binding.note.visibility = View.VISIBLE
                     } else {
@@ -175,7 +195,12 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
 
     override fun onResume() {
         super.onResume()
-        updatePendingUI()
+        when {
+            isPending(this) -> updatePendingUI()
+            isProgress(this) -> updateProgressUI()
+            isCompleted(this) -> updateCompletedUI()
+            else -> updatePendingUI()
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -206,7 +231,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
         rescheduleId: Int,
         description: String
     ) {
-        fetchBookingDetails(bookingId, categoryId, rescheduleId.toString(), description)
+        fetchBookingDetails(bookingId, categoryId, userId, rescheduleId.toString(), description)
     }
 
     override fun rescheduleSPStatusCancelDialog(
@@ -245,11 +270,17 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
 
     }
 
-    private fun fetchBookingDetails(bookingId: Int, categoryId: Int, rescheduleId: String, description: String) {
-        val requestBody = BookingDetailsReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, UserUtils.getUserId(this).toInt())
+    private fun fetchBookingDetails(
+        bookingId: Int,
+        categoryId: Int,
+        userId: Int,
+        rescheduleId: String,
+        description: String
+    ) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 progressDialog.show()
+                val requestBody = BookingDetailsReqModel(bookingId, categoryId, RetrofitBuilder.USER_KEY, userId)
                 val response = RetrofitBuilder.getUserRetrofitInstance().getUserBookingDetails(requestBody)
                 if (response.status == 200)  {
                     progressDialog.dismiss()
@@ -283,7 +314,7 @@ class UserMyBookingsScreen : AppCompatActivity(), AlertsInterface, BookingInterf
             try {
                 val response = RetrofitBuilder.getUserRetrofitInstance().updateRescheduleStatus(requestBody)
                 val jsonResponse = JSONObject(response.string())
-                toast(this@UserMyBookingsScreen, jsonResponse.getString("message"))
+                toast(this@UserMyBookingsScreen, jsonResponse.getString(message))
                 finish()
                 startActivity(intent)
             } catch (e: Exception) {

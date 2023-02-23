@@ -167,7 +167,8 @@ class ProviderSignUpThree : AppCompatActivity() {
                         snackBar(nextBtn, "Please Enter Tariff Per Day for ${keyword.name} profession")
                         return@setOnClickListener
                     }
-                    if (keyword.tariff_per_day < keyword.tariff_per_hour) {
+                    if (keyword.tariff_per_day.toInt() < keyword.tariff_per_hour.toInt()) {
+                        toast(this@ProviderSignUpThree, keyword.tariff_per_day + "|" + keyword.tariff_per_hour)
                         snackBar(nextBtn, "Please Enter Per Hour charges less than Per Day Charges For ${keyword.name} Profession")
                         return@setOnClickListener
                     }
